@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Building" Collapsed="true">
+    <Position X="8.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IACIQAAAAAAAAgAAAAAAgAAUAAQggABAAMUAMSIAAEA=</HashCode>
+      <FileName>Assets\Scripts\Buildings\Building.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AssignBuilding" Collapsed="true">
+    <Position X="4.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAQAAAAAAAAAAAAAAAAAAQAAEAAAAAAAACAAIAAAA=</HashCode>
+      <FileName>Assets\Scripts\Buildings\Assign\AssignBuilding.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pipe" Collapsed="true">
+    <Position X="7" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEABAAAAAAAAAAAAAAAAAAAAAAAAAACAAAQAEQAAAIA=</HashCode>
+      <FileName>Assets\Scripts\Buildings\Fluids\Pipe.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Storage" Collapsed="true">
+    <Position X="9.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAQAAAAAEAAAAAAAABAAAQAAAAAAAAAAEAAAIAAEA=</HashCode>
+      <FileName>Assets\Scripts\Buildings\Storage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="House" Collapsed="true">
+    <Position X="3.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Buildings\Assign\House.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductionBuilding" Collapsed="true">
+    <Position X="5.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>JAgKQBQAAAkAAIAAAAACgIAUAAABAIRAIEAAAQIACAA=</HashCode>
+      <FileName>Assets\Scripts\Buildings\Assign\ProductionBuilding.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Elevator" Collapsed="true">
+    <Position X="9.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAQAAAAAABAAAAAAAIAAAQ=</HashCode>
+      <FileName>Assets\Scripts\Buildings\Elevator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StorageObject" Collapsed="true">
+    <Position X="7" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAEAAAAAAAAAAEAAQAAAAA=</HashCode>
+      <FileName>Assets\Scripts\StorageObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Chunk" Collapsed="true">
+    <Position X="6" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAgAYAAAgAAEAAAAEAAQAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Data\Chunk.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClickableObject" Collapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IACAAAAAAAAIAAAAgAAAgAAAAAAgAAABAAAAAwAAAgA=</HashCode>
+      <FileName>Assets\Scripts\ClickableObject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="pipePart" Collapsed="true">
+    <Position X="9" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Buildings\Fluids\PipePart.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Road" Collapsed="true">
+    <Position X="11" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAIAAAAAAAAAAAAAAAgAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Data\Road.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rock" Collapsed="true">
+    <Position X="5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAIAAAAAAAAAgAAAAAAAAAAAAQQSAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Data\Rock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Human" Collapsed="true">
+    <Position X="3" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IECABABAMBgoAEEAgAgAABAAAEAgIAAGAQAABxQAAUA=</HashCode>
+      <FileName>Assets\Scripts\Humans\Human.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Humans">
+    <Position X="13.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAIIAAAAAAAAAAAAIAAAAAAAAAAAAAADABEA=</HashCode>
+      <FileName>Assets\Scripts\Humans\Humans.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Loading_Screen">
+    <Position X="15" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAkgAAEAQAAkAIQAAAAAoAEBQAAACAwAARAhAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Loadning Screen\Loading_Screen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
