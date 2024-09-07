@@ -11,7 +11,7 @@ public class FluidTank : Building
     public override void UniqueID()
     {
         base.UniqueID();
-        networkAccess.ID(transform.GetChild(2));
+        networkAccess.ID(transform.GetChild(1));
     }
     public override void PlaceBuilding(GridTiles gT)
     {
@@ -20,9 +20,12 @@ public class FluidTank : Building
     }
     public override bool CanPlace()
     {
-        if (!networkAccess.ConnectPipes(transform.GetChild(2)) || !base.CanPlace())
-            return false;
-        return true;
+        bool res = true;
+        if (!base.CanPlace())
+            res = false;
+        if (!networkAccess.ConnectPipes(transform.GetChild(2)))
+            res = false;
+        return res;
     }
     public override void FinishBuild()
     {
@@ -53,17 +56,17 @@ public class FluidTank : Building
         base.DestoyBuilding();
         networkAccess.DisconnectFromNetwork(transform.GetChild(2));
     }
-    public override Fluid GetFluid()
+    /*public override Fluid GetFluid()
     {
         return networkAccess.fluid;
-    }
+    }*/
 
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
             clickable = new TankBSave();
         (clickable as TankBSave).fillColor = new MyColor(fillColor);
-        (clickable as TankBSave).fluidSave = networkAccess.SaveFluidData(transform.GetChild(2));
+        (clickable as TankBSave).fluidSave = networkAccess.SaveFluidData(transform.GetChild(1));
         return base.Save(clickable);
     }
     public override void Load(ClickableObjectSave save)

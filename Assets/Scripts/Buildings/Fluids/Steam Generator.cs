@@ -18,28 +18,31 @@ public class SteamGenerator : ProductionBuilding
     public override void UniqueID()
     {
         base.UniqueID();
-        networkAccess.ID(transform.GetChild(2));
+        networkAccess.ID(transform.GetChild(1));
     }
     public override bool CanPlace()
     {
-        if (!networkAccess.ConnectPipes(transform.GetChild(2)) || !base.CanPlace())
-            return false;
-        return true;
+        bool res = true;
+        if (!base.CanPlace())
+            res = false;
+        if (!networkAccess.ConnectPipes(transform.GetChild(2)))
+            res = false;
+        return res;
     }
     public override void PlaceBuilding(GridTiles gT)
     {
         base.PlaceBuilding(gT);
-        networkAccess.PlacePipes(transform.GetChild(2));
+        networkAccess.PlacePipes(transform.GetChild(1));
     }
     public override void FinishBuild()
     {
         base.FinishBuild();
-        networkAccess.ConnectToNetwork(transform.GetChild(2));
+        networkAccess.ConnectToNetwork(transform.GetChild(1));
     }
     public override void DestoyBuilding()
     {
         base.DestoyBuilding();
-        networkAccess.DisconnectFromNetwork(transform.GetChild(2));
+        networkAccess.DisconnectFromNetwork(transform.GetChild(1));
     }
     protected override bool ManageInputRes()
     {

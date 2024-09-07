@@ -8,9 +8,13 @@ using UnityEngine;
 [Serializable]
 public class GridPos
 {
+    [SerializeField]
     public float x;
+    [SerializeField]
     public float z;
+    [SerializeField]
     public float level;
+
     // override object.Equals
     public override bool Equals(object obj)
     {
@@ -41,11 +45,19 @@ public class GridPos
         x = _x;
         z = _z;
     }
-    public GridPos(Vector3 vec) 
+    public GridPos(Vector3 vec, bool round = true) 
     {
         level = 0;
-        x = Mathf.RoundToInt(vec.x);
-        z = Mathf.RoundToInt(vec.z);
+        if (round)
+        {
+            x = Mathf.RoundToInt(vec.x);
+            z = Mathf.RoundToInt(vec.z);
+        }
+        else
+        {
+            x = Mathf.FloorToInt(vec.x);
+            z = Mathf.FloorToInt(vec.z);
+        }
     }
     public GridPos(GameObject g)
     {
@@ -58,7 +70,7 @@ public class GridPos
         return new(x, level * 2, z);
     }
 }
-public enum NeededGridItem
+public enum GridItemType
 {
     None, // doesn't matter
     Road, // must be free
@@ -68,25 +80,38 @@ public enum NeededGridItem
 }
 
 [Serializable]
-public class Wrapper<T>
+public class NeededGridItem
 {
-    public T[] values;
+    [SerializeField]
+    public GridPos pos;
+    [SerializeField]
+    public GridItemType itemType;
+    public NeededGridItem(GridPos _pos, GridItemType _itemType)
+    {
+        pos = _pos;
+        itemType = _itemType;
+    }
 }
 
 [Serializable]
 public class BuildingGrid
 {
+    [SerializeField]
+    public GridPos size;
+    [SerializeField]
     public GridPos moveBy;
-    
-    public Wrapper<NeededGridItem>[] buildingGrid;
+    [SerializeField]
+    public GridPos anchor;
+    [SerializeField]
+    public List<NeededGridItem> itemList;
 }
 
 [Serializable]
 public class Build
 {
     [Header("Size")]
-    public float sizeX;
-    public float sizeZ;
+    //public float sizeX;
+    //public float sizeZ;
     public BuildingGrid blueprint;
     public int heigth = 0;
     [Header("Storage")]

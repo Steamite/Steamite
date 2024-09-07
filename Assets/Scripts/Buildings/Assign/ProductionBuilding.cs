@@ -232,9 +232,9 @@ public class ProductionBuilding : AssignBuilding
     ///////////////////////////////////////////////////
     public void RefreshStatus()
     {
-        transform.GetChild(1).GetChild(0).gameObject.SetActive(pStates.stoped);
-        transform.GetChild(1).GetChild(1).gameObject.SetActive(!pStates.supplied);
-        transform.GetChild(1).GetChild(2).gameObject.SetActive(!pStates.space);
+        transform.GetChild(0).GetChild(0).gameObject.SetActive(pStates.stoped);
+        transform.GetChild(0).GetChild(1).gameObject.SetActive(!pStates.supplied);
+        transform.GetChild(0).GetChild(2).gameObject.SetActive(!pStates.space);
     }
     public override List<string> GetInfoText()
     {

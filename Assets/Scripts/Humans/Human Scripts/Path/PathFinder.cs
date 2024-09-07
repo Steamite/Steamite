@@ -59,14 +59,10 @@ public static class PathFinder
                     entryPoints.Add(i);
                     continue;
                 }
-                Transform tran = objects[i].transform.GetChild(0);
-                int iter = 0;
-                foreach (Transform t in tran.GetComponentsInChildren<Transform>()/*.Skip(1)*/)
+                foreach (NeededGridItem item in building.build.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
                 {
-                    iter++;
-                    if (iter == 1)
-                        continue;
-                    positions.Add(new GridPos(t.position));
+                    // TODO
+                    positions.Add(new(9,10));
                     entryPoints.Add(i);
                 }
                 if (part != null && part.id == building.id) // the build that the worker is standing on, is one of the destinations 

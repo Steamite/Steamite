@@ -104,7 +104,7 @@ public class NetworkAccesBuilding
     /// <returns></returns>
     public Building FindStore(FluidType fluidType, Transform t, bool deposit)
     {
-        List<int> networks = new();
+        /*List<int> networks = new();
         foreach(FluidNetwork network in t.GetComponentsInChildren<Pipe>().Select(q=>q.network))
         {
             if (networks.IndexOf(network.networkID) == -1)
@@ -130,7 +130,7 @@ public class NetworkAccesBuilding
                     }
                 }
             }       
-        }
+        }*/
         return null;
     }
 

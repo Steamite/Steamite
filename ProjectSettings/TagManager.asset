@@ -23,7 +23,7 @@ TagManager:
   - Human
   - Roads
   - Rocks
-  - 
+  - Overlay
   - 
   - 
   - 
@@ -56,4 +56,7 @@ TagManager:
     locked: 0
   - name: Pipes
     uniqueID: 3749803193
+    locked: 0
+  - name: Ignore
+    uniqueID: 3667447625
     locked: 0
