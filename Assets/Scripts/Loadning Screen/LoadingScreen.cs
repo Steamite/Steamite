@@ -247,7 +247,7 @@ public class LoadingScreen : MonoBehaviour
 
             // fill the prefab with saved Data
             b.Load(save);
-            MyGrid.PlaceBuild(b, roadPref);
+            MyGrid.PlaceBuild(b, true);
             progress.Report(progressGlobal += buildWeigth);
         }
     }
@@ -313,6 +313,7 @@ public class LoadingScreen : MonoBehaviour
         sceneReferences.eventSystem.transform.GetChild(1).GetChild(1).GetChild(0).GetChild(2).GetComponent<PreBuildInfo>().SetUp();
         sceneReferences.GetComponent<SaveController>().activeFolder = folderName;
         sceneReferences.timeButtons.GetComponent<TimeButtons>().tick = sceneReferences.GetComponent<Tick>();
+        MyGrid.sceneReferences = sceneReferences;
 
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = GameObject.FindWithTag("Grid").GetComponent<GridTiles>().defaultMask;
         Camera.main.GetComponent<PhysicsRaycaster>().enabled = true;

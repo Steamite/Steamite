@@ -123,11 +123,8 @@ public class GridTiles : MonoBehaviour
                 else
                 {
                     Build __b = buildBlueprint.build;
-                    GridPos grid;
-                    if (buildBlueprint.transform.rotation.eulerAngles.y % 180 == 0)
-                        grid = new(activePos.x - ((__b.sizeX - 1) * 0.5f), buildBlueprint.GetComponent<Pipe>() ? 1.6f : 1, activePos.z + ((__b.sizeZ - 1) * 0.5f));
-                    else
-                        grid = new(activePos.x - ((__b.sizeZ - 1) * 0.5f), buildBlueprint.GetComponent<Pipe>() ? 1.6f : 1, activePos.z + ((__b.sizeX - 1) * 0.5f));
+                    GridPos grid = MyGrid.CheckRotation(__b.blueprint.moveBy, buildBlueprint.transform.eulerAngles.y);
+                    grid = new(activePos.x + grid.x, 1, activePos.z + grid.z);
                     buildBlueprint.transform.position = new(grid.x, grid.level, grid.z);
                     c = buildBlueprint.CanPlace() ? Color.blue : Color.red;
                     HighLight(c, buildBlueprint.gameObject);
@@ -491,6 +488,7 @@ public class GridTiles : MonoBehaviour
                 }
                 else
                 {
+                    MyGrid.sceneReferences.OverlayCanvas.DeleteBuildGrid();
                     buildBlueprint.DestoyBuilding();
                     Blueprint();
                     return;
@@ -517,6 +515,7 @@ public class GridTiles : MonoBehaviour
                     break;
                 case SelectionMode.build:
                     Camera.main.GetComponent<PhysicsRaycaster>().eventMask = defaultMask;
+                    MyGrid.sceneReferences.OverlayCanvas.DeleteBuildGrid();
                     if (buildBlueprint)
                         buildBlueprint.DestoyBuilding();
                     foreach(ClickableObject clickable in markedTiles)
@@ -568,8 +567,9 @@ public class GridTiles : MonoBehaviour
         Quaternion q = new();
         if (buildBlueprint)
             q = new(buildBlueprint.transform.rotation.x, buildBlueprint.transform.rotation.y, buildBlueprint.transform.rotation.z, buildBlueprint.transform.rotation.w);
-        Vector3 buildPos = new(activePos.x + (buildingPrefab.build.sizeX / 2), -10, activePos.z + (buildingPrefab.build.sizeZ / 2)); // get the position
-        buildBlueprint = Instantiate(buildingPrefab.gameObject, buildPos, Quaternion.identity, transform).GetComponent<Building>(); // creates the building prefab
+        GridPos gp = MyGrid.CheckRotation(buildingPrefab.build.blueprint.moveBy, buildingPrefab.transform.eulerAngles.y);
+        gp = new(activePos.x + gp.x, 0.5f, activePos.z + gp.z);
+        buildBlueprint = Instantiate(buildingPrefab.gameObject, gp.ToVec(), Quaternion.identity, transform).GetComponent<Building>(); // creates the building prefab
         buildBlueprint.transform.rotation = q;
         buildBlueprint.transform.SetParent(buildBlueprint.GetComponent<Pipe>() ? GameObject.FindWithTag("Pipes").transform : GameObject.Find("Buildings").transform);
         buildBlueprint.name = buildBlueprint.name.Replace("(Clone)", ""); // removes (Clone) from its name

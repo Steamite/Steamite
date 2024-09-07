@@ -1,16 +1,11 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-[Serializable]
-public class NetworkAccesBuilding
+
+interface IFluidWork
 {
-    public Fluid fluid = new();
-    /// <summary>
-    /// Call in UniqueID(), ids all pipes.
-    /// </summary>
-    /// <param name="t">Building transform</param>
-    public void ID(Transform t)
+    void ID(Transform t)
     {
         foreach (Pipe pipe in t.GetComponentsInChildren<Pipe>())
         {
@@ -21,7 +16,7 @@ public class NetworkAccesBuilding
     /// Call in CanPlace(), connect or disconnects pipes, and check if the place to build the pipes is free.
     /// </summary>
     /// <param name="t">Building transform</param>
-    public bool ConnectPipes(Transform t)
+    bool ConnectPipes(Transform t)
     {
         bool canPlace = true;
         foreach (Pipe pipe in t.GetComponentsInChildren<Pipe>())
@@ -39,7 +34,7 @@ public class NetworkAccesBuilding
     /// Call in PlaceBuilding(), replaces or preps pipes.
     /// </summary>
     /// <param name="t">Building reference</param>
-    public void PlacePipes(Transform t)
+    void PlacePipes(Transform t)
     {
         foreach (BuildPipe buildPipe in t.GetComponentsInChildren<BuildPipe>())
         {
@@ -71,7 +66,7 @@ public class NetworkAccesBuilding
     /// Call in FinishBuild(), adds the build and pipes into the network.
     /// </summary>
     /// <param name="building"></param>
-    public void ConnectToNetwork(Transform t)
+    void ConnectToNetwork(Transform t)
     {
         foreach (BuildPipe buildPipe in t.GetComponentsInChildren<BuildPipe>())
         {
@@ -82,7 +77,7 @@ public class NetworkAccesBuilding
     /// Call on DestoyBuilding().
     /// </summary>
     /// <param name="t">pipes</param>
-    public void DisconnectFromNetwork(Transform t)
+    void DisconnectFromNetwork(Transform t)
     {
         List<int> networks = new();
         foreach (BuildPipe p in t.GetComponentsInChildren<BuildPipe>())
@@ -102,16 +97,16 @@ public class NetworkAccesBuilding
     /// <param name="t"></param>
     /// <param name="deposit">If deposit find place to store, else find place to take from </param>
     /// <returns></returns>
-    public Building FindStore(FluidType fluidType, Transform t, bool deposit)
+    /*Building FindStore(FluidType fluidType, Transform t, bool deposit)
     {
-        /*List<int> networks = new();
-        foreach(FluidNetwork network in t.GetComponentsInChildren<Pipe>().Select(q=>q.network))
+        List<int> networks = new();
+        foreach (FluidNetwork network in t.GetComponentsInChildren<Pipe>().Select(q => q.network))
         {
             if (networks.IndexOf(network.networkID) == -1)
             {
                 // add prio to production buildings
                 networks.Add(network.networkID);
-                foreach(Building building in network.buildings)
+                foreach (Building building in network.buildings)
                 {
                     int i = building.GetFluid().type.IndexOf(fluidType);
                     if (deposit)
@@ -129,8 +124,8 @@ public class NetworkAccesBuilding
                         }
                     }
                 }
-            }       
-        }*/
+            }
+        }
         return null;
     }
 
@@ -148,9 +143,9 @@ public class NetworkAccesBuilding
 
     internal void Load(Transform transform, List<ClickableObjectSave> pipeSaves)
     {
-        for(int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).GetComponent<BuildPipe>().Load(pipeSaves[i]); 
+            transform.GetChild(i).GetComponent<BuildPipe>().Load(pipeSaves[i]);
         }
-    }
+    }*/
 }

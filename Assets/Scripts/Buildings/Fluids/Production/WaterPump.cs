@@ -11,7 +11,7 @@ public class WaterPump : ProductionBuilding
     public override void UniqueID()
     {
         base.UniqueID();
-        networkAccess.ID(transform.GetChild(3));
+        networkAccess.ID(transform.GetChild(2));
     }
     protected override void UpdateText(Transform t)
     {
@@ -48,12 +48,12 @@ public class WaterPump : ProductionBuilding
             {
                 if (lastAccesNetworkElem)
                 {
-                    if(lastAccesNetworkElem.GetFluid().ammount[0] < lastAccesNetworkElem.GetFluid().capacity[0]) 
+                    /*if(lastAccesNetworkElem.GetFluid().ammount[0] < lastAccesNetworkElem.GetFluid().capacity[0]) 
                     {
                         ExtractWater(lastAccesNetworkElem);
                         continue;
                     }
-                    lastAccesNetworkElem = null;
+                    lastAccesNetworkElem = null;*/
                 }
                 if ((lastAccesNetworkElem = networkAccess.FindStore(FluidType.water, transform.GetChild(3), true)) != null)
                 {
@@ -71,7 +71,7 @@ public class WaterPump : ProductionBuilding
     {
         if (water.ammount > 0)
         {
-            int i = building.GetFluid().type.IndexOf(FluidType.water);
+            /*int i = building.GetFluid().type.IndexOf(FluidType.water);
             if(i > -1)
             {
                 building.GetFluid().ammount[i]++;
@@ -80,7 +80,7 @@ public class WaterPump : ProductionBuilding
                 building.OpenWindow();
                 if (building != this)
                     OpenWindow();
-            }
+            }*/
         }
         else
         {
@@ -92,14 +92,15 @@ public class WaterPump : ProductionBuilding
     }
     public override bool CanPlace()
     {
-        if(!networkAccess.ConnectPipes(transform.GetChild(3)) || !base.CanPlace())
-            return false;
+        bool res = true;
+        if (!base.CanPlace())
+            res = false;
+        if (!networkAccess.ConnectPipes(transform.GetChild(2)))
+            res = false;
         GridPos gridPos = new(transform.GetChild(2).gameObject);
-        if (MyGrid.grid[(int)gridPos.x, (int)gridPos.z].PrintText() == "w")
-        {
-            return true;
-        }
-        return false;
+        if (MyGrid.grid[(int)gridPos.x, (int)gridPos.z].PrintText() != "w")
+            res = false;
+        return res;
     }
     public override void PlaceBuilding(GridTiles gT)
     {
@@ -126,15 +127,15 @@ public class WaterPump : ProductionBuilding
         base.DestoyBuilding();
         networkAccess.DisconnectFromNetwork(transform.GetChild(3));
     }
-    public override Fluid GetFluid()
+    /*public override Fluid GetFluid()
     {
         return networkAccess.fluid;
-    }
+    }*/
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
             clickable = new FluidProdBSave();
-        (clickable as FluidProdBSave).fluidSave = networkAccess.SaveFluidData(transform.GetChild(3));
+        (clickable as FluidProdBSave).fluidSave = networkAccess.SaveFluidData(transform.GetChild(2));
         return base.Save(clickable);
     }
     public override void Load(ClickableObjectSave save)

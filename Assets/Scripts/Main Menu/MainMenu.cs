@@ -18,6 +18,8 @@ public class MainMenu : MonoBehaviour
     string folderName;
     private void Awake()
     {
+        if (!Directory.GetDirectories(Application.persistentDataPath).Contains("/saves"))
+            Directory.CreateDirectory(Application.persistentDataPath + "/saves");
         if(Directory.GetDirectories(Application.persistentDataPath + "/saves").Length == 0)
         {
             loadGame.interactable = false;
@@ -65,5 +67,9 @@ public class MainMenu : MonoBehaviour
     public void ToggleTutorial()
     {
         tutorialButtonImage.SetActive(!tutorialButtonImage.activeSelf);
+    }
+    public void DoQuit()
+    {
+        Application.Quit();
     }
 }

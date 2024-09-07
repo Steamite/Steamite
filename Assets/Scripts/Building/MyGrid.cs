@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UI;
 
 public static class MyGrid
 {
@@ -21,6 +22,7 @@ public static class MyGrid
     public static ResourceHolder buildPrefabs;
     public static ResourceHolder tilePrefabs;
     public static ResourceHolder specialPrefabs;
+    public static SceneReferences sceneReferences;
     ////////////////////////////////////////////////////////////
     //------------------------Start---------------------------//
     ////////////////////////////////////////////////////////////
@@ -98,15 +100,47 @@ public static class MyGrid
     ////////////////////////////////////////////////////////////
     //------------------------Updating------------------------//
     ////////////////////////////////////////////////////////////
-    public static void PlaceBuild(Building building, GameObject roadPref = null)
+    public static void PlaceBuild(Building building, bool load = false)
     {
+        
         if(building.id == -1)
             building.UniqueID();
         buildings.Add(building);
         // assigns sizes acording to rotation
-        Vector2 v = CheckRotation(building.build, building.transform.rotation.eulerAngles.y);
-        float _x = v.x;  
-        float _z = v.y;
+        // TODO
+
+        //BuildObject buildObject = new();
+        //bool canBuild = true;
+        GridPos gridPos = new(building.transform.position - CheckRotation(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
+        for (int i = 0; i < building.build.blueprint.itemList.Count; i++)
+        {
+            NeededGridItem item = building.build.blueprint.itemList[i];
+            GridPos itemPos = CheckRotation(item.pos, building.transform.rotation.eulerAngles.y, true);
+            switch (item.itemType)
+            {
+                case GridItemType.Road:
+                case GridItemType.Anchor:
+                    if (load)
+                    {
+                        GameObject.Instantiate(tilePrefabs.GetPrefab("Road"), new(itemPos.x + gridPos.x, 0, gridPos.z - itemPos.z), Quaternion.identity , sceneReferences.roads);
+                    }
+                    grid[(int)(itemPos.x + gridPos.x), (int)(gridPos.z - itemPos.z)] = building;
+                    break;
+                case GridItemType.Entrance:
+                    Road r = grid[(int)(itemPos.x + gridPos.x), (int)(gridPos.z - itemPos.z)].GetComponent<Road>();
+                    if (r)
+                    {
+                        r.entryPoints.Add(building.id);
+                        continue;
+                    }
+                    break;
+            }
+            //overlay.GetChild(i).GetComponent<>
+        }
+        /*
+        //Vector2 v = CheckRotation(building.build, building.transform.rotation.eulerAngles.y);
+        float _x = 0;//v.x;
+        float _z = 0;// v.y;
         // calculates builds position(lower left corner)
         Vector3 vec = new Vector3(
             building.transform.position.x - ((_x - 1) / 2), 
@@ -152,7 +186,7 @@ public static class MyGrid
                     }
                 }
             }
-        }
+        }*/
     }
 
     ////////////////////////////////////////////////////////////
@@ -210,19 +244,70 @@ public static class MyGrid
     public static bool CanPlace(Building building)
     {
         BuildObject buildObject = new();
+        bool canBuild = true;
+        GridPos gridPos = new(building.transform.position - CheckRotation(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
+        sceneReferences.OverlayCanvas.CreateBuildGrid(building);
+        // checks all Parts of a building
+        Transform overlay = sceneReferences.OverlayCanvas.overlayParent;
+        for (int i = 0; i < building.build.blueprint.itemList.Count; i++)
+        {
+            NeededGridItem item = building.build.blueprint.itemList[i];
+            GridPos itemPos = CheckRotation(item.pos, building.transform.rotation.eulerAngles.y, true);
+            Transform tile = overlay.GetChild(i);
+            Color errC, c;
+            switch (item.itemType)
+            {
+                case GridItemType.Road:
+                    c = new(0, 1, 0, 0.25f);
+                    errC = new(1, 0, 0, 0.25f);
+                    break;
+                case GridItemType.Anchor:
+                    c = new(1, 0.843f, 0, 0.25f);
+                    errC = new(1, 0.643f, 0, 0.25f);
+                    break;
+                case GridItemType.Entrance:
+                    c = new(0.5f, 0.5f, 0.5f, 0.25f);
+                    errC = new(1f, 0.3f, 0.3f, 0.25f);
+                    break;
+                default:
+                    continue;
+            }
+            if (grid[(int)(itemPos.x + gridPos.x), (int)(gridPos.z - itemPos.z)].GetComponent<Rock>())
+            {
+                tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 2.01f);
+                if(item.itemType != GridItemType.Anchor)
+                    tile.GetComponent<Image>().color = errC;
+                canBuild = false;
+            }
+            else
+            {
+                tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 0);
+                Road r = grid[(int)(itemPos.x + gridPos.x), (int)(gridPos.z - itemPos.z)].GetComponent<Road>();
+                if (r)
+                {
+                    tile.GetComponent<Image>().color = c;
+                }
+                else
+                {
+                    tile.GetComponent<Image>().color = errC;
+                    canBuild = false;
+                }
+            }
+            //overlay.GetChild(i).GetComponent<>
+        }
         // assigns sizes acording to rotation
-        Vector2 v = CheckRotation(building.build, building.transform.rotation.eulerAngles.y);
-        float _x = v.x;
-        float _z = v.y;
+        //TODO
+        /*Vector2 v = CheckRotation(building.build, building.transform.rotation.eulerAngles.y);
+        float _x = 0;// v.x;
+        float _z = 0;// v.y;
         // calculates builds position(lower left corner)
         Vector3 vec = new Vector3(
             building.transform.position.x - ((_x - 1) / 2),
             building.transform.position.y,
             building.transform.position.z - ((_z - 1) / 2));
-
-        int i;
+      
         List<Vector2Int> tempP = new();
-        // checks all Parts of a building
+        int i;
         for (int x = 0; x < _x; x++)
         {
             int vecX = Mathf.FloorToInt(vec.x) + x;
@@ -282,34 +367,40 @@ public static class MyGrid
                     return true;
                 }
             }
-        }
+        }*/
         // change for building without entry points
-        return false;
+        return canBuild;
     }
 
     ////////////////////////////////////////////////////////////
     //----------------------Miscelanious----------------------//
     ////////////////////////////////////////////////////////////
 
-    private static Vector2 CheckRotation(Build b, float rotation)
+    public static GridPos CheckRotation(GridPos offset, float rotation, bool isTile = false)
     {
-        Vector2 _vec = new();
+        GridPos gp;
         switch (rotation)
         {
-            case 0:
-            case 180:
-                _vec.x = b.sizeX;
-                _vec.y = b.sizeZ;
-                break;
             case 90:
+                if (isTile)
+                    gp = new(-offset.z, offset.x);
+                else
+                    gp = new(offset.z, -offset.x);
+                break;
+            case 180:
+                gp = new(-offset.x, -offset.z);
+                break;
             case 270:
-                _vec.x = b.sizeZ;
-                _vec.y = b.sizeX;
+                if (isTile)
+                    gp = new(offset.z, -offset.x);
+                else
+                    gp = new(-offset.z, offset.x);
                 break;
             default:
+                gp = new(offset.x, offset.z);
                 break;
         }
-        return _vec;
+        return gp;
     }
     public static StringBuilder PrintGrid()
     {
@@ -360,7 +451,8 @@ public static class MyGrid
 
     public static void RemoveBuilding(Building building)
     {
-        Vector2 size = CheckRotation(building.build, building.transform.eulerAngles.y);
+        // TODO
+        /*Vector2 size = CheckRotation(building.build, building.transform.eulerAngles.y);
         //GameObject roadPref = sce
         for (int x = Mathf.CeilToInt(building.transform.position.x - size.x / 2); x < Mathf.CeilToInt(building.transform.position.x + size.x/2); x++)
         {
@@ -368,7 +460,7 @@ public static class MyGrid
             {
                 grid[x, z] = (GameObject.Instantiate(tilePrefabs.GetPrefab("Road").gameObject, new(x, 0, z), Quaternion.identity, building.transform.parent.parent.GetChild(1)) as GameObject).GetComponent<Road>();
             }
-        }
+        }*/
         if(building.GetType() != typeof(Pipe))
         {
             foreach (Transform entryPoint in building.transform.GetChild(0).GetComponentsInChildren<Transform>().Skip(1))

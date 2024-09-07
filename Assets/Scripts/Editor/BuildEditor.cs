@@ -3,47 +3,46 @@ using UnityEditor;
 using System.Collections;
 using UnityEngine.UIElements;
 using System;
+using UnityEditor.Graphs;
 
 #if UNITY_EDITOR
 class BuildEditor : EditorWindow
 {
     static BuildingGrid actBuild;
-    static NeededGridItem[,] neededGridItems;
+    static SerializedProperty property;
+    static GridItemType[,] GridItemTypes;
     static bool canSave;
     static bool hasAnchor;
     static int width;
     static int height;
-    static int maxItem = Enum.GetNames(typeof(NeededGridItem)).Length;
+    static int maxItem = Enum.GetNames(typeof(GridItemType)).Length;
 
-    public static void ShowWindow(BuildingGrid buildingGrid)
+    public static void ShowWindow(BuildingGrid buildingGrid, SerializedProperty _property)
     {
         canSave = false;
         hasAnchor = false;
         actBuild = buildingGrid;
-
-        if (actBuild.buildingGrid != null)
+        property = _property;
+        GridPos pos;
+        if (actBuild.itemList != null && actBuild.itemList.Count > 0)
         {
-            width = actBuild.buildingGrid.Length;
-            if (width > 0 && actBuild.buildingGrid[0] != null)
+            width = (int)actBuild.size.x;
+            height = (int)actBuild.size.z;
+            if(width > 0 && height > 0)
+                GridItemTypes = new GridItemType[width, height];
+            for (int i = 0; i < actBuild.itemList.Count; i++)
             {
-                height = actBuild.buildingGrid[0].values.Length;
-                neededGridItems = new NeededGridItem[width, height];
-            }
-            for (int i = 0; i < actBuild.buildingGrid.Length; i++)
-            {
-                for(int j = 0; j < actBuild.buildingGrid[i].values.Length; j++)
-                {
-                    neededGridItems[i, j] = actBuild.buildingGrid[i].values[j];
-                    if (neededGridItems[i, j] == NeededGridItem.Anchor)
-                        hasAnchor = true;
-                }
+                pos = actBuild.itemList[i].pos;
+                GridItemTypes[(int)(pos.x + actBuild.anchor.x), (int)(pos.z + actBuild.anchor.z)] = actBuild.itemList[i].itemType;
+                if (actBuild.itemList[i].itemType == GridItemType.Anchor)
+                    hasAnchor = true;
             }
         }
         else
         {
             width = 0;
             height = 0;
-            neededGridItems = null;
+            GridItemTypes = null;
         }
 
         GetWindow(typeof(BuildEditor));
@@ -72,41 +71,45 @@ class BuildEditor : EditorWindow
 
                 if (GUILayout.Button(new GUIContent("Save")))
                 {
-                    NeededGridItem actItem;
-                    Vector2Int min = new(int.MaxValue, int.MaxValue);
-                    Vector2Int max = new(-1, -1);
-
+                    GridItemType actItem;
+                    Vector2 center = new();
+                    int centerChild = 0;
                     Vector2 anchor = new();
-                    actBuild.buildingGrid = new Wrapper<NeededGridItem>[width];
+                    actBuild.itemList = new();
+
                     for(int i = 0; i < width; i++)
                     {
-                        actBuild.buildingGrid[i] = new Wrapper<NeededGridItem>();
-                        actBuild.buildingGrid[i].values = new NeededGridItem[height];
                         for (int j = 0; j < height; j++)
                         {
-                            actItem = neededGridItems[i, j];
-                            actBuild.buildingGrid[i].values[j] = actItem;
-                            if(actItem == NeededGridItem.Road || actItem == NeededGridItem.Anchor)
+                            actItem = GridItemTypes[i, j];
+                            if (actItem == GridItemType.None)
+                                continue;
+                            actBuild.itemList.Add(new(new(i,j), actItem));
+                            if(actItem == GridItemType.Road || actItem == GridItemType.Anchor)
                             {
-                                if (i < min.x)
-                                    min.x = i;
-                                if (j < min.y)
-                                    min.y = j;
-                                if (i > max.x)
-                                    max.x = i;
-                                if (j > max.y)
-                                    max.y = j;
-                                if(actItem == NeededGridItem.Anchor)
+                                center += new Vector2(i, j);
+                                centerChild++;
+                                if (actItem == GridItemType.Anchor)
                                 {
                                     anchor = new(i, j);
                                 }
                             }
                         }
                     }
-                    actBuild.moveBy = new((float)(max.x - min.x) / 2, (float)(max.y - min.y) / 2);
-                    actBuild.moveBy.x -= anchor.x;
-                    actBuild.moveBy.z = anchor.y - actBuild.moveBy.z;
+                    foreach(NeededGridItem elem in actBuild.itemList)
+                    {
+                        elem.pos.x -= anchor.x;
+                        elem.pos.z = elem.pos.z - anchor.y;
+                    }
+
+                    center = center / centerChild;
+
+                    actBuild.moveBy.x = center.x - anchor.x;
+                    actBuild.moveBy.z = anchor.y - center.y;
+                    actBuild.anchor = new(anchor.x, anchor.y);
+                    actBuild.size = new(width, height);
                     canSave = false;
+                    EditorUtility.SetDirty(property.serializedObject.targetObject);
                 }
                 GUI.enabled = true;
                 GUI.backgroundColor = Color.gray;
@@ -116,12 +119,12 @@ class BuildEditor : EditorWindow
                     GUILayout.BeginVertical();
                     for (int j = 0; j < height; j++)
                     {
-                        ChangeColor(neededGridItems[i, j]);
-                        if (GUILayout.Button(new GUIContent(neededGridItems[i,j].ToString()),GUILayout.MaxWidth(position.width / width)))
+                        ChangeColor(GridItemTypes[i, j]);
+                        if (GUILayout.Button(new GUIContent(GridItemTypes[i,j].ToString()),GUILayout.MaxWidth(position.width / width)))
                         {
                             if(Event.current.button == 0)
                             {
-                                item = (int)neededGridItems[i, j] + 1;
+                                item = (int)GridItemTypes[i, j] + 1;
                                 if (item == maxItem)
                                 {
                                     hasAnchor = false;
@@ -134,11 +137,11 @@ class BuildEditor : EditorWindow
                                     else
                                         hasAnchor = true;
                                 }
-                                neededGridItems[i, j] = (NeededGridItem)item;
+                                GridItemTypes[i, j] = (GridItemType)item;
                             }
                             else if (Event.current.button == 1)
                             {
-                                item = (int)neededGridItems[i, j]-1;
+                                item = (int)GridItemTypes[i, j]-1;
                                 if (item == -1)
                                 {
                                     if(hasAnchor)
@@ -151,13 +154,13 @@ class BuildEditor : EditorWindow
                                 }
                                 else if(item == maxItem - 2)
                                     hasAnchor = false;
-                                neededGridItems[i, j] = (NeededGridItem)item;
+                                GridItemTypes[i, j] = (GridItemType)item;
                             }
                             else if (Event.current.button == 2)
                             {
-                                if (neededGridItems[i, j] == NeededGridItem.Anchor)
+                                if (GridItemTypes[i, j] == GridItemType.Anchor)
                                     hasAnchor = false;
-                                neededGridItems[i, j] = NeededGridItem.None;
+                                GridItemTypes[i, j] = GridItemType.None;
                             }
                             canSave = true;
                         }
@@ -172,12 +175,12 @@ class BuildEditor : EditorWindow
 
     void ManageGrid()
     {
-        if (neededGridItems == null)
+        if (GridItemTypes == null)
         {
             canSave = true;
-            neededGridItems = new NeededGridItem[width, height];
+            GridItemTypes = new GridItemType[width, height];
         }
-        else if (neededGridItems.GetLength(0) != width || neededGridItems.GetLength(1) != height)
+        else if (GridItemTypes.GetLength(0) != width || GridItemTypes.GetLength(1) != height)
         {
             canSave = true;
             ResizeGrid();
@@ -186,37 +189,37 @@ class BuildEditor : EditorWindow
 
     void ResizeGrid()
     {
-        NeededGridItem[,] tmpItems = new NeededGridItem[width, height];
+        GridItemType[,] tmpItems = new GridItemType[width, height];
         hasAnchor = false;
-        for(int i = 0; i < width & i < neededGridItems.GetLength(0); i++)
+        for(int i = 0; i < width & i < GridItemTypes.GetLength(0); i++)
         {
-            for (int j = 0; j < height & j < neededGridItems.GetLength(1); j++)
+            for (int j = 0; j < height & j < GridItemTypes.GetLength(1); j++)
             {
-                tmpItems[i, j] = neededGridItems[i, j];
-                if (tmpItems[i, j] == NeededGridItem.Anchor)
+                tmpItems[i, j] = GridItemTypes[i, j];
+                if (tmpItems[i, j] == GridItemType.Anchor)
                     hasAnchor = true;
             }
         }
-        neededGridItems = tmpItems;
+        GridItemTypes = tmpItems;
     }
 
-    void ChangeColor(NeededGridItem gridItem)
+    void ChangeColor(GridItemType gridItem)
     {
         switch (gridItem)
         {
-            case NeededGridItem.None:
+            case GridItemType.None:
                 GUI.backgroundColor = Color.black;
                 break;
-            case NeededGridItem.Road:
+            case GridItemType.Road:
                 GUI.backgroundColor = Color.yellow;
                 break;
-            case NeededGridItem.Water:
+            case GridItemType.Water:
                 GUI.backgroundColor = Color.blue;
                 break;
-            case NeededGridItem.Entrance:
+            case GridItemType.Entrance:
                 GUI.backgroundColor = Color.white;
                 break;
-            case NeededGridItem.Anchor:
+            case GridItemType.Anchor:
                 GUI.backgroundColor = Color.green;
                 break;
         }

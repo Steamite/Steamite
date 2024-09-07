@@ -14,6 +14,7 @@ public class Building : StorageObject
 
     protected virtual void Awake()
     {
+        return;
         myColor = gameObject.GetComponent<MeshRenderer>().material.color; // saves the original color
     }
 
@@ -175,6 +176,7 @@ public class Building : StorageObject
     }
     public virtual void ChangeRenderMode(bool transparent)
     {
+        return;
         Material material = gameObject.GetComponent<MeshRenderer>().material;
         if (transparent)
         {
@@ -262,11 +264,12 @@ public class Building : StorageObject
 
     public virtual bool CanPlace()
     {
-        if (MyRes.DiffRes(build.cost, MyRes.resources, new()).ammount.Sum() == 0)
-        {
-            return MyGrid.CanPlace(this);
-        }
-        return false;
+        bool can = MyRes.DiffRes(build.cost, MyRes.resources, new()).ammount.Sum() == 0;
+        bool tmp = MyGrid.CanPlace(this);
+        if (can && tmp)
+            return true;
+        else
+            return false;
     }
     public virtual void PlaceBuilding(GridTiles gT)
     {

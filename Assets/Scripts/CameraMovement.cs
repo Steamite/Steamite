@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class CameraMovement : MonoBehaviour
     InputAction rotate => cameraMap.FindAction("Rotate");
     InputAction zoom => cameraMap.FindAction("Zoom");
     InputAction reset => cameraMap.FindAction("Reset");
+
+    InputAction panButton => cameraMap.FindAction("Drag - Down");
+    InputAction panMove => cameraMap.FindAction("Drag - Move");
 
     [SerializeField] EventHandler asset;
 
@@ -33,6 +37,9 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] float minY = 3;
     [SerializeField] float maxY = 20;
 
+    [Header("Pan")]
+    [SerializeField] float maxPan = 0.1f;
+    
     float mod;
     private void OnEnable()
     {
@@ -137,6 +144,24 @@ public class CameraMovement : MonoBehaviour
             zoomVal = 0;
         Rot(rot);
         Zoom(zoomVal);
+        Pan();
+    }
+
+    void Pan()
+    {
+        if (panButton.inProgress)
+        {
+            float delta = panMove.ReadValue<Vector2>().y;
+            if (delta > 0)
+                delta = maxPan;
+            else if (delta < 0)
+                delta = -maxPan;
+            if (transform.GetChild(0).localRotation.eulerAngles.x < 10)
+                transform.GetChild(0).localRotation = Quaternion.Euler(10, 0, 0);
+            else if(transform.GetChild(0).localRotation.eulerAngles.x > 85)
+                transform.GetChild(0).localRotation = Quaternion.Euler(85, 0, 0);
+            transform.GetChild(0).Rotate(delta, 0, 0);
+        }
     }
 
     /// <summary>
