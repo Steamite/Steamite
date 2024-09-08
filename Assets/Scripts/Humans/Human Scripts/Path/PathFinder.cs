@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class PathFinder
 {
@@ -24,7 +25,7 @@ public static class PathFinder
                 {
                     plan.path.RemoveAt(plan.path.Count - 1);
                 }
-                else if(MyGrid.grid[(int)_start.x, (int)_start.z].id != b.id)
+                else if(MyGrid.GetGridItem(_start).id != b.id)
                     plan.path.Add(LastStep(plan.path.Count > 0 ? plan.path[^1] : _start, b.gameObject, 1));
             }
             else
@@ -44,7 +45,7 @@ public static class PathFinder
     {
         List<GridPos> positions = new();
         List<int> entryPoints = new();
-        Building part = MyGrid.grid[(int)_start.x, (int)_start.z] as Building; // gets tile build reference if standing on it
+        Building part = MyGrid.GetGridItem(_start) as Building; // gets tile build reference if standing on it
         Plan plan = new();
 
         for (int i = 0; i < objects.Count; i++)
@@ -59,10 +60,9 @@ public static class PathFinder
                     entryPoints.Add(i);
                     continue;
                 }
-                foreach (NeededGridItem item in building.build.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
+                foreach (RectTransform t in MyGrid.sceneReferences.Overlay.buildingOverlays.First(q=> q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q=>q.transform))//item in building.build.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
                 {
-                    // TODO
-                    positions.Add(new(9,10));
+                    positions.Add(new(t.position));
                     entryPoints.Add(i);
                 }
                 if (part != null && part.id == building.id) // the build that the worker is standing on, is one of the destinations 
@@ -217,7 +217,7 @@ public static class PathFinder
         }
         else
         {
-            return MyGrid.grid[(int)vec.x, (int)vec.z].GetType() == t;
+            return MyGrid.GetGridItem(vec).GetType() == t;
         }
     }
     static bool Check(GridPos checkVec, int pathIndex, List<List<GridPos>> paths, List<GridPos> positions, int check, Plan plan)

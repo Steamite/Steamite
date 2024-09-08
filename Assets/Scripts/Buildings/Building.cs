@@ -225,7 +225,10 @@ public class Building : StorageObject
         build = (save as BSave).build;
         if (build.constructed)
         {
-            gameObject.layer = 6;
+            foreach(GameObject g in transform.GetComponentsInChildren<GameObject>())
+            {
+                g.layer = 6;
+            }
             GetComponent<SortingGroup>().sortingLayerName = "Buildings";
             if (build.deconstructing)
             {
@@ -264,16 +267,19 @@ public class Building : StorageObject
 
     public virtual bool CanPlace()
     {
-        bool can = MyRes.DiffRes(build.cost, MyRes.resources, new()).ammount.Sum() == 0;
+        //bool can = MyRes.DiffRes(build.cost, MyRes.resources, new()).ammount.Sum() == 0;
         bool tmp = MyGrid.CanPlace(this);
-        if (can && tmp)
+        if (/*can &&*/ tmp)
             return true;
         else
             return false;
     }
     public virtual void PlaceBuilding(GridTiles gT)
     {
-        gameObject.layer = 6;
+        foreach (Transform t in transform.GetComponentsInChildren<Transform>())
+        {
+            t.gameObject.layer = 6;
+        }
         GetComponent<SortingGroup>().sortingLayerName = "Buildings";
         build.maximalProgress = build.cost.ammount.Sum() * 2;
         gT.HighLight(new(), gameObject);
@@ -287,11 +293,15 @@ public class Building : StorageObject
     public virtual void DestoyBuilding()
     {
         Destroy(gameObject);
-        if(transform.childCount > 0 && transform.GetChild(0).childCount > 0)
+        if(id > -1)
         {
-            foreach (GridPos gp in transform.GetChild(0).GetComponentsInChildren<Transform>().Skip(1).Select(q=> new GridPos(q.transform.position)))
+            MyGrid.sceneReferences.Overlay.Remove(id);
+            if (transform.childCount > 0 && transform.GetChild(0).childCount > 0)
             {
-                MyGrid.grid[(int)gp.x, (int)gp.z].GetComponent<Road>()?.entryPoints.Remove(id);
+                foreach (GridPos gp in transform.GetChild(0).GetComponentsInChildren<Transform>().Skip(1).Select(q => new GridPos(q.transform.position)))
+                {
+                    MyGrid.GetGridItem(gp).GetComponent<Road>()?.entryPoints.Remove(id);
+                }
             }
         }
     }

@@ -16,7 +16,7 @@ public class WaterPump : ProductionBuilding
     protected override void UpdateText(Transform t)
     {
         GridPos waterPos = new(transform.GetChild(2).gameObject);
-        water = MyGrid.grid[(int)waterPos.x, (int)waterPos.z] as Water;
+        water = MyGrid.GetGridItem(waterPos) as Water;
         t = t.GetChild(2);
         t.GetChild(0).GetComponent<ProductionButton>().UpdateButtonState(pTime.currentTime, pTime.prodTime);
         
@@ -98,7 +98,7 @@ public class WaterPump : ProductionBuilding
         if (!networkAccess.ConnectPipes(transform.GetChild(2)))
             res = false;
         GridPos gridPos = new(transform.GetChild(2).gameObject);
-        if (MyGrid.grid[(int)gridPos.x, (int)gridPos.z].PrintText() != "w")
+        if (MyGrid.GetGridItem(gridPos).PrintText() != "w")
             res = false;
         return res;
     }
@@ -111,7 +111,7 @@ public class WaterPump : ProductionBuilding
     {
         base.FinishBuild();
         GridPos waterPos = new(transform.GetChild(2).gameObject);
-        water = MyGrid.grid[(int)waterPos.x, (int)waterPos.z] as Water;
+        water = MyGrid.GetGridItem(waterPos) as Water;
         networkAccess.ConnectToNetwork(transform.GetChild(3));
     }
     protected override void AfterProduction()

@@ -21,14 +21,16 @@ public class BlueprintEditor : PropertyDrawer
         // Calculate rects
         var buttonReact = new Rect(position.x, position.y, position.width, position.height);
 
-        // Draw fields - pass GUIContent.none to each so they are drawn without labels
-        if (((Building)property.serializedObject.targetObject).build.blueprint.itemList.Count == 0)
-            GUI.backgroundColor = Color.red;
-        else
-            GUI.backgroundColor = Color.white;
-        if (GUI.Button(buttonReact, "Manage"))
-        {
-            BuildEditor.ShowWindow(((Building)property.serializedObject.targetObject).build.blueprint, property);
+        if ((Building)property.serializedObject.targetObject){
+            // Draw fields - pass GUIContent.none to each so they are drawn without labels
+            if (((Building)property.serializedObject.targetObject).build.blueprint.itemList.Count == 0)
+                GUI.backgroundColor = Color.red;
+            else
+                GUI.backgroundColor = Color.white;
+            if (GUI.Button(buttonReact, "Manage"))
+            {
+                BuildEditor.ShowWindow(((Building)property.serializedObject.targetObject).build.blueprint, property);
+            }
         }
         EditorGUI.EndProperty();
     }

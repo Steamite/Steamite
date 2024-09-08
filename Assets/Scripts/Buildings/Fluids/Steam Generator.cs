@@ -25,8 +25,8 @@ public class SteamGenerator : ProductionBuilding
         bool res = true;
         if (!base.CanPlace())
             res = false;
-        if (!networkAccess.ConnectPipes(transform.GetChild(2)))
-            res = false;
+        //if (!networkAccess.ConnectPipes(transform.GetChild(1)))
+        //    res = false;
         return res;
     }
     public override void PlaceBuilding(GridTiles gT)
@@ -54,7 +54,7 @@ public class SteamGenerator : ProductionBuilding
             if (networkAccess.fluid.ammount[0] < waterCost)
             {
                 if (!lastWaterAccessNetworkElem)
-                    lastWaterAccessNetworkElem = networkAccess.FindStore(FluidType.water, transform.GetChild(2), false);
+                    lastWaterAccessNetworkElem = networkAccess.FindStore(FluidType.water, transform.GetChild(1), false);
                 if (lastWaterAccessNetworkElem)
                 {
                     int index = lastWaterAccessNetworkElem.GetFluid().type.IndexOf(FluidType.water);
@@ -95,7 +95,7 @@ public class SteamGenerator : ProductionBuilding
                     }
                     lastSteamAccessNetworkElem = null;
                 }
-                if ((lastSteamAccessNetworkElem = networkAccess.FindStore(FluidType.steam, transform.GetChild(2), true)) != null)
+                if ((lastSteamAccessNetworkElem = networkAccess.FindStore(FluidType.steam, transform.GetChild(1), true)) != null)
                 {
                     lastSteamAccessNetworkElem.GetFluid().ammount[1] += steamProduction;
                 }
@@ -157,7 +157,7 @@ public class SteamGenerator : ProductionBuilding
 
         if (clickable == null)
             clickable = new FluidProdBSave();
-        (clickable as FluidProdBSave).fluidSave = networkAccess.SaveFluidData(transform.GetChild(2));
+        (clickable as FluidProdBSave).fluidSave = networkAccess.SaveFluidData(transform.GetChild(1));
         return base.Save(clickable);
     }
     public override void Load(ClickableObjectSave save)
