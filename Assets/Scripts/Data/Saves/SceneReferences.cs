@@ -15,7 +15,7 @@ public class SceneReferences : MonoBehaviour
     public Transform research;
     public Transform levelCamera;
     public Transform timeButtons;
-    public UIOverlay Overlay;
+    public UIOverlay overlay;
 
     //public GameObject
 

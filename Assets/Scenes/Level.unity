@@ -2294,8 +2294,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 210019824}
+  m_Children: []
   m_Father: {fileID: 1537335779}
   m_LocalEulerAnglesHint: {x: 270, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3093,41 +3092,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4613935305307938995, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
   m_PrefabInstance: {fileID: 200792219}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &210019823
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 210019824}
-  m_Layer: 11
-  m_Name: Build Grid Overlay
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &210019824
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 210019823}
-  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 150913266}
-  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &211926603
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20060,7 +20024,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlayTile: {fileID: 4350976640805172038, guid: 39b39dcf1eb28c5469ce6d2e2e99bd85, type: 3}
   overlayParent: {fileID: 1836081214}
-  entryPointParent: {fileID: 0}
+  entryPointParent: {fileID: 150913266}
   groupPrefab: {fileID: 6444442565779037667, guid: 9a4fb24bbc4bd8d489cca057c5060e76, type: 3}
   buildingOverlays: []
 --- !u!1001 &1541428447
@@ -29847,26 +29811,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MyCamera
       objectReference: {fileID: 0}
-    - target: {fileID: 1010446617054400077, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 4096
-      objectReference: {fileID: 0}
-    - target: {fileID: 1133921947934513987, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
-      propertyPath: m_ClearFlags
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1133921947934513987, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 4087
-      objectReference: {fileID: 0}
     - target: {fileID: 4186981223861399555, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: asset
       value: 
       objectReference: {fileID: 6086404398923934763}
-    - target: {fileID: 6314038135591522541, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
     - target: {fileID: 9079333737667581699, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10
@@ -30428,7 +30376,7 @@ MonoBehaviour:
   research: {fileID: 4202380561512442795}
   levelCamera: {fileID: 0}
   timeButtons: {fileID: 4202380561512442796}
-  Overlay: {fileID: 1537335780}
+  overlay: {fileID: 1537335780}
 --- !u!114 &8277524054700303562
 MonoBehaviour:
   m_ObjectHideFlags: 0

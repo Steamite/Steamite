@@ -49,7 +49,7 @@ public class UIOverlay : MonoBehaviour
 
     public void AddBuildingOverlay(GridPos gridPos, int id)
     {
-        RectTransform t = Instantiate(groupPrefab, transform.GetChild(1)).GetComponent<RectTransform>();
+        RectTransform t = Instantiate(groupPrefab, entryPointParent).GetComponent<RectTransform>();
         t.anchoredPosition = new(gridPos.x, -gridPos.z);
         t.name = id.ToString();
         buildingOverlays.Add(t);
@@ -80,10 +80,22 @@ public class UIOverlay : MonoBehaviour
     }
 
     // show/hide entry points
-    public void ToggleEntryPoints()
+    public void ToggleEntryPoints(Road r)
+    {
+        if (r)
+            foreach(int id in r.entryPoints)
+            {
+                RectTransform rect = buildingOverlays.First(q => q.name == id.ToString());
+                rect.GetComponentsInChildren<Image>().FirstOrDefault(q => new GridPos(q.transform.position).Equals(new GridPos(r.transform.position))).gameObject.SetActive(false);
+            }
+                
+    }
+
+    // show/hide entry points
+    /*public void ToggleEntryPoints()
     {
         bool toggle = transform.GetChild(1).gameObject.activeSelf;
 
         transform.GetChild(1).gameObject.SetActive(!toggle);
-    }
+    }*/
 }

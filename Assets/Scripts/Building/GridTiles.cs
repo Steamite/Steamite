@@ -488,7 +488,7 @@ public class GridTiles : MonoBehaviour
                 }
                 else
                 {
-                    MyGrid.sceneReferences.Overlay.DeleteBuildGrid();
+                    MyGrid.sceneReferences.overlay.DeleteBuildGrid();
                     buildBlueprint.DestoyBuilding();
                     Blueprint();
                     return;
@@ -515,7 +515,7 @@ public class GridTiles : MonoBehaviour
                     break;
                 case SelectionMode.build:
                     Camera.main.GetComponent<PhysicsRaycaster>().eventMask = defaultMask;
-                    MyGrid.sceneReferences.Overlay.DeleteBuildGrid();
+                    MyGrid.sceneReferences.overlay.DeleteBuildGrid();
                     if (buildBlueprint)
                         buildBlueprint.DestoyBuilding();
                     foreach(ClickableObject clickable in markedTiles)
