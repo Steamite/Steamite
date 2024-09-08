@@ -14,7 +14,7 @@ public class ProductionBuilding : AssignBuilding
     public ProductionTime pTime = new();
     [Header("States")]
     public List<Human> working = new();
-    [SerializeField]public ProductionStates pStates = new();
+    public ProductionStates pStates = new();
 
     public override void FinishBuild()
     {

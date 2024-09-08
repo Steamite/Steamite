@@ -295,7 +295,7 @@ public class Building : StorageObject
         Destroy(gameObject);
         if(id > -1)
         {
-            MyGrid.sceneReferences.Overlay.Remove(id);
+            MyGrid.sceneReferences.overlay.Remove(id);
             if (transform.childCount > 0 && transform.GetChild(0).childCount > 0)
             {
                 foreach (GridPos gp in transform.GetChild(0).GetComponentsInChildren<Transform>().Skip(1).Select(q => new GridPos(q.transform.position)))

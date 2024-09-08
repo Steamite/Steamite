@@ -13,7 +13,7 @@ public static class MyGrid
     public static List<Building> buildings = new();
     public static List<Chunk> chunks = new();
     public static List<Human> humans = new();
-    public static List<FluidNetwork> fluidNetworks = new(); 
+    public static List<FluidNetwork> fluidNetworks = new();
     public static GridTiles gridTiles;
 
     static ClickableObject[,] grid;
@@ -47,6 +47,22 @@ public static class MyGrid
         {
             Debug.LogError($"(Set)Index outside of grid bounds, x: {x}, y :{y}.");
             return;
+        }
+        if (clickable.GetComponent<Road>())
+        {
+            foreach (Transform tran in sceneReferences.overlay.buildingOverlays)
+            {
+                for(int i = 0; i < tran.childCount; i++)
+                {
+                    Transform t = tran.GetChild(i);
+                    if (t.gameObject.activeSelf == false && new GridPos(t.position).Equals(gp))
+                    {
+                        t.gameObject.SetActive(true);
+                        (clickable as Road).entryPoints.Add(int.Parse(t.parent.name));
+                        t.localPosition = new(t.localPosition.x, t.localPosition.y, 0);
+                    }
+                }
+            }
         }
         grid[x, y] = clickable;
     }
@@ -125,14 +141,14 @@ public static class MyGrid
             pipe.PlacePipe();
         }
     }
-    
+
     ////////////////////////////////////////////////////////////
     //------------------------Updating------------------------//
     ////////////////////////////////////////////////////////////
     public static void PlaceBuild(Building building, bool load = false)
     {
-        
-        if(building.id == -1)
+
+        if (building.id == -1)
             building.UniqueID();
         buildings.Add(building);
         // assigns sizes acording to rotation
@@ -141,87 +157,41 @@ public static class MyGrid
         //BuildObject buildObject = new();
         //bool canBuild = true;
         GridPos gridPos = new(building.transform.position - CheckRotation(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
-        sceneReferences.Overlay.AddBuildingOverlay(gridPos, building.id);
-        for (int i = building.build.blueprint.itemList.Count-1; i > -1; i--)
+        sceneReferences.overlay.AddBuildingOverlay(gridPos, building.id);
+        for (int i = building.build.blueprint.itemList.Count - 1; i > -1; i--)
         {
             NeededGridItem item = building.build.blueprint.itemList[i];
             GridPos itemPos = CheckRotation(item.pos, building.transform.rotation.eulerAngles.y, true);
+            int x = (int)(itemPos.x + gridPos.x);
+            int y = (int)(gridPos.z - itemPos.z);
+            Road r = GetGridItem(new(x, y))?.GetComponent<Road>();
             switch (item.itemType)
             {
                 case GridItemType.Road:
                 case GridItemType.Anchor:
                     if (load)
-                    {
-                        GameObject.Instantiate(tilePrefabs.GetPrefab("Road"), new(itemPos.x + gridPos.x, 0.45f, gridPos.z - itemPos.z), Quaternion.identity, sceneReferences.roads);
-                    }
-                    grid[(int)(itemPos.x + gridPos.x), (int)(gridPos.z - itemPos.z)] = building;
+                        GameObject.Instantiate(tilePrefabs.GetPrefab("Road"), new(x, 0.45f, y), Quaternion.identity, sceneReferences.roads);
+                    sceneReferences.overlay.ToggleEntryPoints(r);
+                    SetGridItem(new(x,y), building);
                     break;
                 case GridItemType.Entrance:
-                    Road r = grid[(int)(itemPos.x + gridPos.x), (int)(gridPos.z - itemPos.z)].GetComponent<Road>();
+                    if (load)
+                        sceneReferences.overlay.Add(new(itemPos.x, itemPos.z), -1);
+                    else
+                        sceneReferences.overlay.Add(new(itemPos.x, itemPos.z), i);
                     if (r)
                     {
-                        if(load)
-                            sceneReferences.Overlay.Add(new(itemPos.x, itemPos.z), -1);
-                        else
-                            sceneReferences.Overlay.Add(new(itemPos.x, itemPos.z), i);
+                        sceneReferences.overlay.buildingOverlays[^1].GetComponentsInChildren<Image>().ToList()[^1].gameObject.SetActive(true);
                         r.entryPoints.Add(building.id);
                         continue;
                     }
+                    sceneReferences.overlay.buildingOverlays[^1].GetComponentsInChildren<Image>().ToList()[^1].gameObject.SetActive(false);
                     break;
             }
         }
-        if(!load)
-            sceneReferences.Overlay.DeleteBuildGrid();
-        /*
-        //Vector2 v = CheckRotation(building.build, building.transform.rotation.eulerAngles.y);
-        float _x = 0;//v.x;
-        float _z = 0;// v.y;
-        // calculates builds position(lower left corner)
-        Vector3 vec = new Vector3(
-            building.transform.position.x - ((_x - 1) / 2), 
-            building.transform.position.y, 
-            building.transform.position.z - ((_z - 1) / 2));
+        if (!load)
+            sceneReferences.overlay.DeleteBuildGrid();
 
-        // adds buildings to the grid
-        for (int x = 0; x < _x; x++)
-        {
-            int vecX = Mathf.FloorToInt(vec.x) + x;
-            if(0 <= vecX && vecX < width) // inside range
-            {
-                for (int z = 0; z < _z; z++)
-                {
-                    int vecZ = Mathf.FloorToInt(vec.z) + z;
-                    if (0 <= vecZ && vecZ < height) // inside range
-                    {
-                        grid[vecX, vecZ] = building;
-                        if (roadPref)
-                        {
-                            GameObject.Instantiate(roadPref, new(vecX, 0, vecZ), Quaternion.identity, building.transform.parent.parent.GetChild(1));
-                        }
-                    }
-                }
-            }
-        }
-        int i = 0;
-
-        if(building.transform.childCount > 0 && building.transform.GetChild(0).childCount > 0)
-        {
-            // adds entry points
-            foreach (Transform entryPoint in building.transform.GetChild(0).GetComponentsInChildren<Transform>())
-            {
-                i++;
-                if (i == 1) continue;
-                GridPos _vec = new(entryPoint.transform.position);
-                if ((0 <= _vec.x && 0 <= _vec.z) && (_vec.x < width && _vec.z < height))
-                {
-                    Road r = grid[(int)_vec.x, (int)_vec.z] as Road;
-                    if (r != null)
-                    {
-                        r.entryPoints.Add(building.id);
-                    }
-                }
-            }
-        }*/
     }
 
     ////////////////////////////////////////////////////////////
@@ -281,9 +251,13 @@ public static class MyGrid
         BuildObject buildObject = new();
         bool canBuild = true;
         GridPos gridPos = new(building.transform.position - CheckRotation(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
-        sceneReferences.Overlay.CreateBuildGrid(building);
+        sceneReferences.overlay.CreateBuildGrid(building);
         // checks all Parts of a building
-        Transform overlay = sceneReferences.Overlay.overlayParent;
+        Transform overlay = sceneReferences.overlay.overlayParent;
+        List<Road> roads = new();
+        List<Image> images = new();
+        List<Image> entrances = new();
+        int activeEntrances = -1;
         for (int i = 0; i < building.build.blueprint.itemList.Count; i++)
         {
             NeededGridItem item = building.build.blueprint.itemList[i];
@@ -305,107 +279,66 @@ public static class MyGrid
                 case GridItemType.Entrance:
                     c = new(0.5f, 0.5f, 0.5f, 0.25f);
                     errC = new(1f, 0.3f, 0.3f, 0.25f);
+                    entrances.Add(tile.GetComponent<Image>());
+                    activeEntrances++;
                     break;
                 default:
                     continue;
             }
-            if (GetGridItem(itemPos).GetComponent<Rock>())
+            ClickableObject clickable = GetGridItem(itemPos);
+            if (!clickable)
+                continue;
+            if (clickable.GetComponent<Rock>())
             {
                 tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 2.01f);
-                if(item.itemType != GridItemType.Anchor)
+                if (item.itemType == GridItemType.Entrance)
+                {
+                    
+                }
+                else if (item.itemType != GridItemType.Anchor)
+                {
                     tile.GetComponent<Image>().color = errC;
-                canBuild = false;
+                    canBuild = false;
+                }
+                else
+                    canBuild = false;
             }
             else
             {
                 tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 0);
-                Road r = GetGridItem(itemPos).GetComponent<Road>();
+                Road r = clickable.GetComponent<Road>();
                 if (r)
                 {
+                    if(r.entryPoints.Count > 0 && (item.itemType == GridItemType.Road || item.itemType == GridItemType.Anchor))
+                    {
+                        roads.Add(r);
+                        images.Add(tile.GetComponent<Image>());
+                    }
                     tile.GetComponent<Image>().color = c;
+                    continue;
                 }
-                else
+                else if(item.itemType != GridItemType.Entrance)
                 {
                     tile.GetComponent<Image>().color = errC;
                     canBuild = false;
                 }
             }
-            //overlay.GetChild(i).GetComponent<>
-        }
-        // assigns sizes acording to rotation
-        //TODO
-        /*Vector2 v = CheckRotation(building.build, building.transform.rotation.eulerAngles.y);
-        float _x = 0;// v.x;
-        float _z = 0;// v.y;
-        // calculates builds position(lower left corner)
-        Vector3 vec = new Vector3(
-            building.transform.position.x - ((_x - 1) / 2),
-            building.transform.position.y,
-            building.transform.position.z - ((_z - 1) / 2));
-      
-        List<Vector2Int> tempP = new();
-        int i;
-        for (int x = 0; x < _x; x++)
-        {
-            int vecX = Mathf.FloorToInt(vec.x) + x;
-            if (0 <= vecX && vecX < width) // inside range
-            {
-                for (int z = 0; z < _z; z++)
-                {
-                    int vecZ = Mathf.FloorToInt(vec.z) + z;
-                    if (0 <= vecZ && vecZ < height) // inside range
-                    {
-                        Road r = grid[vecX, vecZ].GetComponent<Road>();
-                        if(r != null)
-                        {
-                            tempP.Add(new(vecX, vecZ));
-                            foreach (int id in r.entryPoints)
-                            {
-                                bool found = false;
-                                i = 0;
-                                foreach(Transform pos in buildings[buildings.Select(q => q.id).ToList().IndexOf(id)].transform.GetChild(0).GetComponentsInChildren<Transform>())
-                                {
-                                    i++;
-                                    if (i == 1)
-                                        continue;
-                                    Vector2Int _v = Vector2Int.RoundToInt(new(pos.transform.position.x, pos.transform.position.z));
-                                    if (!tempP.Contains(_v))
-                                    {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                                if (!found)
-                                {
-                                    return false;
-                                }
-                            }
-                        }
-                        else return false;
-                    }
-                    else return false;
-                }
-            }
-            else return false;
+            if (item.itemType == GridItemType.Entrance)
+                activeEntrances--;
         }
 
-        i = 0;
-        // checks all Entry Points of a building
-        foreach (Transform entryPoint in building.transform.GetChild(0).GetComponentsInChildren<Transform>())
+        if (!CheckEntranceObscursion(roads, images))
+            canBuild = false;
+        foreach(Image image in entrances)
         {
-            i++;
-            if (i == 1) continue;
-            GridPos gridPos = new(entryPoint.transform.position);
-            if ((0 <= gridPos.x && 0 <= gridPos.z) && (gridPos.x < width && gridPos.z < height))
+            if (activeEntrances == -1)
             {
-                Road r = grid[(int)gridPos.x, (int)gridPos.z] as Road;
-                if (r != null)
-                {
-                    return true;
-                }
+                image.color = new(1f, 0.3f, 0.3f, 0.25f);
+                canBuild = false;
             }
-        }*/
-        // change for building without entry points
+            else
+                image.color = new(0.5f, 0.5f, 0.5f, 0.25f);
+        }
         return canBuild;
     }
 
@@ -470,7 +403,7 @@ public static class MyGrid
         Vector3 vec = rock.transform.position;
         gridTiles.toBeDigged.Remove(rock); // removes from list
         gridTiles.markedTiles.Remove(rock);
-        GameObject replacement = GameObject.Instantiate(tilePrefabs.GetPrefab("Road").gameObject, new Vector3(vec.x, rock.transform.localPosition.y+0.45f, vec.z), Quaternion.identity, gridTiles.transform); // creates a road on the place of tiles
+        GameObject replacement = GameObject.Instantiate(tilePrefabs.GetPrefab("Road").gameObject, new Vector3(vec.x, rock.transform.localPosition.y + 0.45f, vec.z), Quaternion.identity, gridTiles.transform); // creates a road on the place of tiles
         replacement.name = replacement.name.Replace("(Clone)", "");
         replacement.transform.parent = GameObject.Find(replacement.name + "s").transform;
         SetGridItem(new(vec), replacement.GetComponent<Road>() ? replacement.GetComponent<Road>() : replacement.GetComponent<Water>());
@@ -490,7 +423,7 @@ public static class MyGrid
                 grid[x, z] = (GameObject.Instantiate(tilePrefabs.GetPrefab("Road").gameObject, new(x, 0, z), Quaternion.identity, building.transform.parent.parent.GetChild(1)) as GameObject).GetComponent<Road>();
             }
         }*/
-        if(building.GetType() != typeof(Pipe))
+        if (building.GetType() != typeof(Pipe))
         {
             /*foreach ((RectTransform t in MyGrid.sceneReferences.OverlayCanvas.buildingOverlays.First(q => q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q => q.transform)))
             {
@@ -505,5 +438,34 @@ public static class MyGrid
         Debug.Log(PrintGrid());
     }
 
+    static bool CheckEntranceObscursion(List<Road> roads, List<Image> tiles)
+    {
+        Dictionary<int, int> buildings = new Dictionary<int, int>();
+        bool ok = true;
+
+        foreach (Road road in roads)
+        {
+            foreach (int i in road.entryPoints)
+            {
+                if (!buildings.Keys.Contains(i))
+                    buildings.Add(i, sceneReferences.overlay.buildingOverlays.First(q => q.name == i.ToString()).GetComponentsInChildren<Image>().Where(q => q.enabled).Count());
+                buildings[i]--;
+                if (buildings[i] == 0)
+                {
+                    List<int> ids = new();
+                    for (int j = 0; j < roads.Count; j++)
+                    {
+                        if (roads[j].entryPoints.Contains(i))
+                        {
+                            //entries[j].gameObject.SetActive(false);
+                            tiles[j].color = new(1, 0, 0, 0.5f);
+                            ok = false;
+                        }
+                    }
+                }
+            }
+        }
+        return ok;
+    }
 
 }
