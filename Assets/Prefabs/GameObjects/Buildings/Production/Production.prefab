@@ -567,8 +567,8 @@ MonoBehaviour:
         z: 3
         level: 0
       moveBy:
-        x: -1
-        z: 1
+        x: -0.5
+        z: 0.5
         level: 0
       anchor:
         x: 1

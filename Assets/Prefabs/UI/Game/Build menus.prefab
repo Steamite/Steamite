@@ -2443,7 +2443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65ef790084eb06740acbc36a8625a187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildPrefab: {fileID: 2524446502032690299, guid: efe51ab318f684d1098e36750a1bd4f0, type: 3}
+  buildPrefab: {fileID: 4774776962751315979, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
   unlocked_by: -1
 --- !u!1 &5083721147254122351
 GameObject:

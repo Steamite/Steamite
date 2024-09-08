@@ -54,7 +54,7 @@ public class FluidTank : Building
     public override void DestoyBuilding()
     {
         base.DestoyBuilding();
-        networkAccess.DisconnectFromNetwork(transform.GetChild(2));
+        networkAccess.DisconnectFromNetwork(transform.GetChild(1));
     }
     /*public override Fluid GetFluid()
     {

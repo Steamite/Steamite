@@ -16,19 +16,56 @@ public static class MyGrid
     public static List<FluidNetwork> fluidNetworks = new(); 
     public static GridTiles gridTiles;
 
-    public static ClickableObject[,] grid;
+    static ClickableObject[,] grid;
     public static Pipe[,] pipeGrid;
 
     public static ResourceHolder buildPrefabs;
     public static ResourceHolder tilePrefabs;
     public static ResourceHolder specialPrefabs;
     public static SceneReferences sceneReferences;
+
+    ////////////////////////////////////////////////////////////
+    //------------------------GetSet--------------------------//
+    ////////////////////////////////////////////////////////////
+    public static ClickableObject GetGridItem(GridPos gp)
+    {
+        int x = Mathf.RoundToInt(gp.x);
+        int y = Mathf.RoundToInt(gp.z);
+        if (x < 0 || x >= width || y < 0 || y >= height)
+        {
+            Debug.LogError($"(Get)Index outside of grid bounds, x: {x}, y :{y}.");
+            return null;
+        }
+        return grid[x, y];
+    }
+
+    public static void SetGridItem(GridPos gp, ClickableObject clickable)
+    {
+        int x = Mathf.RoundToInt(gp.x);
+        int y = Mathf.RoundToInt(gp.z);
+        if (x < 0 || x >= width || y < 0 || y >= height)
+        {
+            Debug.LogError($"(Set)Index outside of grid bounds, x: {x}, y :{y}.");
+            return;
+        }
+        grid[x, y] = clickable;
+    }
+
+    public static void ClearGrid()
+    {
+        buildings = new List<Building>();
+        chunks = new List<Chunk>();
+        grid = new ClickableObject[width, height];
+        pipeGrid = new Pipe[width, height];
+        fluidNetworks = new();
+    }
     ////////////////////////////////////////////////////////////
     //------------------------Start---------------------------//
     ////////////////////////////////////////////////////////////
-    public static StringBuilder PrepGrid(Transform t)
+    public static StringBuilder PrepGrid(Transform t, SceneReferences _sceneReferences)
     {
         ClearGrid();
+        sceneReferences = _sceneReferences;
         gridTiles = t.GetComponent<GridTiles>();
         grid = new ClickableObject[width, height];
         pipeGrid = new Pipe[width, height];
@@ -42,20 +79,12 @@ public static class MyGrid
         }
         return PrintGrid();
     }
-    public static void ClearGrid()
-    {
-        buildings = new List<Building>();
-        chunks = new List<Chunk>();
-        fluidNetworks = new();
-        grid = null;
-        pipeGrid = null;
-    }
     static void FillRoads(Transform objects)
     {
         for (int j = 0; j < objects.childCount; j++)
         {
             GridPos vec = new(objects.GetChild(j).transform.localPosition);
-            grid[(int)vec.x, (int)vec.z] = objects.GetChild(j).GetComponent<Road>();
+            SetGridItem(vec, objects.GetChild(j).GetComponent<Road>());
         }
     }
     static void FillRocks(Transform objects)
@@ -63,8 +92,8 @@ public static class MyGrid
         for (int j = 0; j < objects.childCount; j++)
         {
             GridPos vec = new(objects.GetChild(j).transform.localPosition);
-            grid[(int)vec.x, (int)vec.z] = objects.GetChild(j).GetComponent<Rock>();
-            grid[(int)vec.x, (int)vec.z].UniqueID();
+            SetGridItem(vec, objects.GetChild(j).GetComponent<Rock>());
+            GetGridItem(vec).UniqueID();
         }
     }
     static void FillWater(Transform objects)
@@ -72,7 +101,7 @@ public static class MyGrid
         for (int j = 0; j < objects.childCount; j++)
         {
             GridPos vec = new(objects.GetChild(j).transform.localPosition);
-            grid[(int)vec.x, (int)vec.z] = objects.GetChild(j).GetComponent<Water>();
+            SetGridItem(vec, objects.GetChild(j).GetComponent<Water>());
         }
     }
     static void FillBuildings(Transform objects)
@@ -81,7 +110,7 @@ public static class MyGrid
         {
             if (!building.GetComponent<BuildPipe>())
             {
-                PlaceBuild(building);
+                PlaceBuild(building, true);
                 if (building.GetComponent<ProductionBuilding>() && building.build.constructed)
                 {
                     building.GetComponent<ProductionBuilding>().RefreshStatus();
@@ -112,7 +141,8 @@ public static class MyGrid
         //BuildObject buildObject = new();
         //bool canBuild = true;
         GridPos gridPos = new(building.transform.position - CheckRotation(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
-        for (int i = 0; i < building.build.blueprint.itemList.Count; i++)
+        sceneReferences.Overlay.AddBuildingOverlay(gridPos, building.id);
+        for (int i = building.build.blueprint.itemList.Count-1; i > -1; i--)
         {
             NeededGridItem item = building.build.blueprint.itemList[i];
             GridPos itemPos = CheckRotation(item.pos, building.transform.rotation.eulerAngles.y, true);
@@ -122,7 +152,7 @@ public static class MyGrid
                 case GridItemType.Anchor:
                     if (load)
                     {
-                        GameObject.Instantiate(tilePrefabs.GetPrefab("Road"), new(itemPos.x + gridPos.x, 0, gridPos.z - itemPos.z), Quaternion.identity , sceneReferences.roads);
+                        GameObject.Instantiate(tilePrefabs.GetPrefab("Road"), new(itemPos.x + gridPos.x, 0.45f, gridPos.z - itemPos.z), Quaternion.identity, sceneReferences.roads);
                     }
                     grid[(int)(itemPos.x + gridPos.x), (int)(gridPos.z - itemPos.z)] = building;
                     break;
@@ -130,13 +160,18 @@ public static class MyGrid
                     Road r = grid[(int)(itemPos.x + gridPos.x), (int)(gridPos.z - itemPos.z)].GetComponent<Road>();
                     if (r)
                     {
+                        if(load)
+                            sceneReferences.Overlay.Add(new(itemPos.x, itemPos.z), -1);
+                        else
+                            sceneReferences.Overlay.Add(new(itemPos.x, itemPos.z), i);
                         r.entryPoints.Add(building.id);
                         continue;
                     }
                     break;
             }
-            //overlay.GetChild(i).GetComponent<>
         }
+        if(!load)
+            sceneReferences.Overlay.DeleteBuildGrid();
         /*
         //Vector2 v = CheckRotation(building.build, building.transform.rotation.eulerAngles.y);
         float _x = 0;//v.x;
@@ -246,13 +281,15 @@ public static class MyGrid
         BuildObject buildObject = new();
         bool canBuild = true;
         GridPos gridPos = new(building.transform.position - CheckRotation(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
-        sceneReferences.OverlayCanvas.CreateBuildGrid(building);
+        sceneReferences.Overlay.CreateBuildGrid(building);
         // checks all Parts of a building
-        Transform overlay = sceneReferences.OverlayCanvas.overlayParent;
+        Transform overlay = sceneReferences.Overlay.overlayParent;
         for (int i = 0; i < building.build.blueprint.itemList.Count; i++)
         {
             NeededGridItem item = building.build.blueprint.itemList[i];
             GridPos itemPos = CheckRotation(item.pos, building.transform.rotation.eulerAngles.y, true);
+            itemPos.x += gridPos.x;
+            itemPos.z = gridPos.z - itemPos.z;
             Transform tile = overlay.GetChild(i);
             Color errC, c;
             switch (item.itemType)
@@ -272,7 +309,7 @@ public static class MyGrid
                 default:
                     continue;
             }
-            if (grid[(int)(itemPos.x + gridPos.x), (int)(gridPos.z - itemPos.z)].GetComponent<Rock>())
+            if (GetGridItem(itemPos).GetComponent<Rock>())
             {
                 tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 2.01f);
                 if(item.itemType != GridItemType.Anchor)
@@ -282,7 +319,7 @@ public static class MyGrid
             else
             {
                 tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 0);
-                Road r = grid[(int)(itemPos.x + gridPos.x), (int)(gridPos.z - itemPos.z)].GetComponent<Road>();
+                Road r = GetGridItem(itemPos).GetComponent<Road>();
                 if (r)
                 {
                     tile.GetComponent<Image>().color = c;
@@ -424,14 +461,6 @@ public static class MyGrid
         return s;
     }
 
-    ////////////////////////////////////////////////////////////////
-    public static void UpdateGrid(GridPos gridPos, ClickableObject item)
-    {
-        grid[(int)gridPos.x, (int)gridPos.z] = item;
-    }
-
-
-
     /// <summary>
     /// Called when mining out rocks, removes it and replaces it with a set prefab.
     /// </summary>
@@ -441,10 +470,10 @@ public static class MyGrid
         Vector3 vec = rock.transform.position;
         gridTiles.toBeDigged.Remove(rock); // removes from list
         gridTiles.markedTiles.Remove(rock);
-        GameObject replacement = GameObject.Instantiate(tilePrefabs.GetPrefab("Road").gameObject, new Vector3(vec.x, rock.transform.localPosition.y, vec.z), Quaternion.identity, gridTiles.transform); // creates a road on the place of tiles
+        GameObject replacement = GameObject.Instantiate(tilePrefabs.GetPrefab("Road").gameObject, new Vector3(vec.x, rock.transform.localPosition.y+0.45f, vec.z), Quaternion.identity, gridTiles.transform); // creates a road on the place of tiles
         replacement.name = replacement.name.Replace("(Clone)", "");
         replacement.transform.parent = GameObject.Find(replacement.name + "s").transform;
-        UpdateGrid(new(vec), replacement.GetComponent<Road>() ? replacement.GetComponent<Road>() : replacement.GetComponent<Water>());
+        SetGridItem(new(vec), replacement.GetComponent<Road>() ? replacement.GetComponent<Road>() : replacement.GetComponent<Water>());
         gridTiles.Remove(rock);
         GameObject.Destroy(rock.gameObject); // destroys object
     }
@@ -463,16 +492,18 @@ public static class MyGrid
         }*/
         if(building.GetType() != typeof(Pipe))
         {
-            foreach (Transform entryPoint in building.transform.GetChild(0).GetComponentsInChildren<Transform>().Skip(1))
+            /*foreach ((RectTransform t in MyGrid.sceneReferences.OverlayCanvas.buildingOverlays.First(q => q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q => q.transform)))
             {
                 int x = Mathf.CeilToInt(entryPoint.position.x);
                 int z = Mathf.CeilToInt(entryPoint.position.z);
                 Road gR = (grid[x, z] as Road);
                 gR?.entryPoints.RemoveAll(q => q == building.id);
                 Debug.Log(grid[x, z].PrintText());
-            }
+            }*/
         }
         buildings.Remove(building);
         Debug.Log(PrintGrid());
     }
+
+
 }

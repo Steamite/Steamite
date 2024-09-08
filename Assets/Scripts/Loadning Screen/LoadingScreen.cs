@@ -49,7 +49,7 @@ public class LoadingScreen : MonoBehaviour
         else // if loading level
         {
             sceneReferences = GameObject.Find("Scene").GetComponent<SceneReferences>();
-            MyGrid.PrepGrid(sceneReferences.eventSystem.GetChild(0).transform);
+            MyGrid.PrepGrid(sceneReferences.eventSystem.GetChild(0).transform, sceneReferences);
             sceneReferences.research.GetComponent<ResearchSaveHandler>().NewResearch();
             AfterLevelLoad(true);
         }
@@ -100,6 +100,7 @@ public class LoadingScreen : MonoBehaviour
     void LoadWorld(AsyncOperation obj)
     {
         sceneReferences = GameObject.Find("Scene").GetComponent<SceneReferences>();
+        MyGrid.sceneReferences = sceneReferences;
         Slider slider = transform.GetChild(0).GetChild(1).GetComponent<Slider>();
         // create Progress val for loading slider
         int maxProgress = gridSave.width * gridSave.height*4; // Tiles and pipes
@@ -146,9 +147,6 @@ public class LoadingScreen : MonoBehaviour
     {
         // creates new grid
         MyGrid.ClearGrid();
-        MyGrid.grid = new ClickableObject[gridSave.width, gridSave.height];
-        MyGrid.pipeGrid = new Pipe[gridSave.width, gridSave.height];
-        MyGrid.fluidNetworks = new();
         
         // gets gridTiles reference for rocks
         MyGrid.gridTiles = sceneReferences.eventSystem.GetChild(0).GetComponent<GridTiles>();
@@ -175,7 +173,7 @@ public class LoadingScreen : MonoBehaviour
                     case RockSave:
                         Rock rock = Instantiate(MyGrid.tilePrefabs.GetPrefab((objectSave as RockSave).oreName), new(x, 1, z), Quaternion.identity, sceneReferences.rocks).GetComponent<Rock>();
                         rock.Load(objectSave);
-                        MyGrid.grid[x, z] = rock;
+                        MyGrid.SetGridItem(new(x,z), rock);
                         if (rock.toBeDug)
                         {
                             MyGrid.gridTiles.toBeDigged.Add(rock);
@@ -183,16 +181,16 @@ public class LoadingScreen : MonoBehaviour
                         }
                         break;
                     case BSave:
-                        MyGrid.grid[x, z] = null;
+                        //MyGrid.grid[x, z] = null;
                         break;
                     case WaterSave:
                         Water water = Instantiate(waterPref, new(x, 0, z), Quaternion.identity, sceneReferences.water).GetComponent<Water>();
                         water.Load(objectSave);
-                        MyGrid.grid[x, z] = water;
+                        MyGrid.SetGridItem(new(x, z), water);
                         break;
                     default:
                         Road road = Instantiate(roadPref, new(x, 0, z), Quaternion.identity, sceneReferences.roads).GetComponent<Road>();
-                        MyGrid.grid[x, z] = road;
+                        MyGrid.SetGridItem(new(x, z), road);
                         break;
                 }
                 progress.Report(progressGlobal += 2);
@@ -313,7 +311,7 @@ public class LoadingScreen : MonoBehaviour
         sceneReferences.eventSystem.transform.GetChild(1).GetChild(1).GetChild(0).GetChild(2).GetComponent<PreBuildInfo>().SetUp();
         sceneReferences.GetComponent<SaveController>().activeFolder = folderName;
         sceneReferences.timeButtons.GetComponent<TimeButtons>().tick = sceneReferences.GetComponent<Tick>();
-        MyGrid.sceneReferences = sceneReferences;
+        
 
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = GameObject.FindWithTag("Grid").GetComponent<GridTiles>().defaultMask;
         Camera.main.GetComponent<PhysicsRaycaster>().enabled = true;

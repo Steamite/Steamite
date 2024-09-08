@@ -1002,11 +1002,19 @@ MonoBehaviour:
     mods: 
   build:
     blueprint:
+      size:
+        x: 0
+        z: 0
+        level: 0
       moveBy:
         x: 0
         z: 0
         level: 0
-      buildingGrid: []
+      anchor:
+        x: 0
+        z: 0
+        level: 0
+      itemList: []
     heigth: 0
     cost:
       capacity: -1
@@ -8030,11 +8038,19 @@ MonoBehaviour:
     mods: 
   build:
     blueprint:
+      size:
+        x: 0
+        z: 0
+        level: 0
       moveBy:
         x: 0
         z: 0
         level: 0
-      buildingGrid: []
+      anchor:
+        x: 0
+        z: 0
+        level: 0
+      itemList: []
     heigth: 0
     cost:
       capacity: -1
@@ -11991,67 +12007,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4613935305307938995, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
   m_PrefabInstance: {fileID: 854147202}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &855004159
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 13.5
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 11.5
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
-      propertyPath: m_Name
-      value: Research tower
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8c2e3aeaf4fe86c4885b982b433d89ac, type: 3}
 --- !u!1001 &856920647
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17785,11 +17740,19 @@ MonoBehaviour:
     mods: 
   build:
     blueprint:
+      size:
+        x: 0
+        z: 0
+        level: 0
       moveBy:
         x: 0
         z: 0
         level: 0
-      buildingGrid: []
+      anchor:
+        x: 0
+        z: 0
+        level: 0
+      itemList: []
     heigth: 0
     cost:
       capacity: -1
@@ -18824,11 +18787,19 @@ MonoBehaviour:
     mods: 
   build:
     blueprint:
+      size:
+        x: 0
+        z: 0
+        level: 0
       moveBy:
         x: 0
         z: 0
         level: 0
-      buildingGrid: []
+      anchor:
+        x: 0
+        z: 0
+        level: 0
+      itemList: []
     heigth: 0
     cost:
       capacity: -1
@@ -20945,11 +20916,19 @@ MonoBehaviour:
     mods: 
   build:
     blueprint:
+      size:
+        x: 0
+        z: 0
+        level: 0
       moveBy:
         x: 0
         z: 0
         level: 0
-      buildingGrid: []
+      anchor:
+        x: 0
+        z: 0
+        level: 0
+      itemList: []
     heigth: 0
     cost:
       capacity: -1
@@ -24081,11 +24060,19 @@ MonoBehaviour:
     mods: 
   build:
     blueprint:
+      size:
+        x: 0
+        z: 0
+        level: 0
       moveBy:
         x: 0
         z: 0
         level: 0
-      buildingGrid: []
+      anchor:
+        x: 0
+        z: 0
+        level: 0
+      itemList: []
     heigth: 0
     cost:
       capacity: -1
@@ -29097,16 +29084,19 @@ MonoBehaviour:
     mods: 
   build:
     blueprint:
+      size:
+        x: 0
+        z: 0
+        level: 0
       moveBy:
         x: -2
         z: 0
         level: 0
-      buildingGrid:
-      - values: 0000000001000000000000000000000000000000
-      - values: 0100000001000000010000000000000000000000
-      - values: 0000000001000000000000000000000000000000
-      - values: 0000000001000000000000000000000000000000
-      - values: 0000000001000000010000000400000003000000
+      anchor:
+        x: 0
+        z: 0
+        level: 0
+      itemList: []
     heigth: 0
     cost:
       capacity: -1
@@ -30328,7 +30318,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!210 &2201814939114144074
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -30622,6 +30612,63 @@ Transform:
   - {fileID: 2083134752}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &6038036577889799623
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 642641727929861327, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
+      propertyPath: m_Name
+      value: Research tower
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763972426785108769, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 13.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763972426785108769, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763972426785108769, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 11.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763972426785108769, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763972426785108769, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763972426785108769, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763972426785108769, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763972426785108769, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763972426785108769, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763972426785108769, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 33878745a75f77644af84f3ca2b1c500, type: 3}
 --- !u!114 &6086404398923934763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31246,6 +31293,7 @@ MonoBehaviour:
   research: {fileID: 0}
   levelCamera: {fileID: 0}
   timeButtons: {fileID: 0}
+  OverlayCanvas: {fileID: 0}
 --- !u!33 &8504176930812541226
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -31322,11 +31370,19 @@ MonoBehaviour:
     mods: 
   build:
     blueprint:
+      size:
+        x: 0
+        z: 0
+        level: 0
       moveBy:
         x: 0
         z: 0
         level: 0
-      buildingGrid: []
+      anchor:
+        x: 0
+        z: 0
+        level: 0
+      itemList: []
     heigth: 0
     cost:
       capacity: -1
@@ -31375,4 +31431,4 @@ SceneRoots:
   - {fileID: 5026351469592114601}
   - {fileID: 7751514193011626992}
   - {fileID: 1952656472}
-  - {fileID: 855004159}
+  - {fileID: 6038036577889799623}

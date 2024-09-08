@@ -55,14 +55,15 @@ public class SaveController : MonoBehaviour
         gridSave.width = MyGrid.width;
         gridSave.height = MyGrid.height;
         gridSave.gridItems = new ClickableObjectSave[gridSave.width, gridSave.height];
-        if (MyGrid.grid != null)
+        if (true)//MyGrid.grid != null)
         {
             for (int x = 0; x < MyGrid.height; x++)
             {
                 for (int z = 0; z < MyGrid.width; z++)
                 {
-                    if(MyGrid.grid[x, z].GetType() != typeof(Building))
-                        gridSave.gridItems[x, z] = MyGrid.grid[x, z].Save();
+                    ClickableObject clickable = MyGrid.GetGridItem(new(x, z));
+                    if (clickable.GetType() != typeof(Building))
+                        gridSave.gridItems[x, z] = clickable.Save();
                 }
             }
             SaveBuildings(gridSave);

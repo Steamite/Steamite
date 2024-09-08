@@ -239,7 +239,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5302068491180230622}
+  - {fileID: 7585833758531762445}
   m_Father: {fileID: 9079333737667581699}
   m_LocalEulerAnglesHint: {x: 40, y: 0, z: 0}
 --- !u!20 &1133921947934513987
@@ -251,7 +251,7 @@ Camera:
   m_GameObject: {fileID: 1634306986070870791}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 3
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -281,7 +281,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2039
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -354,7 +354,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_MaxRayIntersections: 0
---- !u!1 &4017459852791502528
+--- !u!1 &6314038135591522541
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -362,22 +362,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5302068491180230622}
-  - component: {fileID: 5725589313091735517}
+  - component: {fileID: 7585833758531762445}
+  - component: {fileID: 1010446617054400077}
   m_Layer: 0
   m_Name: Overlay camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5302068491180230622
+--- !u!4 &7585833758531762445
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4017459852791502528}
+  m_GameObject: {fileID: 6314038135591522541}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -386,13 +386,13 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8826420735073951469}
   m_LocalEulerAnglesHint: {x: 40, y: 0, z: 0}
---- !u!20 &5725589313091735517
+--- !u!20 &1010446617054400077
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4017459852791502528}
+  m_GameObject: {fileID: 6314038135591522541}
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 3
@@ -426,7 +426,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 2048
-  m_RenderingPath: 0
+  m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
