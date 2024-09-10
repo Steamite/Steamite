@@ -141,7 +141,7 @@ public class WaterPump : ProductionBuilding
     public override void Load(ClickableObjectSave save)
     {
         networkAccess.fluid = (save as FluidProdBSave).fluidSave.fluid;
-        networkAccess.Load(transform.GetChild(3), (save as FluidProdBSave).fluidSave.pipeSaves);
+        networkAccess.Load(transform.GetChild(2), (save as FluidProdBSave).fluidSave.pipeSaves);
         base.Load(save);
     }
 }

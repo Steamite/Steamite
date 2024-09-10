@@ -126,7 +126,7 @@ public class ProductionBuilding : AssignBuilding
             else if(pRes.inputResource.carriers.Count == 0)
             {
                 RequestRestock();
-                transform.GetChild(1).GetChild(1).gameObject.SetActive(true);
+                transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
                 pStates.supplied = false;
                 PauseProduction();
             }

@@ -164,7 +164,7 @@ public class SteamGenerator : ProductionBuilding
     {
 
         networkAccess.fluid = (save as FluidProdBSave).fluidSave.fluid;
-        networkAccess.Load(transform.GetChild(2), (save as FluidProdBSave).fluidSave.pipeSaves);
+        networkAccess.Load(transform.GetChild(1), (save as FluidProdBSave).fluidSave.pipeSaves);
         base.Load(save);
     }
 }
