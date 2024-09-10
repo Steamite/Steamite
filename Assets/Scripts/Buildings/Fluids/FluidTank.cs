@@ -72,7 +72,7 @@ public class FluidTank : Building
     public override void Load(ClickableObjectSave save)
     {
         networkAccess.fluid = (save as TankBSave).fluidSave.fluid;
-        networkAccess.Load(transform.GetChild(2), (save as TankBSave).fluidSave.pipeSaves);
+        networkAccess.Load(transform.GetChild(1), (save as TankBSave).fluidSave.pipeSaves);
         base.Load(save);
     }
 }

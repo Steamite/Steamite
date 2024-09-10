@@ -74,9 +74,20 @@ public class UIOverlay : MonoBehaviour
 
     public void Remove(int id)
     {
-        Transform t = buildingOverlays.FirstOrDefault(q => q.name == id.ToString());
-        if (t)
-            Destroy(t.gameObject);
+        int i = buildingOverlays.FindIndex(q => q.name == id.ToString());
+        if (i > -1)
+        {
+            Destroy(buildingOverlays[i].gameObject);
+            foreach(GridPos gp in buildingOverlays[i].GetComponentsInChildren<Transform>().Skip(1).Select(q=> new GridPos(q.transform.position)))
+            {
+                ClickableObject clickable = MyGrid.GetGridItem(gp);
+                if (clickable is Road)
+                {
+                    ((Road)clickable).entryPoints.Remove(id);
+                }
+            }
+            buildingOverlays.RemoveAt(i);
+        }
     }
 
     // show/hide entry points

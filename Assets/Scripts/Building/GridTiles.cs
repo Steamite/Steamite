@@ -124,7 +124,7 @@ public class GridTiles : MonoBehaviour
                 {
                     Build __b = buildBlueprint.build;
                     GridPos grid = MyGrid.CheckRotation(__b.blueprint.moveBy, buildBlueprint.transform.eulerAngles.y);
-                    grid = new(activePos.x + grid.x, 1, activePos.z + grid.z);
+                    grid = new(activePos.x + grid.x, buildBlueprint.transform.position.y, activePos.z + grid.z);
                     buildBlueprint.transform.position = new(grid.x, grid.level, grid.z);
                     c = buildBlueprint.CanPlace() ? Color.blue : Color.red;
                     HighLight(c, buildBlueprint.gameObject);
@@ -568,7 +568,7 @@ public class GridTiles : MonoBehaviour
         if (buildBlueprint)
             q = new(buildBlueprint.transform.rotation.x, buildBlueprint.transform.rotation.y, buildBlueprint.transform.rotation.z, buildBlueprint.transform.rotation.w);
         GridPos gp = MyGrid.CheckRotation(buildingPrefab.build.blueprint.moveBy, buildingPrefab.transform.eulerAngles.y);
-        gp = new(activePos.x + gp.x, 0.5f, activePos.z + gp.z);
+        gp = new(activePos.x + gp.x, buildingPrefab is Pipe ? 0.75f : 0.5f, activePos.z + gp.z);
         buildBlueprint = Instantiate(buildingPrefab.gameObject, gp.ToVec(), Quaternion.identity, transform).GetComponent<Building>(); // creates the building prefab
         buildBlueprint.transform.rotation = q;
         buildBlueprint.transform.SetParent(buildBlueprint.GetComponent<Pipe>() ? GameObject.FindWithTag("Pipes").transform : GameObject.Find("Buildings").transform);

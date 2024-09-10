@@ -189,7 +189,7 @@ public class LoadingScreen : MonoBehaviour
                         MyGrid.SetGridItem(new(x, z), water);
                         break;
                     default:
-                        Road road = Instantiate(roadPref, new(x, 0, z), Quaternion.identity, sceneReferences.roads).GetComponent<Road>();
+                        Road road = Instantiate(roadPref, new(x, 0.45f, z), Quaternion.identity, sceneReferences.roads).GetComponent<Road>();
                         MyGrid.SetGridItem(new(x, z), road);
                         break;
                 }

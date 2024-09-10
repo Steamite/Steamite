@@ -413,16 +413,36 @@ public static class MyGrid
 
     public static void RemoveBuilding(Building building)
     {
-        // TODO
-        /*Vector2 size = CheckRotation(building.build, building.transform.eulerAngles.y);
-        //GameObject roadPref = sce
-        for (int x = Mathf.CeilToInt(building.transform.position.x - size.x / 2); x < Mathf.CeilToInt(building.transform.position.x + size.x/2); x++)
+        if (building is Pipe)
         {
-            for (int z = Mathf.CeilToInt(building.transform.position.z - size.y / 2); z < Mathf.CeilToInt(building.transform.position.z + size.y / 2); z++)
+
+        }
+        else
+        {
+            GridPos gridPos = new(building.transform.position - CheckRotation(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
+            sceneReferences.overlay.AddBuildingOverlay(gridPos, building.id);
+            if(building.build.blueprint.itemList.Count > 0)
             {
-                grid[x, z] = (GameObject.Instantiate(tilePrefabs.GetPrefab("Road").gameObject, new(x, 0, z), Quaternion.identity, building.transform.parent.parent.GetChild(1)) as GameObject).GetComponent<Road>();
+                List<Road> roads = sceneReferences.roads.GetComponentsInChildren<Road>().ToList();
+                for (int i = building.build.blueprint.itemList.Count - 1; i > -1; i--)
+                {
+                    NeededGridItem item = building.build.blueprint.itemList[i];
+                    GridPos itemPos = CheckRotation(item.pos, building.transform.rotation.eulerAngles.y, true);
+                    int x = (int)(itemPos.x + gridPos.x);
+                    int y = (int)(gridPos.z - itemPos.z);
+
+                    switch (item.itemType)
+                    {
+                        case GridItemType.Road:
+                        case GridItemType.Anchor:
+                            Road r = roads.FirstOrDefault(q=> new GridPos(q.transform.position).Equals(new GridPos(x,y)));
+                            r.entryPoints = new();
+                            SetGridItem(new(x, y), r);
+                            break;
+                    }
+                }
             }
-        }*/
+        }
         if (building.GetType() != typeof(Pipe))
         {
             /*foreach ((RectTransform t in MyGrid.sceneReferences.OverlayCanvas.buildingOverlays.First(q => q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q => q.transform)))

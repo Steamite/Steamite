@@ -8,14 +8,14 @@ using TMPro;
 
 public class Building : StorageObject
 {
-    protected Color myColor;
+    //protected Color myColor;
     [Header("Base")]
     public Build build = new();
 
     protected virtual void Awake()
     {
         return;
-        myColor = gameObject.GetComponent<MeshRenderer>().material.color; // saves the original color
+        //myColor = gameObject.GetComponent<MeshRenderer>().material.color; // saves the original color
     }
 
     public override void UniqueID()
@@ -165,14 +165,14 @@ public class Building : StorageObject
 
     public virtual void ChangeColor(Color color)
     {
-        if (color.Equals(new Color()) || build.constructed) // signal for restart of color
+     /*   if (color.Equals(new Color()) || build.constructed) // signal for restart of color
         {
             gameObject.GetComponent<MeshRenderer>().material.color = myColor;
         }
         else
         {
             gameObject.GetComponent<MeshRenderer>().material.color = color;
-        }
+        }*/
     }
     public virtual void ChangeRenderMode(bool transparent)
     {
@@ -225,7 +225,7 @@ public class Building : StorageObject
         build = (save as BSave).build;
         if (build.constructed)
         {
-            foreach(GameObject g in transform.GetComponentsInChildren<GameObject>())
+            foreach(GameObject g in transform.GetComponentsInChildren<Transform>().Select(q=> q.gameObject))
             {
                 g.layer = 6;
             }
@@ -296,13 +296,7 @@ public class Building : StorageObject
         if(id > -1)
         {
             MyGrid.sceneReferences.overlay.Remove(id);
-            if (transform.childCount > 0 && transform.GetChild(0).childCount > 0)
-            {
-                foreach (GridPos gp in transform.GetChild(0).GetComponentsInChildren<Transform>().Skip(1).Select(q => new GridPos(q.transform.position)))
-                {
-                    MyGrid.GetGridItem(gp).GetComponent<Road>()?.entryPoints.Remove(id);
-                }
-            }
+            MyGrid.RemoveBuilding(this);
         }
     }
     public virtual Fluid GetFluid()
