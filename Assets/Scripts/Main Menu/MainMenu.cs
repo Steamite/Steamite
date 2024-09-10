@@ -18,6 +18,10 @@ public class MainMenu : MonoBehaviour
     string folderName;
     private void Awake()
     {
+        if(!Directory.Exists(Application.persistentDataPath + "/saves"))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/saves");
+        }
         if(Directory.GetDirectories(Application.persistentDataPath + "/saves").Length == 0)
         {
             loadGame.interactable = false;
