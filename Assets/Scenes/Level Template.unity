@@ -318,6 +318,11 @@ MonoBehaviour:
   entryPointParent: {fileID: 1342075532}
   groupPrefab: {fileID: 6444442565779037667, guid: 9a4fb24bbc4bd8d489cca057c5060e76, type: 3}
   buildingOverlays: []
+--- !u!224 &271866413 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 660338891197985479, guid: 86fe5593abcfa6949b5da7820b01883a, type: 3}
+  m_PrefabInstance: {fileID: 524351705}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &290219977
 GameObject:
   m_ObjectHideFlags: 0
@@ -1472,7 +1477,7 @@ MonoBehaviour:
   chunks: {fileID: 894017352}
   water: {fileID: 555613289}
   humans: {fileID: 82324340}
-  research: {fileID: 1890495832}
+  research: {fileID: 271866413}
   levelCamera: {fileID: 0}
   timeButtons: {fileID: 524351709}
   overlay: {fileID: 154790461}
@@ -1573,11 +1578,6 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
---- !u!224 &1890495832 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 77531171416510543, guid: 86fe5593abcfa6949b5da7820b01883a, type: 3}
-  m_PrefabInstance: {fileID: 524351705}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
