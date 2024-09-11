@@ -860,6 +860,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1684691070}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!224 &1223007458 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 660338891197985479, guid: 86fe5593abcfa6949b5da7820b01883a, type: 3}
+  m_PrefabInstance: {fileID: 524351705}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1263695981
 GameObject:
   m_ObjectHideFlags: 0
@@ -1183,7 +1188,7 @@ MonoBehaviour:
   chunks: {fileID: 894017352}
   water: {fileID: 555613289}
   humans: {fileID: 82324340}
-  research: {fileID: 1890495832}
+  research: {fileID: 1223007458}
   levelCamera: {fileID: 0}
   timeButtons: {fileID: 524351709}
 --- !u!1 &1847447097
@@ -1282,11 +1287,6 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
---- !u!224 &1890495832 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 77531171416510543, guid: 86fe5593abcfa6949b5da7820b01883a, type: 3}
-  m_PrefabInstance: {fileID: 524351705}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
