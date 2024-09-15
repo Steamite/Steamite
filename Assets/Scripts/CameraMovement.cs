@@ -17,10 +17,11 @@ public class CameraMovement : MonoBehaviour
 
     [Header("General")]
     /// <summary> multiplier in GetSpeed </summary>
-    [SerializeField] float generalSpeed = 1;
+    [SerializeField] float generalSpeed = 3;
 
     [Header("Movement")]
-    [SerializeField] float addMovement = 0.5f;
+    [SerializeField] float addMovement = 1f;
+    [SerializeField] float removeMovement = 2f;
     [SerializeField] float currentMovementX = 0;
     [SerializeField] float currentMovementY = 0;
     [SerializeField] int maxMovement = 50;
@@ -30,6 +31,7 @@ public class CameraMovement : MonoBehaviour
 
     [Header("Rotation")]
     [SerializeField] float addRotationY = 2;
+    [SerializeField] float removeRotationY = 4;
     [SerializeField] float currentRotationY = 0;
     [SerializeField] int maxRotationY = 50;
 
@@ -83,9 +85,9 @@ public class CameraMovement : MonoBehaviour
         mouse.x -= 0.5f;
         mouse.y -= 0.5f;
         transform.Translate(
-            GetSpeed(ref currentMovementX, addMovement, maxMovement, MergeMove(Edge(mouse.x, mouseThreshold), vec.x)),
+            GetSpeed(ref currentMovementX, addMovement, removeMovement, maxMovement, MergeMove(Edge(mouse.x, mouseThreshold), vec.x)),
             0,
-            GetSpeed(ref currentMovementY, addMovement, maxMovement, MergeMove(Edge(mouse.y, mouseThreshold), vec.y)));
+            GetSpeed(ref currentMovementY, addMovement, removeMovement, maxMovement, MergeMove(Edge(mouse.y, mouseThreshold), vec.y)));
         //EdgeMove();
     }
     float MergeMove(float mouse, float key)
@@ -173,7 +175,7 @@ public class CameraMovement : MonoBehaviour
         transform.RotateAround(
             transform.position,
             Vector3.up,
-            GetSpeed(ref currentRotationY, addRotationY, maxRotationY, rot));
+            GetSpeed(ref currentRotationY, addRotationY, removeRotationY, maxRotationY, rot));
     }
 
     /// <summary>
@@ -208,33 +210,44 @@ public class CameraMovement : MonoBehaviour
     /// <param name="max">Max speed.</param>
     /// <param name="input">Axis value from input (-1, 1).</param>
     /// <returns>Value to move by.</returns>
-    float GetSpeed(ref float currentMovement, float add, int max, float input)
+    float GetSpeed(ref float currentMovement, float add, float remove, int max, float input)
     {
         float f = Time.deltaTime / mod * generalSpeed;
         switch (input)
         {
             case > 0:
-                if (currentMovement < max)
-                    currentMovement += add;
+                if (currentMovement + add * f < max)
+                    currentMovement += add * f;
+                else
+                    currentMovement = max;
                 break;
             case < 0:
-                if (currentMovement > -max)
-                    currentMovement -= add;
+                if (currentMovement - add * f > -max)
+                    currentMovement -= add * f;
+                else
+                    currentMovement = -max;
+                    
                 break;
-            default:
+            case 0:
                 switch (currentMovement)
                 {
                     case < 0:
-                        currentMovement += add;
+                        currentMovement += remove * f;
                         break;
                     case > 0:
-                        currentMovement -= add;
+                        currentMovement -= remove * f;
                         break;
                     default:
                         return 0;
                 }
                 break;
         }
-        return (f * currentMovement);
+        if (Mathf.Abs(currentMovement) > 0.1f)
+        {
+            return (f * currentMovement);
+        }
+        else if (input == 0)
+            currentMovement = 0;
+        return 0;
     }
 }

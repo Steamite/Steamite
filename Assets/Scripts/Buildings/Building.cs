@@ -8,14 +8,41 @@ using TMPro;
 
 public class Building : StorageObject
 {
-    //protected Color myColor;
+    protected List<Color> myColor;
     [Header("Base")]
     public Build build = new();
 
     protected virtual void Awake()
     {
-        return;
-        //myColor = gameObject.GetComponent<MeshRenderer>().material.color; // saves the original color
+       /* if (transform.GetComponent<MeshFilter>())
+        {
+            Quaternion q = transform.rotation;
+            Vector3 oldPos = transform.position;
+
+            transform.rotation = Quaternion.identity;
+            transform.position = Vector3.zero;
+
+            MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+
+            int i = 0;
+            while (i < meshFilters.Length)
+            {
+                combine[i].mesh = meshFilters[i].sharedMesh;
+                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+                meshFilters[i].gameObject.SetActive(false);
+
+                i++;
+            }
+
+            Mesh mesh = new Mesh();
+            mesh.CombineMeshes(combine);
+            transform.GetComponent<MeshFilter>().sharedMesh = mesh;
+            gameObject.SetActive(true);
+            transform.rotation = q;
+            transform.position = oldPos;
+        }*/
+        myColor = transform.GetComponentsInChildren<MeshRenderer>().Select(q=> q.material.color).ToList(); // saves the original color
     }
 
     public override void UniqueID()
@@ -101,9 +128,9 @@ public class Building : StorageObject
                 localRes.ReassignCarriers();
                 build.deconstructing = true;
                 queue.AddJob(JobState.Deconstructing, this);
-                Material m = GetComponent<MeshRenderer>().material;
-                m.SetColor("_EmissionColor", m.GetColor("_EmissionColor") + Color.red);
-                GetComponent<MeshRenderer>().material.EnableKeyword("_Emission");
+                //Material m = GetComponent<MeshRenderer>().material;
+                //m.SetColor("_EmissionColor", m.GetColor("_EmissionColor") + Color.red);
+                //GetComponent<MeshRenderer>().material.EnableKeyword("_Emission");
             }
             else
             {
@@ -114,15 +141,32 @@ public class Building : StorageObject
         }
         else
         {
+            
             // if there are any resources deposited(change to build progress when implemented)
             if (build.constructionProgress > 0)
             {
-                queue.constructions.RemoveAll(q => q.id == id);
-                queue.deconstructions.Add(this);
-                localRes.ReassignCarriers();
+                if (!build.deconstructing)
+                {
+                    queue.CancelJob(JobState.Constructing, this);
+                    queue.AddJob(JobState.Deconstructing, this);
+                    localRes.ReassignCarriers();
+                }
+                else
+                {
+                    queue.AddJob(JobState.Constructing, this);
+                    queue.CancelJob(JobState.Deconstructing, this);
+                    if(localRes.carriers.Count > 0)
+                    {
+                        localRes.carriers[0].jData.job = JobState.Constructing;
+                        localRes.carriers[0].ChangeAction(HumanActions.Build);
+                    }
+                }
+                build.deconstructing = !build.deconstructing;
             }
             else
             {
+                queue.CancelJob(JobState.Constructing, this);
+                queue.AddJob(JobState.Deconstructing, this);
                 foreach (Human carrier in localRes.carriers)
                 {
                     MyRes.FindStorage(carrier);
@@ -165,38 +209,43 @@ public class Building : StorageObject
 
     public virtual void ChangeColor(Color color)
     {
-     /*   if (color.Equals(new Color()) || build.constructed) // signal for restart of color
+        if (color.Equals(new Color()) || build.constructed) // signal for restart of color
         {
-            gameObject.GetComponent<MeshRenderer>().material.color = myColor;
+            int i = 0;
+            foreach (MeshRenderer mesh in transform.GetComponentsInChildren<MeshRenderer>())
+            {
+                mesh.material.color = myColor[i];
+                i++;
+            }
         }
         else
-        {
-            gameObject.GetComponent<MeshRenderer>().material.color = color;
-        }*/
+            foreach (MeshRenderer mesh in transform.GetComponentsInChildren<MeshRenderer>())
+                mesh.material.color = color;
     }
     public virtual void ChangeRenderMode(bool transparent)
     {
-        return;
-        Material material = gameObject.GetComponent<MeshRenderer>().material;
-        if (transparent)
+        foreach(Material material in transform.GetComponentsInChildren<MeshRenderer>().Select(q=> q.material))
         {
-            // transparent
-            material.SetInt("_SrcBlend", (int)BlendMode.SrcAlpha);
-            material.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
-            material.SetInt("_ZWrite", 0);
-            material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-            material.renderQueue = 3000;
-            material.color = new(1, 1, 1, 0.5f);
-        }
-        else
-        {
-            // opaque
-            material.SetInt("_SrcBlend", (int)BlendMode.One);
-            material.SetInt("_DstBlend", (int)BlendMode.Zero);
-            material.SetInt("_ZWrite", 1);
-            material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-            material.renderQueue = -1;
-            material.color = new(material.color.r, material.color.g, material.color.b, 0.5f);
+            if (transparent)
+            {
+                // transparent
+                material.SetInt("_SrcBlend", (int)BlendMode.SrcAlpha);
+                material.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
+                material.SetInt("_ZWrite", 0);
+                material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                material.renderQueue = 3000;
+                material.color = new(1, 1, 1, 0.5f);
+            }
+            else
+            {
+                // opaque
+                material.SetInt("_SrcBlend", (int)BlendMode.One);
+                material.SetInt("_DstBlend", (int)BlendMode.Zero);
+                material.SetInt("_ZWrite", 1);
+                material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                material.renderQueue = -1;
+                material.color = new(material.color.r, material.color.g, material.color.b, 0.5f);
+            }
         }
     }
     public virtual Resource GetDiff(Resource inventory)
@@ -292,6 +341,7 @@ public class Building : StorageObject
     }
     public virtual void DestoyBuilding()
     {
+        MyGrid.gridTiles.DeselectObjects();
         Destroy(gameObject);
         if(id > -1)
         {

@@ -48,6 +48,9 @@ public class Human : ClickableObject
     public Action<Human> repetableAction;
     public void ActivateHuman()
     {
+#if UNITY_EDITOR
+        transform.GetChild(0).gameObject.SetActive(true);
+#endif
         transform.parent.parent.GetComponent<Humans>().ticks.tickAction += DoRepetableAction;
         DayTime.day += Day;
         DayTime.night += Night;
@@ -64,7 +67,6 @@ public class Human : ClickableObject
             repetableAction.Invoke(this);
         else
             HumanActions.LookForNew(this);
-
     }
     public override void UniqueID() // creates a random int
     {
@@ -115,11 +117,13 @@ public class Human : ClickableObject
     public void Idle()
     {
         jData = new JobData();
-        GridPos v = new(GameObject.FindGameObjectsWithTag("Elevator").First(q => q.GetComponent<Elevator>().main).transform.localPosition);
+        Elevator el = MyGrid.buildings.First(q=> q.tag == "Elevator" && q.GetComponent<Elevator>().main).GetComponent<Elevator>();
+        GridPos v = new(el.transform.localPosition);
         if (!v.Equals(new GridPos(transform.localPosition))) // if not standing on the elevator
         {
-            jData = PathFinder.FindPath(new() { GameObject.FindGameObjectsWithTag("Elevator").First(q => q.GetComponent<Elevator>().main).GetComponent<Elevator>() }, this);
-            ChangeAction(HumanActions.Move); //  go to the elevator and look for a new Job 
+            jData = PathFinder.FindPath(new() { el }, this);
+            if(jData.interest != null)
+                ChangeAction(HumanActions.Move); //  go to the elevator and look for a new Job 
         }
         else
         {

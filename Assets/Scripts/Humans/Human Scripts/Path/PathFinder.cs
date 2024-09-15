@@ -50,7 +50,15 @@ public static class PathFinder
 
         for (int i = 0; i < objects.Count; i++)
         {
-            Building building = objects[i].GetComponent<Building>();
+            Building building = null;
+            try 
+            {
+                building = objects[i].GetComponent<Building>();
+            }
+            catch (Exception e)
+            {
+                Debug.Log("");
+            }
             if (building)
             {
                 Pipe pipe = building.GetComponent<Pipe>();

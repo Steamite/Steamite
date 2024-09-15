@@ -253,7 +253,7 @@ public static class MyRes
             if (filtered.Count > 0)
             {
                 human.jData = PathFinder.FindPath(filtered, human);
-                if (human.jData.interest)
+                if (human.jData.interest && PathFinder.FindPath(new() { building}, human).interest != null)
                 {
                     human.destination = building;
                     human.jData.job = JobState.Pickup;
@@ -269,7 +269,8 @@ public static class MyRes
                     human.lookingForAJob = false;
                     if(diff.ammount.Sum() == 0)
                     {
-                        human.transform.parent.parent.GetComponent<JobQueue>().CancelJob(j, human.jData.interest);
+                        diff = diff;
+                        //human.transform.parent.parent.GetComponent<JobQueue>().CancelJob(j, human.jData.interest);
                     }
                     return true;
                 }
@@ -309,7 +310,8 @@ public static class MyRes
                     }
                     else
                     {
-                        storages.Add(stores[i]);
+                        if (future.ammount[index] > 0)
+                            storages.Add(stores[i]);
                     }
                 }
                 break;
@@ -404,6 +406,7 @@ public static class MyRes
         if((h.jData = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h)).interest)
         {
             h.jData.interest.GetComponent<StorageObject>().RequestRes(h.inventory, h, 1);
+            h.destination = (Building)h.jData.interest;
         }
     }
     static List<Storage> FilterStorages(Resource r, Human h, bool perfect)

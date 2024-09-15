@@ -143,17 +143,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   asset: {fileID: 0}
-  generalSpeed: 1
-  addMovement: 0.5
+  generalSpeed: 5
+  addMovement: 2
+  removeMovement: 3
   currentMovementX: 0
   currentMovementY: 0
-  maxMovement: 50
+  maxMovement: 6
   mouseThreshold: 0.495
-  addRotationY: 3
+  addRotationY: 4
+  removeRotationY: 8
   currentRotationY: 0
-  maxRotationY: 150
+  maxRotationY: 15
   minY: 2
-  maxY: 15
+  maxY: 20
   maxPan: 0.5
 --- !u!33 &3291604625329694478
 MeshFilter:
@@ -216,7 +218,6 @@ GameObject:
   - component: {fileID: 8826420735073951469}
   - component: {fileID: 1133921947934513987}
   - component: {fileID: 7690688619011433921}
-  - component: {fileID: 6502054683690694690}
   - component: {fileID: 7674749408414356125}
   - component: {fileID: 1451388178638193742}
   m_Layer: 0
@@ -301,27 +302,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1634306986070870791}
   m_Enabled: 1
---- !u!65 &6502054683690694690
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1634306986070870791}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7674749408414356125
 MonoBehaviour:
   m_ObjectHideFlags: 0

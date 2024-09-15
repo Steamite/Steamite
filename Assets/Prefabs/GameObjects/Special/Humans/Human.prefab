@@ -353,7 +353,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
       propertyPath: m_Name
-      value: Worker
+      value: Human
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
       propertyPath: m_Layer

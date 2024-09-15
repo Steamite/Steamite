@@ -65,13 +65,15 @@ public class ProductionBuilding : AssignBuilding
     {
         instantPos.y = 1;
         Chunk c = base.Deconstruct(instantPos);
-        if (!c)
-        {
-            c = Instantiate(Resources.Load("Chunk") as GameObject, instantPos, Quaternion.identity, GameObject.Find("Chunks").transform).GetComponent<Chunk>();
-            c.Create(pRes.inputResource.stored, true);
+        if(pRes.inputResource.stored.ammount.Sum() > 0){
+            if (!c)
+            {
+                c = Instantiate(MyGrid.specialPrefabs.GetPrefab("Chunk"), instantPos, Quaternion.identity, GameObject.Find("Chunks").transform).GetComponent<Chunk>();
+                c.Create(pRes.inputResource.stored, true);
+            }
+            else
+                MyRes.ManageRes(c.localRes.stored, pRes.inputResource.stored, 1);
         }
-        else
-            MyRes.ManageRes(c.localRes.stored, pRes.inputResource.stored, 1);
         return c;
     }
     public override void TryLink(Human h)
@@ -230,7 +232,7 @@ public class ProductionBuilding : AssignBuilding
     ///////////////////////////////////////////////////
     //-----------------Player Info-------------------//
     ///////////////////////////////////////////////////
-    public void RefreshStatus()
+    public virtual void RefreshStatus()
     {
         transform.GetChild(0).GetChild(0).gameObject.SetActive(pStates.stoped);
         transform.GetChild(0).GetChild(1).gameObject.SetActive(!pStates.supplied);
@@ -284,6 +286,8 @@ public class ProductionBuilding : AssignBuilding
         if (build.constructed)
         {
             int index = pRes.inputResource.carriers.IndexOf(h);
+            if (index == -1)
+                print("");
             MyRes.MoveRes(pRes.inputResource.stored, h.inventory, pRes.inputResource.requests[index], transferPerTick);
             OpenWindow();
             if (MyRes.DiffRes(pRes.productionCost, pRes.inputResource.stored, new()).ammount.Sum() == 0)
@@ -295,6 +299,8 @@ public class ProductionBuilding : AssignBuilding
             if (pRes.inputResource.requests[index].ammount.Sum() == 0)
             {
                 pRes.inputResource.RemoveRequest(h);
+
+                h.destination = null;
                 HumanActions.LookForNew(h);
                 return;
             }

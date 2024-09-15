@@ -33,7 +33,7 @@ public static class MyGrid
         int y = Mathf.RoundToInt(gp.z);
         if (x < 0 || x >= width || y < 0 || y >= height)
         {
-            Debug.LogError($"(Get)Index outside of grid bounds, x: {x}, y :{y}.");
+            Debug.LogError($"(Get)Index outside of grid bounds, x: {x}, y :{y}.");  
             return null;
         }
         return grid[x, y];

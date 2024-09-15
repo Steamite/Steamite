@@ -15,7 +15,7 @@ public class WaterPump : ProductionBuilding
     }
     protected override void UpdateText(Transform t)
     {
-        GridPos waterPos = new(transform.GetChild(2).gameObject);
+        GridPos waterPos = new(transform.GetChild(1).gameObject);
         water = MyGrid.GetGridItem(waterPos) as Water;
         t = t.GetChild(2);
         t.GetChild(0).GetComponent<ProductionButton>().UpdateButtonState(pTime.currentTime, pTime.prodTime);

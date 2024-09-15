@@ -852,18 +852,38 @@ MonoBehaviour:
   build:
     blueprint:
       size:
-        x: 0
-        z: 0
+        x: 1
+        z: 4
         level: 0
       moveBy:
         x: 0
-        z: 0
+        z: 0.5
         level: 0
       anchor:
         x: 0
-        z: 0
+        z: 2
         level: 0
-      itemList: []
+      itemList:
+      - pos:
+          x: 0
+          z: -2
+          level: 0
+        itemType: 2
+      - pos:
+          x: 0
+          z: -1
+          level: 0
+        itemType: 1
+      - pos:
+          x: 0
+          z: 0
+          level: 0
+        itemType: 4
+      - pos:
+          x: 0
+          z: 1
+          level: 0
+        itemType: 3
     heigth: 0
     cost:
       capacity: -1
