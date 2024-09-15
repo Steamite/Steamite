@@ -82,6 +82,7 @@ public static class HumanActions
     {
         Building building = h.jData.interest.GetComponent<Building>();
         building.build.constructionProgress -= 2;
+        building.OpenWindow();
         if (building.build.constructionProgress <= 0)
         {
             building.Deconstruct(h.transform.localPosition);
@@ -91,12 +92,25 @@ public static class HumanActions
     }
     public static void Store(Human h)
     {
-        h.jData.interest.GetComponent<StorageObject>().Store(h, transferPerTick);
+        try
+        {
+            h.jData.interest.GetComponent<StorageObject>().Store(h, transferPerTick);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+        }
     }
     public static void Take(Human h)
     {
-       h.jData.interest.GetComponent<StorageObject>().Take(h, transferPerTick);
-
+        try
+        {
+            h.jData.interest.GetComponent<StorageObject>().Take(h, transferPerTick);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+        }
     }
 
     /// <summary>

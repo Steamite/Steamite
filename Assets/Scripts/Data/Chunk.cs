@@ -14,26 +14,32 @@ public class Chunk : StorageObject
     }
     public override void Take(Human h, int transferPerTick)
     {
-        int index = localRes.carriers.IndexOf(h);
-        MyRes.MoveRes(h.inventory, localRes.stored, localRes.requests[index], transferPerTick);
-        if (localRes.requests[index].ammount.Sum() == 0)
+        if (h.destination != null)
         {
-            if (h.inventory.capacity - h.inventory.ammount.Sum() == 0)
+            base.Take(h, transferPerTick);
+        }
+        else
+        {
+            int index = localRes.carriers.IndexOf(h);
+            MyRes.MoveRes(h.inventory, localRes.stored, localRes.requests[index], transferPerTick);
+            if (localRes.requests[index].ammount.Sum() == 0)
             {
-                FindS(h);
-            }
-            else
-            {
-                if (HumanActions.HandleCases(h.transform.parent.parent.GetComponent<JobQueue>(), h, JobState.Cleanup))
+                if (h.inventory.capacity - h.inventory.ammount.Sum() == 0)
+                {
                     FindS(h);
+                }
+                else
+                {
+                    if (HumanActions.HandleCases(h.transform.parent.parent.GetComponent<JobQueue>(), h, JobState.Cleanup))
+                        FindS(h);
+                }
             }
-            int ammountStored = localRes.stored.ammount.Sum();
-            if (ammountStored == 0)
-            {
-                transform.parent.parent.parent.parent.GetComponent<GridTiles>().Remove(this);
-                MyGrid.chunks.Remove(this);
-                Destroy(gameObject);
-            }
+        }
+        if (localRes.stored.ammount.Sum() == 0)
+        {
+            transform.parent.parent.parent.parent.GetComponent<GridTiles>().Remove(this);
+            MyGrid.chunks.Remove(this);
+            Destroy(gameObject);
         }
     }
     void FindS(Human h)

@@ -632,8 +632,7 @@ public class GridTiles : MonoBehaviour
             activeObject = null;
         if (cO.selected)
         {
-            GameObject.FindWithTag("Info").transform.GetChild(0).gameObject.SetActive(false);
-            clickedObject = null;
+            DeselectObjects();
         }
     }
 }

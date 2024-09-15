@@ -9,13 +9,15 @@ public class FirstScene : MonoBehaviour
     {
         AsyncOperation load = SceneManager.LoadSceneAsync(1);
         load.completed += onLoad;
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = -1;
     }
     void onLoad(AsyncOperation aO)
     {
         // Fills all resource holders
-        MyGrid.buildPrefabs = Resources.Load("Holders/Building Holder") as ResourceHolder;
-        MyGrid.tilePrefabs = Resources.Load("Holders/Tile Holder") as ResourceHolder;
-        MyGrid.specialPrefabs = Resources.Load("Holders/Special Holder") as ResourceHolder;
+        MyGrid.buildPrefabs = Resources.Load("Holders/Models/Building Holder") as ResourceHolder;
+        MyGrid.tilePrefabs = Resources.Load("Holders/Models/Tile Holder") as ResourceHolder;
+        MyGrid.specialPrefabs = Resources.Load("Holders/Models/Special Holder") as ResourceHolder;
         GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>().LoadMainMenu();
     }
 }

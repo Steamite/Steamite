@@ -11,7 +11,7 @@ public class Research_Production : ProductionBuilding
     protected override void Awake()
     {
         base.Awake();
-        Research_Script = GameObject.Find("Research Tree NEW").GetComponent<ResearchBackend>();
+        Research_Script = MyGrid.sceneReferences.research.GetComponent<ResearchBackend>();
     }
 
     public override void Produce()
@@ -36,5 +36,9 @@ public class Research_Production : ProductionBuilding
     {
         base.Work(h);
         Research_Script.AddResearchers(1);
+    }
+    public override void RefreshStatus()
+    {
+        //base.RefreshStatus();
     }
 }

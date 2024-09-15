@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine.UIElements;
 using System;
 using UnityEditor.Graphs;
+using UnityEditor.PackageManager.UI;
 
 #if UNITY_EDITOR
 class BuildEditor : EditorWindow
@@ -45,19 +46,21 @@ class BuildEditor : EditorWindow
             GridItemTypes = null;
         }
 
-        GetWindow(typeof(BuildEditor));
+        var v = GetWindow(typeof(BuildEditor));
+        v.maxSize = new(600, 600);
+        v.minSize = new(200, 200);
     }
+
     void OnGUI()
     {
-        this.maxSize = new(600, 600);
-        this.minSize = new(200, 200);
-        
-        if(actBuild == null)
+        if (actBuild == null)
         {
             GUILayout.Label(new GUIContent("NO BUILDING SELECTED"));
+            titleContent = new($"Build Editor - None");
         }
         else
         {
+            titleContent = new($"Build Editor - {property.serializedObject.targetObject.name}");
             int item;
             width = EditorGUILayout.IntField(new GUIContent("size x: "), width);
             height = EditorGUILayout.IntField(new GUIContent("size y: "), height);
