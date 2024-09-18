@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -12,6 +14,8 @@ public class EventHandler : MonoBehaviour
     InputAction buildRotate => bindingMap.FindAction("Build Rotate");
     InputAction menu => bindingMap.FindAction("Menu");
     InputAction shift => bindingMap.FindAction("Shift");
+
+    public List<Transform> openWindows;
 
 
 
@@ -78,19 +82,30 @@ public class EventHandler : MonoBehaviour
         // opens ingame menu
         if (menu.triggered)
         {
-            GameObject menu = GameObject.Find("Ingame Menu").transform.GetChild(0).gameObject;
-            if (menu.activeSelf)
+            if (!(openWindows.Count > 0))
             {
-                GameObject.Find("Scene").GetComponent<Tick>().Unpause();
+                GameObject menu = GameObject.Find("Ingame Menu").transform.GetChild(0).gameObject;
+                if (menu.activeSelf)
+                {
+                    GameObject.Find("Scene").GetComponent<Tick>().Unpause();
+                }
+                else
+                {
+                    GameObject.Find("Scene").GetComponent<Tick>().ChangeGameSpeed(0);
+                }
+
+                menu.SetActive(!menu.activeSelf);
+                //menu.transform.parent.GetChild(1).gameObject.SetActive(menu.activeSelf);
+                Camera.main.GetComponent<PhysicsRaycaster>().enabled = !menu.activeSelf;
+                Camera.main.GetComponent<Physics2DRaycaster>().enabled = !menu.activeSelf;
             }
             else
             {
-                GameObject.Find("Scene").GetComponent<Tick>().ChangeGameSpeed(0);
+                foreach (Transform window in openWindows)
+                {
+                    window.gameObject.SetActive(false);
+                }
             }
-            menu.SetActive(!menu.activeSelf);
-            //menu.transform.parent.GetChild(1).gameObject.SetActive(menu.activeSelf);
-            Camera.main.GetComponent<PhysicsRaycaster>().enabled = !menu.activeSelf;
-            Camera.main.GetComponent<Physics2DRaycaster>().enabled = !menu.activeSelf;
         }
 
         if (shift.inProgress)

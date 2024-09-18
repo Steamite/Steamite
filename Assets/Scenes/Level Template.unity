@@ -346,6 +346,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -37.70544
       objectReference: {fileID: 0}
+    - target: {fileID: 2421645536223217914, guid: 86fe5593abcfa6949b5da7820b01883a, type: 3}
+      propertyPath: EventSystem
+      value: 
+      objectReference: {fileID: 1847447099}
     - target: {fileID: 2587373866063378799, guid: 86fe5593abcfa6949b5da7820b01883a, type: 3}
       propertyPath: m_SizeDelta.x
       value: 238.79387
@@ -1239,6 +1243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82f7d36186fc2eb4692f1fe7af3b2af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  openWindows: []
   inputAsset: {fileID: -944628639613478452, guid: ae7911b76ba3ad24387d6033d2c3e664, type: 3}
   buildMenuObject: {fileID: 524351710}
   catogoryMenu: {fileID: 524351708}

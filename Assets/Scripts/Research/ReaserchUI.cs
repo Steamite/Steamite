@@ -14,6 +14,7 @@ public class ResearchUI : MonoBehaviour
     private Transform[] cattegories;
     public TMP_Text counter;
     public Transform cattegories_parrent;
+    public EventHandler EventSystem;
     
     //Methods
     //Initializes the UI
@@ -59,19 +60,20 @@ public class ResearchUI : MonoBehaviour
             counter.text = "Research Progress: Completed";
             return;
         }
-        counter.text = ("Research Progress: " + ((int)((float)(research.GetResearchProgress()/research.GetResearchNeeded()))* 100) + "%");
+        counter.text = ("Research Progress: " + ((int)(((float)research.GetResearchProgress()/research.GetResearchNeeded()))* 100) + "%");
     }
     
     //Opens the research UI
     public void OpenResearchUI()
     {
+        EventSystem.openWindows.Add(transform.GetChild(0));
         transform.GetChild(0).gameObject.SetActive(true);
     }
     
     //Closes the research UI
     public void CloseButton()
     {
+        EventSystem.openWindows.Remove(transform.GetChild(0));
         transform.GetChild(0).gameObject.SetActive(false);
-        
     }
 }

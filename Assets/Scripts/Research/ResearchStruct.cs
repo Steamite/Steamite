@@ -33,6 +33,7 @@ public class ResearchStructs : MonoBehaviour
     {
         if (completed) return;
         completed = true;
+        button.interactable = false;
         unlocks?.Invoke();
         //UI.ResearchFinishedPopUP(); does nothing yet
     }
