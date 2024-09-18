@@ -14,44 +14,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildButtons: {fileID: 11400000, guid: 116323b1eb6a60342a1b0796e74ac72d, type: 2}
   categories:
-  - categName: Population
-    heads:
-    - rect:
-        serializedVersion: 2
-        x: 91.5
-        y: 20
-        width: 175
-        height: 100
-      data: node 1
-    - rect:
-        serializedVersion: 2
-        x: 341.5
-        y: 20
-        width: 175
-        height: 100
-      data: node 2
-    - rect:
-        serializedVersion: 2
-        x: 591.5
-        y: 20
-        width: 175
-        height: 100
-      data: node 3
-    - rect:
-        serializedVersion: 2
-        x: 841.5
-        y: 20
-        width: 175
-        height: 100
-      data: node 4
-    - rect:
-        serializedVersion: 2
-        x: 1091.5
-        y: 20
-        width: 175
-        height: 100
-      data: node 5
   - categName: Production
-    heads: []
+    nodes:
+    - gp:
+        x: 375.5
+        z: 20
+        level: 0
+      data: node 1
+      buttonCategory: 0
+      buildButton: -1
+    - gp:
+        x: 625.5
+        z: 20
+        level: 0
+      data: node 2
+      buttonCategory: -1
+      buildButton: -1
+    - gp:
+        x: 875.5
+        z: 20
+        level: 0
+      data: node 3
+      buttonCategory: -1
+      buildButton: -1
   - categName: Fluids
-    heads: []
+    nodes: []
+  - categName: Population
+    nodes:
+    - gp:
+        x: 375.5
+        z: 20
+        level: 0
+      data: node 1
+      buttonCategory: 0
+      buildButton: 1
+    - gp:
+        x: 625.5
+        z: 20
+        level: 0
+      data: node 2
+      buttonCategory: 0
+      buildButton: 0
+    - gp:
+        x: 875.5
+        z: 20
+        level: 0
+      data: node 3
+      buttonCategory: -1
+      buildButton: -1
