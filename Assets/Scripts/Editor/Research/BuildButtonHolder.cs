@@ -2,10 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using UnityEditor;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 [Serializable]
 public class BuildCategWrapper
@@ -36,10 +34,5 @@ public class BuildButtonHolderEditor : Editor
             holder = (BuildButtonHolder)target;
         if (categories == null)
             categories = holder.buildingCategories.ToList();
-        if (GUILayout.Button("Generate buttons"))
-        {
-            holder.onChange.Invoke();
-            Debug.Log("Changed");
-        }
     }
 }
