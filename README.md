@@ -12,3 +12,12 @@
 <ul>
   <li>When you find a bug, or want to say something about this game, please tell me about it(discord - isakobe).</li>
 </ul>
+<br>
+<br>
+<br>
+<br>
+<h4>Credits</h4>
+<ul>
+  <li>Programing - Richard Kopp, (Honza Drobílek)</li>
+  <li>Models - Vojta Liebich</li>
+</ul>
