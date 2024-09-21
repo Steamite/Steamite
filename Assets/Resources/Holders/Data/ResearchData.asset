@@ -14,51 +14,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildButtons: {fileID: 11400000, guid: 116323b1eb6a60342a1b0796e74ac72d, type: 2}
   categories:
-  - categName: Production
+  - categName: population
     nodes:
-    - gp:
-        x: 375.5
+    - id: 1
+      gp:
+        x: 391.5
         z: 20
         level: 0
-      data: node 1
-      buttonCategory: 0
-      buildButton: -1
-    - gp:
-        x: 625.5
-        z: 20
-        level: 0
-      data: node 2
+      name: node 1
+      researchTime: 0
       buttonCategory: -1
       buildButton: -1
-    - gp:
-        x: 875.5
+      unlockedBy: []
+      unlocks: []
+    - id: 2
+      gp:
+        x: 641.5
         z: 20
         level: 0
-      data: node 3
+      name: node 2
+      researchTime: 0
       buttonCategory: -1
       buildButton: -1
-  - categName: Fluids
-    nodes: []
-  - categName: Population
-    nodes:
-    - gp:
-        x: 375.5
+      unlockedBy: []
+      unlocks: []
+    - id: 3
+      gp:
+        x: 891.5
         z: 20
         level: 0
-      data: node 1
-      buttonCategory: 0
-      buildButton: 1
-    - gp:
-        x: 625.5
-        z: 20
-        level: 0
-      data: node 2
-      buttonCategory: 0
-      buildButton: 0
-    - gp:
-        x: 875.5
-        z: 20
-        level: 0
-      data: node 3
+      name: node 3
+      researchTime: 0
       buttonCategory: -1
       buildButton: -1
+      unlockedBy: []
+      unlocks: []
+    - id: 4
+      gp:
+        x: 1141.5
+        z: 20
+        level: 0
+      name: node 4
+      researchTime: 0
+      buttonCategory: -1
+      buildButton: -1
+      unlockedBy: []
+      unlocks: []

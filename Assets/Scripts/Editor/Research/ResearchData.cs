@@ -2,35 +2,117 @@ using Codice.Client.Common.TreeGrouper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using UnityEngine;
 
 [Serializable]
 public class ResearchNode
 {
+    public int id;
     public GridPos gp;
-    public string data;
+    public string name;
+    public int researchTime;
     public int buttonCategory;
     public int buildButton;
+    [SerializeField] public List<ResearchNode> unlockedBy;
+    [SerializeField] public List<ResearchNode> unlocks;
 
-    public ResearchNode(GridPos _gp, string _data)
+    public override bool Equals(object obj)
     {
-        gp = _gp;
-        data = _data;
-        buttonCategory = -1;
-        buildButton = -1;
+       ResearchNode node = (ResearchNode)obj;
+        if (node == null || id != node.id)
+            return false;
+        return true;
     }
 
-    public ResearchNode(GridPos _gp, string _data, int _categ, int _buildButton)
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+    /// <summary>
+    /// Used when creating.
+    /// </summary>
+    /// <param name="_gp"></param>
+    /// <param name="_data"></param>
+    /// <param name="level"></param>
+    public ResearchNode(GridPos _gp, string _data, int level, int lastID)
     {
         gp = _gp;
-        data = _data;
+        gp.level = level;
+        name = _data;
+        buttonCategory = -1;
+        buildButton = -1;
+        unlockedBy = new();
+        unlocks = new();
+        id = lastID+1;
+    }
+
+    /// <summary>
+    /// Used for cloning, need all parametrs.
+    /// </summary>
+    /// <param name="_gp"></param>
+    /// <param name="_data"></param>
+    /// <param name="_categ"></param>
+    /// <param name="_buildButton"></param>
+    /// <param name="_unlockedBy"></param>
+    /// <param name="_unlocks"></param>
+    public ResearchNode(GridPos _gp, string _data, int _categ, int _buildButton, List<ResearchNode> _unlockedBy, List<ResearchNode> _unlocks, int _id)
+    {
+        gp = _gp;
+        name = _data;
         buttonCategory = _categ;
         buildButton = _buildButton;
+        unlockedBy = _unlockedBy.ToList();
+        unlocks = _unlocks.ToList();
+        id = _id;
     }
 
     public ResearchNode Clone()
     {
-        return new(gp, data, buttonCategory, buildButton);
+        return new(gp, name, buttonCategory, buildButton, unlocks, unlockedBy, id);
+    }
+
+    public void ConnectNode(ResearchNode node)
+    {
+        if (!unlocks.Contains(node))
+        {
+            unlocks.Add(node);
+            node.unlockedBy.Add(this);
+        }
+    }
+
+    /// <summary>
+    /// Disconnects all connected nodes.
+    /// </summary>
+    public void DisconnectNodes()
+    {
+        for (int i = unlocks.Count-1; i >= 0; i--)
+        {
+            DisconnectNode(true, i);
+        }
+        for (int i = unlockedBy.Count -1; i >= 0; i--)
+        {
+            DisconnectNode(false, i);
+        }
+    }
+
+    /// <summary>
+    /// Disconnects one node.
+    /// </summary>
+    /// <param name="disconectUp">if true disconects node form unlocks</param>
+    /// <param name="index">index in list</param>
+    public void DisconnectNode(bool disconectUp, int index)
+    {
+        if (disconectUp)
+        {
+            unlocks[index].unlockedBy.Remove(this);
+            unlocks.RemoveAt(index);
+        }
+        else
+        {
+            unlockedBy[index].unlocks.Remove(this);
+            unlockedBy.RemoveAt(index);
+        }
     }
 }
 
@@ -55,12 +137,31 @@ public class ResearchData : ScriptableObject
     Dictionary<int, List<string>> allBuildings;
     Dictionary<int, List<string>> unassignedBuildings;
     static bool init = false;
-    
-    public void Init()
-    {
-        OnValidate();
-    }
+
     void OnValidate()
+    {
+        Init();
+        if (!init)
+        {
+            foreach (ResearchCategory categ in categories)
+            {
+                foreach (ResearchNode node in categ.nodes)
+                {
+                    for(int i = 0; i < node.unlocks.Count; i++)
+                    {
+                        node.unlocks[i] = categ.nodes.First(q => q.id == node.unlocks[i].id);
+                    }
+                    for(int i = 0; i < node.unlockedBy.Count; i++)
+                    {
+                        node.unlockedBy[i] = categ.nodes.First(q => q.id == node.unlockedBy[i].id);
+                    }
+                }
+            }
+            init = true;
+        }
+    }
+
+    public void Init()
     {
         allBuildings = new();
         unassignedBuildings = new();
@@ -74,9 +175,9 @@ public class ResearchData : ScriptableObject
                 unassignedBuildings[i].Add(building.name);
             }
         }
-        foreach (ResearchNode node in categories.SelectMany(q=>q.nodes))
+        foreach (ResearchNode node in categories.SelectMany(q => q.nodes))
         {
-            if(node.buttonCategory != -1 && node.buildButton != -1)
+            if (node.buttonCategory != -1 && node.buildButton != -1)
                 unassignedBuildings[node.buttonCategory].Remove(allBuildings[node.buttonCategory][node.buildButton]);
         }
         Debug.Log("Research init");
