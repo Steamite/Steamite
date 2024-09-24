@@ -24,6 +24,8 @@ public static class MyGrid
     public static ResourceHolder specialPrefabs;
     public static SceneReferences sceneReferences;
 
+    public static string StartSceneName;
+
     ////////////////////////////////////////////////////////////
     //------------------------GetSet--------------------------//
     ////////////////////////////////////////////////////////////
@@ -50,7 +52,7 @@ public static class MyGrid
         }
         if (clickable.GetComponent<Road>())
         {
-            foreach (Transform tran in sceneReferences.overlay.buildingOverlays)
+            foreach (Transform tran in sceneReferences.canvasManager.overlays.buildingOverlays)
             {
                 for(int i = 0; i < tran.childCount; i++)
                 {
@@ -78,20 +80,20 @@ public static class MyGrid
     ////////////////////////////////////////////////////////////
     //------------------------Start---------------------------//
     ////////////////////////////////////////////////////////////
-    public static StringBuilder PrepGrid(Transform t, SceneReferences _sceneReferences)
+    public static StringBuilder PrepGrid(SceneReferences _sceneReferences)
     {
         ClearGrid();
         sceneReferences = _sceneReferences;
-        gridTiles = t.GetComponent<GridTiles>();
+        gridTiles = _sceneReferences.eventSystem.GetChild(0).GetComponent<GridTiles>();
         grid = new ClickableObject[width, height];
         pipeGrid = new Pipe[width, height];
-        for (int i = 0; i < t.childCount; i++)
+        for (int i = 0; i < sceneReferences.levels.Count; i++)
         {
-            Transform objects = t.GetChild(i);
-            FillRocks(objects.GetChild(0).GetChild(0)); // adds ores
-            FillRoads(objects.GetChild(0).GetChild(1)); // adds roads
-            FillWater(objects.GetChild(0).GetChild(2)); // adds water
-            FillBuildings(objects.GetChild(0).GetChild(3)); // adds Buildings and (entry points)
+            FillRocks(sceneReferences.levels[i].rocks); // adds ores
+            FillRoads(sceneReferences.levels[i].roads); // adds roads
+            FillWater(sceneReferences.levels[i].water); // adds water
+            FillBuildings(sceneReferences.levels[i].buildings); // adds Buildings and (entry points)
+            FillPipes(sceneReferences.levels[i].pipes); // adds Pipes
         }
         return PrintGrid();
     }
@@ -136,11 +138,15 @@ public static class MyGrid
             else
                 building.GetComponent<BuildPipe>().PlacePipe();
         }
-        foreach (Pipe pipe in objects.transform.parent.GetChild(4).GetComponentsInChildren<Pipe>())
+    }
+    static void FillPipes(Transform objects)
+    {
+        foreach (Pipe pipe in objects.GetComponentsInChildren<Pipe>())
         {
             pipe.PlacePipe();
         }
     }
+
 
     ////////////////////////////////////////////////////////////
     //------------------------Updating------------------------//
@@ -151,13 +157,9 @@ public static class MyGrid
         if (building.id == -1)
             building.UniqueID();
         buildings.Add(building);
-        // assigns sizes acording to rotation
-        // TODO
-
-        //BuildObject buildObject = new();
-        //bool canBuild = true;
+        
         GridPos gridPos = new(building.transform.position - CheckRotation(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
-        sceneReferences.overlay.AddBuildingOverlay(gridPos, building.id);
+        sceneReferences.canvasManager.overlays.AddBuildingOverlay(gridPos, building.id);
         for (int i = building.build.blueprint.itemList.Count - 1; i > -1; i--)
         {
             NeededGridItem item = building.build.blueprint.itemList[i];
@@ -170,28 +172,27 @@ public static class MyGrid
                 case GridItemType.Road:
                 case GridItemType.Anchor:
                     if (load)
-                        GameObject.Instantiate(tilePrefabs.GetPrefab("Road"), new(x, 0.45f, y), Quaternion.identity, sceneReferences.roads);
-                    sceneReferences.overlay.ToggleEntryPoints(r);
+                        GameObject.Instantiate(tilePrefabs.GetPrefab("Road"), new(x, 0.45f, y), Quaternion.identity, sceneReferences.levels[0].roads);
+                    sceneReferences.canvasManager.overlays.ToggleEntryPoints(r);
                     SetGridItem(new(x,y), building);
                     break;
                 case GridItemType.Entrance:
                     if (load)
-                        sceneReferences.overlay.Add(new(itemPos.x, itemPos.z), -1);
+                        sceneReferences.canvasManager.overlays.Add(new(itemPos.x, itemPos.z), -1);
                     else
-                        sceneReferences.overlay.Add(new(itemPos.x, itemPos.z), i);
+                        sceneReferences.canvasManager.overlays.Add(new(itemPos.x, itemPos.z), i);
                     if (r)
                     {
-                        sceneReferences.overlay.buildingOverlays[^1].GetComponentsInChildren<Image>().ToList()[^1].gameObject.SetActive(true);
+                        sceneReferences.canvasManager.overlays.buildingOverlays[^1].GetComponentsInChildren<Image>().ToList()[^1].gameObject.SetActive(true);
                         r.entryPoints.Add(building.id);
                         continue;
                     }
-                    sceneReferences.overlay.buildingOverlays[^1].GetComponentsInChildren<Image>().ToList()[^1].gameObject.SetActive(false);
+                    sceneReferences.canvasManager.overlays.buildingOverlays[^1].GetComponentsInChildren<Image>().ToList()[^1].gameObject.SetActive(false);
                     break;
             }
         }
         if (!load)
-            sceneReferences.overlay.DeleteBuildGrid();
-
+            sceneReferences.canvasManager.overlays.DeleteBuildGrid();
     }
 
     ////////////////////////////////////////////////////////////
@@ -251,9 +252,9 @@ public static class MyGrid
         BuildObject buildObject = new();
         bool canBuild = true;
         GridPos gridPos = new(building.transform.position - CheckRotation(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
-        sceneReferences.overlay.CreateBuildGrid(building);
+        sceneReferences.canvasManager.overlays.CreateBuildGrid(building);
         // checks all Parts of a building
-        Transform overlay = sceneReferences.overlay.overlayParent;
+        Transform overlay = sceneReferences.canvasManager.overlays.overlayParent;
         List<Road> roads = new();
         List<Image> images = new();
         List<Image> entrances = new();
@@ -420,10 +421,10 @@ public static class MyGrid
         else
         {
             GridPos gridPos = new(building.transform.position - CheckRotation(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
-            sceneReferences.overlay.AddBuildingOverlay(gridPos, building.id);
+            sceneReferences.canvasManager.overlays.AddBuildingOverlay(gridPos, building.id);
             if(building.build.blueprint.itemList.Count > 0)
             {
-                List<Road> roads = sceneReferences.roads.GetComponentsInChildren<Road>().ToList();
+                List<Road> roads = sceneReferences.levels[0].roads.GetComponentsInChildren<Road>().ToList();
                 for (int i = building.build.blueprint.itemList.Count - 1; i > -1; i--)
                 {
                     NeededGridItem item = building.build.blueprint.itemList[i];
@@ -460,7 +461,7 @@ public static class MyGrid
 
     static bool CheckEntranceObscursion(List<Road> roads, List<Image> tiles)
     {
-        Dictionary<int, int> buildings = new Dictionary<int, int>();
+        Dictionary<int, int> buildings = new();
         bool ok = true;
 
         foreach (Road road in roads)
@@ -468,7 +469,7 @@ public static class MyGrid
             foreach (int i in road.entryPoints)
             {
                 if (!buildings.Keys.Contains(i))
-                    buildings.Add(i, sceneReferences.overlay.buildingOverlays.First(q => q.name == i.ToString()).GetComponentsInChildren<Image>().Where(q => q.enabled).Count());
+                    buildings.Add(i, sceneReferences.canvasManager.overlays.buildingOverlays.First(q => q.name == i.ToString()).GetComponentsInChildren<Image>().Where(q => q.enabled).Count());
                 buildings[i]--;
                 if (buildings[i] == 0)
                 {

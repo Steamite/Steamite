@@ -23,10 +23,7 @@ public class ResearchSaveHandler : MonoBehaviour
     {
         MainBackend.PreInitializeResearches(savedResearches.Count, savedResearches);
         MainBackend.InitializeUI();
-        MainBackend.InitializeBuildButtons();
-        MainBackend.InitializeResearchButtons();
         MainBackend.InitializeResearchBackend();
-        MainBackend.InitializeResearches();
     }
     
     //Loads researches from file

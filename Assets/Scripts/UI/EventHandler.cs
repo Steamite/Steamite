@@ -12,13 +12,10 @@ public class EventHandler : MonoBehaviour
     InputAction buildRotate => bindingMap.FindAction("Build Rotate");
     InputAction menu => bindingMap.FindAction("Menu");
     InputAction shift => bindingMap.FindAction("Shift");
-
+    InputAction research => bindingMap.FindAction("Research");
 
 
     [SerializeField] public InputActionAsset inputAsset;
-    [Header("Menus")]
-    [SerializeField] GameObject buildMenuObject;
-    [SerializeField] Transform catogoryMenu;
 
     private void OnEnable()
     {
@@ -31,16 +28,21 @@ public class EventHandler : MonoBehaviour
 
     void Update()
     {
-        GridTiles gt = transform.GetChild(0).GetComponent<GridTiles>();
+        GridTiles gt = MyGrid.gridTiles;
         // toggle build menu
         if (buildMenu.triggered)
         {
-            buildMenuObject.SetActive(!buildMenuObject.activeSelf);
-            for (int i = catogoryMenu.childCount - 1; i <= 0; i++)
+            GameObject buildMenu = MyGrid.sceneReferences.canvasManager.buildMenu.gameObject;
+            Transform categories = buildMenu.transform.GetChild(1);
+            buildMenu.SetActive(!buildMenu.activeSelf);
+            if (buildMenu.activeSelf)
             {
-                catogoryMenu.GetChild(i).gameObject.SetActive(buildMenuObject.activeSelf);
+                for (int i = 0; i < categories.childCount; i++)
+                {
+                    categories.GetChild(i).gameObject.SetActive(false);
+                }
+                buildMenu.transform.GetChild(1).gameObject.SetActive(false);
             }
-            buildMenuObject.transform.GetChild(2).gameObject.SetActive(false);
         }
         // toggle dig
         if (dig.triggered)
@@ -78,19 +80,7 @@ public class EventHandler : MonoBehaviour
         // opens ingame menu
         if (menu.triggered)
         {
-            GameObject menu = GameObject.Find("Ingame Menu").transform.GetChild(0).gameObject;
-            if (menu.activeSelf)
-            {
-                GameObject.Find("Scene").GetComponent<Tick>().Unpause();
-            }
-            else
-            {
-                GameObject.Find("Scene").GetComponent<Tick>().ChangeGameSpeed(0);
-            }
-            menu.SetActive(!menu.activeSelf);
-            //menu.transform.parent.GetChild(1).gameObject.SetActive(menu.activeSelf);
-            Camera.main.GetComponent<PhysicsRaycaster>().enabled = !menu.activeSelf;
-            Camera.main.GetComponent<Physics2DRaycaster>().enabled = !menu.activeSelf;
+            MyGrid.sceneReferences.canvasManager.pauseMenu.Toggle();
         }
 
         if (shift.inProgress)
@@ -99,6 +89,11 @@ public class EventHandler : MonoBehaviour
             {
                 gt.Enter(gt.activeObject);
             }
+        }
+
+        if (research.triggered)
+        {
+            MyGrid.sceneReferences.canvasManager.research.GetComponent<ResearchUI>().ToogleResearchUI();
         }
     }
 }

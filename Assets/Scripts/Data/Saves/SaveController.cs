@@ -45,7 +45,7 @@ public class SaveController : MonoBehaviour
 
     void SaveResearch()
     {
-        ResearchSaveHandler research = GameObject.Find("Scene").GetComponent<SceneReferences>().research.GetComponent<ResearchSaveHandler>();
+        ResearchSaveHandler research = GameObject.Find("Scene").GetComponent<SceneReferences>().canvasManager.research.GetComponent<ResearchSaveHandler>();
         research.SaveResearches($"{Application.persistentDataPath}{Slash()}saves{Slash()}{activeFolder}{Slash()}Research.json");
     }
 

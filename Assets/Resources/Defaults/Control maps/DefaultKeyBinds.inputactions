@@ -1,5 +1,5 @@
 {
-    "name": "UserInputAsset",
+    "name": "DefaultKeyBinds",
     "maps": [
         {
             "name": "Camera",
@@ -362,6 +362,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Research",
+                    "type": "Button",
+                    "id": "dcf276ab-21f2-4dd3-8b22-8a1f165eb000",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -450,6 +459,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Shift",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b642d4e6-f7ed-427a-bc4a-a6082a7fc743",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Research",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

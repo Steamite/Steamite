@@ -49,18 +49,23 @@ public class LoadingScreen : MonoBehaviour
         else // if loading level
         {
             sceneReferences = GameObject.Find("Scene").GetComponent<SceneReferences>();
-            MyGrid.PrepGrid(sceneReferences.eventSystem.GetChild(0).transform, sceneReferences);
-            sceneReferences.research.GetComponent<ResearchSaveHandler>().NewResearch();
+            MyGrid.PrepGrid(sceneReferences);
+            sceneReferences.canvasManager.research.GetComponent<ResearchSaveHandler>().NewResearch();
             AfterLevelLoad(true);
         }
         Debug.Log("end:" + Time.realtimeSinceStartup);
         transform.GetChild(0).gameObject.SetActive(false);
     }
-    void NewGame(string _folderName, bool tutorial)
+    public void NewGame(string _folderName, bool tutorial)
     {
         folderName = _folderName;
-        AsyncOperation sceneUnloading = SceneManager.UnloadSceneAsync("Main Menu");
-        sceneUnloading.completed += CreateW;
+        if (folderName == "test - TopGun")
+            CreateW(null);
+        else
+        {
+            AsyncOperation sceneUnloading = SceneManager.UnloadSceneAsync("Main Menu");
+            sceneUnloading.completed += CreateW;
+        }
     }
     void CreateW(AsyncOperation obj)
     {
@@ -171,7 +176,7 @@ public class LoadingScreen : MonoBehaviour
                 switch (objectSave)
                 {
                     case RockSave:
-                        Rock rock = Instantiate(MyGrid.tilePrefabs.GetPrefab((objectSave as RockSave).oreName), new(x, 1, z), Quaternion.identity, sceneReferences.rocks).GetComponent<Rock>();
+                        Rock rock = Instantiate(MyGrid.tilePrefabs.GetPrefab((objectSave as RockSave).oreName), new(x, 1, z), Quaternion.identity, sceneReferences.levels[0].rocks).GetComponent<Rock>();
                         rock.Load(objectSave);
                         MyGrid.SetGridItem(new(x,z), rock);
                         if (rock.toBeDug)
@@ -184,12 +189,12 @@ public class LoadingScreen : MonoBehaviour
                         //MyGrid.grid[x, z] = null;
                         break;
                     case WaterSave:
-                        Water water = Instantiate(waterPref, new(x, 0, z), Quaternion.identity, sceneReferences.water).GetComponent<Water>();
+                        Water water = Instantiate(waterPref, new(x, 0, z), Quaternion.identity, sceneReferences.levels[0].water).GetComponent<Water>();
                         water.Load(objectSave);
                         MyGrid.SetGridItem(new(x, z), water);
                         break;
                     default:
-                        Road road = Instantiate(roadPref, new(x, 0.45f, z), Quaternion.identity, sceneReferences.roads).GetComponent<Road>();
+                        Road road = Instantiate(roadPref, new(x, 0.45f, z), Quaternion.identity, sceneReferences.levels[0].roads).GetComponent<Road>();
                         MyGrid.SetGridItem(new(x, z), road);
                         break;
                 }
@@ -206,7 +211,7 @@ public class LoadingScreen : MonoBehaviour
         foreach (ChunkSave chunkSave in gridSave.chunks)
         {
             Vector3 vec = chunkSave.gridPos.ToVec();
-            MyGrid.chunks.Add(Instantiate(chunkPref, new(vec.x, 1, vec.z), Quaternion.identity, sceneReferences.chunks).GetComponent<Chunk>());
+            MyGrid.chunks.Add(Instantiate(chunkPref, new(vec.x, 1, vec.z), Quaternion.identity, sceneReferences.levels[0].chunks).GetComponent<Chunk>());
             MyGrid.chunks[^1].Load(chunkSave);
         }
     }
@@ -220,7 +225,7 @@ public class LoadingScreen : MonoBehaviour
             {
                 if (gridSave.pipes[x,z] != null)
                 {
-                    Instantiate(pipePref, new(x, 1.6f, z), Quaternion.identity, sceneReferences.pipes)
+                    Instantiate(pipePref, new(x, 1.6f, z), Quaternion.identity, sceneReferences.levels[0].pipes)
                         .GetComponent<Pipe>().Load(gridSave.pipes[x, z]);
                 }
                 progress.Report(progressGlobal += 2);
@@ -241,7 +246,7 @@ public class LoadingScreen : MonoBehaviour
             Building b = Instantiate(_pref,
                 new(save.gridPos.x, 1, save.gridPos.z),
                 Quaternion.Euler(0, save.rotationY, 0),
-                sceneReferences.buildings);
+                sceneReferences.levels[0].buildings);
 
             // fill the prefab with saved Data
             b.Load(save);
@@ -273,7 +278,6 @@ public class LoadingScreen : MonoBehaviour
             human.inventory = h.inventory;
             human.specialization = h.specs;
             human.sleep = h.sleep;
-            // job assigment TODO
             if (human.jData.path.Count > 0)
                 human.ChangeAction(HumanActions.Move);
             else
@@ -299,7 +303,7 @@ public class LoadingScreen : MonoBehaviour
 
     void FillResearches(Progress<int> progress)
     {
-        sceneReferences.research.GetComponent<ResearchSaveHandler>().LoadResearches($"{Application.persistentDataPath}/saves/{folderName}/Research.json");
+        sceneReferences.canvasManager.research.GetComponent<ResearchSaveHandler>().LoadResearches($"{Application.persistentDataPath}/saves/{folderName}/Research.json");
     }
 
     void AfterLevelLoad(bool newGame)
@@ -307,18 +311,20 @@ public class LoadingScreen : MonoBehaviour
         transform.parent.GetChild(1).GetComponent<AudioListener>().enabled = false;
 
         sceneReferences.humans.GetComponent<Humans>().GetHumans();
-        sceneReferences.eventSystem.transform.GetChild(1).gameObject.SetActive(true);
-        sceneReferences.eventSystem.transform.GetChild(1).GetChild(1).GetChild(0).GetChild(2).GetComponent<PreBuildInfo>().SetUp();
+        sceneReferences.canvasManager.gameObject.SetActive(true);
+        sceneReferences.canvasManager.buildMenu.GetChild(2).GetComponent<PreBuildInfo>().SetUp();
         sceneReferences.GetComponent<SaveController>().activeFolder = folderName;
-        sceneReferences.timeButtons.GetComponent<TimeButtons>().tick = sceneReferences.GetComponent<Tick>();
+        sceneReferences.canvasManager.stats.GetChild(1).GetChild(1).GetComponent<TimeButtons>().tick = sceneReferences.GetComponent<Tick>();
         
 
-        Camera.main.GetComponent<PhysicsRaycaster>().eventMask = GameObject.FindWithTag("Grid").GetComponent<GridTiles>().defaultMask;
+        Camera.main.GetComponent<PhysicsRaycaster>().eventMask = MyGrid.gridTiles.defaultMask;
         Camera.main.GetComponent<PhysicsRaycaster>().enabled = true;
         Camera.main.GetComponent<Physics2DRaycaster>().enabled = true;
         Camera.main.GetComponent<AudioListener>().enabled = true;
+
         MyRes.ActivateResources(newGame);
         sceneReferences.GetComponent<Tick>().AwakeTicks();
         SceneManager.UnloadSceneAsync("LoadingScreen");
     }
+
 }

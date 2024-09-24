@@ -1,12 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection.Emit;
 using UnityEditor;
-using UnityEditor.Overlays;
 using System.Linq;
 using UnityEngine;
 using System;
-using Codice.Client.Common.TreeGrouper;
 
 #if UNITY_EDITOR
 public class ResearchEditor : EditorWindow
@@ -23,16 +19,23 @@ public class ResearchEditor : EditorWindow
     static bool connecting;
     static bool disconecting;
     static Vector2 scroll = new();
-    static int selTab = 0;
+    static int selTab = -1;
     Texture2D point;
     Texture2D circle;
     GUIStyle circleButtonStyle;
 
-    [MenuItem("Custom Editors/Research Editor", priority = 15)]
+    static EditorWindow open;
+
+    [MenuItem("Custom Editors/Research Editor %t", priority = 15)]
     public static void ShowWindow()
     {
-        ResearchEditor window = GetWindow(typeof(ResearchEditor)) as ResearchEditor;
-        window.Init();
+        if (open == null)
+        {
+            open = GetWindow(typeof(ResearchEditor));
+            (open as ResearchEditor).Init();
+        }
+        else
+            open.Close();
     }
 
     void Init()
@@ -111,8 +114,6 @@ public class ResearchEditor : EditorWindow
                 {
                     GUI.enabled = true;
                     int level = -1;
-                    if (nodeLevel.Length == 0)
-                        nodeLevel = "0";
                     if (int.TryParse(nodeLevel, out level) && level > -1 && level < 5)
                         GUI.contentColor = Color.white;
                     else
@@ -147,10 +148,9 @@ public class ResearchEditor : EditorWindow
                     }
                     GUI.BeginGroup(new(5, 25, position.width - 10, position.height - 30));
                     GUI.Box(new(0, 0, position.width, position.height - 30), "");
-                    scroll = GUI.BeginScrollView(new Rect(0, 0, position.width - 10, position.height - 30), scroll, new Rect(0, 0, 1000, 700), false, true);
+                    scroll = GUI.BeginScrollView(new Rect(0, 0, position.width - 10, position.height - 30), scroll, new Rect(0, 0, 1000, 900), false, true);
                     RenderNodes(researchData.categories[selTab].nodes);
                     GUI.EndScrollView();
-
                     GUI.EndGroup();
                 }
             }
@@ -159,7 +159,7 @@ public class ResearchEditor : EditorWindow
 
     void CalculateHeads()
     {
-        if(selTab > -1)
+        if(selTab > -1 && selTab < researchData.categories.Count)
         for(int i = 0; i < 5; i++)
         {
             List<ResearchNode> nodes = researchData.categories[selTab].nodes.Where(q => q.gp.level == i).ToList();
@@ -170,11 +170,12 @@ public class ResearchEditor : EditorWindow
                 {
                     node.gp.x = startX;
                     node.gp.z = 20 + ((nodeHeight + 50) * node.gp.level);
+                    node.realX = (node.gp.x + nodeWidth/2) * (1920 / position.width);
                     startX += nodeSpace;
                 }
             }
         }
-        
+        researchData.categories[selTab].nodes = researchData.categories[selTab].nodes.OrderBy(q => q.gp.level).ToList();
         EditorUtility.SetDirty(researchData);
     }
 
@@ -197,7 +198,7 @@ public class ResearchEditor : EditorWindow
             {
                 if (!destroing)
                 {
-                    node.DisconnectNodes();
+                    node.DisconnectNodes(researchNodes);
                     researchData.DeselectBuilding(node);
                     researchNodes.RemoveAt(i);
                     CalculateHeads();
@@ -214,7 +215,8 @@ public class ResearchEditor : EditorWindow
             else
             {
 
-                if (int.TryParse(GUI.TextField(new(42, nodeHeight - 33, 20, 20), node.researchTime.ToString()), out int newResTime))
+
+                if (int.TryParse(GUI.TextField(new(42, nodeHeight - 33, 30, 20), node.researchTime.ToString()), out int newResTime))
                 {
                     node.researchTime = newResTime;
                     GUI.contentColor = Color.white;
@@ -227,13 +229,8 @@ public class ResearchEditor : EditorWindow
                 OutConnectionButton(node);
             }
             GUI.EndGroup();
-            
-            i++;
-        }
-        foreach (ResearchNode node in researchNodes)
-        {
             Vector2 start = new(node.gp.x + nodeWidth / 2, node.gp.z + 10);
-            foreach (ResearchNode rNode in node.unlockedBy)
+            foreach (ResearchNode rNode in researchNodes.Where(q => node.unlockedBy.Contains(q.id)))
             {
                 Vector2 end = new(rNode.gp.x + nodeWidth / 2, rNode.gp.z + nodeHeight - 10);
                 GUI.color = Color.red;
@@ -242,10 +239,9 @@ public class ResearchEditor : EditorWindow
                 DrawLine(new(end.x, start.y - 20), end);
                 GUI.color = Color.white;
             }
+            i++;
         }
-        //DrawLine(new(800, 15), Event.current.mousePosition, 3);
     }
-
 
     /// <summary>
     /// Handles actions of the destroy button on node.
@@ -281,7 +277,7 @@ public class ResearchEditor : EditorWindow
     }
     bool InConnectionButton(ResearchNode node)
     {
-        if (connecting && selectedNode != node && !node.unlockedBy.Contains(selectedNode) && node.gp.level > selectedNode.gp.level)
+        if (connecting && selectedNode != node && !node.unlockedBy.Contains(selectedNode.id) && node.gp.level > selectedNode.gp.level)
             GUI.backgroundColor = Color.green;
         else
             GUI.backgroundColor = Color.gray;
@@ -292,15 +288,16 @@ public class ResearchEditor : EditorWindow
                 selectedNode.ConnectNode(node);
                 selectedNode = null;
                 connecting = false;
+                disconecting = false;
                 return true;
             }
             else
             {
-                if (disconecting)
+                if (disconecting && selectedNode != null)
                 {
                     for (int i = node.unlockedBy.Count - 1; i >= 0; i--)
                     {
-                        node.DisconnectNode(false, i);
+                        node.DisconnectNode(false, i, researchData.categories[selTab].nodes);
                     }
                     disconecting = false;
                     selectedNode = null;
@@ -354,7 +351,7 @@ public class ResearchEditor : EditorWindow
         if (node.buttonCategory > -1)
         {
             List<string> tabs = new() { "Select" };
-            tabs.AddRange(researchData.GetUnssignedBuildings(node));
+            tabs.AddRange(researchData.GetUnassignedBuildings(node));
             int tmpIndex = node.buildButton == -1 ? 0 : 1;
             if (tmpIndex == 0)
                 GUI.contentColor = Color.red;
@@ -412,7 +409,7 @@ public class ResearchEditor : EditorWindow
             end = new(tmp.x, tmp.y);
         }
         Vector2 d = end - start;
-        float a = Mathf.Rad2Deg * Mathf.Atan(d.y / d.x);
+        float a = Mathf.Rad2Deg * Mathf.Atan2(d.y, d.x);
         if (d.x < 0)
             a += 180;
 
@@ -422,7 +419,5 @@ public class ResearchEditor : EditorWindow
         GUI.DrawTexture(new Rect(start.x, start.y - width2, d.magnitude, width), point);
         GUIUtility.RotateAroundPivot(-a, start);
     }
-
-
 }
 #endif

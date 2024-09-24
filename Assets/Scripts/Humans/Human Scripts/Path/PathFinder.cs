@@ -68,7 +68,7 @@ public static class PathFinder
                     entryPoints.Add(i);
                     continue;
                 }
-                foreach (RectTransform t in MyGrid.sceneReferences.overlay.buildingOverlays.First(q=> q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q=>q.transform))//item in building.build.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
+                foreach (RectTransform t in MyGrid.sceneReferences.canvasManager.overlays.buildingOverlays.First(q=> q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q=>q.transform))//item in building.build.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
                 {
                     positions.Add(new(t.position));
                     entryPoints.Add(i);

@@ -11,20 +11,21 @@ public class PreBuildInfo : UIBehaviour
     RectTransform rectTransform;
     Canvas c;
     GridPos gridPos = new();
-    status s = status.notSet;
+    bool isSet = false;
     enum status{
         notSet,
         set
     }
+
     public void SetUp()
     {
         rectTransform = (RectTransform)transform;
-        c = transform.parent.parent.parent.GetComponent<Canvas>();
-        s = status.set;
+        c = transform.parent.GetComponent<Canvas>();
+        isSet = true;
     }
     protected override void OnRectTransformDimensionsChange()
     {
-        if(s == status.set)
+        if(isSet)
         {
             float canvasHeight = c.renderingDisplaySize.y;// * c.scaleFactor;
             //print(canvasHeight);
@@ -36,7 +37,7 @@ public class PreBuildInfo : UIBehaviour
     public void DisplayInfo(Building prefab, Vector3 pos)
     {
         // triggers on button enter, works after setingUp
-        if(s == status.set)
+        if(isSet)
         {
             gridPos = new(pos.x, pos.y);
             print(prefab.name);

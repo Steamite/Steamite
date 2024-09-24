@@ -9,54 +9,220 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75a415d96de8b11479fcd5d46a324429, type: 3}
+  m_Script: {fileID: 11500000, guid: 9759bb5ca0e6b0e459c3e7b86df65b4f, type: 3}
   m_Name: ResearchData
   m_EditorClassIdentifier: 
   buildButtons: {fileID: 11400000, guid: 116323b1eb6a60342a1b0796e74ac72d, type: 2}
   categories:
-  - categName: population
+  - categName: Population
     nodes:
-    - id: 1
-      gp:
-        x: 391.5
-        z: 20
-        level: 0
-      name: node 1
-      researchTime: 0
-      buttonCategory: -1
-      buildButton: -1
-      unlockedBy: []
-      unlocks: []
-    - id: 2
-      gp:
-        x: 641.5
-        z: 20
-        level: 0
-      name: node 2
-      researchTime: 0
-      buttonCategory: -1
-      buildButton: -1
-      unlockedBy: []
-      unlocks: []
     - id: 3
       gp:
-        x: 891.5
+        x: 403
         z: 20
         level: 0
-      name: node 3
+      realX: 765.03656
+      name: Population - House
+      researchTime: 0
+      buttonCategory: 0
+      buildButton: 0
+      researched: 1
+      unlockedBy: 
+      unlocks: 070000000200000008000000
+    - id: 19
+      gp:
+        x: 653
+        z: 20
+        level: 0
+      realX: 1154.9635
+      name: node 19
       researchTime: 0
       buttonCategory: -1
       buildButton: -1
-      unlockedBy: []
-      unlocks: []
+      researched: 0
+      unlockedBy: 
+      unlocks: 
+    - id: 2
+      gp:
+        x: 153
+        z: 190
+        level: 1
+      realX: 375.10968
+      name: Population - Diner
+      researchTime: 0
+      buttonCategory: 0
+      buildButton: 1
+      researched: 0
+      unlockedBy: 03000000
+      unlocks: 06000000
+    - id: 7
+      gp:
+        x: 403
+        z: 190
+        level: 1
+      realX: 765.03656
+      name: Storage - Elevator
+      researchTime: 0
+      buttonCategory: 2
+      buildButton: 0
+      researched: 0
+      unlockedBy: 03000000
+      unlocks: 
+    - id: 8
+      gp:
+        x: 653
+        z: 190
+        level: 1
+      realX: 1154.9635
+      name: Fluids - Water Pump
+      researchTime: 0
+      buttonCategory: 3
+      buildButton: 2
+      researched: 0
+      unlockedBy: 03000000
+      unlocks: 
+    - id: 9
+      gp:
+        x: 903
+        z: 190
+        level: 1
+      realX: 1544.8904
+      name: Fluids - Steam Tank
+      researchTime: 0
+      buttonCategory: 3
+      buildButton: 1
+      researched: 0
+      unlockedBy: 
+      unlocks: 12000000
     - id: 4
       gp:
-        x: 1141.5
-        z: 20
-        level: 0
-      name: node 4
+        x: 403
+        z: 360
+        level: 2
+      realX: 765.03656
+      name: Fluids - Steam Generator
+      researchTime: 0
+      buttonCategory: 3
+      buildButton: 0
+      researched: 0
+      unlockedBy: 
+      unlocks: 0b000000
+    - id: 20
+      gp:
+        x: 653
+        z: 360
+        level: 2
+      realX: 1154.9635
+      name: node 20
       researchTime: 0
       buttonCategory: -1
       buildButton: -1
-      unlockedBy: []
-      unlocks: []
+      researched: 0
+      unlockedBy: 
+      unlocks: 
+    - id: 5
+      gp:
+        x: 153
+        z: 530
+        level: 3
+      realX: 375.10968
+      name: node 5
+      researchTime: 0
+      buttonCategory: -1
+      buildButton: -1
+      researched: 0
+      unlockedBy: 
+      unlocks: 
+    - id: 16
+      gp:
+        x: 403
+        z: 530
+        level: 3
+      realX: 765.03656
+      name: Production - Research tower
+      researchTime: 0
+      buttonCategory: 1
+      buildButton: 2
+      researched: 0
+      unlockedBy: 
+      unlocks: 
+    - id: 17
+      gp:
+        x: 653
+        z: 530
+        level: 3
+      realX: 1154.9635
+      name: Fluids - Fluid Pipe base
+      researchTime: 0
+      buttonCategory: 3
+      buildButton: 4
+      researched: 0
+      unlockedBy: 
+      unlocks: 
+    - id: 18
+      gp:
+        x: 903
+        z: 530
+        level: 3
+      realX: 1544.8904
+      name: Production - Production
+      researchTime: 0
+      buttonCategory: 1
+      buildButton: 1
+      researched: 0
+      unlockedBy: 09000000
+      unlocks: 
+    - id: 6
+      gp:
+        x: 153
+        z: 700
+        level: 4
+      realX: 375.10968
+      name: Production - Foundry
+      researchTime: 0
+      buttonCategory: 1
+      buildButton: 0
+      researched: 0
+      unlockedBy: 02000000
+      unlocks: 
+    - id: 11
+      gp:
+        x: 403
+        z: 700
+        level: 4
+      realX: 765.03656
+      name: Fluids - Water Tank
+      researchTime: 0
+      buttonCategory: 3
+      buildButton: 3
+      researched: 0
+      unlockedBy: 04000000
+      unlocks: 
+    - id: 13
+      gp:
+        x: 653
+        z: 700
+        level: 4
+      realX: 1154.9635
+      name: node 13
+      researchTime: 0
+      buttonCategory: -1
+      buildButton: -1
+      researched: 0
+      unlockedBy: 
+      unlocks: 
+    - id: 14
+      gp:
+        x: 903
+        z: 700
+        level: 4
+      realX: 1544.8904
+      name: node 14
+      researchTime: 0
+      buttonCategory: -1
+      buildButton: -1
+      researched: 0
+      unlockedBy: 
+      unlocks: 
+  - categName: Production
+    nodes: []
