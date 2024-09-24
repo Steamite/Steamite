@@ -107,12 +107,6 @@ public class ResearchStructs : MonoBehaviour
         return researchProgress;
     }
     
-    public void Initialize()
-    {
-        text = button.GetComponentInChildren<TMP_Text>();
-        text.text = researchName;
-    }
-    
     //Start & Awake
     //TODO: Get rid of this
     public void Awake()

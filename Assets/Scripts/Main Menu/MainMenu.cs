@@ -57,7 +57,6 @@ public class MainMenu : MonoBehaviour
             Debug.LogError("set Value");
         }
     }
-    
     public void OpenOptions()
     {
         optionsMenu.gameObject.SetActive(true);

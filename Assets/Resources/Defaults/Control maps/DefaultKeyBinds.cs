@@ -384,6 +384,15 @@ public partial class @DefaultKeyBinds: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Research"",
+                    ""type"": ""Button"",
+                    ""id"": ""dcf276ab-21f2-4dd3-8b22-8a1f165eb000"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -474,6 +483,17 @@ public partial class @DefaultKeyBinds: IInputActionCollection2, IDisposable
                     ""action"": ""Shift"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b642d4e6-f7ed-427a-bc4a-a6082a7fc743"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Research"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -557,6 +577,7 @@ public partial class @DefaultKeyBinds: IInputActionCollection2, IDisposable
         m_Shortcuts_BuildRotate = m_Shortcuts.FindAction("Build Rotate", throwIfNotFound: true);
         m_Shortcuts_Menu = m_Shortcuts.FindAction("Menu", throwIfNotFound: true);
         m_Shortcuts_Shift = m_Shortcuts.FindAction("Shift", throwIfNotFound: true);
+        m_Shortcuts_Research = m_Shortcuts.FindAction("Research", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -710,6 +731,7 @@ public partial class @DefaultKeyBinds: IInputActionCollection2, IDisposable
     private readonly InputAction m_Shortcuts_BuildRotate;
     private readonly InputAction m_Shortcuts_Menu;
     private readonly InputAction m_Shortcuts_Shift;
+    private readonly InputAction m_Shortcuts_Research;
     public struct ShortcutsActions
     {
         private @DefaultKeyBinds m_Wrapper;
@@ -720,6 +742,7 @@ public partial class @DefaultKeyBinds: IInputActionCollection2, IDisposable
         public InputAction @BuildRotate => m_Wrapper.m_Shortcuts_BuildRotate;
         public InputAction @Menu => m_Wrapper.m_Shortcuts_Menu;
         public InputAction @Shift => m_Wrapper.m_Shortcuts_Shift;
+        public InputAction @Research => m_Wrapper.m_Shortcuts_Research;
         public InputActionMap Get() { return m_Wrapper.m_Shortcuts; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -747,6 +770,9 @@ public partial class @DefaultKeyBinds: IInputActionCollection2, IDisposable
             @Shift.started += instance.OnShift;
             @Shift.performed += instance.OnShift;
             @Shift.canceled += instance.OnShift;
+            @Research.started += instance.OnResearch;
+            @Research.performed += instance.OnResearch;
+            @Research.canceled += instance.OnResearch;
         }
 
         private void UnregisterCallbacks(IShortcutsActions instance)
@@ -769,6 +795,9 @@ public partial class @DefaultKeyBinds: IInputActionCollection2, IDisposable
             @Shift.started -= instance.OnShift;
             @Shift.performed -= instance.OnShift;
             @Shift.canceled -= instance.OnShift;
+            @Research.started -= instance.OnResearch;
+            @Research.performed -= instance.OnResearch;
+            @Research.canceled -= instance.OnResearch;
         }
 
         public void RemoveCallbacks(IShortcutsActions instance)
@@ -848,5 +877,6 @@ public partial class @DefaultKeyBinds: IInputActionCollection2, IDisposable
         void OnBuildRotate(InputAction.CallbackContext context);
         void OnMenu(InputAction.CallbackContext context);
         void OnShift(InputAction.CallbackContext context);
+        void OnResearch(InputAction.CallbackContext context);
     }
 }
