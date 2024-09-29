@@ -10,6 +10,7 @@ public class ResearchNode
     public GridPos gp;
     public float realX;
     public string name;
+    public float currentTime;
     public int researchTime;
     public int buttonCategory;
     public int buildButton;
@@ -19,15 +20,29 @@ public class ResearchNode
 
     public override bool Equals(object obj)
     {
-       ResearchNode node = (ResearchNode)obj;
-        if (node == null || id != node.id)
+        if (obj == null)
             return false;
-        return true;
+        try
+        {
+            ResearchNode node = (ResearchNode)obj;
+            if (id == node.id)
+                return true;
+        }
+        catch
+        {
+            Debug.Log("Somthing went wrong");
+        }
+        return false;
     }
 
     public override int GetHashCode()
     {
         return base.GetHashCode();
+    }
+
+    public ResearchNode()
+    {
+
     }
     /// <summary>
     /// Used when creating.
@@ -42,37 +57,29 @@ public class ResearchNode
         gp.level = level;
         name = _data;
         id = lastID+1;
+        researchTime = 5 * (int)_gp.level;
 
+        currentTime = 0;
+        researched = false;
         buttonCategory = -1;
         buildButton = -1;
-        researched = false;
         unlockedBy = new();
         unlocks = new();
     }
 
-    /// <summary>
-    /// Used for cloning, need all parametrs.
-    /// </summary>
-    /// <param name="_gp"></param>
-    /// <param name="_data"></param>
-    /// <param name="_categ"></param>
-    /// <param name="_buildButton"></param>
-    /// <param name="_unlockedBy"></param>
-    /// <param name="_unlocks"></param>
-    public ResearchNode(GridPos _gp, string _data, int _categ, int _buildButton, List<int> _unlockedBy, List<int> _unlocks, int _id)
+    public ResearchNode(ResearchNode node)
     {
-        gp = _gp;
-        name = _data;
-        buttonCategory = _categ;
-        buildButton = _buildButton;
-        unlockedBy = _unlockedBy.ToList();
-        unlocks = _unlocks.ToList();
-        id = _id;
-    }
-
-    public ResearchNode Clone()
-    {
-        return new(gp, name, buttonCategory, buildButton, unlocks, unlockedBy, id);
+        id = node.id;
+        gp = node.gp;
+        realX = node.realX;
+        name = node.name;
+        currentTime = node.currentTime;
+        researchTime = node.researchTime;
+        buttonCategory = node.buttonCategory;
+        buildButton = node.buildButton;
+        researched = node.researched;
+        unlockedBy = node.unlockedBy;
+        unlocks = node.unlocks;
     }
 
     public void ConnectNode(ResearchNode node)
@@ -122,8 +129,15 @@ public class ResearchNode
 [Serializable]
 public class ResearchCategory
 {
+    [SerializeField]
     public string categName;
+    [SerializeField]
     public List<ResearchNode> nodes;
+
+    public ResearchCategory()
+    {
+
+    }
 
     public ResearchCategory(string _name)
     {
@@ -137,9 +151,8 @@ public class ResearchData : ScriptableObject
 {
     public BuildButtonHolder buildButtons;
     public List<ResearchCategory> categories = new();
-    Dictionary<int, List<string>> allBuildings;
-    Dictionary<int, List<string>> unassignedBuildings;
-    static bool init = false;
+    [NonSerialized] Dictionary<int, List<string>> allBuildings;
+    [NonSerialized] Dictionary<int, List<string>> unassignedBuildings;
 
     void OnValidate()
     {

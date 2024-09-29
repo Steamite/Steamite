@@ -63,7 +63,7 @@ public class Building : StorageObject
             // sets window mod to buildings and toggles constructed/unconstructed
             if (setUp)
             {
-                info.SwitchMods(0, name);
+                info.SwitchMods(InfoMode.Building, name);
                 info.cTransform.parent.GetChild(0).gameObject.SetActive(!build.constructed); // unconstructed
                 info.cTransform.gameObject.SetActive(build.constructed); // constructed
                 for (int i = 0; i < info.cTransform.childCount; i++)
@@ -202,7 +202,6 @@ public class Building : StorageObject
         }
 
         MyGrid.RemoveBuilding(this);
-        transform.parent.parent.parent.parent.GetComponent<GridTiles>().Remove(this);
         DestoyBuilding(); // destroy self
         return c;
     }
@@ -345,7 +344,7 @@ public class Building : StorageObject
         Destroy(gameObject);
         if(id > -1)
         {
-            MyGrid.sceneReferences.canvasManager.overlays.Remove(id);
+            MyGrid.canvasManager.overlays.Remove(id);
             MyGrid.RemoveBuilding(this);
         }
     }

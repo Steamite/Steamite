@@ -269,7 +269,7 @@ public static class MyRes
                     human.lookingForAJob = false;
                     if(diff.ammount.Sum() == 0)
                     {
-                        diff = diff;
+                        //diff = diff;
                         //human.transform.parent.parent.GetComponent<JobQueue>().CancelJob(j, human.jData.interest);
                     }
                     return true;

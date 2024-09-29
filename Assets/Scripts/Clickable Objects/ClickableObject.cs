@@ -61,7 +61,8 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         if (!selected)
             return null;
-        InfoWindow info = GameObject.FindWithTag("Info").transform.GetChild(0).GetComponent<InfoWindow>();
+        InfoWindow info = MyGrid.canvasManager.infoWindow;
+        info.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new(0, 0);
         info.gameObject.SetActive(true);
         return info;
     }

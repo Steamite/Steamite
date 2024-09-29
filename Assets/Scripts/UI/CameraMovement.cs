@@ -58,6 +58,9 @@ public class CameraMovement : MonoBehaviour
 
     void Update()
     {
+        if (MyGrid.canvasManager && (MyGrid.canvasManager.pauseMenu.gameObject.activeSelf || MyGrid.canvasManager.research.gameObject.activeSelf))
+            return;
+
         mod = Input.GetKey(KeyCode.LeftShift) ? 2 : 1;
         mod *= Time.timeScale;
 

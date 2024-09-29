@@ -287,20 +287,20 @@ public class Human : ClickableObject
             // set window mod to humans
             if (setUp)
             {
-                info.SwitchMods(1, name);
+                info.SwitchMods(InfoMode.Human, name);
             }
             string s;
             // JOB INFO
             s =
                 $"Job - {jData.job}\n" +
                 $"Object - {(jData.interest ? jData.interest.name: "")}";
-            info.transform.GetChild(1).GetChild(1).GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = s;
+            info.clickObjectTransform.GetChild((int)InfoMode.Human).GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = s;
             // STATUS INFO
             s = 
                 $"Sleep - {sleep}\n" +
                 $"HasEaten - {hasEaten}\n" +
                 $"Inventory - {MyRes.GetDisplayText(inventory)}";
-            info.transform.GetChild(1).GetChild(1).GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = s;
+            info.clickObjectTransform.GetChild((int)InfoMode.Human).GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = s;
         }
         // floating text update
         transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();

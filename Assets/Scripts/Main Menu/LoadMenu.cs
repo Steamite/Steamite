@@ -14,13 +14,14 @@ public class LoadMenu : MonoBehaviour
 {
     [SerializeField] GameObject content;
     [SerializeField] GameObject itemPrefab;
-    public event Action<GridSave, PlayerSettings, List<HumanSave>, string> loadGame;
+    //public event Action<GridSave, PlayerSettings, List<HumanSave>, string> loadGame;
     string selectedSave;
     List<string> loadedElems = new();
 
     GridSave gridSave;
     PlayerSettings playerSettings;
     List<HumanSave> humanSaves;
+    ResearchSave researchSaves;
     public void ParseSaves()
     {
         string[] dirs = Directory.GetDirectories(Application.persistentDataPath + "/saves/");
@@ -39,6 +40,7 @@ public class LoadMenu : MonoBehaviour
         }
         gameObject.SetActive(true);
     }
+
     public void ClearSelection(bool active)
     {
         selectedSave = "";
@@ -48,6 +50,7 @@ public class LoadMenu : MonoBehaviour
         transform.GetChild(3).GetChild(2).GetComponent<Button>().interactable = false;
         gameObject.SetActive(active);
     }
+
     public static string GetSaveName(string path)
     {
         string s = "";
@@ -61,12 +64,11 @@ public class LoadMenu : MonoBehaviour
         }
         return s.Reverse().ToArray().ArrayToString();
     }
+
     void SelectSave(Button button)
     {
         selectedSave = button.transform.GetChild(0).GetComponent<TMP_Text>().text;
-        JsonSerializer jsonSerializer = new();
-        jsonSerializer.TypeNameHandling = TypeNameHandling.Auto;
-        jsonSerializer.Formatting = Formatting.Indented;
+        JsonSerializer jsonSerializer = SaveController.PrepSerializer();
         // for gridSave
         JsonTextReader jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Grid.json"));
         gridSave = jsonSerializer.Deserialize<GridSave>(jsonReader);
@@ -79,15 +81,21 @@ public class LoadMenu : MonoBehaviour
         jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Humans.json"));
         humanSaves = jsonSerializer.Deserialize<List<HumanSave>>(jsonReader);
         jsonReader.Close();
+        // for researchCategories
+        jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Research.json"));
+        researchSaves = jsonSerializer.Deserialize<ResearchSave>(jsonReader);
+        jsonReader.Close();
 
         transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = selectedSave;
         transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = // to show that the save is really working
             $"Buildings: {gridSave.buildings.Count}\n" +
-            $"Humans: {humanSaves.Count}";
+            $"Humans: {humanSaves.Count}\n" +
+            $"Completed Researches: {researchSaves.categories.SelectMany(q=> q.nodes).Count(q=> q.researched)}";
         
         transform.GetChild(3).GetChild(0).GetComponent<Button>().interactable = true; // load
         transform.GetChild(3).GetChild(2).GetComponent<Button>().interactable = true; // delete
     }
+
     public void DeleteSave(bool delete)
     {
         if (!delete)
@@ -118,6 +126,7 @@ public class LoadMenu : MonoBehaviour
                 transform.parent.GetChild(1).GetChild(1).GetComponent<Button>().interactable = remain;
         }
     }
+
     public void Load()
     {
         if(GameObject.Find("Main Menu") != null)
@@ -130,15 +139,16 @@ public class LoadMenu : MonoBehaviour
             aO.completed += UnLoad;
         }
     }
+
     public void UnLoad(AsyncOperation ao)
     {
         Scene scene = SceneManager.GetActiveScene();
         AsyncOperation aO = SceneManager.UnloadSceneAsync(scene);
         aO.completed += Load;
     }
+
     public void Load(AsyncOperation ao)
     {
-        
-        GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>().LoadSave(gridSave, playerSettings, humanSaves, selectedSave);
+        GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>().LoadSave(gridSave, playerSettings, humanSaves, researchSaves, selectedSave);
     }
 }

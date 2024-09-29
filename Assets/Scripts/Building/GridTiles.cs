@@ -469,7 +469,7 @@ public class GridTiles : MonoBehaviour
             clickedObject.selected = false;
             Exit(clickedObject);
             clickedObject = null;
-            GameObject.FindWithTag("Info").transform.GetChild(0).gameObject.SetActive(false);
+            MyGrid.canvasManager.infoWindow.gameObject.SetActive(false);
         }
     }
     /// <summary>
@@ -488,7 +488,7 @@ public class GridTiles : MonoBehaviour
                 }
                 else
                 {
-                    MyGrid.sceneReferences.canvasManager.overlays.DeleteBuildGrid();
+                    MyGrid.canvasManager.overlays.DeleteBuildGrid();
                     buildBlueprint.DestoyBuilding();
                     Blueprint();
                     return;
@@ -515,7 +515,7 @@ public class GridTiles : MonoBehaviour
                     break;
                 case SelectionMode.build:
                     Camera.main.GetComponent<PhysicsRaycaster>().eventMask = defaultMask;
-                    MyGrid.sceneReferences.canvasManager.overlays.DeleteBuildGrid();
+                    MyGrid.canvasManager.overlays.DeleteBuildGrid();
                     if (buildBlueprint)
                         buildBlueprint.DestoyBuilding();
                     foreach(ClickableObject clickable in markedTiles)
