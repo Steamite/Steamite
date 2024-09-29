@@ -36,10 +36,10 @@ public class Rock : ClickableObject
         {
             if (setUp)
             {
-                info.SwitchMods(2, name); // set window mod to Ore Info
-                info.transform.GetChild(1).GetChild(2).GetChild(1).GetComponent<TMP_Text>().text = MyRes.GetDisplayText(rockYield);
+                info.SwitchMods(InfoMode.Rock, name); // set window mod to Ore Info
+                info.clickObjectTransform.GetChild(2).GetChild(1).GetComponent<TMP_Text>().text = MyRes.GetDisplayText(rockYield);
             }
-            info.transform.GetChild(1).GetChild(2).GetChild(0).GetComponent<TMP_Text>().text = $"Integrity: {integrity}";
+            info.clickObjectTransform.GetChild(2).GetChild(0).GetComponent<TMP_Text>().text = $"Integrity: {integrity}";
             return info;
         }
         return null;

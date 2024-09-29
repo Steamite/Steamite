@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,6 @@ public class ResearchUIButton : MonoBehaviour
     {
         Unavailable,
         Available,
-        Reseaching,
         Completed
     }
 
@@ -20,36 +20,41 @@ public class ResearchUIButton : MonoBehaviour
     public List<Image> unlockedByLines;
     public List<Image> unlocksLines;
 
-    private ResearchUI UI;
+    private int unlockedPrevs;
     private ResearchBackend backend;
+    [SerializeField]public Image borderFill;
 
     public ButtonState state;
+    bool decresing;
 
     //Methods
     //Initializes the button
-    public void Initialize(string _name, ResearchNode researchNode, List<ResearchNode> nodes)
+    public void Initialize(ResearchNode researchNode, List<ResearchNode> nodes)
     {
         unlockedByLines = new();
         unlocksLines = new();
-        name = _name;
+        name = researchNode.name;
         node = researchNode;
-        transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = _name;
-
+        transform.GetChild(2).GetChild(0).GetComponent<TMP_Text>().text = name;
 
         if (node.researched)
         {
-            state = ButtonState.Completed;
-            Recolor();
+            Complete(true);
+            return;
         }
         else if(node.gp.level == 0 || node.unlockedBy.All(q => nodes.Find(x=> x.id == q).researched))
         {
             state = ButtonState.Available;
             Recolor();
+            if (node.researchTime == 0)
+                Debug.LogError($"researchTime not set: {node.gp.level}, {name}");
+            borderFill.fillAmount = node.currentTime / node.researchTime;
         }
         else
         {
             state = ButtonState.Unavailable;
         }
+        ManageBuildButton();
     }
 
     void Recolor(bool doLines = false)
@@ -57,20 +62,19 @@ public class ResearchUIButton : MonoBehaviour
         switch (state)
         {
             case ButtonState.Unavailable:
-                gameObject.GetComponent<Image>().color = Col(63, 66, 67);
-                transform.GetChild(0).GetComponent<Image>().color = Col(86, 90, 91);
-                transform.GetChild(1).GetComponent<Image>().color = Col(105, 108, 109);
+                transform.GetChild(0).GetComponent<Image>().color = Col(63, 66, 67);
+                transform.GetChild(1).GetComponent<Image>().color = Col(86, 90, 91);
+                transform.GetChild(2).GetComponent<Image>().color = Col(105, 108, 109);
                 break;
             case ButtonState.Available:
-            case ButtonState.Reseaching:
-                gameObject.GetComponent<Image>().color = Col(158, 101, 38);
-                transform.GetChild(0).GetComponent<Image>().color = Col(197, 144, 49);
-                transform.GetChild(1).GetComponent<Image>().color = Col(210, 159, 69);
+                transform.GetChild(0).GetComponent<Image>().color = Col(158, 101, 38);
+                transform.GetChild(1).GetComponent<Image>().color = Col(197, 144, 49);
+                transform.GetChild(2).GetComponent<Image>().color = Col(210, 159, 69);
                 break;
             case ButtonState.Completed:
-                gameObject.GetComponent<Image>().color = Col(19, 128, 95);
-                transform.GetChild(0).GetComponent<Image>().color = Col(22, 159, 120);
-                transform.GetChild(1).GetComponent<Image>().color = Col(71, 187, 139);
+                transform.GetChild(0).GetComponent<Image>().color = Col(19, 128, 95);
+                transform.GetChild(1).GetComponent<Image>().color = Col(22, 159, 120);
+                transform.GetChild(2).GetComponent<Image>().color = Col(71, 187, 139);
                 break;
         }
         if(doLines)
@@ -88,8 +92,7 @@ public class ResearchUIButton : MonoBehaviour
                 }
                 break;
             case ButtonState.Available:
-            case ButtonState.Reseaching:
-                foreach (Image image in unlocksLines)
+                foreach (Image image in unlockedByLines)
                 {
                     image.color = Col(210, 159, 69);
                 }
@@ -112,18 +115,94 @@ public class ResearchUIButton : MonoBehaviour
         return new(r / 255f, g / 255f, b / 255f, 1);
     }
 
-    public void Initialise(ResearchUI UI_passed)
-    {
-        if (UI_passed == null) Debug.Log("UI is null in button");
-        UI = UI_passed;
-        backend = UI.gameObject.GetComponent<ResearchBackend>();
-        backend.researches[node.id].button = gameObject.GetComponent<Button>();
-    }
-
     public void OnClick()
     {
+        MyGrid.canvasManager.research.ResearchButtonClick(this);
+    }
+
+    void ManageBuildButton()
+    {
+        Transform button = MyGrid.canvasManager.buildMenu.GetChild(1).GetChild(node.buttonCategory).transform.GetChild(node.buildButton);
+        switch (state)
+        {
+            case ButtonState.Unavailable:
+                button.gameObject.SetActive(false);
+                if (button.parent.GetComponentsInChildren<BuildButton>().Length == 0)
+                    MyGrid.canvasManager.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(false);
+                break;
+            case ButtonState.Available:
+                button.gameObject.SetActive(true);
+                button.GetComponent<Button>().interactable = false;
+                MyGrid.canvasManager.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(true);
+                break;
+            case ButtonState.Completed:
+                button.gameObject.SetActive(true);
+                button.GetComponent<Button>().interactable = true;
+                MyGrid.canvasManager.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(true);
+                break;
+        }
+    }
+
+    public void Complete(bool init = false)
+    {
+        state = ButtonState.Completed;
         node.researched = true;
-        Recolor();
-        //UI.OnResearchButtonClick(node.id, gameObject.GetComponent<Button>());
+        node.currentTime = node.researchTime;
+        Recolor(true);
+        Destroy(borderFill);
+        if (!init)
+        {
+            EndAnim(true);
+            foreach (int i in node.unlocks)
+            {
+                int categ = transform.parent.parent.GetSiblingIndex();
+                MyGrid.canvasManager.research.GetResearchUIButton(categ, i).Unlock(this);
+            }
+        }
+        MyGrid.canvasManager.research.UpdateInfoWindow(this);
+        ManageBuildButton();
+    }
+
+    void Unlock(ResearchUIButton currentResearch)
+    {
+        if (node.unlockedBy.Contains(currentResearch.node.id))
+        {
+            unlockedPrevs++;
+            if (unlockedPrevs == node.unlockedBy.Count)
+            {
+                state = ButtonState.Available;
+                Recolor();
+            }
+        }
+    }
+
+    internal void StartAnim()
+    {
+        decresing = false;
+        transform.GetChild(0).GetComponent<Animator>().SetFloat("Speed", 1);
+        transform.GetChild(0).GetComponent<Animator>().SetTrigger("selected");
+    }
+
+    internal void EndAnim(bool smooth = false)
+    {
+        if (smooth)
+            StartCoroutine(SmoothEnd());
+        else
+            transform.GetChild(0).GetComponent<Animator>().SetTrigger("unselected");
+    }
+
+    IEnumerator SmoothEnd()
+    {
+        decresing = true;
+        Animator animator = transform.GetChild(0).GetComponent<Animator>();
+        float f = animator.GetFloat("Speed");
+        while(f > 0)
+        {
+            if (!decresing)
+                yield break;
+            f -= 0.1f;
+            animator.SetFloat("Speed", f);
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
     }
 }

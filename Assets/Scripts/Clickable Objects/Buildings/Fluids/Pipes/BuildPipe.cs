@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class BuildPipe : Pipe
 {
     public Building connectedBuilding;
-    bool pipesSaved = false;
+    //bool pipesSaved = false;
     public void FillData(Pipe p, Building _connectedBuild)
     {
         network = p.network;

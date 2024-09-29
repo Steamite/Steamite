@@ -5,30 +5,18 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
 using System;
+using TMPro;
 
 public class SaveController : MonoBehaviour
 {
     public string activeFolder;
-
-    static string Slash()
-    {
-        return "/";
-        /*
-        if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
-        {
-            return "\\";
-        }
-        else
-        {
-            return "/";
-        }*/
-    }
+    static JsonSerializer jsonSerializer;
 
     void OnApplicationQuit()
     {
         SaveGame();
-        
     }
+
     public void SaveGame()
     {
         Debug.Log("Application ending after " + Time.time + " seconds");
@@ -37,16 +25,47 @@ public class SaveController : MonoBehaviour
         if (Directory.GetDirectories($"{Application.persistentDataPath}/saves").FirstOrDefault(q => LoadMenu.GetSaveName(q) == activeFolder) == null)
             Directory.CreateDirectory($"{Application.persistentDataPath}/saves/{activeFolder}");
 
-        SaveGrid();
-        SaveHumans();
-        SavePlayerSettings();
-        SaveResearch();
+        try
+        {
+            SaveGrid();
+            SaveHumans();
+            SavePlayerSettings();
+            SaveResearch();
+        }
+        catch (Exception e)
+        {
+            MyGrid.canvasManager.ShowMessage("An error ocured when saving.");
+            Debug.Log("Saving error: " + e);
+            return;
+        }
+        MyGrid.canvasManager.ShowMessage("Saved succesfuly");
     }
 
     void SaveResearch()
     {
-        ResearchSaveHandler research = GameObject.Find("Scene").GetComponent<SceneReferences>().canvasManager.research.GetComponent<ResearchSaveHandler>();
-        research.SaveResearches($"{Application.persistentDataPath}{Slash()}saves{Slash()}{activeFolder}{Slash()}Research.json");
+        // takes nodes from all research buttons
+        ResearchUI research = MyGrid.canvasManager.research;
+        Transform categsTransform = research.categoriesTran;
+        ResearchSave categsData = new(categsTransform.childCount);
+        for (int i = 0; i < categsTransform.childCount; i++) 
+        {
+            Transform categTransform = categsTransform.GetChild(i);
+            categsData.categories[i] = new(categTransform.name);
+            for (int j = 1; j < categTransform.childCount; j++)
+            {
+                Transform levelTransform = categTransform.GetChild(j);
+                for(int k = 0; k < levelTransform.childCount; k++)
+                {
+                    categsData.categories[i].nodes.Add(levelTransform.GetChild(k).GetComponent<ResearchUIButton>().node);
+                }
+            }
+        }
+        if(research.GetComponent<ResearchBackend>().currentResearch)
+            categsData.currentResearch = research.GetComponent<ResearchBackend>().currentResearch.node.id;
+        //write saves
+        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{Application.persistentDataPath}/saves/{activeFolder}/Research.json"));
+        PrepSerializer().Serialize(jsonTextWriter, categsData);
+        jsonTextWriter.Close();
     }
 
     void SaveGrid()
@@ -121,11 +140,18 @@ public class SaveController : MonoBehaviour
         jsonTextWriter.Close();
     }
 
-    JsonSerializer PrepSerializer()
+    /// <summary>
+    /// returns 
+    /// </summary>
+    /// <returns></returns>
+    public static JsonSerializer PrepSerializer()
     {
-        JsonSerializer jsonSerializer = new();
-        jsonSerializer.TypeNameHandling = TypeNameHandling.Auto;
-        jsonSerializer.Formatting = Formatting.Indented;
+        if(jsonSerializer == null)
+        {
+            jsonSerializer = new();
+            jsonSerializer.TypeNameHandling = TypeNameHandling.Auto;
+            jsonSerializer.Formatting = Formatting.Indented;
+        }
         return jsonSerializer;
     }
 }

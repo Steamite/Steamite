@@ -15,8 +15,8 @@ public class Water : ClickableObject
         if (info)
         {
             if(setUp)
-                info.SwitchMods(4, name);
-            info.transform.GetChild(1).GetChild(4).GetChild(0).GetComponent<TMP_Text>().text = $"Storing: {ammount}";
+                info.SwitchMods(InfoMode.Water, name);
+            info.clickObjectTransform.GetChild((int)InfoMode.Water).GetChild(0).GetComponent<TMP_Text>().text = $"Storing: {ammount}";
         }
         return info;
     }

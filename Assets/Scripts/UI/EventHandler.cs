@@ -32,7 +32,7 @@ public class EventHandler : MonoBehaviour
         // toggle build menu
         if (buildMenu.triggered)
         {
-            GameObject buildMenu = MyGrid.sceneReferences.canvasManager.buildMenu.gameObject;
+            GameObject buildMenu = MyGrid.canvasManager.buildMenu.gameObject;
             Transform categories = buildMenu.transform.GetChild(1);
             buildMenu.SetActive(!buildMenu.activeSelf);
             if (buildMenu.activeSelf)
@@ -80,7 +80,7 @@ public class EventHandler : MonoBehaviour
         // opens ingame menu
         if (menu.triggered)
         {
-            MyGrid.sceneReferences.canvasManager.pauseMenu.Toggle();
+            MyGrid.canvasManager.pauseMenu.Toggle();
         }
 
         if (shift.inProgress)
@@ -93,7 +93,7 @@ public class EventHandler : MonoBehaviour
 
         if (research.triggered)
         {
-            MyGrid.sceneReferences.canvasManager.research.GetComponent<ResearchUI>().ToogleResearchUI();
+            MyGrid.canvasManager.research.ToogleResearchUI();
         }
     }
 }

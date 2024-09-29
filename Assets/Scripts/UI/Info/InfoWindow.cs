@@ -5,23 +5,51 @@ using TMPro;
 using UnityEngine.UI;
 using System;
 
+public enum InfoMode
+{
+    // Clickable objects
+    Building,
+    Human,
+    Rock,
+    Chunk,
+    Water,
+    // Research
+    Research,
+}
+
 public class InfoWindow : MonoBehaviour
 {
     public Transform cTransform;
+
+    [SerializeField] public Transform clickObjectTransform;
+    [SerializeField] public Transform researchTransform;
+    [SerializeField] TMP_Text header;
+
     int activeInfo = -1;
-    public void SwitchMods(int active, string header)
+
+    public void SwitchMods(InfoMode active, string _header)
     {
-        if (active != activeInfo)
+        header.text = _header;
+        if ((int)active != activeInfo)
         {
-            Transform t = transform.GetChild(1);
-            transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = header;
-            for (int i = 0; i < t.childCount; i++)
+            if ((InfoMode)activeInfo < InfoMode.Research && activeInfo > -1)
             {
-                t.GetChild(i).gameObject.SetActive(i == active);
+                clickObjectTransform.gameObject.SetActive(false);
+                clickObjectTransform.GetChild((int)activeInfo).gameObject.SetActive(false);
             }
-            return;
+            else
+                researchTransform.gameObject.SetActive(false);
+
+            if(active < InfoMode.Research)
+            {
+                clickObjectTransform.gameObject.SetActive(true);
+                clickObjectTransform.GetChild((int)active).gameObject.SetActive(true);
+            }
+            else
+                researchTransform.gameObject.SetActive(true);
+
+            activeInfo = (int)active;
         }
-        return;
     }
     public void SetAssignButton(bool assign, Transform buttons) // toggles info worker to assigned and back
     {

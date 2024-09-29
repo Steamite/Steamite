@@ -1,114 +1,72 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using System.IO;
-using System.Text;
+using UnityEngine;
 using UnityEngine.UI;
-using Newtonsoft.Json;
-using System.Linq;
 
 
 public class ResearchBackend : MonoBehaviour
 {
-    //Variables
-    public ResearchStructs[] researches; //Researches
-    private string saveFileLocation;
-    private string defaultResearchLocation;
-    public ResearchUI UI;
-    public Transform researchesParent;
-
-    //public Tick tick_script;
-
-    private string saveJson; //Save file string
-    private string defaultJson;
-
-    //Temp
-    private ResearchStructs research;
+    ResearchUI UI;
+    public ResearchUIButton currentResearch;
+    public float speed = 3;
+    public int queuedRoutines = 0;
+    public float elapsedProgress;
     
-    public int numberOfResearches; //How many humans are employed in research buildings
-
-    private int currentlyResearching; //Currently researched research
-    [SerializeField]
-    private List<ResearchStructSaved> savedResearches;
-    private bool researching; //Is a research being done
-
-
-    //Methods
-    //Adds researchers - people who are currently in research buildings
-    public void AddResearchers(int number, bool add = true)
+    public void Init(ResearchUI _UI)
     {
-        if (add) numberOfResearches += number;
-        else numberOfResearches -= number;
+        UI = _UI;
+    }
+
+    //Start researching a research
+    public void StartResearch(ResearchUIButton button)
+    {
+        if (button == currentResearch)
+            return;
+        if (currentResearch == null)
+        {
+            currentResearch = button;
+            currentResearch.StartAnim();
+        }
+        else if (button != currentResearch)
+        {
+            currentResearch.EndAnim(true);
+            currentResearch = button;
+            currentResearch.StartAnim();
+            // confirmation popup
+        }
+        elapsedProgress = currentResearch.node.currentTime;
+        StartCoroutine(UpdateButtonFill());
+    }
+
+    void FinishResearch()
+    {
+        currentResearch.Complete();
+        UI.ResearchFinishedPopUP();
+        currentResearch = null;
     }
     
     //Called by every worker in a research building
     public void DoResearch()
     {
-        researches[currentlyResearching].AddResearchPoints(50, check: true);
-    }
-    
-    //Start UI
-    public void InitializeUI()
-    {
-        UI = gameObject.GetComponent<ResearchUI>();
-        UI.Initialise();
+        if (currentResearch)
+        {
+            currentResearch.node.currentTime++;
+            if(currentResearch.node.currentTime == currentResearch.node.researchTime)
+            {
+                FinishResearch();
+            }
+        }
     }
 
-    //Start researching a research
-    public void StartResearch(int id, Button button)
+    public IEnumerator UpdateButtonFill()
     {
-        if(researching)
-            if (id == currentlyResearching) return;
-        currentlyResearching = id;
-        researches[id].StartResearch(button);
-        if (!researching)
+        elapsedProgress = currentResearch.node.currentTime;
+        while (currentResearch)
         {
-            researching = true;
-            //tick_script.tickAction += DoResearch;
+            elapsedProgress = Mathf.Lerp(elapsedProgress, currentResearch.node.currentTime, Time.deltaTime * speed);
+            currentResearch.borderFill.fillAmount = elapsedProgress / currentResearch.node.researchTime;
+            yield return null;
         }
-    }
-    
-    public void InitializeResearchBackend()
-    {
-        //tick_script = GameObject.Find("Tick").GetComponent<Tick>();
-    }
-
-    public void PreInitializeResearches(int capacity, List<ResearchStructSaved> savedResearchStructsArray)
-    {
-        // TODO
-        /*researches = new ResearchStructs[capacity];
-        int counter = 0;
-        foreach (ResearchStructSaved saved in savedResearchStructsArray)
-        {
-            research = researchesParent.gameObject.AddComponent<ResearchStructs>();
-            research.SaveLoader(saved);
-            researches[counter] = research;
-            counter++;
-        }
-        foreach (ResearchStructs research in researches)
-        {
-            research.UI = UI;
-        }*/
-    }
-
-    //Start & Awake
-    
-    //Find save file location
-    /*
-    private void Awake()
-    {
-        if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
-        {
-            saveFileLocation = Application.persistentDataPath + "\\saves\\Researches.json";
-        }
-        else
-        {
-            saveFileLocation = Application.persistentDataPath + "/saves/Researches.json";
-        }
-    }*/
-    private void Start()
-    {
     }
 }

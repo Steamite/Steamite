@@ -199,7 +199,24 @@ public class PlayerSettings
     public List<JobState> priorities;
 }
 [Serializable]
-public class MyColor{
+public class ResearchSave
+{
+    public int currentResearch;
+    public ResearchCategory[] categories;
+
+    public ResearchSave(int categCount)
+    {
+        categories = new ResearchCategory[categCount];
+    }
+    public ResearchSave()
+    {
+
+    }
+}
+
+[Serializable]
+public class MyColor
+{
     public float r;
     public float g;
     public float b;

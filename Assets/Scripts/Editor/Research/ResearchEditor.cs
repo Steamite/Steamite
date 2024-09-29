@@ -160,23 +160,25 @@ public class ResearchEditor : EditorWindow
     void CalculateHeads()
     {
         if(selTab > -1 && selTab < researchData.categories.Count)
-        for(int i = 0; i < 5; i++)
         {
-            List<ResearchNode> nodes = researchData.categories[selTab].nodes.Where(q => q.gp.level == i).ToList();
-            float startX = (position.width / 2) - nodeWidth / 2 - ((nodes.Count-1) * (nodeSpace / 2));
-            if (startX > 0)
+            for (int i = 0; i < 5; i++)
             {
-                foreach (ResearchNode node in nodes)
+                List<ResearchNode> nodes = researchData.categories[selTab].nodes.Where(q => q.gp.level == i).ToList();
+                float startX = (position.width / 2) - nodeWidth / 2 - ((nodes.Count - 1) * (nodeSpace / 2));
+                if (startX > 0)
                 {
-                    node.gp.x = startX;
-                    node.gp.z = 20 + ((nodeHeight + 50) * node.gp.level);
-                    node.realX = (node.gp.x + nodeWidth/2) * (1920 / position.width);
-                    startX += nodeSpace;
+                    foreach (ResearchNode node in nodes)
+                    {
+                        node.gp.x = startX;
+                        node.gp.z = 20 + ((nodeHeight + 50) * node.gp.level);
+                        node.realX = (node.gp.x + nodeWidth / 2) * (1920 / position.width);
+                        startX += nodeSpace;
+                    }
                 }
             }
+            researchData.categories[selTab].nodes = researchData.categories[selTab].nodes.OrderBy(q => q.gp.level).ToList();
+            EditorUtility.SetDirty(researchData);
         }
-        researchData.categories[selTab].nodes = researchData.categories[selTab].nodes.OrderBy(q => q.gp.level).ToList();
-        EditorUtility.SetDirty(researchData);
     }
 
     /// <summary>
@@ -364,7 +366,7 @@ public class ResearchEditor : EditorWindow
                 if (node.buildButton > -1)
                 {
                     researchData.SelectBuilding(node);
-                    node.name = researchData.buildButtons.buildingCategories[node.buttonCategory].categName + " - " + tabs[index];
+                    node.name = tabs[index];
                 }
                 else
                 {

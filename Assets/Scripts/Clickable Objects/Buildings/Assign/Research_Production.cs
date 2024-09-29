@@ -4,19 +4,26 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 using TMPro;
+using System;
 public class Research_Production : ProductionBuilding
 {
     //private int temp_workers_count = 0; Already exists: ProductionBuilding.working
-    private ResearchBackend Research_Script;
-    protected override void Awake()
+    ResearchBackend Research_Script;
+
+    public void Init()
     {
-        base.Awake();
-        Research_Script = MyGrid.sceneReferences.canvasManager.research.GetComponent<ResearchBackend>();
+        Research_Script = MyGrid.canvasManager.research.GetComponent<ResearchBackend>();
+    }
+
+    public override void Load(ClickableObjectSave save)
+    {
+        Init();
+        base.Load(save);
     }
 
     public override void Produce()
     {
-        base.Produce();
+        //base.Produce();
         Research_Script.DoResearch();
     }
 
@@ -35,10 +42,11 @@ public class Research_Production : ProductionBuilding
     public override void Work(Human h)
     {
         base.Work(h);
-        Research_Script.AddResearchers(1);
     }
     public override void RefreshStatus()
     {
         //base.RefreshStatus();
     }
+
+    
 }

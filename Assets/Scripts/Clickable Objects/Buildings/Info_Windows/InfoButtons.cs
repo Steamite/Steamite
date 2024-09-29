@@ -7,18 +7,20 @@ public class InfoButtons : MonoBehaviour
     public int id;
     public void CloseInfoMenu() // closes the info window
     {
-        transform.parent.parent.gameObject.SetActive(false);
-        GridTiles g = GameObject.Find("Grid").GetComponent<GridTiles>();
-        g.DeselectObjects();
+        MyGrid.canvasManager.infoWindow.gameObject.SetActive(false);
+        MyGrid.gridTiles.DeselectObjects();
     }
+
     public void SwitchViews(bool state) // changes assign to unassign and back
     {
-        GameObject.Find("Info Window").GetComponent<InfoWindow>().SetAssignButton(state, transform.parent);
+        MyGrid.canvasManager.infoWindow.SetAssignButton(state, transform.parent);
     }
+
     public void ManageWorkers() // assigns or unassigns worker
     {
         transform.parent.parent.parent.parent.GetComponent<WorkerAssign>().ManageHuman(id);
     }
+
     public void ManageStorage(bool status)
     {
         gameObject.GetComponent<Button>().interactable = false;
@@ -26,6 +28,7 @@ public class InfoButtons : MonoBehaviour
         Storage storage = transform.parent.parent.parent.GetComponent<StorageAssign>().building.GetComponent<Storage>();
         storage.canStore[id] = status;
     }
+
     public void ChangeTime()
     {
         bool b = id == 1 ? true : false;

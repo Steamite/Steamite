@@ -15,12 +15,15 @@ public class LoadingScreen : MonoBehaviour
 {
     string folderName;
     int buildWeigth = 5;
+    int progressGlobal = 1;
+
     public GridSave gridSave;
     public PlayerSettings playerSettings;
     public List<HumanSave> humanSaves;
-    public SceneReferences sceneReferences;
+    public ResearchSave researchSaves;
 
-    int progressGlobal = 1;
+    [SerializeField] GroundLevel startLevel;
+    [SerializeField] GroundLevel templateLevel;
     public event Action humanActivation;
 
     GameObject roadPref;
@@ -44,13 +47,12 @@ public class LoadingScreen : MonoBehaviour
             MainMenu mainMenu = GameObject.Find("Main Menu").GetComponent<MainMenu>();
             mainMenu.newGame += NewGame;
             LoadMenu saveLoader = mainMenu.transform.GetChild(3).GetComponent<LoadMenu>();
-            saveLoader.loadGame += LoadSave;
+            //saveLoader.loadGame += LoadSave;
         }
         else // if loading level
         {
-            sceneReferences = GameObject.Find("Scene").GetComponent<SceneReferences>();
-            MyGrid.PrepGrid(sceneReferences);
-            sceneReferences.canvasManager.research.GetComponent<ResearchSaveHandler>().NewResearch();
+            MyGrid.CreateGrid(startLevel);
+            MyGrid.canvasManager.research.NewGame();
             AfterLevelLoad(true);
         }
         Debug.Log("end:" + Time.realtimeSinceStartup);
@@ -77,11 +79,12 @@ public class LoadingScreen : MonoBehaviour
     //-----------------------------Loading--------------------------//
     //////////////////////////////////////////////////////////////////
     
-    public void LoadSave(GridSave _gridSave, PlayerSettings _playerSettings, List<HumanSave> _humanSaves, string _folderName)
+    public void LoadSave(GridSave _gridSave, PlayerSettings _playerSettings, List<HumanSave> _humanSaves, ResearchSave _researchSaves, string _folderName)
     {
         gridSave = _gridSave;
         playerSettings = _playerSettings;
         humanSaves = _humanSaves;
+        researchSaves = _researchSaves;
         folderName = _folderName;
 
         if (GameObject.Find("Main Menu"))
@@ -99,13 +102,14 @@ public class LoadingScreen : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(true);
         transform.GetChild(0).GetChild(2).GetComponent<TMP_Text>().text = folderName;
         transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
-        var loading = SceneManager.LoadSceneAsync("Level Template", LoadSceneMode.Additive);
+        var loading = SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
         loading.completed += LoadWorld;
     }
+
     void LoadWorld(AsyncOperation obj)
     {
-        sceneReferences = GameObject.Find("Scene").GetComponent<SceneReferences>();
-        MyGrid.sceneReferences = sceneReferences;
+        MyGrid.sceneReferences = GameObject.Find("Scene").GetComponent<SceneReferences>();
+        MyGrid.canvasManager = GameObject.Find("UI canvas").GetComponent<CanvasManager>();
         Slider slider = transform.GetChild(0).GetChild(1).GetComponent<Slider>();
         // create Progress val for loading slider
         int maxProgress = gridSave.width * gridSave.height*4; // Tiles and pipes
@@ -129,12 +133,12 @@ public class LoadingScreen : MonoBehaviour
     IEnumerator LoadWaiting()
     {
         yield return new WaitForSeconds(2);
-        MyGrid.gridTiles = sceneReferences.eventSystem.GetChild(0).GetComponent<GridTiles>();
+        MyGrid.gridTiles = MyGrid.sceneReferences.eventSystem.GetChild(0).GetComponent<GridTiles>();
         AfterLevelLoad(false);
     }
     void FillPlayerSettings(IProgress<int> progress)
     {
-        sceneReferences.humans.GetComponent<JobQueue>().priority = playerSettings.priorities;
+        MyGrid.sceneReferences.humans.GetComponent<JobQueue>().priority = playerSettings.priorities;
     }
     //////////////////////////////////////////////////////////////////
     //-----------------------------Grid-----------------------------//
@@ -154,7 +158,11 @@ public class LoadingScreen : MonoBehaviour
         MyGrid.ClearGrid();
         
         // gets gridTiles reference for rocks
-        MyGrid.gridTiles = sceneReferences.eventSystem.GetChild(0).GetComponent<GridTiles>();
+        MyGrid.gridTiles = MyGrid.sceneReferences.eventSystem.GetChild(0).GetComponent<GridTiles>();
+        // creates an empty ground level
+        GroundLevel groundLevel = Instantiate(templateLevel, MyGrid.gridTiles.transform);
+        MyGrid.sceneReferences.levels.Add(groundLevel);
+
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = MyGrid.gridTiles.defaultMask;
         // process of creating items
         CreateTiles(progress);
@@ -176,7 +184,7 @@ public class LoadingScreen : MonoBehaviour
                 switch (objectSave)
                 {
                     case RockSave:
-                        Rock rock = Instantiate(MyGrid.tilePrefabs.GetPrefab((objectSave as RockSave).oreName), new(x, 1, z), Quaternion.identity, sceneReferences.levels[0].rocks).GetComponent<Rock>();
+                        Rock rock = Instantiate(MyGrid.tilePrefabs.GetPrefab((objectSave as RockSave).oreName), new(x, 1.5f, z), Quaternion.identity, MyGrid.sceneReferences.levels[0].rocks).GetComponent<Rock>();
                         rock.Load(objectSave);
                         MyGrid.SetGridItem(new(x,z), rock);
                         if (rock.toBeDug)
@@ -189,19 +197,19 @@ public class LoadingScreen : MonoBehaviour
                         //MyGrid.grid[x, z] = null;
                         break;
                     case WaterSave:
-                        Water water = Instantiate(waterPref, new(x, 0, z), Quaternion.identity, sceneReferences.levels[0].water).GetComponent<Water>();
+                        Water water = Instantiate(waterPref, new(x, 0, z), Quaternion.identity, MyGrid.sceneReferences.levels[0].water).GetComponent<Water>();
                         water.Load(objectSave);
                         MyGrid.SetGridItem(new(x, z), water);
                         break;
                     default:
-                        Road road = Instantiate(roadPref, new(x, 0.45f, z), Quaternion.identity, sceneReferences.levels[0].roads).GetComponent<Road>();
+                        Road road = Instantiate(roadPref, new(x, 0.45f, z), Quaternion.identity, MyGrid.sceneReferences.levels[0].roads).GetComponent<Road>();
                         MyGrid.SetGridItem(new(x, z), road);
                         break;
                 }
                 progress.Report(progressGlobal += 2);
             }
         }
-        sceneReferences.humans.GetComponent<JobQueue>().toBeDug = MyGrid.gridTiles.toBeDigged.ToList();
+        MyGrid.sceneReferences.humans.GetComponent<JobQueue>().toBeDug = MyGrid.gridTiles.toBeDigged.ToList();
     }
 
     void CreateChunks(IProgress<int> progress)
@@ -211,7 +219,7 @@ public class LoadingScreen : MonoBehaviour
         foreach (ChunkSave chunkSave in gridSave.chunks)
         {
             Vector3 vec = chunkSave.gridPos.ToVec();
-            MyGrid.chunks.Add(Instantiate(chunkPref, new(vec.x, 1, vec.z), Quaternion.identity, sceneReferences.levels[0].chunks).GetComponent<Chunk>());
+            MyGrid.chunks.Add(Instantiate(chunkPref, new(vec.x, 1, vec.z), Quaternion.identity, MyGrid.sceneReferences.levels[0].chunks).GetComponent<Chunk>());
             MyGrid.chunks[^1].Load(chunkSave);
         }
     }
@@ -225,7 +233,7 @@ public class LoadingScreen : MonoBehaviour
             {
                 if (gridSave.pipes[x,z] != null)
                 {
-                    Instantiate(pipePref, new(x, 1.6f, z), Quaternion.identity, sceneReferences.levels[0].pipes)
+                    Instantiate(pipePref, new(x, 1.6f, z), Quaternion.identity, MyGrid.sceneReferences.levels[0].pipes)
                         .GetComponent<Pipe>().Load(gridSave.pipes[x, z]);
                 }
                 progress.Report(progressGlobal += 2);
@@ -246,7 +254,7 @@ public class LoadingScreen : MonoBehaviour
             Building b = Instantiate(_pref,
                 new(save.gridPos.x, 1, save.gridPos.z),
                 Quaternion.Euler(0, save.rotationY, 0),
-                sceneReferences.levels[0].buildings);
+                MyGrid.sceneReferences.levels[0].buildings);
 
             // fill the prefab with saved Data
             b.Load(save);
@@ -260,8 +268,13 @@ public class LoadingScreen : MonoBehaviour
     //////////////////////////////////////////////////////////////////
     void FillHumans(IProgress<int> progress)
     {
+        // Destroys all humans 
+        for (int i = MyGrid.sceneReferences.humans.GetChild(0).childCount-1; i >= 0; i--)
+        {
+            Destroy(MyGrid.sceneReferences.humans.GetChild(0).GetChild(i).gameObject);
+        }
         GameObject humanPrefab = MyGrid.specialPrefabs.GetPrefab("Human").gameObject;
-        Humans humans = sceneReferences.humans.GetComponent<Humans>();
+        Humans humans = MyGrid.sceneReferences.humans.GetComponent<Humans>();
         JobQueue jobQueue = humans.GetComponent<JobQueue>();
         humans.humen = new();
         foreach (HumanSave h in humanSaves)
@@ -270,7 +283,7 @@ public class LoadingScreen : MonoBehaviour
             Human human = GameObject.Instantiate(humanPrefab,
                 new Vector3(h.gridPos.x, 1, h.gridPos.z), 
                 Quaternion.identity,
-                sceneReferences.humans.GetChild(parent)).GetComponent<Human>();
+                MyGrid.sceneReferences.humans.GetChild(parent)).GetComponent<Human>();
             human.transform.GetChild(1).GetComponent<MeshRenderer>().material.color = h.color.ConvertColor();
             human.id = h.id;
             human.jData = new(h.jobSave, human);
@@ -303,18 +316,18 @@ public class LoadingScreen : MonoBehaviour
 
     void FillResearches(Progress<int> progress)
     {
-        sceneReferences.canvasManager.research.GetComponent<ResearchSaveHandler>().LoadResearches($"{Application.persistentDataPath}/saves/{folderName}/Research.json");
+        MyGrid.canvasManager.research.LoadGame(researchSaves);
     }
 
     void AfterLevelLoad(bool newGame)
     {
         transform.parent.GetChild(1).GetComponent<AudioListener>().enabled = false;
 
-        sceneReferences.humans.GetComponent<Humans>().GetHumans();
-        sceneReferences.canvasManager.gameObject.SetActive(true);
-        sceneReferences.canvasManager.buildMenu.GetChild(2).GetComponent<PreBuildInfo>().SetUp();
-        sceneReferences.GetComponent<SaveController>().activeFolder = folderName;
-        sceneReferences.canvasManager.stats.GetChild(1).GetChild(1).GetComponent<TimeButtons>().tick = sceneReferences.GetComponent<Tick>();
+        MyGrid.sceneReferences.humans.GetComponent<Humans>().GetHumans();
+        MyGrid.canvasManager.gameObject.SetActive(true);
+        MyGrid.canvasManager.buildMenu.GetChild(2).GetComponent<PreBuildInfo>().SetUp();
+        MyGrid.sceneReferences.GetComponent<SaveController>().activeFolder = folderName;
+        MyGrid.canvasManager.stats.GetChild(1).GetChild(1).GetComponent<TimeButtons>().tick = MyGrid.sceneReferences.GetComponent<Tick>();
         
 
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = MyGrid.gridTiles.defaultMask;
@@ -323,7 +336,7 @@ public class LoadingScreen : MonoBehaviour
         Camera.main.GetComponent<AudioListener>().enabled = true;
 
         MyRes.ActivateResources(newGame);
-        sceneReferences.GetComponent<Tick>().AwakeTicks();
+        MyGrid.sceneReferences.GetComponent<Tick>().AwakeTicks();
         SceneManager.UnloadSceneAsync("LoadingScreen");
     }
 

@@ -18,24 +18,26 @@ MonoBehaviour:
     nodes:
     - id: 3
       gp:
-        x: 403
+        x: 443
         z: 20
         level: 0
-      realX: 765.03656
-      name: Population - House
-      researchTime: 0
+      realX: 776.93365
+      name: House
+      currentTime: 0
+      researchTime: 100
       buttonCategory: 0
       buildButton: 0
-      researched: 1
+      researched: 0
       unlockedBy: 
       unlocks: 070000000200000008000000
-    - id: 19
+    - id: 14
       gp:
-        x: 653
+        x: 693
         z: 20
         level: 0
-      realX: 1154.9635
-      name: node 19
+      realX: 1143.0664
+      name: node 14
+      currentTime: 0
       researchTime: 0
       buttonCategory: -1
       buildButton: -1
@@ -44,12 +46,13 @@ MonoBehaviour:
       unlocks: 
     - id: 2
       gp:
-        x: 153
+        x: 68
         z: 190
         level: 1
-      realX: 375.10968
-      name: Population - Diner
-      researchTime: 0
+      realX: 227.73456
+      name: Diner
+      currentTime: 0
+      researchTime: 200
       buttonCategory: 0
       buildButton: 1
       researched: 0
@@ -57,12 +60,13 @@ MonoBehaviour:
       unlocks: 06000000
     - id: 7
       gp:
-        x: 403
+        x: 318
         z: 190
         level: 1
-      realX: 765.03656
-      name: Storage - Elevator
-      researchTime: 0
+      realX: 593.86725
+      name: Elevator
+      currentTime: 0
+      researchTime: 200
       buttonCategory: 2
       buildButton: 0
       researched: 0
@@ -70,12 +74,13 @@ MonoBehaviour:
       unlocks: 
     - id: 8
       gp:
-        x: 653
+        x: 568
         z: 190
         level: 1
-      realX: 1154.9635
-      name: Fluids - Water Pump
-      researchTime: 0
+      realX: 960
+      name: Water Pump
+      currentTime: 0
+      researchTime: 200
       buttonCategory: 3
       buildButton: 2
       researched: 0
@@ -83,25 +88,41 @@ MonoBehaviour:
       unlocks: 
     - id: 9
       gp:
-        x: 903
+        x: 818
         z: 190
         level: 1
-      realX: 1544.8904
-      name: Fluids - Steam Tank
-      researchTime: 0
+      realX: 1326.1327
+      name: Steam Tank
+      currentTime: 0
+      researchTime: 200
       buttonCategory: 3
       buildButton: 1
       researched: 0
       unlockedBy: 
       unlocks: 12000000
+    - id: 14
+      gp:
+        x: 1068
+        z: 190
+        level: 1
+      realX: 1692.2655
+      name: node 14
+      currentTime: 0
+      researchTime: 5
+      buttonCategory: -1
+      buildButton: -1
+      researched: 0
+      unlockedBy: 
+      unlocks: 
     - id: 4
       gp:
-        x: 403
+        x: 443
         z: 360
         level: 2
-      realX: 765.03656
-      name: Fluids - Steam Generator
-      researchTime: 0
+      realX: 776.93365
+      name: Steam Generator
+      currentTime: 0
+      researchTime: 300
       buttonCategory: 3
       buildButton: 0
       researched: 0
@@ -109,11 +130,12 @@ MonoBehaviour:
       unlocks: 0b000000
     - id: 20
       gp:
-        x: 653
+        x: 693
         z: 360
         level: 2
-      realX: 1154.9635
+      realX: 1143.0664
       name: node 20
+      currentTime: 0
       researchTime: 0
       buttonCategory: -1
       buildButton: -1
@@ -122,38 +144,27 @@ MonoBehaviour:
       unlocks: 
     - id: 5
       gp:
-        x: 153
+        x: 318
         z: 530
         level: 3
-      realX: 375.10968
+      realX: 593.86725
       name: node 5
+      currentTime: 0
       researchTime: 0
       buttonCategory: -1
       buildButton: -1
       researched: 0
       unlockedBy: 
       unlocks: 
-    - id: 16
-      gp:
-        x: 403
-        z: 530
-        level: 3
-      realX: 765.03656
-      name: Production - Research tower
-      researchTime: 0
-      buttonCategory: 1
-      buildButton: 2
-      researched: 0
-      unlockedBy: 
-      unlocks: 
     - id: 17
       gp:
-        x: 653
+        x: 568
         z: 530
         level: 3
-      realX: 1154.9635
-      name: Fluids - Fluid Pipe base
-      researchTime: 0
+      realX: 960
+      name: Fluid Pipe base
+      currentTime: 0
+      researchTime: 50
       buttonCategory: 3
       buildButton: 4
       researched: 0
@@ -161,12 +172,13 @@ MonoBehaviour:
       unlocks: 
     - id: 18
       gp:
-        x: 903
+        x: 818
         z: 530
         level: 3
-      realX: 1544.8904
-      name: Production - Production
-      researchTime: 0
+      realX: 1326.1327
+      name: Production
+      currentTime: 0
+      researchTime: 20
       buttonCategory: 1
       buildButton: 1
       researched: 0
@@ -174,12 +186,13 @@ MonoBehaviour:
       unlocks: 
     - id: 6
       gp:
-        x: 153
+        x: 193
         z: 700
         level: 4
-      realX: 375.10968
-      name: Production - Foundry
-      researchTime: 0
+      realX: 410.8009
+      name: Foundry
+      currentTime: 0
+      researchTime: 40
       buttonCategory: 1
       buildButton: 0
       researched: 0
@@ -187,38 +200,41 @@ MonoBehaviour:
       unlocks: 
     - id: 11
       gp:
-        x: 403
+        x: 443
         z: 700
         level: 4
-      realX: 765.03656
-      name: Fluids - Water Tank
-      researchTime: 0
+      realX: 776.93365
+      name: Water Tank
+      currentTime: 0
+      researchTime: 50
       buttonCategory: 3
       buildButton: 3
       researched: 0
       unlockedBy: 04000000
       unlocks: 
-    - id: 13
+    - id: 12
       gp:
-        x: 653
+        x: 693
         z: 700
         level: 4
-      realX: 1154.9635
-      name: node 13
-      researchTime: 0
+      realX: 1143.0664
+      name: node 12
+      currentTime: 0
+      researchTime: 20
       buttonCategory: -1
       buildButton: -1
       researched: 0
       unlockedBy: 
       unlocks: 
-    - id: 14
+    - id: 13
       gp:
-        x: 903
+        x: 943
         z: 700
         level: 4
-      realX: 1544.8904
-      name: node 14
-      researchTime: 0
+      realX: 1509.1991
+      name: node 13
+      currentTime: 0
+      researchTime: 20
       buttonCategory: -1
       buildButton: -1
       researched: 0

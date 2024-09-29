@@ -10,6 +10,12 @@ public class Menu : MonoBehaviour
 {
     public void Toggle()
     {
+        if (MyGrid.canvasManager.research.gameObject.activeSelf)
+        {
+            MyGrid.canvasManager.research.CloseButton();
+            return;
+        }
+
         if (gameObject.activeSelf)
             GameObject.Find("Scene").GetComponent<Tick>().Unpause();
         else
@@ -37,12 +43,5 @@ public class Menu : MonoBehaviour
         {
             return;
         }
-        StartCoroutine(HideText());
-    }
-    IEnumerator HideText()
-    {
-        transform.parent.GetChild(transform.parent.childCount - 1).gameObject.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        transform.parent.GetChild(transform.parent.childCount - 1).gameObject.SetActive(false);
     }
 }

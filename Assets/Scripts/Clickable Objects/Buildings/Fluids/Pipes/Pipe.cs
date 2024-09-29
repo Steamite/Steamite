@@ -207,7 +207,7 @@ public class Pipe : Building
         {
             if (setUp)
             {
-                info.SwitchMods(4, $"network {network.networkID}");
+                info.SwitchMods(InfoMode.Water, $"network {network.networkID}");
                 info.transform.GetChild(1).GetChild(4).GetChild(0).GetComponent<TMP_Text>().text =
                     $"Network: {network.networkID} \n";
             }

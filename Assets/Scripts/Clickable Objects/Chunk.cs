@@ -81,9 +81,9 @@ public class Chunk : StorageObject
             // set window mod to Ore Info
             if (first)
             {
-                info.SwitchMods(3, name);
+                info.SwitchMods(InfoMode.Chunk, name);
             }
-            info.transform.GetChild(1).GetChild(3).GetChild(0)
+            info.clickObjectTransform.GetChild((int)InfoMode.Chunk).GetChild(0)
                 .GetComponent<TMP_Text>().text 
                     = $"Human: {string.Join(",", localRes.carriers.Select(q => q.name))} \nResources: {MyRes.GetDisplayText(localRes.stored)}";
         }

@@ -625,7 +625,9 @@ MonoBehaviour:
     chunks: []
   playerSettings:
     priorities: 
-  sceneReferences: {fileID: 0}
+  researchSaves: []
+  startLevel: {fileID: 8292747787264182705, guid: 5d2fc7fe1586e9a4f92424803d3e179a, type: 3}
+  templateLevel: {fileID: 1135758614679704061, guid: d9f415992495cb841b318eb1f8d8a04f, type: 3}
 --- !u!1 &676738600
 GameObject:
   m_ObjectHideFlags: 0
