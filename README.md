@@ -18,6 +18,7 @@
 <br>
 <h4>Credits</h4>
 <ul>
-  <li>Programing - Richard Kopp, (Honza Drobílek)</li>
+  <li>Programing - Richard Kopp</li>
   <li>Models - Vojta Liebich</li>
+  <li>2D art - Lucka Olivová</li>
 </ul>
