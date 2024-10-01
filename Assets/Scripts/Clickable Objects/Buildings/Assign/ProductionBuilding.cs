@@ -81,14 +81,7 @@ public class ProductionBuilding : AssignBuilding
         pRes.inputResource.LinkHuman(h);
         base.TryLink(h);
     }
-    public virtual void Work(Human h)
-    {
-        working.Add(h);
-        if (working.Count == 1) // nobody is working right now
-        {
-            Produce(); // start production
-        }
-    }
+
     public virtual void Produce()
     {
         if (!pStates.stoped)
@@ -188,6 +181,7 @@ public class ProductionBuilding : AssignBuilding
             jQ.AddJob(JobState.Pickup, this);
         }
     }
+
     public override Resource GetDiff(Resource r)
     {
         if (!build.constructed)
@@ -198,7 +192,7 @@ public class ProductionBuilding : AssignBuilding
         {
             Resource x = new();
             MyRes.ManageRes(x, pRes.productionCost, 2);
-            return MyRes.DiffRes(x, pRes.inputResource.Future(false), r);
+            return MyRes.DiffRes(x, pRes.inputResource.Future(), r);
         }       
     }
     ///////////////////////////////////////////////////
@@ -253,22 +247,27 @@ public class ProductionBuilding : AssignBuilding
         // if selected
         if ((info = base.OpenWindow(setUp)) != null)
         {
-            // update
-            UpdateText(info.cTransform);
             // if to be setup
             if (setUp)
             {
-                info.cTransform.GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = "Workers"; // worker table
                 info.cTransform.GetChild(2).gameObject.SetActive(true);
+                info.cTransform.GetChild(3).gameObject.SetActive(false); 
+                info.cTransform.GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = "Workers"; // worker table
             }
+            // update
+            UpdateProductionInfo(info.cTransform);
             return info;
         }
         return null;
     }
-    protected virtual void UpdateText(Transform t)
+
+    protected virtual void UpdateProductionInfo(Transform t)
     {
         t = t.GetChild(2);
+
+        // production button
         t.GetChild(0).GetComponent<ProductionButton>().UpdateButtonState(pTime.currentTime, pTime.prodTime);
+        
         // production cost
         t.GetChild(1).GetComponent<TMP_Text>()
                 .text = MyRes.GetDisplayText(pRes.inputResource.stored, pRes.productionCost);
@@ -281,6 +280,7 @@ public class ProductionBuilding : AssignBuilding
         t.GetChild(3).GetComponent<TMP_Text>()
         .text = MyRes.GetDisplayText(localRes.stored);
     }
+
     public override void Store(Human h, int transferPerTick)
     {
         if (build.constructed)

@@ -13,7 +13,7 @@ public class WaterPump : ProductionBuilding
         base.UniqueID();
         networkAccess.ID(transform.GetChild(2));
     }
-    protected override void UpdateText(Transform t)
+    protected override void UpdateProductionInfo(Transform t)
     {
         GridPos waterPos = new(transform.GetChild(1).gameObject);
         water = MyGrid.GetGridItem(waterPos) as Water;

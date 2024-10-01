@@ -8,45 +8,85 @@ using System;
 public class Research_Production : ProductionBuilding
 {
     //private int temp_workers_count = 0; Already exists: ProductionBuilding.working
-    ResearchBackend Research_Script;
+    ResearchBackend researchBackend;
 
-    public void Init()
+    public override void UniqueID()
     {
-        Research_Script = MyGrid.canvasManager.research.GetComponent<ResearchBackend>();
+        base.UniqueID();
+        researchBackend = MyGrid.canvasManager.research.GetComponent<ResearchBackend>();
+    }
+
+    public override InfoWindow OpenWindow(bool setUp = false)
+    {
+        InfoWindow info;
+        // if selected
+        if ((info = base.OpenWindow(setUp)) != null)
+        {
+            // if to be setup
+            if (setUp)
+            {
+                // disable production button
+                info.cTransform.GetChild(2).gameObject.SetActive(false);
+                info.cTransform.GetChild(3).gameObject.SetActive(true);
+                if (researchBackend.currentResearch)
+                    info.cTransform.GetChild(3).GetComponent<TMP_Text>().text = researchBackend.currentResearch.name;
+                else
+                    info.cTransform.GetChild(3).GetComponent<TMP_Text>().text = "None";
+            }
+            return info;
+        }
+        return null;
     }
 
     public override void Load(ClickableObjectSave save)
     {
-        Init();
         base.Load(save);
+        researchBackend = MyGrid.canvasManager.research.GetComponent<ResearchBackend>();
     }
 
     public override void Produce()
     {
         //base.Produce();
-        Research_Script.DoResearch();
+        researchBackend.DoResearch();
     }
 
-    protected override void Product()
+
+    /*public override void Take(Human h, int transferPerTick)
     {
-        /*
-        Transform research_transform  = GameObject.Find("Research Tree(Stays Active)").transform;
-        research_transform.GetComponent<Research>().research_progress += 10; //add 10 research points
-        */
-        pTime.currentTime = 0;
+        base.Take(h, transferPerTick);
     }
+    public override void Store(Human h, int transferPerTick)
+    {
+        if (!build.constructed)
+            base.Store(h, transferPerTick);
+        else
+        {
+            //MyRes.MoveRes(researchBackend.researchResourceInput, h.inventory, , transferPerTick);
+        }
+    }
+    public override Resource GetDiff(Resource r)
+    {
+        if(!build.constructed)
+            return base.GetDiff(r);
+        else
+        {
+            Resource x = new();
+            MyRes.ManageRes(x, researchBackend.currentResearch.node.reseachCost, 2);
+            return MyRes.DiffRes(x, researchBackend.researchResourceInput.Future(), r);
+        }
+    }*/
+
     protected override void AfterProduction()
     {
-       // base.AfterProduction();
+        //base.AfterProduction();
     }
-    public override void Work(Human h)
-    {
-        base.Work(h);
-    }
+
     public override void RefreshStatus()
     {
         //base.RefreshStatus();
     }
-
-    
+    protected override void Product()
+    {
+        //
+    }
 }

@@ -12,7 +12,7 @@ public class ResearchEditor : EditorWindow
     string categName = "";
     string nodeLevel = "0";
     const float nodeWidth = 175;
-    const float nodeHeight = 120;
+    const float nodeHeight = 195;
     const float nodeSpace = nodeWidth + 75;
 
     static bool destroing;
@@ -48,8 +48,12 @@ public class ResearchEditor : EditorWindow
         circleButtonStyle = new GUIStyle();
         circleButtonStyle.normal.background = circle;
         circleButtonStyle.padding = new RectOffset(0, 0, 0, 0);
+        maxSize = new(1234, 1440);
+        minSize = new(1234, 500);
+        maximized = false;
         CalculateHeads();
     }
+
     private void OnGUI()
     {
         GUI.contentColor = Color.white;
@@ -148,7 +152,7 @@ public class ResearchEditor : EditorWindow
                     }
                     GUI.BeginGroup(new(5, 25, position.width - 10, position.height - 30));
                     GUI.Box(new(0, 0, position.width, position.height - 30), "");
-                    scroll = GUI.BeginScrollView(new Rect(0, 0, position.width - 10, position.height - 30), scroll, new Rect(0, 0, 1000, 900), false, true);
+                    scroll = GUI.BeginScrollView(new Rect(0, 0, position.width - 10, position.height - 30), scroll, new Rect(0, 0, 1000, 5*(nodeHeight+50)), false, true);
                     RenderNodes(researchData.categories[selTab].nodes);
                     GUI.EndScrollView();
                     GUI.EndGroup();
@@ -171,7 +175,7 @@ public class ResearchEditor : EditorWindow
                     {
                         node.gp.x = startX;
                         node.gp.z = 20 + ((nodeHeight + 50) * node.gp.level);
-                        node.realX = (node.gp.x + nodeWidth / 2) * (1920 / position.width);
+                        node.realX = (node.gp.x + nodeWidth / 2) * (1920 / 1234);
                         startX += nodeSpace;
                     }
                 }
@@ -191,7 +195,14 @@ public class ResearchEditor : EditorWindow
         foreach (ResearchNode node in researchNodes)
         {
             GUI.BeginGroup(new(node.gp.x, node.gp.z, nodeWidth, nodeHeight));
-            GUI.Box(new(0, 0, nodeWidth, nodeHeight-10), GUIContent.none);
+            Color background = GUI.backgroundColor;
+            GUI.backgroundColor = Color.white;
+            if (node.buildButton > -1)
+                GUI.Box(new(0, 0, nodeWidth, nodeHeight - 10), GUIContent.none); 
+            else if (node.buttonCategory > -1)
+                GUI.Box(new(0, 0, nodeWidth, 100), GUIContent.none);
+            else
+                GUI.Box(new(0, 0, nodeWidth, 65), GUIContent.none);
             GUIStyle style = new();
             style.alignment = TextAnchor.MiddleCenter;
             style.normal.textColor = Color.white;
@@ -208,16 +219,20 @@ public class ResearchEditor : EditorWindow
                 GUI.EndGroup();
                 break;
             }
-            else if(CategoryPopup(node) || BuildPopup(node) || InConnectionButton(node))
+            else if (CategoryPopup(node) || BuildPopup(node))
             {
                 EditorUtility.SetDirty(researchData);
                 GUI.EndGroup();
                 break;
             }
-            else
+            else if(node.buildButton > -1)
             {
-
-
+                if (ResearchCost(node) || InConnectionButton(node))
+                {
+                    EditorUtility.SetDirty(researchData);
+                    GUI.EndGroup();
+                    break;
+                }
                 if (int.TryParse(GUI.TextField(new(42, nodeHeight - 33, 30, 20), node.researchTime.ToString()), out int newResTime))
                 {
                     node.researchTime = newResTime;
@@ -235,7 +250,7 @@ public class ResearchEditor : EditorWindow
             foreach (ResearchNode rNode in researchNodes.Where(q => node.unlockedBy.Contains(q.id)))
             {
                 Vector2 end = new(rNode.gp.x + nodeWidth / 2, rNode.gp.z + nodeHeight - 10);
-                GUI.color = Color.red;
+                GUI.color = new(0.1f, 0.1f, 0.55f);
                 DrawLine(start, new(start.x, start.y - 20));
                 DrawLine(new(start.x, start.y - 20), new(end.x, start.y - 20));
                 DrawLine(new(end.x, start.y - 20), end);
@@ -244,7 +259,6 @@ public class ResearchEditor : EditorWindow
             i++;
         }
     }
-
     /// <summary>
     /// Handles actions of the destroy button on node.
     /// </summary>
@@ -316,6 +330,77 @@ public class ResearchEditor : EditorWindow
         return false;
     }
 
+
+    bool ResearchCost(ResearchNode node)
+    {
+        List<string> resourceTypes = Enum.GetNames(typeof(ResourceType)).ToList();
+
+        // filter options
+        List<string> resourceTypesFiltred = new() { "select" };
+        resourceTypesFiltred.AddRange(resourceTypes);
+        resourceTypesFiltred.RemoveAll(q => node.reseachCost.type.Contains((ResourceType)resourceTypes.IndexOf(q)));
+        GUI.Label(new(5, 80, nodeWidth, 20), "Cost");
+
+        for (int i = 0; i < 3 && i < node.reseachCost.type.Count + 1; i++)
+        {
+            int yPos = 100 + (i*20);
+            if (node.reseachCost.type.Count == i)
+            {
+                GUI.contentColor = Color.red;
+                int index = EditorGUI.Popup(new(5, yPos, nodeWidth/3, 20), 0, resourceTypesFiltred.ToArray());
+                index = resourceTypes.IndexOf(resourceTypesFiltred[index]);
+                if(index > -1)
+                {
+                    node.reseachCost.type.Add((ResourceType)index);
+                    node.reseachCost.ammount.Add(-1);
+                    return true;
+                }
+                break;
+            }
+            else
+            {
+                List<string> tempFiltred = resourceTypesFiltred.ToList();
+                int lastIndex = tempFiltred.IndexOf(node.reseachCost.type[i].ToString());
+                if(lastIndex == -1)
+                {
+                    GUI.contentColor = Color.white;
+                    tempFiltred.Insert(1, node.reseachCost.type[i].ToString());
+                    lastIndex = 1;
+                }
+                else
+                    GUI.contentColor = Color.red;
+                int index = EditorGUI.Popup(new(5, yPos, nodeWidth /3, 20), lastIndex, tempFiltred.ToArray());
+                if(index != lastIndex)
+                {
+                    index = resourceTypes.IndexOf(tempFiltred[index]);
+                    if(index > -1)
+                    {
+                        node.reseachCost.type[i] = (ResourceType)index;
+                    }
+                    else
+                    {
+                        node.reseachCost.type.RemoveAt(i);
+                        node.reseachCost.ammount.RemoveAt(i);
+                    }
+                    return true;
+                }
+            }
+
+            string ammount = GUI.TextField(new(nodeWidth/3 + 10, yPos, (2*nodeWidth/3)-15, 20), node.reseachCost.ammount[i].ToString());
+            int x = 0;
+            if (ammount == "")
+                node.reseachCost.ammount[i] = 0;
+            if(int.TryParse(ammount, out x))
+            {
+                node.reseachCost.ammount[i] = x;
+            }
+
+            //int index = EditorGUI.Popup(new(5, 40, nodeWidth - 10, 20), node.reseachCost + 1, resourceTypesFiltred.ToArray()) - 1;
+        }
+        GUI.contentColor = Color.white;
+        return false;
+    }
+
     /// <summary>
     /// Renders the category popup.
     /// </summary>
@@ -383,7 +468,7 @@ public class ResearchEditor : EditorWindow
         if (connecting && selectedNode == node)
             GUI.backgroundColor = Color.yellow;
         else
-            GUI.backgroundColor = Color.red;
+            GUI.backgroundColor = new(0.1f, 0.1f, 0.75f);
 
         if (GUI.Button(new(nodeWidth / 2 - 10, nodeHeight - 25, 20, 20), new GUIContent(), circleButtonStyle))
         {
