@@ -250,7 +250,7 @@ public class Building : StorageObject
     public virtual Resource GetDiff(Resource inventory)
     {
         Resource r = new();
-        r = MyRes.DiffRes(build.cost, localRes.Future(false), inventory);
+        r = MyRes.DiffRes(build.cost, localRes.Future(), inventory);
         return r;
     }
 

@@ -68,7 +68,7 @@ public class Storage : Building
     {
         if(build.constructed && mod == 1)
         {
-            int spaceToStore = localRes.stored.capacity - localRes.Future(false).ammount.Sum();
+            int spaceToStore = localRes.stored.capacity - localRes.Future().ammount.Sum();
             Resource transferRes = new();
             for (int i = 0; i < request.type.Count && spaceToStore > 0; i++)
             {

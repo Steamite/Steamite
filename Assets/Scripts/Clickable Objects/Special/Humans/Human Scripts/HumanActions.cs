@@ -160,14 +160,14 @@ public static class HumanActions
                 // builds that are only missing progress not resources
                 if (jobQueue.constructions.Count == 0)
                     break;
-                List<Building> buildings = jobQueue.constructions.Where(q => q.localRes.Future(false).Equals(q.build.cost)).ToList();
+                List<Building> buildings = jobQueue.constructions.Where(q => q.localRes.Future().Equals(q.build.cost)).ToList();
                 if (FindInterests(buildings.Where(q => q.localRes.carriers.Count == 0).Cast<ClickableObject>(), h, j))
                 {
                     h.jData.interest.GetComponent<Building>().localRes.AddRequest(new(), h, 0);
                     return false;
                 }
                 // builds that are missing resources to progress further
-                if (FilterBuilds(jobQueue.constructions.Where(q => !q.localRes.Future(false).Equals(q.build.cost)), h, j))
+                if (FilterBuilds(jobQueue.constructions.Where(q => !q.localRes.Future().Equals(q.build.cost)), h, j))
                     return false;
                 break;
             case JobState.Deconstructing:
@@ -181,10 +181,10 @@ public static class HumanActions
             case JobState.Pickup:
                 // if there's any space for it
                 if (MyRes.globalStorageSpace > 0)
-                    if (FindInterests(jobQueue.pickupNeeded.Where(q => q.localRes.Future(false).ammount.Sum() > 0).Cast<ClickableObject>(), h, j))
+                    if (FindInterests(jobQueue.pickupNeeded.Where(q => q.localRes.Future().ammount.Sum() > 0).Cast<ClickableObject>(), h, j))
                     {
                         h.destination = h.jData.interest.GetComponent<Building>();
-                        Resource toMove = h.destination.localRes.Future(false);
+                        Resource toMove = h.destination.localRes.Future();
                         Resource r = new();
                         MyRes.MoveRes(r, toMove.Clone(), toMove, h.inventory.capacity < MyRes.globalStorageSpace ? h.inventory.capacity : MyRes.globalStorageSpace);
                         h.destination.localRes.AddRequest(r, h, -1);
@@ -206,13 +206,13 @@ public static class HumanActions
                 if (MyRes.globalStorageSpace == 0)
                     return true;
                 IEnumerable<ClickableObject> chunks;
-                if ((chunks = MyGrid.chunks.Where(q => q.localRes.Future(false).ammount.Sum() > 0).Cast<ClickableObject>()).Count() > 0)
+                if ((chunks = MyGrid.chunks.Where(q => q.localRes.Future().ammount.Sum() > 0).Cast<ClickableObject>()).Count() > 0)
                 {
                     if (FindInterests(chunks, h, JobState.Pickup))
                     {
                         Resource toMove = new();
                         Chunk chunk = (Chunk)h.jData.interest;
-                        Resource chunkStorage = chunk.localRes.Future(false);
+                        Resource chunkStorage = chunk.localRes.Future();
                         MyRes.MoveRes(toMove, chunkStorage, chunkStorage, h.inventory.capacity - h.inventory.ammount.Sum());
                         chunk.RequestRes(toMove, h, -1);
                         return false;

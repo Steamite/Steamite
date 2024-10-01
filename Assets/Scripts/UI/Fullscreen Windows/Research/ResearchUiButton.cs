@@ -75,6 +75,7 @@ public class ResearchUIButton : MonoBehaviour
                 transform.GetChild(0).GetComponent<Image>().color = Col(19, 128, 95);
                 transform.GetChild(1).GetComponent<Image>().color = Col(22, 159, 120);
                 transform.GetChild(2).GetComponent<Image>().color = Col(71, 187, 139);
+                Destroy(borderFill);
                 break;
         }
         if(doLines)
@@ -148,8 +149,6 @@ public class ResearchUIButton : MonoBehaviour
         state = ButtonState.Completed;
         node.researched = true;
         node.currentTime = node.researchTime;
-        Recolor(true);
-        Destroy(borderFill);
         if (!init)
         {
             EndAnim(true);
@@ -158,7 +157,10 @@ public class ResearchUIButton : MonoBehaviour
                 int categ = transform.parent.parent.GetSiblingIndex();
                 MyGrid.canvasManager.research.GetResearchUIButton(categ, i).Unlock(this);
             }
+            borderFill.fillAmount = 1;
         }
+        MyGrid.canvasManager.ShowMessage($"Reseach finished: {node.name}");
+        Recolor(true);
         MyGrid.canvasManager.research.UpdateInfoWindow(this);
         ManageBuildButton();
     }
@@ -173,6 +175,7 @@ public class ResearchUIButton : MonoBehaviour
                 state = ButtonState.Available;
                 Recolor();
             }
+            ManageBuildButton();
         }
     }
 
@@ -185,7 +188,7 @@ public class ResearchUIButton : MonoBehaviour
 
     internal void EndAnim(bool smooth = false)
     {
-        if (smooth)
+        if (smooth && gameObject.activeInHierarchy)
             StartCoroutine(SmoothEnd());
         else
             transform.GetChild(0).GetComponent<Animator>().SetTrigger("unselected");
@@ -204,5 +207,6 @@ public class ResearchUIButton : MonoBehaviour
             animator.SetFloat("Speed", f);
             yield return new WaitForSecondsRealtime(0.1f);
         }
+        animator.SetFloat("Speed", 0);
     }
 }

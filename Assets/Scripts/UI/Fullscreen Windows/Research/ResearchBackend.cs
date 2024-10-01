@@ -1,18 +1,16 @@
 using System;
 using System.Collections;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
-
 
 public class ResearchBackend : MonoBehaviour
 {
     ResearchUI UI;
     public ResearchUIButton currentResearch;
-    public float speed = 3;
-    public int queuedRoutines = 0;
-    public float elapsedProgress;
-    
+    public StorageResource researchResourceInput;
+
     public void Init(ResearchUI _UI)
     {
         UI = _UI;
@@ -35,14 +33,14 @@ public class ResearchBackend : MonoBehaviour
             currentResearch.StartAnim();
             // confirmation popup
         }
-        elapsedProgress = currentResearch.node.currentTime;
-        StartCoroutine(UpdateButtonFill());
+        UI.StartCoroutine(UI.UpdateButtonFill());
+        UI.openResearchAnimator.SetFloat("Speed", 0.5f);
+        UI.openResearchAnimator.SetTrigger("selected");
     }
 
-    void FinishResearch()
+    public void FinishResearch()
     {
         currentResearch.Complete();
-        UI.ResearchFinishedPopUP();
         currentResearch = null;
     }
     
@@ -52,21 +50,6 @@ public class ResearchBackend : MonoBehaviour
         if (currentResearch)
         {
             currentResearch.node.currentTime++;
-            if(currentResearch.node.currentTime == currentResearch.node.researchTime)
-            {
-                FinishResearch();
-            }
-        }
-    }
-
-    public IEnumerator UpdateButtonFill()
-    {
-        elapsedProgress = currentResearch.node.currentTime;
-        while (currentResearch)
-        {
-            elapsedProgress = Mathf.Lerp(elapsedProgress, currentResearch.node.currentTime, Time.deltaTime * speed);
-            currentResearch.borderFill.fillAmount = elapsedProgress / currentResearch.node.researchTime;
-            yield return null;
         }
     }
 }

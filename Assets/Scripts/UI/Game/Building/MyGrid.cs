@@ -141,10 +141,6 @@ public static class MyGrid
                 {
                     building.GetComponent<ProductionBuilding>().RefreshStatus();
                     building.GetComponent<ProductionBuilding>().RequestRestock();
-                    if (building.GetComponent<Research_Production>())
-                    {
-                        building.GetComponent<Research_Production>().Init();
-                    }
                 }
             }
             else

@@ -135,7 +135,7 @@ public class SteamGenerator : ProductionBuilding
     {
         return networkAccess.fluid;
     }
-    protected override void UpdateText(Transform t)
+    protected override void UpdateProductionInfo(Transform t)
     {
         t = t.GetChild(2);
         t.GetChild(0).GetComponent<ProductionButton>().UpdateButtonState(pTime.currentTime, pTime.prodTime);

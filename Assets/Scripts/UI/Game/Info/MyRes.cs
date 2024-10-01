@@ -416,7 +416,7 @@ public static class MyRes
         int wantToStore = r.ammount.Sum();
         for (int i = storages.Count - 1; i >= 0; i--)
         {
-            int spaceToStore = storages[i].localRes.stored.capacity - storages[i].localRes.Future(false).ammount.Sum();
+            int spaceToStore = storages[i].localRes.stored.capacity - storages[i].localRes.Future().ammount.Sum();
             if (spaceToStore == 0)
                 continue;
             for (int j = 0; j < r.type.Count; j++)

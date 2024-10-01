@@ -259,7 +259,7 @@ public struct JobData
 [Serializable]
 public class Resource
 {
-    // (https://steamite.atlassian.net/wiki/spaces/Steamite/pages/edit-v2/10846209?draftShareId=a083ef84-8156-4dec-83da-a7c6333f9b2f)
+    // (https://steamite.atlassian.net/wiki/x/AYCl)
     public int capacity = -1; // -1 = no limit
     public List<ResourceType> type = new(); // stores all resource types
     public List<int> ammount = new();
@@ -389,7 +389,7 @@ public class StorageResource
     /// </summary>
     /// <param name="_stored"> true = return only resource available right now (removes the reserved ones)</param>
     /// <returns></returns>
-    public Resource Future(bool _stored)
+    public Resource Future(bool _stored = false)
     {
         Resource futureRes = stored.Clone();
         for (int i = 0; i < requests.Count; i++)

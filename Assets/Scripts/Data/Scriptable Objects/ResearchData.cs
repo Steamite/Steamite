@@ -6,15 +6,19 @@ using UnityEngine;
 [Serializable]
 public class ResearchNode
 {
+    public string name;
     public int id;
     public GridPos gp;
     public float realX;
-    public string name;
+
+    public bool researched;
     public float currentTime;
     public int researchTime;
+
+    public Resource reseachCost; 
+
     public int buttonCategory;
     public int buildButton;
-    public bool researched;
     [SerializeField] public List<int> unlockedBy;
     [SerializeField] public List<int> unlocks;
 
@@ -65,6 +69,7 @@ public class ResearchNode
         buildButton = -1;
         unlockedBy = new();
         unlocks = new();
+        reseachCost = new();
     }
 
     public ResearchNode(ResearchNode node)
@@ -80,6 +85,12 @@ public class ResearchNode
         researched = node.researched;
         unlockedBy = node.unlockedBy;
         unlocks = node.unlocks;
+        reseachCost = new();
+        if(node.reseachCost != null)
+        {
+            reseachCost.type = node.reseachCost.type.ToList();
+            reseachCost.ammount = node.reseachCost.ammount.ToList();
+        }
     }
 
     public void ConnectNode(ResearchNode node)

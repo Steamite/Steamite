@@ -32,16 +32,17 @@ public class EventHandler : MonoBehaviour
         // toggle build menu
         if (buildMenu.triggered)
         {
-            GameObject buildMenu = MyGrid.canvasManager.buildMenu.gameObject;
-            Transform categories = buildMenu.transform.GetChild(1);
-            buildMenu.SetActive(!buildMenu.activeSelf);
-            if (buildMenu.activeSelf)
+            Transform buildMenu = MyGrid.canvasManager.buildMenu.transform;
+            Transform categories = buildMenu.GetChild(1);
+            buildMenu.gameObject.SetActive(!buildMenu.gameObject.activeSelf);
+            if (buildMenu.gameObject.activeSelf)
             {
                 for (int i = 0; i < categories.childCount; i++)
                 {
                     categories.GetChild(i).gameObject.SetActive(false);
                 }
-                buildMenu.transform.GetChild(1).gameObject.SetActive(false);
+                buildMenu.GetChild(1).gameObject.SetActive(false);
+                buildMenu.GetChild(2).gameObject.SetActive(false);
             }
         }
         // toggle dig

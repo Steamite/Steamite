@@ -1,6 +1,4 @@
-using Newtonsoft.Json;
-using System;
-using System.IO;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,8 +12,13 @@ public class ResearchUI : MonoBehaviour
     [Header("References")]
     [SerializeField] Transform categorySwitchesTran;
     [SerializeField] public Transform categoriesTran;
-    private ResearchBackend backend;
-    public TMP_Text counter;
+    public Transform researchWindow;
+    ResearchBackend backend;
+
+    [Header("Research open")]
+    [SerializeField] public Image openResearchFill;
+    [SerializeField] public TMP_Text openResearchText;
+    [SerializeField] public Animator openResearchAnimator;
 
     [Header("Build Menu")]
     [SerializeField] GameObject buttonGroupPref;
@@ -27,7 +30,10 @@ public class ResearchUI : MonoBehaviour
     [SerializeField] GameObject researchCategoryPref;
     [SerializeField] Image line;
 
-    Vector2 screenScale;
+    [Header("Fill animation")]
+    public float speed = 3;
+    public float elapsedProgress;
+    //Vector2 screenScale;
     ResearchUIButton selectedButton;
     //-----------------------------------\\
     //-----------Initialization----------\\
@@ -54,13 +60,15 @@ public class ResearchUI : MonoBehaviour
 
     void Initialize(ResearchCategory[] researches, int _currentResearch = -1)
     {
-        gameObject.SetActive(true);
-        backend = this.GetComponent<ResearchBackend>();
+        researchWindow = transform.GetChild(0);
+        researchWindow.gameObject.SetActive(true);
+        backend = gameObject.GetComponent<ResearchBackend>();
         backend.Init(this);
+
         BuildButtonHolder buildButtons = (BuildButtonHolder)Resources.Load("Holders/Data/BuildButtonData");
         InitializeBuildButtons(buildButtons);
         InitializeResearchButtons(buildButtons, researches, _currentResearch);
-        gameObject.SetActive(false);
+        researchWindow.gameObject.SetActive(false);
 
         // freeing useless prefabs
         buttonBuildPref = null;
@@ -77,12 +85,12 @@ public class ResearchUI : MonoBehaviour
     {
         Transform buildMenuCategs = MyGrid.canvasManager.buildMenu.GetChild(0);
         Transform buildMenuButtons = MyGrid.canvasManager.buildMenu.GetChild(1);
-        
+
         for (int i = 0; i < buildButtons.buildingCategories.Count; i++)
         {
             //Data
             BuildCategWrapper buildCateg = buildButtons.buildingCategories[i];
-            
+
             //Category Button
             Button categButton = Instantiate(simpleButtonPref, buildMenuCategs);
             var _i = i;
@@ -92,7 +100,7 @@ public class ResearchUI : MonoBehaviour
             GameObject group = Instantiate(buttonGroupPref, buildMenuButtons);
             group.name = buildCateg.categName;
             group.SetActive(false);
-            for(int j = 0; j < buildCateg.buildings.Count; j++)
+            for (int j = 0; j < buildCateg.buildings.Count; j++)
             {
                 BuildButton button = Instantiate(buttonBuildPref, group.transform);
                 button.Initialize(buildCateg.buildings[j]);
@@ -103,8 +111,8 @@ public class ResearchUI : MonoBehaviour
 
     void InitializeResearchButtons(BuildButtonHolder buildButtons, ResearchCategory[] researches, int _currentResearch)
     {
-        screenScale = new(((float)Screen.width / 1920f), (float)Screen.height / 1080f);
-        Vector2 categWindowSize = new(1920 * screenScale.x, 1000 * screenScale.y);
+        //screenScale = new(((float)Screen.width / 1920f), (float)Screen.height / 1080f);
+        Vector2 categWindowSize = researchWindow.GetChild(2).GetComponent<RectTransform>().rect.size;
         Transform buildCategTransform = MyGrid.canvasManager.buildMenu.GetChild(1);
         for (int i = 0; i < researches.Length; i++)
         {
@@ -120,28 +128,31 @@ public class ResearchUI : MonoBehaviour
                 if (node.buildButton > -1)
                 {
                     ResearchUIButton researchButton = Instantiate(researchButtonPref, categ.GetChild((int)node.gp.level + 1).transform);
-                    researchButton.Initialize( 
+                    researchButton.Initialize(
                         node,
                         researchCategory.nodes);
                     RectTransform rect = researchButton.GetComponent<RectTransform>();
-                    rect.anchoredPosition = new((node.realX - (categWindowSize.x / 2)) * screenScale.x, 0);
+                    rect.anchoredPosition = new((node.realX /* screenScale.x*/) - (categWindowSize.x / 2), 0);
                     bool hasLines = false;
                     foreach (int index in node.unlockedBy)
                     {
-                        CreateLine(researchButton, GetResearchUIButton(i, index), categ, screenScale.x, categWindowSize, hasLines);
+                        CreateLine(researchButton, GetResearchUIButton(i, index), categ, categWindowSize, hasLines);
                         hasLines = true;
                     }
-
-                    if(node.id == _currentResearch)
+                    if (node.id == _currentResearch)
                     {
                         backend.StartResearch(researchButton);
                     }
                 }
             }
-            foreach(ResearchUIButton researchUIButton in categ.GetComponentsInChildren<ResearchUIButton>())
+            foreach (ResearchUIButton researchUIButton in categ.GetComponentsInChildren<ResearchUIButton>())
             {
                 researchUIButton.RecolorLines();
             }
+        }
+        if (!backend.currentResearch)
+        {
+            openResearchText.text = "None";
         }
     }
 
@@ -152,24 +163,24 @@ public class ResearchUI : MonoBehaviour
         b.onClick.AddListener(action);
     }
 
-    void CreateLine(ResearchUIButton button, ResearchUIButton unlockedByButton, RectTransform categ, float scale, Vector2 categSize, bool exists)
+    void CreateLine(ResearchUIButton button, ResearchUIButton unlockedByButton, RectTransform categ, Vector2 categSize, bool exists)
     {
         RectTransform lineTransform;
         // vertical line
         if (unlockedByButton.unlocksLines.Count == 0)
         {
-            lineTransform = InitLine(categ, false, scale);
-            lineTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ((button.node.gp.level - unlockedByButton.node.gp.level) * 200 - 150) * scale);
-            lineTransform.anchoredPosition = new((unlockedByButton.node.realX - categSize.x / 2) * scale, -(((button.node.gp.level + unlockedByButton.node.gp.level) * 200 + 150) / 2 * scale) + (Screen.height * 0.4625f));
+            lineTransform = InitLine(categ, false);
+            lineTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ((button.node.gp.level - unlockedByButton.node.gp.level) * 200 - 150));
+            lineTransform.anchoredPosition = new((unlockedByButton.node.realX) - (categSize.x / 2), -(((button.node.gp.level + unlockedByButton.node.gp.level) * 200 + 150) / 2) + (1080 * 0.4625f));
             unlockedByButton.unlocksLines.Add(lineTransform.GetComponent<Image>());
         }
-        
+
         // small line
         if (!exists)
         {
-            lineTransform = InitLine(categ, false, scale);
-            lineTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 40 * scale);
-            lineTransform.anchoredPosition = new(button.GetComponent<RectTransform>().anchoredPosition.x, -((button.node.gp.level * 200 + 20)*scale) + (Screen.height * 0.4625f));
+            lineTransform = InitLine(categ, false);
+            lineTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 40);
+            lineTransform.anchoredPosition = new(button.GetComponent<RectTransform>().anchoredPosition.x, -((button.node.gp.level * 200 + 20)) + (1080 * 0.4625f));
             button.unlockedByLines.Add(lineTransform.GetComponent<Image>());
         }
         unlockedByButton.unlocksLines.Add(button.unlockedByLines[0]);
@@ -177,9 +188,9 @@ public class ResearchUI : MonoBehaviour
         // horizontal line
         if (Mathf.RoundToInt(unlockedByButton.node.realX) != Mathf.RoundToInt(button.node.realX))
         {
-            lineTransform = InitLine(categ, true, scale);
-            lineTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (Mathf.Abs(button.node.realX - unlockedByButton.node.realX) + 5) * scale);
-            lineTransform.anchoredPosition = new((button.node.realX + unlockedByButton.node.realX - categSize.x)/ 2 * scale, -((button.node.gp.level * 200) * scale) + (Screen.height * 0.4625f));
+            lineTransform = InitLine(categ, true);
+            lineTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (Mathf.Abs(button.node.realX - unlockedByButton.node.realX) + 5));
+            lineTransform.anchoredPosition = new((((button.node.realX + unlockedByButton.node.realX)) - categSize.x) / 2, -((button.node.gp.level * 200)) + (1080 * 0.4625f));
             button.unlockedByLines.Add(lineTransform.GetComponent<Image>());
             unlockedByButton.unlocksLines.Add(button.unlockedByLines[^1]);
         }
@@ -187,10 +198,10 @@ public class ResearchUI : MonoBehaviour
         button.unlockedByLines.Add(unlockedByButton.unlocksLines[0]);
     }
 
-    RectTransform InitLine(RectTransform categ, bool isHorizontal, float scale)
+    RectTransform InitLine(RectTransform categ, bool isHorizontal)
     {
         RectTransform lineTransform = Instantiate(line, categ.GetChild(0)).GetComponent<RectTransform>();
-        lineTransform.SetSizeWithCurrentAnchors(isHorizontal ? RectTransform.Axis.Vertical :RectTransform.Axis.Horizontal, 5 * scale);
+        lineTransform.SetSizeWithCurrentAnchors(isHorizontal ? RectTransform.Axis.Vertical : RectTransform.Axis.Horizontal, 5);
         return lineTransform;
     }
 
@@ -208,14 +219,14 @@ public class ResearchUI : MonoBehaviour
         }
     }
 
-    //Research button click - starts research
+    //Research button click - opens info window
     public void ResearchButtonClick(ResearchUIButton button)
     {
         RectTransform rect = MyGrid.canvasManager.infoWindow.transform.GetChild(0).GetComponent<RectTransform>();
         if (button.GetComponent<RectTransform>().anchoredPosition.x < 0)
             rect.anchoredPosition = new(0, 0);
         else
-            rect.anchoredPosition = new(-Screen.width + 400, 0);
+            rect.anchoredPosition = new(-1519, 0);
         rect.parent.gameObject.SetActive(true);
         if (selectedButton == button)
             selectedButton = null;
@@ -228,18 +239,22 @@ public class ResearchUI : MonoBehaviour
 
     public void UpdateInfoWindow(ResearchUIButton button)
     {
-        if(selectedButton && selectedButton.node.id == button.node.id)
+        if (selectedButton && selectedButton.node.id == button.node.id)
         {
             // info window
             MyGrid.canvasManager.infoWindow.SwitchMods(InfoMode.Research, button.name);
             Transform researchInfo = MyGrid.canvasManager.infoWindow.researchTransform;
-            researchInfo.GetChild(0).GetComponent<TMP_Text>().text = $"Unlocks {button.node.name}.";
+            researchInfo.GetChild(0).GetComponent<TMP_Text>().text = $"Unlocks <color=#D3D3D3>{button.node.name}</color>.";
+            //ShowNeededResources(button.node, true);
             switch (button.state)
             {
                 case ResearchUIButton.ButtonState.Available:
                     researchInfo.GetChild(2).GetComponent<Button>().interactable = true;
                     researchInfo.GetChild(2).GetChild(0).GetComponent<TMP_Text>().text = "research";
-                    researchInfo.GetChild(3).GetComponent<TMP_Text>().text = $"{button.node.researchTime * 5} research points needed";
+                    if (button.node.currentTime == 0)
+                        researchInfo.GetChild(3).GetComponent<TMP_Text>().text = $"{button.node.researchTime * 5} research points needed";
+                    else
+                        researchInfo.GetChild(3).GetComponent<TMP_Text>().text = $"{Mathf.RoundToInt(elapsedProgress * 5)} / {button.node.researchTime * 5} research points";
                     break;
                 case ResearchUIButton.ButtonState.Completed:
                     selectedButton = null;
@@ -255,11 +270,37 @@ public class ResearchUI : MonoBehaviour
             }
         }
     }
+
+    public void ShowNeededResources(ResearchNode node, bool useGlobalStored)
+    {
+        Transform researchInfo = MyGrid.canvasManager.infoWindow.researchTransform;
+        TMP_Text types = researchInfo.GetChild(1).GetChild(0).GetComponent<TMP_Text>();
+        TMP_Text ammounts = researchInfo.GetChild(1).GetChild(1).GetComponent<TMP_Text>();
+        types.text = "";
+        ammounts.text = "";
+        if (node.reseachCost != null && node.reseachCost.type.Count > 0)
+        {
+            for (int i = 0; i < node.reseachCost.type.Count; i++)
+            {
+                if (i > 0)
+                {
+                    types.text += "\n";
+                    ammounts.text += "\n";
+                }
+
+                types.text += node.reseachCost.type[i].ToString();
+                ammounts.text += $"... " +
+                    $"{MyRes.resources.ammount[MyRes.resources.type.IndexOf(node.reseachCost.type[i])]} " +
+                    $"/ {node.reseachCost.ammount[i].ToString()}";
+            }
+        }
+    }
+
     public void InfoWindowButtonClick()
     {
         if (!selectedButton)
             return;
-        if(backend.currentResearch == selectedButton)
+        if (backend.currentResearch == selectedButton)
         {
             // stop research
         }
@@ -287,10 +328,49 @@ public class ResearchUI : MonoBehaviour
     }
 
     //pop-up after research is finished
-    public void ResearchFinishedPopUP()
+    public void ResearchFinish()
     {
-        //TODO: Add pop-up
+        backend.FinishResearch();
+        openResearchFill.fillAmount = 1;
+        openResearchText.text = "100%";
+        StartCoroutine(OpenResearchSmoothEnd());
     }
+
+    public IEnumerator UpdateButtonFill()
+    {
+        elapsedProgress = backend.currentResearch.node.currentTime;
+        while (elapsedProgress < backend.currentResearch.node.researchTime)
+        {
+            elapsedProgress = Mathf.Lerp(elapsedProgress, backend.currentResearch.node.currentTime, Time.deltaTime * speed);
+            float fill = elapsedProgress / backend.currentResearch.node.researchTime;
+            if (researchWindow.gameObject.activeSelf)
+            {
+                backend.currentResearch.borderFill.fillAmount = fill;
+                MyGrid.canvasManager.infoWindow.researchTransform.GetChild(3).GetComponent<TMP_Text>().text
+                    = $"{Mathf.RoundToInt(elapsedProgress * 5)} / {backend.currentResearch.node.researchTime * 5} research points";
+            }
+            openResearchFill.fillAmount = fill;
+            openResearchText.text = $"{Mathf.RoundToInt(fill * 100)}%";
+            yield return null;
+        }
+        // Research Finished
+        ResearchFinish();
+    }
+
+    IEnumerator OpenResearchSmoothEnd()
+    {
+        float f = openResearchAnimator.GetFloat("Speed");
+        while (f > 0)
+        {
+            f -= 0.1f;
+            openResearchAnimator.SetFloat("Speed", f);
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+        openResearchAnimator.SetFloat("Speed", 0);
+        openResearchFill.fillAmount = 0;
+        openResearchText.text = "None";
+    }
+
 
     //-----------------------------------\\
     //-------Toggling reaserchMenu-------\\
@@ -300,7 +380,7 @@ public class ResearchUI : MonoBehaviour
     {
         if (gameObject.activeSelf)
         {
-            CloseButton();
+            CloseResearchUI();
         }
         else
         {
@@ -312,21 +392,21 @@ public class ResearchUI : MonoBehaviour
     public void OpenResearchUI()
     {
         // open view Window
+        MyGrid.gridTiles.DeselectObjects();
         MyGrid.canvasManager.infoWindow.gameObject.SetActive(false);
-        gameObject.SetActive(true);
+        transform.GetChild(0).gameObject.SetActive(true);
         if (backend.currentResearch)
         {
-            StartCoroutine(backend.UpdateButtonFill());
             backend.currentResearch.StartAnim();
         }
     }
 
     //Closes the research UI
-    public void CloseButton()
+    public void CloseResearchUI()
     {
         if (backend.currentResearch)
             backend.currentResearch.EndAnim();
-        gameObject.SetActive(false);
+        transform.GetChild(0).gameObject.SetActive(false);
         MyGrid.canvasManager.infoWindow.gameObject.SetActive(false);
     }
 }

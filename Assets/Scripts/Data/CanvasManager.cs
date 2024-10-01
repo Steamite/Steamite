@@ -29,10 +29,10 @@ public class CanvasManager : MonoBehaviour
 
     IEnumerator MessageToggle(string text)
     {
+        messageShown = true;
         GameObject g = MyGrid.canvasManager.miscellaneous.GetChild(1).gameObject;
         g.GetComponent<TMP_Text>().text = text;
         g.SetActive(true);
-        messageShown = true;
         yield return new WaitForSecondsRealtime(2f);
         g.SetActive(false);
         messageShown = false;
