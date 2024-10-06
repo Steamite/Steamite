@@ -3,45 +3,65 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class DayTime : MonoBehaviour
 {
-    int dayT = 60 * 10;
-    int increment = 60;
-    [SerializeField] Humans humans;
+    float ticksPerHour = 4;
+    int minutesPerTick;
 
-    public static Action night;
-    public static Action day;
+    public Action nightStart;
+    public Action dayStart;
 
-    private void Start()
+    // time data
+    int timeInMinutes = 12 * 60;
+    int numberOfDays = 0;
+
+    [SerializeField] TMP_Text time;
+
+    public void Init(Tick tick)
     {
-        StartCoroutine(CountTime());
+        minutesPerTick = (int)(60f / ticksPerHour);
+        tick.tickAction += UpdateTime;
+
+        transform.GetChild(0).GetComponent<TMP_Text>().text = "12:00";
+        transform.GetChild(1).GetComponent<TMP_Text>().text = "Day: 1";
+        transform.GetChild(2).GetComponent<TMP_Text>().text = "Week: 1";
+        transform.GetChild(3).GetComponent<TMP_Text>().text = "Month: 1";
+        transform.GetChild(4).GetComponent<TMP_Text>().text = "Year: 1";
     }
-    IEnumerator CountTime()
+
+    void UpdateTime()
     {
-        //yield return new WaitForSeconds(1);
-        while (true)
+        timeInMinutes += minutesPerTick;
+        switch (timeInMinutes)
         {
-            dayT += increment;
-            gameObject.GetComponent<TMP_Text>().text = $"Time: {dayT/60}:{dayT%60}";
-            if(dayT == 5 * 60)
-            {
-                print("day, go to work!!!");
-                day?.Invoke();
-                
-            }
-            else if(dayT == 20 * 60)
-            {
-                print("night, go to sleep");
-                night?.Invoke();
-            }
-            else if(dayT == 24 * 60)
-            {
-                print("new DAY!!!");
-                dayT = 0;
-                // místo pro save 
-            }
-            yield return new WaitForSeconds(1);
+            case 1440:
+                timeInMinutes = 0;
+                numberOfDays++;
+                if (numberOfDays % 7 == 0)
+                {
+                    if (numberOfDays % 28 == 0)
+                    {
+                        if (numberOfDays % 336 == 0)
+                        {
+                            transform.GetChild(4).GetComponent<TMP_Text>().text = $"Year: {(numberOfDays / 336) + 1}";
+                        }
+                        transform.GetChild(3).GetComponent<TMP_Text>().text = $"Month: {((numberOfDays % 336) / 28) + 1}";
+                    }
+                    transform.GetChild(2).GetComponent<TMP_Text>().text = $"Week: {((numberOfDays % 28) / 7) + 1}";
+                }
+                transform.GetChild(1).GetComponent<TMP_Text>().text = $"Day: {(numberOfDays % 7)+1}";
+                break;
+            case 1320:
+                if(nightStart != null)
+                    nightStart.Invoke();
+                break;
+            case 360:
+                if(dayStart != null)
+                    dayStart.Invoke();
+                break;
         }
+        time.text = $"{(timeInMinutes/60).ToString().PadLeft(2, '0')}:{(timeInMinutes%60).ToString().PadLeft(2, '0')}";
     }
 }

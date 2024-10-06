@@ -35,11 +35,11 @@ public class InfoButtons : MonoBehaviour
         id = b ? 0 : 1;
         if (b)
         {
-            DayTime.day?.Invoke();
+            //DayTime.?.Invoke();
         }
         else
         {
-            DayTime.night?.Invoke();
+            //DayTime.night?.Invoke();
         }
         transform.GetChild(0).GetComponent<TMP_Text>().text = b ? "Day": "Night";
     }

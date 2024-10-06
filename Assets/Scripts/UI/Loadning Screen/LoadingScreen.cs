@@ -269,9 +269,9 @@ public class LoadingScreen : MonoBehaviour
     void FillHumans(IProgress<int> progress)
     {
         // Destroys all humans 
-        for (int i = MyGrid.sceneReferences.humans.GetChild(0).childCount-1; i >= 0; i--)
+        for (int i = MyGrid.sceneReferences.humans.transform.GetChild(0).childCount-1; i >= 0; i--)
         {
-            Destroy(MyGrid.sceneReferences.humans.GetChild(0).GetChild(i).gameObject);
+            Destroy(MyGrid.sceneReferences.humans.transform.GetChild(0).GetChild(i).gameObject);
         }
         GameObject humanPrefab = MyGrid.specialPrefabs.GetPrefab("Human").gameObject;
         Humans humans = MyGrid.sceneReferences.humans.GetComponent<Humans>();
@@ -283,14 +283,13 @@ public class LoadingScreen : MonoBehaviour
             Human human = GameObject.Instantiate(humanPrefab,
                 new Vector3(h.gridPos.x, 1, h.gridPos.z), 
                 Quaternion.identity,
-                MyGrid.sceneReferences.humans.GetChild(parent)).GetComponent<Human>();
+                MyGrid.sceneReferences.humans.transform.GetChild(parent)).GetComponent<Human>();
             human.transform.GetChild(1).GetComponent<MeshRenderer>().material.color = h.color.ConvertColor();
             human.id = h.id;
             human.jData = new(h.jobSave, human);
             human.name = h.name;
             human.inventory = h.inventory;
             human.specialization = h.specs;
-            human.sleep = h.sleep;
             if (human.jData.path.Count > 0)
                 human.ChangeAction(HumanActions.Move);
             else
@@ -327,7 +326,7 @@ public class LoadingScreen : MonoBehaviour
         MyGrid.canvasManager.gameObject.SetActive(true);
         MyGrid.canvasManager.buildMenu.GetChild(2).GetComponent<PreBuildInfo>().SetUp();
         MyGrid.sceneReferences.GetComponent<SaveController>().activeFolder = folderName;
-        MyGrid.canvasManager.stats.GetChild(1).GetChild(1).GetComponent<TimeButtons>().tick = MyGrid.sceneReferences.GetComponent<Tick>();
+        MyGrid.canvasManager.stats.GetChild(0).GetChild(1).GetComponent<TimeButtons>().tick = MyGrid.sceneReferences.GetComponent<Tick>();
         
 
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = MyGrid.gridTiles.defaultMask;

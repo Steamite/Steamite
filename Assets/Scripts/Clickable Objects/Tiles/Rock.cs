@@ -10,7 +10,7 @@ public class Rock : ClickableObject
     // data about the rock(set)
     public Resource rockYield;
    // public int hardness;
-    public int integrity;
+    public float integrity;
 
     // infuenced by the player
     public Human assigned;
@@ -18,6 +18,9 @@ public class Rock : ClickableObject
     // prefab to replace with
     public string assetPath;
 
+    ///////////////////////////////////////////////////
+    ///////////////////Overrides///////////////////////
+    ///////////////////////////////////////////////////
     public override void UniqueID()
     {
         CreateNewId(transform.parent.GetComponentsInChildren<Rock>().Select(q => q.id).ToList());
@@ -39,19 +42,10 @@ public class Rock : ClickableObject
                 info.SwitchMods(InfoMode.Rock, name); // set window mod to Ore Info
                 info.clickObjectTransform.GetChild(2).GetChild(1).GetComponent<TMP_Text>().text = MyRes.GetDisplayText(rockYield);
             }
-            info.clickObjectTransform.GetChild(2).GetChild(0).GetComponent<TMP_Text>().text = $"Integrity: {integrity}";
+            info.clickObjectTransform.GetChild(2).GetChild(0).GetComponent<TMP_Text>().text = $"Integrity: {Math.Round(integrity,2)}";
             return info;
         }
         return null;
-    }
-
-    public void ChunkCreation(Chunk chunk)
-    {
-        GridPos gridPos = new(transform.position);
-        chunk = Instantiate(chunk, new Vector3(gridPos.x, gridPos.level + 0.75f, gridPos.z), chunk.transform.rotation, GameObject.FindWithTag("Chunks").transform); // spawns chunk of resources
-        chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material = GetComponent<MeshRenderer>().material;
-        chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
-        chunk.GetComponent<Chunk>().Create(rockYield, true);
     }
 
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
@@ -63,7 +57,6 @@ public class Rock : ClickableObject
         (clickable as RockSave).toBeDug = toBeDug;
         return base.Save(clickable);
     }
-
     public override void Load(ClickableObjectSave save)
     {
         integrity = (save as RockSave).integrity;
@@ -71,4 +64,17 @@ public class Rock : ClickableObject
         name = name.Replace("(Clone)", "");
         base.Load(save);
     }
+
+    ///////////////////////////////////////////////////
+    ///////////////////Methods/////////////////////////
+    ///////////////////////////////////////////////////
+    public void ChunkCreation(Chunk chunk)
+    {
+        GridPos gridPos = new(transform.position);
+        chunk = Instantiate(chunk, new Vector3(gridPos.x, gridPos.level + 0.75f, gridPos.z), chunk.transform.rotation, GameObject.FindWithTag("Chunks").transform); // spawns chunk of resources
+        chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material = GetComponent<MeshRenderer>().material;
+        chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
+        chunk.GetComponent<Chunk>().Create(rockYield, true);
+    }
+
 }

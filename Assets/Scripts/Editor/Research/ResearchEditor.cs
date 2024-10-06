@@ -37,13 +37,12 @@ public class ResearchEditor : EditorWindow
         else
             open.Close();
     }
-
     void Init()
     {
         titleContent = new("Research Editor");
         point = (Texture2D)Resources.Load("Textures/Point");
         circle = (Texture2D)Resources.Load("Textures/Circle");
-        researchData = (ResearchData)Resources.Load("Holders/Data/ResearchData");
+        researchData = (ResearchData)Resources.Load("Holders/Data/Research Data");
         researchData.Init();
         circleButtonStyle = new GUIStyle();
         circleButtonStyle.normal.background = circle;
@@ -53,8 +52,7 @@ public class ResearchEditor : EditorWindow
         maximized = false;
         CalculateHeads();
     }
-
-    private void OnGUI()
+    void OnGUI()
     {
         GUI.contentColor = Color.white;
         if (!researchData)
@@ -65,7 +63,6 @@ public class ResearchEditor : EditorWindow
             selTab = 0;
         SwitchCategory();
     }
-
 
     void SwitchCategory()
     {
@@ -160,7 +157,6 @@ public class ResearchEditor : EditorWindow
             }
         }
     }
-
     void CalculateHeads()
     {
         if(selTab > -1 && selTab < researchData.categories.Count)
@@ -175,7 +171,7 @@ public class ResearchEditor : EditorWindow
                     {
                         node.gp.x = startX;
                         node.gp.z = 20 + ((nodeHeight + 50) * node.gp.level);
-                        node.realX = (node.gp.x + nodeWidth / 2) * (1920 / 1234);
+                        node.realX = (node.gp.x + nodeWidth / 2f) * (1920f / 1234f);
                         startX += nodeSpace;
                     }
                 }
@@ -329,8 +325,6 @@ public class ResearchEditor : EditorWindow
         GUI.enabled = true;
         return false;
     }
-
-
     bool ResearchCost(ResearchNode node)
     {
         List<string> resourceTypes = Enum.GetNames(typeof(ResourceType)).ToList();
@@ -400,7 +394,6 @@ public class ResearchEditor : EditorWindow
         GUI.contentColor = Color.white;
         return false;
     }
-
     /// <summary>
     /// Renders the category popup.
     /// </summary>
@@ -427,7 +420,6 @@ public class ResearchEditor : EditorWindow
         }
         return false;
     }
-
     /// <summary>
     /// Renders the building selection popup.
     /// </summary>
@@ -462,7 +454,6 @@ public class ResearchEditor : EditorWindow
         }
         return false;
     }
-
     void OutConnectionButton(ResearchNode node)
     {
         if (connecting && selectedNode == node)
@@ -485,7 +476,6 @@ public class ResearchEditor : EditorWindow
         }
         GUI.backgroundColor = Color.white;
     }
-
     private void DrawLine(Vector2 start, Vector2 end)
     {
         int width = 4;

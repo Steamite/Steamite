@@ -15,8 +15,6 @@ public enum JobState
     Deconstructing, // progress deconstruction
     Pickup, // taking resources to a storage
     Supply, // taking resources from a storage (elevator, chunk) to a building
-    Eating, //
-    Sleeping, //
     FullTime, // progress production
     Cleanup
 }
@@ -28,32 +26,76 @@ public enum Specs
 }
 public class Human : ClickableObject
 {
-    // human info and stats
-    //public int health = 100;
-    //public float speed = 0.5f;
-    public JobData jData = new();
-    public Resource inventory = new();
+    [Header("Human stats")]
+    [SerializeField]
+    public Efficiency efficiency = new();
     public Specs specialization = Specs.Worker;
 
-    // statuses
     public bool nightTime = false;
-    public int sleep = 0;
     public bool hasEaten = true;
     public bool lookingForAJob = false;
 
     // job data
     public House home;
+
+    // Action data
+    [Header("Action data")]
+    public JobData jData = new();
     public Building destination;
     public ProductionBuilding workplace;
     public Action<Human> repetableAction;
+    public Resource inventory = new();
+    ///////////////////////////////////////////////////
+    ///////////////////Overrides///////////////////////
+    ///////////////////////////////////////////////////
+    public override void UniqueID() // creates a random int
+    {
+        List<int> ids = transform.parent.parent.GetChild(0).GetComponentsInChildren<Human>().Select(q => q.id).ToList();
+        ids.AddRange(transform.parent.parent.GetChild(1).GetComponentsInChildren<Human>().Select(q => q.id).ToList());
+        CreateNewId(ids);
+    }
+    public override InfoWindow OpenWindow(bool setUp = false)
+    {
+        InfoWindow info;
+        // if selected
+        if ((info = base.OpenWindow(setUp)) != null)
+        {
+            // set window mod to humans
+            if (setUp)
+            {
+                info.SwitchMods(InfoMode.Human, name);
+            }
+            string s;
+            // JOB INFO
+            s =
+                $"Job - {jData.job}\n" +
+                $"Object - {(jData.interest ? jData.interest.name : "")}";
+            info.clickObjectTransform.GetChild((int)InfoMode.Human).GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = s;
+            // STATUS INFO
+            s =
+                $"Efficiency - {efficiency.efficiency}\n" +
+                $"HasEaten - {hasEaten}\n" +
+                $"Inventory - {MyRes.GetDisplayText(inventory)}";
+            info.clickObjectTransform.GetChild((int)InfoMode.Human).GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = s;
+        }
+        // floating text update
+        transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
+        return null;
+    }
+
+    ///////////////////////////////////////////////////
+    ///////////////////Methods/////////////////////////
+    ///////////////////////////////////////////////////
     public void ActivateHuman()
     {
 #if UNITY_EDITOR
         transform.GetChild(0).gameObject.SetActive(true);
 #endif
         transform.parent.parent.GetComponent<Humans>().ticks.tickAction += DoRepetableAction;
-        DayTime.day += Day;
-        DayTime.night += Night;
+        DayTime dT = MyGrid.sceneReferences.GetComponent<Tick>().timeControler;
+        dT.dayStart += Day;
+        dT.nightStart += Night;
+
         if (jData.job == JobState.Free)
         {
             HumanActions.LookForNew(this);
@@ -61,27 +103,30 @@ public class Human : ClickableObject
         }
         ChangeAction(HumanActions.Move);
     }
+
     public void DoRepetableAction()
     {
         if (repetableAction != null && !lookingForAJob)
+        {
             repetableAction.Invoke(this);
-        else
+        }
+        else if(!nightTime)
+        {
             HumanActions.LookForNew(this);
+        }
     }
-    public override void UniqueID() // creates a random int
-    {
-        List<int> ids = transform.parent.parent.GetChild(0).GetComponentsInChildren<Human>().Select(q => q.id).ToList();
-        ids.AddRange(transform.parent.parent.GetChild(1).GetComponentsInChildren<Human>().Select(q => q.id).ToList());
-        CreateNewId(ids);
-    }
+
     public void ChangeAction(Action<Human> action)
     {
         transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
         OpenWindow();
         repetableAction = action;
     }
+
     public void Decide() // for new Jobs or for managing fullTime jobs
     {
+        if (nightTime)
+            return;
         switch (jData.job)
         {
             case JobState.Free:
@@ -105,24 +150,22 @@ public class Human : ClickableObject
             case JobState.FullTime:
                 ChangeAction(HumanActions.DoProduction);
                 break;
-            case JobState.Eating:
-                StartCoroutine(Eat());
-                break;
             default:
                 HumanActions.LookForNew(this);
-                Debug.LogError("Sometnig went wrong, don't know what to do!!!");
+                Debug.LogError("Something went wrong, don't know what to do!!!");
                 break;
         }
     }
+
     public void Idle()
     {
         jData = new JobData();
-        Elevator el = MyGrid.buildings.First(q=> q.tag == "Elevator" && q.GetComponent<Elevator>().main).GetComponent<Elevator>();
+        Elevator el = MyGrid.buildings.First(q => q.tag == "Elevator" && q.GetComponent<Elevator>().main).GetComponent<Elevator>();
         GridPos v = new(el.transform.localPosition);
         if (!v.Equals(new GridPos(transform.localPosition))) // if not standing on the elevator
         {
             jData = PathFinder.FindPath(new() { el }, this);
-            if(jData.interest != null)
+            if (jData.interest != null)
                 ChangeAction(HumanActions.Move); //  go to the elevator and look for a new Job 
         }
         else
@@ -130,180 +173,32 @@ public class Human : ClickableObject
             OpenWindow();
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //--------------------------------------------------------DAY/NIGHT CYCLE-----------------------------------------------------------------/
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+    ///////////////////////////////////////////////////
+    ///////////////////Day/Night///////////////////////
+    ///////////////////////////////////////////////////
     public void Day()
     {
-        /*nightTime = false; // stop sleeping
-        StopC();
-        switch (jData.job)
+        nightTime = false; // stop sleeping
+        if (jData.job == JobState.Free)
+            HumanActions.LookForNew(this);
+        else
         {
-            case jobs.free:
-                RepetableActions.LookForNew(this);
-                print("I'm free");
-                break;
-            case jobs.building:
-                c.FindResources();
-                break;
-            case jobs.carrying:
-                d.Carry();
-                break;
-            case jobs.demolishing:
-            case jobs.digging:
-            case jobs.fullTime:
-            case jobs.supply:
-            case jobs.pickup:
-            case jobs.eating:
-            default:
-                jData.path = gameObject.GetComponent<PathFinder>().FindPath(new() {jData.interest}, this).Result.path;
-                changeAction(RepetableActions.Move);
-                break;
-        }*/
+            jData.path = PathFinder.FindPath(new() { jData.interest }, this).path;
+            ChangeAction(HumanActions.Move);
+        }
     }
+
     public void Night()
     {
-        /*StopC();
-        sleep = 0;
-        nightTime = true;
-        if(jData.job == jobs.fullTime)
+        if (!nightTime)
         {
-            jData.interest.GetComponent<ProductionBuilding>().working.Remove(this); // removes from working
-            if (jData.interest.GetComponent<Research_Production>()) // if working in research building
-            {
-                transform.parent.parent.GetComponent<Humans>().Research_Script.number_of_researchers--; // removes from researchers
-            }
+            MyRes.EatFood(this);
+            nightTime = true;
         }
-        FindPlaceToEat();*/
+        jData.path = PathFinder.FindWayHome(this);
+        ChangeAction(HumanActions.Move);
     }
 
-    void FindPlaceToEat()
-    {
-        /*List<ClickableObject> diners = MyGrid.buildings
-            .Where(q => q.GetComponent<Diner>()).Select(q => q.GetComponent<Diner>())
-            .Where(q => MyRes.GetAmmount(q.localRes, 3) > 0).Select(q => q.GetComponent<ClickableObject>()).ToList();
-
-        RepetableActions.LookForNew(this);
-
-        if (diners.Count > 0) // if there are diner with food
-        {
-            jData = gameObject.GetComponent<PathFinder>().FindPath(new(transform.localPosition), diners, this).Result;
-        }
-        else // there are not
-        {
-            diners = MyGrid.buildings
-            .Where(q => q.GetComponent<Storage>()).Select(q => q.GetComponent<Storage>())
-            .Where(q => MyRes.GetAmmount(q.localRes, 3) > 0).Select(q => q.GetComponent<ClickableObject>()).ToList();
-            if (diners.Count > 0)
-            {
-                jData = gameObject.GetComponent<PathFinder>().FindPath(new(transform.localPosition), diners, this).Result;
-            }
-        }
-
-        if(jData.interest == null)
-        {
-            hasEaten = false;
-            GoHome();
-        }
-        else
-        {
-            jData.job = jobs.eating;
-            changeAction(RepetableActions.Move);
-        }*/
-    }
-
-    public void GoHome()
-    {
-        /*OpenWindow();
-        if (home != null)
-        {
-            if (home.transform.localPosition != transform.localPosition) // sends worker home to sleep
-            {
-                jData.job = jobs.sleeping;
-                jData.path = gameObject.GetComponent<PathFinder>().FindPath(new(transform.localPosition), new() { home }, this).Result.path;
-                changeAction(RepetableActions.Move);
-                return;
-            }
-            changeAction(RepetableActions.Sleep); // worker starts sleeping
-        }
-        else // if no home, move to elevator
-        {
-            StorageObject el = GameObject.Find("Elevator").GetComponent<StorageObject>();
-            if (el.transform.localPosition != transform.localPosition)
-            {
-                jData.job = jobs.sleeping;
-                jData.path = gameObject.GetComponent<PathFinder>().FindPath(new(transform.localPosition), new() { el }, this).Result.path;
-                changeAction(RepetableActions.Move);
-                return;
-            }
-        }*/
-    }
-
-    IEnumerator Eat()
-    {
-        /*Building building = jData.interest.GetComponent<Building>();
-        if (building.localRes.ammount[4] > 0)
-        {
-            building.localRes.ammount[4]--;
-            if (building.selected && building.GetComponent<Diner>())
-            {
-                string _s = "";
-                Resource r = jData.interest.GetComponent<Diner>().localRes;
-                for (int i = 0; i < r.ammount.Count; i++)
-                {
-                    if (r.ammount[i] > 0)
-                    {
-                        _s += $"{r.id[i]}: {r.ammount[i]}";
-                    }
-                }
-                GameObject.Find("Generated Resource").GetComponent<TMP_Text>().text = _s;
-            }
-            else
-            {
-                building.OpenWindow();
-            }
-            hasEaten = true;
-            print("nom");
-            yield return new WaitForSeconds(0.5f);
-            print("nom nom nom");
-            GoHome();
-        }
-        else
-        {
-            FindPlaceToEat(); 
-            yield break;
-        }*/
-        yield return new();
-    }
-
-    
-    public override InfoWindow OpenWindow(bool setUp = false)
-    {
-        InfoWindow info;
-        // if selected
-        if ((info = base.OpenWindow(setUp)) != null)
-        {
-            // set window mod to humans
-            if (setUp)
-            {
-                info.SwitchMods(InfoMode.Human, name);
-            }
-            string s;
-            // JOB INFO
-            s =
-                $"Job - {jData.job}\n" +
-                $"Object - {(jData.interest ? jData.interest.name: "")}";
-            info.clickObjectTransform.GetChild((int)InfoMode.Human).GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = s;
-            // STATUS INFO
-            s = 
-                $"Sleep - {sleep}\n" +
-                $"HasEaten - {hasEaten}\n" +
-                $"Inventory - {MyRes.GetDisplayText(inventory)}";
-            info.clickObjectTransform.GetChild((int)InfoMode.Human).GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = s;
-        }
-        // floating text update
-        transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
-        return null;
-    }
 }

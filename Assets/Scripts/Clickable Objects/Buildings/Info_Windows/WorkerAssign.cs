@@ -84,7 +84,7 @@ public class WorkerAssign : MonoBehaviour
     public void ManageHuman(int id) //adding or removing humans
     {
         bool add = _building.assigned.FindIndex(q => q.id == id) == -1;
-        if (add && _building.limit <=  _building.assigned.Count)
+        if (add && _building.limit <= _building.assigned.Count)
         {
             print("no space");
             return;
@@ -94,22 +94,26 @@ public class WorkerAssign : MonoBehaviour
             if(add)
             {
                 Human human = humans.transform.GetChild(0).GetComponentsInChildren<Human>().Single(q => q.id == id);
-                _building.assigned.Add(human);
-                human.transform.SetParent(humans.transform.GetChild(1).transform);
-                human.workplace = _building as ProductionBuilding;
-
-                human.jData = PathFinder.FindPath(
+                JobData jData = PathFinder.FindPath(
                     new List<ClickableObject>() { _building },
                     human);
-                if (human.jData.interest)
+                if (jData.interest)
                 {
+                    _building.assigned.Add(human);
+                    human.transform.SetParent(humans.transform.GetChild(1).transform);
+                    human.workplace = _building as ProductionBuilding;
+                    human.jData.interest = jData.interest;
                     human.jData.job = JobState.FullTime;
+                    if (!human.nightTime)
+                    {
+                        human.jData.path = jData.path;
+                    }
                     human.ChangeAction(HumanActions.Move);
                     human.lookingForAJob = false;
                 }
                 else
                 {
-                    human.Idle();
+                    Debug.LogError("cant find way here");
                 }
             }
             else

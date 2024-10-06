@@ -256,7 +256,6 @@ public static class MyGrid
     }
     public static bool CanPlace(Building building)
     {
-        BuildObject buildObject = new();
         bool canBuild = true;
         GridPos gridPos = new(building.transform.position - CheckRotation(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
         canvasManager.overlays.CreateBuildGrid(building);

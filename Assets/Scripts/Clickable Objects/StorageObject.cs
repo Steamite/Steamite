@@ -4,11 +4,31 @@ using System.Linq;
 public class StorageObject : ClickableObject
 {
     public StorageResource localRes = new();
+
+    ///////////////////////////////////////////////////
+    ///////////////////Overrides///////////////////////
+    ///////////////////////////////////////////////////
+    public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
+    {
+        if (clickable == null)
+            clickable = new StorageObjectSave();
+        (clickable as StorageObjectSave).resSave = new(localRes);
+        (clickable as StorageObjectSave).gridPos = new(transform.position.x, transform.position.z); // used for not rounded values
+        return base.Save(clickable);
+    }
+    public override void Load(ClickableObjectSave save)
+    {
+        localRes = new((save as StorageObjectSave).resSave);
+        base.Load(save);
+    }
+
+    ///////////////////////////////////////////////////
+    ///////////////////Methods/////////////////////////
+    ///////////////////////////////////////////////////
     public virtual void Store(Human h, int transferPerTick)
     {
         throw new NotImplementedException();
     }
-
     /// <summary>
     /// Removes resource from the object(chunk, building)
     /// </summary>
@@ -39,18 +59,5 @@ public class StorageObject : ClickableObject
     public virtual void TryLink(Human h)
     {
         localRes.LinkHuman(h);
-    }
-    public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
-    {
-        if (clickable == null)
-            clickable = new StorageObjectSave();
-        (clickable as StorageObjectSave).resSave = new(localRes); 
-        (clickable as StorageObjectSave).gridPos = new(transform.position.x, transform.position.z); // used for not rounded values
-        return base.Save(clickable);
-    }
-    public override void Load(ClickableObjectSave save)
-    {
-        localRes = new((save as StorageObjectSave).resSave);
-        base.Load(save);
     }
 }

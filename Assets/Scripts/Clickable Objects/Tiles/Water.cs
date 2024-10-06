@@ -9,6 +9,10 @@ public class Water : ClickableObject
 {
     public readonly int quality = 50;
     public int ammount = 50;
+
+    ///////////////////////////////////////////////////
+    ///////////////////Overrides///////////////////////
+    ///////////////////////////////////////////////////
     public override InfoWindow OpenWindow(bool setUp = false)
     {
         InfoWindow info = base.OpenWindow(setUp);
@@ -20,10 +24,7 @@ public class Water : ClickableObject
         }
         return info;
     }
-    public override string PrintText()
-    {
-        return "w";
-    }
+
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)

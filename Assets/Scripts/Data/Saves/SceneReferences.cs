@@ -5,7 +5,7 @@ using UnityEngine;
 public class SceneReferences : MonoBehaviour
 {
     public Transform eventSystem;
-    public Transform humans;
+    public Humans humans;
     public Transform levelCamera;
     public List<GroundLevel> levels;
 

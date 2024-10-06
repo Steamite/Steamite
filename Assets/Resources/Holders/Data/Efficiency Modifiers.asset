@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95171ddedd66da84d846ace8f66ea9b1, type: 3}
+  m_Name: Efficiency Modifiers
+  m_EditorClassIdentifier: 
+  modifiers:
+  - name: Food
+    modType: 0
+    count: 0
+    posCount: 2
+    posInfluence: 5
+    negCount: 3
+    negInfluence: 10
+  - name: House
+    modType: 1
+    count: 0
+    posCount: 1
+    posInfluence: 10
+    negCount: 2
+    negInfluence: 15

@@ -7,10 +7,10 @@ using UnityEngine;
 [Serializable]
 public enum ResourceType
 {
-    coal,
-    metal,
-    stone,
-    food,
+    Coal,
+    Metal,
+    Stone,
+    Food,
 }
 
 public static class MyRes
@@ -20,6 +20,7 @@ public static class MyRes
     public static List<TMP_Text> textFields = new();
     public static int globalStorageSpace;
     public static int storageResources = 4;
+    static Storage[] storage;
     /// <summary>
     /// Starting function for the resource system.
     /// </summary>
@@ -34,7 +35,7 @@ public static class MyRes
             FillRes();
             globalStorageSpace = 0;
 
-            Storage[] storage = GameObject.Find("Buildings").GetComponentsInChildren<Storage>();
+            storage = GameObject.Find("Buildings").GetComponentsInChildren<Storage>();
             JobQueue jQ = GameObject.Find("Humans").GetComponent<JobQueue>();
             foreach (Storage _s in storage)
             {
@@ -442,5 +443,24 @@ public static class MyRes
             return FilterStorages(r, h, false);
         }
         return storages;
+    }
+
+    public static void EatFood(Human human)
+    {
+        int i = -1;
+        Storage store = storage.FirstOrDefault(q => q.localRes.stored.ammount[i = q.localRes.Future(true).type.IndexOf(ResourceType.Food)] > 0);
+        if(store)
+        {
+            store.localRes.stored.ammount[i]--;
+            resources.ammount[resources.type.IndexOf(ResourceType.Food)]--;
+            store.OpenWindow(false);
+            human.hasEaten = true;
+            human.efficiency.ManageModifier(ModType.Food, true);
+        }
+        else
+        {
+            human.hasEaten = false;
+            human.efficiency.ManageModifier(ModType.Food, false);
+        }
     }
 }

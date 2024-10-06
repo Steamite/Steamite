@@ -6,38 +6,10 @@ using UnityEngine;
 public class Storage : Building
 {
     public List<bool> canStore = new();
-    protected override void Awake()
-    {
-        base.Awake();
-        for(int i = 0; i < localRes.stored.ammount.Count; i++)
-        {
-            canStore.Add(true);
-        }
-    }
 
     ///////////////////////////////////////////////////
-    //---------------Saving & Loading----------------//
+    ///////////////////Overrides///////////////////////
     ///////////////////////////////////////////////////
-    
-    public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
-    {
-        if(clickable == null)
-            clickable = new StorageBSave();
-        (clickable as StorageBSave).canStore = canStore;
-        return base.Save(clickable);
-    }
-    public override void Load(ClickableObjectSave save)
-    {
-        base.Load(save);
-        canStore = (save as StorageBSave).canStore;
-        if (build.constructed)
-            GameObject.Find("Humans").GetComponent<JobQueue>().storages.Add(this);
-    }
-
-    ///////////////////////////////////////////////////
-    /////---------------Info Window----------------////
-    ///////////////////////////////////////////////////
-    
     public override InfoWindow OpenWindow(bool setUp = false)
     {
         InfoWindow info;
@@ -57,16 +29,25 @@ public class Storage : Building
         }
         return info;
     }
-    
-    public override List<string> GetInfoText()
+
+    public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
-        List<string> s = base.GetInfoText();
-        s.Insert(0, $"Can store up to: {localRes.stored.capacity} resources");
-        return s;
+        if (clickable == null)
+            clickable = new StorageBSave();
+        (clickable as StorageBSave).canStore = canStore;
+        return base.Save(clickable);
     }
+    public override void Load(ClickableObjectSave save)
+    {
+        base.Load(save);
+        canStore = (save as StorageBSave).canStore;
+        if (build.constructed)
+            GameObject.Find("Humans").GetComponent<JobQueue>().storages.Add(this);
+    }
+
     public override void RequestRes(Resource request, Human h, int mod)
     {
-        if(build.constructed && mod == 1)
+        if (build.constructed && mod == 1)
         {
             int spaceToStore = localRes.stored.capacity - localRes.Future().ammount.Sum();
             Resource transferRes = new();
@@ -94,6 +75,25 @@ public class Storage : Building
         base.RequestRes(request, h, mod);
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+        for(int i = 0; i < localRes.stored.ammount.Count; i++)
+        {
+            canStore.Add(true);
+        }
+    }
+
+    public override List<string> GetInfoText()
+    {
+        List<string> s = base.GetInfoText();
+        s.Insert(0, $"Can store up to: {localRes.stored.capacity} resources");
+        return s;
+    }
+
+    ///////////////////////////////////////////////////
+    ///////////////////Methods/////////////////////////
+    ///////////////////////////////////////////////////
     public virtual void SetupStorage(Resource templateRes, JobQueue jQ)
     {
         localRes.stored.type = templateRes.type;

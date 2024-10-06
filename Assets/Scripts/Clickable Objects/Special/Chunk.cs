@@ -8,6 +8,54 @@ using UnityEngine.EventSystems;
 
 public class Chunk : StorageObject
 {
+    ///////////////////////////////////////////////////
+    ///////////////////Overrides///////////////////////
+    ///////////////////////////////////////////////////
+    public override void UniqueID()
+    {
+        CreateNewId(MyGrid.chunks.Select(q => q.id).ToList());
+    }
+    public override void GetID(JobSave jobSave)
+    {
+        jobSave.objectId = id;
+        jobSave.objectType = typeof(Chunk);
+    }
+
+    public override InfoWindow OpenWindow(bool first)
+    {
+        InfoWindow info;
+        // if selected
+        if ((info = base.OpenWindow(first).GetComponent<InfoWindow>()) != null)
+        {
+            // set window mod to Ore Info
+            if (first)
+            {
+                info.SwitchMods(InfoMode.Chunk, name);
+            }
+            info.clickObjectTransform.GetChild((int)InfoMode.Chunk).GetChild(0)
+                .GetComponent<TMP_Text>().text
+                    = $"Human: {string.Join(",", localRes.carriers.Select(q => q.name))} \nResources: {MyRes.GetDisplayText(localRes.stored)}";
+        }
+        return null;
+    }
+
+    public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
+    {
+        if (clickable == null)
+            clickable = new ChunkSave();
+        if (gameObject)
+        {
+            (clickable as ChunkSave).resColor = new MyColor(transform.GetChild(1).GetComponent<MeshRenderer>().material.color);
+            return base.Save(clickable);
+        }
+        return null;
+    }
+    public override void Load(ClickableObjectSave save)
+    {
+        transform.GetChild(1).GetComponent<MeshRenderer>().material.color = (save as ChunkSave).resColor.ConvertColor();
+        base.Load(save);
+    }
+
     public override void Store(Human h, int transferPerTick)
     {
         Debug.LogError("Can't store in a chunk");
@@ -42,6 +90,10 @@ public class Chunk : StorageObject
             Destroy(gameObject);
         }
     }
+
+    ///////////////////////////////////////////////////
+    ///////////////////Methods/////////////////////////
+    ///////////////////////////////////////////////////    
     void FindS(Human h)
     {
         MyRes.FindStorage(h);
@@ -62,47 +114,5 @@ public class Chunk : StorageObject
         GameObject.FindWithTag("Humans").GetComponent<JobQueue>().AddJob(JobState.Cleanup, this);
         name = name.Replace("(Clone)", " ");
         MyGrid.chunks.Add(this);
-    }
-    public override void UniqueID()
-    {
-        CreateNewId(MyGrid.chunks.Select(q => q.id).ToList());
-    }
-    public override void GetID(JobSave jobSave)
-    {
-        jobSave.objectId = id;
-        jobSave.objectType = typeof(Chunk);
-    }
-    public override InfoWindow OpenWindow(bool first)
-    {
-        InfoWindow info;
-        // if selected
-        if ((info = base.OpenWindow(first).GetComponent<InfoWindow>()) != null)
-        {
-            // set window mod to Ore Info
-            if (first)
-            {
-                info.SwitchMods(InfoMode.Chunk, name);
-            }
-            info.clickObjectTransform.GetChild((int)InfoMode.Chunk).GetChild(0)
-                .GetComponent<TMP_Text>().text 
-                    = $"Human: {string.Join(",", localRes.carriers.Select(q => q.name))} \nResources: {MyRes.GetDisplayText(localRes.stored)}";
-        }
-        return null;
-    }
-    public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
-    {
-        if (clickable == null)
-            clickable = new ChunkSave();
-        if (gameObject)
-        {
-            (clickable as ChunkSave).resColor = new MyColor(transform.GetChild(1).GetComponent<MeshRenderer>().material.color);
-            return base.Save(clickable);
-        }
-        return null;
-    }
-    public override void Load(ClickableObjectSave save)
-    {
-        transform.GetChild(1).GetComponent<MeshRenderer>().material.color = (save as ChunkSave).resColor.ConvertColor();
-        base.Load(save);
     }
 }

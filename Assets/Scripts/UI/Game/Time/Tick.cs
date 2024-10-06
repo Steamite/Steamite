@@ -6,14 +6,20 @@ using UnityEngine.UI;
 
 public class Tick : MonoBehaviour
 {
+    public uint lastTick = 0;
+
     public event Action tickAction;
     public Button lastButton;
-    public static uint lastTick = 0;
+
+    public DayTime timeControler;
+
     public void AwakeTicks()
     {
         Time.timeScale = 5;
+        timeControler.Init(this);
         StartCoroutine(DoTick());
     }
+
     public void ChangeGameSpeed(float _speed)
     {
         StopAllCoroutines();
@@ -26,11 +32,13 @@ public class Tick : MonoBehaviour
                 button.transform.GetChild(0).GetComponent<Animator>().SetFloat("gameSpeed", 5f / _speed);*/
         }
     }
+
     public void Unpause()
     {
         StopAllCoroutines();
         StartCoroutine(DoTick());
     }
+
     public IEnumerator DoTick()
     {
         while (true)
@@ -41,6 +49,7 @@ public class Tick : MonoBehaviour
                 lastTick = 0;
             else
                 lastTick++;
+
             Debug.Log(lastTick);
         }
     }
