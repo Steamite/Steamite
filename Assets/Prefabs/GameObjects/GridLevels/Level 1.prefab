@@ -23747,6 +23747,10 @@ PrefabInstance:
       propertyPath: localRes.stored.ammount.Array.data[2]
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: localRes.stored.ammount.Array.data[3]
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 548421508411422551, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10

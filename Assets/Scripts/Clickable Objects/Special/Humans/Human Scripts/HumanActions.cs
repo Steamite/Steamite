@@ -1,12 +1,39 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public static class HumanActions
 {
     static int transferPerTick = 5;
+
+    // Efficiency
+    static float digSpeed = 1f;
+    static float buildSpeed = 1f;
+    static float productionSpeed = 1f;
+
+    public static void ChangeEfficiency(JobState toChange, int ammount)
+    {
+        switch (toChange)
+        {
+            case JobState.Digging:
+                digSpeed += ammount;
+                break;
+            case JobState.Constructing:
+            case JobState.Deconstructing:
+                buildSpeed += ammount;
+                break;
+            case JobState.FullTime:
+                productionSpeed += ammount;
+            break;
+            default:
+                Debug.LogError($"Undifined jobState, {toChange}");
+                break;
+        }
+    }
+
     /// <summary>
     /// moves worker to the next position in list, and deletes it. Upon reaching the end, decide what to do next(using jData)
     /// </summary>
@@ -21,11 +48,13 @@ public static class HumanActions
         }
         else
         {
-            Rotate(h, new(h.jData.interest.gameObject));
+            if (h.jData.interest != null)
+                Rotate(h, new(h.jData.interest.gameObject));
             h.ChangeAction(null);
             h.Decide();
         }
     }
+
     static void Rotate(Human h, GridPos point)
     {
         GridPos humanPos = new(h.gameObject);
@@ -38,6 +67,7 @@ public static class HumanActions
         else if (point.z < humanPos.z)
             h.transform.rotation = Quaternion.Euler(0, 270, 0);
     }
+
     /// <summary>
     /// digs the stone(lowers the rock integrity)
     /// </summary>
@@ -45,7 +75,7 @@ public static class HumanActions
     public static void Dig(Human h)
     {
         Rock r = h.jData.interest.GetComponent<Rock>();
-        r.integrity--;
+        r.integrity -= digSpeed * h.efficiency.efficiency;
         r.OpenWindow();
         if(r.integrity <= 0)
         {
@@ -56,6 +86,7 @@ public static class HumanActions
             h.transform.parent.parent.GetComponent<JobQueue>().CancelJob(JobState.Digging, h.jData.interest); // removes job order
         }
     }
+
     /// <summary>
     /// if there're all needed resources, progress build, otherwise store
     /// </summary>
@@ -74,6 +105,7 @@ public static class HumanActions
         }
         building.OpenWindow(); // change to UpdateWindow
     }
+
     /// <summary>
     /// progresses demolish on building
     /// </summary>
@@ -90,6 +122,7 @@ public static class HumanActions
             LookForNew(h);
         }
     }
+
     public static void Store(Human h)
     {
         try
@@ -101,6 +134,7 @@ public static class HumanActions
             Debug.LogError(e);
         }
     }
+
     public static void Take(Human h)
     {
         try
@@ -119,6 +153,7 @@ public static class HumanActions
     /// <param name="h"></param>
     public static void LookForNew(Human h)
     {
+        h.destination = null;
         if (!h.nightTime && !h.lookingForAJob)
         {
             JobQueue jobQueue = h.transform.parent.GetComponentInParent<JobQueue>();
@@ -137,6 +172,7 @@ public static class HumanActions
         h.lookingForAJob = false;
         return;
     }
+
     /// <summary>
     /// tries to find job of the suppplied type
     /// </summary>
@@ -267,21 +303,11 @@ public static class HumanActions
     {
         if (h.workplace)
         {
-            h.workplace.Produce();
+            h.workplace.Produce(h.efficiency.efficiency * productionSpeed);
         }
         else
         {
             h.Idle();
         }
-    }
-
-    /// <summary>
-    /// proggresses sleep
-    /// </summary>
-    /// <param name="h"></param>
-    public static void Sleep(Human h)
-    {
-        h.OpenWindow();
-        h.sleep++;
     }
 }

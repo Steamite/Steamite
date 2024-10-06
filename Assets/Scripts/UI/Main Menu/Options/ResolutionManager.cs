@@ -23,7 +23,8 @@ public class ResolutionManager : MonoBehaviour
         
         resolutionDropdown.ClearOptions();
         currentRefresheRate = Screen.currentResolution.refreshRateRatio.value;
-        
+
+        SetFullScreen(true);
         for (int i = 0; i < resolutions.Length; i++)
         {
             if (resolutions[i].refreshRateRatio.value == currentRefresheRate)

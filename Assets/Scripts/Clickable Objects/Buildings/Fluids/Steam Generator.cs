@@ -54,10 +54,10 @@ public class SteamGenerator : ProductionBuilding
             if (networkAccess.fluid.ammount[0] < waterCost)
             {
                 if (!lastWaterAccessNetworkElem)
-                    lastWaterAccessNetworkElem = networkAccess.FindStore(FluidType.water, transform.GetChild(1), false);
+                    lastWaterAccessNetworkElem = networkAccess.FindStore(FluidType.Water, transform.GetChild(1), false);
                 if (lastWaterAccessNetworkElem)
                 {
-                    int index = lastWaterAccessNetworkElem.GetFluid().type.IndexOf(FluidType.water);
+                    int index = lastWaterAccessNetworkElem.GetFluid().type.IndexOf(FluidType.Water);
                     int ammountToTransfer = lastWaterAccessNetworkElem.GetFluid().ammount[index];
                     if(ammountToTransfer > 0)
                     {
@@ -95,7 +95,7 @@ public class SteamGenerator : ProductionBuilding
                     }
                     lastSteamAccessNetworkElem = null;
                 }
-                if ((lastSteamAccessNetworkElem = networkAccess.FindStore(FluidType.steam, transform.GetChild(1), true)) != null)
+                if ((lastSteamAccessNetworkElem = networkAccess.FindStore(FluidType.Steam, transform.GetChild(1), true)) != null)
                 {
                     lastSteamAccessNetworkElem.GetFluid().ammount[1] += steamProduction;
                 }
@@ -119,7 +119,7 @@ public class SteamGenerator : ProductionBuilding
     /// </summary>
     void TakeWater()
     {
-        int index = lastWaterAccessNetworkElem.GetFluid().type.IndexOf(FluidType.water);
+        int index = lastWaterAccessNetworkElem.GetFluid().type.IndexOf(FluidType.Water);
         int ammountToExtract = lastWaterAccessNetworkElem.GetFluid().ammount[index];
         if (ammountToExtract > networkAccess.fluid.capacity[0] - networkAccess.fluid.ammount[0])
             ammountToExtract = networkAccess.fluid.capacity[0] - networkAccess.fluid.ammount[0];

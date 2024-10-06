@@ -9,6 +9,9 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public bool selected = false;
     public int id = -1;
 
+    ///////////////////////////////////////////////////
+    ///////////////////Overrides///////////////////////
+    ///////////////////////////////////////////////////
     public override bool Equals(object obj)
     {
         if (obj == null || GetType() != obj.GetType())
@@ -17,11 +20,25 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
             return true;
         return false;
     }
+
     public override int GetHashCode() { return base.GetHashCode(); }
 
+    ///////////////////////////////////////////////////
+    ///////////////////Methods/////////////////////////
+    ///////////////////////////////////////////////////
     public virtual void UniqueID()
     {
         id = -1;
+    }
+    public virtual void GetID(JobSave jobSave)
+    {
+        jobSave.objectId = id;
+        jobSave.objectType = typeof(ClickableObject);
+    }
+
+    public virtual string PrintText()
+    {
+        return "_";
     }
 
     public virtual void OnPointerEnter(PointerEventData eventData)
@@ -30,19 +47,16 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
         if (MyGrid.gridTiles.drag)
             eventData.pointerPress = gameObject;
     }
-
     public virtual void OnPointerExit(PointerEventData eventData)
     {
         MyGrid.gridTiles.Exit(this);
         eventData.pointerPress = null;
     }
-
     public virtual void OnPointerDown(PointerEventData eventData)
     {
         if (MyGrid.gridTiles.drag == false && eventData.button == PointerEventData.InputButton.Left)
             MyGrid.gridTiles.Down();
     }
-
     public virtual void OnPointerUp(PointerEventData eventData)
     {
         print(gameObject.name + $", {transform.position.x}, {transform.position.z}");
@@ -67,22 +81,6 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
         return info;
     }
 
-
-    /// <summary>
-    /// Fills the jobSave with id and object type.
-    /// </summary>
-    /// <param name="jobSave">The value to be filled.</param>
-    public virtual void GetID(JobSave jobSave)
-    {
-        jobSave.objectId = id;
-        jobSave.objectType = typeof(ClickableObject);
-    }
-
-    public virtual string PrintText()
-    {
-        return "_";
-    }
-
     public virtual ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -90,7 +88,6 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
         clickable.id = id;
         return clickable;
     }
-
     public virtual void Load(ClickableObjectSave save)
     {
         id = save.id;

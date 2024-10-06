@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ResearchBackend : MonoBehaviour
 {
@@ -45,11 +40,11 @@ public class ResearchBackend : MonoBehaviour
     }
     
     //Called by every worker in a research building
-    public void DoResearch()
+    public void DoResearch(float speed)
     {
         if (currentResearch)
         {
-            currentResearch.node.currentTime++;
+            currentResearch.node.currentTime += speed * 1;
         }
     }
 }

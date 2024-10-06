@@ -53,7 +53,7 @@ public class ClickableObjectSave
 [Serializable]
 public class RockSave : ClickableObjectSave
 {
-    public int integrity;
+    public float integrity;
     public string oreName;
     public bool toBeDug;
 }
@@ -146,7 +146,7 @@ public class HumanSave
     public JobSave jobSave;
     public Resource inventory;
     // statuses
-    public int sleep;
+    public float sleep;
     public bool hasEaten;
     // specializations
     public Specs specs;
@@ -162,7 +162,6 @@ public class HumanSave
         jobSave = new(h.jData);
         jobSave.destinationID = h.destination?h.destination.id:-1;
         inventory = h.inventory;
-        sleep = h.sleep;
         hasEaten = h.hasEaten;
         specs = h.specialization;
         houseID = h.home ? h.home.id : -1;

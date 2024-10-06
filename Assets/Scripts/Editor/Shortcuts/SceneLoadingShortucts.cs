@@ -4,35 +4,35 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
+[InitializeOnLoad]
 public class SceneLoadingShortucts : MonoBehaviour
 {
     static readonly string scenePath = "Assets/Scenes/";
-    [MenuItem("Custom Editors/Load/Play %q", priority = -1)]
-    static void Play()
+
+    static SceneLoadingShortucts()
     {
-        if (!EditorApplication.isPlaying)
+        EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+    }
+    static void OnPlayModeStateChanged(PlayModeStateChange state)
+    {
+        if (state == PlayModeStateChange.ExitingEditMode)
         {
+
             EditorSceneManager.SaveOpenScenes();
             string activeSceneName = EditorSceneManager.GetActiveScene().name;
             if (activeSceneName != "Open Scene")
             {
                 EditorSceneManager.OpenScene($"{scenePath}Open Scene.unity");
-                EditorSceneManager.activeSceneChangedInEditMode += test;
+                //EditorSceneManager.activeSceneChangedInEditMode += SceneReturn;
             }
             GameObject.Find("Loader").GetComponent<FirstScene>().loadNewGame = true;
             EditorApplication.EnterPlaymode();
             File.WriteAllText($"{Application.persistentDataPath}/openScene.txt", activeSceneName);
         }
-        else
+        else if(state == PlayModeStateChange.EnteredEditMode)
         {
-            EditorApplication.ExitPlaymode();
+            EditorSceneManager.OpenScene($"{scenePath}{File.ReadAllText($"{Application.persistentDataPath}/openScene.txt")}.unity");
         }
-    }
-
-    private static void test(UnityEngine.SceneManagement.Scene arg0, UnityEngine.SceneManagement.Scene arg1)
-    {
-        EditorSceneManager.activeSceneChangedInEditMode -= test;
-        EditorSceneManager.OpenScene($"{scenePath}{File.ReadAllText($"{Application.persistentDataPath}/openScene.txt")}.unity");
     }
 
 
@@ -42,14 +42,12 @@ public class SceneLoadingShortucts : MonoBehaviour
         if (EditorSceneManager.GetActiveScene().name != "Open Scene")
             EditorSceneManager.OpenScene($"{scenePath}Open Scene.unity");
     }
-
     [MenuItem("Custom Editors/Load/Main Menu _F2", priority = 1)]
     static void LoadMainMenu()
     {
         if (EditorSceneManager.GetActiveScene().name != "Main Menu")
             EditorSceneManager.OpenScene($"{scenePath}Main Menu.unity");
     }
-
     [MenuItem("Custom Editors/Load/Level _F3", priority = 2)]
     static void LoadLevel()
     {

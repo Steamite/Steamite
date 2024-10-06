@@ -10,6 +10,8 @@ public class Humans : MonoBehaviour
     public LoadingScreen loadingScreen;
     public List<Human> humen;
     public Tick ticks;
+    public EfficencyModifiers modifiers;
+
     //Don't missmatch with "Human" this is a script for the parent object, no inheritence thou
     public void GetHumans()
     {

@@ -40,7 +40,7 @@ public class ResearchUI : MonoBehaviour
     //-----------------------------------\\
     public void NewGame()
     {
-        ResearchData data = (ResearchData)Resources.Load("Holders/Data/ResearchData");
+        ResearchData data = (ResearchData)Resources.Load("Holders/Data/Research Data");
         ResearchCategory[] researches = new ResearchCategory[data.categories.Count];
         for (int i = 0; i < data.categories.Count; i++)
         {
@@ -65,7 +65,7 @@ public class ResearchUI : MonoBehaviour
         backend = gameObject.GetComponent<ResearchBackend>();
         backend.Init(this);
 
-        BuildButtonHolder buildButtons = (BuildButtonHolder)Resources.Load("Holders/Data/BuildButtonData");
+        BuildButtonHolder buildButtons = (BuildButtonHolder)Resources.Load("Holders/Data/BuildButton Data");
         InitializeBuildButtons(buildButtons);
         InitializeResearchButtons(buildButtons, researches, _currentResearch);
         researchWindow.gameObject.SetActive(false);

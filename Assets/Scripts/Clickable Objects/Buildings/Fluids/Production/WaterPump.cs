@@ -30,10 +30,10 @@ public class WaterPump : ProductionBuilding
         t.GetChild(3).GetComponent<TMP_Text>()
             .text = $"Water: {networkAccess.fluid.ammount[0]}/{networkAccess.fluid.capacity[0]}";
     }
-    public override void Produce()
+    public override void Produce(float speed)
     {
         if(pStates.supplied)
-            base.Produce();
+            base.Produce(speed);
     }
     protected override void Product()
     {
@@ -55,7 +55,7 @@ public class WaterPump : ProductionBuilding
                     }
                     lastAccesNetworkElem = null;*/
                 }
-                if ((lastAccesNetworkElem = networkAccess.FindStore(FluidType.water, transform.GetChild(3), true)) != null)
+                if ((lastAccesNetworkElem = networkAccess.FindStore(FluidType.Water, transform.GetChild(3), true)) != null)
                 {
                     ExtractWater(lastAccesNetworkElem);
                 }

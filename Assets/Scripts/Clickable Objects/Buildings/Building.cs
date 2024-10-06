@@ -12,43 +12,19 @@ public class Building : StorageObject
     [Header("Base")]
     public Build build = new();
 
-    protected virtual void Awake()
-    {
-       /* if (transform.GetComponent<MeshFilter>())
-        {
-            Quaternion q = transform.rotation;
-            Vector3 oldPos = transform.position;
-
-            transform.rotation = Quaternion.identity;
-            transform.position = Vector3.zero;
-
-            MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
-            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-
-            int i = 0;
-            while (i < meshFilters.Length)
-            {
-                combine[i].mesh = meshFilters[i].sharedMesh;
-                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-                meshFilters[i].gameObject.SetActive(false);
-
-                i++;
-            }
-
-            Mesh mesh = new Mesh();
-            mesh.CombineMeshes(combine);
-            transform.GetComponent<MeshFilter>().sharedMesh = mesh;
-            gameObject.SetActive(true);
-            transform.rotation = q;
-            transform.position = oldPos;
-        }*/
-        myColor = transform.GetComponentsInChildren<MeshRenderer>().Select(q=> q.material.color).ToList(); // saves the original color
-    }
-
+    ///////////////////////////////////////////////////
+    ///////////////////Overrides///////////////////////
+    ///////////////////////////////////////////////////
     public override void UniqueID()
     {
         CreateNewId(MyGrid.buildings.Select(q => q.id).ToList());
     }
+    public override void GetID(JobSave jobSave)
+    {
+        jobSave.objectId = id;
+        jobSave.objectType = typeof(Building);
+    }
+
     /// <summary>
     /// Sets up/Updates info window
     /// </summary>
@@ -79,6 +55,40 @@ public class Building : StorageObject
         return null;
     }
 
+    public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
+    {
+        if (clickable == null)
+            clickable = new BSave();
+        (clickable as BSave).build = build;
+        (clickable as BSave).prefabName = name;
+        (clickable as BSave).rotationY = transform.rotation.eulerAngles.y;
+        return base.Save(clickable);
+    }
+    public override void Load(ClickableObjectSave save)
+    {
+        name = (save as BSave).prefabName;
+        build = (save as BSave).build;
+        if (build.constructed)
+        {
+            foreach (GameObject g in transform.GetComponentsInChildren<Transform>().Select(q => q.gameObject))
+            {
+                g.layer = 6;
+            }
+            GetComponent<SortingGroup>().sortingLayerName = "Buildings";
+            if (build.deconstructing)
+            {
+                GameObject.Find("Humans").GetComponent<JobQueue>().AddJob(JobState.Deconstructing, this);
+            }
+
+        }
+        else
+        {
+            PlaceBuilding(MyGrid.gridTiles);
+        }
+        GetComponent<Building>().ChangeColor(new Color());
+        base.Load(save);
+    }
+
     public override void Store(Human human, int transferPerTick)
     {
         int index = localRes.carriers.IndexOf(human);
@@ -102,6 +112,43 @@ public class Building : StorageObject
         base.Take(h, transferPerTick);
         OpenWindow();
     }
+
+    ///////////////////////////////////////////////////
+    ///////////////////Methods/////////////////////////
+    ///////////////////////////////////////////////////
+    protected virtual void Awake()
+    {
+        /* if (transform.GetComponent<MeshFilter>())
+         {
+             Quaternion q = transform.rotation;
+             Vector3 oldPos = transform.position;
+
+             transform.rotation = Quaternion.identity;
+             transform.position = Vector3.zero;
+
+             MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+             CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+
+             int i = 0;
+             while (i < meshFilters.Length)
+             {
+                 combine[i].mesh = meshFilters[i].sharedMesh;
+                 combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+                 meshFilters[i].gameObject.SetActive(false);
+
+                 i++;
+             }
+
+             Mesh mesh = new Mesh();
+             mesh.CombineMeshes(combine);
+             transform.GetComponent<MeshFilter>().sharedMesh = mesh;
+             gameObject.SetActive(true);
+             transform.rotation = q;
+             transform.position = oldPos;
+         }*/
+        myColor = transform.GetComponentsInChildren<MeshRenderer>().Select(q => q.material.color).ToList(); // saves the original color
+    }
+
     /// <summary>
     /// sets constructed to true, clears resource for which it was built, and changes color to the original one
     /// </summary>
@@ -116,6 +163,7 @@ public class Building : StorageObject
         ChangeRenderMode(false);
         OpenWindow(true); // if selected, update the info window
     }
+
     public virtual void OrderDeconstruct()
     {
         JobQueue queue = GameObject.Find("Humans").GetComponent<JobQueue>();
@@ -205,6 +253,16 @@ public class Building : StorageObject
         DestoyBuilding(); // destroy self
         return c;
     }
+    public virtual void DestoyBuilding()
+    {
+        MyGrid.gridTiles.DeselectObjects();
+        Destroy(gameObject);
+        if (id > -1)
+        {
+            MyGrid.canvasManager.overlays.Remove(id);
+            MyGrid.RemoveBuilding(this);
+        }
+    }
 
     public virtual void ChangeColor(Color color)
     {
@@ -247,66 +305,12 @@ public class Building : StorageObject
             }
         }
     }
+
     public virtual Resource GetDiff(Resource inventory)
     {
         Resource r = new();
         r = MyRes.DiffRes(build.cost, localRes.Future(), inventory);
         return r;
-    }
-
-    ///////////////////////////////////////////////////
-    //---------------Saving & Loading----------------//
-    ///////////////////////////////////////////////////
-    public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
-    {
-        if (clickable == null)
-            clickable = new BSave();
-        (clickable as BSave).build = build;
-        (clickable as BSave).prefabName = name;
-        (clickable as BSave).rotationY = transform.rotation.eulerAngles.y;
-        return base.Save(clickable);
-    }
-
-    public override void Load(ClickableObjectSave save)
-    {
-        name = (save as BSave).prefabName;
-        build = (save as BSave).build;
-        if (build.constructed)
-        {
-            foreach(GameObject g in transform.GetComponentsInChildren<Transform>().Select(q=> q.gameObject))
-            {
-                g.layer = 6;
-            }
-            GetComponent<SortingGroup>().sortingLayerName = "Buildings";
-            if (build.deconstructing)
-            {
-                GameObject.Find("Humans").GetComponent<JobQueue>().AddJob(JobState.Deconstructing, this);
-            }
-
-        }
-        else
-        {
-            PlaceBuilding(MyGrid.gridTiles);
-        }
-        GetComponent<Building>().ChangeColor(new Color());
-        base.Load(save);
-    }
-    public override void GetID(JobSave jobSave)
-    {
-        jobSave.objectId = id;
-        jobSave.objectType = typeof(Building);
-    }
-    private void DefText(Transform cTransform)
-    {
-        // deactivate constructed part and activate unconstructed
-        cTransform.gameObject.SetActive(false);
-        cTransform.parent.GetChild(0).gameObject.SetActive(true);
-        // create a string and set it
-        string infoText =
-            $"{MyRes.GetDisplayText(localRes.stored, build.cost)}\n" +
-            $"Constructed: {build.constructionProgress}/{build.maximalProgress}";
-        cTransform.parent.GetChild(0).GetChild(0).GetComponent<TMP_Text>()
-            .text = infoText;
     }
     public virtual List<string> GetInfoText()
     {
@@ -338,18 +342,22 @@ public class Building : StorageObject
         MyGrid.PlaceBuild(this);
         print(MyGrid.PrintGrid());
     }
-    public virtual void DestoyBuilding()
-    {
-        MyGrid.gridTiles.DeselectObjects();
-        Destroy(gameObject);
-        if(id > -1)
-        {
-            MyGrid.canvasManager.overlays.Remove(id);
-            MyGrid.RemoveBuilding(this);
-        }
-    }
+
     public virtual Fluid GetFluid()
     {
         return null;
+    }
+
+    private void DefText(Transform cTransform)
+    {
+        // deactivate constructed part and activate unconstructed
+        cTransform.gameObject.SetActive(false);
+        cTransform.parent.GetChild(0).gameObject.SetActive(true);
+        // create a string and set it
+        string infoText =
+            $"{MyRes.GetDisplayText(localRes.stored, build.cost)}\n" +
+            $"Constructed: {build.constructionProgress}/{build.maximalProgress}";
+        cTransform.parent.GetChild(0).GetChild(0).GetComponent<TMP_Text>()
+            .text = infoText;
     }
 }

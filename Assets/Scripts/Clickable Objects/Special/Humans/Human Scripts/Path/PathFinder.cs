@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -98,6 +96,28 @@ public static class PathFinder
             LookForPath(startPos, null, new() { activePos }, p, enterObjectType);
         return p.path;
     }
+    public static List<GridPos> FindWayHome(Human h)
+    {
+        JobData _jData;
+        if (h.home)
+        {
+            _jData = FindPath(new() { h.home }, h);
+            if (_jData.interest)
+            {
+                h.efficiency.ManageModifier(ModType.House, true);
+                return _jData.path;
+            }
+        }
+        Building elevator = MyGrid.buildings.First(q => (Elevator)q != null && ((Elevator)q).main);
+        _jData = FindPath(new() { elevator }, h);
+        h.efficiency.ManageModifier(ModType.House, false);
+        if (_jData.interest)
+        {
+            return _jData.path;
+        }
+        return new();
+    }
+
     static void LookForPath(GridPos _start, Building buildingTile, List<GridPos> positions, Plan plan, Type enterObjectType)
     {
         int check = 0;
