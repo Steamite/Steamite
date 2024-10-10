@@ -11043,6 +11043,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2bf0a4d3cf124395b2c06525d2cbd1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentResearch: {fileID: 0}
+  researchResourceInput:
+    stored:
+      capacity: -1
+      type: 
+      ammount: 
+    requests: []
+    carriers: []
+    mods: 
 --- !u!114 &745012304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11057,13 +11066,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   categorySwitchesTran: {fileID: 8824996791239420669}
   categoriesTran: {fileID: 7809636589494703553}
-  counter: {fileID: 511195085943090325}
+  researchWindow: {fileID: 0}
+  openResearchFill: {fileID: 0}
+  openResearchText: {fileID: 0}
+  openResearchAnimator: {fileID: 0}
   buttonGroupPref: {fileID: 4611725828449921710, guid: f7aa49020912db14e92e274538ab1259, type: 3}
   buttonBuildPref: {fileID: -1283386553157307328, guid: be1bc1ac2994c1a48a38c7f57d36c830, type: 3}
   simpleButtonPref: {fileID: 5301427236101477692, guid: e06b7f6fc4bc2454e9942ba52b46e89b, type: 3}
   researchButtonPref: {fileID: 8890755971369008905, guid: 99cce1809ab993b4294868c27336bd1b, type: 3}
   researchCategoryPref: {fileID: 413424511023610807, guid: 73efd173be5c0364f9183328a93c818f, type: 3}
   line: {fileID: 7206134379434204088, guid: ae499704ae44d7d4993251caeeb79b6f, type: 3}
+  speed: 3
+  elapsedProgress: 0
 --- !u!114 &745012305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22135,7 +22149,8 @@ MonoBehaviour:
   overlays: {fileID: 1537335780}
   research: {fileID: 745012304}
   pauseMenu: {fileID: 1708745677}
-  InfoWindow: {fileID: 6877375340367387794}
+  infoWindow: {fileID: 0}
+  tradeWindow: {fileID: 0}
 --- !u!1001 &1623488319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33083,7 +33098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f648d2e51df3b34a959db47b02d20d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  humans: {fileID: 3891230603216898686}
+  time: {fileID: 0}
 --- !u!114 &1133664416432482341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40866,6 +40881,7 @@ MonoBehaviour:
   loadingScreen: {fileID: 0}
   humen: []
   ticks: {fileID: 8150810313726245684}
+  modifiers: {fileID: 0}
 --- !u!1 &3896633529893969552
 GameObject:
   m_ObjectHideFlags: 0
@@ -48674,6 +48690,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cTransform: {fileID: 9006833587816497058}
+  clickObjectTransform: {fileID: 0}
+  researchTransform: {fileID: 0}
+  header: {fileID: 0}
 --- !u!1 &6889816566179271055
 GameObject:
   m_ObjectHideFlags: 0
@@ -52368,7 +52387,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c820b0d8f88bdb4d835008f00417405, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lastTick: 0
   lastButton: {fileID: 0}
+  timeController: {fileID: 0}
 --- !u!114 &8150810313726245685
 MonoBehaviour:
   m_ObjectHideFlags: 0

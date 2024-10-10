@@ -10,9 +10,9 @@ public class Menu : MonoBehaviour
 {
     public void Toggle()
     {
-        if (MyGrid.canvasManager.research.researchWindow.gameObject.activeSelf)
+        if (MyGrid.canvasManager.research.window.gameObject.activeSelf)
         {
-            MyGrid.canvasManager.research.CloseResearchUI();
+            MyGrid.canvasManager.research.CloseWindow();
             return;
         }
 

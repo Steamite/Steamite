@@ -429,7 +429,11 @@ public class GridTiles : MonoBehaviour
     /// <param name="toBeChanged"></param>
     public void HighLight(Color c, GameObject toBeChanged)
     {
-        foreach (Material material in toBeChanged.GetComponentsInChildren<MeshRenderer>().Where(q=> q).Select(q=> q.material))
+        foreach (Material material in 
+            toBeChanged.GetComponentsInChildren<MeshRenderer>()
+            .Where(q=> q).Select(q=> q.material)
+            .Union(toBeChanged.GetComponentsInChildren<SkinnedMeshRenderer>()
+            .Where(q => q).Select(q => q.material)))
         {
             LightUp(c, material);
         }

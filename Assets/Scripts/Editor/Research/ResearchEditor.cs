@@ -20,8 +20,8 @@ public class ResearchEditor : EditorWindow
     static bool disconecting;
     static Vector2 scroll = new();
     static int selTab = -1;
-    Texture2D point;
-    Texture2D circle;
+    [SerializeField]Texture2D point;
+    [SerializeField] Texture2D circle;
     GUIStyle circleButtonStyle;
 
     static EditorWindow open;
@@ -40,8 +40,6 @@ public class ResearchEditor : EditorWindow
     void Init()
     {
         titleContent = new("Research Editor");
-        point = (Texture2D)Resources.Load("Textures/Point");
-        circle = (Texture2D)Resources.Load("Textures/Circle");
         researchData = (ResearchData)Resources.Load("Holders/Data/Research Data");
         researchData.Init();
         circleButtonStyle = new GUIStyle();

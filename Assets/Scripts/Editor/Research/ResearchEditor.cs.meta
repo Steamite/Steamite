@@ -3,7 +3,10 @@ guid: 7062a661f34fafa45b8a5cba6eb7078d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - point: {fileID: 2800000, guid: ebbab09247d5fd5419f6d7a4e47c0c48, type: 3}
+  - circle: {fileID: 2800000, guid: 5228e8ecb6e2a4d448697e7dcece5ee1, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

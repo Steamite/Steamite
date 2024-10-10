@@ -92,7 +92,7 @@ public class Human : ClickableObject
         transform.GetChild(0).gameObject.SetActive(true);
 #endif
         transform.parent.parent.GetComponent<Humans>().ticks.tickAction += DoRepetableAction;
-        DayTime dT = MyGrid.sceneReferences.GetComponent<Tick>().timeControler;
+        DayTime dT = MyGrid.sceneReferences.GetComponent<Tick>().timeController;
         dT.dayStart += Day;
         dT.nightStart += Night;
 

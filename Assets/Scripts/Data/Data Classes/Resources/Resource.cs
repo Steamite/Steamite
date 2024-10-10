@@ -9,6 +9,10 @@ public class Resource
     public int capacity = -1; // -1 = no limit
     public List<ResourceType> type = new(); // stores all resource types
     public List<int> ammount = new();
+    public Resource(int _capacity)
+    {
+        capacity = _capacity;
+    }
     public Resource()
     {
 
