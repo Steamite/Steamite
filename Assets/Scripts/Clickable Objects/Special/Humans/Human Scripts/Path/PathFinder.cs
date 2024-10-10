@@ -4,6 +4,17 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+class PathNode
+{
+    public GridPos pos;
+    public PathNode previus;
+    public PathNode(GridPos gp, PathNode p)
+    {
+        pos = gp;
+        previus = p;
+    }
+}
+
 public static class PathFinder
 {
     public static JobData FindPath(List<ClickableObject> objects, Human h)
@@ -120,13 +131,11 @@ public static class PathFinder
 
     static void LookForPath(GridPos _start, Building buildingTile, List<GridPos> positions, Plan plan, Type enterObjectType)
     {
-        int check = 0;
         List<GridPos> visited = new();
-        List<List<GridPos>> paths = new();
-        List<int> toBeRemoved = new();
+        List<PathNode> toCheck = new();
         bool fin = false;
-        paths.Add(new());
-        paths[0].Add(_start);
+        toCheck.Add(new(_start, null)); 
+        visited.Add(_start);
         int i;
         
         if (buildingTile != null)
@@ -135,84 +144,68 @@ public static class PathFinder
             if (i > -1)
             {
                 GridPos vec = LastStep(_start, MyGrid.buildings[i].gameObject, -1);
-                paths[0].Add(vec);
+                toCheck[0] = new(vec, toCheck[0]);
             }
         }
         i = 0;
 
-        if (!fin && Check(paths[0][^1], 0,paths, positions, check, plan)) // Am I standing on an entry point or next to the job
+        if (!fin && Check(toCheck[0], positions, plan)) // Am I standing on an entry point or next to the job
         {
             //Am I startring on a building
-            while (i < 30 && paths.Count > 0 && !fin) // when finished, when no paths, when out of range
+            while (i < 30 && toCheck.Count > 0 && !fin) // when finished, when no paths, when out of range
             {
-                toBeRemoved = new();
-                int c = paths.Count;
+                int c = toCheck.Count;
                 for (int j = 0; j < c; j++) // foreach active path
                 {
                     if(plan.index == -1)
                     {
-                        CheckMove(j, visited, paths, positions, check, toBeRemoved, plan, enterObjectType);
+                        CheckMove(visited, toCheck, j, positions, plan, enterObjectType);
                     }
                     else
                     {
                         return;
                     }
                 }
-                if (paths.Count > 0) // removes no longer active paths
-                {
-                    for (int x = toBeRemoved.Count - 1; x >= 0; x--)
-                    {
-                        int y = toBeRemoved[x];
-                        paths.RemoveAt(y);
-                    }
-                }
+                toCheck.RemoveRange(0, c);
                 i++;
             }
         }
     }
-    static void CheckMove(int pathIndex, List<GridPos> visited, List<List<GridPos>> paths, List<GridPos> positions, int check, List<int> toBeRemoved, Plan plan, Type enterObjectType)
+    static void CheckMove(List<GridPos> visited, List<PathNode> pathNodes, int j, List<GridPos> positions, Plan plan, Type enterObjectType)
     {
         try
         {
             // from where
-            GridPos vec = paths[pathIndex][^1];
-            check = 0;
+            PathNode pathNode = pathNodes[j];
+            GridPos vec = pathNode.pos;
             for (int i = 0; i < 4; i++) // checks in every direction
             {
-                GridPos checkVec = new();
+                PathNode checkNode;
                 switch (i)
                 {
                     case 0:
-                        checkVec = new(vec.x + 1, vec.z); 
+                        checkNode = new(new(vec.x + 1, vec.z), pathNode); 
                         break;
                     case 1:
-                        checkVec = new(vec.x - 1, vec.z);
+                        checkNode = new(new(vec.x - 1, vec.z), pathNode);
                         break;
                     case 2:
-                        checkVec = new(vec.x, vec.z + 1);
+                        checkNode = new(new(vec.x, vec.z + 1), pathNode);
                         break;
                     case 3:
-                        checkVec = new(vec.x, vec.z - 1);
+                        checkNode = new(new(vec.x, vec.z - 1), pathNode);
                         break;
+                    default:
+                        continue;
                 }
-                if (visited.Where(q=>q.Equals(checkVec)).Count() == 0) // checks if already visited
+                if (visited.Where(q=>q.Equals(checkNode.pos)).Count() == 0) // checks if already visited
                 {
-                    visited.Add(checkVec);
-                    if (Check(checkVec, pathIndex, paths, positions, check, plan)) // if nothing found
+                    visited.Add(checkNode.pos);
+                    if (Check(checkNode, positions, plan)) // if nothing found
                     {
-                        if (CanEnter(checkVec, enterObjectType)) // if there is a road on the new position
+                        if (CanEnter(checkNode.pos, enterObjectType)) // if there is a road on the new position
                         {
-                            if (check == 0) // if first then add
-                            {
-                                paths[pathIndex].Add(checkVec);
-                                check++;
-                            }
-                            else // else create a new branch
-                            {
-                                paths.Add(paths[pathIndex].ToList());
-                                paths[^1][^1] = checkVec;
-                                check++;
-                            }
+                            pathNodes.Add(checkNode);
                         }
                     }
                     else
@@ -221,14 +214,10 @@ public static class PathFinder
                     }
                 }
             }
-            if (check == 0)
-            {
-                toBeRemoved.Add(pathIndex); // if none found from this position delete the whole path
-            }
         }
         catch (Exception e)
         {
-            Debug.LogWarning("haaha it's null you dumbass: " +paths.Count+ "\n"+ e); // log error
+            Debug.LogWarning("haaha it's null you dumbass: " + pathNodes.Count+ "\n"+ e); // log error
         }
 
         return;
@@ -248,13 +237,13 @@ public static class PathFinder
             return MyGrid.GetGridItem(vec).GetType() == t;
         }
     }
-    static bool Check(GridPos checkVec, int pathIndex, List<List<GridPos>> paths, List<GridPos> positions, int check, Plan plan)
+    static bool Check(PathNode checkNode, List<GridPos> positions, Plan plan)
     {
         int id = -1;
         int count = 0;
         foreach (GridPos pos in positions)
         {
-            if (checkVec.Equals(pos))
+            if (checkNode.pos.Equals(pos))
             {
                 id = count;
                 break;
@@ -263,13 +252,14 @@ public static class PathFinder
         }
         if (id > -1) // if there is an entry point or a job on the checkVec
         {
-            if (check != 0) // removes the last element of the path if there already is one
+            List<GridPos> path = new();
+            while(checkNode != null)
             {
-                paths[pathIndex].RemoveAt(paths[pathIndex].Count-1);
+                path.Add(checkNode.pos);
+                checkNode = checkNode.previus;
             }
-            paths[pathIndex].Add(checkVec); // add the new pos to the path
-            paths[pathIndex].RemoveAt(0);
-            plan.path.AddRange(paths[pathIndex].ToList());
+            path.Reverse();
+            plan.path = path;
             plan.index = id;
             return false;
         }
@@ -300,4 +290,6 @@ public static class PathFinder
         }
         return new(vec.x, vec.z);
     }
+
+    
 }
