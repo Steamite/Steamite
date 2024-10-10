@@ -13,6 +13,7 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] public ResearchUI research;
     [SerializeField] public Menu pauseMenu;
     [SerializeField] public InfoWindow infoWindow;
+    [SerializeField] public Trade tradeWindow;
 
     bool messageShown = false;
     void InitCanvases()

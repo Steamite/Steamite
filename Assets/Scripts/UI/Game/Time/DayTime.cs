@@ -12,10 +12,11 @@ public class DayTime : MonoBehaviour
 
     public Action nightStart;
     public Action dayStart;
+    public Action weekEnd;
 
     // time data
     int timeInMinutes = 12 * 60;
-    int numberOfDays = 0;
+    int numberOfDays = 5;
 
     [SerializeField] TMP_Text time;
 
@@ -24,11 +25,11 @@ public class DayTime : MonoBehaviour
         minutesPerTick = (int)(60f / ticksPerHour);
         tick.tickAction += UpdateTime;
 
-        transform.GetChild(0).GetComponent<TMP_Text>().text = "12:00";
-        transform.GetChild(1).GetComponent<TMP_Text>().text = "Day: 1";
-        transform.GetChild(2).GetComponent<TMP_Text>().text = "Week: 1";
-        transform.GetChild(3).GetComponent<TMP_Text>().text = "Month: 1";
-        transform.GetChild(4).GetComponent<TMP_Text>().text = "Year: 1";
+        transform.GetChild(0).GetComponent<TMP_Text>().text = $"{(timeInMinutes / 60).ToString().PadLeft(2, '0')}:{(timeInMinutes % 60).ToString().PadLeft(2, '0')}"; ;
+        transform.GetChild(1).GetComponent<TMP_Text>().text = $"Day: {(numberOfDays % 7) + 1}";
+        transform.GetChild(2).GetComponent<TMP_Text>().text = $"Week: {((numberOfDays % 28) / 7) + 1}";
+        transform.GetChild(3).GetComponent<TMP_Text>().text = $"Month: {((numberOfDays % 336) / 28) + 1}";
+        transform.GetChild(4).GetComponent<TMP_Text>().text = $"Year: {(numberOfDays / 336) + 1877}";
     }
 
     void UpdateTime()
@@ -41,6 +42,7 @@ public class DayTime : MonoBehaviour
                 numberOfDays++;
                 if (numberOfDays % 7 == 0)
                 {
+                    weekEnd?.Invoke();
                     if (numberOfDays % 28 == 0)
                     {
                         if (numberOfDays % 336 == 0)
@@ -54,12 +56,10 @@ public class DayTime : MonoBehaviour
                 transform.GetChild(1).GetComponent<TMP_Text>().text = $"Day: {(numberOfDays % 7)+1}";
                 break;
             case 1320:
-                if(nightStart != null)
-                    nightStart.Invoke();
+                    nightStart?.Invoke();
                 break;
             case 360:
-                if(dayStart != null)
-                    dayStart.Invoke();
+                    dayStart?.Invoke();
                 break;
         }
         time.text = $"{(timeInMinutes/60).ToString().PadLeft(2, '0')}:{(timeInMinutes%60).ToString().PadLeft(2, '0')}";

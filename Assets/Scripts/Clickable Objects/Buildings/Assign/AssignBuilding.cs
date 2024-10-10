@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class AssignBuilding : Building
 {
+
     [Header("Humans")]
     public List<Human> assigned = new();
     public int limit = 5;

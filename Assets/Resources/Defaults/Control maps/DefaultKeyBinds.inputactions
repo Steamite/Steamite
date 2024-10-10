@@ -371,6 +371,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Trade",
+                    "type": "Button",
+                    "id": "bb009f70-64a7-42d4-9f21-6c8e2943b5b4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -465,11 +474,22 @@
                 {
                     "name": "",
                     "id": "b642d4e6-f7ed-427a-bc4a-a6082a7fc743",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Research",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "66a7ae13-aa50-460d-8e93-fe59898d5c49",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Trade",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

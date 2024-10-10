@@ -11,12 +11,12 @@ public class Tick : MonoBehaviour
     public event Action tickAction;
     public Button lastButton;
 
-    public DayTime timeControler;
+    public DayTime timeController;
 
     public void AwakeTicks()
     {
         Time.timeScale = 5;
-        timeControler.Init(this);
+        timeController.Init(this);
         StartCoroutine(DoTick());
     }
 
@@ -50,7 +50,7 @@ public class Tick : MonoBehaviour
             else
                 lastTick++;
 
-            Debug.Log(lastTick);
+            //Debug.Log(lastTick);
         }
     }
 }

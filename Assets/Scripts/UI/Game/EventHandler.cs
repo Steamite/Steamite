@@ -13,7 +13,7 @@ public class EventHandler : MonoBehaviour
     InputAction menu => bindingMap.FindAction("Menu");
     InputAction shift => bindingMap.FindAction("Shift");
     InputAction research => bindingMap.FindAction("Research");
-
+    InputAction trade => bindingMap.FindAction("Trade");
 
     [SerializeField] public InputActionAsset inputAsset;
 
@@ -94,7 +94,12 @@ public class EventHandler : MonoBehaviour
 
         if (research.triggered)
         {
-            MyGrid.canvasManager.research.ToogleResearchUI();
+            MyGrid.canvasManager.research.ToggleWindow();
+        }
+
+        if (trade.triggered)
+        {
+            MyGrid.canvasManager.tradeWindow.ToggleWindow();
         }
     }
 }

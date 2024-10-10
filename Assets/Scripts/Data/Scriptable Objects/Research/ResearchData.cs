@@ -34,7 +34,7 @@ public class ResearchNode
         }
         catch
         {
-            Debug.Log("Somthing went wrong");
+            //Debug.Log("Somthing went wrong");
         }
         return false;
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class ResearchUI : MonoBehaviour
+public class ResearchUI : FullscreenWindow
 {
     //Variables
     private int selected_category;
@@ -12,8 +12,7 @@ public class ResearchUI : MonoBehaviour
     [Header("References")]
     [SerializeField] Transform categorySwitchesTran;
     [SerializeField] public Transform categoriesTran;
-    public Transform researchWindow;
-    ResearchBackend backend;
+    public ResearchBackend backend;
 
     [Header("Research open")]
     [SerializeField] public Image openResearchFill;
@@ -60,15 +59,14 @@ public class ResearchUI : MonoBehaviour
 
     void Initialize(ResearchCategory[] researches, int _currentResearch = -1)
     {
-        researchWindow = transform.GetChild(0);
-        researchWindow.gameObject.SetActive(true);
+        window.gameObject.SetActive(true);
         backend = gameObject.GetComponent<ResearchBackend>();
         backend.Init(this);
 
         BuildButtonHolder buildButtons = (BuildButtonHolder)Resources.Load("Holders/Data/BuildButton Data");
         InitializeBuildButtons(buildButtons);
         InitializeResearchButtons(buildButtons, researches, _currentResearch);
-        researchWindow.gameObject.SetActive(false);
+        window.gameObject.SetActive(false);
 
         // freeing useless prefabs
         buttonBuildPref = null;
@@ -112,7 +110,7 @@ public class ResearchUI : MonoBehaviour
     void InitializeResearchButtons(BuildButtonHolder buildButtons, ResearchCategory[] researches, int _currentResearch)
     {
         //screenScale = new(((float)Screen.width / 1920f), (float)Screen.height / 1080f);
-        Vector2 categWindowSize = researchWindow.GetChild(2).GetComponent<RectTransform>().rect.size;
+        Vector2 categWindowSize = new(1920, 1080);
         Transform buildCategTransform = MyGrid.canvasManager.buildMenu.GetChild(1);
         for (int i = 0; i < researches.Length; i++)
         {
@@ -343,7 +341,7 @@ public class ResearchUI : MonoBehaviour
         {
             elapsedProgress = Mathf.Lerp(elapsedProgress, backend.currentResearch.node.currentTime, Time.deltaTime * speed);
             float fill = elapsedProgress / backend.currentResearch.node.researchTime;
-            if (researchWindow.gameObject.activeSelf)
+            if (window.gameObject.activeSelf)
             {
                 backend.currentResearch.borderFill.fillAmount = fill;
                 MyGrid.canvasManager.infoWindow.researchTransform.GetChild(3).GetComponent<TMP_Text>().text
@@ -376,37 +374,16 @@ public class ResearchUI : MonoBehaviour
     //-------Toggling reaserchMenu-------\\
     //-----------------------------------\\
 
-    public void ToogleResearchUI()
+    public override void OpenWindow()
     {
-        if (gameObject.activeSelf)
-        {
-            CloseResearchUI();
-        }
-        else
-        {
-            OpenResearchUI();
-        }
+        base.OpenWindow();
+        backend.currentResearch?.StartAnim();
     }
 
-    //Opens the research UI
-    public void OpenResearchUI()
+    public override void CloseWindow()
     {
-        // open view Window
-        MyGrid.gridTiles.DeselectObjects();
-        MyGrid.canvasManager.infoWindow.gameObject.SetActive(false);
-        transform.GetChild(0).gameObject.SetActive(true);
-        if (backend.currentResearch)
-        {
-            backend.currentResearch.StartAnim();
-        }
+        backend.currentResearch?.EndAnim();
+        base.CloseWindow();
     }
 
-    //Closes the research UI
-    public void CloseResearchUI()
-    {
-        if (backend.currentResearch)
-            backend.currentResearch.EndAnim();
-        transform.GetChild(0).gameObject.SetActive(false);
-        MyGrid.canvasManager.infoWindow.gameObject.SetActive(false);
-    }
 }
