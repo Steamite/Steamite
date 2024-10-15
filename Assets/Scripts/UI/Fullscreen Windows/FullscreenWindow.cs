@@ -22,14 +22,17 @@ public class FullscreenWindow : MonoBehaviour
     {
         // open view Window
         MyGrid.gridTiles.DeselectObjects();
+        EventHandler.DisableInput();
         MyGrid.canvasManager.infoWindow.gameObject.SetActive(false);
-        window.gameObject.SetActive(true);
+        window.SetActive(true);
+
     }
 
     //Closes the research UI
     public virtual void CloseWindow()
     {
         window.SetActive(false);
+        EventHandler.EnableInput();
         MyGrid.canvasManager.infoWindow.gameObject.SetActive(false);
     }
 }

@@ -125,7 +125,7 @@ public class SaveController : MonoBehaviour
     void SavePlayerSettings()
     {
         PlayerSettings settings = new();
-        settings.priorities = GameObject.Find("Humans").GetComponent<JobQueue>().priority;
+        settings.priorities = MyGrid.sceneReferences.humans.GetComponent<JobQueue>().priority;
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{Application.persistentDataPath}/saves/{activeFolder}/PlayerSettings.json"));
         PrepSerializer().Serialize(jsonTextWriter, settings);
         jsonTextWriter.Close();
@@ -133,7 +133,7 @@ public class SaveController : MonoBehaviour
     void SaveHumans()
     {
         List<HumanSave> humanSave = new();
-        foreach (Human h in GameObject.Find("Humans").GetComponent<Humans>().humen)
+        foreach (Human h in MyGrid.sceneReferences.humans.GetComponent<Humans>().humen)
             humanSave.Add(new(h));
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{Application.persistentDataPath}/saves/{activeFolder}/Humans.json"));
         PrepSerializer().Serialize(jsonTextWriter, humanSave);

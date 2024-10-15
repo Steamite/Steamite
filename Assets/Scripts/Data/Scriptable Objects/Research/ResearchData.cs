@@ -157,7 +157,7 @@ public class ResearchCategory
     }
 }
 
-[CreateAssetMenu(fileName = "ResearchData", menuName = "ScriptableObjects/Research Holder", order = 2)]
+[CreateAssetMenu(fileName = "ResearchData", menuName = "UI Data/Research Holder", order = 2)]
 public class ResearchData : ScriptableObject
 {
     public BuildButtonHolder buildButtons;

@@ -55,11 +55,11 @@ public class ProductionBuilding : AssignBuilding
         pStates = (save as ProductionBSave).pStates;
         if (pStates.supply && pStates.supplied == false)
         {
-            GameObject.Find("Humans").GetComponent<JobQueue>().AddJob(JobState.Supply, this);
+            MyGrid.sceneReferences.humans.GetComponent<JobQueue>().AddJob(JobState.Supply, this);
         }
         if (build.constructed && GetDiff(new()).ammount.Sum() > 0)
         {
-            GameObject.Find("Humans").GetComponent<JobQueue>().AddJob(JobState.Pickup, this);
+            MyGrid.sceneReferences.humans.GetComponent<JobQueue>().AddJob(JobState.Pickup, this);
         }
         RefreshStatus();
         base.Load(save);
@@ -330,7 +330,7 @@ public class ProductionBuilding : AssignBuilding
 
     public void RequestRestock()
     {
-        JobQueue jQ = GameObject.Find("Humans").GetComponent<JobQueue>();
+        JobQueue jQ = MyGrid.sceneReferences.humans.GetComponent<JobQueue>();
         if (!jQ.supplyNeeded.Contains(this) && pStates.supply)
         {
             jQ.AddJob(JobState.Supply, this);
@@ -339,7 +339,7 @@ public class ProductionBuilding : AssignBuilding
 
     public void RequestPickup()
     {
-        JobQueue jQ = GameObject.Find("Humans").GetComponent<JobQueue>();
+        JobQueue jQ = MyGrid.sceneReferences.humans.GetComponent<JobQueue>();
         if (!jQ.pickupNeeded.Contains(this))
         {
             jQ.AddJob(JobState.Pickup, this);

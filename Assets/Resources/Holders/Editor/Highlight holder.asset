@@ -19,6 +19,9 @@ MonoBehaviour:
     objects:
     - MyCamera
     - Scene
+    - Overlays
+    - Research
+    - Interface
   - name: Humans
     backgroundColor: {r: 0.6509434, g: 0.19900389, b: 0, a: 1}
     textColor: {r: 1, g: 1, b: 1, a: 1}
@@ -33,7 +36,7 @@ MonoBehaviour:
     backgroundColor: {r: 0.14933477, g: 0.6509804, b: 0, a: 1}
     textColor: {r: 1, g: 1, b: 1, a: 1}
     objects:
-    - Research
+    - 
   - name: Trade
     backgroundColor: {r: 0.59942436, g: 0.6509804, b: 0, a: 1}
     textColor: {r: 1, g: 1, b: 1, a: 1}

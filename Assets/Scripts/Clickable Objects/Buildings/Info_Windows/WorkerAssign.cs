@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 public class WorkerAssign : MonoBehaviour
 {
     [SerializeField] GameObject buttonPrefab;
-    GameObject humans;
+    Transform humans;
     public AssignBuilding _building;
 
     public void FillStart(AssignBuilding _build)
     {
         _building = _build;
-        humans = GameObject.Find("Humans");
+        humans = MyGrid.sceneReferences.humans.transform;
         Transform ContentWorkers = transform.GetChild(0).GetChild(0).GetChild(0).transform; // content for assigned
         Transform ContentAssign = transform.GetChild(1).GetChild(0).GetChild(0).transform; // content for unassigned
 
@@ -22,13 +22,13 @@ public class WorkerAssign : MonoBehaviour
         if (_build.GetComponent<ProductionBuilding>())
         {
             // create buttons for humans without workplaces
-            humen = humans.transform.GetChild(0).GetComponentsInChildren<Human>().ToList();
+            humen = humans.GetChild(0).GetComponentsInChildren<Human>().ToList();
         }
         else
         {
             // create buttons for humans without homes
-            humen = humans.transform.GetChild(0).GetComponentsInChildren<Human>().ToList();
-            humen.AddRange(humans.transform.GetChild(1).GetComponentsInChildren<Human>().ToList());
+            humen = humans.GetChild(0).GetComponentsInChildren<Human>().ToList();
+            humen.AddRange(humans.GetChild(1).GetComponentsInChildren<Human>().ToList());
             humen.RemoveAll(q => _build.assigned.Contains(q) || q.home != null);
         }
         // create buttons for assigned humans
@@ -93,14 +93,14 @@ public class WorkerAssign : MonoBehaviour
         {
             if(add)
             {
-                Human human = humans.transform.GetChild(0).GetComponentsInChildren<Human>().Single(q => q.id == id);
+                Human human = humans.GetChild(0).GetComponentsInChildren<Human>().Single(q => q.id == id);
                 JobData jData = PathFinder.FindPath(
                     new List<ClickableObject>() { _building },
                     human);
                 if (jData.interest)
                 {
                     _building.assigned.Add(human);
-                    human.transform.SetParent(humans.transform.GetChild(1).transform);
+                    human.transform.SetParent(humans.GetChild(1).transform);
                     human.workplace = _building as ProductionBuilding;
                     human.jData.interest = jData.interest;
                     human.jData.job = JobState.FullTime;
@@ -118,17 +118,17 @@ public class WorkerAssign : MonoBehaviour
             }
             else
             {
-                Human human = humans.transform.GetChild(1).GetComponentsInChildren<Human>().Single(q => q.id == id);
+                Human human = humans.GetChild(1).GetComponentsInChildren<Human>().Single(q => q.id == id);
                 human.workplace = null;
                 _building.assigned.Remove(human);
-                human.transform.SetParent(humans.transform.GetChild(0).transform);
+                human.transform.SetParent(humans.GetChild(0).transform);
                 human.jData.job = JobState.Free;
                 human.Idle();
             }
         }
         else if (_building.GetComponent<House>())
         {
-            Human human = humans.transform.GetChild(0).GetComponentsInChildren<Human>().Union(humans.transform.GetChild(1).GetComponentsInChildren<Human>()).Single(q => q.id == id);
+            Human human = humans.GetChild(0).GetComponentsInChildren<Human>().Union(humans.GetChild(1).GetComponentsInChildren<Human>()).Single(q => q.id == id);
             if (add)
             {
                 human.home = _building.GetComponent<House>();

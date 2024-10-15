@@ -7,8 +7,8 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class DayTime : MonoBehaviour
 {
-    float ticksPerHour = 4;
-    int minutesPerTick;
+    [SerializeField]float ticksPerHour = 4;
+    [SerializeField]int minutesPerTick;
 
     public Action nightStart;
     public Action dayStart;

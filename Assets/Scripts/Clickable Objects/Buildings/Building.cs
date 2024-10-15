@@ -77,7 +77,7 @@ public class Building : StorageObject
             GetComponent<SortingGroup>().sortingLayerName = "Buildings";
             if (build.deconstructing)
             {
-                GameObject.Find("Humans").GetComponent<JobQueue>().AddJob(JobState.Deconstructing, this);
+                MyGrid.sceneReferences.humans.GetComponent<JobQueue>().AddJob(JobState.Deconstructing, this);
             }
 
         }
@@ -166,7 +166,7 @@ public class Building : StorageObject
 
     public virtual void OrderDeconstruct()
     {
-        JobQueue queue = GameObject.Find("Humans").GetComponent<JobQueue>();
+        JobQueue queue = MyGrid.sceneReferences.humans.GetComponent<JobQueue>();
         if (build.constructed) // if contructed
         {
             // if there isn't a deconstruction order yet
