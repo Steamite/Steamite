@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using System;
+using UnityEngine.Rendering;
 
 [Serializable]
 public class Resource
@@ -53,4 +54,14 @@ public class Resource
         return true;
     }
     public override int GetHashCode() { return base.GetHashCode(); }
+
+    public override string ToString()
+    {
+        string s = "";
+        for (int i = 0; i < type.Count; i++)
+        {
+            s += $"{type[i]}: {ammount[i]}";
+        }
+        return s;
+    }
 }

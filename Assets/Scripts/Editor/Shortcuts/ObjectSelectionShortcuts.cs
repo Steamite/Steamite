@@ -14,12 +14,12 @@ public class ObjectSelectionShortcuts : MonoBehaviour
         Selection.activeGameObject = gameObject;
     }
 
-    [MenuItem("Custom Editors/Selection/ research view _2", priority = -1)]
+    [MenuItem("Custom Editors/Selection/ trade view _2", priority = -1)]
     static public void SelectResearch()
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = GameObject.Find("UI canvas").GetComponent<CanvasManager>().research.gameObject;
+        GameObject gameObject = GameObject.Find("UI canvas").GetComponent<CanvasManager>().tradeWindow.window.transform.GetChild(2).GetChild(1).GetChild(1).gameObject;
         Selection.activeGameObject = gameObject;
     }
 
@@ -46,7 +46,7 @@ public class ObjectSelectionShortcuts : MonoBehaviour
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = GameObject.Find("UI canvas").GetComponent<CanvasManager>().stats.GetChild(1).gameObject;
+        GameObject gameObject = GameObject.Find("UI canvas").GetComponent<CanvasManager>().stats.GetChild(1).GetChild(0).gameObject;
         Selection.activeGameObject = gameObject;
     }
     #endif

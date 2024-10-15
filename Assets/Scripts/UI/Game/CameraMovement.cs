@@ -43,6 +43,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] float maxPan = 0.1f;
     
     float mod;
+
     private void OnEnable()
     {
         currentMovementX = 0;
@@ -56,11 +57,9 @@ public class CameraMovement : MonoBehaviour
         cameraMap.Disable();
     }
 
+
     void Update()
     {
-        if (MyGrid.canvasManager && (MyGrid.canvasManager.pauseMenu.gameObject.activeSelf || MyGrid.canvasManager.research.window.gameObject.activeSelf))
-            return;
-
         mod = Input.GetKey(KeyCode.LeftShift) ? 2 : 1;
         mod *= Time.timeScale;
 

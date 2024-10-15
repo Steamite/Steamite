@@ -327,7 +327,7 @@ public class LoadingScreen : MonoBehaviour
         MyGrid.canvasManager.buildMenu.GetChild(2).GetComponent<PreBuildInfo>().SetUp();
         MyGrid.sceneReferences.GetComponent<SaveController>().activeFolder = folderName;
         MyGrid.canvasManager.stats.GetChild(0).GetChild(1).GetComponent<TimeButtons>().tick = MyGrid.sceneReferences.GetComponent<Tick>();
-        MyGrid.canvasManager.tradeWindow.Init(new("Snowlandia", 1, 4));
+        MyGrid.canvasManager.tradeWindow.Init();
 
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = MyGrid.gridTiles.defaultMask;
         Camera.main.GetComponent<PhysicsRaycaster>().enabled = true;

@@ -11,6 +11,7 @@ public enum ResourceType
     Metal,
     Stone,
     Food,
+    Wood,
 }
 
 public static class MyRes
@@ -21,7 +22,10 @@ public static class MyRes
     public static List<TMP_Text> textFields = new();
     public static int globalStorageSpace;
     public static int storageResources = 4;
+    public static int money = 1000;
+    public static TMP_Text moneyField;
     static Storage[] storage;
+
     /// <summary>
     /// Starting function for the resource system.
     /// </summary>
@@ -36,8 +40,8 @@ public static class MyRes
             FillRes();
             globalStorageSpace = 0;
 
-            storage = GameObject.Find("Buildings").GetComponentsInChildren<Storage>();
-            JobQueue jQ = GameObject.Find("Humans").GetComponent<JobQueue>();
+            storage = MyGrid.buildings.Select(q => q.GetComponent<Storage>()).Where(q => q != null).ToArray();
+            JobQueue jQ = MyGrid.sceneReferences.humans.GetComponent<JobQueue>();
             foreach (Storage _s in storage)
             {
                 if (setupStorages)
@@ -53,6 +57,8 @@ public static class MyRes
             {
                 textFields.Add(resourceInfo.GetChild(i).GetChild(0).GetComponent<TMP_Text>());
             }
+            moneyField = resourceInfo.parent.GetChild(1).GetChild(0).GetComponent<TMP_Text>();
+            UpdateMoneyText();
             UpdateResText();
         }
         catch (Exception e)
@@ -84,6 +90,16 @@ public static class MyRes
         {
             textFields[i].text = resources.ammount[i].ToString();
         }
+    }
+
+    public static void ManageMoney(int change)
+    {
+        money += change;
+        UpdateMoneyText();
+    }
+    static void UpdateMoneyText()
+    {
+        moneyField.text = money.ToString();
     }
 
     /// <summary>
@@ -233,7 +249,7 @@ public static class MyRes
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+            Debug.LogError($"{destination}, {e}");
             return false;
         }
         

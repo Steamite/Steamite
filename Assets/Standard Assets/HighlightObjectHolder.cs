@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Highlight holder", menuName = "ScriptableObjects/Highlight Holder", order = 1)]
+[CreateAssetMenu(fileName = "Highlight holder", menuName = "Editor/Highlight Holder", order = 1)]
 public class HighlightObjectHolder : ScriptableObject
 {
 
-    [SerializeField] public List<HighlightObject> highlightObjects = new();
+    [SerializeField] public List<HighlightObject> highlightObjects;
 
     public int FindObject(string _name)
     {

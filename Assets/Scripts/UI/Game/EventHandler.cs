@@ -16,6 +16,20 @@ public class EventHandler : MonoBehaviour
     InputAction trade => bindingMap.FindAction("Trade");
 
     [SerializeField] public InputActionAsset inputAsset;
+    static bool handleGrid = true;
+    static bool handleWindows = true;
+    public static void DisableInput(bool win = true)
+    {
+        handleGrid = false;
+        handleWindows = win;
+        MyGrid.sceneReferences.levelCamera.enabled = false;
+    }
+    public static void EnableInput(bool win = true)
+    {
+        handleGrid = true;
+        handleWindows = win;
+        MyGrid.sceneReferences.levelCamera.enabled = true;
+    }
 
     private void OnEnable()
     {
@@ -29,59 +43,57 @@ public class EventHandler : MonoBehaviour
     void Update()
     {
         GridTiles gt = MyGrid.gridTiles;
-        // toggle build menu
-        if (buildMenu.triggered)
+        if (handleGrid)
         {
-            Transform buildMenu = MyGrid.canvasManager.buildMenu.transform;
-            Transform categories = buildMenu.GetChild(1);
-            buildMenu.gameObject.SetActive(!buildMenu.gameObject.activeSelf);
-            if (buildMenu.gameObject.activeSelf)
+            // toggle build menu
+            if (buildMenu.triggered)
             {
-                for (int i = 0; i < categories.childCount; i++)
+                Transform buildMenu = MyGrid.canvasManager.buildMenu.transform;
+                Transform categories = buildMenu.GetChild(1);
+                buildMenu.gameObject.SetActive(!buildMenu.gameObject.activeSelf);
+                if (buildMenu.gameObject.activeSelf)
                 {
-                    categories.GetChild(i).gameObject.SetActive(false);
+                    for (int i = 0; i < categories.childCount; i++)
+                    {
+                        categories.GetChild(i).gameObject.SetActive(false);
+                    }
+                    buildMenu.GetChild(1).gameObject.SetActive(false);
+                    buildMenu.GetChild(2).gameObject.SetActive(false);
                 }
-                buildMenu.GetChild(1).gameObject.SetActive(false);
-                buildMenu.GetChild(2).gameObject.SetActive(false);
             }
-        }
-        // toggle dig
-        if (dig.triggered)
-        {
-            gt.ChangeSelMode(SelectionMode.dig);
-            gt.Exit(gt.activeObject);
-            gt.Enter(gt.activeObject);
-        }
-        // toggle deconstruct
-        else if (deconstruction.triggered)
-        {
-            gt.ChangeSelMode(SelectionMode.deconstruct);
-            gt.Exit(gt.activeObject);
-            gt.Enter(gt.activeObject);
-        }
-        // rotates buildign
-        else if (buildRotate.triggered)
-        {
-            float axis = buildRotate.ReadValue<float>();
-            if(MyGrid.gridTiles.selMode == SelectionMode.build)
+            // toggle dig
+            if (dig.triggered)
             {
-                if (MyGrid.gridTiles.buildBlueprint.GetComponent<Pipe>())
-                    return;
-                if (axis < 0)
-                {
-                    MyGrid.gridTiles.buildBlueprint.transform.Rotate(new Vector3(0, 90, 0));
-                }
-                else
-                {
-                    MyGrid.gridTiles.buildBlueprint.transform.Rotate(new Vector3(0, -90, 0));
-                }
-                MyGrid.gridTiles.Enter(MyGrid.gridTiles.activeObject);
+                gt.ChangeSelMode(SelectionMode.dig);
+                gt.Exit(gt.activeObject);
+                gt.Enter(gt.activeObject);
             }
-        }
-        // opens ingame menu
-        if (menu.triggered)
-        {
-            MyGrid.canvasManager.pauseMenu.Toggle();
+            // toggle deconstruct
+            else if (deconstruction.triggered)
+            {
+                gt.ChangeSelMode(SelectionMode.deconstruct);
+                gt.Exit(gt.activeObject);
+                gt.Enter(gt.activeObject);
+            }
+            // rotates buildign
+            else if (buildRotate.triggered)
+            {
+                float axis = buildRotate.ReadValue<float>();
+                if (MyGrid.gridTiles.selMode == SelectionMode.build)
+                {
+                    if (MyGrid.gridTiles.buildBlueprint.GetComponent<Pipe>())
+                        return;
+                    if (axis < 0)
+                    {
+                        MyGrid.gridTiles.buildBlueprint.transform.Rotate(new Vector3(0, 90, 0));
+                    }
+                    else
+                    {
+                        MyGrid.gridTiles.buildBlueprint.transform.Rotate(new Vector3(0, -90, 0));
+                    }
+                    MyGrid.gridTiles.Enter(MyGrid.gridTiles.activeObject);
+                }
+            }
         }
 
         if (shift.inProgress)
@@ -92,14 +104,23 @@ public class EventHandler : MonoBehaviour
             }
         }
 
-        if (research.triggered)
+        if (handleWindows)
         {
-            MyGrid.canvasManager.research.ToggleWindow();
+            if (research.triggered)
+            {
+                MyGrid.canvasManager.tradeWindow.CloseWindow();
+                MyGrid.canvasManager.research.ToggleWindow();
+            }
+            if (trade.triggered)
+            {
+                MyGrid.canvasManager.research.CloseWindow();
+                MyGrid.canvasManager.tradeWindow.ToggleWindow();
+            }
         }
-
-        if (trade.triggered)
+        // opens ingame menu
+        if (menu.triggered)
         {
-            MyGrid.canvasManager.tradeWindow.ToggleWindow();
+            MyGrid.canvasManager.pauseMenu.Toggle();
         }
     }
 }

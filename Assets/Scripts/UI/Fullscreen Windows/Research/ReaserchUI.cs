@@ -63,7 +63,7 @@ public class ResearchUI : FullscreenWindow
         backend = gameObject.GetComponent<ResearchBackend>();
         backend.Init(this);
 
-        BuildButtonHolder buildButtons = (BuildButtonHolder)Resources.Load("Holders/Data/BuildButton Data");
+        BuildButtonHolder buildButtons = (BuildButtonHolder)Resources.Load("Holders/Models/BuildButton Data");
         InitializeBuildButtons(buildButtons);
         InitializeResearchButtons(buildButtons, researches, _currentResearch);
         window.gameObject.SetActive(false);

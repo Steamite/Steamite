@@ -13,7 +13,7 @@ public class BuildCategWrapper
     [SerializeField] public List<Building> buildings;
 }
 
-[CreateAssetMenu(fileName = "BuildButtonCategory", menuName = "ScriptableObjects/BuildButton Holder", order = 1)]
+[CreateAssetMenu(fileName = "BuildButtonCategory", menuName = "UI Data/BuildButton Holder", order = 1)]
 public class BuildButtonHolder : ScriptableObject
 {
     /// <summary>

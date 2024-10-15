@@ -6,7 +6,7 @@ public class SceneReferences : MonoBehaviour
 {
     public Transform eventSystem;
     public Humans humans;
-    public Transform levelCamera;
+    public CameraMovement levelCamera;
     public List<GroundLevel> levels;
 
     //public GameObject

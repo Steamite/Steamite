@@ -11,7 +11,7 @@ using System.Xml.Linq;
 public class HierarchyObjectColor
 {
     private static Vector2 offset = new Vector2(20, 1);
-    static HighlightObjectHolder highlightObjects = new();
+    static HighlightObjectHolder highlightObjects;
     static Texture2D icon;
     
     static HierarchyObjectColor()
