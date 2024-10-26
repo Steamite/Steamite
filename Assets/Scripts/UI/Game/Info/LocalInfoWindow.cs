@@ -1,55 +1,80 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PreBuildInfo : UIBehaviour
+public class LocalInfoWindow : UIBehaviour
 {
     RectTransform rectTransform;
     Canvas c;
     GridPos gridPos = new();
-    bool isSet = false;
-    enum status{
+    Status status = Status.notSet;
+    enum Status{
         notSet,
-        set
+        set,
+        buildings,
+        expeditions
     }
 
     public void SetUp()
     {
         rectTransform = (RectTransform)transform;
         c = transform.parent.GetComponent<Canvas>();
-        isSet = true;
+        status = Status.set;
     }
     protected override void OnRectTransformDimensionsChange()
     {
-        if(isSet)
+        if(status == Status.buildings)
         {
             float canvasHeight = c.renderingDisplaySize.y;// * c.scaleFactor;
-            //print(canvasHeight);
             rectTransform.anchoredPosition = new(gridPos.x, (gridPos.z + ((canvasHeight / 13) + (rectTransform.rect.height / 2)))* c.scaleFactor);
             
             transform.gameObject.SetActive(true);
         }
+        else if(status == Status.expeditions)
+        {
+            float canvasHeight = c.renderingDisplaySize.y;// * c.scaleFactor;
+            rectTransform.anchoredPosition = new(gridPos.x, (gridPos.z * c.scaleFactor));
+
+            transform.gameObject.SetActive(true);
+        }
     }
+    //-----------Display options-------------//
     public void DisplayInfo(Building prefab, Vector3 pos)
     {
         // triggers on button enter, works after setingUp
-        if(isSet)
+        if(status != Status.notSet)
         {
+            status = Status.buildings;
             gridPos = new(pos.x, pos.y);
             print(prefab.name);
             transform.GetChild(0).GetComponent<TMP_Text>().text = prefab.name;
             transform.GetChild(1).GetComponent<TMP_Text>().text = string.Join('\n', prefab.GetInfoText());
             transform.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 100);
+            gameObject.SetActive(true);
         }
     }
+
+    public void DisplayInfo(TradeExpedition expedition, Vector3 pos)
+    {
+        // triggers on button enter, works after setingUp
+        if (status != Status.notSet)
+        {
+            status = Status.expeditions;
+            gridPos = new(pos.x, pos.y - 40);
+            print(gridPos);
+            transform.GetChild(0).GetComponent<TMP_Text>().text = expedition.tradeLocation.ToString();
+            transform.GetChild(1).GetComponent<TMP_Text>().text = string.Join('\n', expedition.goingToTrade);
+            transform.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 100);
+            gameObject.SetActive(true);
+        }
+    }
+
+
     void OnApplicationPause()
     {
         HideInfo();
     }
+
     public void HideInfo()
     {
         gameObject.SetActive(false);

@@ -64,7 +64,7 @@ public class ResearchEditor : EditorWindow
 
     void SwitchCategory()
     {
-        string[] tabs = researchData.categories.Select(q => $"{q.categName} ({q.nodes.Count})").Append("create new").ToArray();
+        string[] tabs = researchData.categories.Select(q => $"{q.categName} ({q.nodes.Count(q => q.buildButton > -1)})").Append("create new").ToArray();
         selTab = EditorGUI.Popup(new(0, 0, 200, 20), selTab, tabs);
         int i = Event.current.button;
         if ((destroing || connecting) && (i == 1 || i == 2))
@@ -127,7 +127,7 @@ public class ResearchEditor : EditorWindow
                     GUI.contentColor = Color.white;
                     if (GUI.Button(new(845, 0, 100, 20), new GUIContent("add node")) && level > -1 && level < 5)
                     {
-                        int headCount = researchData.categories[selTab].nodes.Where(q=> q.gp.level == level).Count();
+                        int headCount = researchData.categories[selTab].nodes.Where(q=> q.gp.y == level).Count();
                         if(headCount < 5)
                         {
                             if (researchData.categories[selTab].nodes.Count > 0)
@@ -161,20 +161,20 @@ public class ResearchEditor : EditorWindow
         {
             for (int i = 0; i < 5; i++)
             {
-                List<ResearchNode> nodes = researchData.categories[selTab].nodes.Where(q => q.gp.level == i).ToList();
+                List<ResearchNode> nodes = researchData.categories[selTab].nodes.Where(q => q.gp.y == i).ToList();
                 float startX = (position.width / 2) - nodeWidth / 2 - ((nodes.Count - 1) * (nodeSpace / 2));
                 if (startX > 0)
                 {
                     foreach (ResearchNode node in nodes)
                     {
                         node.gp.x = startX;
-                        node.gp.z = 20 + ((nodeHeight + 50) * node.gp.level);
+                        node.gp.z = 20 + ((nodeHeight + 50) * node.gp.y);
                         node.realX = (node.gp.x + nodeWidth / 2f) * (1920f / 1234f);
                         startX += nodeSpace;
                     }
                 }
             }
-            researchData.categories[selTab].nodes = researchData.categories[selTab].nodes.OrderBy(q => q.gp.level).ToList();
+            researchData.categories[selTab].nodes = researchData.categories[selTab].nodes.OrderBy(q => q.gp.y).ToList();
             EditorUtility.SetDirty(researchData);
         }
     }
@@ -287,7 +287,7 @@ public class ResearchEditor : EditorWindow
     }
     bool InConnectionButton(ResearchNode node)
     {
-        if (connecting && selectedNode != node && !node.unlockedBy.Contains(selectedNode.id) && node.gp.level > selectedNode.gp.level)
+        if (connecting && selectedNode != node && !node.unlockedBy.Contains(selectedNode.id) && node.gp.y > selectedNode.gp.y)
             GUI.backgroundColor = Color.green;
         else
             GUI.backgroundColor = Color.gray;

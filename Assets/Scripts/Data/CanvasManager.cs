@@ -15,6 +15,7 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] public InfoWindow infoWindow;
     [SerializeField] public Trade tradeWindow;
 
+
     bool messageShown = false;
     void InitCanvases()
     {
@@ -31,7 +32,7 @@ public class CanvasManager : MonoBehaviour
     IEnumerator MessageToggle(string text)
     {
         messageShown = true;
-        GameObject g = MyGrid.canvasManager.miscellaneous.GetChild(1).gameObject;
+        GameObject g = MyGrid.canvasManager.miscellaneous.GetChild(0).gameObject;
         g.GetComponent<TMP_Text>().text = text;
         g.SetActive(true);
         yield return new WaitForSecondsRealtime(2f);

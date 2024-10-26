@@ -12,17 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad094dab82e60b4ca090c2de0aff2de, type: 3}
   m_Name: Trade Data
   m_EditorClassIdentifier: 
-  startingLocations: []
+  startingLocations:
+  - name: Snowlandia
+    passiveProductions:
+    - productionName: Workforce
+      currentProduction: 2
+      maxProduction: 5
+    - productionName: Water
+      currentProduction: 3
+      maxProduction: 3
+    - productionName: Wood
+      currentProduction: 2
+      maxProduction: 4
+    - productionName: Food
+      currentProduction: 4
+      maxProduction: 5
+    stats:
+    - productionName: Trade
+      currentProduction: 3
+      maxProduction: 5
   tradeLocations:
   - name: Dean Forrest
-    selling:
-    - name: Coal
-      type: 0
-      cost: 4
+    wantToSell:
     - name: Wood
       type: 4
       cost: 2
-    buying:
+    - name: Coal
+      type: 0
+      cost: 3
+    wantToBuy:
     - name: Metal
       type: 1
+      cost: 4
+  - name: Wye valley
+    wantToSell:
+    - name: Food
+      type: 3
+      cost: 1
+    wantToBuy:
+    - name: Coal
+      type: 0
       cost: 2
+    - name: Metal
+      type: 1
+      cost: 4

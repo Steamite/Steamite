@@ -125,7 +125,7 @@ public class ResearchUI : FullscreenWindow
             {
                 if (node.buildButton > -1)
                 {
-                    ResearchUIButton researchButton = Instantiate(researchButtonPref, categ.GetChild((int)node.gp.level + 1).transform);
+                    ResearchUIButton researchButton = Instantiate(researchButtonPref, categ.GetChild((int)node.gp.y + 1).transform);
                     researchButton.Initialize(
                         node,
                         researchCategory.nodes);
@@ -168,8 +168,8 @@ public class ResearchUI : FullscreenWindow
         if (unlockedByButton.unlocksLines.Count == 0)
         {
             lineTransform = InitLine(categ, false);
-            lineTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ((button.node.gp.level - unlockedByButton.node.gp.level) * 200 - 150));
-            lineTransform.anchoredPosition = new((unlockedByButton.node.realX) - (categSize.x / 2), -(((button.node.gp.level + unlockedByButton.node.gp.level) * 200 + 150) / 2) + (1080 * 0.4625f));
+            lineTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ((button.node.gp.y - unlockedByButton.node.gp.y) * 200 - 150));
+            lineTransform.anchoredPosition = new((unlockedByButton.node.realX) - (categSize.x / 2), -(((button.node.gp.y + unlockedByButton.node.gp.y) * 200 + 150) / 2) + (1080 * 0.4625f));
             unlockedByButton.unlocksLines.Add(lineTransform.GetComponent<Image>());
         }
 
@@ -178,7 +178,7 @@ public class ResearchUI : FullscreenWindow
         {
             lineTransform = InitLine(categ, false);
             lineTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 40);
-            lineTransform.anchoredPosition = new(button.GetComponent<RectTransform>().anchoredPosition.x, -((button.node.gp.level * 200 + 20)) + (1080 * 0.4625f));
+            lineTransform.anchoredPosition = new(button.GetComponent<RectTransform>().anchoredPosition.x, -((button.node.gp.y * 200 + 20)) + (1080 * 0.4625f));
             button.unlockedByLines.Add(lineTransform.GetComponent<Image>());
         }
         unlockedByButton.unlocksLines.Add(button.unlockedByLines[0]);
@@ -188,7 +188,7 @@ public class ResearchUI : FullscreenWindow
         {
             lineTransform = InitLine(categ, true);
             lineTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (Mathf.Abs(button.node.realX - unlockedByButton.node.realX) + 5));
-            lineTransform.anchoredPosition = new((((button.node.realX + unlockedByButton.node.realX)) - categSize.x) / 2, -((button.node.gp.level * 200)) + (1080 * 0.4625f));
+            lineTransform.anchoredPosition = new((((button.node.realX + unlockedByButton.node.realX)) - categSize.x) / 2, -((button.node.gp.y * 200)) + (1080 * 0.4625f));
             button.unlockedByLines.Add(lineTransform.GetComponent<Image>());
             unlockedByButton.unlocksLines.Add(button.unlockedByLines[^1]);
         }
@@ -225,11 +225,14 @@ public class ResearchUI : FullscreenWindow
             rect.anchoredPosition = new(0, 0);
         else
             rect.anchoredPosition = new(-1519, 0);
-        rect.parent.gameObject.SetActive(true);
         if (selectedButton == button)
+        {
             selectedButton = null;
+            rect.parent.gameObject.SetActive(false);
+        }
         else
         {
+            rect.parent.gameObject.SetActive(true);
             selectedButton = button;
             UpdateInfoWindow(selectedButton);
         }
@@ -382,6 +385,7 @@ public class ResearchUI : FullscreenWindow
 
     public override void CloseWindow()
     {
+        selectedButton = null;
         backend.currentResearch?.EndAnim();
         base.CloseWindow();
     }

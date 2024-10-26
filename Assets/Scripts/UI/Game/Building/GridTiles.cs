@@ -125,7 +125,7 @@ public class GridTiles : MonoBehaviour
                     Build __b = buildBlueprint.build;
                     GridPos grid = MyGrid.CheckRotation(__b.blueprint.moveBy, buildBlueprint.transform.eulerAngles.y);
                     grid = new(activePos.x + grid.x, buildBlueprint.transform.position.y, activePos.z + grid.z);
-                    buildBlueprint.transform.position = new(grid.x, grid.level, grid.z);
+                    buildBlueprint.transform.position = new(grid.x, grid.y, grid.z);
                     c = buildBlueprint.CanPlace() ? Color.blue : Color.red;
                     HighLight(c, buildBlueprint.gameObject);
                 }

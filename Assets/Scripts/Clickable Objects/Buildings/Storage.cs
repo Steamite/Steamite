@@ -97,6 +97,10 @@ public class Storage : Building
     public virtual void SetupStorage(Resource templateRes, JobQueue jQ)
     {
         localRes.stored.type = templateRes.type;
+        while(localRes.stored.ammount.Count < templateRes.type.Count)
+        {
+            localRes.stored.ammount.Add(0);
+        }
         jQ.storages.Add(this);
     }
 }

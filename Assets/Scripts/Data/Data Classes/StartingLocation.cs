@@ -26,12 +26,21 @@ public class StartingLocation
     public string name;
 
     [SerializeField] public List<PassiveProduction> passiveProductions;
+    [SerializeField] public List<PassiveProduction> stats;
 
     public int GetCurrentProduction(string prodName)
     {
         int i = passiveProductions.FindIndex(q => q.productionName == prodName);
         if (i > -1)
             return passiveProductions[i].currentProduction;
+        return -1;
+    }
+
+    public int GetCurrentStats(string prodName)
+    {
+        int i = stats.FindIndex(q => q.productionName == prodName);
+        if (i > -1)
+            return stats[i].currentProduction;
         return -1;
     }
 

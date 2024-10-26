@@ -6,13 +6,10 @@ using UnityEngine.UI;
 
 public class TradeInputField : MonoBehaviour
 {
+    //[SerializeField] bool is
     public void UpdateTradeCost()
     {
         TMP_InputField inputField = gameObject.GetComponent<TMP_InputField>();
-
-        if (inputField.text.Length > 0 && inputField.text[0] == '0')
-            inputField.text = inputField.text.Remove(0);
-        else
-            MyGrid.canvasManager.tradeWindow.tradeInfo.UpdateTradeText();
+        MyGrid.canvasManager.tradeWindow.tradeInfo.UpdateTradeText();
     }
 }

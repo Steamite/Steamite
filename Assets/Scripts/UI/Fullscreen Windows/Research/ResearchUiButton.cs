@@ -42,12 +42,12 @@ public class ResearchUIButton : MonoBehaviour
             Complete(true);
             return;
         }
-        else if(node.gp.level == 0 || node.unlockedBy.All(q => nodes.Find(x=> x.id == q).researched))
+        else if(node.gp.y == 0 || node.unlockedBy.All(q => nodes.Find(x=> x.id == q).researched))
         {
             state = ButtonState.Available;
             Recolor();
             if (node.researchTime == 0)
-                Debug.LogError($"researchTime not set: {node.gp.level}, {name}");
+                Debug.LogError($"researchTime not set: {node.gp.y}, {name}");
             borderFill.fillAmount = node.currentTime / node.researchTime;
         }
         else
