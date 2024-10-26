@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -10,23 +12,39 @@ public class Trade : FullscreenWindow
     [SerializeField] Transform pasProdTran;
     [SerializeField] TMP_Text header;
 
-    [Header("Colors")]
+    [Header("Customizables")]
     [SerializeField] Color unavailableColor;
     [SerializeField] Color productionColor;
+    [SerializeField] float expeditionSpeed;
 
     [Header("Data")]
-    [SerializeField] StartingLocation colonyLocation;
+    [SerializeField] public StartingLocation colonyLocation;
     [SerializeField] List<TradeLocation> tradeLocations;
 
+    public List<TradeExpedition> expeditions;
+
+    int lastIndex = -2;
     public override void OpenWindow()
     {
         base.OpenWindow();
+        lastIndex = -2;
         SelectButton(-1);
+        if(expeditions.Count > 0)
+        {
+            StartCoroutine(MoveTradeRoute());
+        }
+    }
+    public override void CloseWindow()
+    {
+        base.CloseWindow();
+        StopCoroutine(MoveTradeRoute());
     }
 
     public void Init()
     {
         MyGrid.sceneReferences.GetComponent<Tick>().timeController.weekEnd += DoPassiveProduction;
+        MyGrid.sceneReferences.GetComponent<Tick>().tickAction += MoveTradeRouteProgress;
+
         TradeHolder tradeHolder = (TradeHolder)Resources.Load("Holders/Data/Trade Data");
         tradeLocations = tradeHolder.tradeLocations;
         header.text = colonyLocation.name;
@@ -43,6 +61,7 @@ public class Trade : FullscreenWindow
                     cat.GetChild(j).GetComponent<Image>().color = productionColor;
             }
         }
+        expeditions = new();
     }
 
     public void DoPassiveProduction()
@@ -61,6 +80,12 @@ public class Trade : FullscreenWindow
 
     public void SelectButton(int index)
     {
+        if (index == lastIndex)
+            return;
+        if(lastIndex != -2)
+            window.transform.GetChild(1).GetChild(lastIndex + 1).GetChild(0).GetComponent<Animator>().SetTrigger("unselected");
+        lastIndex = index;
+        window.transform.GetChild(1).GetChild(index + 1).GetChild(0).GetComponent<Animator>().SetTrigger("selected");
         if(index == -1)
         {
             tradeInfo.transform.parent.GetChild(0).gameObject.SetActive(true);
@@ -72,6 +97,53 @@ public class Trade : FullscreenWindow
             tradeInfo.transform.parent.GetChild(0).gameObject.SetActive(false);
             tradeInfo.gameObject.SetActive(true);
             header.text = tradeInfo.ChangeTradeLocation(tradeLocations[index]);
+        }
+    }
+
+    public void StartExpediton(TradeExpedition expedition)
+    {
+        Slider slider = window.transform.GetChild(0).GetChild(0).GetChild(lastIndex).GetComponent<Slider>();
+        slider.value = 0;
+        slider.maxValue = Vector3.Distance(slider.transform.position, window.transform.GetChild(1).GetChild(lastIndex + 1).transform.position);
+        slider.handleRect.GetComponent<ExpeditionInfo>().SetExpedition(expedition);
+        expedition.tradeLocation = lastIndex;
+        expedition.maxProgress = slider.maxValue;
+        expeditions.Add(expedition);
+        if (expeditions.Count == 1)
+        {
+            StartCoroutine(MoveTradeRoute());
+        }
+    }
+
+    void MoveTradeRouteProgress()
+    {
+        foreach(TradeExpedition exp in expeditions)
+        {
+            exp.currentProgress += exp.goingToTrade ? 4 : -4;
+        }
+    }
+
+    IEnumerator MoveTradeRoute()
+    {
+        while (true)
+        {
+            for(int i = expeditions.Count -1; i >= 0; i--)
+            {
+                TradeExpedition exp = expeditions[i];
+                Slider slider = window.transform.GetChild(0).GetChild(0).GetChild(exp.tradeLocation).GetComponent<Slider>();
+                slider.value = Mathf.Lerp(slider.value, exp.currentProgress, expeditionSpeed * Time.deltaTime * Time.timeScale);
+                slider.handleRect.GetComponent<ExpeditionInfo>().MoveInfo();
+                if(exp.goingToTrade ? slider.value >= slider.maxValue : slider.value <= 0)
+                {
+                    if (exp.FinishExpedition())
+                    {
+                        expeditions.RemoveAt(i);
+                        if (expeditions.Count == 0)
+                            yield break;
+                    }
+                }
+            }
+            yield return null;
         }
     }
 }

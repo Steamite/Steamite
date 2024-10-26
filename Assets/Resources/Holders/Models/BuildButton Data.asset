@@ -20,7 +20,7 @@ MonoBehaviour:
     buildings:
     - {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
     - {fileID: 62586701505083539, guid: e184e054e4d44194395af0d43ebb55a0, type: 3}
-    - {fileID: 1558366114027955935, guid: 6eaf7c6c51f4e7543bc6ffee1422c2b4, type: 3}
+    - {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
   - categName: Storage
     buildings:
     - {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}

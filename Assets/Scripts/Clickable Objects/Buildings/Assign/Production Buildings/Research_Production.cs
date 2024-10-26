@@ -1,9 +1,11 @@
 using TMPro;
+using UnityEngine;
 
 public class Research_Production : ProductionBuilding
 {
     //private int temp_workers_count = 0; Already exists: ProductionBuilding.working
     ResearchBackend researchBackend;
+    bool b = true;
 
     public override void UniqueID()
     {
@@ -42,6 +44,11 @@ public class Research_Production : ProductionBuilding
     public override void Produce(float speed)
     {
         //base.Produce();
+        if (b)
+        {
+            gameObject.GetComponent<Animator>().SetBool("Rotate", true);
+            b = false;
+        }
         researchBackend.DoResearch(speed);
     }
 

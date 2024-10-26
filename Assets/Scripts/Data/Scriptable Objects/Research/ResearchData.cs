@@ -58,10 +58,10 @@ public class ResearchNode
     public ResearchNode(GridPos _gp, string _data, int level, int lastID)
     {
         gp = _gp;
-        gp.level = level;
+        gp.y = level;
         name = _data;
         id = lastID+1;
-        researchTime = 5 * (int)_gp.level;
+        researchTime = 100 * ((int)_gp.y + 1);
 
         currentTime = 0;
         researched = false;

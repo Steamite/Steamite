@@ -324,7 +324,7 @@ public class LoadingScreen : MonoBehaviour
 
         MyGrid.sceneReferences.humans.GetComponent<Humans>().GetHumans();
         MyGrid.canvasManager.gameObject.SetActive(true);
-        MyGrid.canvasManager.buildMenu.GetChild(2).GetComponent<PreBuildInfo>().SetUp();
+        MyGrid.canvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().SetUp();
         MyGrid.sceneReferences.GetComponent<SaveController>().activeFolder = folderName;
         MyGrid.canvasManager.stats.GetChild(0).GetChild(1).GetComponent<TimeButtons>().tick = MyGrid.sceneReferences.GetComponent<Tick>();
         MyGrid.canvasManager.tradeWindow.Init();

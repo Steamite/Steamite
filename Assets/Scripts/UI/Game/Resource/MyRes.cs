@@ -21,7 +21,6 @@ public static class MyRes
     public static Resource resources;
     public static List<TMP_Text> textFields = new();
     public static int globalStorageSpace;
-    public static int storageResources = 4;
     public static int money = 1000;
     public static TMP_Text moneyField;
     static Storage[] storage;
@@ -74,7 +73,8 @@ public static class MyRes
     /// <returns></returns>
     static void FillRes()
     {
-        for (int i = 0; i < storageResources; i++)
+        string[] names = Enum.GetNames(typeof(ResourceType));
+        for (int i = 0; i < names.Length; i++)
         {
             resources.type.Add((ResourceType)i);
             resources.ammount.Add(0);
@@ -96,6 +96,8 @@ public static class MyRes
     {
         money += change;
         UpdateMoneyText();
+        if(MyGrid.canvasManager.tradeWindow.tradeInfo.gameObject.activeSelf)
+            MyGrid.canvasManager.tradeWindow.tradeInfo.UpdateTradeText();
     }
     static void UpdateMoneyText()
     {
@@ -252,9 +254,9 @@ public static class MyRes
             Debug.LogError($"{destination}, {e}");
             return false;
         }
-        
+
     }
-    
+
     /// <summary>
     /// Finds the closest stockpite with needed resources, if found some, orders to move to it.
     /// </summary>
@@ -272,7 +274,7 @@ public static class MyRes
             if (filtered.Count > 0)
             {
                 human.jData = PathFinder.FindPath(filtered, human);
-                if (human.jData.interest && PathFinder.FindPath(new() { building}, human).interest != null)
+                if (human.jData.interest && PathFinder.FindPath(new() { building }, human).interest != null)
                 {
                     human.destination = building;
                     human.jData.job = JobState.Pickup;
@@ -286,7 +288,7 @@ public static class MyRes
                     human.destination.RequestRes(resource.Clone(), human, 1);
                     human.ChangeAction(HumanActions.Move);
                     human.lookingForAJob = false;
-                    if(diff.ammount.Sum() == 0)
+                    if (diff.ammount.Sum() == 0)
                     {
                         //diff = diff;
                         //human.transform.parent.parent.GetComponent<JobQueue>().CancelJob(j, human.jData.interest);
@@ -344,6 +346,31 @@ public static class MyRes
             return new();
     }
 
+    public static Resource DiffRes(Resource cost, Resource storA)
+    {
+        Resource ret = new();
+        for (int i = 0; i < cost.type.Count; i++)
+        {
+            int minus; // total stored
+            int j = storA.type.IndexOf(cost.type[i]);
+            minus = j > -1 ? storA.ammount[j] : 0;
+            if (minus > 0)
+            {
+                int exchange = DiffZ(cost.ammount[i], minus);
+                if (exchange > 0)
+                {
+                    ret.ammount.Add(exchange);
+                    ret.type.Add(cost.type[i]);
+                }
+            }
+            else
+            {
+                ret.ammount.Add(cost.ammount[i]);
+                ret.type.Add(cost.type[i]);
+            }
+        }
+        return ret;
+    }
     public static Resource DiffRes(Resource cost, Resource storA, Resource storB)
     {
         Resource ret = new();
@@ -400,7 +427,7 @@ public static class MyRes
         }
         return true;
     }
-    
+
     /// <summary>
     /// find only where to store, not how to get there
     /// </summary>
@@ -409,10 +436,10 @@ public static class MyRes
     public static void FindStorage(Resource r, Human h)
     {
         List<Storage> storages = FilterStorages(r, h, true);
-        h.destination = PathFinder.FindPath(storages.Select(q=> q.GetComponent<ClickableObject>()).ToList(), h).interest.GetComponent<Building>();
+        h.destination = PathFinder.FindPath(storages.Select(q => q.GetComponent<ClickableObject>()).ToList(), h).interest.GetComponent<Building>();
         if (h.destination)
         {
-            h.destination.RequestRes(r,h,1);
+            h.destination.RequestRes(r, h, 1);
         }
     }
     /// <summary>
@@ -422,7 +449,7 @@ public static class MyRes
     public static void FindStorage(Human h)
     {
         List<Storage> storages = FilterStorages(h.inventory, h, true);
-        if((h.jData = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h)).interest)
+        if ((h.jData = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h)).interest)
         {
             h.jData.interest.GetComponent<StorageObject>().RequestRes(h.inventory, h, 1);
             h.destination = (Building)h.jData.interest;
@@ -467,7 +494,7 @@ public static class MyRes
     {
         int i = -1;
         Storage store = storage.FirstOrDefault(q => q.localRes.stored.ammount[i = q.localRes.Future(true).type.IndexOf(ResourceType.Food)] > 0);
-        if(store)
+        if (store)
         {
             store.localRes.stored.ammount[i]--;
             resources.ammount[resources.type.IndexOf(ResourceType.Food)]--;
@@ -489,4 +516,30 @@ public static class MyRes
             MoveRes(store.localRes.stored, resource, resource, resource.ammount.Sum());
         }
     }
+
+    public static void TakeFromGlobalStorage(Resource r)
+    {
+        UpdateResource(r, -1);
+        for (int i = 0; i < storage.Length; i++)
+        {
+            Resource diff = DiffRes(r, storage[i].localRes.Future(true));
+            for(int j = r.type.Count-1; j >= 0; j--)
+            {
+                int x = diff.type.IndexOf(r.type[j]);
+                if(x == -1)
+                {
+                    storage[i].localRes.stored.ammount[storage[i].localRes.stored.type.IndexOf(r.type[j])] -= r.ammount[j];
+                    r.ammount.RemoveAt(j);
+                    r.type.RemoveAt(j);
+                }
+                else
+                {
+                    int change = r.ammount[j] - diff.ammount[x];
+                    storage[i].localRes.stored.ammount[storage[i].localRes.stored.type.IndexOf(r.type[j])] -= change;
+                    r.ammount[j] -= change;
+                }
+            }
+        }
+    }
+
 }

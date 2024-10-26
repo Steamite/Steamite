@@ -430,7 +430,7 @@
                 {
                     "name": "negative",
                     "id": "15bd2afe-55e4-4a62-96ef-fa73ea3ddc5f",
-                    "path": "<Keyboard>/r",
+                    "path": "<Keyboard>/comma",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -441,7 +441,7 @@
                 {
                     "name": "positive",
                     "id": "151f50d9-04b4-4c99-923d-7f5cafc2086c",
-                    "path": "<Keyboard>/t",
+                    "path": "<Keyboard>/period",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

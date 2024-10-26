@@ -33,14 +33,14 @@ MonoBehaviour:
       buttonCategory: 0
       buildButton: 0
       unlockedBy: 
-      unlocks: 0700000008000000
+      unlocks: 070000000d000000
     - name: Elevator
       id: 7
       gp:
-        x: 29.5
+        x: 404.5
         z: 265
         level: 1
-      realX: 182.04214
+      realX: 765.51056
       researched: 0
       currentTime: 0
       researchTime: 200
@@ -52,103 +52,31 @@ MonoBehaviour:
       buildButton: 0
       unlockedBy: 03000000
       unlocks: 
-    - name: Water Pump
-      id: 8
+    - name: Production
+      id: 13
       gp:
-        x: 279.5
+        x: 654.5
         z: 265
         level: 1
-      realX: 571.02106
+      realX: 1154.4895
       researched: 0
       currentTime: 0
       researchTime: 200
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: 3
-      buildButton: 2
-      unlockedBy: 03000000
-      unlocks: 
-    - name: Steam Tank
-      id: 9
-      gp:
-        x: 529.5
-        z: 265
-        level: 1
-      realX: 960
-      researched: 0
-      currentTime: 0
-      researchTime: 200
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: 3
-      buildButton: 1
-      unlockedBy: 
-      unlocks: 12000000
-    - name: Research tower
-      id: 14
-      gp:
-        x: 779.5
-        z: 265
-        level: 1
-      realX: 1348.9789
-      researched: 0
-      currentTime: 0
-      researchTime: 5
       reseachCost:
         capacity: -1
         type: 
         ammount: 
       buttonCategory: 1
-      buildButton: 2
-      unlockedBy: 
+      buildButton: 1
+      unlockedBy: 03000000
       unlocks: 
-    - name: node 13
-      id: 13
-      gp:
-        x: 1029.5
-        z: 265
-        level: 1
-      realX: 1737.9579
-      researched: 0
-      currentTime: 0
-      researchTime: 5
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: -1
-      buildButton: -1
-      unlockedBy: 
-      unlocks: 
-    - name: Steam Generator
-      id: 4
-      gp:
-        x: 404.5
-        z: 510
-        level: 2
-      realX: 765.51056
-      researched: 0
-      currentTime: 0
-      researchTime: 300
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: 3
-      buildButton: 0
-      unlockedBy: 
-      unlocks: 0b000000
     - name: node 20
       id: 20
       gp:
-        x: 654.5
+        x: 529.5
         z: 510
         level: 2
-      realX: 1154.4895
+      realX: 960
       researched: 0
       currentTime: 0
       researchTime: 0
@@ -163,10 +91,10 @@ MonoBehaviour:
     - name: node 5
       id: 5
       gp:
-        x: 279.5
+        x: 404.5
         z: 755
         level: 3
-      realX: 571.02106
+      realX: 765.51056
       researched: 0
       currentTime: 0
       researchTime: 0
@@ -178,85 +106,13 @@ MonoBehaviour:
       buildButton: -1
       unlockedBy: 
       unlocks: 
-    - name: Fluid Pipe base
-      id: 17
-      gp:
-        x: 529.5
-        z: 755
-        level: 3
-      realX: 960
-      researched: 0
-      currentTime: 0
-      researchTime: 50
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: 3
-      buildButton: 4
-      unlockedBy: 
-      unlocks: 
-    - name: Production
+    - name: node 18
       id: 18
       gp:
-        x: 779.5
+        x: 654.5
         z: 755
         level: 3
-      realX: 1348.9789
-      researched: 0
-      currentTime: 0
-      researchTime: 20
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: 1
-      buildButton: 1
-      unlockedBy: 09000000
-      unlocks: 
-    - name: Foundry
-      id: 6
-      gp:
-        x: 279.5
-        z: 1000
-        level: 4
-      realX: 571.02106
-      researched: 0
-      currentTime: 0
-      researchTime: 40
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: 1
-      buildButton: 0
-      unlockedBy: 
-      unlocks: 
-    - name: Water Tank
-      id: 11
-      gp:
-        x: 529.5
-        z: 1000
-        level: 4
-      realX: 960
-      researched: 0
-      currentTime: 0
-      researchTime: 50
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: 3
-      buildButton: 3
-      unlockedBy: 04000000
-      unlocks: 
-    - name: node 12
-      id: 12
-      gp:
-        x: 779.5
-        z: 1000
-        level: 4
-      realX: 1348.9789
+      realX: 1154.4895
       researched: 0
       currentTime: 0
       researchTime: 20
@@ -268,5 +124,131 @@ MonoBehaviour:
       buildButton: -1
       unlockedBy: 
       unlocks: 
-  - categName: Production
-    nodes: []
+    - name: node 6
+      id: 6
+      gp:
+        x: 404.5
+        z: 1000
+        level: 4
+      realX: 765.51056
+      researched: 0
+      currentTime: 0
+      researchTime: 40
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buttonCategory: -1
+      buildButton: -1
+      unlockedBy: 
+      unlocks: 
+    - name: node 12
+      id: 12
+      gp:
+        x: 654.5
+        z: 1000
+        level: 4
+      realX: 1154.4895
+      researched: 0
+      currentTime: 0
+      researchTime: 20
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buttonCategory: -1
+      buildButton: -1
+      unlockedBy: 
+      unlocks: 
+  - categName: Fluids
+    nodes:
+    - name: Water Pump
+      id: 3
+      gp:
+        x: 529.5
+        z: 20
+        level: 0
+      realX: 960
+      researched: 0
+      currentTime: 0
+      researchTime: 100
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buttonCategory: 3
+      buildButton: 2
+      unlockedBy: 
+      unlocks: 0400000005000000
+    - name: Water Tank
+      id: 4
+      gp:
+        x: 404.5
+        z: 265
+        level: 1
+      realX: 765.51056
+      researched: 0
+      currentTime: 0
+      researchTime: 200
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buttonCategory: 3
+      buildButton: 3
+      unlockedBy: 03000000
+      unlocks: 
+    - name: Steam Generator
+      id: 5
+      gp:
+        x: 654.5
+        z: 265
+        level: 1
+      realX: 1154.4895
+      researched: 0
+      currentTime: 0
+      researchTime: 200
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buttonCategory: 3
+      buildButton: 0
+      unlockedBy: 03000000
+      unlocks: 09000000
+    - name: node 7
+      id: 7
+      gp:
+        x: 404.5
+        z: 510
+        level: 2
+      realX: 765.51056
+      researched: 0
+      currentTime: 0
+      researchTime: 10
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buttonCategory: -1
+      buildButton: -1
+      unlockedBy: 
+      unlocks: 
+    - name: Steam Tank
+      id: 9
+      gp:
+        x: 654.5
+        z: 510
+        level: 2
+      realX: 1154.4895
+      researched: 0
+      currentTime: 0
+      researchTime: 300
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buttonCategory: 3
+      buildButton: 1
+      unlockedBy: 05000000
+      unlocks: 

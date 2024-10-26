@@ -5,7 +5,8 @@ using UnityEngine;
 [Serializable]
 public class TradeLocation
 {
+    [Header("Location")]
     public string name;
-    public List<TradeDeal> selling;
-    public List<TradeDeal> buying;
+    public List<TradeDeal> wantToSell;
+    public List<TradeDeal> wantToBuy;
 }

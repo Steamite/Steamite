@@ -14,5 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingLocations:
   - name: Wye valley
-    foodProduction: 1
-    maxFoodProduction: 4
+    passiveProductions:
+    - productionName: Workforce
+      currentProduction: 3
+      maxProduction: 5
+    - productionName: Water
+      currentProduction: 1
+      maxProduction: 3
+    - productionName: Wood
+      currentProduction: 4
+      maxProduction: 4
+    - productionName: Food
+      currentProduction: 2
+      maxProduction: 4
+    stats:
+    - productionName: Trade
+      currentProduction: 2
+      maxProduction: 5
+  tradeLocations: []

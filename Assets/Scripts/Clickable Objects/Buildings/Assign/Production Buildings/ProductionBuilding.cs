@@ -74,7 +74,7 @@ public class ProductionBuilding : AssignBuilding
                 print("");
             MyRes.MoveRes(pRes.inputResource.stored, h.inventory, pRes.inputResource.requests[index], transferPerTick);
             OpenWindow();
-            if (MyRes.DiffRes(pRes.productionCost, pRes.inputResource.stored, new()).ammount.Sum() == 0)
+            if (MyRes.DiffRes(pRes.productionCost, pRes.inputResource.stored).ammount.Sum() == 0)
             {
                 h.transform.parent.parent.GetComponent<JobQueue>().CancelJob(JobState.Supply, this);
                 pStates.supplied = true;
@@ -223,7 +223,7 @@ public class ProductionBuilding : AssignBuilding
     {
         if (pStates.supply && !pStates.supplied)
         {
-            Resource r = MyRes.DiffRes(pRes.productionCost, pRes.inputResource.stored, new());
+            Resource r = MyRes.DiffRes(pRes.productionCost, pRes.inputResource.stored);
 
             if (r.ammount.Sum() == 0)
             {

@@ -22,6 +22,8 @@ public class SaveController : MonoBehaviour
         Debug.Log("Application ending after " + Time.time + " seconds");
         if (activeFolder == "")
             activeFolder = "new folder";
+        if (Directory.GetDirectories($"{Application.persistentDataPath}").FirstOrDefault(q=> q == $"{Application.persistentDataPath}/saves") == null)
+            Directory.CreateDirectory($"{Application.persistentDataPath}/saves");
         if (Directory.GetDirectories($"{Application.persistentDataPath}/saves").FirstOrDefault(q => LoadMenu.GetSaveName(q) == activeFolder) == null)
             Directory.CreateDirectory($"{Application.persistentDataPath}/saves/{activeFolder}");
 

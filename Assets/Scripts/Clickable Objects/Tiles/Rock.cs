@@ -71,7 +71,7 @@ public class Rock : ClickableObject
     public void ChunkCreation(Chunk chunk)
     {
         GridPos gridPos = new(transform.position);
-        chunk = Instantiate(chunk, new Vector3(gridPos.x, gridPos.level + 0.75f, gridPos.z), chunk.transform.rotation, GameObject.FindWithTag("Chunks").transform); // spawns chunk of resources
+        chunk = Instantiate(chunk, new Vector3(gridPos.x, gridPos.y + 0.75f, gridPos.z), chunk.transform.rotation, GameObject.FindWithTag("Chunks").transform); // spawns chunk of resources
         chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material = GetComponent<MeshRenderer>().material;
         chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
         chunk.GetComponent<Chunk>().Create(rockYield, true);
