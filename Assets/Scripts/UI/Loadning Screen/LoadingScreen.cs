@@ -318,7 +318,7 @@ public class LoadingScreen : MonoBehaviour
         MyGrid.canvasManager.research.LoadGame(researchSaves);
     }
 
-    void AfterLevelLoad(bool newGame)
+    async void AfterLevelLoad(bool newGame)
     {
         transform.parent.GetChild(1).GetComponent<AudioListener>().enabled = false;
 
@@ -335,8 +335,8 @@ public class LoadingScreen : MonoBehaviour
         Camera.main.GetComponent<AudioListener>().enabled = true;
 
         MyRes.ActivateResources(newGame);
+        await SceneManager.UnloadSceneAsync("LoadingScreen"); 
         MyGrid.sceneReferences.GetComponent<Tick>().AwakeTicks();
-        SceneManager.UnloadSceneAsync("LoadingScreen");
     }
 
 }

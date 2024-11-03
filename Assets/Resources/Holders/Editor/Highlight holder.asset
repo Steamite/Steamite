@@ -31,15 +31,16 @@ MonoBehaviour:
     backgroundColor: {r: 0, g: 0.25290883, b: 0.6509804, a: 1}
     textColor: {r: 1, g: 1, b: 1, a: 1}
     objects:
-    - UI canvas
+    - UI canva
   - name: Research
     backgroundColor: {r: 0.14933477, g: 0.6509804, b: 0, a: 1}
     textColor: {r: 1, g: 1, b: 1, a: 1}
     objects:
     - 
   - name: Trade
-    backgroundColor: {r: 0.59942436, g: 0.6509804, b: 0, a: 1}
+    backgroundColor: {r: 0.14507182, g: 0.38679248, b: 0.0748042, a: 1}
     textColor: {r: 1, g: 1, b: 1, a: 1}
     objects:
-    - Stats
-    - 0
+    - _Colony
+    - _Trade
+    - _Outpost

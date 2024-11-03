@@ -31,25 +31,6 @@ public class BuildButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         transform.GetChild(0).GetComponent<TMP_Text>().text = name;
     }
 
-    // Research MainBackend calls this before the first frame
-    public void Initialize(ResearchBackend research_script_passed)
-    {
-        /*research_script = research_script_passed;
-        if (unlocked_by == -1) gameObject.GetComponent<Button>().interactable = true;
-        else if(research_script.researches.Length > 0)
-        {
-            research_script.researches[unlocked_by].unlocks += ResearchUnlock;
-            if (research_script.researches[unlocked_by].GetResearchProgress() >= research_script.researches[unlocked_by].GetResearchNeeded() || research_script.researches[unlocked_by].completed)
-            {
-                gameObject.GetComponent<Button>().interactable = true;
-            }
-            else
-            {
-                gameObject.GetComponent<Button>().interactable = false;
-            }
-        }*/
-    }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         Transform t = MyGrid.canvasManager.miscellaneous;

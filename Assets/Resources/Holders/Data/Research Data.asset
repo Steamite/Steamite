@@ -21,7 +21,7 @@ MonoBehaviour:
       gp:
         x: 529.5
         z: 20
-        level: 0
+        y: 0
       realX: 960
       researched: 0
       currentTime: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
       gp:
         x: 404.5
         z: 265
-        level: 1
+        y: 1
       realX: 765.51056
       researched: 0
       currentTime: 0
@@ -57,7 +57,7 @@ MonoBehaviour:
       gp:
         x: 654.5
         z: 265
-        level: 1
+        y: 1
       realX: 1154.4895
       researched: 0
       currentTime: 0
@@ -70,96 +70,6 @@ MonoBehaviour:
       buildButton: 1
       unlockedBy: 03000000
       unlocks: 
-    - name: node 20
-      id: 20
-      gp:
-        x: 529.5
-        z: 510
-        level: 2
-      realX: 960
-      researched: 0
-      currentTime: 0
-      researchTime: 0
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: -1
-      buildButton: -1
-      unlockedBy: 
-      unlocks: 
-    - name: node 5
-      id: 5
-      gp:
-        x: 404.5
-        z: 755
-        level: 3
-      realX: 765.51056
-      researched: 0
-      currentTime: 0
-      researchTime: 0
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: -1
-      buildButton: -1
-      unlockedBy: 
-      unlocks: 
-    - name: node 18
-      id: 18
-      gp:
-        x: 654.5
-        z: 755
-        level: 3
-      realX: 1154.4895
-      researched: 0
-      currentTime: 0
-      researchTime: 20
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: -1
-      buildButton: -1
-      unlockedBy: 
-      unlocks: 
-    - name: node 6
-      id: 6
-      gp:
-        x: 404.5
-        z: 1000
-        level: 4
-      realX: 765.51056
-      researched: 0
-      currentTime: 0
-      researchTime: 40
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: -1
-      buildButton: -1
-      unlockedBy: 
-      unlocks: 
-    - name: node 12
-      id: 12
-      gp:
-        x: 654.5
-        z: 1000
-        level: 4
-      realX: 1154.4895
-      researched: 0
-      currentTime: 0
-      researchTime: 20
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: -1
-      buildButton: -1
-      unlockedBy: 
-      unlocks: 
   - categName: Fluids
     nodes:
     - name: Water Pump
@@ -167,7 +77,7 @@ MonoBehaviour:
       gp:
         x: 529.5
         z: 20
-        level: 0
+        y: 0
       realX: 960
       researched: 0
       currentTime: 0
@@ -179,32 +89,14 @@ MonoBehaviour:
       buttonCategory: 3
       buildButton: 2
       unlockedBy: 
-      unlocks: 0400000005000000
-    - name: Water Tank
-      id: 4
-      gp:
-        x: 404.5
-        z: 265
-        level: 1
-      realX: 765.51056
-      researched: 0
-      currentTime: 0
-      researchTime: 200
-      reseachCost:
-        capacity: -1
-        type: 
-        ammount: 
-      buttonCategory: 3
-      buildButton: 3
-      unlockedBy: 03000000
-      unlocks: 
+      unlocks: 04000000050000000a000000
     - name: Steam Generator
       id: 5
       gp:
-        x: 654.5
+        x: 404.5
         z: 265
-        level: 1
-      realX: 1154.4895
+        y: 1
+      realX: 765.51056
       researched: 0
       currentTime: 0
       researchTime: 200
@@ -216,31 +108,31 @@ MonoBehaviour:
       buildButton: 0
       unlockedBy: 03000000
       unlocks: 09000000
-    - name: node 7
-      id: 7
+    - name: Water Tank
+      id: 10
       gp:
-        x: 404.5
-        z: 510
-        level: 2
-      realX: 765.51056
+        x: 654.5
+        z: 265
+        y: 1
+      realX: 1154.4895
       researched: 0
       currentTime: 0
-      researchTime: 10
+      researchTime: 200
       reseachCost:
         capacity: -1
         type: 
         ammount: 
-      buttonCategory: -1
-      buildButton: -1
-      unlockedBy: 
+      buttonCategory: 3
+      buildButton: 3
+      unlockedBy: 03000000
       unlocks: 
     - name: Steam Tank
       id: 9
       gp:
-        x: 654.5
+        x: 404.5
         z: 510
-        level: 2
-      realX: 1154.4895
+        y: 2
+      realX: 765.51056
       researched: 0
       currentTime: 0
       researchTime: 300
@@ -251,4 +143,22 @@ MonoBehaviour:
       buttonCategory: 3
       buildButton: 1
       unlockedBy: 05000000
+      unlocks: 
+    - name: node 10
+      id: 10
+      gp:
+        x: 654.5
+        z: 510
+        y: 2
+      realX: 1154.4895
+      researched: 0
+      currentTime: 0
+      researchTime: 300
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buttonCategory: -1
+      buildButton: -1
+      unlockedBy: 
       unlocks: 

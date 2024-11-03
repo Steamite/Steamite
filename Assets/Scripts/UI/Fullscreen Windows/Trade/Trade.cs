@@ -1,34 +1,55 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Trade : FullscreenWindow
 {
+    public enum SelectedCateg
+    {
+        None,
+        Colony,
+        Trade,
+        Outpost,
+    }
+
     [Header("References")]
-    [SerializeField] public TradeInfo tradeInfo;
-    [SerializeField] Transform pasProdTran;
-    [SerializeField] TMP_Text header;
+    public TradeInfo tradeInfo;
+    public ColonyInfo colonyInfo;
+    public OutpostInfo outpostInfo;
+    [SerializeField] Transform colonyTran;
+    public TMP_InputField header;
 
     [Header("Customizables")]
-    [SerializeField] Color unavailableColor;
-    [SerializeField] Color productionColor;
-    [SerializeField] float expeditionSpeed;
+    [SerializeField] public Color unavailableColor;
+    [SerializeField] public Color productionColor;
+    [SerializeField] public Color availableColor;
+    [SerializeField] float expeditionSpeed = 0.13f;
 
     [Header("Data")]
-    [SerializeField] public StartingLocation colonyLocation;
-    [SerializeField] List<TradeLocation> tradeLocations;
-
+    public StartingLocation colonyLocation;
+    public List<TradeLocation> tradeLocations;
+    public List<Outpost> outposts;
     public List<TradeExpedition> expeditions;
 
-    int lastIndex = -2;
+    [Header("Prefabs")]
+    [SerializeField] GameObject expeditionSlider;
+    [SerializeField] GameObject routeImage;
+    [SerializeField] GameObject tradeButton;
+
+
+    int lastIndex;
+    SelectedCateg isLastLocation;
+
     public override void OpenWindow()
     {
         base.OpenWindow();
-        lastIndex = -2;
-        SelectButton(-1);
+        SelectButton(SelectedCateg.Colony, tradeLocations.Count);
         if(expeditions.Count > 0)
         {
             StartCoroutine(MoveTradeRoute());
@@ -42,75 +63,241 @@ public class Trade : FullscreenWindow
 
     public void Init()
     {
-        MyGrid.sceneReferences.GetComponent<Tick>().timeController.weekEnd += DoPassiveProduction;
-        MyGrid.sceneReferences.GetComponent<Tick>().tickAction += MoveTradeRouteProgress;
-
-        TradeHolder tradeHolder = (TradeHolder)Resources.Load("Holders/Data/Trade Data");
-        tradeLocations = tradeHolder.tradeLocations;
+        lastIndex = -2;
+        isLastLocation = SelectedCateg.None;
+        expeditions = new();
+        tradeLocations = ((TradeHolder)Resources.Load("Holders/Data/Trade Data")).tradeLocations;
         header.text = colonyLocation.name;
-        for (int i = 0; i < colonyLocation.passiveProductions.Count; i++)
+        //PrepBaseLocation(colonyLocation.passiveProductions,0);
+        PrepBaseLocation(colonyLocation.stats, 1);
+
+        for (int i = 0; i < colonyLocation.stats[0].currentProduction; i++)
         {
-            Transform cat = pasProdTran.GetChild(i+1).GetChild(1);
+            AddExpeditionSlider();
+        }
+
+        // Colony button
+        Transform buttonGroupTran = transform.GetChild(0).GetChild(1);
+        RectTransform locationButton = Instantiate(tradeButton, buttonGroupTran).GetComponent<RectTransform>();
+        locationButton.anchoredPosition = new(colonyLocation.pos.x, colonyLocation.pos.z);
+
+        // Trade buttons
+        float scale = gameObject.GetComponent<Canvas>().scaleFactor;
+        for (int i = 0; i <= tradeLocations.Count; i++)
+        {
+            var x = i + 1;
+            if (tradeLocations.Count != i)
+            {
+                AddLocationButton(buttonGroupTran, locationButton.position, x, scale);
+            }
+            else
+            {
+                buttonGroupTran.GetChild(0).GetChild(0).GetComponent<Button>().onClick.AddListener( () => { SelectButton(SelectedCateg.Colony, x-1); });
+                buttonGroupTran.GetChild(0).SetAsLastSibling();
+            }
+        }
+        
+        // Outpost buttons
+        buttonGroupTran = transform.GetChild(0).GetChild(2);
+        for(int i = 0; i <= outposts.Count; i++)
+        {
+            var x = i;
+            Button button = AddOutpostButton(buttonGroupTran, x);
+            if(i == expeditions.Count)
+            {
+                button.GetComponent<Image>().color = availableColor;
+            }
+        }
+        MyGrid.sceneReferences.GetComponent<Tick>().timeController.weekEnd += OutpostProduction;
+
+        TMP_Dropdown dropdown = outpostInfo.unconstructed.GetChild(0).GetComponent<TMP_Dropdown>();
+        dropdown.options = new List<TMP_Dropdown.OptionData>() { new("Select") };
+        foreach (string s in Enum.GetNames(typeof(ResourceType)))
+        {
+            dropdown.options.Add(new(s));
+        }
+        if (outposts.Count(q => !q.constructed) > 0)
+            MyGrid.sceneReferences.GetComponent<Tick>().tickAction += outpostInfo.UpdateOutpostProgress;
+    }
+
+    void PrepBaseLocation(List<PassiveProduction> production, int part)
+    {
+        for (int i = 0; i < production.Count; i++)
+        {
+            Transform cat = colonyTran.GetChild(part).GetChild(i + 1).GetChild(1);
             for (int j = 4; j > -1; j--)
             {
-                if (j >= colonyLocation.passiveProductions[i].maxProduction)
+                if (j >= production[i].maxProduction)
                     Destroy(cat.GetChild(j).gameObject);
-                else if(j >= colonyLocation.passiveProductions[i].currentProduction)
+                else if (j >= production[i].currentProduction)
                     cat.GetChild(j).GetComponent<Image>().color = unavailableColor;
                 else
                     cat.GetChild(j).GetComponent<Image>().color = productionColor;
             }
         }
-        expeditions = new();
+    }
+    void AddExpeditionSlider()
+    {
+        Transform routes = window.transform
+            .GetChild(0).GetChild(1);
+        GameObject newRoute = Instantiate(expeditionSlider, routes);
+        newRoute.SetActive(false);
+    }
+    void AddLocationButton(Transform buttonGroupTran, Vector3 colonyPos, int x, float scale)
+    {
+        // creates the button
+        RectTransform locationButton = Instantiate(tradeButton, buttonGroupTran).GetComponent<RectTransform>();
+        locationButton.anchoredPosition = new(tradeLocations[x-1].pos.x, tradeLocations[x-1].pos.z);
+        // creates the path between trader and colony
+        Vector3 dif = locationButton.position - colonyPos;
+        RectTransform routePath = Instantiate(routeImage,
+            (locationButton.position + colonyPos) / 2,
+            Quaternion.Euler(new Vector3(0, 0, 180 * Mathf.Atan(dif.y / dif.x) / Mathf.PI)),
+            window.transform.GetChild(0).GetChild(0)).GetComponent<RectTransform>();
+
+        routePath.sizeDelta = new(Vector3.Distance(locationButton.position, colonyPos) / scale, 2);
+        routePath.GetComponent<Image>().color = unavailableColor;
+        buttonGroupTran.GetChild(x).GetChild(0).GetComponent<Button>().onClick.AddListener(() => { SelectButton(SelectedCateg.Trade, x - 1); });
+    }
+    public Button AddOutpostButton(Transform t, int x)
+    {
+        Button button = Instantiate(tradeButton, t).transform.GetChild(0).GetComponent<Button>();
+        button.onClick.AddListener(() => { SelectButton(SelectedCateg.Outpost, x); });
+        return button;
     }
 
-    public void DoPassiveProduction()
+    /// <summary>
+    /// Handles outpost production
+    /// </summary>
+    void OutpostProduction()
     {
         Resource r = new(-1);
-        r.type.Add(ResourceType.Food);
-        r.ammount.Add(colonyLocation.GetCurrentProduction("Food") * 5);
-        r.type.Add(ResourceType.Wood);
-        r.ammount.Add(colonyLocation.GetCurrentProduction("Wood") * 3);
-        for(int i = 0; i < colonyLocation.GetCurrentProduction("Workforce"); i++)
+        int money = 0;
+        foreach(Outpost o in outposts.Where(q=> q.constructed))
         {
-            MyGrid.sceneReferences.humans.CreateHuman();
+            float mod = 1;
+            if (o.timeToFinish > 0)
+            {
+                mod = (1440 - o.timeToFinish/7) / 1440f;
+                o.timeToFinish = 0;
+            }
+            MyRes.ManageRes(r, o.production, mod);
+            money += Outpost.resourceCosts[o.production.type[0]] * Mathf.FloorToInt((Outpost.resourceAmmount[o.production.type[0]] - o.production.ammount[0]) * mod);
         }
         MyRes.DeliverToElevator(r);
+        MyRes.ManageMoney(money);
     }
 
-    public void SelectButton(int index)
+    public void SelectButton(SelectedCateg selectedCateg, int index)
     {
-        if (index == lastIndex)
+        EndRename();
+        if (selectedCateg == isLastLocation && index == lastIndex)
             return;
-        if(lastIndex != -2)
-            window.transform.GetChild(1).GetChild(lastIndex + 1).GetChild(0).GetComponent<Animator>().SetTrigger("unselected");
+
+        int buttonGroup;
+        if (ButtonChange(false, out buttonGroup))
+            window.transform.GetChild(buttonGroup).GetChild(lastIndex).GetChild(0).GetComponent<Animator>().SetTrigger("unselected");
+
+        isLastLocation = selectedCateg;
         lastIndex = index;
-        window.transform.GetChild(1).GetChild(index + 1).GetChild(0).GetComponent<Animator>().SetTrigger("selected");
-        if(index == -1)
-        {
-            tradeInfo.transform.parent.GetChild(0).gameObject.SetActive(true);
-            tradeInfo.gameObject.SetActive(false);
-            header.text = colonyLocation.name;
-        }
-        else
-        {
-            tradeInfo.transform.parent.GetChild(0).gameObject.SetActive(false);
-            tradeInfo.gameObject.SetActive(true);
-            header.text = tradeInfo.ChangeTradeLocation(tradeLocations[index]);
-        }
+        if (ButtonChange(true, out buttonGroup))
+            window.transform.GetChild(buttonGroup).GetChild(lastIndex).GetChild(0).GetComponent<Animator>().SetTrigger("selected");
     }
 
+    /// <summary>
+    /// Called when changing buttons to deselect/select them.
+    /// </summary>
+    /// <param name="activate">If it should be selected or not.</param>
+    /// <param name="buttonGroup">The output button group.</param>
+    /// <param name="button">The output button.</param>
+    /// <returns>If the values be used.</returns>
+    bool ButtonChange(bool activate, out int buttonGroup)
+    {
+        buttonGroup = -1;
+        switch (isLastLocation)
+        {
+            //
+            case SelectedCateg.Colony:
+                colonyInfo.gameObject.SetActive(activate);
+                buttonGroup = 1;
+
+                if (activate)
+                {
+                    header.text = colonyLocation.name;
+                }
+                break;
+            //
+            case SelectedCateg.Trade:
+                tradeInfo.gameObject.SetActive(activate);
+                buttonGroup = 1;
+                if (activate)
+                {
+                    header.text = tradeInfo.ChangeTradeLocation(tradeLocations[lastIndex]);
+                    window.transform.GetChild(0).GetChild(0).GetChild(lastIndex).GetComponent<Image>().color = availableColor;
+                }
+                else
+                {
+                    window.transform.GetChild(0).GetChild(0).GetChild(lastIndex).GetComponent<Image>().color = unavailableColor;
+                }
+                break;
+            //
+            case SelectedCateg.Outpost:
+                outpostInfo.gameObject.SetActive(activate);
+                buttonGroup = 2;
+
+                if (activate)
+                {
+                    if(lastIndex < outposts.Count) 
+                    {
+                        header.text = outpostInfo.ChangeOutpost(lastIndex);
+                    }
+                    else
+                    {
+                        header.text = outpostInfo.NewOutpostView(lastIndex);
+                    }
+                }
+                break;
+            // Do not do anything
+            case SelectedCateg.None:
+            default:
+                return false;
+        }
+        return true;
+    }
+    
     public void StartExpediton(TradeExpedition expedition)
     {
-        Slider slider = window.transform.GetChild(0).GetChild(0).GetChild(lastIndex).GetComponent<Slider>();
+        Transform t = window.transform.GetChild(0).GetChild(1);
+        for(int i = 0; i < t.childCount; i++)
+            if (!t.GetChild(i).gameObject.activeSelf)
+            {
+                expedition.sliderID = i;
+                break;
+            }
+
+        Slider slider = t.GetChild(expedition.sliderID).GetComponent<Slider>();
         slider.value = 0;
-        slider.maxValue = Vector3.Distance(slider.transform.position, window.transform.GetChild(1).GetChild(lastIndex + 1).transform.position);
         slider.handleRect.GetComponent<ExpeditionInfo>().SetExpedition(expedition);
+        slider.gameObject.SetActive(true);
+
+        Transform tradeLocationsTran = transform.GetChild(0).GetChild(1);
+        Vector3 colonyTran = tradeLocationsTran.GetChild(tradeLocationsTran.childCount - 1).transform.position;
+        Vector3 posTran = tradeLocationsTran.GetChild(lastIndex).position;
+        Vector3 dif = posTran - colonyTran;
+
+        slider.transform.position = (posTran + colonyTran) / 2;
+        slider.maxValue = (Vector3.Distance(posTran, colonyTran) - 15) / gameObject.GetComponent<Canvas>().scaleFactor;
+        slider.GetComponent<RectTransform>().sizeDelta = new(slider.maxValue - 15, slider.GetComponent<RectTransform>().sizeDelta.y);
+
+        float f = Mathf.Atan(dif.y / dif.x);
+        slider.transform.rotation = Quaternion.Euler(new Vector3(0, 0, dif.x > 0 ? (180 * f / Mathf.PI) : -180 + (180 * f / Mathf.PI)));
+
         expedition.tradeLocation = lastIndex;
         expedition.maxProgress = slider.maxValue;
         expeditions.Add(expedition);
         if (expeditions.Count == 1)
         {
+            MyGrid.sceneReferences.GetComponent<Tick>().tickAction += MoveTradeRouteProgress;
             StartCoroutine(MoveTradeRoute());
         }
     }
@@ -130,7 +317,7 @@ public class Trade : FullscreenWindow
             for(int i = expeditions.Count -1; i >= 0; i--)
             {
                 TradeExpedition exp = expeditions[i];
-                Slider slider = window.transform.GetChild(0).GetChild(0).GetChild(exp.tradeLocation).GetComponent<Slider>();
+                Slider slider = window.transform.GetChild(0).GetChild(1).GetChild(exp.sliderID).GetComponent<Slider>();
                 slider.value = Mathf.Lerp(slider.value, exp.currentProgress, expeditionSpeed * Time.deltaTime * Time.timeScale);
                 slider.handleRect.GetComponent<ExpeditionInfo>().MoveInfo();
                 if(exp.goingToTrade ? slider.value >= slider.maxValue : slider.value <= 0)
@@ -138,12 +325,60 @@ public class Trade : FullscreenWindow
                     if (exp.FinishExpedition())
                     {
                         expeditions.RemoveAt(i);
+                        tradeInfo.UpdateTradeText();
                         if (expeditions.Count == 0)
+                        {
+                            MyGrid.sceneReferences.GetComponent<Tick>().tickAction -= MoveTradeRouteProgress;
                             yield break;
+                        }
                     }
                 }
             }
             yield return null;
         }
+    }
+
+    public void EndRename()
+    {
+        if(header.text.Trim().Length > 0)
+        {
+            switch (isLastLocation)
+            {
+                case SelectedCateg.Colony:
+                    colonyLocation.name = header.text;
+                    break;
+                case SelectedCateg.Trade:
+                    tradeLocations[lastIndex].name = header.text;
+                    break;
+                case SelectedCateg.Outpost:
+                    if(lastIndex < outposts.Count)
+                        outposts[lastIndex].name = header.text;
+                    break;
+                case SelectedCateg.None:
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            switch (isLastLocation)
+            {
+                case SelectedCateg.Colony:
+                    header.text = colonyLocation.name;
+                    break;
+                case SelectedCateg.Trade:
+                    header.text = tradeLocations[lastIndex].name;
+                    break;
+                case SelectedCateg.Outpost:
+                    if (lastIndex < outposts.Count)
+                        header.text = outposts[lastIndex].name;
+                    break;
+                case SelectedCateg.None:
+                default:
+                    break;
+
+            }
+        }
+        EventSystem.current.SetSelectedGameObject(null);
     }
 }

@@ -27,7 +27,6 @@ public class ExpeditionInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         {
             mouseOver = false;
             MyGrid.canvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().HideInfo();
-            mouseDown = false;
             follow = false;
         }
     }
@@ -38,12 +37,12 @@ public class ExpeditionInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        
         if (mouseDown)
         {
-            mouseDown = false;
             follow = !follow;
+            mouseDown = false;
         }
-
     }
 
     public void SetExpedition(TradeExpedition _expedition)
@@ -55,10 +54,9 @@ public class ExpeditionInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         if (mouseOver)
         {
-            Vector2 vec = transform.position;
             MyGrid.canvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().DisplayInfo(
-                expedition, vec);
-            if (mouseDown)
+                expedition, MyGrid.canvasManager.tradeWindow.transform.InverseTransformPoint(transform.GetComponent<RectTransform>().position));
+            if (follow)
             {
                 Mouse.current.WarpCursorPosition(transform.position);
             }

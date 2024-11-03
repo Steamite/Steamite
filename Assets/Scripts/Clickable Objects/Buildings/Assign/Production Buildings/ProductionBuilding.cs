@@ -316,7 +316,7 @@ public class ProductionBuilding : AssignBuilding
     public bool StopProduction()
     {
         pStates.stoped = !pStates.stoped;
-        transform.GetChild(1).GetChild(0).gameObject.SetActive(pStates.stoped);
+        transform.GetChild(0).GetChild(0).gameObject.SetActive(pStates.stoped);
         PauseProduction();
         return pStates.stoped;
     }

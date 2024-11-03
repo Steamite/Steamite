@@ -17,33 +17,50 @@ public class SaveController : MonoBehaviour
         SaveGame();
     }
 
-    public void SaveGame()
+    public void SaveGame(bool autoSave = false)
     {
-        Debug.Log("Application ending after " + Time.time + " seconds");
-        if (activeFolder == "")
-            activeFolder = "new folder";
-        if (Directory.GetDirectories($"{Application.persistentDataPath}").FirstOrDefault(q=> q == $"{Application.persistentDataPath}/saves") == null)
+        // checks if there's a folder for saves
+        if (Directory.GetDirectories($"{Application.persistentDataPath}").FirstOrDefault(q => q == $"{Application.persistentDataPath}/saves") == null)
             Directory.CreateDirectory($"{Application.persistentDataPath}/saves");
-        if (Directory.GetDirectories($"{Application.persistentDataPath}/saves").FirstOrDefault(q => LoadMenu.GetSaveName(q) == activeFolder) == null)
-            Directory.CreateDirectory($"{Application.persistentDataPath}/saves/{activeFolder}");
-
+        
+        string tmpPath = $"{Application.persistentDataPath}/saves/_tmp";
+        Directory.CreateDirectory($"{tmpPath}");
         try
         {
-            SaveGrid();
-            SaveHumans();
-            SavePlayerSettings();
-            SaveResearch();
+            SaveGrid(tmpPath);
+            SaveHumans(tmpPath);
+            SavePlayerSettings(tmpPath);
+            SaveResearch(tmpPath);
         }
         catch (Exception e)
         {
             MyGrid.canvasManager.ShowMessage("An error ocured when saving.");
             Debug.Log("Saving error: " + e);
+            Directory.Delete($"{tmpPath}");
             return;
         }
-        MyGrid.canvasManager.ShowMessage("Saved succesfuly");
+
+        if (activeFolder == "")
+            activeFolder = "noname";
+        string activeF = autoSave ? activeFolder + " - autosave" : activeFolder;
+        string path = $"{Application.persistentDataPath}/saves/{activeF}";
+        if (Directory.GetDirectories($"{Application.persistentDataPath}/saves").FirstOrDefault(q => LoadMenu.GetSaveName(q) == activeF) == null)
+            Directory.CreateDirectory($"{path}");
+
+        foreach(string file in Directory.GetFiles(tmpPath))
+        {
+            string s = file.Split("\\").Last();
+            if(File.Exists($"{path}/{s}"))
+                File.Delete($"{path}/{s}");
+            File.Move($"{file}", $"{path}/{s}");
+        }
+
+        Directory.Delete($"{tmpPath}");
+        MyGrid.canvasManager.ShowMessage(autoSave? "Autosave" : "Saved succesfuly");
+
     }
 
-    void SaveResearch()
+    void SaveResearch(string path)
     {
         // takes nodes from all research buttons
         ResearchUI research = MyGrid.canvasManager.research;
@@ -65,12 +82,12 @@ public class SaveController : MonoBehaviour
         if(research.GetComponent<ResearchBackend>().currentResearch)
             categsData.currentResearch = research.GetComponent<ResearchBackend>().currentResearch.node.id;
         //write saves
-        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{Application.persistentDataPath}/saves/{activeFolder}/Research.json"));
+        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Research.json"));
         PrepSerializer().Serialize(jsonTextWriter, categsData);
         jsonTextWriter.Close();
     }
 
-    void SaveGrid()
+    void SaveGrid(string path)
     {
         GridSave gridSave = new();
         gridSave.width = MyGrid.width;
@@ -89,7 +106,7 @@ public class SaveController : MonoBehaviour
             }
             SaveBuildings(gridSave);
             SaveChunks(gridSave);
-            JsonTextWriter jsonTextWriter = new(new StreamWriter($"{Application.persistentDataPath}/saves/{activeFolder}/Grid.json"));
+            JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Grid.json"));
             PrepSerializer().Serialize(jsonTextWriter, gridSave);
             jsonTextWriter.Close();
         }
@@ -124,20 +141,20 @@ public class SaveController : MonoBehaviour
         }
     }
 
-    void SavePlayerSettings()
+    void SavePlayerSettings(string path)
     {
         PlayerSettings settings = new();
         settings.priorities = MyGrid.sceneReferences.humans.GetComponent<JobQueue>().priority;
-        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{Application.persistentDataPath}/saves/{activeFolder}/PlayerSettings.json"));
+        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/PlayerSettings.json"));
         PrepSerializer().Serialize(jsonTextWriter, settings);
         jsonTextWriter.Close();
     }
-    void SaveHumans()
+    void SaveHumans(string path)
     {
         List<HumanSave> humanSave = new();
         foreach (Human h in MyGrid.sceneReferences.humans.GetComponent<Humans>().humen)
             humanSave.Add(new(h));
-        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{Application.persistentDataPath}/saves/{activeFolder}/Humans.json"));
+        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Humans.json"));
         PrepSerializer().Serialize(jsonTextWriter, humanSave);
         jsonTextWriter.Close();
     }

@@ -6,10 +6,15 @@ using UnityEngine.Rendering;
 [Serializable]
 public class Resource
 {
-    // (https://steamite.atlassian.net/wiki/x/AYCl)
     public int capacity = -1; // -1 = no limit
     public List<ResourceType> type = new(); // stores all resource types
     public List<int> ammount = new();
+
+    public Resource(List<ResourceType> _type, List<int> _ammount)
+    {
+        type = _type;
+        ammount = _ammount;
+    }
     public Resource(int _capacity)
     {
         capacity = _capacity;
@@ -60,8 +65,41 @@ public class Resource
         string s = "";
         for (int i = 0; i < type.Count; i++)
         {
-            s += $"{type[i]}: {ammount[i]}";
+            if (ammount[i] > 0)
+                s += $"{type[i]}: {ammount[i]}\n";
         }
         return s;
+    }
+    public string ToStringComplete()
+    {
+        string s = "";
+        for (int i = 0; i < type.Count; i++)
+        {
+            s += $"{type[i]}: {ammount[i]}\n";
+        }
+        return s;
+    }
+
+    /// <summary>
+    /// Creates a string ready to be displayed.
+    /// </summary>
+    /// <param name="str">String to add to.</param>
+    /// <param name="available">Storage resources.</param>
+    /// <returns>True if you cannot afford it.</returns>
+    public bool ToStringTMP(ref string str, Resource available)
+    {
+        bool canAfford = true;
+        Resource diff = MyRes.DiffRes(this, available);
+        for (int i = 0; i < type.Count; i++)
+        {
+            if (diff.type.Contains(type[i]))
+            {
+                str += $"<color=red>{type[i]}: {available.ammount[available.type.IndexOf(type[i])]}/{ammount[i]}</color>\n";
+                canAfford = false;
+            }
+            else
+                str += $"{type[i]}: {available.ammount[available.type.IndexOf(type[i])]}/{ammount[i]}\n";
+        }
+        return !canAfford;
     }
 }

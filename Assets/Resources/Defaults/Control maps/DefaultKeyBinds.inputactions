@@ -313,7 +313,7 @@
                     "name": "Build Menu",
                     "type": "Button",
                     "id": "5c803185-0157-4470-a047-424c2fb9fc5f",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -340,7 +340,7 @@
                     "name": "Build Rotate",
                     "type": "Button",
                     "id": "a91c692b-d8f8-4ab6-bf4b-ec5a1909eeec",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -349,7 +349,7 @@
                     "name": "Menu",
                     "type": "Button",
                     "id": "a2b6b23f-e627-404a-8f78-257b8c6dbd92",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -417,7 +417,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "1D Axis",
+                    "name": ", .",
                     "id": "4170c95d-00f6-410d-86ae-4bd244746a84",
                     "path": "1DAxis",
                     "interactions": "",
@@ -442,6 +442,39 @@
                     "name": "positive",
                     "id": "151f50d9-04b4-4c99-923d-7f5cafc2086c",
                     "path": "<Keyboard>/period",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Build Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "z c",
+                    "id": "4cfe92f3-2029-4871-9dc1-b5941940922f",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Build Rotate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "8d004da4-b22d-4b72-a126-5dd64818fae2",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Build Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "0cd21e83-efbd-4b4e-961b-9963987cf986",
+                    "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
