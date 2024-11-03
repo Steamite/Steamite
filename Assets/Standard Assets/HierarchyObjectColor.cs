@@ -36,9 +36,9 @@ public class HierarchyObjectColor
                 if((i = highlightObjects.FindObject(obj.name)) > -1)
                 {
                     Rect offsetRect = new Rect(selectionRect.position + offset, selectionRect.size);
-                    Rect bgRect = new Rect(selectionRect.x, selectionRect.y, 100, selectionRect.height);
+                    Rect bgRect = new Rect(selectionRect.x, selectionRect.y, selectionRect.width, selectionRect.height);
                     backgroundColor = highlightObjects.highlightObjects[i].backgroundColor;
-                    textColor = highlightObjects.highlightObjects[i].textColor;
+                    textColor = ((GameObject)obj).activeSelf ? Color.white: Color.gray;
 
                     //-------Coloring--------\\
                     EditorGUI.DrawRect(bgRect, backgroundColor);

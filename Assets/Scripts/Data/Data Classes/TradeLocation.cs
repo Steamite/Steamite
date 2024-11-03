@@ -7,6 +7,7 @@ public class TradeLocation
 {
     [Header("Location")]
     public string name;
+    public GridPos pos;
     public List<TradeDeal> wantToSell;
     public List<TradeDeal> wantToBuy;
 }

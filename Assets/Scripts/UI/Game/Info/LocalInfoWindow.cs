@@ -33,7 +33,7 @@ public class LocalInfoWindow : UIBehaviour
         else if(status == Status.expeditions)
         {
             float canvasHeight = c.renderingDisplaySize.y;// * c.scaleFactor;
-            rectTransform.anchoredPosition = new(gridPos.x, (gridPos.z * c.scaleFactor));
+            rectTransform.anchoredPosition = new(gridPos.x + (rectTransform.rect.width / 2) + 13 * c.scaleFactor, gridPos.z + (rectTransform.rect.height / 2) + 13 * c.scaleFactor);
 
             transform.gameObject.SetActive(true);
         }
@@ -60,10 +60,10 @@ public class LocalInfoWindow : UIBehaviour
         if (status != Status.notSet)
         {
             status = Status.expeditions;
-            gridPos = new(pos.x, pos.y - 40);
+            gridPos = new(pos.x, pos.y);
             print(gridPos);
-            transform.GetChild(0).GetComponent<TMP_Text>().text = expedition.tradeLocation.ToString();
-            transform.GetChild(1).GetComponent<TMP_Text>().text = string.Join('\n', expedition.goingToTrade);
+            transform.GetChild(0).GetComponent<TMP_Text>().text = MyGrid.canvasManager.tradeWindow.tradeLocations[expedition.tradeLocation].name;
+            transform.GetChild(1).GetComponent<TMP_Text>().text = expedition.ToString();
             transform.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 100);
             gameObject.SetActive(true);
         }

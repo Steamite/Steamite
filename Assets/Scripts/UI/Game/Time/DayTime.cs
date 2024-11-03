@@ -15,14 +15,15 @@ public class DayTime : MonoBehaviour
     public Action weekEnd;
 
     // time data
-    int timeInMinutes = 12 * 60;
-    int numberOfDays = 5;
+    [SerializeField] int timeInMinutes = 4;
+    [SerializeField] int numberOfDays = 5;
 
     [SerializeField] TMP_Text time;
 
     public void Init(Tick tick)
     {
         minutesPerTick = (int)(60f / ticksPerHour);
+        timeInMinutes *= 60;
         tick.tickAction += UpdateTime;
 
         transform.GetChild(0).GetComponent<TMP_Text>().text = $"{(timeInMinutes / 60).ToString().PadLeft(2, '0')}:{(timeInMinutes % 60).ToString().PadLeft(2, '0')}"; ;
@@ -56,12 +57,18 @@ public class DayTime : MonoBehaviour
                 transform.GetChild(1).GetComponent<TMP_Text>().text = $"Day: {(numberOfDays % 7)+1}";
                 break;
             case 1320:
-                    nightStart?.Invoke();
+                nightStart?.Invoke();
                 break;
             case 360:
-                    dayStart?.Invoke();
+                dayStart?.Invoke();
+                MyGrid.sceneReferences.GetComponent<SaveController>().SaveGame(true);
                 break;
         }
         time.text = $"{(timeInMinutes/60).ToString().PadLeft(2, '0')}:{(timeInMinutes%60).ToString().PadLeft(2, '0')}";
+    }
+
+    public int GetWeekTime()
+    {
+        return (numberOfDays % 7 * 1440) + timeInMinutes;
     }
 }

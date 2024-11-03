@@ -186,8 +186,8 @@ public class CameraMovement : MonoBehaviour
     /// <param name="zoom">Input zoom value.</param>
     void Zoom(float zoom)
     {
-        print(zoom);
-        zoom = zoom * 1000 * Time.deltaTime / mod;
+        //print(zoom);
+        zoom = zoom * 200 * Time.deltaTime / mod;
         Transform cam = transform.GetChild(0);
         if (zoom > 0 && cam.localPosition.y > minY)
         {

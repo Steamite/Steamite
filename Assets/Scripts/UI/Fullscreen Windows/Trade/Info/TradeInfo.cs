@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEditor;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,6 +32,7 @@ public class TradeInfo : MonoBehaviour
     [SerializeField] TMP_Text moneyChangeText;
     [SerializeField] TMP_Text finalMoneyText;
     [SerializeField] Button confirmButton;
+    [SerializeField] TMP_Text expeditonText;
 
     [Header("Buy summary")]
     [SerializeField] TMP_Text buyCapText;
@@ -49,6 +51,20 @@ public class TradeInfo : MonoBehaviour
     List<TradeDeal> sell;
 
     TradeRoute activeTrade;
+
+    public void Hide(int lastIndex)
+    {
+        gameObject.SetActive(false);
+        Transform t = trade.window.transform.GetChild(1).GetChild(lastIndex);
+        trade.window.transform.GetChild(0).GetChild(0).GetChild(lastIndex).GetComponent<Image>().color = trade.unavailableColor;
+        t.GetChild(0).GetComponent<Animator>().SetTrigger("unselected");
+    }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+
     public string ChangeTradeLocation(TradeLocation tradeLocation)
     {
         activeTrade = new();
@@ -56,6 +72,7 @@ public class TradeInfo : MonoBehaviour
         buy = tradeLocation.wantToSell;
         ChangeDeals(1, tradeLocation.wantToBuy);
         sell = tradeLocation.wantToBuy;
+
         UpdateTradeText();
         return tradeLocation.name;
     }
@@ -98,9 +115,25 @@ public class TradeInfo : MonoBehaviour
         //-------------sell-----------\\
         MakeSummary(capacity, activeTrade.selling.ammount.Sum(), activeTrade.reward, 
             sellResText, sellCapText, sellCostText, ref buttonText, true);
-        
+        List<Resource> availableResources = MyGrid.buildings.Where(q => q.GetComponent<Storage>() != null).Select(q => q.localRes.Future(true)).ToList();
+        for(int i = 0; i < activeTrade.selling.ammount.Count; i++)
+        {
+            if (activeTrade.selling.ammount[i] > availableResources.Sum(q => q.ammount[q.type.IndexOf(activeTrade.selling.type[i])]))
+            {
+                transform.GetChild(1).GetChild(i + 2).GetChild(2).GetComponent<TMP_InputField>().textComponent.color = Color.red;
+                if (buttonText == "confirm")
+                    buttonText = "not enough in store"; // error 3
+            }
+            else
+            {
+                transform.GetChild(1).GetChild(i + 2).GetChild(2).GetComponent<TMP_InputField>().textComponent.color = Color.white;
+            }
+        }
+
         confirmButton.interactable = buttonText == "confirm";
         confirmButton.transform.GetChild(0).GetComponent<TMP_Text>().text = buttonText;
+        capacity /= 50; 
+        expeditonText.text = $"{capacity - trade.expeditions.Count} / {capacity}";
     }
 
     void MakeSummary(int capacity, int ammount, int revenue, TMP_Text res, TMP_Text cap, TMP_Text mon, ref string message, bool isRes)
@@ -111,13 +144,17 @@ public class TradeInfo : MonoBehaviour
             {
                 res.color = Color.red;
                 if (message == "confirm")
-                    message = "over capacity"; // error 3
+                    message = "over capacity"; // error 4
             }
-            if (activeTrade.buying.ammount.Sum() + activeTrade.selling.ammount.Sum() == 0)
+            else if (activeTrade.buying.ammount.Sum() + activeTrade.selling.ammount.Sum() == 0)
             {
                 res.color = Color.white;
                 if (message == "confirm")
                     message = "no resources selected"; // error 1
+            }
+            else
+            {
+                res.color = Color.white;
             }
         }
         else
@@ -172,12 +209,8 @@ public class TradeInfo : MonoBehaviour
             if (diff.ammount.Count > 0 && diff.ammount.Min() < 0)
                 return;
             // REMOVES resources
-            MyRes.TakeFromGlobalStorage(activeTrade.selling);/*
-            Elevator el = MyGrid.buildings.Select(q => (Elevator)q).Where(q => q != null).First(q => q.main);
+            MyRes.TakeFromGlobalStorage(activeTrade.selling);
             
-            MyRes.ManageRes(el.localRes.stored, route.selling, -1);
-            MyRes.UpdateResource(route.selling, -1);*/
-
             trade.StartExpediton(new(activeTrade.buying, activeTrade.reward));
             MyRes.ManageMoney(-activeTrade.cost);
 
@@ -191,5 +224,4 @@ public class TradeInfo : MonoBehaviour
             MyGrid.canvasManager.ShowMessage("No money");
         }
     }
-
 }

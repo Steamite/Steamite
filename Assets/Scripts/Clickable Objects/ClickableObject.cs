@@ -16,7 +16,7 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         if (obj == null || GetType() != obj.GetType())
             return false;
-        else if (((ClickableObject)obj).id == id)
+        else if (((ClickableObject)obj).id == id && ((ClickableObject)obj).name == name)
             return true;
         return false;
     }

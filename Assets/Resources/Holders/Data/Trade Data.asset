@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingLocations:
   - name: Snowlandia
+    pos:
+      x: 0
+      z: 0
+      y: 0
     passiveProductions:
     - productionName: Workforce
       currentProduction: 2
@@ -33,6 +37,10 @@ MonoBehaviour:
       maxProduction: 5
   tradeLocations:
   - name: Dean Forrest
+    pos:
+      x: -273
+      z: 250
+      y: 0
     wantToSell:
     - name: Wood
       type: 4
@@ -45,6 +53,10 @@ MonoBehaviour:
       type: 1
       cost: 4
   - name: Wye valley
+    pos:
+      x: 138
+      z: -358
+      y: 0
     wantToSell:
     - name: Food
       type: 3
@@ -55,4 +67,20 @@ MonoBehaviour:
       cost: 2
     - name: Metal
       type: 1
+      cost: 4
+  - name: Scottish Highlands
+    pos:
+      x: 256
+      z: 250
+      y: 0
+    wantToSell:
+    - name: Stone
+      type: 2
+      cost: 1
+    wantToBuy:
+    - name: Coal
+      type: 0
+      cost: 2
+    - name: Wood
+      type: 4
       cost: 4

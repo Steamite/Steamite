@@ -24,7 +24,7 @@ public struct PassiveProduction
 public class StartingLocation
 {
     public string name;
-
+    public GridPos pos;
     [SerializeField] public List<PassiveProduction> passiveProductions;
     [SerializeField] public List<PassiveProduction> stats;
 

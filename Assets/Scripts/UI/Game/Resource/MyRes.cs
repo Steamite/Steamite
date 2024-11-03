@@ -21,7 +21,7 @@ public static class MyRes
     public static Resource resources;
     public static List<TMP_Text> textFields = new();
     public static int globalStorageSpace;
-    public static int money = 1000;
+    public static int money = 2000;
     public static TMP_Text moneyField;
     static Storage[] storage;
 
@@ -73,6 +73,7 @@ public static class MyRes
     /// <returns></returns>
     static void FillRes()
     {
+        money = 2000;
         string[] names = Enum.GetNames(typeof(ResourceType));
         for (int i = 0; i < names.Length; i++)
         {
@@ -146,7 +147,7 @@ public static class MyRes
     /// <param name="destination">What will change</param>
     /// <param name="source">Change ammount</param>
     /// <param name="mod">1 = add, -1 = remove</param>
-    public static void ManageRes(Resource destination, Resource source, int mod) // destination is the resource/removed from; source ammount to be transfered
+    public static void ManageRes(Resource destination, Resource source, float mod) // destination is the resource/removed from; source ammount to be transfered
     {
         try
         {
@@ -161,14 +162,14 @@ public static class MyRes
                 int j = destination.type.IndexOf(source.type[i]);
                 if (j > -1)
                 {
-                    destination.ammount[j] += source.ammount[i] * mod;
+                    destination.ammount[j] += Mathf.FloorToInt(source.ammount[i] * mod);
                     continue;
                 }
                 else if (mod > -1)
                 {
                     if (source.ammount[i] > 0)
                     {
-                        destination.ammount.Add(source.ammount[i] * mod);
+                        destination.ammount.Add(Mathf.FloorToInt(source.ammount[i] * mod));
                         destination.type.Add(source.type[i]);
                     }
                     continue;
@@ -301,7 +302,7 @@ public static class MyRes
     }
 
     /// <summary>
-    /// Filters storages, first with those that have all that's needed, if not found try atleast part of the diff
+    /// Filters storages, first with those that have all that's needed, if none found try atleast part of the diff
     /// </summary>
     /// <param name="diff">resource to find</param>
     /// <param name="stores">list of storages to go filter</param>
@@ -346,6 +347,12 @@ public static class MyRes
             return new();
     }
 
+    /// <summary>
+    /// Compares both paramets and returns what is needed, but not available.
+    /// </summary>
+    /// <param name="cost">Needed resources.</param>
+    /// <param name="storA">Available resources.</param>
+    /// <returns>Resources that are missing.</returns>
     public static Resource DiffRes(Resource cost, Resource storA)
     {
         Resource ret = new();

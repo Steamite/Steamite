@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Analytics.IAnalytic;
+using UnityEngine.WSA;
+using UnityEditor;
 
 [CreateAssetMenu(fileName = "Resource holder", menuName = "ScriptableObjects/Resource Holder", order = 1)]
 public class ResourceHolder : ScriptableObject
@@ -25,5 +29,24 @@ public class ResourceHolder : ScriptableObject
         if (index < prefabs.Count)
             return prefabs[index];
         return null;
+    }
+
+    public void LoadPrefs()
+    {
+        bool change = false;
+        BuildButtonHolder buildButtons = (BuildButtonHolder)Resources.Load("Holders/Models/BuildButton Data");
+        foreach(BuildCategWrapper wrap in buildButtons.buildingCategories)
+        {
+            foreach(Building b in wrap.buildings)
+            {
+                if (!prefabs.Contains(b))
+                {
+                    change = true;
+                    prefabs.Add(b);
+                }
+            }
+        }
+        if (change)
+            EditorUtility.SetDirty(this);
     }
 }
