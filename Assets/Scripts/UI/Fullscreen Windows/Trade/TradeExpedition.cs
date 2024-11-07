@@ -1,10 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 [Serializable]
 public class TradeExpedition
@@ -17,8 +12,8 @@ public class TradeExpedition
     public float currentProgress = 0;
     public float maxProgress = 0;
 
-    private Resource buying;
-    private int reward;
+    public Resource buying;
+    public int reward;
     public TradeExpedition(Resource _buying, int _reward)
     {
         buying = _buying;
@@ -38,7 +33,7 @@ public class TradeExpedition
         {
             MyRes.DeliverToElevator(buying);
             MyRes.ManageMoney(reward);
-            MyGrid.canvasManager.tradeWindow.window.transform.GetChild(0).GetChild(1).GetChild(sliderID).gameObject.SetActive(false);
+            MyGrid.canvasManager.trade.window.transform.GetChild(0).GetChild(1).GetChild(sliderID).gameObject.SetActive(false);
             return true;
         }
     }

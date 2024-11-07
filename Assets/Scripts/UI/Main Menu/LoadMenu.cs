@@ -21,7 +21,9 @@ public class LoadMenu : MonoBehaviour
     GridSave gridSave;
     PlayerSettings playerSettings;
     List<HumanSave> humanSaves;
-    ResearchSave researchSaves;
+    ResearchSave researchSave;
+    TradeSave tradeSave;
+
     public void ParseSaves()
     {
         string[] dirs = Directory.GetDirectories(Application.persistentDataPath + "/saves/");
@@ -83,14 +85,17 @@ public class LoadMenu : MonoBehaviour
         jsonReader.Close();
         // for researchCategories
         jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Research.json"));
-        researchSaves = jsonSerializer.Deserialize<ResearchSave>(jsonReader);
+        researchSave = jsonSerializer.Deserialize<ResearchSave>(jsonReader);
+        jsonReader.Close();
+        jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Trade.json"));
+        tradeSave = jsonSerializer.Deserialize<TradeSave>(jsonReader);
         jsonReader.Close();
 
         transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = selectedSave;
         transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = // to show that the save is really working
             $"Buildings: {gridSave.buildings.Count}\n" +
             $"Humans: {humanSaves.Count}\n" +
-            $"Completed Researches: {researchSaves.categories.SelectMany(q=> q.nodes).Count(q=> q.researched)}";
+            $"Completed Researches: {researchSave.categories.SelectMany(q=> q.nodes).Count(q=> q.researched)}";
         
         transform.GetChild(3).GetChild(0).GetComponent<Button>().interactable = true; // load
         transform.GetChild(3).GetChild(2).GetComponent<Button>().interactable = true; // delete
@@ -149,6 +154,7 @@ public class LoadMenu : MonoBehaviour
 
     public void Load(AsyncOperation ao)
     {
-        GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>().LoadSave(gridSave, playerSettings, humanSaves, researchSaves, selectedSave);
+        GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>().
+            StartLoading(gridSave, playerSettings, humanSaves, researchSave, tradeSave, selectedSave);
     }
 }

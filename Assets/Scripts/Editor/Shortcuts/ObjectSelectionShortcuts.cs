@@ -19,7 +19,7 @@ public class ObjectSelectionShortcuts : MonoBehaviour
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = GameObject.Find("UI canvas").GetComponent<CanvasManager>().tradeWindow.window.transform.GetChild(3).GetChild(1).GetChild(1).gameObject;
+        GameObject gameObject = GameObject.Find("UI canvas").GetComponent<CanvasManager>().trade.window.transform.GetChild(3).GetChild(1).GetChild(1).gameObject;
         Selection.activeGameObject = gameObject;
     }
 

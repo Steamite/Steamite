@@ -32,10 +32,10 @@ public class Trade : FullscreenWindow
     [SerializeField] float expeditionSpeed = 0.13f;
 
     [Header("Data")]
-    public StartingLocation colonyLocation;
+    public ColonyLocation colonyLocation;
     public List<TradeLocation> tradeLocations;
-    public List<Outpost> outposts;
     public List<TradeExpedition> expeditions;
+    public List<Outpost> outposts;
 
     [Header("Prefabs")]
     [SerializeField] GameObject expeditionSlider;
@@ -50,7 +50,7 @@ public class Trade : FullscreenWindow
     {
         base.OpenWindow();
         SelectButton(SelectedCateg.Colony, tradeLocations.Count);
-        if(expeditions.Count > 0)
+        if (expeditions.Count > 0)
         {
             StartCoroutine(MoveTradeRoute());
         }
@@ -61,13 +61,44 @@ public class Trade : FullscreenWindow
         StopCoroutine(MoveTradeRoute());
     }
 
-    public void Init()
+    public void NewGame()
+    {
+        tradeLocations = ((TradeHolder)Resources.Load("Holders/Data/Trade Data")).tradeLocations;
+        expeditions = new();
+        Init();
+    }
+
+    public void LoadGame(TradeSave tradeSave)
+    {
+        colonyLocation = tradeSave.colonyLocation;
+        tradeLocations = tradeSave.tradeLocations;
+        expeditions = tradeSave.expeditions;
+        outposts = tradeSave.outposts;
+        MyRes.money = tradeSave.money;
+
+        Init();
+
+        // assigns sliders
+        if (expeditions.Count > 0)
+        {
+            foreach (TradeExpedition exp in expeditions)
+            {
+                LoadExpedition(exp);
+            }
+            MyGrid.sceneReferences.GetComponent<Tick>().tickAction += MoveTradeRouteProgress;
+            StartCoroutine(MoveTradeRoute());
+        }
+    }
+
+    /// <summary>
+    /// The trade window initialization, creates all needed objects.
+    /// </summary>
+    void Init()
     {
         lastIndex = -2;
         isLastLocation = SelectedCateg.None;
-        expeditions = new();
-        tradeLocations = ((TradeHolder)Resources.Load("Holders/Data/Trade Data")).tradeLocations;
         header.text = colonyLocation.name;
+
         //PrepBaseLocation(colonyLocation.passiveProductions,0);
         PrepBaseLocation(colonyLocation.stats, 1);
 
@@ -119,7 +150,12 @@ public class Trade : FullscreenWindow
         if (outposts.Count(q => !q.constructed) > 0)
             MyGrid.sceneReferences.GetComponent<Tick>().tickAction += outpostInfo.UpdateOutpostProgress;
     }
-
+    
+    /// <summary>
+    /// Removes and marks states on colony info.
+    /// </summary>
+    /// <param name="production">The list of Productions that it should mark.</param>
+    /// <param name="part">Index of child object.</param>
     void PrepBaseLocation(List<PassiveProduction> production, int part)
     {
         for (int i = 0; i < production.Count; i++)
@@ -136,6 +172,10 @@ public class Trade : FullscreenWindow
             }
         }
     }
+    
+    /// <summary>
+    /// Creates empty sliders, and disables them.
+    /// </summary>
     void AddExpeditionSlider()
     {
         Transform routes = window.transform
@@ -143,6 +183,14 @@ public class Trade : FullscreenWindow
         GameObject newRoute = Instantiate(expeditionSlider, routes);
         newRoute.SetActive(false);
     }
+
+    /// <summary>
+    /// Adds a trade location and conects it with colony.
+    /// </summary>
+    /// <param name="buttonGroupTran">Parent transform to the button.</param>
+    /// <param name="colonyPos">Position of the button.</param>
+    /// <param name="x">Location index.</param>
+    /// <param name="scale">Canvas scale.</param>
     void AddLocationButton(Transform buttonGroupTran, Vector3 colonyPos, int x, float scale)
     {
         // creates the button
@@ -159,6 +207,13 @@ public class Trade : FullscreenWindow
         routePath.GetComponent<Image>().color = unavailableColor;
         buttonGroupTran.GetChild(x).GetChild(0).GetComponent<Button>().onClick.AddListener(() => { SelectButton(SelectedCateg.Trade, x - 1); });
     }
+    
+    /// <summary>
+    /// Creates a outpost button.
+    /// </summary>
+    /// <param name="t">Parent transform to the button.</param>
+    /// <param name="x">Outpost index.</param>
+    /// <returns></returns>
     public Button AddOutpostButton(Transform t, int x)
     {
         Button button = Instantiate(tradeButton, t).transform.GetChild(0).GetComponent<Button>();
@@ -188,6 +243,11 @@ public class Trade : FullscreenWindow
         MyRes.ManageMoney(money);
     }
 
+    /// <summary>
+    /// Called by buttons, calles button handlers.
+    /// </summary>
+    /// <param name="selectedCateg">Button category.</param>
+    /// <param name="index">Child index.</param>
     public void SelectButton(SelectedCateg selectedCateg, int index)
     {
         EndRename();
@@ -205,11 +265,10 @@ public class Trade : FullscreenWindow
     }
 
     /// <summary>
-    /// Called when changing buttons to deselect/select them.
+    /// Handles deselecting/selecting buttons.
     /// </summary>
     /// <param name="activate">If it should be selected or not.</param>
     /// <param name="buttonGroup">The output button group.</param>
-    /// <param name="button">The output button.</param>
     /// <returns>If the values be used.</returns>
     bool ButtonChange(bool activate, out int buttonGroup)
     {
@@ -265,6 +324,7 @@ public class Trade : FullscreenWindow
         return true;
     }
     
+
     public void StartExpediton(TradeExpedition expedition)
     {
         Transform t = window.transform.GetChild(0).GetChild(1);
@@ -286,8 +346,8 @@ public class Trade : FullscreenWindow
         Vector3 dif = posTran - colonyTran;
 
         slider.transform.position = (posTran + colonyTran) / 2;
-        slider.maxValue = (Vector3.Distance(posTran, colonyTran) - 15) / gameObject.GetComponent<Canvas>().scaleFactor;
-        slider.GetComponent<RectTransform>().sizeDelta = new(slider.maxValue - 15, slider.GetComponent<RectTransform>().sizeDelta.y);
+        slider.maxValue = (Vector3.Distance(posTran, colonyTran) - 15);
+        slider.GetComponent<RectTransform>().sizeDelta = new((slider.maxValue - 15) / gameObject.GetComponent<Canvas>().scaleFactor, slider.GetComponent<RectTransform>().sizeDelta.y);
 
         float f = Mathf.Atan(dif.y / dif.x);
         slider.transform.rotation = Quaternion.Euler(new Vector3(0, 0, dif.x > 0 ? (180 * f / Mathf.PI) : -180 + (180 * f / Mathf.PI)));
@@ -300,6 +360,35 @@ public class Trade : FullscreenWindow
             MyGrid.sceneReferences.GetComponent<Tick>().tickAction += MoveTradeRouteProgress;
             StartCoroutine(MoveTradeRoute());
         }
+    }
+
+    void LoadExpedition(TradeExpedition expedition)
+    {
+        Transform t = transform.GetChild(0).GetChild(0).GetChild(1);
+        Transform tradeLocationsTran = transform.GetChild(0).GetChild(1);
+
+        Vector3 colonyTran = tradeLocationsTran.GetChild(tradeLocationsTran.childCount - 1).transform.position;
+        Vector3 posTran = tradeLocationsTran.GetChild(expedition.tradeLocation).position;
+        Vector3 dif = posTran - colonyTran;
+
+        float tangens = Mathf.Atan(dif.y / dif.x);
+        Slider slider = t.GetChild(expedition.sliderID).GetComponent<Slider>();
+        slider.maxValue = expedition.maxProgress;
+
+        slider.GetComponent<RectTransform>().sizeDelta = 
+            new(
+                (slider.maxValue - 15) / gameObject.GetComponent<Canvas>().scaleFactor, 
+                slider.GetComponent<RectTransform>().sizeDelta.y);
+
+        slider.transform.rotation = 
+            Quaternion.Euler(new Vector3(0, 0, 
+                dif.x > 0 
+                    ? (180 * tangens / Mathf.PI) 
+                    : -180 + (180 * tangens / Mathf.PI)));
+        slider.transform.position = (posTran + colonyTran) / 2;
+        slider.handleRect.GetComponent<ExpeditionInfo>().SetExpedition(expedition);
+        slider.gameObject.SetActive(true);
+        slider.value = expedition.currentProgress;
     }
 
     void MoveTradeRouteProgress()

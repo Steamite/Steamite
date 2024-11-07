@@ -10,16 +10,31 @@ using TMPro;
 public class SaveController : MonoBehaviour
 {
     public string activeFolder;
-    static JsonSerializer jsonSerializer;
 
     void OnApplicationQuit()
     {
         SaveGame();
     }
 
+    /// <summary>
+    /// Creates a JsonSerializer.
+    /// </summary>
+    /// <returns>Returns a standardized JsonSerializer</returns>
+    public static JsonSerializer PrepSerializer()
+    {
+        JsonSerializer jsonSerializer = new();
+        jsonSerializer.TypeNameHandling = TypeNameHandling.Auto;
+        //jsonSerializer.Formatting = Formatting.Indented;
+        return jsonSerializer;
+    }
+
+    /// <summary>
+    /// Checks if there's a saves folder, then tries to save data to a temporaly directory.<br/>
+    /// If it succedes calls AfterSave().
+    /// </summary>
+    /// <param name="autoSave"></param>
     public void SaveGame(bool autoSave = false)
     {
-        // checks if there's a folder for saves
         if (Directory.GetDirectories($"{Application.persistentDataPath}").FirstOrDefault(q => q == $"{Application.persistentDataPath}/saves") == null)
             Directory.CreateDirectory($"{Application.persistentDataPath}/saves");
         
@@ -27,10 +42,12 @@ public class SaveController : MonoBehaviour
         Directory.CreateDirectory($"{tmpPath}");
         try
         {
-            SaveGrid(tmpPath);
-            SaveHumans(tmpPath);
-            SavePlayerSettings(tmpPath);
-            SaveResearch(tmpPath);
+            JsonSerializer jsonSerializer = PrepSerializer();
+            SaveGrid(tmpPath, jsonSerializer);
+            SaveHumans(tmpPath, jsonSerializer);
+            SavePlayerSettings(tmpPath, jsonSerializer);
+            SaveResearch(tmpPath, jsonSerializer);
+            SaveTrade(tmpPath, jsonSerializer);
         }
         catch (Exception e)
         {
@@ -40,54 +57,44 @@ public class SaveController : MonoBehaviour
             return;
         }
 
+        AfterSave(tmpPath, autoSave);
+    }
+
+    /// <summary>
+    /// Moves saves from tmp folder to persistent folder.
+    /// </summary>
+    /// <param name="tmpPath">Tmp folder path.</param>
+    /// <param name="autoSave">Save name.</param>
+    void AfterSave(string tmpPath, bool autoSave)
+    {
         if (activeFolder == "")
             activeFolder = "noname";
-        string activeF = autoSave ? activeFolder + " - autosave" : activeFolder;
+
+        string activeF = autoSave 
+            ? (activeFolder.Contains(" - autosave") 
+                ? activeFolder 
+                : (activeFolder + " - autosave"))
+            : activeFolder;
+
         string path = $"{Application.persistentDataPath}/saves/{activeF}";
         if (Directory.GetDirectories($"{Application.persistentDataPath}/saves").FirstOrDefault(q => LoadMenu.GetSaveName(q) == activeF) == null)
             Directory.CreateDirectory($"{path}");
 
-        foreach(string file in Directory.GetFiles(tmpPath))
+        foreach (string file in Directory.GetFiles(tmpPath))
         {
             string s = file.Split("\\").Last();
-            if(File.Exists($"{path}/{s}"))
+            if (File.Exists($"{path}/{s}"))
                 File.Delete($"{path}/{s}");
             File.Move($"{file}", $"{path}/{s}");
         }
 
         Directory.Delete($"{tmpPath}");
-        MyGrid.canvasManager.ShowMessage(autoSave? "Autosave" : "Saved succesfuly");
-
+        MyGrid.canvasManager.ShowMessage(autoSave ? "Autosave" : "Saved succesfuly");
     }
 
-    void SaveResearch(string path)
-    {
-        // takes nodes from all research buttons
-        ResearchUI research = MyGrid.canvasManager.research;
-        Transform categsTransform = research.categoriesTran;
-        ResearchSave categsData = new(categsTransform.childCount);
-        for (int i = 0; i < categsTransform.childCount; i++) 
-        {
-            Transform categTransform = categsTransform.GetChild(i);
-            categsData.categories[i] = new(categTransform.name);
-            for (int j = 1; j < categTransform.childCount; j++)
-            {
-                Transform levelTransform = categTransform.GetChild(j);
-                for(int k = 0; k < levelTransform.childCount; k++)
-                {
-                    categsData.categories[i].nodes.Add(levelTransform.GetChild(k).GetComponent<ResearchUIButton>().node);
-                }
-            }
-        }
-        if(research.GetComponent<ResearchBackend>().currentResearch)
-            categsData.currentResearch = research.GetComponent<ResearchBackend>().currentResearch.node.id;
-        //write saves
-        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Research.json"));
-        PrepSerializer().Serialize(jsonTextWriter, categsData);
-        jsonTextWriter.Close();
-    }
 
-    void SaveGrid(string path)
+    //-------Grid-------\\
+    void SaveGrid(string path, JsonSerializer jsonSerializer)
     {
         GridSave gridSave = new();
         gridSave.width = MyGrid.width;
@@ -107,7 +114,7 @@ public class SaveController : MonoBehaviour
             SaveBuildings(gridSave);
             SaveChunks(gridSave);
             JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Grid.json"));
-            PrepSerializer().Serialize(jsonTextWriter, gridSave);
+            jsonSerializer.Serialize(jsonTextWriter, gridSave);
             jsonTextWriter.Close();
         }
     }
@@ -122,7 +129,6 @@ public class SaveController : MonoBehaviour
                 gridSave.buildings.Add(clickable);
         }
     }
-
     void SavePipes(GridSave gridSave)
     {
         gridSave.pipes = new ClickableObjectSave[gridSave.height, gridSave.width];
@@ -141,37 +147,62 @@ public class SaveController : MonoBehaviour
         }
     }
 
-    void SavePlayerSettings(string path)
+    //------Player Settings------\\
+    void SavePlayerSettings(string path, JsonSerializer jsonSerializer)
     {
         PlayerSettings settings = new();
         settings.priorities = MyGrid.sceneReferences.humans.GetComponent<JobQueue>().priority;
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/PlayerSettings.json"));
-        PrepSerializer().Serialize(jsonTextWriter, settings);
+        jsonSerializer.Serialize(jsonTextWriter, settings);
         jsonTextWriter.Close();
     }
-    void SaveHumans(string path)
+
+    //------Humans------\\
+    void SaveHumans(string path, JsonSerializer jsonSerializer)
     {
         List<HumanSave> humanSave = new();
         foreach (Human h in MyGrid.sceneReferences.humans.GetComponent<Humans>().humen)
             humanSave.Add(new(h));
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Humans.json"));
-        PrepSerializer().Serialize(jsonTextWriter, humanSave);
+        jsonSerializer.Serialize(jsonTextWriter, humanSave);
+        jsonTextWriter.Close();
+    }
+    
+    //------Research------\\
+    void SaveResearch(string path, JsonSerializer jsonSerializer)
+    {
+        // takes nodes from all research buttons
+        ResearchUI research = MyGrid.canvasManager.research;
+        Transform categsTransform = research.categoriesTran;
+        ResearchSave categsData = new(categsTransform.childCount);
+        for (int i = 0; i < categsTransform.childCount; i++)
+        {
+            Transform categTransform = categsTransform.GetChild(i);
+            categsData.categories[i] = new(categTransform.name);
+            for (int j = 1; j < categTransform.childCount; j++)
+            {
+                Transform levelTransform = categTransform.GetChild(j);
+                for (int k = 0; k < levelTransform.childCount; k++)
+                {
+                    categsData.categories[i].nodes.Add(levelTransform.GetChild(k).GetComponent<ResearchUIButton>().node);
+                }
+            }
+        }
+        if (research.GetComponent<ResearchBackend>().currentResearch)
+            categsData.currentResearch = research.GetComponent<ResearchBackend>().currentResearch.node.id;
+        //write saves
+        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Research.json"));
+        jsonSerializer.Serialize(jsonTextWriter, categsData);
         jsonTextWriter.Close();
     }
 
-    /// <summary>
-    /// returns 
-    /// </summary>
-    /// <returns></returns>
-    public static JsonSerializer PrepSerializer()
+    //------Research------\\
+    void SaveTrade(string path, JsonSerializer jsonSerializer)
     {
-        if(jsonSerializer == null)
-        {
-            jsonSerializer = new();
-            jsonSerializer.TypeNameHandling = TypeNameHandling.Auto;
-            jsonSerializer.Formatting = Formatting.Indented;
-        }
-        return jsonSerializer;
+        Trade trade = MyGrid.canvasManager.trade;
+        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Trade.json"));
+        jsonSerializer.Serialize(jsonTextWriter, new TradeSave(trade));
+        jsonTextWriter.Close();
     }
 }
 

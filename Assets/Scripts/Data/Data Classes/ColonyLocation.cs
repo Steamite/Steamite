@@ -21,7 +21,7 @@ public struct PassiveProduction
 }
 
 [Serializable]
-public class StartingLocation
+public class ColonyLocation
 {
     public string name;
     public GridPos pos;
@@ -44,7 +44,7 @@ public class StartingLocation
         return -1;
     }
 
-    public StartingLocation(string _name)
+    public ColonyLocation(string _name)
     {
         name = _name;
     }
