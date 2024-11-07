@@ -128,7 +128,7 @@ public class OutpostInfo : MonoBehaviour
         // Update text
         Outpost outpost = trade.outposts[activeOutpost];
         outpost.production.ammount[0] = (int)slider.value;
-        int money = Outpost.resourceCosts[outpost.production.type[0]] * (Outpost.resourceAmmount[outpost.production.type[0]] - outpost.production.ammount[0]);
+        int money = Outpost.resourceCosts[outpost.production.type[0]] * ((Outpost.resourceAmmount[outpost.production.type[0]] * outpost.level) - outpost.production.ammount[0]);
         constructed.GetChild(3).GetChild(1).GetComponent<TMP_Text>().text =
             $"Money: {money}" +
             $"\n{outpost.production.ToStringComplete()}";
@@ -145,13 +145,13 @@ public class OutpostInfo : MonoBehaviour
                 new(
                     "Outpost " + activeOutpost, 
                     (ResourceType)unconstructed.GetChild(0).GetComponent<TMP_Dropdown>().value-1));
-            if (trade.outposts.Count(q => !q.constructed) == 1)
-                MyGrid.sceneReferences.GetComponent<Tick>().tickAction += UpdateOutpostProgress;
         }
         else
         {
             trade.outposts[activeOutpost].StartUpgrade();
         }
+        if (trade.outposts.Count(q => !q.constructed) == 1)
+            MyGrid.sceneReferences.GetComponent<Tick>().tickAction += UpdateOutpostProgress;
         ChangeOutpost(activeOutpost);
     }
 
