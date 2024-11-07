@@ -36,7 +36,7 @@ public static class MyRes
         {
             resources = new();
             textFields = new();
-            FillRes();
+            FillRes(setupStorages);
             globalStorageSpace = 0;
 
             storage = MyGrid.buildings.Select(q => q.GetComponent<Storage>()).Where(q => q != null).ToArray();
@@ -71,9 +71,10 @@ public static class MyRes
     /// Preps IDs for the MyRes class.
     /// </summary>
     /// <returns></returns>
-    static void FillRes()
+    static void FillRes(bool fillMoney)
     {
-        money = 2000;
+        if(fillMoney)
+            money = 2000;
         string[] names = Enum.GetNames(typeof(ResourceType));
         for (int i = 0; i < names.Length; i++)
         {
@@ -97,8 +98,8 @@ public static class MyRes
     {
         money += change;
         UpdateMoneyText();
-        if(MyGrid.canvasManager.tradeWindow.tradeInfo.gameObject.activeSelf)
-            MyGrid.canvasManager.tradeWindow.tradeInfo.UpdateTradeText();
+        if(MyGrid.canvasManager.trade.tradeInfo.gameObject.activeSelf)
+            MyGrid.canvasManager.trade.tradeInfo.UpdateTradeText();
     }
     static void UpdateMoneyText()
     {

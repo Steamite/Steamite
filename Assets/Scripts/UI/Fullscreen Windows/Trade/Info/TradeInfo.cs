@@ -15,7 +15,6 @@ public struct TradeRoute
     public Resource buying;
     public Resource selling;
 
-    
     public TradeRoute(int _cost)
     {
         cost = 0;
@@ -97,43 +96,46 @@ public class TradeInfo : MonoBehaviour
 
     public void UpdateTradeText()
     {
-        activeTrade = CalculateTradeCost();
-        int capacity = trade.colonyLocation.stats[0].currentProduction * 50;
-        string buttonText = "confirm";
-        if (trade.colonyLocation.stats[0].currentProduction <= trade.expeditions.Count)
-            buttonText = "no available expeditions"; // error 0
-
-        //-------------money summary------------\\
-        int moneyC = activeTrade.reward - activeTrade.cost;
-        MakeSummary(MyRes.money, moneyC, moneyC + MyRes.money,
-            moneyChangeText, moneyText, finalMoneyText, ref buttonText, false);
-
-        //-------------buy------------\\
-        MakeSummary(capacity, activeTrade.buying.ammount.Sum(), activeTrade.cost, 
-            buyResText, buyCapText, buyCostText, ref buttonText, true);
-        
-        //-------------sell-----------\\
-        MakeSummary(capacity, activeTrade.selling.ammount.Sum(), activeTrade.reward, 
-            sellResText, sellCapText, sellCostText, ref buttonText, true);
-        List<Resource> availableResources = MyGrid.buildings.Where(q => q.GetComponent<Storage>() != null).Select(q => q.localRes.Future(true)).ToList();
-        for(int i = 0; i < activeTrade.selling.ammount.Count; i++)
+        if (gameObject.activeSelf)
         {
-            if (activeTrade.selling.ammount[i] > availableResources.Sum(q => q.ammount[q.type.IndexOf(activeTrade.selling.type[i])]))
-            {
-                transform.GetChild(1).GetChild(i + 2).GetChild(2).GetComponent<TMP_InputField>().textComponent.color = Color.red;
-                if (buttonText == "confirm")
-                    buttonText = "not enough in store"; // error 3
-            }
-            else
-            {
-                transform.GetChild(1).GetChild(i + 2).GetChild(2).GetComponent<TMP_InputField>().textComponent.color = Color.white;
-            }
-        }
+            activeTrade = CalculateTradeCost();
+            int capacity = trade.colonyLocation.stats[0].currentProduction * 50;
+            string buttonText = "confirm";
+            if (trade.colonyLocation.stats[0].currentProduction <= trade.expeditions.Count)
+                buttonText = "no available expeditions"; // error 0
 
-        confirmButton.interactable = buttonText == "confirm";
-        confirmButton.transform.GetChild(0).GetComponent<TMP_Text>().text = buttonText;
-        capacity /= 50; 
-        expeditonText.text = $"{capacity - trade.expeditions.Count} / {capacity}";
+            //-------------money summary------------\\
+            int moneyC = activeTrade.reward - activeTrade.cost;
+            MakeSummary(MyRes.money, moneyC, moneyC + MyRes.money,
+                moneyChangeText, moneyText, finalMoneyText, ref buttonText, false);
+
+            //-------------buy------------\\
+            MakeSummary(capacity, activeTrade.buying.ammount.Sum(), activeTrade.cost,
+                buyResText, buyCapText, buyCostText, ref buttonText, true);
+
+            //-------------sell-----------\\
+            MakeSummary(capacity, activeTrade.selling.ammount.Sum(), activeTrade.reward,
+                sellResText, sellCapText, sellCostText, ref buttonText, true);
+            List<Resource> availableResources = MyGrid.buildings.Where(q => q.GetComponent<Storage>() != null).Select(q => q.localRes.Future(true)).ToList();
+            for (int i = 0; i < activeTrade.selling.ammount.Count; i++)
+            {
+                if (activeTrade.selling.ammount[i] > availableResources.Sum(q => q.ammount[q.type.IndexOf(activeTrade.selling.type[i])]))
+                {
+                    transform.GetChild(1).GetChild(i + 2).GetChild(2).GetComponent<TMP_InputField>().textComponent.color = Color.red;
+                    if (buttonText == "confirm")
+                        buttonText = "not enough in store"; // error 3
+                }
+                else
+                {
+                    transform.GetChild(1).GetChild(i + 2).GetChild(2).GetComponent<TMP_InputField>().textComponent.color = Color.white;
+                }
+            }
+
+            confirmButton.interactable = buttonText == "confirm";
+            confirmButton.transform.GetChild(0).GetComponent<TMP_Text>().text = buttonText;
+            capacity /= 50;
+            expeditonText.text = $"{capacity - trade.expeditions.Count} / {capacity}";
+        }
     }
 
     void MakeSummary(int capacity, int ammount, int revenue, TMP_Text res, TMP_Text cap, TMP_Text mon, ref string message, bool isRes)

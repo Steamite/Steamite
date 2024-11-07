@@ -108,13 +108,13 @@ public class EventHandler : MonoBehaviour
         {
             if (research.triggered)
             {
-                MyGrid.canvasManager.tradeWindow.CloseWindow();
+                MyGrid.canvasManager.trade.CloseWindow();
                 MyGrid.canvasManager.research.ToggleWindow();
             }
             if (trade.triggered)
             {
                 MyGrid.canvasManager.research.CloseWindow();
-                MyGrid.canvasManager.tradeWindow.ToggleWindow();
+                MyGrid.canvasManager.trade.ToggleWindow();
             }
         }
         // opens ingame menu

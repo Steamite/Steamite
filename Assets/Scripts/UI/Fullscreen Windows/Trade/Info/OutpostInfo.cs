@@ -141,7 +141,10 @@ public class OutpostInfo : MonoBehaviour
     {
         if(activeOutpost == trade.outposts.Count)
         {
-            trade.outposts.Add(new("Outpost " + activeOutpost, (ResourceType)unconstructed.GetChild(0).GetComponent<TMP_Dropdown>().value-1));
+            trade.outposts.Add(
+                new(
+                    "Outpost " + activeOutpost, 
+                    (ResourceType)unconstructed.GetChild(0).GetComponent<TMP_Dropdown>().value-1));
             if (trade.outposts.Count(q => !q.constructed) == 1)
                 MyGrid.sceneReferences.GetComponent<Tick>().tickAction += UpdateOutpostProgress;
         }
@@ -162,7 +165,7 @@ public class OutpostInfo : MonoBehaviour
                 outpost.timeToFinish -= 1;
                 if (outpost.timeToFinish == 0)
                 {
-                    outpost.Upgrade(trade, i);
+                    outpost.Upgrade();
                     if (activeOutpost == i)
                         ChangeOutpost(i);
                     if (trade.outposts.Count(q => !q.constructed) == 0)

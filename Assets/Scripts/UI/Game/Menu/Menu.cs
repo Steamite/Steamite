@@ -16,9 +16,9 @@ public class Menu : MonoBehaviour
             MyGrid.canvasManager.research.CloseWindow();
             return;
         }
-        else if (MyGrid.canvasManager.tradeWindow.window.activeSelf)
+        else if (MyGrid.canvasManager.trade.window.activeSelf)
         {
-            MyGrid.canvasManager.tradeWindow.CloseWindow();
+            MyGrid.canvasManager.trade.CloseWindow();
             return;
         }
 

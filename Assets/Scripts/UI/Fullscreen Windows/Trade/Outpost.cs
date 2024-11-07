@@ -1,6 +1,8 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -79,18 +81,23 @@ public class Outpost
         timeToFinish = upgradeCosts[level].timeInTicks;
         MyRes.TakeFromGlobalStorage(upgradeCosts[level].resource);
         MyRes.ManageMoney(-upgradeCosts[level].money);
+        if (level == 0)
+        {
+            Trade trade = MyGrid.canvasManager.trade;
+            Button button = trade.AddOutpostButton(trade.transform.GetChild(0).GetChild(2), trade.outposts.Count);
+        }
     }
 
     /// <summary>
     /// Ends the upgrade process and marks when it finished.
     /// </summary>
-    public void Upgrade(Trade trade, int index)
+    public void Upgrade()
     {
         constructed = true;
         if(level == 0)
         {
-            Button button = trade.AddOutpostButton(trade.transform.GetChild(0).GetChild(2), trade.outposts.Count);
-            trade.transform.GetChild(0).GetChild(2).GetChild(index).GetChild(0).GetComponent<Image>().color = trade.availableColor;
+            Trade trade = MyGrid.canvasManager.trade;
+            trade.transform.GetChild(0).GetChild(2).GetChild(trade.outposts.Count-1).GetChild(0).GetComponent<Image>().color = trade.availableColor;
         }
         level++;
         timeToFinish = MyGrid.sceneReferences.GetComponent<Tick>().timeController.GetWeekTime();

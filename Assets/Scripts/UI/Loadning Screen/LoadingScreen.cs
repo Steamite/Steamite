@@ -17,11 +17,6 @@ public class LoadingScreen : MonoBehaviour
     int buildWeigth = 5;
     int progressGlobal = 1;
 
-    public GridSave gridSave;
-    public PlayerSettings playerSettings;
-    public List<HumanSave> humanSaves;
-    public ResearchSave researchSaves;
-
     [SerializeField] GroundLevel startLevel;
     [SerializeField] GroundLevel templateLevel;
     public event Action humanActivation;
@@ -29,17 +24,12 @@ public class LoadingScreen : MonoBehaviour
     GameObject roadPref;
     public void LoadMainMenu()
     {
-        StartCoroutine(Load(2)); // the loading Process
+        Load(2); // the loading Process
     }
-    IEnumerator Load(int id)
+    async void Load(int id)
     {
-        var scene = SceneManager.LoadSceneAsync(id, LoadSceneMode.Additive);
-        // starts the loading
-        do
-        {
-            yield return new WaitForSeconds(0.2f);
-        }
-        while (!scene.isDone);
+        await SceneManager.LoadSceneAsync(id, LoadSceneMode.Additive);
+        
         Debug.Log("start:" + Time.realtimeSinceStartup);
         if(id == 2) // if main menu is being activated
         {
@@ -53,11 +43,13 @@ public class LoadingScreen : MonoBehaviour
         {
             MyGrid.CreateGrid(startLevel);
             MyGrid.canvasManager.research.NewGame();
+            MyGrid.canvasManager.trade.NewGame();
             AfterLevelLoad(true);
         }
         Debug.Log("end:" + Time.realtimeSinceStartup);
         transform.GetChild(0).gameObject.SetActive(false);
     }
+
     public void NewGame(string _folderName, bool tutorial)
     {
         folderName = _folderName;
@@ -72,41 +64,42 @@ public class LoadingScreen : MonoBehaviour
     void CreateW(AsyncOperation obj)
     {
         transform.GetChild(0).gameObject.SetActive(true);
-        StartCoroutine(Load(3));
+        Load(3);
     }
 
     //////////////////////////////////////////////////////////////////
     //-----------------------------Loading--------------------------//
     //////////////////////////////////////////////////////////////////
-    
-    public void LoadSave(GridSave _gridSave, PlayerSettings _playerSettings, List<HumanSave> _humanSaves, ResearchSave _researchSaves, string _folderName)
+
+    /// <summary>
+    /// Assigns parameters and shows loading screen.<br/>
+    /// If called while on "Main Menu" scene unloads it.<br/>
+    /// After that loads "Level" scene.
+    /// </summary>
+    /// <param name="_folderName">Current folder name.</param>
+    public async void StartLoading(GridSave _gridSave, PlayerSettings _playerSettings, List<HumanSave> _humanSaves,
+        ResearchSave _researchSave, TradeSave _tradeSave, string _folderName)
     {
-        gridSave = _gridSave;
-        playerSettings = _playerSettings;
-        humanSaves = _humanSaves;
-        researchSaves = _researchSaves;
         folderName = _folderName;
 
-        if (GameObject.Find("Main Menu"))
-        {
-            var unloading = SceneManager.UnloadSceneAsync("Main Menu");
-            unloading.completed += LoadLevel;
-        }
-        else 
-        {
-            LoadLevel(null);
-        }
-    }
-    void LoadLevel(AsyncOperation obj)
-    {
         transform.GetChild(0).gameObject.SetActive(true);
         transform.GetChild(0).GetChild(2).GetComponent<TMP_Text>().text = folderName;
         transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
-        var loading = SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
-        loading.completed += LoadWorld;
+
+        if (GameObject.Find("Main Menu"))
+        {
+           await SceneManager.UnloadSceneAsync("Main Menu");
+        }
+        await SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
+        LoadWorldData(_gridSave, _playerSettings, _humanSaves, _researchSave, _tradeSave);
     }
 
-    void LoadWorld(AsyncOperation obj)
+    /// <summary>
+    /// Uses the data from
+    /// </summary>
+    /// <param name="obj"></param>
+    void LoadWorldData(GridSave gridSave, PlayerSettings playerSettings, List<HumanSave> humanSaves,
+        ResearchSave researchSave, TradeSave tradeSave)
     {
         MyGrid.sceneReferences = GameObject.Find("Scene").GetComponent<SceneReferences>();
         MyGrid.canvasManager = GameObject.Find("UI canvas").GetComponent<CanvasManager>();
@@ -115,17 +108,19 @@ public class LoadingScreen : MonoBehaviour
         int maxProgress = gridSave.width * gridSave.height*4; // Tiles and pipes
         maxProgress += gridSave.buildings.Count * buildWeigth; //scale number
         maxProgress += gridSave.chunks.Count;
-        /*maxProgress += jobSaves.Count;
-        maxProgress += humanSaves.Count;*/
+        maxProgress += humanSaves.Count;
+        maxProgress += researchSave.categories.SelectMany(q => q.nodes).Count();
+        //maxProgress += trade
         slider.maxValue = maxProgress;
         Progress<int> progress = new Progress<int>(value =>
         {
             slider.value = value;
         });
-        FillPlayerSettings(progress);
-        FillGrid(progress);
-        FillHumans(progress);
-        FillResearches(progress);
+        FillPlayerSettings(progress, playerSettings);
+        FillGrid(progress, gridSave);
+        FillHumans(progress, humanSaves);
+        FillResearches(progress, researchSave);
+        FillTrade(progress, tradeSave);
         //..
         StartCoroutine(LoadWaiting());
     }
@@ -136,23 +131,28 @@ public class LoadingScreen : MonoBehaviour
         MyGrid.gridTiles = MyGrid.sceneReferences.eventSystem.GetChild(0).GetComponent<GridTiles>();
         AfterLevelLoad(false);
     }
-    void FillPlayerSettings(IProgress<int> progress)
+    void FillPlayerSettings(IProgress<int> progress, PlayerSettings playerSettings)
     {
         MyGrid.sceneReferences.humans.GetComponent<JobQueue>().priority = playerSettings.priorities;
     }
     //////////////////////////////////////////////////////////////////
     //-----------------------------Grid-----------------------------//
     //////////////////////////////////////////////////////////////////
-    void FillGrid(IProgress<int> progress)
+    void FillGrid(IProgress<int> progress, GridSave gridSave)
     {
         roadPref = MyGrid.tilePrefabs.GetPrefab("Road").gameObject;
-        CreateGrid(progress);
-        CreateChunks(progress);
-        CreatePipes(progress);
-        CreateBuilding(progress);
+        CreateGrid(progress, gridSave);
+        CreateChunks(progress, gridSave);
+        CreatePipes(progress, gridSave);
+        CreateBuilding(progress, gridSave);
     }
 
-    void CreateGrid(IProgress<int> progress)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="gridSave"></param>
+    void CreateGrid(IProgress<int> progress, GridSave gridSave)
     {
         // creates new grid
         MyGrid.ClearGrid();
@@ -165,14 +165,14 @@ public class LoadingScreen : MonoBehaviour
 
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = MyGrid.gridTiles.defaultMask;
         // process of creating items
-        CreateTiles(progress);
+        CreateTiles(progress, gridSave);
     }
 
     /// <summary>
     /// Instantiates and fills ClickableObject tiles (Rock, Water, Road).
     /// </summary>
     /// <param name="progress"></param>
-    void CreateTiles(IProgress<int> progress)
+    void CreateTiles(IProgress<int> progress, GridSave gridSave)
     {
         ClickableObject waterPref = MyGrid.tilePrefabs.GetPrefab("Water");//Assets/Resources/.prefab
         for (int x = 0; x < gridSave.height; x++)
@@ -212,7 +212,12 @@ public class LoadingScreen : MonoBehaviour
         MyGrid.sceneReferences.humans.GetComponent<JobQueue>().toBeDug = MyGrid.gridTiles.toBeDigged.ToList();
     }
 
-    void CreateChunks(IProgress<int> progress)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="gridSave"></param>
+    void CreateChunks(IProgress<int> progress, GridSave gridSave)
     {
         MyGrid.chunks = new();
         GameObject chunkPref = MyGrid.specialPrefabs.GetPrefab("Chunk").gameObject;
@@ -223,8 +228,13 @@ public class LoadingScreen : MonoBehaviour
             MyGrid.chunks[^1].Load(chunkSave);
         }
     }
-
-    void CreatePipes(IProgress<int> progress)
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="gridSave"></param>
+    void CreatePipes(IProgress<int> progress, GridSave gridSave)
     {
         GameObject pipePref = MyGrid.buildPrefabs.GetPrefab("Fluid Pipe base").gameObject;
         for (int x = 0; x < gridSave.height; x++)
@@ -245,7 +255,7 @@ public class LoadingScreen : MonoBehaviour
     /// Instantiates and places all the buildings.
     /// </summary>
     /// <param name="progress"></param>
-    void CreateBuilding(IProgress<int> progress)
+    void CreateBuilding(IProgress<int> progress, GridSave gridSave)
     {
         foreach (BSave save in gridSave.buildings) // for each saved building
         {
@@ -266,7 +276,7 @@ public class LoadingScreen : MonoBehaviour
     //////////////////////////////////////////////////////////////////
     //-----------------------------Humans---------------------------//
     //////////////////////////////////////////////////////////////////
-    void FillHumans(IProgress<int> progress)
+    void FillHumans(IProgress<int> progress, List<HumanSave> humanSaves)
     {
         // Destroys all humans 
         for (int i = MyGrid.sceneReferences.humans.transform.GetChild(0).childCount-1; i >= 0; i--)
@@ -313,9 +323,14 @@ public class LoadingScreen : MonoBehaviour
         }
     }
 
-    void FillResearches(Progress<int> progress)
+    void FillResearches(Progress<int> progress, ResearchSave researchSave)
     {
-        MyGrid.canvasManager.research.LoadGame(researchSaves);
+        MyGrid.canvasManager.research.LoadGame(researchSave);
+    }
+
+    void FillTrade(Progress<int> progress, TradeSave tradeSave)
+    {
+        MyGrid.canvasManager.trade.LoadGame(tradeSave);
     }
 
     async void AfterLevelLoad(bool newGame)
@@ -327,8 +342,7 @@ public class LoadingScreen : MonoBehaviour
         MyGrid.canvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().SetUp();
         MyGrid.sceneReferences.GetComponent<SaveController>().activeFolder = folderName;
         MyGrid.canvasManager.stats.GetChild(0).GetChild(1).GetComponent<TimeButtons>().tick = MyGrid.sceneReferences.GetComponent<Tick>();
-        MyGrid.canvasManager.tradeWindow.Init();
-
+        
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = MyGrid.gridTiles.defaultMask;
         Camera.main.GetComponent<PhysicsRaycaster>().enabled = true;
         Camera.main.GetComponent<Physics2DRaycaster>().enabled = true;
