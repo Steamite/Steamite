@@ -22,16 +22,12 @@ MonoBehaviour:
     - Overlays
     - Research
     - Interface
+    - Trade
   - name: Humans
     backgroundColor: {r: 0.6509434, g: 0.19900389, b: 0, a: 1}
     textColor: {r: 1, g: 1, b: 1, a: 1}
     objects:
     - Humans
-  - name: UI canvas
-    backgroundColor: {r: 0, g: 0.25290883, b: 0.6509804, a: 1}
-    textColor: {r: 1, g: 1, b: 1, a: 1}
-    objects:
-    - UI canva
   - name: Research
     backgroundColor: {r: 0.14933477, g: 0.6509804, b: 0, a: 1}
     textColor: {r: 1, g: 1, b: 1, a: 1}
