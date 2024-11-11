@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Analytics.IAnalytic;
-using UnityEngine.WSA;
 using UnityEditor;
 
 [CreateAssetMenu(fileName = "Resource holder", menuName = "ScriptableObjects/Resource Holder", order = 1)]
@@ -46,7 +44,9 @@ public class ResourceHolder : ScriptableObject
                 }
             }
         }
+#if UNITY_EDITOR
         if (change)
             EditorUtility.SetDirty(this);
+#endif
     }
 }

@@ -24,7 +24,7 @@ public class SaveController : MonoBehaviour
     {
         JsonSerializer jsonSerializer = new();
         jsonSerializer.TypeNameHandling = TypeNameHandling.Auto;
-        //jsonSerializer.Formatting = Formatting.Indented;
+        jsonSerializer.Formatting = Formatting.Indented;
         return jsonSerializer;
     }
 

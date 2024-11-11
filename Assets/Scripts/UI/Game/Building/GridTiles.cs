@@ -1,12 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
-using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
 public enum SelectionMode
 {
@@ -16,6 +12,9 @@ public enum SelectionMode
     build
 }
 
+/// <summary>
+/// Handles Input on the game Grid.
+/// </summary>
 public class GridTiles : MonoBehaviour
 {
     //public bool dragBuildState = false; // follow mouse or find closest route
@@ -24,20 +23,26 @@ public class GridTiles : MonoBehaviour
     [Header("Tilemaps")]
     public Building buildingPrefab;
     public SelectionMode selMode = SelectionMode.nothing;
+
     public GridPos activePos;
     public GridPos startPos;
+
     public bool drag = false;
     public bool deselect = false;
+
     public List<ClickableObject> markedTiles;
     public List<Rock> toBeDigged = new();
     public Building buildBlueprint;
+
     /// <summary> clicked(selected) </summary>
     public ClickableObject clickedObject;
     /// <summary> mouse over </summary>
     public ClickableObject activeObject;
+
     public Texture2D[] cursors;
     public Color highlight = Color.white/3; // WHITE / 3
     public Color toBeDugColor = (Color.yellow + Color.red) / 2;
+
     /// <summary>
     /// Called when altTabing from the game.
     /// </summary>

@@ -1,14 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelButton : MonoBehaviour
+public class LevelButton : RadioButtons
 {
-    public void ChangeLevel(int i)
+    protected override void ButtonTrigger(Button button, int index)
     {
-        GroundLevel groundLevel = gameObject.GetComponent<GroundLevel>();
-        transform.GetChild(i).GetComponent<Button>().interactable = true;
-        //GroundLevel.SetLevel(i);
+        base.ButtonTrigger(button, index);
+        // TODO:  Change level
     }
 }
