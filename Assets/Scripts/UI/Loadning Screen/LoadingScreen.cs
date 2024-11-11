@@ -341,7 +341,7 @@ public class LoadingScreen : MonoBehaviour
         MyGrid.canvasManager.gameObject.SetActive(true);
         MyGrid.canvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().SetUp();
         MyGrid.sceneReferences.GetComponent<SaveController>().activeFolder = folderName;
-        MyGrid.canvasManager.stats.GetChild(0).GetChild(1).GetComponent<TimeButtons>().tick = MyGrid.sceneReferences.GetComponent<Tick>();
+        MyGrid.canvasManager.stats.GetChild(0).GetChild(0).GetComponent<TimeButtons>().tick = MyGrid.sceneReferences.GetComponent<Tick>();
         
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = MyGrid.gridTiles.defaultMask;
         Camera.main.GetComponent<PhysicsRaycaster>().enabled = true;

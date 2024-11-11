@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TimeButtons : MonoBehaviour
+public class TimeButtons : RadioButtons
 {
     public Tick tick;
 
-    /// <summary>
+    protected override void ButtonTrigger(Button button, int index)
+    {
+        base.ButtonTrigger(button, index);
+        tick.ChangeGameSpeed(states[index]);
+    }
+
+    /*/// <summary>
     /// Called by speed buttons, manages transitions betwean them and changes the gamespeed.
     /// </summary>
     /// <param name="newSpeed"></param>
@@ -23,5 +29,5 @@ public class TimeButtons : MonoBehaviour
         newSpeed.interactable = false;
         tick.ChangeGameSpeed(int.Parse(newSpeed.name[0].ToString()));
         tick.lastButton = newSpeed;
-    }
+    }*/
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEditor.PackageManager.UI;
+﻿
 using UnityEngine;
 
 public class ColonyInfo : MonoBehaviour

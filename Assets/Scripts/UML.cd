@@ -1,59 +1,59 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Building">
-    <Position X="18.5" Y="5.5" Width="1.5" />
+    <Position X="17.5" Y="5.5" Width="1.5" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
       <HashCode>IAAIwIAAAAAAAgAAAEQAgAAEAAQAgABAAIUAESAAIEA=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Building.cs</FileName>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Building.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AssignBuilding">
-    <Position X="17" Y="7.75" Width="1.5" />
+    <Position X="16" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAAAwIAAAAAAAAAAAAAAAAAAAAEAAAAAAAACAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Assign\AssignBuilding.cs</FileName>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\AssignBuilding.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Pipe">
-    <Position X="24.75" Y="7.75" Width="1.75" />
+    <Position X="22.5" Y="7.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>IEAAgIAAAAAAAgAACEEAAgAEAAAAgABABAwAEQAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Fluids\Pipes\Pipe.cs</FileName>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\Pipes\Pipe.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Storage">
-    <Position X="27.25" Y="7.75" Width="1.5" />
+    <Position X="25.25" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAAAwIAAAAEAAAAAAAABAABAAAAAAAAAAAAAAAAAAEA=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Storage.cs</FileName>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Storage.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="House">
     <Position X="11.75" Y="11" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Assign\House.cs</FileName>
+      <HashCode>IAAAQAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\House.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ProductionBuilding">
-    <Position X="18.25" Y="11" Width="1.75" />
+    <Position X="17.25" Y="11" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>JAgKwJQQAAkAAIAAAEACgIAEAAABAIRAIEAAAQAACAA=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Assign\ProductionBuilding.cs</FileName>
+      <HashCode>JAAKwJQQAAEAAIAAAEACgIAEAAABAIRAIEAAAUAACAA=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\Production Buildings\ProductionBuilding.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Elevator">
-    <Position X="27.25" Y="11.5" Width="1.75" />
+    <Position X="25" Y="11.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAgIAAAAAAAAAAAAAAgAAAAAAAAABAAAAAAQAAAAQ=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Elevator.cs</FileName>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Elevator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="StorageObject">
-    <Position X="17.25" Y="3.25" Width="1.5" />
+    <Position X="16.25" Y="3.25" Width="1.5" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
@@ -69,11 +69,11 @@
     </Compartments>
     <TypeIdentifier>
       <HashCode>IAAAgIAAAAAAAAAABAQAgAAAAAAAAEAAAAEAAQAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Data\Chunk.cs</FileName>
+      <FileName>Assets\Scripts\Clickable Objects\Special\Chunk.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ClickableObject">
-    <Position X="16.25" Y="0.75" Width="1.5" />
+    <Position X="15.25" Y="0.75" Width="1.5" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
@@ -84,13 +84,13 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Road">
-    <Position X="29.75" Y="3.25" Width="1.5" />
+    <Position X="27.5" Y="3.25" Width="1.5" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
       <HashCode>AACAAIAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
-      <FileName>Assets\Scripts\Data\Road.cs</FileName>
+      <FileName>Assets\Scripts\Clickable Objects\Tiles\Road.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Rock">
@@ -100,7 +100,7 @@
     </Compartments>
     <TypeIdentifier>
       <HashCode>IEAAgIAAAAIAAAAAAAQAgAAAAAAAAAABABACAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Data\Rock.cs</FileName>
+      <FileName>Assets\Scripts\Clickable Objects\Tiles\Rock.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Human">
@@ -109,22 +109,22 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>IAAABABAMBggAEEAAAwAABAAAAAAIABGAAAABhQAAQA=</HashCode>
-      <FileName>Assets\Scripts\Humans\Human.cs</FileName>
+      <HashCode>IAAABABAIBggAEAAAAwAADAAAAAAIABGAAAABBQAAAA=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Special\Humans\Human.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Humans" Collapsed="true">
-    <Position X="34.5" Y="0.75" Width="1.5" />
+    <Position X="32.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAIIAAAAAAAAAAAAIAAAAAAAAAAAAAADABEA=</HashCode>
-      <FileName>Assets\Scripts\Humans\Humans.cs</FileName>
+      <HashCode>AAAAAAAAAIIAAAAAAAAAAAAIAAAgAAAAAAAAAADABEQ=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Special\Humans\Humans.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LoadingScreen" Collapsed="true">
-    <Position X="36.25" Y="0.75" Width="1.5" />
+    <Position X="34" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAkgAAEAUAAGAIQAAAIQoAEFQAAACAwAAQAhACAAIA=</HashCode>
-      <FileName>Assets\Scripts\Loadning Screen\LoadingScreen.cs</FileName>
+      <HashCode>ABAkgAAEAUAAAgIUAAAIQgAAFQAAAAAwAAQAgACAEIA=</HashCode>
+      <FileName>Assets\Scripts\UI\Loadning Screen\LoadingScreen.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Water">
@@ -133,15 +133,15 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>IAAAgKAAAEAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Data\Water.cs</FileName>
+      <HashCode>IAAAgIAAAEAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Tiles\Water.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PipePart">
-    <Position X="32" Y="3.25" Width="1.5" />
+    <Position X="29.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Fluids\Pipes\PipePart.cs</FileName>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\Pipes\PipePart.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Diner">
@@ -152,38 +152,38 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Research_Production">
-    <Position X="16.5" Y="18.25" Width="1.75" />
+    <Position X="14.25" Y="18" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>BCgCAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Assign\Research_Production.cs</FileName>
+      <HashCode>JAACgAAAAAAAAIAAAAQAAAAAAAAAAoAAAQAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\Production Buildings\Research_Production.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WaterPump">
-    <Position X="19" Y="18.25" Width="2" />
+    <Position X="16.75" Y="18" Width="2" />
     <TypeIdentifier>
-      <HashCode>BAACgIAAAAgAAIAAAEQAgAAEAAAAAABAICQAEQAAIAA=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Fluids\Production\WaterPump.cs</FileName>
+      <HashCode>BAACgIAAAAAAAIAAAEQAgAAEAAAAAABAICQAEUAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\Production\WaterPump.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SteamGenerator">
-    <Position X="21.75" Y="18.25" Width="2.25" />
+    <Position X="19.5" Y="18" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAACgIQAAAgAAJAAAEQAAAAEAIAAQAJAAAQEGAAAIAA=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Fluids\Steam Generator.cs</FileName>
+      <HashCode>AAACgIQAAAAAAJAAAEQAAAAEAIAAQAJAAAQEGEAAIAA=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\Steam Generator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="FluidTank">
     <Position X="9.5" Y="7.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAgIAAAAAAAAAAAEQAAAAEAAAAAABACAQAEAAAIAA=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Fluids\FluidTank.cs</FileName>
+      <HashCode>IAAAgIAAAAAAAAAAAEQAAAAEAAAAAABACAQAEAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\FluidTank.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BuildPipe">
-    <Position X="24.75" Y="13.25" Width="1.75" />
+    <Position X="22.5" Y="13.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AACAgQAAAAAIAAAAAAAAAAAEAEEgAABAAAgAAQAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Buildings\Fluids\Pipes\BuildPipe.cs</FileName>
+      <HashCode>AACAgQAAAAAIAAAAAAAAAAAEAAEgAABAAAgAAQAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\Pipes\BuildPipe.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
