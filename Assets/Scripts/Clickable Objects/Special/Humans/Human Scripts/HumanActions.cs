@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public static class HumanActions
 {
@@ -43,7 +41,12 @@ public static class HumanActions
         if (h.jData.path.Count > 0)
         {
             Rotate(h, h.jData.path[0]);
+            int y = Mathf.RoundToInt(h.transform.localPosition.y);
             h.transform.localPosition = h.jData.path[0].ToVec();
+            if(Mathf.RoundToInt(h.transform.localPosition.y) != y)
+            {
+                h.gameObject.SetActive(MyGrid.currentLevel == h.GetPos().y);
+            }
             h.jData.path.RemoveAt(0);
         }
         else
@@ -80,9 +83,9 @@ public static class HumanActions
         if(r.integrity <= 0)
         {
             if (r.rockYield.ammount.Sum() > 0)
-                r.ChunkCreation(MyGrid.specialPrefabs.GetPrefab("Chunk") as Chunk);
+                SceneRefs.objectFactory.CreateAChunk(r.GetPos(), r.rockYield);
             // destroys the mined block
-            MyGrid.RemoveTiles(r);
+            MyGrid.RemoveRock(r);
             h.transform.parent.parent.GetComponent<JobQueue>().CancelJob(JobState.Digging, h.jData.interest); // removes job order
         }
     }
@@ -117,7 +120,7 @@ public static class HumanActions
         building.OpenWindow();
         if (building.build.constructionProgress <= 0)
         {
-            building.Deconstruct(h.transform.localPosition);
+            building.Deconstruct(h.GetPos());
             h.GetComponentInParent<JobQueue>().CancelJob(JobState.Deconstructing, h.jData.interest);
             LookForNew(h);
         }

@@ -42,7 +42,7 @@ public class Storage : Building
         base.Load(save);
         canStore = (save as StorageBSave).canStore;
         if (build.constructed)
-            MyGrid.sceneReferences.humans.GetComponent<JobQueue>().storages.Add(this);
+            SceneRefs.humans.GetComponent<JobQueue>().storages.Add(this);
     }
 
     public override void RequestRes(Resource request, Human h, int mod)

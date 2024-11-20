@@ -20,6 +20,10 @@ public class Chunk : StorageObject
         jobSave.objectId = id;
         jobSave.objectType = typeof(Chunk);
     }
+    public override GridPos GetPos()
+    {
+        return new(transform.position.x, (transform.position.y - 1) / 2, transform.position.z);
+    }
 
     public override InfoWindow OpenWindow(bool first)
     {
@@ -85,7 +89,7 @@ public class Chunk : StorageObject
         }
         if (localRes.stored.ammount.Sum() == 0)
         {
-            MyGrid.gridTiles.Remove(this);
+            SceneRefs.gridTiles.DestroyUnselect(this);
             MyGrid.chunks.Remove(this);
             Destroy(gameObject);
         }
@@ -105,12 +109,12 @@ public class Chunk : StorageObject
         else
             Debug.LogError("Fuck, where do I store this?");
     }
-    public void Create(Resource res, bool addToMainRes)
+
+    public void Init(Resource res)
     {
         UniqueID();
         localRes.stored = res;
-        if (addToMainRes)
-            MyRes.UpdateResource(localRes.stored, 1);
+        MyRes.UpdateResource(localRes.stored, 1);
         GameObject.FindWithTag("Humans").GetComponent<JobQueue>().AddJob(JobState.Cleanup, this);
         name = name.Replace("(Clone)", " ");
         MyGrid.chunks.Add(this);

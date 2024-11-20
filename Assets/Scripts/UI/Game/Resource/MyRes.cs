@@ -40,7 +40,7 @@ public static class MyRes
             globalStorageSpace = 0;
 
             storage = MyGrid.buildings.Select(q => q.GetComponent<Storage>()).Where(q => q != null).ToArray();
-            JobQueue jQ = MyGrid.sceneReferences.humans.GetComponent<JobQueue>();
+            JobQueue jQ = SceneRefs.humans.GetComponent<JobQueue>();
             foreach (Storage _s in storage)
             {
                 if (setupStorages)
@@ -98,8 +98,8 @@ public static class MyRes
     {
         money += change;
         UpdateMoneyText();
-        if(MyGrid.canvasManager.trade.tradeInfo.gameObject.activeSelf)
-            MyGrid.canvasManager.trade.tradeInfo.UpdateTradeText();
+        if(CanvasManager.trade.tradeInfo.gameObject.activeSelf)
+            CanvasManager.trade.tradeInfo.UpdateTradeText();
     }
     static void UpdateMoneyText()
     {

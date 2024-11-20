@@ -222,7 +222,7 @@ public class TradeInfo : MonoBehaviour
         }
         else
         {
-            MyGrid.canvasManager.ShowMessage("No money");
+            CanvasManager.ShowMessage("No money");
         }
     }
 }

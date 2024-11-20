@@ -14,7 +14,7 @@ public class WorkerAssign : MonoBehaviour
     public void FillStart(AssignBuilding _build)
     {
         _building = _build;
-        humans = MyGrid.sceneReferences.humans.transform;
+        humans = SceneRefs.humans.transform;
         Transform ContentWorkers = transform.GetChild(0).GetChild(0).GetChild(0).transform; // content for assigned
         Transform ContentAssign = transform.GetChild(1).GetChild(0).GetChild(0).transform; // content for unassigned
 

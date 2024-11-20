@@ -1,28 +1,47 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 
-class PathNode
+class SearchCoordinates
 {
-    public GridPos pos;
-    public PathNode previus;
-    public PathNode(GridPos gp, PathNode p)
+    public List<GridPos> positions;
+    public List<GridPos> elevEnterPositions;
+    public List<GridPos> elevPositions;
+    public List<List<int>> connections;
+
+    public SearchCoordinates(GridPos gridPos)
     {
-        pos = gp;
-        previus = p;
+        positions = new() { gridPos};
+        elevEnterPositions = new();
+        elevPositions = new();
+        connections = new();
+    }
+    public SearchCoordinates()
+    {
+        positions = new();
+        elevEnterPositions = new();
+        elevPositions = new();
+        connections = new();
     }
 }
 
 public static class PathFinder
 {
+    const float ROAD_COST = 1;
+    const float FASTROUTE_COST = 0.75f;
+    const float ELEVATOR_COST = 2f;
+    #region Humans
     public static JobData FindPath(List<ClickableObject> objects, Human h)
     {
         if (objects.Count == 0)
             return new();
-        GridPos _start = new(h.transform.position);
-        Plan plan = Prep(_start, objects);
+        GridPos _start = h.GetPos();
+        Plan plan = Prep(_start, objects).Result;
         if (plan.index > -1)
         {
             ClickableObject interest = objects[plan.index];
@@ -34,7 +53,7 @@ public static class PathFinder
                 {
                     plan.path.RemoveAt(plan.path.Count - 1);
                 }
-                else if(MyGrid.GetGridItem(_start).id != b.id)
+                else if(MyGrid.GetGridItem(_start).id != b.id && plan.foundNormaly)
                     plan.path.Add(LastStep(plan.path.Count > 0 ? plan.path[^1] : _start, b.gameObject, 1));
             }
             else
@@ -50,11 +69,11 @@ public static class PathFinder
         }
         return new JobData(_path: new(), _interest: null);
     }
-    static Plan Prep(GridPos _start, List<ClickableObject> objects)
+    async static Task<Plan> Prep(GridPos _start, List<ClickableObject> objects)
     {
-        List<GridPos> positions = new();
         List<int> entryPoints = new();
-        Building part = MyGrid.GetGridItem(_start) as Building; // gets tile build reference if standing on it
+        SearchCoordinates coordinates = new();
+        Building part = MyGrid.GetGridItem(_start).GetComponent<Building>(); // gets tile build reference if standing on it
         Plan plan = new();
 
         for (int i = 0; i < objects.Count; i++)
@@ -70,16 +89,18 @@ public static class PathFinder
             }
             if (building)
             {
-                Pipe pipe = building.GetComponent<Pipe>();
+                GridPos gp = building.GetPos();
+                /*Pipe pipe = building as Pipe;
                 if (pipe)
                 {
-                    positions.Add(new(pipe.transform.position));
+                    coordinates.positions.Add(new(pipe.transform.position));
                     entryPoints.Add(i);
                     continue;
-                }
-                foreach (RectTransform t in MyGrid.canvasManager.overlays.buildingOverlays.First(q=> q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q=>q.transform))//item in building.build.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
+                }*/
+                
+                foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q=> q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q=>q.transform))//item in building.build.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
                 {
-                    positions.Add(new(t.position));
+                    coordinates.positions.Add(new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z)));
                     entryPoints.Add(i);
                 }
                 if (part != null && part.id == building.id) // the build that the worker is standing on, is one of the destinations 
@@ -91,22 +112,42 @@ public static class PathFinder
             }
             else
             {
-                positions.Add(new(objects[i].transform.position));
+                coordinates.positions.Add(objects[i].GetPos());
                 entryPoints.Add(i);
             }
         }
-        LookForPath(_start, part, positions, plan, typeof(Road));
-        if(plan.index > 0)
+
+        // prep for elevators
+        foreach (Building el in MyGrid.buildings.Where(q => q is Elevator))
+        {
+            GridPos gp = el.GetPos();
+            foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q => q.name == el.id.ToString()).GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.build.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance).Skip(1))
+            {
+                coordinates.elevPositions.Add(gp);
+                coordinates.elevEnterPositions.Add(new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z)));
+                coordinates.connections.Add(new());
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                if (MyGrid.GetGridItem(new(gp.x, i, gp.z)) is Elevator)
+                {
+                    coordinates.connections[^1].Add(i);
+                }
+            }
+        }
+
+        await LookForPath(_start, part, coordinates, plan, typeof(Road));
+        if(plan.index > -1)
+        {
+            if (!part)
+            {
+                plan.path.RemoveAt(0);
+            }
             plan.index = entryPoints[plan.index];
+        }
         return plan;
     }
-    public static List<GridPos> FindPath(GridPos startPos, GridPos activePos, Type enterObjectType)
-    {
-        Plan p = new();
-        if (!startPos.Equals(activePos))
-            LookForPath(startPos, null, new() { activePos }, p, enterObjectType);
-        return p.path;
-    }
+    
     public static List<GridPos> FindWayHome(Human h)
     {
         JobData _jData;
@@ -119,7 +160,7 @@ public static class PathFinder
                 return _jData.path;
             }
         }
-        Building elevator = MyGrid.buildings.First(q => (Elevator)q != null && ((Elevator)q).main);
+        Building elevator = MyGrid.buildings.First(q => q is Elevator el && el.main);
         _jData = FindPath(new() { elevator }, h);
         h.efficiency.ManageModifier(ModType.House, false);
         if (_jData.interest)
@@ -128,120 +169,85 @@ public static class PathFinder
         }
         return new();
     }
+#endregion Humans
 
-    static void LookForPath(GridPos _start, Building buildingTile, List<GridPos> positions, Plan plan, Type enterObjectType)
+    public static List<GridPos> FindPath(GridPos startPos, GridPos activePos, Type enterObjectType)
     {
-        List<GridPos> visited = new();
-        List<PathNode> toCheck = new();
-        bool fin = false;
-        toCheck.Add(new(_start, null)); 
-        visited.Add(_start);
-        int i;
-        
+        Plan p = new();
+        if (!startPos.Equals(activePos))
+            LookForPath(startPos, null, new(activePos), p, enterObjectType);
+        return p.path;
+    }
+    
+    #region Looping
+    static Task LookForPath(GridPos _start, Building buildingTile, SearchCoordinates searchCoords, Plan plan, Type enterObjectType)
+    {
+        // Move if starting inside a building
         if (buildingTile != null)
         {
-            i = MyGrid.buildings.Select(q => q.id).ToList().IndexOf(buildingTile.id);
-            if (i > -1)
-            {
-                GridPos vec = LastStep(_start, MyGrid.buildings[i].gameObject, -1);
-                toCheck[0] = new(vec, toCheck[0]);
-            }
+            _start = LastStep(_start, buildingTile.gameObject, -1);
         }
-        i = 0;
 
-        if (!fin && Check(toCheck[0], positions, plan)) // Am I standing on an entry point or next to the job
+        Queue queue = new(_start);
+        // Check if you already arrived, or try to access different levels
+        if (!Check(new(_start, 0, null), searchCoords, plan, queue))
         {
-            //Am I startring on a building
-            while (i < 30 && toCheck.Count > 0 && !fin) // when finished, when no paths, when out of range
-            {
-                int c = toCheck.Count;
-                for (int j = 0; j < c; j++) // foreach active path
-                {
-                    if(plan.index == -1)
-                    {
-                        CheckMove(visited, toCheck, j, positions, plan, enterObjectType);
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-                toCheck.RemoveRange(0, c);
-                i++;
-            }
+            return Task.CompletedTask;
         }
-    }
-    static void CheckMove(List<GridPos> visited, List<PathNode> pathNodes, int j, List<GridPos> positions, Plan plan, Type enterObjectType)
-    {
-        try
+        PathNode prevNode;
+        while ((prevNode = queue.Dequeue()) != null)
         {
-            // from where
-            PathNode pathNode = pathNodes[j];
-            GridPos vec = pathNode.pos;
-            for (int i = 0; i < 4; i++) // checks in every direction
+            try
             {
-                PathNode checkNode;
-                switch (i)
+                for (int i = 0; i < 4; i++) // checks in every direction
                 {
-                    case 0:
-                        checkNode = new(new(vec.x + 1, vec.z), pathNode); 
-                        break;
-                    case 1:
-                        checkNode = new(new(vec.x - 1, vec.z), pathNode);
-                        break;
-                    case 2:
-                        checkNode = new(new(vec.x, vec.z + 1), pathNode);
-                        break;
-                    case 3:
-                        checkNode = new(new(vec.x, vec.z - 1), pathNode);
-                        break;
-                    default:
-                        continue;
-                }
-                if (visited.Where(q=>q.Equals(checkNode.pos)).Count() == 0) // checks if already visited
-                {
-                    visited.Add(checkNode.pos);
-                    if (Check(checkNode, positions, plan)) // if nothing found
-                    {
-                        if (CanEnter(checkNode.pos, enterObjectType)) // if there is a road on the new position
+                    PathNode checkNode = new(i, prevNode);
+                    ClickableObject clickable = MyGrid.GetGridItem(checkNode.pos);
+                    if (clickable)
+                    { 
+                        if(Check(checkNode, searchCoords, plan, queue))
                         {
-                            pathNodes.Add(checkNode);
+                            if (CanEnter(clickable, enterObjectType))
+                            {
+                                checkNode.minCost += ROAD_COST;
+                                queue.Enqueue(checkNode);
+                            }
+                        }
+                        else
+                        {
+                            return Task.CompletedTask;
                         }
                     }
-                    else
-                    {
-                        return;
-                    }
                 }
             }
+            catch (Exception e)
+            {
+                Debug.LogWarning("haaha it's null you dumbass: " + "\n" + e); // log error
+            }
         }
-        catch (Exception e)
-        {
-            Debug.LogWarning("haaha it's null you dumbass: " + pathNodes.Count+ "\n"+ e); // log error
-        }
-
-        return;
+        return Task.CompletedTask;
     }
-    static bool CanEnter(GridPos vec, Type t)
+    
+    #endregion Looping
+
+    #region Tile Checks
+    static bool CanEnter(ClickableObject clickable, Type t)
     {
-        if(t == null)
+        return clickable.GetType() == t;
+        /*if(t == null)
         {
             return true;
         }
-        else if(t == typeof(Pipe))
-        {
-            return MyGrid.pipeGrid[(int)vec.x, (int)vec.z]?.GetType() == t;
-        }
         else
         {
-            return MyGrid.GetGridItem(vec).GetType() == t;
-        }
+            return MyGrid.GetGridItem(vec, t == typeof(Pipe))?.GetType() == t;
+        }*/
     }
-    static bool Check(PathNode checkNode, List<GridPos> positions, Plan plan)
+    static bool Check(PathNode checkNode, SearchCoordinates searchCoords, Plan plan, Queue queue, bool firstPass = true)
     {
         int id = -1;
         int count = 0;
-        foreach (GridPos pos in positions)
+        foreach (GridPos pos in searchCoords.positions)
         {
             if (checkNode.pos.Equals(pos))
             {
@@ -253,24 +259,71 @@ public static class PathFinder
         if (id > -1) // if there is an entry point or a job on the checkVec
         {
             List<GridPos> path = new();
-            while(checkNode != null)
+            while (checkNode != null)
             {
                 path.Add(checkNode.pos);
-                checkNode = checkNode.previus;
+                checkNode = checkNode.previous;
             }
             path.Reverse();
             plan.path = path;
             plan.index = id;
+
             return false;
         }
         else
         {
+            if (firstPass)
+                return MoveToNewLevel(searchCoords, checkNode, plan, queue);
             return true;
         }
     }
+
+    static bool MoveToNewLevel(SearchCoordinates searchCoords, PathNode checkNode, Plan plan, Queue queue)
+    {
+        for (int i = 0; i < searchCoords.elevEnterPositions.Count; i++)
+        {
+            if (searchCoords.elevEnterPositions[i].Equals(checkNode.pos) && searchCoords.connections[i].Count > 1)
+            {
+                GridPos gp = searchCoords.elevPositions[i];
+                PathNode inElevatorNode = new(gp, checkNode.minCost + 1, checkNode);
+                for (int j = 0; j < searchCoords.connections[i].Count; j++)
+                {
+                    int level = searchCoords.connections[i][j];
+                    if (level == checkNode.pos.y)
+                        continue;
+                    GridPos elevatorPos = new GridPos(gp.x, level, gp.z);
+                    PathNode outElevatorNode = new(elevatorPos, inElevatorNode.minCost, inElevatorNode);
+                    ClickableObject el = MyGrid.GetGridItem(elevatorPos);
+
+                    foreach (RectTransform t in MyGrid.GetOverlay(level).buildingOverlays
+                        .First(q => q.name == el.id.ToString())
+                        .GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.build.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance).Skip(1))
+                    {
+                        PathNode finishMove =
+                            new(new(Mathf.Round(t.transform.position.x), level, Mathf.Round(t.transform.position.z)), outElevatorNode.minCost + 1, outElevatorNode);
+                        if (Check(finishMove, searchCoords, plan, queue, false))
+                        {
+                            queue.Enqueue(finishMove);
+                        }
+                        else
+                        {
+                            plan.path.RemoveAt(0);
+                            plan.path.RemoveAt(0);
+                            plan.path.RemoveAt(plan.path.Count - 1);
+                            plan.foundNormaly = false;
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    #endregion Tile Checks
+
     static GridPos LastStep(GridPos _vec, GameObject build, int mod)
     {
-        GridPos vec = new(_vec.x, _vec.z);
+        GridPos vec = new(_vec.x, _vec.y, _vec.z);
         float rotation = build.transform.eulerAngles.y;
         int rot = Mathf.RoundToInt(rotation / 90f);
         switch (rot)
@@ -288,7 +341,7 @@ public static class PathFinder
                 vec.x -= (1 * mod);
                 break;
         }
-        return new(vec.x, vec.z);
+        return vec;
     }
 
     

@@ -14,7 +14,7 @@ public class ExpeditionInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         if (expedition != null)
         {
             mouseOver = true;
-            MyGrid.canvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().DisplayInfo(expedition, MyGrid.canvasManager.trade.transform.InverseTransformPoint(transform.GetComponent<RectTransform>().position));
+            CanvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().DisplayInfo(expedition, CanvasManager.trade.transform.InverseTransformPoint(transform.GetComponent<RectTransform>().position));
         }
     }
     public void OnPointerExit(PointerEventData eventData)
@@ -22,7 +22,7 @@ public class ExpeditionInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         if (expedition != null)
         {
             mouseOver = false;
-            MyGrid.canvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().HideInfo();
+            CanvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().HideInfo();
             follow = false;
         }
     }
@@ -50,8 +50,8 @@ public class ExpeditionInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         if (mouseOver)
         {
-            MyGrid.canvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().DisplayInfo(
-                expedition, MyGrid.canvasManager.trade.transform.InverseTransformPoint(transform.GetComponent<RectTransform>().position));
+            CanvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().DisplayInfo(
+                expedition, CanvasManager.trade.transform.InverseTransformPoint(transform.GetComponent<RectTransform>().position));
             if (follow)
             {
                 Mouse.current.WarpCursorPosition(transform.position);

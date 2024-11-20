@@ -93,7 +93,7 @@ public class FluidNetwork
             return;
         Pipe pipeA = pipeTransform.transform.GetChild(childA).GetComponent<PipePart>().connectedPipe;
         Pipe pipeB = pipeTransform.transform.GetChild(childB).GetComponent<PipePart>().connectedPipe;
-        if (PathFinder.FindPath(new(pipeA.gameObject), new(pipeB.gameObject), typeof(Pipe)).Count == 0)
+        if (PathFinder.FindPath(pipeA.GetPos(), pipeB.GetPos(), typeof(Pipe)).Count == 0)
         {
             if(childA == 0)
             {

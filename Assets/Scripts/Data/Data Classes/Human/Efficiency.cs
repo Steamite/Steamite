@@ -39,7 +39,7 @@ public class Efficiency
         }
         else
         {
-            mod = MyGrid.sceneReferences.humans.modifiers.GetModifier(_modType);
+            mod = SceneRefs.humans.modifiers.GetModifier(_modType);
             mod.count = improvement ? 1 : -1;
             modifiers.Add(mod);
         }

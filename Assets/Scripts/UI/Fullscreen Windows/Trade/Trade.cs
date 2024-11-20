@@ -85,7 +85,7 @@ public class Trade : FullscreenWindow
             {
                 LoadExpedition(exp);
             }
-            MyGrid.sceneReferences.GetComponent<Tick>().tickAction += MoveTradeRouteProgress;
+            SceneRefs.tick.tickAction += MoveTradeRouteProgress;
             StartCoroutine(MoveTradeRoute());
         }
     }
@@ -139,7 +139,7 @@ public class Trade : FullscreenWindow
                 button.GetComponent<Image>().color = availableColor;
             }
         }
-        MyGrid.sceneReferences.GetComponent<Tick>().timeController.weekEnd += OutpostProduction;
+        SceneRefs.tick.timeController.weekEnd += OutpostProduction;
 
         TMP_Dropdown dropdown = outpostInfo.unconstructed.GetChild(0).GetComponent<TMP_Dropdown>();
         dropdown.options = new List<TMP_Dropdown.OptionData>() { new("Select") };
@@ -148,7 +148,7 @@ public class Trade : FullscreenWindow
             dropdown.options.Add(new(s));
         }
         if (outposts.Count(q => !q.constructed) > 0)
-            MyGrid.sceneReferences.GetComponent<Tick>().tickAction += outpostInfo.UpdateOutpostProgress;
+            SceneRefs.tick.tickAction += outpostInfo.UpdateOutpostProgress;
     }
     
     /// <summary>
@@ -357,7 +357,7 @@ public class Trade : FullscreenWindow
         expeditions.Add(expedition);
         if (expeditions.Count == 1)
         {
-            MyGrid.sceneReferences.GetComponent<Tick>().tickAction += MoveTradeRouteProgress;
+            SceneRefs.tick.tickAction += MoveTradeRouteProgress;
             StartCoroutine(MoveTradeRoute());
         }
     }
@@ -417,7 +417,7 @@ public class Trade : FullscreenWindow
                         tradeInfo.UpdateTradeText();
                         if (expeditions.Count == 0)
                         {
-                            MyGrid.sceneReferences.GetComponent<Tick>().tickAction -= MoveTradeRouteProgress;
+                            SceneRefs.tick.tickAction -= MoveTradeRouteProgress;
                             yield break;
                         }
                     }

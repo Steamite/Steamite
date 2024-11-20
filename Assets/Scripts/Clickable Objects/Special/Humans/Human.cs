@@ -82,6 +82,22 @@ public class Human : ClickableObject
         transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
         return null;
     }
+    public void OnDrawGizmos()
+    {
+        if (selected)
+        {
+            foreach (GridPos gp in jData.path)
+            {
+                Gizmos.color = Color.white;
+                Gizmos.DrawSphere(new(gp.x, (gp.y * 2) + 1, gp.z), 0.2f);
+            }
+        }
+    }
+
+    public override GridPos GetPos()
+    {
+        return new(transform.position.x, transform.localPosition.y/2, transform.position.z);
+    }
 
     ///////////////////////////////////////////////////
     ///////////////////Methods/////////////////////////
@@ -92,7 +108,7 @@ public class Human : ClickableObject
         transform.GetChild(0).gameObject.SetActive(true);
 #endif
         transform.parent.parent.GetComponent<Humans>().ticks.tickAction += DoRepetableAction;
-        DayTime dT = MyGrid.sceneReferences.GetComponent<Tick>().timeController;
+        DayTime dT = SceneRefs.tick.timeController;
         dT.dayStart += Day;
         dT.nightStart += Night;
 

@@ -8,9 +8,9 @@ abstract public class RadioButtons : MonoBehaviour
     [SerializeField] protected List<int> states = new() {};
     [SerializeField] protected int currentState = 1;
 
-    Button lastAccesedButton;
+    protected Button lastAccesedButton;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         int i = 0;
         foreach (Button button in transform.GetComponentsInChildren<Button>())
@@ -21,7 +21,7 @@ abstract public class RadioButtons : MonoBehaviour
 
             if (i == currentState)
             {
-                SelectButton(button);
+                SelectButton(b);
             }
             i++;
         }
@@ -44,5 +44,6 @@ abstract public class RadioButtons : MonoBehaviour
     {
         DeselectButton();
         SelectButton(button);
+        currentState = index;
     }
 }

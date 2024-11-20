@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,11 +9,19 @@ public class TimeButtons : RadioButtons
 {
     public Tick tick;
 
+    public void SetStartSpeed(Tick _tick)
+    {
+        tick = _tick;
+        tick.AwakeTicks(states[currentState]);
+    }
+
     protected override void ButtonTrigger(Button button, int index)
     {
         base.ButtonTrigger(button, index);
         tick.ChangeGameSpeed(states[index]);
     }
+
+    
 
     /*/// <summary>
     /// Called by speed buttons, manages transitions betwean them and changes the gamespeed.

@@ -117,7 +117,7 @@ public class Pipe : Building
         Transform pipePrefab;
         if ((pipePrefab = transform.GetComponentsInChildren<Transform>().FirstOrDefault(q => q.name == _case.ToString())) == null || !canNext)
         {
-            pipePrefab = Instantiate(MyGrid.buildPrefabs.GetPrefab("Pipe connection"), transform).transform;
+            pipePrefab = Instantiate(SceneRefs.objectFactory.buildPrefabs.GetPrefab("Pipe connection"), transform).transform;
             pipePrefab.GetComponent<MeshRenderer>().material = gameObject.GetComponent<MeshRenderer>().material;
             pipePrefab.gameObject.name = _case.ToString();
         }
@@ -155,14 +155,15 @@ public class Pipe : Building
     }
     public override void DestoyBuilding()
     {
-        GridPos gridPos = new(gameObject);
+        GridPos gridPos = GetPos();
         for (int x = 0; x < 4; x++)
         {
             DisconnectPipe(x, true);
         }
-        if (MyGrid.pipeGrid[(int)gridPos.x, (int)gridPos.z]?.id == id)
+        Pipe pipe = (Pipe)MyGrid.GetGridItem(gridPos, true);
+        if (pipe?.id == id)
         {
-            MyGrid.pipeGrid[(int)gridPos.x, (int)gridPos.z] = null;
+            MyGrid.SetGridItem(gridPos, null, true);
             if (network.networkID != -1)
                 network.Split(this);
         }
@@ -250,7 +251,7 @@ public class Pipe : Building
         if(id == -1)
             UniqueID();
         GridPos pos = new(transform.position);
-        MyGrid.pipeGrid[(int)pos.x, (int)pos.z] = this;
+        MyGrid.SetGridItem(pos, this, true);
         MyGrid.CanPlace(this);
         if (build.constructed)
             FinishBuild();

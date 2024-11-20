@@ -55,11 +55,11 @@ public class ProductionBuilding : AssignBuilding
         pStates = (save as ProductionBSave).pStates;
         if (pStates.supply && pStates.supplied == false)
         {
-            MyGrid.sceneReferences.humans.GetComponent<JobQueue>().AddJob(JobState.Supply, this);
+            SceneRefs.humans.GetComponent<JobQueue>().AddJob(JobState.Supply, this);
         }
         if (build.constructed && GetDiff(new()).ammount.Sum() > 0)
         {
-            MyGrid.sceneReferences.humans.GetComponent<JobQueue>().AddJob(JobState.Pickup, this);
+            SceneRefs.humans.GetComponent<JobQueue>().AddJob(JobState.Pickup, this);
         }
         RefreshStatus();
         base.Load(save);
@@ -172,15 +172,13 @@ public class ProductionBuilding : AssignBuilding
             }
         }
     }
-    public override Chunk Deconstruct(Vector3 instantPos)
+    public override Chunk Deconstruct(GridPos instantPos)
     {
-        instantPos.y = 1;
         Chunk c = base.Deconstruct(instantPos);
         if(pRes.inputResource.stored.ammount.Sum() > 0){
             if (!c)
             {
-                c = Instantiate(MyGrid.specialPrefabs.GetPrefab("Chunk"), instantPos, Quaternion.identity, GameObject.Find("Chunks").transform).GetComponent<Chunk>();
-                c.Create(pRes.inputResource.stored, true);
+                c = SceneRefs.objectFactory.CreateAChunk(instantPos, pRes.inputResource.stored);
             }
             else
                 MyRes.ManageRes(c.localRes.stored, pRes.inputResource.stored, 1);
@@ -330,7 +328,7 @@ public class ProductionBuilding : AssignBuilding
 
     public void RequestRestock()
     {
-        JobQueue jQ = MyGrid.sceneReferences.humans.GetComponent<JobQueue>();
+        JobQueue jQ = SceneRefs.humans.GetComponent<JobQueue>();
         if (!jQ.supplyNeeded.Contains(this) && pStates.supply)
         {
             jQ.AddJob(JobState.Supply, this);
@@ -339,7 +337,7 @@ public class ProductionBuilding : AssignBuilding
 
     public void RequestPickup()
     {
-        JobQueue jQ = MyGrid.sceneReferences.humans.GetComponent<JobQueue>();
+        JobQueue jQ = SceneRefs.humans.GetComponent<JobQueue>();
         if (!jQ.pickupNeeded.Contains(this))
         {
             jQ.AddJob(JobState.Pickup, this);

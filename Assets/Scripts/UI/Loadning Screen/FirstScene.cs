@@ -16,13 +16,6 @@ public class FirstScene : MonoBehaviour
     }
     void onLoad(AsyncOperation aO)
     {
-        // Fills all resource holders
-        MyGrid.buildPrefabs = Resources.Load("Holders/Models/Building Holder") as ResourceHolder;
-#if UNITY_64
-        MyGrid.buildPrefabs.LoadPrefs();
-#endif
-        MyGrid.tilePrefabs = Resources.Load("Holders/Models/Tile Holder") as ResourceHolder;
-        MyGrid.specialPrefabs = Resources.Load("Holders/Models/Special Holder") as ResourceHolder;
         if (loadNewGame)
             GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>().NewGame("test - TopGun", false);
         else

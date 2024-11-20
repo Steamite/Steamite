@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Experimental.AI;
 using UnityEngine.UI;
 
 public class UIOverlay : MonoBehaviour
@@ -19,7 +18,7 @@ public class UIOverlay : MonoBehaviour
     {
         if (overlayParent.gameObject.activeSelf)
         {
-            GridPos gp = MyGrid.CheckRotation(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y);
+            GridPos gp = MyGrid.Rotate(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y);
             overlayParent.anchoredPosition = new(building.transform.position.x - gp.x, building.transform.position.z - gp.z);
             overlayParent.localRotation = Quaternion.Euler(180, 0, building.transform.rotation.eulerAngles.y);
             if(buildGridCreated == false)
@@ -99,14 +98,11 @@ public class UIOverlay : MonoBehaviour
                 RectTransform rect = buildingOverlays.First(q => q.name == id.ToString());
                 rect.GetComponentsInChildren<Image>().FirstOrDefault(q => new GridPos(q.transform.position).Equals(new GridPos(r.transform.position))).gameObject.SetActive(false);
             }
-                
     }
 
-    // show/hide entry points
-    /*public void ToggleEntryPoints()
+    internal UIOverlay SelectOverlay(int lIndex)
     {
-        bool toggle = transform.GetChild(1).gameObject.activeSelf;
+        throw new NotImplementedException();
+    }
 
-        transform.GetChild(1).gameObject.SetActive(!toggle);
-    }*/
 }

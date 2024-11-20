@@ -118,7 +118,7 @@ public class WaterPump : ProductionBuilding
     {
         return;
     }
-    public override Chunk Deconstruct(Vector3 instantPos)
+    public override Chunk Deconstruct(GridPos instantPos)
     {
         return base.Deconstruct(instantPos);
     }

@@ -9,7 +9,7 @@ public class GridPos
     [SerializeField]
     public float z;
     [SerializeField]
-    public float y;
+    public int y;
 
     // override object.Equals
     public override bool Equals(object obj)
@@ -37,7 +37,7 @@ public class GridPos
     public GridPos(float _x, float _level, float _z)
     {
         x = _x;
-        y = _level;
+        y = Mathf.RoundToInt(_level);
         z = _z;
     }
     public GridPos(float _x, float _z)
@@ -45,28 +45,25 @@ public class GridPos
         x = _x;
         z = _z;
     }
-    public GridPos(Vector3 vec, bool round = true)
+    public GridPos(Vector3 vec)
     {
-        y = 0;
-        if (round)
-        {
-            x = Mathf.RoundToInt(vec.x);
-            z = Mathf.RoundToInt(vec.z);
-        }
-        else
-        {
-            x = Mathf.FloorToInt(vec.x);
-            z = Mathf.FloorToInt(vec.z);
-        }
+        x = vec.x;
+        y = Mathf.RoundToInt(vec.y);
+        z = vec.z;
     }
     public GridPos(GameObject g)
     {
-        y = 0;
-        x = Mathf.RoundToInt(g.transform.position.x);
-        z = Mathf.RoundToInt(g.transform.position.z);
+        Vector3 vec = g.transform.localPosition;
+        x = vec.x;
+        y = Mathf.RoundToInt(vec.y / 2);
+        z = vec.z;
     }
-    public Vector3 ToVec()
+
+    public Vector3 ToVec(float Yoffset = 0)
     {
-        return new(x, y * 2, z);
+        return new(
+            x, 
+            (y * 2) + Yoffset,
+            z);
     }
 }

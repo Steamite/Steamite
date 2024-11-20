@@ -55,6 +55,7 @@ public class GridTiles : MonoBehaviour
         }
     }
 
+    #region Mouse Events
     /// <summary>
     /// Called when mouse enters the ClickableObject collider.
     /// </summary>
@@ -65,7 +66,7 @@ public class GridTiles : MonoBehaviour
             return;
         Color c = new();
         activeObject = enterObject;
-        activePos = new(enterObject.transform.position);
+        activePos = enterObject.GetPos();
         switch (selMode)
         {
             case SelectionMode.nothing:
@@ -128,8 +129,8 @@ public class GridTiles : MonoBehaviour
                 else
                 {
                     Build __b = buildBlueprint.build;
-                    GridPos grid = MyGrid.CheckRotation(__b.blueprint.moveBy, buildBlueprint.transform.eulerAngles.y);
-                    grid = new(activePos.x + grid.x, buildBlueprint.transform.position.y, activePos.z + grid.z);
+                    GridPos grid = MyGrid.Rotate(__b.blueprint.moveBy, buildBlueprint.transform.eulerAngles.y);
+                    grid = new(activePos.x + grid.x, MyGrid.currentLevel + ClickabeObjectFactory.BUILD_OFFSET, activePos.z + grid.z);
                     buildBlueprint.transform.position = new(grid.x, grid.y, grid.z);
                     c = buildBlueprint.CanPlace() ? Color.blue : Color.red;
                     HighLight(c, buildBlueprint.gameObject);
@@ -247,7 +248,7 @@ public class GridTiles : MonoBehaviour
                 Rock _r = activeObject.GetComponent<Rock>();
                 if (_r)
                 {
-                    startPos = new(activePos.x, activePos.z);
+                    startPos = new(activePos.x, activePos.y, activePos.z);
                     drag = true;
                     deselect = _r.toBeDug ? true : false;
                     markedTiles = new() { _r };
@@ -260,8 +261,8 @@ public class GridTiles : MonoBehaviour
                     {
                         drag = true;
                         markedTiles = new() { buildBlueprint};
-                        GridPos gridPos = new(activeObject.gameObject);
-                        MyGrid.pipeGrid[(int)gridPos.x, (int)gridPos.z] = buildBlueprint.GetComponent<Pipe>();
+                        GridPos gridPos = activeObject.GetPos();
+                        MyGrid.SetGridItem(gridPos, buildBlueprint, true);
                         buildBlueprint.UniqueID();
                         buildBlueprint = null;
                     }
@@ -336,6 +337,9 @@ public class GridTiles : MonoBehaviour
         }
     }
 
+    #endregion Mouse Events
+
+    #region Multiselecting
     /// <summary>
     /// ReMarks all rock in range from start to activePos. 
     /// </summary>
@@ -345,7 +349,7 @@ public class GridTiles : MonoBehaviour
         List<ClickableObject> rocks = new();
         float x = (Mathf.FloorToInt(startPos.x) - activePos.x) / 2f;
         float z = (Mathf.FloorToInt(startPos.z) - activePos.z) / 2f;
-        rocks.AddRange(Physics.OverlapBox(new Vector3(startPos.x - x, 0.5f, startPos.z - z), new(Mathf.Abs(x), 0.5f, Mathf.Abs(z))).Where(q => q.GetComponent<Rock>() != null).Select(q => q.GetComponent<Rock>()).ToList());
+        rocks.AddRange(Physics.OverlapBox(new Vector3(startPos.x - x, (startPos.y*2) + ClickabeObjectFactory.ROCK_OFFSET, startPos.z - z), new(Mathf.Abs(x), 0.5f, Mathf.Abs(z))).Where(q => q.GetComponent<Rock>() != null).Select(q => q.GetComponent<Rock>()).ToList());
         List<ClickableObject> filtered = rocks.ToList();
         foreach (Rock g in rocks)
         {
@@ -357,6 +361,7 @@ public class GridTiles : MonoBehaviour
         }
         markedTiles = filtered;
     }
+    
     /// <summary>
     /// Creates/Deletes pipes to copy the shortest path from startPos to activePos
     /// </summary>
@@ -385,12 +390,12 @@ public class GridTiles : MonoBehaviour
                 _clickObject = Instantiate(buildingPrefab, new(path[i].x, 1.5f, path[i].z), Quaternion.identity, pipes);
 
                 Pipe pipe = _clickObject.GetComponent<Pipe>();
-                GridPos gridPos = new(pipe.gameObject);
+                GridPos gridPos = pipe.GetPos();
                 pipe.ChangeRenderMode(true);
-                if (!MyGrid.pipeGrid[(int)gridPos.x, (int)gridPos.z])
+                if (!MyGrid.GetGridItem(gridPos, true))
                 {
                     HighLight(pipe.CanPlace() ? Color.blue : Color.red, pipe.gameObject);
-                    MyGrid.pipeGrid[(int)gridPos.x, (int)gridPos.z] = pipe;
+                    MyGrid.SetGridItem(gridPos, pipe, true);
                     pipe.name = pipe.name.Replace("(Clone)", " ");
                     pipe.UniqueID();
                 }
@@ -409,11 +414,12 @@ public class GridTiles : MonoBehaviour
         markedTiles.AddRange(tempMarkedTiles);
         print(markedTiles.Count);
     }
+    #endregion Multiselecting
 
     /// <summary>
     /// Called when canceling drag, changes highlight of all rocks in markedTiles.
     /// </summary>
-    public void ClearMarks() // deletes all tiles
+    void ClearMarks()
     {
         if (markedTiles != null)
         {
@@ -478,7 +484,7 @@ public class GridTiles : MonoBehaviour
             clickedObject.selected = false;
             Exit(clickedObject);
             clickedObject = null;
-            MyGrid.canvasManager.infoWindow.gameObject.SetActive(false);
+            CanvasManager.infoWindow.gameObject.SetActive(false);
         }
     }
     /// <summary>
@@ -497,7 +503,6 @@ public class GridTiles : MonoBehaviour
                 }
                 else
                 {
-                    MyGrid.canvasManager.overlays.DeleteBuildGrid();
                     buildBlueprint.DestoyBuilding();
                     Blueprint();
                     return;
@@ -524,7 +529,7 @@ public class GridTiles : MonoBehaviour
                     break;
                 case SelectionMode.build:
                     Camera.main.GetComponent<PhysicsRaycaster>().eventMask = defaultMask;
-                    MyGrid.canvasManager.overlays.DeleteBuildGrid();
+                    MyGrid.GetOverlay().DeleteBuildGrid();
                     if (buildBlueprint)
                         buildBlueprint.DestoyBuilding();
                     foreach(ClickableObject clickable in markedTiles)
@@ -576,7 +581,7 @@ public class GridTiles : MonoBehaviour
         Quaternion q = new();
         if (buildBlueprint)
             q = new(buildBlueprint.transform.rotation.x, buildBlueprint.transform.rotation.y, buildBlueprint.transform.rotation.z, buildBlueprint.transform.rotation.w);
-        GridPos gp = MyGrid.CheckRotation(buildingPrefab.build.blueprint.moveBy, buildingPrefab.transform.eulerAngles.y);
+        GridPos gp = MyGrid.Rotate(buildingPrefab.build.blueprint.moveBy, buildingPrefab.transform.eulerAngles.y);
         gp = new(activePos.x + gp.x, buildingPrefab is Pipe ? 0.75f : 0.5f, activePos.z + gp.z);
         buildBlueprint = Instantiate(buildingPrefab.gameObject, gp.ToVec(), Quaternion.identity, transform).GetComponent<Building>(); // creates the building prefab
         buildBlueprint.transform.rotation = q;
@@ -587,7 +592,8 @@ public class GridTiles : MonoBehaviour
     }
 
     /// <summary>
-    /// Changes the state of rocks in markedTiles, if the first one was toBeDigged, cancels them. Else marks orders their excavation.
+    /// Changes the state of rocks in markedTiles, if the first one was toBeDigged, cancels them.<br/>
+    /// Else marks orders their excavation.
     /// </summary>
     void PrepDig()
     {
@@ -631,10 +637,10 @@ public class GridTiles : MonoBehaviour
     }
 
     /// <summary>
-    /// If the object was selected unselect.
+    /// If the object was selected unselect.(Happens when the object is destroyed)
     /// </summary>
     /// <param name="cO"></param>
-    public void Remove(ClickableObject cO)
+    public void DestroyUnselect(ClickableObject cO)
     {
         Exit(cO);
         if (activeObject && activeObject == cO)

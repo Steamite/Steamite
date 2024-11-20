@@ -21,9 +21,9 @@ public class FullscreenWindow : MonoBehaviour
     public virtual void OpenWindow()
     {
         // open view Window
-        MyGrid.gridTiles.DeselectObjects();
+        SceneRefs.gridTiles.DeselectObjects();
         EventHandler.DisableInput();
-        MyGrid.canvasManager.infoWindow.gameObject.SetActive(false);
+        CanvasManager.infoWindow.gameObject.SetActive(false);
         window.SetActive(true);
 
     }
@@ -33,6 +33,6 @@ public class FullscreenWindow : MonoBehaviour
     {
         window.SetActive(false);
         EventHandler.EnableInput();
-        MyGrid.canvasManager.infoWindow.gameObject.SetActive(false);
+        CanvasManager.infoWindow.gameObject.SetActive(false);
     }
 }

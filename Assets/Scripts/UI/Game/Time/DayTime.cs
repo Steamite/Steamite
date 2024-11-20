@@ -61,7 +61,7 @@ public class DayTime : MonoBehaviour
                 break;
             case 360:
                 dayStart?.Invoke();
-                MyGrid.sceneReferences.GetComponent<SaveController>().SaveGame(true);
+                SceneRefs.saveController.SaveGame(true);
                 break;
         }
         time.text = $"{(timeInMinutes/60).ToString().PadLeft(2, '0')}:{(timeInMinutes%60).ToString().PadLeft(2, '0')}";

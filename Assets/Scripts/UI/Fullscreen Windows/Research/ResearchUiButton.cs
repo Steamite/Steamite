@@ -118,28 +118,28 @@ public class ResearchUIButton : MonoBehaviour
 
     public void OnClick()
     {
-        MyGrid.canvasManager.research.ResearchButtonClick(this);
+        CanvasManager.research.ResearchButtonClick(this);
     }
 
     void ManageBuildButton()
     {
-        Transform button = MyGrid.canvasManager.buildMenu.GetChild(1).GetChild(node.buttonCategory).transform.GetChild(node.buildButton);
+        Transform button = CanvasManager.buildMenu.GetChild(1).GetChild(node.buttonCategory).transform.GetChild(node.buildButton);
         switch (state)
         {
             case ButtonState.Unavailable:
                 button.gameObject.SetActive(false);
                 if (button.parent.GetComponentsInChildren<BuildButton>().Length == 0)
-                    MyGrid.canvasManager.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(false);
+                    CanvasManager.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(false);
                 break;
             case ButtonState.Available:
                 button.gameObject.SetActive(true);
                 button.GetComponent<Button>().interactable = false;
-                MyGrid.canvasManager.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(true);
+                CanvasManager.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(true);
                 break;
             case ButtonState.Completed:
                 button.gameObject.SetActive(true);
                 button.GetComponent<Button>().interactable = true;
-                MyGrid.canvasManager.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(true);
+                CanvasManager.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(true);
                 break;
         }
     }
@@ -155,13 +155,13 @@ public class ResearchUIButton : MonoBehaviour
             foreach (int i in node.unlocks)
             {
                 int categ = transform.parent.parent.GetSiblingIndex();
-                MyGrid.canvasManager.research.GetResearchUIButton(categ, i).Unlock(this);
+                CanvasManager.research.GetResearchUIButton(categ, i).Unlock(this);
             }
             borderFill.fillAmount = 1;
         }
-        MyGrid.canvasManager.ShowMessage($"Reseach finished: {node.name}");
+        CanvasManager.ShowMessage($"Reseach finished: {node.name}");
         Recolor(true);
-        MyGrid.canvasManager.research.UpdateInfoWindow(this);
+        CanvasManager.research.UpdateInfoWindow(this);
         ManageBuildButton();
     }
 

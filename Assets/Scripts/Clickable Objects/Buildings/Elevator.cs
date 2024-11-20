@@ -32,7 +32,7 @@ public class Elevator : Storage
         if(main)
             print("can't order destroy");
     }
-    public override Chunk Deconstruct(Vector3 instantPos)
+    public override Chunk Deconstruct(GridPos instantPos)
     {
         if (main)
             print("can't destroy");

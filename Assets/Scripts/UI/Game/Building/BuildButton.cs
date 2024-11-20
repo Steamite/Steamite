@@ -33,12 +33,12 @@ public class BuildButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Transform t = MyGrid.canvasManager.miscellaneous;
+        Transform t = CanvasManager.miscellaneous;
         t.GetChild(1).GetComponent<LocalInfoWindow>().DisplayInfo(buildPrefab, t.InverseTransformPoint(transform.GetComponent<RectTransform>().position));
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        MyGrid.canvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().HideInfo();
+        CanvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().HideInfo();
     }
 }
