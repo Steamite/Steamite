@@ -6,6 +6,6 @@ public class TradeButton : MonoBehaviour
 
     public void OpenInfo()
     {
-        MyGrid.canvasManager.trade.SelectButton(Trade.SelectedCateg.Trade, tradeLocationIndex);
+        CanvasManager.trade.SelectButton(Trade.SelectedCateg.Trade, tradeLocationIndex);
     }
 }

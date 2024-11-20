@@ -10,7 +10,7 @@ public class Research_Production : ProductionBuilding
     public override void UniqueID()
     {
         base.UniqueID();
-        researchBackend = MyGrid.canvasManager.research.GetComponent<ResearchBackend>();
+        researchBackend = CanvasManager.research.GetComponent<ResearchBackend>();
     }
 
     public override InfoWindow OpenWindow(bool setUp = false)
@@ -38,7 +38,7 @@ public class Research_Production : ProductionBuilding
     public override void Load(ClickableObjectSave save)
     {
         base.Load(save);
-        researchBackend = MyGrid.canvasManager.research.GetComponent<ResearchBackend>();
+        researchBackend = CanvasManager.research.GetComponent<ResearchBackend>();
     }
 
     public override void Produce(float speed)

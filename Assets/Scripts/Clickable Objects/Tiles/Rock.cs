@@ -21,6 +21,7 @@ public class Rock : ClickableObject
     ///////////////////////////////////////////////////
     ///////////////////Overrides///////////////////////
     ///////////////////////////////////////////////////
+    #region Basic Operations
     public override void UniqueID()
     {
         CreateNewId(transform.parent.GetComponentsInChildren<Rock>().Select(q => q.id).ToList());
@@ -30,7 +31,8 @@ public class Rock : ClickableObject
         jobSave.objectId = id;
         jobSave.objectType = typeof(Rock);
     }
-
+    #endregion Basic Operations
+    #region Window
     public override InfoWindow OpenWindow(bool setUp = false)
     {
         InfoWindow info;
@@ -47,7 +49,8 @@ public class Rock : ClickableObject
         }
         return null;
     }
-
+    #endregion Window
+    #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -64,17 +67,13 @@ public class Rock : ClickableObject
         name = name.Replace("(Clone)", "");
         base.Load(save);
     }
-
-    ///////////////////////////////////////////////////
-    ///////////////////Methods/////////////////////////
-    ///////////////////////////////////////////////////
-    public void ChunkCreation(Chunk chunk)
+    #endregion Saving
+    public override GridPos GetPos()
     {
-        GridPos gridPos = new(transform.position);
-        chunk = Instantiate(chunk, new Vector3(gridPos.x, gridPos.y + 0.75f, gridPos.z), chunk.transform.rotation, GameObject.FindWithTag("Chunks").transform); // spawns chunk of resources
-        chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material = GetComponent<MeshRenderer>().material;
-        chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
-        chunk.GetComponent<Chunk>().Create(rockYield, true);
+        return new GridPos(
+            transform.position.x,
+            (transform.position.y - 1.5f) / 2,
+            transform.position.z);
     }
 
 }

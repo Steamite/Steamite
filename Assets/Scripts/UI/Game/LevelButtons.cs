@@ -1,10 +1,10 @@
 using UnityEngine.UI;
 
-public class LevelButton : RadioButtons
+public class LevelButtons : RadioButtons
 {
     protected override void ButtonTrigger(Button button, int index)
     {
         base.ButtonTrigger(button, index);
-        // TODO:  Change level
+        MyGrid.ChangeGridLevel(states[index]);
     }
 }

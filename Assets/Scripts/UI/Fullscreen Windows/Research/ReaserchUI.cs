@@ -81,8 +81,8 @@ public class ResearchUI : FullscreenWindow
     //Start Build Buttons
     void InitializeBuildButtons(BuildButtonHolder buildButtons)
     {
-        Transform buildMenuCategs = MyGrid.canvasManager.buildMenu.GetChild(0);
-        Transform buildMenuButtons = MyGrid.canvasManager.buildMenu.GetChild(1);
+        Transform buildMenuCategs = CanvasManager.buildMenu.GetChild(0);
+        Transform buildMenuButtons = CanvasManager.buildMenu.GetChild(1);
 
         for (int i = 0; i < buildButtons.buildingCategories.Count; i++)
         {
@@ -111,7 +111,7 @@ public class ResearchUI : FullscreenWindow
     {
         //screenScale = new(((float)Screen.width / 1920f), (float)Screen.height / 1080f);
         Vector2 categWindowSize = new(1920, 1080);
-        Transform buildCategTransform = MyGrid.canvasManager.buildMenu.GetChild(1);
+        Transform buildCategTransform = CanvasManager.buildMenu.GetChild(1);
         for (int i = 0; i < researches.Length; i++)
         {
             ResearchCategory researchCategory = researches[i];
@@ -220,7 +220,7 @@ public class ResearchUI : FullscreenWindow
     //Research button click - opens info window
     public void ResearchButtonClick(ResearchUIButton button)
     {
-        RectTransform rect = MyGrid.canvasManager.infoWindow.transform.GetChild(0).GetComponent<RectTransform>();
+        RectTransform rect = CanvasManager.infoWindow.transform.GetChild(0).GetComponent<RectTransform>();
         if (button.GetComponent<RectTransform>().anchoredPosition.x < 0)
             rect.anchoredPosition = new(0, 0);
         else
@@ -243,8 +243,8 @@ public class ResearchUI : FullscreenWindow
         if (selectedButton && selectedButton.node.id == button.node.id)
         {
             // info window
-            MyGrid.canvasManager.infoWindow.SwitchMods(InfoMode.Research, button.name);
-            Transform researchInfo = MyGrid.canvasManager.infoWindow.researchTransform;
+            CanvasManager.infoWindow.SwitchMods(InfoMode.Research, button.name);
+            Transform researchInfo = CanvasManager.infoWindow.researchTransform;
             researchInfo.GetChild(0).GetComponent<TMP_Text>().text = $"Unlocks <color=#D3D3D3>{button.node.name}</color>.";
             //ShowNeededResources(button.node, true);
             switch (button.state)
@@ -274,7 +274,7 @@ public class ResearchUI : FullscreenWindow
 
     public void ShowNeededResources(ResearchNode node, bool useGlobalStored)
     {
-        Transform researchInfo = MyGrid.canvasManager.infoWindow.researchTransform;
+        Transform researchInfo = CanvasManager.infoWindow.researchTransform;
         TMP_Text types = researchInfo.GetChild(1).GetChild(0).GetComponent<TMP_Text>();
         TMP_Text ammounts = researchInfo.GetChild(1).GetChild(1).GetComponent<TMP_Text>();
         types.text = "";
@@ -347,7 +347,7 @@ public class ResearchUI : FullscreenWindow
             if (window.gameObject.activeSelf)
             {
                 backend.currentResearch.borderFill.fillAmount = fill;
-                MyGrid.canvasManager.infoWindow.researchTransform.GetChild(3).GetComponent<TMP_Text>().text
+                CanvasManager.infoWindow.researchTransform.GetChild(3).GetComponent<TMP_Text>().text
                     = $"{Mathf.RoundToInt(elapsedProgress * 5)} / {backend.currentResearch.node.researchTime * 5} research points";
             }
             openResearchFill.fillAmount = fill;

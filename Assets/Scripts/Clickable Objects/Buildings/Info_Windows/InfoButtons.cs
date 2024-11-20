@@ -7,13 +7,13 @@ public class InfoButtons : MonoBehaviour
     public int id;
     public void CloseInfoMenu() // closes the info window
     {
-        MyGrid.canvasManager.infoWindow.gameObject.SetActive(false);
-        MyGrid.gridTiles.DeselectObjects();
+        CanvasManager.infoWindow.gameObject.SetActive(false);
+        SceneRefs.gridTiles.DeselectObjects();
     }
 
     public void SwitchViews(bool state) // changes assign to unassign and back
     {
-        MyGrid.canvasManager.infoWindow.SetAssignButton(state, transform.parent);
+        CanvasManager.infoWindow.SetAssignButton(state, transform.parent);
     }
 
     public void ManageWorkers() // assigns or unassigns worker

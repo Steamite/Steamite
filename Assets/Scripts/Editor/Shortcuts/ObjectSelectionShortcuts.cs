@@ -10,7 +10,7 @@ public class ObjectSelectionShortcuts : MonoBehaviour
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = GameObject.Find("UI canvas").GetComponent<CanvasManager>().infoWindow.gameObject;
+        GameObject gameObject = CanvasManager.infoWindow.gameObject;
         Selection.activeGameObject = gameObject;
     }
 
@@ -19,7 +19,7 @@ public class ObjectSelectionShortcuts : MonoBehaviour
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = GameObject.Find("UI canvas").GetComponent<CanvasManager>().trade.window.transform.GetChild(3).GetChild(1).GetChild(1).gameObject;
+        GameObject gameObject = CanvasManager.trade.window.transform.GetChild(3).GetChild(1).GetChild(1).gameObject;
         Selection.activeGameObject = gameObject;
     }
 
@@ -28,7 +28,7 @@ public class ObjectSelectionShortcuts : MonoBehaviour
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = GameObject.Find("UI canvas").GetComponent<CanvasManager>().pauseMenu.gameObject;
+        GameObject gameObject = CanvasManager.pauseMenu.gameObject;
         Selection.activeGameObject = gameObject;
     }
 
@@ -37,7 +37,7 @@ public class ObjectSelectionShortcuts : MonoBehaviour
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = GameObject.Find("UI canvas").GetComponent<CanvasManager>().stats.GetChild(0).gameObject;
+        GameObject gameObject = CanvasManager.stats.GetChild(0).gameObject;
         Selection.activeGameObject = gameObject;
     }
 
@@ -46,7 +46,7 @@ public class ObjectSelectionShortcuts : MonoBehaviour
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = GameObject.Find("UI canvas").GetComponent<CanvasManager>().stats.GetChild(1).GetChild(0).gameObject;
+        GameObject gameObject = CanvasManager.stats.GetChild(1).GetChild(0).gameObject;
         Selection.activeGameObject = gameObject;
     }
     #endif

@@ -24,7 +24,7 @@ public class Water : ClickableObject
         }
         return info;
     }
-
+    #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -36,5 +36,10 @@ public class Water : ClickableObject
     {
         ammount = (save as WaterSave).ammount;
         base.Load(save);
+    }
+    #endregion Saving
+    public override GridPos GetPos()
+    {
+        return new(transform.position.x, transform.position.y/2, transform.position.z);
     }
 }

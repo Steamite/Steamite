@@ -4,10 +4,7 @@ using System.Linq;
 public class StorageObject : ClickableObject
 {
     public StorageResource localRes = new();
-
-    ///////////////////////////////////////////////////
-    ///////////////////Overrides///////////////////////
-    ///////////////////////////////////////////////////
+    #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -21,10 +18,9 @@ public class StorageObject : ClickableObject
         localRes = new((save as StorageObjectSave).resSave);
         base.Load(save);
     }
+    #endregion Saving
 
-    ///////////////////////////////////////////////////
-    ///////////////////Methods/////////////////////////
-    ///////////////////////////////////////////////////
+    #region Storage
     public virtual void Store(Human h, int transferPerTick)
     {
         throw new NotImplementedException();
@@ -51,7 +47,8 @@ public class StorageObject : ClickableObject
             // store maybe?
         }
     }
-    
+    #endregion Storage
+
     public virtual void RequestRes(Resource request, Human h, int mod)
     {
         localRes.AddRequest(request, h, mod);

@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Rigidbody))]
-public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class ClickableObject : MonoBehaviour, 
+    IPointerEnterHandler, IPointerExitHandler, 
+    IPointerDownHandler, IPointerUpHandler
 {
     public bool selected = false;
     public int id = -1;
@@ -26,6 +28,7 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
     ///////////////////////////////////////////////////
     ///////////////////Methods/////////////////////////
     ///////////////////////////////////////////////////
+    #region Basic Operations
     public virtual void UniqueID()
     {
         id = -1;
@@ -40,32 +43,34 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         return "_";
     }
-
+    #endregion Basic Operations
+    #region Mouse Events
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        MyGrid.gridTiles.Enter(this);
-        if (MyGrid.gridTiles.drag)
+        SceneRefs.gridTiles.Enter(this);
+        if (SceneRefs.gridTiles.drag)
             eventData.pointerPress = gameObject;
     }
     public virtual void OnPointerExit(PointerEventData eventData)
     {
-        MyGrid.gridTiles.Exit(this);
+        SceneRefs.gridTiles.Exit(this);
         eventData.pointerPress = null;
     }
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        if (MyGrid.gridTiles.drag == false && eventData.button == PointerEventData.InputButton.Left)
-            MyGrid.gridTiles.Down();
+        if (SceneRefs.gridTiles.drag == false && eventData.button == PointerEventData.InputButton.Left)
+            SceneRefs.gridTiles.Down();
     }
     public virtual void OnPointerUp(PointerEventData eventData)
     {
         print(gameObject.name + $", {transform.position.x}, {transform.position.z}");
         if (eventData.button == PointerEventData.InputButton.Left)
-            MyGrid.gridTiles.Up();
+            SceneRefs.gridTiles.Up();
         else
-            MyGrid.gridTiles.BreakAction();
+            SceneRefs.gridTiles.BreakAction();
     }
-
+    #endregion Mouse Events
+    #region Window
     /// <summary>
     /// Creates the info window, if first is false only updates the info.
     /// </summary>
@@ -75,12 +80,13 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         if (!selected)
             return null;
-        InfoWindow info = MyGrid.canvasManager.infoWindow;
+        InfoWindow info = CanvasManager.infoWindow;
         info.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new(0, 0);
         info.gameObject.SetActive(true);
         return info;
     }
-
+    #endregion Window
+    #region Saving
     public virtual ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -91,6 +97,14 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public virtual void Load(ClickableObjectSave save)
     {
         id = save.id;
+    }
+    #endregion Saving
+
+    public virtual GridPos GetPos()
+    {
+        Debug.LogError("No Implementation");
+        GridPos gp = new();
+        return gp;
     }
 
     protected void CreateNewId(List<int> clickables) // creates a random int

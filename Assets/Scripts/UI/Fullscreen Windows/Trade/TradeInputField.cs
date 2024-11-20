@@ -10,6 +10,6 @@ public class TradeInputField : MonoBehaviour
     public void UpdateTradeCost()
     {
         TMP_InputField inputField = gameObject.GetComponent<TMP_InputField>();
-        MyGrid.canvasManager.trade.tradeInfo.UpdateTradeText();
+        CanvasManager.trade.tradeInfo.UpdateTradeText();
     }
 }

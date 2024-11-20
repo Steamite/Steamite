@@ -24,7 +24,7 @@ public struct JobData
         }
         else if (typeof(Rock) == jobSave.objectType)
         {
-            interest = MyGrid.gridTiles.toBeDigged.FirstOrDefault(q => q.id == jobSave.objectId);
+            interest = SceneRefs.gridTiles.toBeDigged.FirstOrDefault(q => q.id == jobSave.objectId);
             interest.GetComponent<Rock>().assigned = human;
         }
         else if (typeof(Chunk) == jobSave.objectType)

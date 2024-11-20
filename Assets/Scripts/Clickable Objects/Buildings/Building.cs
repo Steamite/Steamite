@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.Rendering;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.UIElements;
 
 public class Building : StorageObject
 {
@@ -55,6 +56,7 @@ public class Building : StorageObject
         return null;
     }
 
+    #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -77,18 +79,20 @@ public class Building : StorageObject
             GetComponent<SortingGroup>().sortingLayerName = "Buildings";
             if (build.deconstructing)
             {
-                MyGrid.sceneReferences.humans.GetComponent<JobQueue>().AddJob(JobState.Deconstructing, this);
+                SceneRefs.humans.GetComponent<JobQueue>().AddJob(JobState.Deconstructing, this);
             }
 
         }
         else
         {
-            PlaceBuilding(MyGrid.gridTiles);
+            PlaceBuilding(SceneRefs.gridTiles);
         }
         GetComponent<Building>().ChangeColor(new Color());
         base.Load(save);
     }
+    #endregion Saving
 
+    #region Storing
     public override void Store(Human human, int transferPerTick)
     {
         int index = localRes.carriers.IndexOf(human);
@@ -112,7 +116,16 @@ public class Building : StorageObject
         base.Take(h, transferPerTick);
         OpenWindow();
     }
+    #endregion Storing
 
+    public override GridPos GetPos()
+    {
+        GridPos pos = MyGrid.Rotate(build.blueprint.moveBy, transform.rotation.eulerAngles.y);
+        return new(
+            transform.position.x - pos.x,
+            (transform.position.y - 1) / 2,
+            transform.position.z - pos.z);
+    }
     ///////////////////////////////////////////////////
     ///////////////////Methods/////////////////////////
     ///////////////////////////////////////////////////
@@ -166,7 +179,7 @@ public class Building : StorageObject
 
     public virtual void OrderDeconstruct()
     {
-        JobQueue queue = MyGrid.sceneReferences.humans.GetComponent<JobQueue>();
+        JobQueue queue = SceneRefs.humans.GetComponent<JobQueue>();
         if (build.constructed) // if contructed
         {
             // if there isn't a deconstruction order yet
@@ -221,11 +234,11 @@ public class Building : StorageObject
                     carrier.ChangeAction(HumanActions.Move);
                     carrier.jData.job = JobState.Supply;
                 }
-                Deconstruct(transform.position);
+                Deconstruct(GetPos());
             }
         }
     }
-    public virtual Chunk Deconstruct(Vector3 instantPos)
+    public virtual Chunk Deconstruct(GridPos instantPos)
     {
         Resource r = new();
         // if constructed
@@ -240,27 +253,25 @@ public class Building : StorageObject
         }
         // get all stored resources
         MyRes.ManageRes(r, localRes.stored, 1);
-
         Chunk c = null;
-        if (r.ammount.Sum() > 0) // if there's anything to salvage
-        {
-            // create a chunk containing salvagable resources
-            c = Instantiate(MyGrid.specialPrefabs.GetPrefab("Chunk"), instantPos, Quaternion.identity, GameObject.Find("Chunks").transform).GetComponent<Chunk>();
-            c.Create(r, true);
-        }
+        if (r.ammount.Sum() > 0)
+            c = SceneRefs.objectFactory.CreateAChunk(instantPos, r);
 
         MyGrid.RemoveBuilding(this);
         DestoyBuilding(); // destroy self
-        return c;
+        return c; 
     }
     public virtual void DestoyBuilding()
     {
-        MyGrid.gridTiles.DeselectObjects();
+        SceneRefs.gridTiles.DeselectObjects();
         Destroy(gameObject);
         if (id > -1)
         {
-            MyGrid.canvasManager.overlays.Remove(id);
             MyGrid.RemoveBuilding(this);
+        }
+        else
+        {
+            MyGrid.GetOverlay().DeleteBuildGrid();
         }
     }
 

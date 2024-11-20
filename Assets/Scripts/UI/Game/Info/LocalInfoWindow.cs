@@ -62,7 +62,7 @@ public class LocalInfoWindow : UIBehaviour
             status = Status.expeditions;
             gridPos = new(pos.x, pos.y);
             print(gridPos);
-            transform.GetChild(0).GetComponent<TMP_Text>().text = MyGrid.canvasManager.trade.tradeLocations[expedition.tradeLocation].name;
+            transform.GetChild(0).GetComponent<TMP_Text>().text = CanvasManager.trade.tradeLocations[expedition.tradeLocation].name;
             transform.GetChild(1).GetComponent<TMP_Text>().text = expedition.ToString();
             transform.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 100);
             gameObject.SetActive(true);

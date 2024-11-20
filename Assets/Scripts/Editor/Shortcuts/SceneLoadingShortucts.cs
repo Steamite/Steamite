@@ -54,4 +54,10 @@ public class SceneLoadingShortucts : MonoBehaviour
         if(EditorSceneManager.GetActiveScene().name != "Level")
             EditorSceneManager.OpenScene($"{scenePath}Level.unity");
     }
+    [MenuItem("Custom Editors/Load/LoadingScreen _F4", priority = 3)]
+    static void LoadLoadingScreen()
+    {
+        if (EditorSceneManager.GetActiveScene().name != "LoadingScreen")
+            EditorSceneManager.OpenScene($"{scenePath}LoadingScreen.unity");
+    }
 }

@@ -13,9 +13,9 @@ public class Tick : MonoBehaviour
 
     public DayTime timeController;
 
-    public void AwakeTicks()
+    public void AwakeTicks(int clockSpeed)
     {
-        Time.timeScale = 5;
+        Time.timeScale = clockSpeed;
         timeController.Init(this);
         StartCoroutine(DoTick());
     }
@@ -27,7 +27,7 @@ public class Tick : MonoBehaviour
         {
             Time.timeScale = _speed;
             StartCoroutine(DoTick());
-            /*ResearchUIButton button = MyGrid.canvasManager.research.GetComponent<ResearchBackend>().currentResearch;
+            /*ResearchUIButton button = CanvasManager.research.GetComponent<ResearchBackend>().currentResearch;
             if (button)
                 button.transform.GetChild(0).GetComponent<Animator>().SetFloat("gameSpeed", 5f / _speed);*/
         }

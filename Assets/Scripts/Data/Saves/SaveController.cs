@@ -51,7 +51,7 @@ public class SaveController : MonoBehaviour
         }
         catch (Exception e)
         {
-            MyGrid.canvasManager.ShowMessage("An error ocured when saving.");
+            CanvasManager.ShowMessage("An error ocured when saving.");
             Debug.Log("Saving error: " + e);
             Directory.Delete($"{tmpPath}");
             return;
@@ -89,13 +89,15 @@ public class SaveController : MonoBehaviour
         }
 
         Directory.Delete($"{tmpPath}");
-        MyGrid.canvasManager.ShowMessage(autoSave ? "Autosave" : "Saved succesfuly");
+        CanvasManager.ShowMessage(autoSave ? "Autosave" : "Saved succesfuly");
     }
 
 
     //-------Grid-------\\
     void SaveGrid(string path, JsonSerializer jsonSerializer)
     {
+        #warning TODO
+        return;/*
         GridSave gridSave = new();
         gridSave.width = MyGrid.width;
         gridSave.height = MyGrid.height;
@@ -116,7 +118,7 @@ public class SaveController : MonoBehaviour
             JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Grid.json"));
             jsonSerializer.Serialize(jsonTextWriter, gridSave);
             jsonTextWriter.Close();
-        }
+        }*/
     }
     void SaveBuildings(GridSave gridSave)
     {
@@ -151,7 +153,7 @@ public class SaveController : MonoBehaviour
     void SavePlayerSettings(string path, JsonSerializer jsonSerializer)
     {
         PlayerSettings settings = new();
-        settings.priorities = MyGrid.sceneReferences.humans.GetComponent<JobQueue>().priority;
+        settings.priorities = SceneRefs.humans.GetComponent<JobQueue>().priority;
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/PlayerSettings.json"));
         jsonSerializer.Serialize(jsonTextWriter, settings);
         jsonTextWriter.Close();
@@ -160,19 +162,19 @@ public class SaveController : MonoBehaviour
     //------Humans------\\
     void SaveHumans(string path, JsonSerializer jsonSerializer)
     {
-        List<HumanSave> humanSave = new();
-        foreach (Human h in MyGrid.sceneReferences.humans.GetComponent<Humans>().humen)
+        /*List<HumanSave> humanSave = new();
+        foreach (Human h in SceneRefs.humans.GetComponent<Humans>().humen)
             humanSave.Add(new(h));
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Humans.json"));
         jsonSerializer.Serialize(jsonTextWriter, humanSave);
-        jsonTextWriter.Close();
+        jsonTextWriter.Close();*/
     }
     
     //------Research------\\
     void SaveResearch(string path, JsonSerializer jsonSerializer)
     {
         // takes nodes from all research buttons
-        ResearchUI research = MyGrid.canvasManager.research;
+        ResearchUI research = CanvasManager.research;
         Transform categsTransform = research.categoriesTran;
         ResearchSave categsData = new(categsTransform.childCount);
         for (int i = 0; i < categsTransform.childCount; i++)
@@ -199,7 +201,7 @@ public class SaveController : MonoBehaviour
     //------Research------\\
     void SaveTrade(string path, JsonSerializer jsonSerializer)
     {
-        Trade trade = MyGrid.canvasManager.trade;
+        Trade trade = CanvasManager.trade;
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Trade.json"));
         jsonSerializer.Serialize(jsonTextWriter, new TradeSave(trade));
         jsonTextWriter.Close();

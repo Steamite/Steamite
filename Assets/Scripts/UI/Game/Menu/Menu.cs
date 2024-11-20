@@ -11,14 +11,14 @@ public class Menu : MonoBehaviour
     public void Toggle()
     {
 
-        if (MyGrid.canvasManager.research.window.activeSelf)
+        if (CanvasManager.research.window.activeSelf)
         {
-            MyGrid.canvasManager.research.CloseWindow();
+            CanvasManager.research.CloseWindow();
             return;
         }
-        else if (MyGrid.canvasManager.trade.window.activeSelf)
+        else if (CanvasManager.trade.window.activeSelf)
         {
-            MyGrid.canvasManager.trade.CloseWindow();
+            CanvasManager.trade.CloseWindow();
             return;
         }
 
@@ -26,7 +26,7 @@ public class Menu : MonoBehaviour
             GameObject.Find("Scene").GetComponent<Tick>().Unpause();
         else
             GameObject.Find("Scene").GetComponent<Tick>().ChangeGameSpeed(0);
-        MyGrid.sceneReferences.levelCamera.enabled = gameObject.activeSelf;
+        SceneRefs.levelCamera.enabled = gameObject.activeSelf;
         gameObject.SetActive(!gameObject.activeSelf);
         Camera.main.GetComponent<PhysicsRaycaster>().enabled = !gameObject.activeSelf;
         Camera.main.GetComponent<Physics2DRaycaster>().enabled = !gameObject.activeSelf;

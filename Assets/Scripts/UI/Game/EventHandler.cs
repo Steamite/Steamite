@@ -22,13 +22,13 @@ public class EventHandler : MonoBehaviour
     {
         handleGrid = false;
         handleWindows = win;
-        MyGrid.sceneReferences.levelCamera.enabled = false;
+        SceneRefs.levelCamera.enabled = false;
     }
     public static void EnableInput(bool win = true)
     {
         handleGrid = true;
         handleWindows = win;
-        MyGrid.sceneReferences.levelCamera.enabled = true;
+        SceneRefs.levelCamera.enabled = true;
     }
 
     private void OnEnable()
@@ -42,13 +42,13 @@ public class EventHandler : MonoBehaviour
 
     void Update()
     {
-        GridTiles gt = MyGrid.gridTiles;
+        GridTiles gt = SceneRefs.gridTiles;
         if (handleGrid)
         {
             // toggle build menu
             if (buildMenu.triggered)
             {
-                Transform buildMenu = MyGrid.canvasManager.buildMenu.transform;
+                Transform buildMenu = CanvasManager.buildMenu.transform;
                 Transform categories = buildMenu.GetChild(1);
                 buildMenu.gameObject.SetActive(!buildMenu.gameObject.activeSelf);
                 if (buildMenu.gameObject.activeSelf)
@@ -79,19 +79,19 @@ public class EventHandler : MonoBehaviour
             else if (buildRotate.triggered)
             {
                 float axis = buildRotate.ReadValue<float>();
-                if (MyGrid.gridTiles.selMode == SelectionMode.build)
+                if (SceneRefs.gridTiles.selMode == SelectionMode.build)
                 {
-                    if (MyGrid.gridTiles.buildBlueprint.GetComponent<Pipe>())
+                    if (SceneRefs.gridTiles.buildBlueprint.GetComponent<Pipe>())
                         return;
                     if (axis < 0)
                     {
-                        MyGrid.gridTiles.buildBlueprint.transform.Rotate(new Vector3(0, 90, 0));
+                        SceneRefs.gridTiles.buildBlueprint.transform.Rotate(new Vector3(0, 90, 0));
                     }
                     else
                     {
-                        MyGrid.gridTiles.buildBlueprint.transform.Rotate(new Vector3(0, -90, 0));
+                        SceneRefs.gridTiles.buildBlueprint.transform.Rotate(new Vector3(0, -90, 0));
                     }
-                    MyGrid.gridTiles.Enter(MyGrid.gridTiles.activeObject);
+                    SceneRefs.gridTiles.Enter(SceneRefs.gridTiles.activeObject);
                 }
             }
         }
@@ -108,19 +108,19 @@ public class EventHandler : MonoBehaviour
         {
             if (research.triggered)
             {
-                MyGrid.canvasManager.trade.CloseWindow();
-                MyGrid.canvasManager.research.ToggleWindow();
+                CanvasManager.trade.CloseWindow();
+                CanvasManager.research.ToggleWindow();
             }
             if (trade.triggered)
             {
-                MyGrid.canvasManager.research.CloseWindow();
-                MyGrid.canvasManager.trade.ToggleWindow();
+                CanvasManager.research.CloseWindow();
+                CanvasManager.trade.ToggleWindow();
             }
         }
         // opens ingame menu
         if (menu.triggered)
         {
-            MyGrid.canvasManager.pauseMenu.Toggle();
+            CanvasManager.pauseMenu.Toggle();
         }
     }
 }

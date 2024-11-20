@@ -4,31 +4,41 @@ using UnityEngine.EventSystems;
 public class Road : ClickableObject
 {
     public List<int> entryPoints = new(); // IDs of builds that have entry points on this piece of 
-    
+
     ///////////////////////////////////////////////////
     ///////////////////Overrides///////////////////////
     ///////////////////////////////////////////////////
+    #region Mouse Events
     public override void OnPointerDown(PointerEventData eventData)
     {
-        if ((MyGrid.gridTiles.markedTiles.Count > 0 || MyGrid.gridTiles.selMode == SelectionMode.build) && eventData.button == PointerEventData.InputButton.Left)
+        if ((SceneRefs.gridTiles.markedTiles.Count > 0 || SceneRefs.gridTiles.selMode == SelectionMode.build) && eventData.button == PointerEventData.InputButton.Left)
         {
-            MyGrid.gridTiles.Down();
+            SceneRefs.gridTiles.Down();
         }
         else if (eventData.button != PointerEventData.InputButton.Left)
         {
-            MyGrid.gridTiles.BreakAction();
+            SceneRefs.gridTiles.BreakAction();
         }
     }
     public override void OnPointerUp(PointerEventData eventData)
     {
-        if ((MyGrid.gridTiles.markedTiles.Count > 0 || MyGrid.gridTiles.selMode == SelectionMode.build) && eventData.button == PointerEventData.InputButton.Left)
+        if ((SceneRefs.gridTiles.markedTiles.Count > 0 || SceneRefs.gridTiles.selMode == SelectionMode.build) && eventData.button == PointerEventData.InputButton.Left)
         {
-            MyGrid.gridTiles.Up();
+            SceneRefs.gridTiles.Up();
         }
         else if(eventData.button != PointerEventData.InputButton.Left)
         {
-            MyGrid.gridTiles.BreakAction();
+            SceneRefs.gridTiles.BreakAction();
         }
+    }
+    #endregion Mouse Events
+
+    public override GridPos GetPos()
+    {
+        return new GridPos(
+            transform.position.x,
+            (transform.position.y - 0.45f) / 2,
+            transform.position.z);
     }
 
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)

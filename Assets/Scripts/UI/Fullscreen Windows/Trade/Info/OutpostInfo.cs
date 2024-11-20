@@ -151,7 +151,7 @@ public class OutpostInfo : MonoBehaviour
             trade.outposts[activeOutpost].StartUpgrade();
         }
         if (trade.outposts.Count(q => !q.constructed) == 1)
-            MyGrid.sceneReferences.GetComponent<Tick>().tickAction += UpdateOutpostProgress;
+            SceneRefs.tick.tickAction += UpdateOutpostProgress;
         ChangeOutpost(activeOutpost);
     }
 
@@ -170,7 +170,7 @@ public class OutpostInfo : MonoBehaviour
                         ChangeOutpost(i);
                     if (trade.outposts.Count(q => !q.constructed) == 0)
                     {
-                        MyGrid.sceneReferences.GetComponent<Tick>().tickAction -= UpdateOutpostProgress;
+                        SceneRefs.tick.tickAction -= UpdateOutpostProgress;
                     }
                 }
                 else

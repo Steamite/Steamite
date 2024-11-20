@@ -27,13 +27,13 @@ public class TradeExpedition
             currentProgress = maxProgress;
             goingToTrade = false;
             return false;
-            //MyGrid.canvasManager.tradeWindow.transform.GetChild(0).GetChild(0).GetChild(tradeLocation).GetComponent<Slider>().value =;
+            //CanvasManager.tradeWindow.transform.GetChild(0).GetChild(0).GetChild(tradeLocation).GetComponent<Slider>().value =;
         }
         else
         {
             MyRes.DeliverToElevator(buying);
             MyRes.ManageMoney(reward);
-            MyGrid.canvasManager.trade.window.transform.GetChild(0).GetChild(1).GetChild(sliderID).gameObject.SetActive(false);
+            CanvasManager.trade.window.transform.GetChild(0).GetChild(1).GetChild(sliderID).gameObject.SetActive(false);
             return true;
         }
     }

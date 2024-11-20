@@ -5,7 +5,7 @@ public class UIbuttons : MonoBehaviour
 {
     public void ToggleAction(int i)
     {
-        GridTiles gridTiles = MyGrid.gridTiles;
+        GridTiles gridTiles = SceneRefs.gridTiles;
         if(gridTiles.selMode == (SelectionMode)i)
         {
             gridTiles.activeObject = null;
