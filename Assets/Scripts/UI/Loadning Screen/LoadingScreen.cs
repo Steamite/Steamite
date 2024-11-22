@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,14 +20,18 @@ public class LoadingScreen : MonoBehaviour
     [SerializeField] GroundLevel startLevel;
     [SerializeField] GroundLevel mainLevel;
     [SerializeField] GroundLevel templateLevel;
+
+    [SerializeField] TMP_Text actionText;
+    [SerializeField] Slider loadingSlider;
     public event Action humanActivation;
 
     GameObject roadPref;
-    public void LoadMainMenu()
+    public void OpenMainMenu()
     {
-        Load(2); // the loading Process
+        OpenScene(2); // the loading Process
     }
-    async void Load(int id)
+
+    async void OpenScene(int id)
     {
         await SceneManager.LoadSceneAsync(id, LoadSceneMode.Additive);
         
@@ -44,6 +49,7 @@ public class LoadingScreen : MonoBehaviour
             MyGrid.CreateGrid(startLevel, mainLevel);
             CanvasManager.research.NewGame();
             CanvasManager.trade.NewGame();
+            SceneRefs.humans.NewGameInit();
             AfterLevelLoad(true);
         }
         Debug.Log("end:" + Time.realtimeSinceStartup);
@@ -64,20 +70,17 @@ public class LoadingScreen : MonoBehaviour
     void CreateW(AsyncOperation obj)
     {
         transform.GetChild(0).gameObject.SetActive(true);
-        Load(3);
+        OpenScene(3);
     }
 
-    //////////////////////////////////////////////////////////////////
-    //-----------------------------Loading--------------------------//
-    //////////////////////////////////////////////////////////////////
-
+    #region Loading Game State
     /// <summary>
     /// Assigns parameters and shows loading screen.<br/>
     /// If called while on "Main Menu" scene unloads it.<br/>
     /// After that loads "Level" scene.
     /// </summary>
     /// <param name="_folderName">Current folder name.</param>
-    public async void StartLoading(GridSave _gridSave, PlayerSettings _playerSettings, List<HumanSave> _humanSaves,
+    public async void StartLoading(WorldSave _gridSave, GameStateSave _playerSettings, HumanSave[] _humanSaves,
         ResearchSave _researchSave, TradeSave _tradeSave, string _folderName)
     {
         folderName = _folderName;
@@ -91,234 +94,118 @@ public class LoadingScreen : MonoBehaviour
            await SceneManager.UnloadSceneAsync("Main Menu");
         }
         await SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
-        LoadWorldData(_gridSave, _playerSettings, _humanSaves, _researchSave, _tradeSave);
+        await LoadWorldData(_gridSave, _playerSettings, _humanSaves, _researchSave, _tradeSave);
+        AfterLevelLoad(false);
     }
 
     /// <summary>
-    /// Uses the data from
+    /// Preps <see cref="SceneRefs"/>, <see cref="CanvasManager"/> and loads saved data.
     /// </summary>
     /// <param name="obj"></param>
-    void LoadWorldData(GridSave gridSave, PlayerSettings playerSettings, List<HumanSave> humanSaves,
+    Task LoadWorldData(WorldSave worldSave, GameStateSave playerSettings, HumanSave[] humanSaves,
         ResearchSave researchSave, TradeSave tradeSave)
     {
         GameObject.Find("Scene").GetComponent<SceneRefs>().Init();
         GameObject.Find("UI canvas").GetComponent<CanvasManager>().Init();
-        Slider slider = transform.GetChild(0).GetChild(1).GetComponent<Slider>();
         // create Progress val for loading slider
-        int maxProgress = gridSave.width * gridSave.height*4; // Tiles and pipes
-        maxProgress += gridSave.buildings.Count * buildWeigth; //scale number
-        maxProgress += gridSave.chunks.Count;
-        maxProgress += humanSaves.Count;
+        int maxProgress = 0;
+        for(int i = 0; i < worldSave.gridSave.Length; i++)
+            maxProgress += worldSave.gridSave[i].width * worldSave.gridSave[i].height * 2; // Tiles and pipes
+        maxProgress += worldSave.objectsSave.buildings.Length * buildWeigth; //scale number
+        maxProgress += worldSave.objectsSave.chunks.Length;
+        maxProgress += humanSaves.Length;
         maxProgress += researchSave.categories.SelectMany(q => q.nodes).Count();
-        //maxProgress += trade
-        slider.maxValue = maxProgress;
+        loadingSlider.maxValue = maxProgress;
         Progress<int> progress = new Progress<int>(value =>
         {
-            slider.value = value;
+            loadingSlider.value = value;
         });
-        //FillPlayerSettings(progress, playerSettings);
-        //FillGrid(progress, gridSave);
-        //FillHumans(progress, humanSaves);
-        //FillResearches(progress, researchSave);
-        //FillTrade(progress, tradeSave);
-        //..
-        StartCoroutine(LoadWaiting());
+        FillGameState(progress, playerSettings);
+        FillGrid(progress, worldSave);
+        FillHumans(progress, humanSaves);
+        FillResearches(progress, researchSave);
+        FillTrade(progress, tradeSave);
+
+        return Task.CompletedTask;
     }
 
-    IEnumerator LoadWaiting()
+
+    #region Model Loading
+    void FillGrid(IProgress<int> progress, WorldSave worldSave)
     {
-        yield return new WaitForSeconds(2);
-        GameObject.Find("Scene").GetComponent<SceneRefs>().Init();
-        AfterLevelLoad(false);
-    }
-    void FillPlayerSettings(IProgress<int> progress, PlayerSettings playerSettings)
-    {
-        SceneRefs.humans.GetComponent<JobQueue>().priority = playerSettings.priorities;
-    }
-    //////////////////////////////////////////////////////////////////
-    //-----------------------------Grid-----------------------------//
-    //////////////////////////////////////////////////////////////////
-    void FillGrid(IProgress<int> progress, GridSave gridSave)
-    {
-        throw new NotImplementedException();
-        /*roadPref = MyGrid.tilePrefabs.GetPrefab("Road").gameObject;
-        CreateGrid(progress, gridSave);
-        CreateChunks(progress, gridSave);
-        SceneRefs.objectFactory.CreatePipes(progress, gridSave);
-        CreateBuilding(progress, gridSave);*/
-    }
-    /*
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="progress"></param>
-    /// <param name="gridSave"></param>
-    void CreateGrid(IProgress<int> progress, GridSave gridSave)
-    {
-        // gets gridTiles reference for rocks
-        SceneRefs.gridTiles = SceneRefs.eventSystem.GetChild(0).GetComponent<GridTiles>();
+        actionText.text = "Loading grid";
+        CreateGrid(progress, worldSave.gridSave);
+        actionText.text = "Spawning chunks";
+        CreateChunks(progress, worldSave.objectsSave.chunks);
+        actionText.text = "Constructing buildings";
+        CreateBuildings(progress, worldSave.objectsSave.buildings);
         
-        // Empties grid
-        MyGrid.ClearGrid();
-        
-        // creates an empty ground level
-        GroundLevel groundLevel = Instantiate(templateLevel, SceneRefs.gridTiles.transform);
-        SceneRefs.levels.Add(groundLevel);
-
-        Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;
-        // process of creating items
-        CreateTiles(progress, gridSave);
     }
 
-    /// <summary>
-    /// Instantiates and fills ClickableObject tiles (Rock, Water, Road).
-    /// </summary>
-    /// <param name="progress"></param>
-    void CreateTiles(IProgress<int> progress, GridSave gridSave)
+    void CreateChunks(IProgress<int> progress, ChunkSave[] chunks)
     {
-        ClickableObject waterPref = MyGrid.tilePrefabs.GetPrefab("Water");//Assets/Resources/.prefab
-        for (int x = 0; x < gridSave.height; x++)
+        foreach (ChunkSave chunkSave in chunks)
         {
-            for (int z = 0; z < gridSave.width; z++)
-            {
-                // Creates the tile object
-                ClickableObjectSave objectSave = gridSave.gridItems[x, z];
-                switch (objectSave)
-                {
-                    case RockSave:
-                        Rock rock = Instantiate(MyGrid.tilePrefabs.GetPrefab((objectSave as RockSave).oreName), new(x, 1.5f, z), Quaternion.identity, SceneRefs.levels[0].rocks).GetComponent<Rock>();
-                        rock.Load(objectSave);
-                        MyGrid.SetGridItem(new(x,z), rock);
-                        if (rock.toBeDug)
-                        {
-                            SceneRefs.gridTiles.toBeDigged.Add(rock);
-                            SceneRefs.gridTiles.HighLight(SceneRefs.gridTiles.toBeDugColor, rock.gameObject);
-                        }
-                        break;
-                    case BSave:
-                        //MyGrid.grid[x, z] = null;
-                        break;
-                    case WaterSave:
-                        Water water = Instantiate(waterPref, new(x, 0, z), Quaternion.identity, SceneRefs.levels[0].water).GetComponent<Water>();
-                        water.Load(objectSave);
-                        MyGrid.SetGridItem(new(x, z), water);
-                        break;
-                    default:
-                        Road road = Instantiate(roadPref, new(x, 0.45f, z), Quaternion.identity, SceneRefs.levels[0].roads).GetComponent<Road>();
-                        MyGrid.SetGridItem(new(x, z), road);
-                        break;
-                }
-                progress.Report(progressGlobal += 2);
-            }
-        }
-        SceneRefs.humans.GetComponent<JobQueue>().toBeDug = SceneRefs.gridTiles.toBeDigged.ToList();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="progress"></param>
-    /// <param name="gridSave"></param>
-    void CreateChunks(IProgress<int> progress, GridSave gridSave)
-    {
-        MyGrid.chunks = new();
-        GameObject chunkPref = MyGrid.specialPrefabs.GetPrefab("Chunk").gameObject;
-        foreach (ChunkSave chunkSave in gridSave.chunks)
-        {
-            Vector3 vec = chunkSave.gridPos.ToVec();
-            MyGrid.chunks.Add(Instantiate(chunkPref, new(vec.x, 1, vec.z), Quaternion.identity, SceneRefs.levels[0].chunks).GetComponent<Chunk>());
-            MyGrid.chunks[^1].Load(chunkSave);
+            SceneRefs.objectFactory
+                .CreateAChunk(chunkSave.gridPos, chunkSave.resSave.stored)
+                .Load(chunkSave);
+            progress.Report(progressGlobal += 1);
         }
     }
-    
 
-    /// <summary>
-    /// Instantiates and places all the buildings.
-    /// </summary>
-    /// <param name="progress"></param>
-    void CreateBuilding(IProgress<int> progress, GridSave gridSave)
+    void CreateBuildings(IProgress<int> progress, BSave[] buildings)
     {
-        foreach (BSave save in gridSave.buildings) // for each saved building
+        foreach (BSave save in buildings) // for each saved building
         {
-            Building _pref = MyGrid.buildPrefabs.GetPrefab(save.prefabName) as Building; // find the prefab
-            // create the prefab
-            Building b = Instantiate(_pref,
-                new(save.gridPos.x, 1, save.gridPos.z),
-                Quaternion.Euler(0, save.rotationY, 0),
-                SceneRefs.levels[0].buildings);
-
-            // fill the prefab with saved Data
-            b.Load(save);
-            MyGrid.PlaceBuild(b, true);
+            SceneRefs.objectFactory.CreateSavedBuilding(save);
             progress.Report(progressGlobal += buildWeigth);
         }
     }
-    
-    //////////////////////////////////////////////////////////////////
-    //-----------------------------Humans---------------------------//
-    //////////////////////////////////////////////////////////////////
-    void FillHumans(IProgress<int> progress, List<HumanSave> humanSaves)
+
+    void CreateGrid(IProgress<int> progress, GridSave[] gridSave)
     {
-        // Destroys all humans 
-        for (int i = SceneRefs.humans.transform.GetChild(0).childCount-1; i >= 0; i--)
+        // Empties grid
+        MyGrid.PrepGridLists();
+
+        // creates an empty ground level
+        for(int i = 0; i < gridSave.Length; i++)
         {
-            Destroy(SceneRefs.humans.transform.GetChild(0).GetChild(i).gameObject);
+            MyGrid.Load(gridSave[i], templateLevel, i);
+            //progress.Report(progressGlobal += );
         }
-        GameObject humanPrefab = MyGrid.specialPrefabs.GetPrefab("Human").gameObject;
-        Humans humans = SceneRefs.humans.GetComponent<Humans>();
-        JobQueue jobQueue = humans.GetComponent<JobQueue>();
-        humans.humen = new();
-        foreach (HumanSave h in humanSaves)
-        {
-            int parent = h.workplaceId > -1 ? 1 : 0;
-            Human human = GameObject.Instantiate(humanPrefab,
-                new Vector3(h.gridPos.x, 1, h.gridPos.z), 
-                Quaternion.identity,
-                SceneRefs.humans.transform.GetChild(parent)).GetComponent<Human>();
-            human.transform.GetChild(1).GetComponent<MeshRenderer>().material.color = h.color.ConvertColor();
-            human.id = h.id;
-            human.jData = new(h.jobSave, human);
-            human.name = h.name;
-            human.inventory = h.inventory;
-            human.specialization = h.specs;
-            if (human.jData.path.Count > 0)
-                human.ChangeAction(HumanActions.Move);
-            else
-                human.Decide();
-            // house assigment
-            if (h.houseID != -1)
-            {
-                human.home = MyGrid.buildings.Where(q => q.id == h.houseID).
-                    SingleOrDefault().GetComponent<House>();
-                human.home.assigned.Add(human);
-            }
-            // workplace assigment
-            if (h.workplaceId != -1)
-            {
-                human.workplace = MyGrid.buildings.Where(q => q.id == h.workplaceId).
-                    SingleOrDefault().GetComponent<ProductionBuilding>();
-                human.workplace.assigned.Add(human);
-            }
-            humans.AddHuman(human, ref humanActivation);
-            progress.Report(progressGlobal++);
-        }
+        Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;
+    }
+    void FillHumans(IProgress<int> progress, HumanSave[] humanSaves)
+    {
+        actionText.text = "Kidnaping workers";
+        SceneRefs.humans.LoadHumans(progress, humanSaves, ref humanActivation);
+    }
+    #endregion Model Loading
+
+    #region UI loading
+
+    void FillGameState(IProgress<int> progress, GameStateSave gameState)
+    {
+        SceneRefs.humans.GetComponent<JobQueue>().priority = gameState.priorities;
+        SceneRefs.tick.timeController.Load(gameState);
     }
 
     void FillResearches(Progress<int> progress, ResearchSave researchSave)
     {
+        actionText.text = "Remembering research";
         CanvasManager.research.LoadGame(researchSave);
     }
 
     void FillTrade(Progress<int> progress, TradeSave tradeSave)
     {
+        actionText.text = "Making Deals";
         CanvasManager.trade.LoadGame(tradeSave);
     }
-    */
+    #endregion UI loading
+    #endregion Loading Game State
     async void AfterLevelLoad(bool newGame)
     {
         transform.parent.GetChild(1).GetComponent<AudioListener>().enabled = false;
-
-        SceneRefs.humans.GetComponent<Humans>().GetHumans();
         CanvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().SetUp();
         SceneRefs.saveController.activeFolder = folderName;
         MyGrid.Init();
@@ -330,7 +217,8 @@ public class LoadingScreen : MonoBehaviour
         MyRes.ActivateResources(newGame);
         await SceneManager.UnloadSceneAsync("LoadingScreen");
         CanvasManager.stats.GetChild(0).GetChild(0).GetComponent<TimeButtons>().SetStartSpeed(SceneRefs.tick);
-        //CanvasManager.ToggleCanvases();
+        humanActivation?.Invoke();
+        SceneRefs.tick.timeController.Init(SceneRefs.tick, newGame);
+        humanActivation = null;
     }
-
 }

@@ -7,12 +7,13 @@ using UnityEngine.UI;
 
 public static class MyGrid
 {
+    public const int NUMBER_OF_LEVELS = 5;
     public static List<Building> buildings = new();
     public static List<Chunk> chunks = new();
     public static List<Human> humans = new();
     public static List<FluidNetwork> fluidNetworks = new();
 
-    public static GroundLevel[] levels;
+    static GroundLevel[] levels;
 
     public static int currentLevel { get; private set; }
     public static string startSceneName;
@@ -43,13 +44,12 @@ public static class MyGrid
             lIndex = currentLevel;
         return levels[lIndex].overlays;
     }
-    public static void ClearGrid()
+    public static void PrepGridLists()
     {
         buildings = new List<Building>();
         chunks = new List<Chunk>();
         fluidNetworks = new();
         levels = new GroundLevel[5];
-        
     }
 
     public static StringBuilder PrintGrid()
@@ -69,7 +69,7 @@ public static class MyGrid
     #region Grid Creation
     public static StringBuilder CreateGrid(GroundLevel level, GroundLevel mainLevel)
     {
-        ClearGrid();
+        PrepGridLists();
         GameObject.Find("Scene").GetComponent<SceneRefs>().Init();
         GameObject.Find("UI canvas").GetComponent<CanvasManager>().Init();
         currentLevel = 2;
@@ -116,11 +116,14 @@ public static class MyGrid
         else
         {
             SceneRefs.gridTiles.DestroyUnselect(building);
-            GridPos gridPos = new(building.transform.position - Rotate(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
+            GridPos gridPos = building.GetPos();
+            GridPos p = Rotate(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y);
+            gridPos.x -= p.x;
+            gridPos.z -= p.z;
             //canvasManager.overlays.AddBuildingOverlay(gridPos, building.id);
             if (building.build.blueprint.itemList.Count > 0)
             {
-                levels[(int)gridPos.y].RemoveBuilding(building, gridPos);
+                levels[gridPos.y].RemoveBuilding(building, gridPos);
             }
         }
         /*if (building.GetType() != typeof(Pipe))
@@ -162,7 +165,9 @@ public static class MyGrid
 
     public static Transform FindLevelChunks(int lIndex) => levels[lIndex].chunks;
     public static Transform FindLevelRoads(int lIndex) => levels[lIndex].roads;
+    public static Transform FindLevelWater(int lIndex) => levels[lIndex].water;
     public static Transform FindLevelRocks(int lIndex) => levels[lIndex].rocks;
+    public static Transform FindLevelBuildings(int lIndex) => levels[lIndex].buildings;
 
     #endregion
 
@@ -201,4 +206,52 @@ public static class MyGrid
         levels[currentLevel].gameObject.SetActive(true);
         return currentLevel;
     }
+
+    public static GridSave Save(int i)
+    {
+        GroundLevel level = levels[i];
+        GridSave gridSave = new(level.height, level.width);
+        GridPos gp = new();
+        for(int x = 0; x < gridSave.height; x++)
+        {
+            gp.x = x;
+            for(int y = 0; y < gridSave.width; y++)
+            {
+                gp.z = y;
+                ClickableObject click = level.GetGridItem(gp, false);
+                gridSave.grid[x, y] = (click is Building) ? null : click?.Save();
+                gridSave.pipes[x, y] = level.GetGridItem(gp, true)?.Save();
+            }
+        }
+        return gridSave;
+    }
+
+    public static void Load(GridSave gridSave, GroundLevel templateLevel, int i)
+    {
+        GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickabeObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.gridTiles.transform);
+        levels[i] = groundLevel;
+        groundLevel.ClearGrid();
+        groundLevel.gameObject.SetActive(i == 2);
+        for(int x = 0; x < gridSave.width; x++)
+        {
+            for (int z = 0; z < gridSave.width; z++)
+            {
+                switch (gridSave.grid[x, z])
+                {
+                    case RockSave:
+                        SceneRefs.objectFactory.CreateSavedRock(gridSave.grid[x, z] as RockSave, new (x, i, z));
+                        break;
+                    case WaterSave:
+                        SceneRefs.objectFactory.CreateSavedWater(gridSave.grid[x, z] as WaterSave, new(x, i, z));
+                        break;
+                    default :
+                        SceneRefs.objectFactory.CreateRoad(new(x, i, z), true);
+                        break;
+                }
+            }
+        }
+        SceneRefs.humans.GetComponent<JobQueue>().toBeDug = SceneRefs.gridTiles.toBeDigged.ToList();
+    }
+
+   
 }

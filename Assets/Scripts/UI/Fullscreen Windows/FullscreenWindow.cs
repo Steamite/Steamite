@@ -22,7 +22,7 @@ public class FullscreenWindow : MonoBehaviour
     {
         // open view Window
         SceneRefs.gridTiles.DeselectObjects();
-        EventHandler.DisableInput();
+        MainShortcuts.DisableInput();
         CanvasManager.infoWindow.gameObject.SetActive(false);
         window.SetActive(true);
 
@@ -32,7 +32,7 @@ public class FullscreenWindow : MonoBehaviour
     public virtual void CloseWindow()
     {
         window.SetActive(false);
-        EventHandler.EnableInput();
+        MainShortcuts.EnableInput();
         CanvasManager.infoWindow.gameObject.SetActive(false);
     }
 }

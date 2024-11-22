@@ -70,6 +70,7 @@ public class Building : StorageObject
     {
         name = (save as BSave).prefabName;
         build = (save as BSave).build;
+        GetColors();
         if (build.constructed)
         {
             foreach (GameObject g in transform.GetComponentsInChildren<Transform>().Select(q => q.gameObject))
@@ -81,13 +82,11 @@ public class Building : StorageObject
             {
                 SceneRefs.humans.GetComponent<JobQueue>().AddJob(JobState.Deconstructing, this);
             }
-
         }
         else
         {
             PlaceBuilding(SceneRefs.gridTiles);
         }
-        GetComponent<Building>().ChangeColor(new Color());
         base.Load(save);
     }
     #endregion Saving
@@ -159,7 +158,7 @@ public class Building : StorageObject
              transform.rotation = q;
              transform.position = oldPos;
          }*/
-        myColor = transform.GetComponentsInChildren<MeshRenderer>().Select(q => q.material.color).ToList(); // saves the original color
+        GetColors();
     }
 
     /// <summary>
@@ -172,7 +171,6 @@ public class Building : StorageObject
         {
             localRes.stored.ammount[i] = 0;
         }
-        ChangeColor(new Color()); // builds
         ChangeRenderMode(false);
         OpenWindow(true); // if selected, update the info window
     }
@@ -256,7 +254,6 @@ public class Building : StorageObject
         Chunk c = null;
         if (r.ammount.Sum() > 0)
             c = SceneRefs.objectFactory.CreateAChunk(instantPos, r);
-
         MyGrid.RemoveBuilding(this);
         DestoyBuilding(); // destroy self
         return c; 
@@ -273,22 +270,6 @@ public class Building : StorageObject
         {
             MyGrid.GetOverlay().DeleteBuildGrid();
         }
-    }
-
-    public virtual void ChangeColor(Color color)
-    {
-        if (color.Equals(new Color()) || build.constructed) // signal for restart of color
-        {
-            int i = 0;
-            foreach (MeshRenderer mesh in transform.GetComponentsInChildren<MeshRenderer>())
-            {
-                mesh.material.color = myColor[i];
-                i++;
-            }
-        }
-        else
-            foreach (MeshRenderer mesh in transform.GetComponentsInChildren<MeshRenderer>())
-                mesh.material.color = color;
     }
     public virtual void ChangeRenderMode(bool transparent)
     {
@@ -319,7 +300,7 @@ public class Building : StorageObject
 
     public virtual Resource GetDiff(Resource inventory)
     {
-        Resource r = new();
+        Resource r = null;
         r = MyRes.DiffRes(build.cost, localRes.Future(), inventory);
         return r;
     }
@@ -354,10 +335,15 @@ public class Building : StorageObject
         print(MyGrid.PrintGrid());
     }
 
+    public void GetColors()
+    {
+        myColor = transform.GetComponentsInChildren<MeshRenderer>().Select(q => q.material.color).ToList(); // saves the original color
+    }
     public virtual Fluid GetFluid()
     {
         return null;
     }
+
 
     private void DefText(Transform cTransform)
     {

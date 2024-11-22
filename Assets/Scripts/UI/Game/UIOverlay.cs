@@ -71,7 +71,7 @@ public class UIOverlay : MonoBehaviour
         rect.GetComponent<Image>().color = new(0.5f, 0.5f, 0.5f, 0.25f);
     }
 
-    public void Remove(int id)
+    public void Remove(int id, GridPos gridPos)
     {
         int i = buildingOverlays.FindIndex(q => q.name == id.ToString());
         if (i > -1)
@@ -79,7 +79,7 @@ public class UIOverlay : MonoBehaviour
             Destroy(buildingOverlays[i].gameObject);
             foreach(GridPos gp in buildingOverlays[i].GetComponentsInChildren<Transform>().Skip(1).Select(q=> new GridPos(q.transform.position)))
             {
-                ClickableObject clickable = MyGrid.GetGridItem(gp);
+                ClickableObject clickable = MyGrid.GetGridItem(new(gp.x, gridPos.y, gp.z));
                 if (clickable is Road)
                 {
                     ((Road)clickable).entryPoints.Remove(id);

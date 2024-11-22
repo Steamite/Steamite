@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class DayTime : MonoBehaviour
 {
@@ -20,10 +19,13 @@ public class DayTime : MonoBehaviour
 
     [SerializeField] TMP_Text time;
 
-    public void Init(Tick tick)
+    public void Init(Tick tick, bool newGame)
     {
         minutesPerTick = (int)(60f / ticksPerHour);
-        timeInMinutes *= 60;
+        if(newGame)
+            timeInMinutes *= 60;
+        if (timeInMinutes < 6 * 60 || timeInMinutes > 23 * 60)
+            nightStart?.Invoke();
         tick.tickAction += UpdateTime;
 
         transform.GetChild(0).GetComponent<TMP_Text>().text = $"{(timeInMinutes / 60).ToString().PadLeft(2, '0')}:{(timeInMinutes % 60).ToString().PadLeft(2, '0')}"; ;
@@ -57,9 +59,11 @@ public class DayTime : MonoBehaviour
                 transform.GetChild(1).GetComponent<TMP_Text>().text = $"Day: {(numberOfDays % 7)+1}";
                 break;
             case 1320:
+                //isNight = true;
                 nightStart?.Invoke();
                 break;
             case 360:
+                //isNight = false;
                 dayStart?.Invoke();
                 SceneRefs.saveController.SaveGame(true);
                 break;
@@ -70,5 +74,17 @@ public class DayTime : MonoBehaviour
     public int GetWeekTime()
     {
         return (numberOfDays % 7 * 1440) + timeInMinutes;
+    }
+
+    public void Save(GameStateSave gameState)
+    {
+        gameState.dayTime = timeInMinutes;
+        gameState.numberOfDays = numberOfDays;
+    }
+
+    public void Load(GameStateSave gameState)
+    {
+        timeInMinutes = gameState.dayTime;
+        numberOfDays = gameState.numberOfDays;
     }
 }

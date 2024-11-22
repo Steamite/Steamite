@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -23,9 +19,15 @@ public class Menu : MonoBehaviour
         }
 
         if (gameObject.activeSelf)
+        {
+            MainShortcuts.EnableInput();
             GameObject.Find("Scene").GetComponent<Tick>().Unpause();
+        }
         else
+        {
+            MainShortcuts.DisableInput(false);
             GameObject.Find("Scene").GetComponent<Tick>().ChangeGameSpeed(0);
+        }
         SceneRefs.levelCamera.enabled = gameObject.activeSelf;
         gameObject.SetActive(!gameObject.activeSelf);
         Camera.main.GetComponent<PhysicsRaycaster>().enabled = !gameObject.activeSelf;

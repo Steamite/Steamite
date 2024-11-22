@@ -18,9 +18,9 @@ public class LoadMenu : MonoBehaviour
     string selectedSave;
     List<string> loadedElems = new();
 
-    GridSave gridSave;
-    PlayerSettings playerSettings;
-    List<HumanSave> humanSaves;
+    WorldSave worldSave;
+    GameStateSave gameStateSave;
+    HumanSave[] humanSaves;
     ResearchSave researchSave;
     TradeSave tradeSave;
 
@@ -72,16 +72,26 @@ public class LoadMenu : MonoBehaviour
         selectedSave = button.transform.GetChild(0).GetComponent<TMP_Text>().text;
         JsonSerializer jsonSerializer = SaveController.PrepSerializer();
         // for gridSave
+        worldSave = new();
         JsonTextReader jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Grid.json"));
-        gridSave = jsonSerializer.Deserialize<GridSave>(jsonReader);
+        worldSave.objectsSave = jsonSerializer.Deserialize<BuildsAndChunksSave>(jsonReader);
         jsonReader.Close();
+
+        worldSave.gridSave = new GridSave[MyGrid.NUMBER_OF_LEVELS];
+        for(int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
+        {
+            jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Level{i}.json"));
+            worldSave.gridSave[i] = jsonSerializer.Deserialize<GridSave>(jsonReader);
+            jsonReader.Close();
+        }
+
         // for playerSettings
         jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/PlayerSettings.json"));
-        playerSettings = jsonSerializer.Deserialize<PlayerSettings>(jsonReader);
+        gameStateSave = jsonSerializer.Deserialize<GameStateSave>(jsonReader);
         jsonReader.Close();
         // for humanSaves
         jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Humans.json"));
-        humanSaves = jsonSerializer.Deserialize<List<HumanSave>>(jsonReader);
+        humanSaves = jsonSerializer.Deserialize<HumanSave[]>(jsonReader);
         jsonReader.Close();
         // for researchCategories
         jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Research.json"));
@@ -93,8 +103,8 @@ public class LoadMenu : MonoBehaviour
 
         transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = selectedSave;
         transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = // to show that the save is really working
-            $"Buildings: {gridSave.buildings.Count}\n" +
-            $"Humans: {humanSaves.Count}\n" +
+            $"Buildings: {worldSave.objectsSave.buildings.Length}\n" +
+            $"Humans: {humanSaves.Length}\n" +
             $"Completed Researches: {researchSave.categories.SelectMany(q=> q.nodes).Count(q=> q.researched)}";
         
         transform.GetChild(3).GetChild(0).GetComponent<Button>().interactable = true; // load
@@ -145,16 +155,16 @@ public class LoadMenu : MonoBehaviour
         }
     }
 
-    public void UnLoad(AsyncOperation ao)
+    public void UnLoad(AsyncOperation _)
     {
         Scene scene = SceneManager.GetActiveScene();
         AsyncOperation aO = SceneManager.UnloadSceneAsync(scene);
         aO.completed += Load;
     }
 
-    public void Load(AsyncOperation ao)
+    public void Load(AsyncOperation _)
     {
         GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>().
-            StartLoading(gridSave, playerSettings, humanSaves, researchSave, tradeSave, selectedSave);
+            StartLoading(worldSave, gameStateSave, humanSaves, researchSave, tradeSave, selectedSave);
     }
 }

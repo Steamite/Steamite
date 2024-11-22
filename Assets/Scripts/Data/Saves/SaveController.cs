@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
 using System;
-using TMPro;
 
 public class SaveController : MonoBehaviour
 {
@@ -40,23 +37,31 @@ public class SaveController : MonoBehaviour
         
         string tmpPath = $"{Application.persistentDataPath}/saves/_tmp";
         Directory.CreateDirectory($"{tmpPath}");
+        JsonSerializer jsonSerializer = PrepSerializer();
+        JsonWriter jsonWriter = null;
         try
         {
-            JsonSerializer jsonSerializer = PrepSerializer();
             SaveGrid(tmpPath, jsonSerializer);
             SaveHumans(tmpPath, jsonSerializer);
-            SavePlayerSettings(tmpPath, jsonSerializer);
+            SaveGameState(tmpPath, jsonSerializer);
             SaveResearch(tmpPath, jsonSerializer);
             SaveTrade(tmpPath, jsonSerializer);
         }
         catch (Exception e)
         {
             CanvasManager.ShowMessage("An error ocured when saving.");
-            Debug.Log("Saving error: " + e);
+            Debug.LogError("Saving error: " + e);
+            if(jsonWriter.WriteState == 0)
+            {
+                jsonWriter.Close();
+            }
+            foreach (string file in Directory.GetFiles(tmpPath))
+            {
+                File.Delete(file);
+            }
             Directory.Delete($"{tmpPath}");
             return;
         }
-
         AfterSave(tmpPath, autoSave);
     }
 
@@ -96,78 +101,67 @@ public class SaveController : MonoBehaviour
     //-------Grid-------\\
     void SaveGrid(string path, JsonSerializer jsonSerializer)
     {
-        #warning TODO
-        return;/*
-        GridSave gridSave = new();
-        gridSave.width = MyGrid.width;
-        gridSave.height = MyGrid.height;
-        gridSave.gridItems = new ClickableObjectSave[gridSave.width, gridSave.height];
-        if (true)//MyGrid.grid != null)
+        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Grid.json"));
+        BuildsAndChunksSave buildsAndChunksSave 
+            = new(SaveBuildings(), SaveChunks());
+        
+        jsonSerializer.Serialize(jsonTextWriter, buildsAndChunksSave);
+        jsonTextWriter.Close();
+        for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
         {
-            for (int x = 0; x < MyGrid.height; x++)
-            {
-                for (int z = 0; z < MyGrid.width; z++)
-                {
-                    ClickableObject clickable = MyGrid.GetGridItem(new(x, z));
-                    if (clickable.GetType() != typeof(Building))
-                        gridSave.gridItems[x, z] = clickable.Save();
-                }
-            }
-            SaveBuildings(gridSave);
-            SaveChunks(gridSave);
-            JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Grid.json"));
-            jsonSerializer.Serialize(jsonTextWriter, gridSave);
+            jsonTextWriter = new(new StreamWriter($"{path}/Level{i}.json"));
+            jsonSerializer.Serialize(jsonTextWriter, MyGrid.Save(i));
             jsonTextWriter.Close();
-        }*/
-    }
-    void SaveBuildings(GridSave gridSave)
-    {
-        SavePipes(gridSave);
-        gridSave.buildings = new();
-        foreach (Building building in MyGrid.buildings)
-        {
-            BSave clickable = building.Save() as BSave;
-            if (clickable != null)
-                gridSave.buildings.Add(clickable);
         }
     }
-    void SavePipes(GridSave gridSave)
+    BSave[] SaveBuildings()
     {
-        gridSave.pipes = new ClickableObjectSave[gridSave.height, gridSave.width];
+        BSave[] bSaves = new BSave[MyGrid.buildings.Count];
+        for(int i = 0; i < MyGrid.buildings.Count; i++)
+        {
+            bSaves[i] = MyGrid.buildings[i].Save() as BSave;
+        }
+        return bSaves;
+    }
+    /*
+    void SavePipes(WorldSave gridSave)
+    {
+        gridSave..pipes = new ClickableObjectSave[gridSave.height, gridSave.width];
+        
         foreach(Pipe pipe in GameObject.Find("Pipes").GetComponentsInChildren<Pipe>())
         {
             GridPos pos = new(pipe.gameObject);
             gridSave.pipes[(int)pos.x, (int)pos.z] = pipe.Save();
         }
-    }
-    void SaveChunks(GridSave gridSave)
+    }*/
+    ChunkSave[] SaveChunks()
     {
-        gridSave.chunks = new();
-        foreach(Chunk chunk in MyGrid.chunks)
+        ChunkSave[] chunkSave = new ChunkSave[MyGrid.chunks.Count];
+        for (int i = 0; i < MyGrid.chunks.Count; i++)
         {
-            gridSave.chunks.Add(chunk.Save() as StorageObjectSave);
+            chunkSave[i] = MyGrid.chunks[i].Save() as ChunkSave;
         }
+        return chunkSave;
     }
-
-    //------Player Settings------\\
-    void SavePlayerSettings(string path, JsonSerializer jsonSerializer)
+    //------Game State------\\
+    void SaveGameState(string path, JsonSerializer jsonSerializer)
     {
-        PlayerSettings settings = new();
-        settings.priorities = SceneRefs.humans.GetComponent<JobQueue>().priority;
+        GameStateSave gameState = new();
+        gameState.priorities = SceneRefs.humans.GetComponent<JobQueue>().priority;
+        SceneRefs.tick.timeController.Save(gameState);
+
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/PlayerSettings.json"));
-        jsonSerializer.Serialize(jsonTextWriter, settings);
+        jsonSerializer.Serialize(jsonTextWriter, gameState);
         jsonTextWriter.Close();
     }
 
     //------Humans------\\
     void SaveHumans(string path, JsonSerializer jsonSerializer)
     {
-        /*List<HumanSave> humanSave = new();
-        foreach (Human h in SceneRefs.humans.GetComponent<Humans>().humen)
-            humanSave.Add(new(h));
+        HumanSave[] humanSave = SceneRefs.humans.SaveHumans();
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Humans.json"));
         jsonSerializer.Serialize(jsonTextWriter, humanSave);
-        jsonTextWriter.Close();*/
+        jsonTextWriter.Close();
     }
     
     //------Research------\\

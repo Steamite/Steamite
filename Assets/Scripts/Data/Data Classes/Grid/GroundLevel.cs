@@ -5,13 +5,12 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
 
 public class GroundLevel : MonoBehaviour
 {
     [Header("Grid")]
-    public const int width = 21;
-    public const int height = 21;
+    public int width = 21;
+    public int height = 21;
     
     ClickableObject[,] grid;
     Pipe[,] pipeGrid;
@@ -209,14 +208,10 @@ public class GroundLevel : MonoBehaviour
     #endregion Adding to Grid
 
     #region Removing from Grid
-    public void RemoveRock(Rock rock)
-    {
-        GridPos gp = rock.GetPos();
-    }
 
     public void RemoveBuilding(Building building, GridPos gridPos)
     {
-        overlays.Remove(building.id);
+        overlays.Remove(building.id, gridPos);
         List<Road> _roads = roads.GetComponentsInChildren<Road>().ToList();
         for (int i = building.build.blueprint.itemList.Count - 1; i > -1; i--)
         {
@@ -229,7 +224,7 @@ public class GroundLevel : MonoBehaviour
             {
                 case GridItemType.Road:
                 case GridItemType.Anchor:
-                    Road r = _roads.FirstOrDefault(q => new GridPos(q.transform.position).Equals(new GridPos(x, y)));
+                    Road r = _roads.FirstOrDefault(q => q.GetPos().Equals(new GridPos(x, gridPos.y, y)));
                     r.entryPoints = new();
                     SetGridItem(new(x, y), r);
                     break;

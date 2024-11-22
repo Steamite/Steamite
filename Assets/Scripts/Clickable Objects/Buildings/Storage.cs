@@ -78,7 +78,8 @@ public class Storage : Building
     protected override void Awake()
     {
         base.Awake();
-        for(int i = 0; i < localRes.stored.ammount.Count; i++)
+        canStore = new();
+        for (int i = 0; i < localRes.stored.ammount.Count; i++)
         {
             canStore.Add(true);
         }

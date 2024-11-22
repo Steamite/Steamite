@@ -10,7 +10,7 @@ public class StorageObject : ClickableObject
         if (clickable == null)
             clickable = new StorageObjectSave();
         (clickable as StorageObjectSave).resSave = new(localRes);
-        (clickable as StorageObjectSave).gridPos = new(transform.position.x, transform.position.z); // used for not rounded values
+        (clickable as StorageObjectSave).gridPos = GetPos(); // used for not rounded values
         return base.Save(clickable);
     }
     public override void Load(ClickableObjectSave save)

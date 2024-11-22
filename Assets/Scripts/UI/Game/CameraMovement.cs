@@ -13,7 +13,7 @@ public class CameraMovement : MonoBehaviour
     InputAction panButton => cameraMap.FindAction("Drag - Down");
     InputAction panMove => cameraMap.FindAction("Drag - Move");
 
-    [SerializeField] EventHandler asset;
+    [SerializeField] MainShortcuts asset;
 
     [Header("General")]
     /// <summary> multiplier in GetSpeed </summary>

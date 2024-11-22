@@ -17,27 +17,14 @@ public class TimeButtons : RadioButtons
 
     protected override void ButtonTrigger(Button button, int index)
     {
-        base.ButtonTrigger(button, index);
-        tick.ChangeGameSpeed(states[index]);
-    }
-
-    
-
-    /*/// <summary>
-    /// Called by speed buttons, manages transitions betwean them and changes the gamespeed.
-    /// </summary>
-    /// <param name="newSpeed"></param>
-    public void SetSpeed(Button newSpeed)
-    {
-        if (!tick.lastButton)
+        if (currentState == index)
         {
-            tick.lastButton = newSpeed;
-            transform.GetChild(3).GetComponent<Button>().interactable = true;
+            if (index > 0)
+                return;
+            index = states.IndexOf(Mathf.RoundToInt(Time.timeScale));
+            button = transform.GetComponentsInChildren<Button>()[index];
         }
-        else
-            tick.lastButton.interactable = true;
-        newSpeed.interactable = false;
-        tick.ChangeGameSpeed(int.Parse(newSpeed.name[0].ToString()));
-        tick.lastButton = newSpeed;
-    }*/
+        tick.ChangeGameSpeed(states[index]);
+        base.ButtonTrigger(button, index);
+    }
 }

@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class ObjectSelectionShortcuts : MonoBehaviour
+public class ObjectSelectionShortcuts
 {
     #if UNITY_EDITOR
     [MenuItem("Custom Editors/Selection/info window _1", priority = -1)]
