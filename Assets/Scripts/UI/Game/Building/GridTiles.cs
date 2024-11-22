@@ -130,7 +130,7 @@ public class GridTiles : MonoBehaviour
                 {
                     Build __b = buildBlueprint.build;
                     GridPos grid = MyGrid.Rotate(__b.blueprint.moveBy, buildBlueprint.transform.eulerAngles.y);
-                    grid = new(activePos.x + grid.x, MyGrid.currentLevel + ClickabeObjectFactory.BUILD_OFFSET, activePos.z + grid.z);
+                    grid = new(activePos.x + grid.x, (MyGrid.currentLevel * ClickabeObjectFactory.LEVEL_HEIGHT) + ClickabeObjectFactory.BUILD_OFFSET, activePos.z + grid.z);
                     buildBlueprint.transform.position = new(grid.x, grid.y, grid.z);
                     c = buildBlueprint.CanPlace() ? Color.blue : Color.red;
                     HighLight(c, buildBlueprint.gameObject);
@@ -582,8 +582,8 @@ public class GridTiles : MonoBehaviour
         if (buildBlueprint)
             q = new(buildBlueprint.transform.rotation.x, buildBlueprint.transform.rotation.y, buildBlueprint.transform.rotation.z, buildBlueprint.transform.rotation.w);
         GridPos gp = MyGrid.Rotate(buildingPrefab.build.blueprint.moveBy, buildingPrefab.transform.eulerAngles.y);
-        gp = new(activePos.x + gp.x, buildingPrefab is Pipe ? 0.75f : 0.5f, activePos.z + gp.z);
-        buildBlueprint = Instantiate(buildingPrefab.gameObject, gp.ToVec(), Quaternion.identity, transform).GetComponent<Building>(); // creates the building prefab
+        gp = new(activePos.x + gp.x, (MyGrid.currentLevel * ClickabeObjectFactory.LEVEL_HEIGHT) + ClickabeObjectFactory.BUILD_OFFSET, activePos.z + gp.z);
+        buildBlueprint = Instantiate(buildingPrefab.gameObject, new Vector3(gp.x, gp.y, gp.z), Quaternion.identity, transform).GetComponent<Building>(); // creates the building prefab
         buildBlueprint.transform.rotation = q;
         buildBlueprint.transform.SetParent(buildBlueprint.GetComponent<Pipe>() ? GameObject.FindWithTag("Pipes").transform : GameObject.Find("Buildings").transform);
         buildBlueprint.name = buildBlueprint.name.Replace("(Clone)", ""); // removes (Clone) from its name

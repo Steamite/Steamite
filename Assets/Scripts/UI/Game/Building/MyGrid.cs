@@ -102,7 +102,8 @@ public static class MyGrid
     {
         SceneRefs.gridTiles.toBeDigged.Remove(rock); // removes from list
         SceneRefs.gridTiles.markedTiles.Remove(rock);
-        SceneRefs.gridTiles.DestroyUnselect(rock);
+        SceneRefs.gridTiles.
+            DestroyUnselect(rock);
         
         SceneRefs.objectFactory.CreateRoad(rock.GetPos(), true);
         GameObject.Destroy(rock.gameObject); // destroys object
@@ -149,12 +150,12 @@ public static class MyGrid
         if(building is Pipe)
         {
             GridPos pos = new(building.transform.position);
-            return levels[(int)pos.y].CanPlace(building as Pipe, pos);
+            return levels[pos.y].CanPlace(building as Pipe, pos);
         }
         else
         {
-            GridPos gridPos = new(building.transform.position - Rotate(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y).ToVec());
-            return levels[(int)gridPos.y].CanPlace(building, gridPos);
+            GridPos gridPos = building.GetPos();
+            return levels[gridPos.y].CanPlace(building, gridPos);
         }
     }
 
