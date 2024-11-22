@@ -113,7 +113,7 @@ public class ProductionBuilding : AssignBuilding
 
     public override void RequestRes(Resource request, Human human, int mod)
     {
-        StorageResource storage = new();
+        StorageResource storage = null;
         if (build.constructed && mod == 1)
             storage = pRes.inputResource;
         else
@@ -174,6 +174,7 @@ public class ProductionBuilding : AssignBuilding
     }
     public override Chunk Deconstruct(GridPos instantPos)
     {
+        SceneRefs.humans.GetComponent<JobQueue>().CancelJob(JobState.Supply, this);
         Chunk c = base.Deconstruct(instantPos);
         if(pRes.inputResource.stored.ammount.Sum() > 0){
             if (!c)

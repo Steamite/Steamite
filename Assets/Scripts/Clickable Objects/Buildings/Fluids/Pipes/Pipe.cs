@@ -83,20 +83,6 @@ public class Pipe : Building
             }
         }
     }
-    public override void ChangeColor(Color color)
-    {
-        /*foreach (MeshRenderer meshRenderer in transform.GetComponentsInChildren<MeshRenderer>())
-        {
-            if (color.Equals(new Color()) || build.constructed) // signal for restart of color
-            {
-                meshRenderer.material.color = myColor;
-            }
-            else
-            {
-                meshRenderer.material.color = color;
-            }
-        }*/
-    }
     public override void OnPointerEnter(PointerEventData eventData)
     {
         base.OnPointerEnter(eventData);

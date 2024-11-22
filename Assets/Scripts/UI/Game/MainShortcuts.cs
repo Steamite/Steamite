@@ -1,8 +1,7 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class EventHandler : MonoBehaviour
+public class MainShortcuts : MonoBehaviour
 {
     InputActionMap bindingMap => inputAsset.actionMaps[1];
 
@@ -20,14 +19,16 @@ public class EventHandler : MonoBehaviour
     static bool handleWindows = true;
     public static void DisableInput(bool win = true)
     {
+        SmallerShortcuts.DisableInput(win);
         handleGrid = false;
         handleWindows = win;
         SceneRefs.levelCamera.enabled = false;
     }
-    public static void EnableInput(bool win = true)
+    public static void EnableInput()
     {
+        SmallerShortcuts.EnableInput();
         handleGrid = true;
-        handleWindows = win;
+        handleWindows = false;
         SceneRefs.levelCamera.enabled = true;
     }
 
@@ -58,7 +59,6 @@ public class EventHandler : MonoBehaviour
                         categories.GetChild(i).gameObject.SetActive(false);
                     }
                     buildMenu.GetChild(1).gameObject.SetActive(false);
-                    buildMenu.GetChild(2).gameObject.SetActive(false);
                 }
             }
             // toggle dig

@@ -1,6 +1,5 @@
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -99,6 +98,26 @@ public class Human : ClickableObject
         return new(transform.position.x, transform.localPosition.y/2, transform.position.z);
     }
 
+    public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
+    {
+        if (clickable == null)
+            clickable = new HumanSave();
+        (clickable as HumanSave).name = name;
+        (clickable as HumanSave).color = new(transform.GetChild(1).GetComponent<MeshRenderer>().material.color); // saves color of hat
+        (clickable as HumanSave).gridPos = GetPos();
+        (clickable as HumanSave).jobSave = new(jData);
+        (clickable as HumanSave).jobSave.destinationID = destination ? destination.id : -1;
+        (clickable as HumanSave).inventory = inventory;
+        (clickable as HumanSave).hasEaten = hasEaten;
+        (clickable as HumanSave).specs = specialization;
+        (clickable as HumanSave).houseID = home ? home.id : -1;
+        (clickable as HumanSave).workplaceId = workplace ? workplace.id : -1;
+        return base.Save(clickable);
+    }
+    public override void Load(ClickableObjectSave save)
+    {
+        base.Load(save);
+    }
     ///////////////////////////////////////////////////
     ///////////////////Methods/////////////////////////
     ///////////////////////////////////////////////////

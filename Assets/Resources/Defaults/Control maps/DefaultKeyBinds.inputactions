@@ -306,7 +306,7 @@
             ]
         },
         {
-            "name": "Shortcuts",
+            "name": "Main Shortcuts",
             "id": "a6c9ac32-bc0e-455d-b799-2a6cdb02e49c",
             "actions": [
                 {
@@ -322,7 +322,7 @@
                     "name": "Dig",
                     "type": "Button",
                     "id": "646d2a96-ca2f-481d-ab00-0c876c5b0aa8",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -358,7 +358,7 @@
                     "name": "Shift",
                     "type": "Value",
                     "id": "45e8e85a-9da4-4f90-93d5-335f147360b6",
-                    "expectedControlType": "Key",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -523,6 +523,131 @@
                     "processors": "",
                     "groups": "",
                     "action": "Trade",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Smaller Shorcuts",
+            "id": "2797711b-5920-4d3f-b706-cb11feb30236",
+            "actions": [
+                {
+                    "name": "Game Speed",
+                    "type": "Button",
+                    "id": "37eb4359-1683-490f-bf93-9c511f9685ae",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Level",
+                    "type": "Button",
+                    "id": "3d6282c0-6091-40c3-be3e-2f346d1941ac",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a84da518-dcae-4283-b2f1-c037d5fd3951",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "Scale(factor=0)",
+                    "groups": "",
+                    "action": "Level",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d2b3f9b6-2ad9-4147-8862-5568f178fe9a",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "Scale",
+                    "groups": "",
+                    "action": "Level",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4a4523ff-a494-4f43-9801-830c99100145",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "Scale(factor=2)",
+                    "groups": "",
+                    "action": "Level",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b0ae404d-0f04-41c6-8702-d5a9f8eb7a30",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "Scale(factor=3)",
+                    "groups": "",
+                    "action": "Level",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "28096aec-dca1-401c-a767-699bc948756f",
+                    "path": "<Keyboard>/5",
+                    "interactions": "",
+                    "processors": "Scale(factor=4)",
+                    "groups": "",
+                    "action": "Level",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "04f218d1-443e-4f90-bca6-96aa316311a2",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "Scale(factor=0)",
+                    "groups": "",
+                    "action": "Game Speed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c8e0f6ed-af5e-42a2-a758-970f9344dff0",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "Scale",
+                    "groups": "",
+                    "action": "Game Speed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a6f1f4d7-4927-4da6-896e-58b2d46c1ae7",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "Scale(factor=2)",
+                    "groups": "",
+                    "action": "Game Speed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6aced6e4-f410-4ff3-8235-35fc13267513",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "Scale(factor=3)",
+                    "groups": "",
+                    "action": "Game Speed",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

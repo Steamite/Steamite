@@ -46,4 +46,10 @@ abstract public class RadioButtons : MonoBehaviour
         SelectButton(button);
         currentState = index;
     }
+
+    public void OutsideTrigger(int index)
+    {
+        Button button = transform.GetComponentsInChildren<Button>()[index];
+        ButtonTrigger(button, index);
+    }
 }

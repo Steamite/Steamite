@@ -1,7 +1,4 @@
-using JetBrains.Annotations;
-using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -34,15 +31,40 @@ public class JobSave
 ////////////////////////////////////////////////////////////
 //--------------------------Grid--------------------------//
 ////////////////////////////////////////////////////////////
+public class WorldSave
+{
+    public BuildsAndChunksSave objectsSave;
+    public GridSave[] gridSave;
+}
+
 [Serializable]
 public class GridSave
 {
     public int width;
     public int height;
-    public List<BSave> buildings;
-    public List<StorageObjectSave> chunks;
-    public ClickableObjectSave[,] gridItems;
+    public ClickableObjectSave[,] grid;
     public ClickableObjectSave[,] pipes;
+
+    public GridSave(int _width, int _height)
+    {
+        width = _width;
+        height = _height;
+        grid = new ClickableObjectSave[_width, _height];
+        pipes = new ClickableObjectSave[_width, _height];
+    }
+}
+
+[Serializable]
+public class BuildsAndChunksSave
+{
+    public BSave[] buildings;
+    public ChunkSave[] chunks;
+
+    public BuildsAndChunksSave(BSave[] _buildings, ChunkSave[] _chunks)
+    {
+        buildings = _buildings;
+        chunks = _chunks;
+    }
 }
 
 [Serializable]
@@ -73,7 +95,7 @@ public class StorageObjectSave : ClickableObjectSave
 }
 
 [Serializable]
-internal class ChunkSave : StorageObjectSave
+public class ChunkSave : StorageObjectSave
 {
     public MyColor resColor;
 }
@@ -135,10 +157,9 @@ public class FluidWorkSave
 //////////////////////////////////////////////////////////////////
 //-----------------------------Humans---------------------------//
 //////////////////////////////////////////////////////////////////
-public class HumanSave
+public class HumanSave : ClickableObjectSave
 {
     // Data mainly for loading
-    public int id = -1;
     public string name;
     public MyColor color;
     public GridPos gridPos;
@@ -152,21 +173,6 @@ public class HumanSave
     public Specs specs;
     public int houseID;
     public int workplaceId;
-
-    public HumanSave(Human h)
-    {
-        id = h.id;
-        name = h.name;
-        color = new(h.transform.GetChild(1).GetComponent<MeshRenderer>().material.color); // saves color of hat
-        gridPos = new(h.transform.position);
-        jobSave = new(h.jData);
-        jobSave.destinationID = h.destination?h.destination.id:-1;
-        inventory = h.inventory;
-        hasEaten = h.hasEaten;
-        specs = h.specialization;
-        houseID = h.home ? h.home.id : -1;
-        workplaceId = h.workplace ? h.workplace.id : -1;
-    }
     public HumanSave()
     {
 
@@ -193,10 +199,13 @@ public class StorageResSave
     }
 }
 [Serializable]
-public class PlayerSettings
+public class GameStateSave
 {
     public List<JobState> priorities;
+    public int dayTime;
+    public int numberOfDays;
 }
+
 [Serializable]
 public class ResearchSave
 {

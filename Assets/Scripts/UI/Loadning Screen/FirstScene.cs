@@ -19,6 +19,6 @@ public class FirstScene : MonoBehaviour
         if (loadNewGame)
             GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>().NewGame("test - TopGun", false);
         else
-            GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>().LoadMainMenu();
+            GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>().OpenMainMenu();
     }
 }

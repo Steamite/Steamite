@@ -13,17 +13,15 @@ public class Humans : MonoBehaviour
     public EfficencyModifiers modifiers;
 
     [SerializeField] Human humanPref;
+    [SerializeField] List<Material> hatMaterial;
     //Don't missmatch with "Human" this is a script for the parent object, no inheritence thou
-    public void GetHumans()
+    public void NewGameInit()
     {
         humen = new();
-        humen = transform.GetComponentsInChildren<Human>().ToList();
-        foreach(Human h in humen)
+        for(int i = 0; i < 3; i++)
         {
-            h.transform.localPosition = 
-                new(h.transform.position.x, 2*2, h.transform.position.z);
-            h.UniqueID();
-            h.ActivateHuman();
+            CreateHuman().transform.GetChild(1).GetComponent<MeshRenderer>().material = hatMaterial[i];
+            humen[^1].gameObject.name = $"Human {(i == 0 ? "Red" : i == 1 ? "Yellow" : "White")}";
         }
     }
 
@@ -33,11 +31,13 @@ public class Humans : MonoBehaviour
         humen.Add(h);
     }
 
-    public void CreateHuman()
+    public Human CreateHuman()
     {
-        Human h = Instantiate(humanPref, new Vector3(10,1,10), Quaternion.identity, transform.GetChild(0));
+        Human h = Instantiate(humanPref, new Vector3(10,4,8), Quaternion.identity, transform.GetChild(0));
         h.UniqueID();
+        humen.Add(h);
         h.ActivateHuman();
+        return h;
     }
 
     public void SwitchLevel(int currentI, int newI)
@@ -46,5 +46,20 @@ public class Humans : MonoBehaviour
             ForEach(q => q.gameObject.SetActive(false));
         humen.Where(q => q?.GetPos().y == newI).ToList().
             ForEach(q => q.gameObject.SetActive(true));
+    }
+
+    public HumanSave[] SaveHumans()
+    {
+        return humen.Select(q => q.Save() as HumanSave).ToArray();
+    }
+
+    public void LoadHumans(IProgress<int> progress, HumanSave[] humanSaves, ref Action humanActivation)
+    {
+        humen = new();
+        foreach (HumanSave hSave in humanSaves)
+        {            
+            AddHuman(SceneRefs.objectFactory.CreateSavedHuman(hSave), ref humanActivation);
+            //progress.Report(progressGlobal++);
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class CanvasManager : MonoBehaviour
@@ -26,6 +27,15 @@ public class CanvasManager : MonoBehaviour
 
     bool messageShown = false;
 
+
+
+#if UNITY_EDITOR_WIN
+    [InitializeOnLoadMethod]
+    static void In()
+    {
+        GameObject.Find("UI canvas")?.GetComponent<CanvasManager>().Init();
+    }
+#endif
 
     public void Init()
     {

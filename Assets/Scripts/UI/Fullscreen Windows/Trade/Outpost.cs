@@ -70,6 +70,10 @@ public class Outpost
             new() { 0 });
         StartUpgrade();
     }
+    public Outpost()
+    {
+        
+    }
 
     /// <summary>
     /// Starts the upgrade process.
