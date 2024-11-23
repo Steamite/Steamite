@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7722ad94548d554479222b9c47c9a556, type: 3}
+  m_Name: Metal
+  m_EditorClassIdentifier: 
+  resource: 1
+  hardness: 4
+  minAmmount: 6
+  maxAmmount: 10
+  minNodes: 2
+  maxNodes: 8
+  minGroups: 4
+  maxGroups: 7
+  color: {r: 1, g: 0, b: 0, a: 1}

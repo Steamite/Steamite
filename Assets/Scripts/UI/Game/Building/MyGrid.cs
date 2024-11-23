@@ -23,6 +23,7 @@ public static class MyGrid
     public static void Init()
     {
         GridChange += (int _, int _) => SceneRefs.gridTiles.ChangeSelMode(SelectionMode.nothing);
+        GridChange += (int _, int _) => SceneRefs.gridTiles.Exit(SceneRefs.gridTiles.activeObject);
         GridChange += (int i, int newI) => SceneRefs.humans.SwitchLevel(i, newI);
         ChangeGridLevel(2);
     }
