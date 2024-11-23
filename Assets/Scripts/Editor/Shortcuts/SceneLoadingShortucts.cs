@@ -15,6 +15,7 @@ public class SceneLoadingShortucts : MonoBehaviour
     }
     static void OnPlayModeStateChanged(PlayModeStateChange state)
     {
+        return;
         if (state == PlayModeStateChange.ExitingEditMode)
         {
 
