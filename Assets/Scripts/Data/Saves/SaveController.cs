@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
 using System;
+using TMPro;
 
 public class SaveController : MonoBehaviour
 {
@@ -23,6 +24,25 @@ public class SaveController : MonoBehaviour
         jsonSerializer.TypeNameHandling = TypeNameHandling.Auto;
         jsonSerializer.Formatting = Formatting.Indented;
         return jsonSerializer;
+    }
+
+    /// <summary>
+    /// Gets save name from path
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static string GetSaveName(string path)
+    {
+        string s = "";
+        int i = path.Length;
+        while (true)
+        {
+            i--;
+            if (path[i] == '\\' || path[i] == '/')
+                break;
+            s += path[i];
+        }
+        return s.Reverse().ToArray().ArrayToString();
     }
 
     /// <summary>
@@ -82,7 +102,7 @@ public class SaveController : MonoBehaviour
             : activeFolder;
 
         string path = $"{Application.persistentDataPath}/saves/{activeF}";
-        if (Directory.GetDirectories($"{Application.persistentDataPath}/saves").FirstOrDefault(q => LoadMenu.GetSaveName(q) == activeF) == null)
+        if (Directory.GetDirectories($"{Application.persistentDataPath}/saves").FirstOrDefault(q => GetSaveName(q) == activeF) == null)
             Directory.CreateDirectory($"{path}");
 
         foreach (string file in Directory.GetFiles(tmpPath))

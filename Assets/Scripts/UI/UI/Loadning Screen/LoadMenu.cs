@@ -14,7 +14,7 @@ public class LoadMenu : MonoBehaviour
 {
     [SerializeField] GameObject content;
     [SerializeField] GameObject itemPrefab;
-    //public event Action<GridSave, PlayerSettings, List<HumanSave>, string> loadGame;
+    public event Action<GridSave, GameStateSave, List<HumanSave>, string> loadGame;
     string selectedSave;
     List<string> loadedElems = new();
 
@@ -34,7 +34,7 @@ public class LoadMenu : MonoBehaviour
                 continue;
             }
             TMP_Text item = Instantiate(itemPrefab, content.transform).transform.GetChild(0).GetComponent<TMP_Text>();
-            item.text = GetSaveName(path);
+            item.text = SaveController.GetSaveName(path);
             loadedElems.Add(path);
 
             Button b = item.transform.parent.GetComponent<Button>();
@@ -53,19 +53,7 @@ public class LoadMenu : MonoBehaviour
         gameObject.SetActive(active);
     }
 
-    public static string GetSaveName(string path)
-    {
-        string s = "";
-        int i = path.Length;
-        while (true)
-        {
-            i--;
-            if (path[i] == '\\' || path[i] == '/')
-                break;
-            s += path[i];
-        }
-        return s.Reverse().ToArray().ArrayToString();
-    }
+
 
     void SelectSave(Button button)
     {

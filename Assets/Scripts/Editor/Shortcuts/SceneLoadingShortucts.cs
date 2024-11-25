@@ -15,7 +15,7 @@ public class SceneLoadingShortucts : MonoBehaviour
     }
     static void OnPlayModeStateChanged(PlayModeStateChange state)
     {
-        return;
+        return;/*
         if (state == PlayModeStateChange.ExitingEditMode)
         {
 
@@ -33,7 +33,7 @@ public class SceneLoadingShortucts : MonoBehaviour
         else if(state == PlayModeStateChange.EnteredEditMode)
         {
             EditorSceneManager.OpenScene($"{scenePath}{File.ReadAllText($"{Application.persistentDataPath}/openScene.txt")}.unity");
-        }
+        }*/
     }
 
 
