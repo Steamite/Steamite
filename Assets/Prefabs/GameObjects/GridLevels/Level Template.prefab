@@ -529,7 +529,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 114942921115005622}
-  - component: {fileID: 4244291414093452168}
   - component: {fileID: 1135758614679704061}
   m_Layer: 2
   m_Name: Level Template
@@ -557,18 +556,6 @@ Transform:
   - {fileID: 5605808579734190664}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!156049354 &4244291414093452168
-Grid:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8759976554350482202}
-  m_Enabled: 1
-  m_CellSize: {x: 1, y: 1, z: 1}
-  m_CellGap: {x: 0, y: 0, z: 0}
-  m_CellLayout: 0
-  m_CellSwizzle: 1
 --- !u!114 &1135758614679704061
 MonoBehaviour:
   m_ObjectHideFlags: 0
