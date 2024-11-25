@@ -9,8 +9,11 @@ public class MapGen : MonoBehaviour
     [SerializeField] Renderer resRenderer;
     [SerializeField] Renderer rockRenderer;
 
+    [SerializeField] Transform rockTransform;
+    [SerializeField] Rock rockPrefab;
+
     [Header("Seed")]
-    [SerializeField] string seed = "320F5";
+    [SerializeField] string seed = "";
 
     [Header("Parameters")]
     [SerializeField] int minToRemove = 2;
@@ -63,7 +66,7 @@ public class MapGen : MonoBehaviour
 
     void Update()
     {
-        if(seed != lastSeed)
+        if (seed != lastSeed)
             Generate();
     }
 
@@ -73,7 +76,7 @@ public class MapGen : MonoBehaviour
         ParseInput();
 
         #region visualization init
-        
+
         resPixels = new Color[gridSize * gridSize];
         resourceTex = new Texture2D(gridSize, gridSize);
         resRenderer.material.mainTexture = resourceTex;
@@ -85,10 +88,10 @@ public class MapGen : MonoBehaviour
         #endregion
 
         #region Generation
-        
+
         map = new MapTile[gridSize, gridSize];
         minCenter = (gridSize / 2) - 5;
-        maxCenter = (gridSize / 2) + 5; 
+        maxCenter = (gridSize / 2) + 5;
 
         CreateGrid();
         PerlinNoise();
@@ -105,7 +108,17 @@ public class MapGen : MonoBehaviour
 
         #endregion
 
-
+        for (int x = 0; x < gridSize; x++)
+        {
+            for (int y = 0; y < gridSize; y++)
+            {
+                Rock r = Instantiate(rockPrefab, new(x, 1.5f, y), Quaternion.identity, rockTransform);
+                r.GetComponent<Renderer>().material.color = resPixels[y * gridSize + x];
+                r.rockYield = map[x, y].resource;
+                r.integrity = map[x, y].hardness;
+                r.UniqueID();
+            }
+        }
     }
 
     void ParseInput()
@@ -134,18 +147,18 @@ public class MapGen : MonoBehaviour
     void CreateGrid()
     {
         //Visualization
-        
+
 
         foreach (MinableRes minable in minableResources)
         {
             int rand = Random.Range(minable.minGroups, minable.maxGroups);
-            for(int i = 0; i < rand; i++)
+            for (int i = 0; i < rand; i++)
             {
                 CreateAGroup(minable);
             }
         }
 
-        
+
     }
     void CreateAGroup(MinableRes minable)
     {
@@ -159,7 +172,7 @@ public class MapGen : MonoBehaviour
         while (!CanPlace(x, y));
         int numberOfTiles = Random.Range(minable.minNodes, minable.maxNodes);
 
-        while(numberOfTiles > 0)
+        while (numberOfTiles > 0)
             CreateTiles(ref numberOfTiles, minable, x, y + 1);
     }
     void CreateTiles(ref int numberOfTiles, MinableRes minable, int x, int y)
@@ -175,7 +188,7 @@ public class MapGen : MonoBehaviour
             if (Spiral(ref x, ref y, maxY, ref rockChance, ref numberOfTiles, false, -1, minable))
                 break;
             maxX++;
-            if(Spiral(ref x, ref y, maxX, ref rockChance, ref numberOfTiles, true, 1, minable))
+            if (Spiral(ref x, ref y, maxX, ref rockChance, ref numberOfTiles, true, 1, minable))
                 break;
             if (Spiral(ref x, ref y, maxY, ref rockChance, ref numberOfTiles, false, 1, minable))
                 break;
@@ -187,16 +200,16 @@ public class MapGen : MonoBehaviour
     }
     bool Spiral(ref int x, ref int y, int maxCord, ref int rockChance, ref int numberOfTiles, bool changeX, int mod, MinableRes minable)
     {
-        for(int i = 0; i < maxCord; i++)
+        for (int i = 0; i < maxCord; i++)
         {
             int rand = Random.Range(1, 101);
-            if(rand < rockChance)
+            if (rand < rockChance)
             {
                 if (changeX)
                     x += mod;
                 else
                     y += mod;
-                if(InBounds(x, y) && CanPlace(x, y))
+                if (InBounds(x, y) && CanPlace(x, y))
                 {
                     map[x, y] = new(minable);
                     resPixels[y * gridSize + x] = minable.color;
@@ -214,8 +227,8 @@ public class MapGen : MonoBehaviour
 
     bool CanPlace(int x, int y)
     {
-        if(map[x, y] == null)
-            if(!((x > minCenter && x < maxCenter) && (y > minCenter && y < maxCenter)))
+        if (map[x, y] == null)
+            if (!((x > minCenter && x < maxCenter) && (y > minCenter && y < maxCenter)))
                 return true;
         return false;
     }
@@ -231,7 +244,7 @@ public class MapGen : MonoBehaviour
     {
         float randomX = Random.Range(-500f, 500f);
         float randomY = Random.Range(-500f, 500f);
-        for(int x = 0; x < gridSize; x++)
+        for (int x = 0; x < gridSize; x++)
         {
             for (int y = 0; y < gridSize; y++)
             {
