@@ -41,8 +41,6 @@ public class LoadingScreen : MonoBehaviour
             // sets Action Listeners
             MainMenu mainMenu = GameObject.Find("Main Menu").GetComponent<MainMenu>();
             mainMenu.newGame += NewGame;
-            LoadMenu saveLoader = mainMenu.transform.GetChild(3).GetComponent<LoadMenu>();
-            //saveLoader.loadGame += LoadSave;
         }
         else // if loading level
         {

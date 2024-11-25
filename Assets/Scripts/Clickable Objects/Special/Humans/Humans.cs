@@ -7,7 +7,6 @@ public class Humans : MonoBehaviour
 {
     public InfoWindow infoWindow;
     public GridTiles grid;
-    public LoadingScreen loadingScreen;
     [SerializeField] List<Human> humen;
     public Tick ticks;
     public EfficencyModifiers modifiers;
