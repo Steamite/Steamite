@@ -188,8 +188,8 @@ public class SaveController : MonoBehaviour
     void SaveResearch(string path, JsonSerializer jsonSerializer)
     {
         // takes nodes from all research buttons
-        ResearchUI research = CanvasManager.research;
-        Transform categsTransform = research.categoriesTran;
+        //ResearchUI research = CanvasManager.research;
+        /*Transform categsTransform = research.categoriesTran;
         ResearchSave categsData = new(categsTransform.childCount);
         for (int i = 0; i < categsTransform.childCount; i++)
         {
@@ -209,16 +209,16 @@ public class SaveController : MonoBehaviour
         //write saves
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Research.json"));
         jsonSerializer.Serialize(jsonTextWriter, categsData);
-        jsonTextWriter.Close();
+        jsonTextWriter.Close();*/
     }
 
     //------Research------\\
     void SaveTrade(string path, JsonSerializer jsonSerializer)
     {
-        Trade trade = CanvasManager.trade;
+        /*Trade trade = CanvasManager.trade;
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Trade.json"));
         jsonSerializer.Serialize(jsonTextWriter, new TradeSave(trade));
-        jsonTextWriter.Close();
+        jsonTextWriter.Close();*/
     }
 }
 

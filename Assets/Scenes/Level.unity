@@ -16404,6 +16404,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1623294176}
   - component: {fileID: 1623294177}
+  - component: {fileID: 1623294178}
+  - component: {fileID: 1623294179}
   m_Layer: 0
   m_Name: UI canvas
   m_TagString: Untagged
@@ -16443,10 +16445,36 @@ MonoBehaviour:
   _stats: {fileID: 220867751}
   _buildMenu: {fileID: 404777}
   _miscellaneous: {fileID: 1651777538818997324}
+  _infoWindow: {fileID: 225780445}
+  _researchAdapter: {fileID: 1623294179}
+--- !u!114 &1623294178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623294175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7028e1e5dbcc82449ab1f2f41c222a45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _levelCamera: {fileID: 7072378217534680772}
+  _trade: {fileID: 257386384}
   _research: {fileID: 745012304}
   _pauseMenu: {fileID: 1708745677}
-  _infoWindow: {fileID: 225780445}
-  _trade: {fileID: 257386384}
+--- !u!114 &1623294179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623294175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 942703556d985394885641f6dc830944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1634267081
 GameObject:
   m_ObjectHideFlags: 0
@@ -32225,7 +32253,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   infoWindow: {fileID: 0}
   grid: {fileID: 3114157475242612541}
-  loadingScreen: {fileID: 0}
   humen: []
   ticks: {fileID: 8150810313726245684}
   modifiers: {fileID: 11400000, guid: 27cb62711b616aa498ce9e9bd2e199c4, type: 2}
@@ -41174,6 +41201,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6086404398923934763}
     - target: {fileID: 4186981223861399555, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 7072378217534680773}
+    - target: {fileID: 4186981223861399555, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: maxRotationY
       value: 20
       objectReference: {fileID: 0}
@@ -41246,6 +41277,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73335a0c7ab68fa4eb56d270191828ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7072378217534680773 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1634306986070870791, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+  m_PrefabInstance: {fileID: 7072378217534680770}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7084847066644529509
 GameObject:
   m_ObjectHideFlags: 0
@@ -44263,7 +44299,6 @@ MonoBehaviour:
   _gridTiles: {fileID: 3114157475242612541}
   _objectFactory: {fileID: 4967022013944964016}
   _humans: {fileID: 3891230603216898686}
-  _levelCamera: {fileID: 7072378217534680772}
   _tick: {fileID: 8150810313726245684}
   _controller: {fileID: 8150810313726245683}
 --- !u!1 &8151224187973870652
@@ -45562,10 +45597,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1708745677}
-        m_TargetAssemblyTypeName: Menu, Assembly-CSharp
-        m_MethodName: Toggle
-        m_Mode: 1
+      - m_Target: {fileID: 1708745675}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

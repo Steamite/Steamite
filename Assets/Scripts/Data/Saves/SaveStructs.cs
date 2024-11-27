@@ -224,7 +224,7 @@ public class ResearchSave
 [Serializable]
 public class TradeSave
 {
-    public ColonyLocation colonyLocation;
+    /*public ColonyLocation colonyLocation;
     public List<TradeLocation> tradeLocations;
     public List<TradeExpedition> expeditions;
     public List<Outpost> outposts;
@@ -240,7 +240,7 @@ public class TradeSave
     public TradeSave()
     {
 
-    }
+    }*/
 }
 
 [Serializable]
