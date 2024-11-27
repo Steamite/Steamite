@@ -3,14 +3,11 @@ using UnityEngine;
 
 public class Research_Production : ProductionBuilding
 {
-    //private int temp_workers_count = 0; Already exists: ProductionBuilding.working
-    ResearchBackend researchBackend;
     bool b = true;
 
     public override void UniqueID()
     {
         base.UniqueID();
-        researchBackend = CanvasManager.research.GetComponent<ResearchBackend>();
     }
 
     public override InfoWindow OpenWindow(bool setUp = false)
@@ -24,11 +21,7 @@ public class Research_Production : ProductionBuilding
             {
                 // disable production button
                 info.cTransform.GetChild(2).gameObject.SetActive(false);
-                info.cTransform.GetChild(3).gameObject.SetActive(true);
-                if (researchBackend.currentResearch)
-                    info.cTransform.GetChild(3).GetComponent<TMP_Text>().text = researchBackend.currentResearch.name;
-                else
-                    info.cTransform.GetChild(3).GetComponent<TMP_Text>().text = "None";
+                CanvasManager.researchAdapter.DisplayResearch(info.cTransform.GetChild(3).GetComponent<TMP_Text>());
             }
             return info;
         }
@@ -38,18 +31,17 @@ public class Research_Production : ProductionBuilding
     public override void Load(ClickableObjectSave save)
     {
         base.Load(save);
-        researchBackend = CanvasManager.research.GetComponent<ResearchBackend>();
+        //researchBackend = CanvasManager.research.GetComponent<ResearchBackend>();
     }
 
     public override void Produce(float speed)
     {
-        //base.Produce();
         if (b)
         {
             gameObject.GetComponent<Animator>().SetBool("Rotate", true);
             b = false;
         }
-        researchBackend.DoResearch(speed);
+        CanvasManager.researchAdapter.DoProduction(speed);
     }
 
 

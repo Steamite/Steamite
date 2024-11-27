@@ -8,14 +8,12 @@ public class SceneRefs : MonoBehaviour
     [SerializeField] GridTiles _gridTiles;
     [SerializeField] ClickabeObjectFactory _objectFactory;
     [SerializeField] Humans _humans;
-    [SerializeField] CameraMovement _levelCamera;
     [SerializeField] Tick _tick;
     [SerializeField] SaveController _controller;
 
     public static GridTiles gridTiles => instance._gridTiles;
     public static ClickabeObjectFactory objectFactory => instance._objectFactory;
     public static Humans humans => instance._humans;
-    public static CameraMovement levelCamera => instance._levelCamera;
     public static Tick tick => instance._tick;
     public static SaveController saveController => instance._controller;
 

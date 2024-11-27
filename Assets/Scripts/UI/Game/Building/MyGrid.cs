@@ -72,7 +72,6 @@ public static class MyGrid
     {
         PrepGridLists();
         GameObject.Find("Scene").GetComponent<SceneRefs>().Init();
-        GameObject.Find("UI canvas").GetComponent<CanvasManager>().Init();
         currentLevel = 2;
         for (int i = 0; i < 5; i++)
         {

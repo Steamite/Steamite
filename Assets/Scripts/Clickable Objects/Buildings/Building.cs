@@ -130,34 +130,6 @@ public class Building : StorageObject
     ///////////////////////////////////////////////////
     protected virtual void Awake()
     {
-        /* if (transform.GetComponent<MeshFilter>())
-         {
-             Quaternion q = transform.rotation;
-             Vector3 oldPos = transform.position;
-
-             transform.rotation = Quaternion.identity;
-             transform.position = Vector3.zero;
-
-             MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
-             CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-
-             int i = 0;
-             while (i < meshFilters.Length)
-             {
-                 combine[i].mesh = meshFilters[i].sharedMesh;
-                 combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-                 meshFilters[i].gameObject.SetActive(false);
-
-                 i++;
-             }
-
-             Mesh mesh = new Mesh();
-             mesh.CombineMeshes(combine);
-             transform.GetComponent<MeshFilter>().sharedMesh = mesh;
-             gameObject.SetActive(true);
-             transform.rotation = q;
-             transform.position = oldPos;
-         }*/
         GetColors();
     }
 
@@ -313,7 +285,7 @@ public class Building : StorageObject
     {
         //bool can = MyRes.DiffRes(build.cost, MyRes.resources, new()).ammount.Sum() == 0;
         bool tmp = MyGrid.CanPlace(this);
-        if (/*can &&*/ tmp)
+        if (tmp)
             return true;
         else
             return false;

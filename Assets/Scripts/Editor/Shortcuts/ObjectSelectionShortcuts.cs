@@ -19,7 +19,7 @@ public class ObjectSelectionShortcuts
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = CanvasManager.trade.window.transform.GetChild(3).GetChild(1).GetChild(1).gameObject;
+        GameObject gameObject = UIRefs.trade.window.transform.GetChild(3).GetChild(1).GetChild(1).gameObject;
         Selection.activeGameObject = gameObject;
     }
 
@@ -28,7 +28,7 @@ public class ObjectSelectionShortcuts
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = CanvasManager.pauseMenu.gameObject;
+        GameObject gameObject = UIRefs.pauseMenu.gameObject;
         Selection.activeGameObject = gameObject;
     }
 
