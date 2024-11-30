@@ -4,9 +4,14 @@ using System.IO;
 using System.Linq;
 using System;
 using TMPro;
+using System.Collections;
 
 public class SaveController : MonoBehaviour
 {
+    private void Start()
+    {
+        Debug.Log(SceneRefs.tick.timeController.name);
+    }
     public string activeFolder;
 
     void OnApplicationQuit()
@@ -27,9 +32,9 @@ public class SaveController : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets save name from path
+    /// Gets save name from path.
     /// </summary>
-    /// <param name="path"></param>
+    /// <param name="path">Path of the save folder.</param>
     /// <returns></returns>
     public static string GetSaveName(string path)
     {
@@ -212,7 +217,7 @@ public class SaveController : MonoBehaviour
         jsonTextWriter.Close();*/
     }
 
-    //------Research------\\
+    //------Trade------\\
     void SaveTrade(string path, JsonSerializer jsonSerializer)
     {
         /*Trade trade = CanvasManager.trade;

@@ -72,8 +72,14 @@ public class GroundLevel : MonoBehaviour
             grid[x, y] = clickable;
     }
 
-    public void ClearGrid()
+    public void ClearGrid(int gridSize = -1)
     {
+        if(gridSize > -1)
+        {
+            width = gridSize;
+            height = gridSize;
+        }
+
         grid = new ClickableObject[width, height];
         pipeGrid = new Pipe[width, height];
     }
@@ -102,9 +108,9 @@ public class GroundLevel : MonoBehaviour
     #endregion Base Grid operations
 
     #region Creation
-    public void CreateGrid()
+    public void CreateGrid(int gridSize = -1)
     {
-        ClearGrid();
+        ClearGrid(gridSize);
         
         FillRocks(rocks); // adds ores
         FillRoads(roads); // adds roads

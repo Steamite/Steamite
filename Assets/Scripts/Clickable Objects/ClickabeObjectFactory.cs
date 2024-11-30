@@ -18,14 +18,7 @@ public class ClickabeObjectFactory : MonoBehaviour
     public ResourceHolder tilePrefabs;
     public ResourceHolder specialPrefabs;
 
-    public Chunk CreateAChunk(GridPos gridPos, Resource startingResource)
-    {
-        Chunk chunk = Instantiate(specialPrefabs.GetPrefab("Chunk"), gridPos.ToVec(CHUNK_OFFSET), Quaternion.identity, MyGrid.FindLevelChunks(gridPos.y)).GetComponent<Chunk>();
-        chunk.Init(startingResource);
-
-        return chunk;
-    }
-
+    #region Tiles
     public void CreatePipes(IProgress<int> progress, WorldSave gridSave)
     {
         /*GameObject pipePref = buildPrefabs.GetPrefab("Fluid Pipe base").gameObject;
@@ -52,8 +45,51 @@ public class ClickabeObjectFactory : MonoBehaviour
             MyGrid.FindLevelRoads(gp.y)).GetComponent<Road>(); // creates a road on the place of tiles
 
         replacement.name = replacement.name.Replace("(Clone)", "");
-        if(doSet)
+        if (doSet)
             MyGrid.SetGridItem(gp, replacement);
+    }
+
+    public void CreateRock(GridPos gp, Color color, Resource resource, int hardness, string _name)
+    {
+        Rock r = (Rock)Instantiate(tilePrefabs.GetPrefab("Dirt"), new Vector3(gp.x, (gp.y * LEVEL_HEIGHT) + ROCK_OFFSET, gp.z), Quaternion.identity, MyGrid.FindLevelRocks(gp.y));
+        r.GetComponent<Renderer>().material.color = color;
+        r.rockYield = resource;
+        r.integrity = hardness;
+        r.name = _name;
+        r.UniqueID();
+        MyGrid.SetGridItem(gp, r);
+    }
+
+    #endregion
+    public Elevator CreateElevator(GridPos gp, bool isMain = false)
+    {
+        Elevator el = (Elevator)Instantiate(buildPrefabs.GetPrefab("Elevator"), new Vector3(gp.x, (gp.y * LEVEL_HEIGHT) + BUILD_OFFSET, gp.z), Quaternion.identity, MyGrid.FindLevelBuildings(gp.y));
+        el.build.constructed = true;
+        el.main = isMain;
+        MyGrid.PlaceBuild(el, true);
+        return el;
+    }
+
+    public Chunk CreateAChunk(GridPos gridPos, Resource startingResource)
+    {
+        Chunk chunk = Instantiate(specialPrefabs.GetPrefab("Chunk"), gridPos.ToVec(CHUNK_OFFSET), Quaternion.identity, MyGrid.FindLevelChunks(gridPos.y)).GetComponent<Chunk>();
+        chunk.Init(startingResource);
+
+        return chunk;
+    }
+    
+    public Human CreateAHuman(GridPos gp, Material material, int i)
+    {
+        Human h = (Human)Instantiate(
+            specialPrefabs.GetPrefab("Human"), 
+            new(gp.x, (gp.y * LEVEL_HEIGHT) + HUMAN_OFFSET, gp.z), 
+            Quaternion.identity, 
+            SceneRefs.humans.transform.GetChild(0).transform);
+        h.UniqueID();
+        // color for debug
+        h.transform.GetChild(1).GetComponent<MeshRenderer>().material = material;
+        h.gameObject.name = $"Human {(i == 0 ? "Red" : i == 1 ? "Yellow" : "White")}";
+        return h;
     }
 
     #region Loading Game
@@ -132,5 +168,6 @@ public class ClickabeObjectFactory : MonoBehaviour
         }
         return human;
     }
+
     #endregion Loading Game
 }

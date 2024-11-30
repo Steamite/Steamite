@@ -81,6 +81,7 @@
     padding-left: 0;
     -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
     background-color: rgb(74, 74, 74);
+    max-width: none;
 }
 
 .save-radio-button-selected {
@@ -97,4 +98,35 @@
     background-color: rgb(73, 121, 107);
     color: rgb(193, 68, 14);
     -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
+}
+
+.Empty {
+    flex-grow: 1;
+    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Roadstore');
+    -unity-font-style: normal;
+}
+
+.enum-style {
+    flex-direction: row;
+    flex-grow: 1;
+    max-width: 250px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 5px;
+    padding-bottom: 0;
+    padding-left: 10px;
+    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Roadstore');
+    -unity-font-style: normal;
+    font-size: 35px;
+    border-top-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-color: rgb(28, 28, 28);
+}
+
+.unity-button:hover {
 }

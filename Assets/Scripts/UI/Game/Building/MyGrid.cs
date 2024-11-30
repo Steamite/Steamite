@@ -17,8 +17,11 @@ public static class MyGrid
 
     public static int currentLevel { get; private set; }
     public static string startSceneName;
-    
+
+    public static int gridSize { get { return levels[currentLevel].height; } }
+
     static Action<int, int> GridChange;
+
 
     public static void Init()
     {
@@ -51,13 +54,15 @@ public static class MyGrid
         chunks = new List<Chunk>();
         fluidNetworks = new();
         levels = new GroundLevel[5];
+        GameObject.Find("Scene").GetComponent<SceneRefs>().Init();
+        currentLevel = 2;
     }
 
     public static StringBuilder PrintGrid()
     {
         StringBuilder grids = new();
         int i = 0;
-        foreach(GroundLevel level in levels.Where(q => q))
+        foreach (GroundLevel level in levels.Where(q => q))
         {
             grids.AppendLine($"Grid {i}:");
             grids.Append(level.PrintGrid());
@@ -71,8 +76,6 @@ public static class MyGrid
     public static StringBuilder CreateGrid(GroundLevel level, GroundLevel mainLevel)
     {
         PrepGridLists();
-        GameObject.Find("Scene").GetComponent<SceneRefs>().Init();
-        currentLevel = 2;
         for (int i = 0; i < 5; i++)
         {
             // creates an empty ground level
@@ -85,6 +88,14 @@ public static class MyGrid
             _level.CreateGrid();
         }
         return PrintGrid();
+    }
+
+    public static GroundLevel AddEmptyGridLevel(GroundLevel templateLevel, int i, int gridSize)
+    {
+        levels[i] = GameObject.Instantiate(templateLevel, new Vector3(0, i * 2, 0), Quaternion.identity, SceneRefs.gridTiles.transform);
+        levels[i].CreateGrid(gridSize);
+        
+        return levels[i];
     }
     #endregion Grid Creation
 
@@ -253,6 +264,4 @@ public static class MyGrid
         }
         SceneRefs.humans.GetComponent<JobQueue>().toBeDug = SceneRefs.gridTiles.toBeDigged.ToList();
     }
-
-   
 }

@@ -20,4 +20,4 @@ MonoBehaviour:
   maxNodes: 6
   minGroups: 5
   maxGroups: 8
-  color: {r: 1, g: 1, b: 1, a: 1}
+  color: {r: 0, g: 0, b: 0, a: 1}

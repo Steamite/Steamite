@@ -651,6 +651,7 @@ GameObject:
   - component: {fileID: 642414928}
   - component: {fileID: 642414927}
   - component: {fileID: 642414931}
+  - component: {fileID: 642414932}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -758,6 +759,33 @@ MonoBehaviour:
   templateLevel: {fileID: 1135758614679704061, guid: d9f415992495cb841b318eb1f8d8a04f, type: 3}
   actionText: {fileID: 235806608}
   loadingSlider: {fileID: 2524945086358073128}
+--- !u!114 &642414932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642414926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f58db49af0aa9134bb743d6b9fde931e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resRenderer: {fileID: 0}
+  rockRenderer: {fileID: 0}
+  rockTransform: {fileID: 0}
+  rockPrefab: {fileID: 0}
+  seed: 
+  minToRemove: 2
+  maxToRemove: 25
+  minToAdd: 1
+  maxToAdd: 6
+  gridSizes: 150000001f00000029000000
+  minableResources:
+  - {fileID: 11400000, guid: a8d8035b791c05943ba13e1333106fc9, type: 2}
+  - {fileID: 11400000, guid: 1c3d32d887bb74046af6627885ac30b8, type: 2}
+  - {fileID: 11400000, guid: a5cd7623b991cc04783d946fb6f71da2, type: 2}
+  dirt: {fileID: 2100000, guid: 0930df6ecc353d34d8d6511a134ceda6, type: 2}
 --- !u!1 &676738600
 GameObject:
   m_ObjectHideFlags: 0
