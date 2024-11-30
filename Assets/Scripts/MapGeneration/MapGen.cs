@@ -21,6 +21,10 @@ public class MapGen : MonoBehaviour
     [SerializeField] int minToAdd = 1;
     [SerializeField] int maxToAdd = 6;
 
+    [Header("Map params")]
+    [SerializeField] int[] gridSizes;
+
+
     int gridSize;
     int randomSeed;
     MapTile[,] map;
@@ -30,102 +34,67 @@ public class MapGen : MonoBehaviour
 
     [Header("Resource data")]
     [SerializeField] List<MinableRes> minableResources;
+    [SerializeField] Material dirt;
 
 
     int minCenter;
     int maxCenter;
 
     string lastSeed = "";
-    /// <summary> Converts input seed into usable values. </summary>
-    /// <param name="s">HEX string to convert to a DEC int.</param>
-    int HexaToDec(string s)
-    {
-        int length = s.Length;
-        int result = 0;
-        for (int i = 0; i < length; i++)
-        {
-            int cInt = s[i];
-            if (cInt >= 48 && cInt <= 57)
-            {
-                result += (cInt - 48) * (int)Mathf.Pow(16, length - i - 1);
-            }
-            else if (cInt >= 65 && cInt <= 70)
-            {
-                result += (cInt - 55) * (int)Mathf.Pow(16, length - i - 1);
-            }
-            else
-            {
-                // if incorrect input fix it to a middle value
-                result += 8 * (int)Mathf.Pow(16, length - i - 1);
-            }
-        }
-        return result;
-    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
+#if UNITY_EDITOR
     void Update()
     {
-        if (seed != lastSeed)
+        if (seed != lastSeed && resRenderer)
             Generate();
     }
+#endif
 
-    void Generate()
+    // TODO
+    public void Generate(string _seed = null, GroundLevel templateLevel = null)
     {
-        lastSeed = seed;
+        seed = _seed;
         ParseInput();
 
-        #region visualization init
-
-        resPixels = new Color[gridSize * gridSize];
-        resourceTex = new Texture2D(gridSize, gridSize);
-        resRenderer.material.mainTexture = resourceTex;
-
-        rockPixels = new Color[gridSize * gridSize];
-        rockTex = new Texture2D(gridSize, gridSize);
-        rockRenderer.material.mainTexture = rockTex;
-
-        #endregion
-
+        MyGrid.PrepGridLists();
         #region Generation
 
-        map = new MapTile[gridSize, gridSize];
+
         minCenter = (gridSize / 2) - 5;
         maxCenter = (gridSize / 2) + 5;
-
-        CreateGrid();
-        PerlinNoise();
-
-        #endregion
-
-        #region Visualization print
-
-        resourceTex.SetPixels(resPixels);
-        resourceTex.Apply();
-
-        rockTex.SetPixels(rockPixels);
-        rockTex.Apply();
-
-        #endregion
-
-        for (int x = 0; x < gridSize; x++)
+        for(int i = 0; i < 5; i++)
         {
-            for (int y = 0; y < gridSize; y++)
+            MyGrid.AddEmptyGridLevel(templateLevel, i, gridSize);
+            resPixels = new Color[gridSize * gridSize];
+            rockPixels = new Color[gridSize * gridSize];
+            map = new MapTile[gridSize, gridSize];
+            CreateGrid();
+            PerlinNoise();
+
+            for (int x = 0; x < gridSize; x++)
             {
-                Rock r = Instantiate(rockPrefab, new(x, 1.5f, y), Quaternion.identity, rockTransform);
-                r.GetComponent<Renderer>().material.color = resPixels[y * gridSize + x];
-                r.rockYield = map[x, y].resource;
-                r.integrity = map[x, y].hardness;
-                r.UniqueID();
+                for (int y = 0; y < gridSize; y++)
+                {
+                    if (map[x, y] != null)
+                        SceneRefs.objectFactory.CreateRock(new(x, i, y), resPixels[y * gridSize + x], map[x, y].resource, map[x, y].hardness, map[x, y].name);
+                    else
+                    {
+                        SceneRefs.objectFactory.CreateRoad(new(x, i, y), true);
+                    }
+                }
             }
+            SceneRefs.objectFactory.CreateElevator(new(gridSize / 2, i, gridSize / 2), i == 2);
         }
+        #endregion
     }
 
     void ParseInput()
     {
         // Input preformating
-        bool add = seed.Length < 5;
-        while (seed.Length != 5)
+        bool add = seed.Length < 8;
+        while (seed.Length != 8)
         {
             if (add)
             {
@@ -137,8 +106,9 @@ public class MapGen : MonoBehaviour
             }
         }
         seed = seed.ToUpper();
-        gridSize = HexaToDec("" + seed[0] + seed[1]);
-        randomSeed = HexaToDec("" + seed[2] + seed[3] + seed[4]);
+        gridSize = gridSizes[MyMath.HexToDec("" + seed[0]) % 3];
+        //gridSize = MyMath.HexToDec("" + seed[1]);
+        randomSeed = MyMath.HexToDec("" + seed[4] + seed[5] + seed[6] + seed[7]);
 
         Random.InitState(randomSeed);
     }
@@ -147,8 +117,6 @@ public class MapGen : MonoBehaviour
     void CreateGrid()
     {
         //Visualization
-
-
         foreach (MinableRes minable in minableResources)
         {
             int rand = Random.Range(minable.minGroups, minable.maxGroups);
@@ -248,9 +216,14 @@ public class MapGen : MonoBehaviour
         {
             for (int y = 0; y < gridSize; y++)
             {
+                bool changeColor = false;
                 if (map[x, y] == null)
                 {
-                    map[x, y] = new();
+                    changeColor = true;
+                    if (CanPlace(x, y))
+                        map[x, y] = new();
+                    else
+                        continue;
                 }
                 float f = Mathf.PerlinNoise(randomX + x / (float)gridSize, randomY + y / (float)gridSize);
                 if (f < 0.2f)
@@ -264,8 +237,9 @@ public class MapGen : MonoBehaviour
                 else
                     f = 15;
                 map[x, y].hardness += Mathf.RoundToInt(f);
-                f = (Mathf.RoundToInt(f) / 20f);
-                rockPixels[y * gridSize + x] = new(f, f, f, 1);
+
+                if (changeColor)
+                    resPixels[y * gridSize + x] = new(dirt.color.r / f *2, dirt.color.g / f*2, dirt.color.b / f*2, 1);
             }
         }
     }

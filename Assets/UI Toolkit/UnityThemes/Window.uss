@@ -1,0 +1,104 @@
+.background {
+    flex-grow: 1;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background-color: rgb(89, 72, 48);
+    visibility: visible;
+    overflow: visible;
+    display: flex;
+    color: rgb(249, 233, 141);
+}
+
+.blocker {
+    flex-grow: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.32);
+    display: none;
+}
+
+.bar {
+    flex-grow: 1;
+    width: 100%;
+    height: 10%;
+    max-height: 10%;
+    background-color: rgb(28, 28, 28);
+    flex-direction: row;
+    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Roadstore');
+}
+
+.bar-button {
+    width: auto;
+    -unity-text-align: middle-center;
+    height: auto;
+    align-self: center;
+    align-items: auto;
+    align-content: auto;
+    right: 7.5%;
+    overflow: hidden;
+    opacity: 1;
+    font-size: 45%;
+    color: rgb(249, 233, 141);
+    background-color: rgb(28, 28, 28);
+    border-left-color: rgba(89, 72, 48, 0);
+    border-right-color: rgba(89, 72, 48, 0);
+    border-top-color: rgba(89, 72, 48, 0);
+    border-bottom-color: rgba(89, 72, 48, 0);
+    white-space: nowrap;
+    text-overflow: clip;
+    top: 0;
+    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Roadstore');
+}
+
+.bar-button:hover {
+}
+
+.disabled-button {
+    opacity: 0.3;
+}
+
+.enabled-button {
+    opacity: 1;
+}
+
+.enabled-button:hover {
+    opacity: 1;
+    scale: 1.05 1.05;
+    transition-duration: 0.1s;
+    transition-property: scale;
+    transition-timing-function: ease-in;
+}
+
+.param-text-field {
+    max-height: 150px;
+    background-color: rgb(28, 28, 28);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
+    padding-left: 5px;
+    font-size: 20px;
+    padding-right: 5px;
+    max-width: 150px;
+    -unity-text-generator: standard;
+    white-space: normal;
+    -unity-text-align: upper-left;
+    text-overflow: clip;
+}
+
+.param-text-field:hover {
+}
+
+#unity-text-input {
+    --unity-cursor-color: rgb(249, 233, 141);
+    background-color: rgb(28, 28, 28);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}

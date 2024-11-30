@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7722ad94548d554479222b9c47c9a556, type: 3}
   m_Name: Wood
   m_EditorClassIdentifier: 
-  resource: 4
+  resource: 2
   hardness: 1
   minAmmount: 25
   maxAmmount: 100
@@ -20,4 +20,4 @@ MonoBehaviour:
   maxNodes: 10
   minGroups: 2
   maxGroups: 2
-  color: {r: 0, g: 0.5127592, b: 1, a: 1}
+  color: {r: 0.66442686, g: 0.68974084, b: 0.745283, a: 1}

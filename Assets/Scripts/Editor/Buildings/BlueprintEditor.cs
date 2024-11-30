@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
@@ -30,3 +31,4 @@ public class BlueprintEditor : PropertyDrawer
         EditorGUI.EndProperty();
     }
 }
+#endif

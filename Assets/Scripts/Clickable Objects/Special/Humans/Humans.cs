@@ -14,13 +14,16 @@ public class Humans : MonoBehaviour
     [SerializeField] Human humanPref;
     [SerializeField] List<Material> hatMaterial;
     //Don't missmatch with "Human" this is a script for the parent object, no inheritence thou
-    public void NewGameInit()
+    public void NewGameInit(ref Action humanActivation)
     {
         humen = new();
-        for(int i = 0; i < 3; i++)
+        int i = MyGrid.gridSize;
+        GridPos pos = new(i / 2, 2, i / 2);
+        for(i = 0; i < 3; i++)
         {
-            CreateHuman().transform.GetChild(1).GetComponent<MeshRenderer>().material = hatMaterial[i];
-            humen[^1].gameObject.name = $"Human {(i == 0 ? "Red" : i == 1 ? "Yellow" : "White")}";
+            // adding the human
+            
+            AddHuman(SceneRefs.objectFactory.CreateAHuman(pos, hatMaterial[i], i), ref humanActivation);
         }
     }
 
@@ -28,15 +31,6 @@ public class Humans : MonoBehaviour
     {
         action += h.ActivateHuman;
         humen.Add(h);
-    }
-
-    public Human CreateHuman()
-    {
-        Human h = Instantiate(humanPref, new Vector3(10,4,8), Quaternion.identity, transform.GetChild(0));
-        h.UniqueID();
-        humen.Add(h);
-        h.ActivateHuman();
-        return h;
     }
 
     public void SwitchLevel(int currentI, int newI)
