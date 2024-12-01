@@ -9,9 +9,9 @@ public class DayTime : MonoBehaviour
     [SerializeField]float ticksPerHour = 4;
     [SerializeField]int minutesPerTick;
 
-    public Action nightStart;
-    public Action dayStart;
-    public Action weekEnd;
+    public event Action nightStart;
+    public event Action dayStart;
+    public event Action weekEnd;
 
     // time data
     [SerializeField] int timeInMinutes = 4;
@@ -65,7 +65,6 @@ public class DayTime : MonoBehaviour
             case 360:
                 //isNight = false;
                 dayStart?.Invoke();
-                SceneRefs.saveController.SaveGame(true);
                 break;
         }
         time.text = $"{(timeInMinutes/60).ToString().PadLeft(2, '0')}:{(timeInMinutes%60).ToString().PadLeft(2, '0')}";

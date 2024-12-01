@@ -45,7 +45,7 @@ public static class MyRes
             {
                 if (setupStorages)
                 {
-                    resourceBuffer = new(200);
+                    //resourceBuffer = new(200);
                     _s.SetupStorage(resources, jQ);
                 }
                 globalStorageSpace += _s.localRes.stored.capacity - _s.localRes.stored.ammount.Sum();

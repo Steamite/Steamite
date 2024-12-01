@@ -21,7 +21,7 @@ public static class MyGrid
     public static int gridSize { get { return levels[currentLevel].height; } }
 
     static Action<int, int> GridChange;
-
+    public static string worldName;
 
     public static void Init()
     {
@@ -242,7 +242,7 @@ public static class MyGrid
     {
         GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickabeObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.gridTiles.transform);
         levels[i] = groundLevel;
-        groundLevel.ClearGrid();
+        groundLevel.ClearGrid(gridSave.width);
         groundLevel.gameObject.SetActive(i == 2);
         for(int x = 0; x < gridSave.width; x++)
         {
