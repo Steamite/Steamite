@@ -1,8 +1,4 @@
-using Newtonsoft.Json;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
@@ -109,8 +105,8 @@ public class LoadingScreen : MonoBehaviour
         {
             loadingSlider.value = value;
         });
-        FillGameState(progress, playerSettings);
         FillGrid(progress, worldSave);
+        FillGameState(progress, playerSettings);
         FillHumans(progress, humanSaves);
         FillResearches(progress, researchSave);
         FillTrade(progress, tradeSave);
@@ -194,9 +190,9 @@ public class LoadingScreen : MonoBehaviour
     #endregion Loading Game State
     async void AfterLevelLoad(bool newGame)
     {
-        transform.parent.GetChild(1).GetComponent<AudioListener>().enabled = false;
+        //transform.parent.GetChild(1).GetComponent<AudioListener>().enabled = false;
         CanvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().SetUp();
-        SceneRefs.saveController.activeFolder = folderName;
+        MyGrid.worldName = folderName;
         MyGrid.Init();
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;
         Camera.main.GetComponent<PhysicsRaycaster>().enabled = true;

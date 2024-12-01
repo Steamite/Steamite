@@ -75,16 +75,6 @@ public class Storage : Building
         base.RequestRes(request, h, mod);
     }
 
-    protected override void Awake()
-    {
-        base.Awake();
-        canStore = new();
-        for (int i = 0; i < localRes.stored.ammount.Count; i++)
-        {
-            canStore.Add(true);
-        }
-    }
-
     public override List<string> GetInfoText()
     {
         List<string> s = base.GetInfoText();
@@ -101,6 +91,11 @@ public class Storage : Building
         while(localRes.stored.ammount.Count < templateRes.type.Count)
         {
             localRes.stored.ammount.Add(0);
+        }
+        canStore = new();
+        for (int i = 0; i < localRes.stored.ammount.Count; i++)
+        {
+            canStore.Add(true);
         }
         jQ.storages.Add(this);
     }

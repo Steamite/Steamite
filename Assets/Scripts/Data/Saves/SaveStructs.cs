@@ -75,6 +75,8 @@ public class ClickableObjectSave
 [Serializable]
 public class RockSave : ClickableObjectSave
 {
+    public ResourceType res;
+    public int ammount;
     public float integrity;
     public string oreName;
     public bool toBeDug;
@@ -204,43 +206,6 @@ public class GameStateSave
     public List<JobState> priorities;
     public int dayTime;
     public int numberOfDays;
-}
-
-[Serializable]
-public class ResearchSave
-{
-    public int currentResearch;
-    public ResearchCategory[] categories;
-
-    public ResearchSave(int categCount)
-    {
-        categories = new ResearchCategory[categCount];
-    }
-    public ResearchSave()
-    {
-
-    }
-}
-[Serializable]
-public class TradeSave
-{
-    /*public ColonyLocation colonyLocation;
-    public List<TradeLocation> tradeLocations;
-    public List<TradeExpedition> expeditions;
-    public List<Outpost> outposts;
-    public int money;
-    public TradeSave(Trade t)
-    {
-        colonyLocation = t.colonyLocation;
-        tradeLocations = t.tradeLocations;
-        expeditions = t.expeditions;
-        outposts = t.outposts;
-        money = MyRes.money;
-    }
-    public TradeSave()
-    {
-
-    }*/
 }
 
 [Serializable]

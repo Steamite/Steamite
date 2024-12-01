@@ -1,9 +1,13 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
+    Action saveAction;
+    public void AssignSaveEvent(Action save) => saveAction = save;
+
     public void Toggle()
     {
         if (UIRefs.research.window.activeSelf)
@@ -41,7 +45,7 @@ public class Menu : MonoBehaviour
     {
         try
         {
-            GameObject.Find("Scene").GetComponent<SaveController>().SaveGame();
+            saveAction.Invoke();
         }
         catch
         {

@@ -3,14 +3,14 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
 using System;
-using TMPro;
 using System.Collections;
 
 public class SaveController : MonoBehaviour
 {
     private void Start()
     {
-        Debug.Log(SceneRefs.tick.timeController.name);
+        SceneRefs.tick.timeController.dayStart += () => SaveGame(true);
+        UIRefs.pauseMenu.AssignSaveEvent(() => SaveGame(false));
     }
     public string activeFolder;
 
@@ -47,7 +47,7 @@ public class SaveController : MonoBehaviour
                 break;
             s += path[i];
         }
-        return s.Reverse().ToArray().ArrayToString();
+        return string.Join("",s.Reverse().ToArray());
     }
 
     /// <summary>
@@ -57,6 +57,7 @@ public class SaveController : MonoBehaviour
     /// <param name="autoSave"></param>
     public void SaveGame(bool autoSave = false)
     {
+        activeFolder = MyGrid.worldName;
         if (Directory.GetDirectories($"{Application.persistentDataPath}").FirstOrDefault(q => q == $"{Application.persistentDataPath}/saves") == null)
             Directory.CreateDirectory($"{Application.persistentDataPath}/saves");
         
@@ -193,8 +194,8 @@ public class SaveController : MonoBehaviour
     void SaveResearch(string path, JsonSerializer jsonSerializer)
     {
         // takes nodes from all research buttons
-        //ResearchUI research = CanvasManager.research;
-        /*Transform categsTransform = research.categoriesTran;
+        ResearchUI research = UIRefs.research;
+        Transform categsTransform = research.categoriesTran;
         ResearchSave categsData = new(categsTransform.childCount);
         for (int i = 0; i < categsTransform.childCount; i++)
         {
@@ -214,16 +215,16 @@ public class SaveController : MonoBehaviour
         //write saves
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Research.json"));
         jsonSerializer.Serialize(jsonTextWriter, categsData);
-        jsonTextWriter.Close();*/
+        jsonTextWriter.Close();
     }
 
     //------Trade------\\
     void SaveTrade(string path, JsonSerializer jsonSerializer)
     {
-        /*Trade trade = CanvasManager.trade;
+        Trade trade = UIRefs.trade;
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Trade.json"));
         jsonSerializer.Serialize(jsonTextWriter, new TradeSave(trade));
-        jsonTextWriter.Close();*/
+        jsonTextWriter.Close();
     }
 }
 

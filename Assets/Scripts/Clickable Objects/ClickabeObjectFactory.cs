@@ -66,7 +66,9 @@ public class ClickabeObjectFactory : MonoBehaviour
         Elevator el = (Elevator)Instantiate(buildPrefabs.GetPrefab("Elevator"), new Vector3(gp.x, (gp.y * LEVEL_HEIGHT) + BUILD_OFFSET, gp.z), Quaternion.identity, MyGrid.FindLevelBuildings(gp.y));
         el.build.constructed = true;
         el.main = isMain;
+        el.name = el.name.Replace("(Clone)", "");
         MyGrid.PlaceBuild(el, true);
+
         return el;
     }
 
@@ -114,6 +116,7 @@ public class ClickabeObjectFactory : MonoBehaviour
             new Vector3(gp.x, (gp.y * LEVEL_HEIGHT) + ROCK_OFFSET, gp.z), Quaternion.identity, 
             MyGrid.FindLevelRocks(gp.y)).GetComponent<Rock>();
         rock.Load(save);
+
         MyGrid.SetGridItem(gp, rock);
         if (rock.toBeDug)
         {

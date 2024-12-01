@@ -55,6 +55,13 @@ public class Rock : ClickableObject
     {
         if (clickable == null)
             clickable = new RockSave();
+        if(rockYield.type.Count > 0)
+        {
+            (clickable as RockSave).res = rockYield.type[0];
+            (clickable as RockSave).ammount = rockYield.ammount[0];
+        }
+        else
+            (clickable as RockSave).ammount = -1;
         (clickable as RockSave).integrity = integrity;
         (clickable as RockSave).oreName = name;
         (clickable as RockSave).toBeDug = toBeDug;
@@ -64,7 +71,17 @@ public class Rock : ClickableObject
     {
         integrity = (save as RockSave).integrity;
         toBeDug = (save as RockSave).toBeDug;
-        name = name.Replace("(Clone)", "");
+        name = (save as RockSave).oreName;
+        if ((save as RockSave).ammount > -1)
+        {
+            rockYield.type[0] = (save as RockSave).res;
+            rockYield.ammount[0] = (save as RockSave).ammount;
+        }
+        else
+        {
+            Color c = gameObject.GetComponent<MeshRenderer>().material.color;
+            gameObject.GetComponent<MeshRenderer>().material.color = c / integrity * 2;
+        }
         base.Load(save);
     }
     #endregion Saving
