@@ -47,7 +47,7 @@ namespace AbstractControls
             IsSelected = true;
             RemoveFromClassList(styleClass);
             AddToClassList(styleClass + "-selected");
-            parent.parent.parent.parent.parent.Q<CustomRadioButtonGroup>()?.Select(this);
+            parent.parent.parent.Q<CustomRadioButtonGroup>()?.Select(this);
         }
 
         public void Deselect()

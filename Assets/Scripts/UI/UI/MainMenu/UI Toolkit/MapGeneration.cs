@@ -7,11 +7,12 @@ using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class MapGeneration : MonoBehaviour
+public class MapGeneration : MonoBehaviour, IToolkitController
 {
     VisualElement mapParams;
 
     bool changeSeed = true;
+
     #region generation props
     string seed = "";
     [CreateProperty]

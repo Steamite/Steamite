@@ -35,6 +35,7 @@ namespace AbstractControls
 
         #region Base
 
+        [Obsolete]
         public new class UxmlFactory : UxmlFactory<CustomRadioButtonGroup, UxmlTraits> { }
 
         public CustomRadioButtonGroup()
@@ -47,6 +48,7 @@ namespace AbstractControls
             makeItem = DefaultMakeItem;
             bindItem = DefaultBindItem;
             bindingSourceSelectionMode = BindingSourceSelectionMode.AutoAssign;
+
         }
 
         // Adds an item to the list and refreshes the ListView
@@ -92,6 +94,10 @@ namespace AbstractControls
             _contentContainer = this.Q<VisualElement>("unity-content-container");
             _contentContainer.style.flexGrow = 1;
             changeEvent = onChange;
+            if (_itemsSource.Count > 0) {
+                _selectedButton?.Deselect();
+                _selectedButton = null;
+            }
         }
 
         public virtual void Select(CustomRadioButton customRadioButton)

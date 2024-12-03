@@ -76,6 +76,7 @@ namespace Params
         [System.Obsolete]
         public new class UxmlFactory : UxmlFactory<StringGenerationParameter, UxmlTraits> { }
 
+        [Obsolete]
         public new class UxmlTraits : BindableElement.UxmlTraits
         {
             // Bindable attributes

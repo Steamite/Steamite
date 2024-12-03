@@ -6,7 +6,6 @@ using TMPro;
 using System.Linq;
 using UnityEngine.UI;
 using System;
-using UnityEngine.Events;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 
@@ -26,70 +25,44 @@ public class LoadMenu : MonoBehaviour
 
     public void ParseSaves()
     {
-        string[] dirs = Directory.GetDirectories(Application.persistentDataPath + "/saves/");
-        foreach (string path in dirs)
+        string dir = Directory.GetDirectories(Application.persistentDataPath + "/saves/").FirstOrDefault(q => q.Contains(MyGrid.worldName));
+        if (dir != null && dir.Length > 0)
         {
-            if (loadedElems.Contains(path))
+            string[] saveFolders = Directory.GetDirectories(dir);
+            foreach(string folder in saveFolders)
             {
-                continue;
-            }
-            TMP_Text item = Instantiate(itemPrefab, content.transform).transform.GetChild(0).GetComponent<TMP_Text>();
-            item.text = SaveController.GetSaveName(path);
-            loadedElems.Add(path);
+                if (loadedElems.Contains(folder))
+                    continue;
+                else if (Directory.GetFiles(folder).Length == 0)
+                    continue;
+                TMP_Text item = Instantiate(
+                    itemPrefab, content.transform).transform.GetChild(0).GetComponent<TMP_Text>();
+                item.text = SaveController.GetSaveName(folder);
+                loadedElems.Add(folder);
 
-            Button b = item.transform.parent.GetComponent<Button>();
-            b.onClick.AddListener(delegate { SelectSave(b); });
+                Button b = item.transform.parent.GetComponent<Button>();
+                b.onClick.AddListener(delegate { SelectSave(item.text); });
+            }
+            gameObject.SetActive(true);
+            return;
         }
-        gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
 
     public void ClearSelection(bool active)
     {
         selectedSave = "";
-        transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = "Info";
+        transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = MyGrid.worldName;
         transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = "";
         transform.GetChild(3).GetChild(0).GetComponent<Button>().interactable = false;
         transform.GetChild(3).GetChild(2).GetComponent<Button>().interactable = false;
         gameObject.SetActive(active);
     }
-
-
-
-    void SelectSave(Button button)
+    void SelectSave(string save)
     {
-        selectedSave = button.transform.GetChild(0).GetComponent<TMP_Text>().text;
-        JsonSerializer jsonSerializer = SaveController.PrepSerializer();
-        // for gridSave
-        worldSave = new();
-        JsonTextReader jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Grid.json"));
-        worldSave.objectsSave = jsonSerializer.Deserialize<BuildsAndChunksSave>(jsonReader);
-        jsonReader.Close();
+        
 
-        worldSave.gridSave = new GridSave[MyGrid.NUMBER_OF_LEVELS];
-        for(int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
-        {
-            jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Level{i}.json"));
-            worldSave.gridSave[i] = jsonSerializer.Deserialize<GridSave>(jsonReader);
-            jsonReader.Close();
-        }
-
-        // for playerSettings
-        jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/PlayerSettings.json"));
-        gameStateSave = jsonSerializer.Deserialize<GameStateSave>(jsonReader);
-        jsonReader.Close();
-        // for humanSaves
-        jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Humans.json"));
-        humanSaves = jsonSerializer.Deserialize<HumanSave[]>(jsonReader);
-        jsonReader.Close();
-        // for researchCategories
-        jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Research.json"));
-        researchSave = jsonSerializer.Deserialize<ResearchSave>(jsonReader);
-        jsonReader.Close();
-        jsonReader = new(new StreamReader($"{Application.persistentDataPath}/saves/{selectedSave}/Trade.json"));
-        tradeSave = jsonSerializer.Deserialize<TradeSave>(jsonReader);
-        jsonReader.Close();
-
-        transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = selectedSave;
+        transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = MyGrid.worldName + '\n' + save;
         transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = // to show that the save is really working
             $"Buildings: {worldSave.objectsSave.buildings.Length}\n" +
             $"Humans: {humanSaves.Length}\n" +
@@ -130,29 +103,16 @@ public class LoadMenu : MonoBehaviour
         }
     }
 
-    public void Load()
+    /*public async void Load()
     {
-        if(GameObject.Find("Main Menu") != null)
+        if (GameObject.Find("Main Menu") == null)
         {
-            Load(null);
+            await SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
+            Scene scene = SceneManager.GetActiveScene();
+            await SceneManager.UnloadSceneAsync(scene);
         }
-        else
-        {
-            AsyncOperation aO = SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
-            aO.completed += UnLoad;
-        }
-    }
-
-    public void UnLoad(AsyncOperation _)
-    {
-        Scene scene = SceneManager.GetActiveScene();
-        AsyncOperation aO = SceneManager.UnloadSceneAsync(scene);
-        aO.completed += Load;
-    }
-
-    public void Load(AsyncOperation _)
-    {
         GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>().
             StartLoading(worldSave, gameStateSave, humanSaves, researchSave, tradeSave, selectedSave);
     }
+*/
 }

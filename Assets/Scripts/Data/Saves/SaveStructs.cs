@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
+
 [Serializable]
 public class JobSave
 {
@@ -206,6 +208,7 @@ public class GameStateSave
     public List<JobState> priorities;
     public int dayTime;
     public int numberOfDays;
+    public bool autoSave;
 }
 
 [Serializable]

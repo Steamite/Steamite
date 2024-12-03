@@ -26,7 +26,7 @@ MonoBehaviour:
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_Match: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 999
   m_TargetDisplay: 0
   m_BindingLogLevel: 0
   m_ClearDepthStencil: 1
@@ -43,4 +43,4 @@ MonoBehaviour:
   m_RuntimeWorldShader: {fileID: 9102, guid: 0000000000000000f000000000000000, type: 0}
   m_ICUDataAsset: {fileID: 4900000, guid: 0b51f57b1e3bc574daadcc01f43e710a, type: 3}
   forceGammaRendering: 0
-  textSettings: {fileID: 0}
+  textSettings: {fileID: 11400000, guid: 587e3cfaf65e755438a3d47f4a02efc3, type: 2}

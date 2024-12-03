@@ -9,14 +9,15 @@ public class SaveController : MonoBehaviour
 {
     private void Start()
     {
-        SceneRefs.tick.timeController.dayStart += () => SaveGame(true);
-        UIRefs.pauseMenu.AssignSaveEvent(() => SaveGame(false));
+        SceneRefs.tick.timeController.dayStart += () => SaveGame("", true);
+        UIRefs.pauseMenu.Init((s) => SaveGame(s, false));
+        
     }
-    public string activeFolder;
+    public string activeWorld;
 
     void OnApplicationQuit()
     {
-        SaveGame();
+        SaveGame("", true);
     }
 
     /// <summary>
@@ -55,9 +56,9 @@ public class SaveController : MonoBehaviour
     /// If it succedes calls AfterSave().
     /// </summary>
     /// <param name="autoSave"></param>
-    public void SaveGame(bool autoSave = false)
+    public void SaveGame(string saveName, bool autoSave)
     {
-        activeFolder = MyGrid.worldName;
+        activeWorld = MyGrid.worldName;
         if (Directory.GetDirectories($"{Application.persistentDataPath}").FirstOrDefault(q => q == $"{Application.persistentDataPath}/saves") == null)
             Directory.CreateDirectory($"{Application.persistentDataPath}/saves");
         
@@ -69,9 +70,13 @@ public class SaveController : MonoBehaviour
         {
             SaveGrid(tmpPath, jsonSerializer);
             SaveHumans(tmpPath, jsonSerializer);
-            SaveGameState(tmpPath, jsonSerializer);
+            SaveGameState(tmpPath, autoSave, jsonSerializer);
             SaveResearch(tmpPath, jsonSerializer);
             SaveTrade(tmpPath, jsonSerializer);
+
+            if (autoSave)
+                saveName = "autosave";
+            AfterSave(tmpPath, saveName, autoSave);
         }
         catch (Exception e)
         {
@@ -88,7 +93,6 @@ public class SaveController : MonoBehaviour
             Directory.Delete($"{tmpPath}");
             return;
         }
-        AfterSave(tmpPath, autoSave);
     }
 
     /// <summary>
@@ -96,27 +100,23 @@ public class SaveController : MonoBehaviour
     /// </summary>
     /// <param name="tmpPath">Tmp folder path.</param>
     /// <param name="autoSave">Save name.</param>
-    void AfterSave(string tmpPath, bool autoSave)
+    void AfterSave(string tmpPath, string saveName, bool autoSave)
     {
-        if (activeFolder == "")
-            activeFolder = "noname";
+        if (activeWorld == "")
+            activeWorld = "noname";
 
-        string activeF = autoSave 
-            ? (activeFolder.Contains(" - autosave") 
-                ? activeFolder 
-                : (activeFolder + " - autosave"))
-            : activeFolder;
-
-        string path = $"{Application.persistentDataPath}/saves/{activeF}";
-        if (Directory.GetDirectories($"{Application.persistentDataPath}/saves").FirstOrDefault(q => GetSaveName(q) == activeF) == null)
+        string path = $"{Application.persistentDataPath}/saves/{activeWorld}";
+        if (Directory.GetDirectories($"{Application.persistentDataPath}/saves").FirstOrDefault(q => GetSaveName(q) == activeWorld) == null)
             Directory.CreateDirectory($"{path}");
+        path = $"{path}/{saveName}";
+        Directory.CreateDirectory(path);
 
-        foreach (string file in Directory.GetFiles(tmpPath))
+        foreach (string saveFile in Directory.GetFiles(tmpPath))
         {
-            string s = file.Split("\\").Last();
+            string s = saveFile.Split("\\").Last();
             if (File.Exists($"{path}/{s}"))
                 File.Delete($"{path}/{s}");
-            File.Move($"{file}", $"{path}/{s}");
+            File.Move($"{saveFile}", $"{path}/{s}");
         }
 
         Directory.Delete($"{tmpPath}");
@@ -170,11 +170,12 @@ public class SaveController : MonoBehaviour
         return chunkSave;
     }
     //------Game State------\\
-    void SaveGameState(string path, JsonSerializer jsonSerializer)
+    void SaveGameState(string path, bool autoSave, JsonSerializer jsonSerializer)
     {
         GameStateSave gameState = new();
         gameState.priorities = SceneRefs.humans.GetComponent<JobQueue>().priority;
         SceneRefs.tick.timeController.Save(gameState);
+        gameState.autoSave = autoSave;
 
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/PlayerSettings.json"));
         jsonSerializer.Serialize(jsonTextWriter, gameState);
