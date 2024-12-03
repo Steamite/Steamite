@@ -7,7 +7,7 @@ public class UIRefs : MonoBehaviour
     [SerializeField] CameraMovement _levelCamera;
     [SerializeField] Trade _trade;
     [SerializeField] ResearchUI _research;
-    [SerializeField] public Menu _pauseMenu;
+    [SerializeField] Menu _pauseMenu;
 
     public static CameraMovement levelCamera => instance._levelCamera;
     public static Trade trade => instance._trade;

@@ -134,8 +134,13 @@ public class GroundLevel : MonoBehaviour
         for (int j = 0; j < objects.childCount; j++)
         {
             GridPos vec = new(objects.GetChild(j).transform.localPosition);
-            SetGridItem(vec, objects.GetChild(j).GetComponent<Rock>());
+            Rock rock = objects.GetChild(j).GetComponent<Rock>();
+            SetGridItem(vec, rock);
             GetGridItem(vec).UniqueID();
+            if (rock.rockYield.ammount.Sum() == 0)
+            {
+                rock.ColorWithIntegrity();
+            }
         }
     }
     void FillWater(Transform objects)

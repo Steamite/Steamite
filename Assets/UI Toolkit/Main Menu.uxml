@@ -1,35 +1,38 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/UnityThemes/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
-    <Style src="project://database/Assets/UI%20Toolkit/UnityThemes/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
-    <ui:VisualElement class="Empty">
+    <ui:Template name="Load-Menu" src="project://database/Assets/UI%20Toolkit/Load-Menu.uxml?fileID=9197481963319205126&amp;guid=87550cde01cc7fa4a83489895c6bf595&amp;type=3#Load-Menu" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Save%20window.uss?fileID=7433441132597879392&amp;guid=eca73d8699a9e1c41a8dd8849b9c0de9&amp;type=3#Save window" />
+    <ui:VisualElement name="VisualElement" class="Empty" style="-unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;); font-size: 50px;">
         <ui:VisualElement name="Canvas" style="flex-grow: 1; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; background-color: rgb(70, 49, 27);">
-            <ui:VisualElement name="Header" style="flex-grow: 1; -unity-text-align: middle-center; align-self: stretch; justify-content: center; height: 304px; min-height: 30%; max-height: 30%; margin-top: 2%; background-image: url(&quot;project://database/Assets/Sprites/Header.png?fileID=2800000&amp;guid=c36688c0ec6f10140960af633a7f009f&amp;type=3#Header&quot;); background-size: 70% 90%; border-left-width: 0;" />
+            <ui:VisualElement name="Header" style="flex-grow: 1; -unity-text-align: middle-center; align-self: flex-start; justify-content: center; height: 304px; min-height: 30%; max-height: 30%; margin-top: 2%; background-image: url(&quot;project://database/Assets/Sprites/Header.png?fileID=2800000&amp;guid=c36688c0ec6f10140960af633a7f009f&amp;type=3#Header&quot;); background-size: 70% 90%; border-left-width: 0; width: 100%;" />
             <ui:VisualElement name="Menu" style="flex-grow: 1; max-width: 40%; align-self: flex-start; left: 30%; right: 35px; justify-content: flex-start; align-content: auto; max-height: 70%; align-items: auto; min-height: auto;">
                 <ui:VisualElement name="Menu" style="flex-grow: 1; height: 20%; min-height: auto; max-height: 100%; align-content: center; align-items: center; justify-content: flex-start; margin-top: 0; margin-left: 5%; margin-right: 5%; margin-bottom: 0; align-self: center; padding-top: 2%;">
-                    <ui:Button text="New Game" name="New-Game-Button" selectable="false" class="main-button" />
-                    <ui:Button text="Load Game" name="Load-Game-Button" class="main-button" />
-                    <ui:Button text="Settings" name="Settings-Button" class="main-button" style="letter-spacing: 0;" />
-                    <ui:Button text="Exit" name="Exit-Button" class="main-button" />
+                    <ui:Button text="Continue" name="Continue-Button" class="disabled-button" style="width: 100%; height: 18%; background-image: url(&quot;project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&amp;guid=3e672b094164b1549a98c05385591f88&amp;type=3#Button&quot;); background-color: rgba(255, 255, 255, 0); color: rgb(249, 233, 141); font-size: 90px; margin-top: 1%; padding-top: 0; padding-right: 0; padding-left: 0; padding-bottom: 1%; margin-left: 0; margin-right: 0; margin-bottom: 0; border-top-color: rgba(255, 255, 255, 0); border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0);" />
+                    <ui:Button text="New Game" name="New-Game-Button" selectable="false" class="main-button" style="margin-top: 1%;" />
+                    <ui:Button text="Load Game" name="Load-Game-Button" class="disabled-button" style="width: 100%; height: 18%; background-image: url(&quot;project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&amp;guid=3e672b094164b1549a98c05385591f88&amp;type=3#Button&quot;); background-color: rgba(255, 255, 255, 0); color: rgb(249, 233, 141); margin-top: 1%; padding-top: 0; padding-right: 0; padding-left: 0; margin-left: 0; margin-right: 0; margin-bottom: 0; border-top-color: rgba(255, 255, 255, 0); border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); font-size: 90px;" />
+                    <ui:Button text="Settings" name="Settings-Button" class="main-button" style="margin-top: 1%; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                    <ui:Button text="Exit" name="Exit-Button" class="main-button" style="margin-top: 1%; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="New-Game-Menu" class="blocker" style="display: flex;">
             <ui:VisualElement enabled="true" class="background">
-                <ui:VisualElement name="Header-Bar" class="bar">
-                    <ui:Label text="New Game" name="New-Menu-Header" style="font-size: 80%; height: 90%; margin-top: 0; width: 90%; margin-left: 3%; margin-bottom: 0; padding-bottom: 0; padding-top: 0; padding-right: 0; padding-left: 0; bottom: 5%; top: auto;" />
-                    <ui:Button text="Close" tooltip="Close" name="New-Close-Button" class="bar-button" style="height: 100%; width: 10%; font-size: 50%; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;" />
+                <ui:VisualElement name="Header-Bar" class="bar" style="align-items: auto; align-self: auto; align-content: auto; justify-content: flex-start;">
+                    <ui:Label text="New Game" name="New-Menu-Header" style="font-size: 80%; -unity-text-align: upper-left;" />
+                    <ui:Button text="Close" tooltip="Close" name="New-Close-Button" style="overflow: hidden; opacity: 1; right: 5px; width: 0; flex-shrink: 1; max-width: 15%;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="Body" style="flex-grow: 1; flex-direction: row;">
-                    <ui:VisualElement name="Left-Bar" style="flex-grow: 0; width: 25%; height: 91%; margin-left: 2.5%; margin-right: 2.5%; margin-top: 1%; margin-bottom: 2%; flex-direction: row;">
+                    <ui:VisualElement name="Left-Bar" style="flex-grow: 0; width: 25%; height: 91%; margin-left: 2.5%; margin-right: 2.5%; margin-top: 1%; margin-bottom: 2%; flex-direction: row; flex-shrink: 0;">
                         <ui:VisualElement style="flex-grow: 1;">
                             <ui:Label text="World Selection" style="font-size: 40px; -unity-text-align: upper-center;" />
                             <RadioGroups.WorldRadioGroup fixed-item-height="30" binding-source-selection-mode="AutoAssign" selection-type="None" allow-add="false" allow-remove="false" name="Worlds" style="height: 400%; flex-grow: 1;" />
                         </ui:VisualElement>
                         <ui:VisualElement name="VisualElement" style="flex-grow: 0; width: 5px; height: 90%; background-color: rgb(249, 233, 141); position: relative; left: 20px; align-self: center; display: flex; top: -10px; margin-top: 25%;" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="Map-Parameters" style="flex-grow: 1; width: 35%; margin-left: 5%; margin-right: 5%; margin-top: 2.5%;">
-                        <ui:ScrollView horizontal-scroller-visibility="Hidden" name="MapParams" style="flex-grow: 0; height: 200%; visibility: visible; overflow: visible; display: flex;">
-                            <Params.StringGenerationParameter name="Seed" label-text="Seed" style="font-size: 37px; -unity-text-align: middle-left;">
+                    <ui:VisualElement name="Map-Parameters" style="flex-grow: 1; width: auto; margin-left: 2.5%; margin-right: 2.5%; margin-top: 2.5%; flex-shrink: 0; max-width: 40%;">
+                        <ui:ScrollView horizontal-scroller-visibility="Hidden" name="MapParams" style="flex-grow: 0; height: 200%; visibility: visible; overflow: visible; display: flex; flex-shrink: 1;">
+                            <Params.StringGenerationParameter name="Seed" label-text="Seed" style="font-size: 37px; -unity-text-align: middle-left; padding-left: 1px; margin-left: 2px;">
                                 <Bindings>
                                     <ui:DataBinding property="TextValue" data-source-path="Seed" data-source-type="MapGeneration, Toolkit" binding-mode="TwoWay" />
                                 </Bindings>
@@ -63,34 +66,27 @@
                         </ui:ScrollView>
                         <ui:Label text="No options&#10;available" name="PlaceHolder" style="-unity-text-align: middle-center; flex-grow: 1; flex-shrink: 1; font-size: 80px; display: flex;" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="Right-Bar" style="flex-grow: 1; width: 25%; margin-right: 2.5%; -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Roadstore&apos;); display: flex; visibility: hidden;">
+                    <ui:VisualElement name="Right-Bar" style="flex-grow: 1; flex-shrink: 1; margin-right: 1%;">
                         <ui:VisualElement name="VisualElement" style="flex-grow: 1; height: 80%; visibility: visible;">
                             <ui:Label text="Predefined" name="Label" style="font-size: 50px; flex-grow: 0; height: 10%; align-self: flex-start; margin-left: 0; margin-right: 0;" />
-                            <ui:Label text="Label" name="Label" style="flex-grow: 1; height: 10%; max-height: 20%; padding-bottom: 0; margin-bottom: 0; align-self: auto; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;" />
-                            <ui:VisualElement name="VisualElement" style="flex-grow: 1; margin-bottom: 0; height: 100%; background-image: url(&quot;project://database/Assets/Sprites/Icons/Gear.png?fileID=2800000&amp;guid=fd35f4632523ad441b9cd8631eecdbc2&amp;type=3#Gear&quot;); border-top-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-bottom-left-radius: 1px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgb(253, 220, 35); border-right-color: rgb(253, 220, 35); border-top-color: rgb(253, 220, 35); border-bottom-color: rgb(253, 220, 35); width: 100%; margin-top: 10%; align-self: center;" />
-                            <ui:VisualElement style="flex-grow: 10; max-height: none; height: 200px; align-self: stretch; align-items: flex-start; align-content: auto; justify-content: flex-start; margin-left: 30px; margin-right: 30px; margin-top: 0; padding-top: 20px;">
-                                <ui:Label text="World name" style="flex-grow: 1; height: 10px; margin-bottom: 5px; max-height: 20px; align-self: flex-start; font-size: 30px; -unity-text-align: middle-left;" />
-                                <ui:TextField placeholder-text="world name" password="false" select-all-on-mouse-up="false" select-all-on-focus="false" emoji-fallback-support="false" enabled="true" name="World-Name" hide-placeholder-on-focus="false" style="flex-direction: column; margin-bottom: 0; width: 100%; align-self: auto; align-items: stretch; margin-left: 0; margin-right: 0; margin-top: 10px; align-content: auto;">
+                            <ui:Label text="Label" name="Label" style="flex-grow: 1; height: 10%; max-height: 20%; padding-bottom: 0; margin-bottom: 0; align-self: auto; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; font-size: 20px;" />
+                            <ui:VisualElement name="VisualElement" style="flex-grow: 1; margin-bottom: 0; height: 100%; background-image: url(&quot;project://database/Assets/Sprites/Icons/Gear.png?fileID=2800000&amp;guid=fd35f4632523ad441b9cd8631eecdbc2&amp;type=3#Gear&quot;); border-top-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-bottom-left-radius: 1px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgb(253, 220, 35); border-right-color: rgb(253, 220, 35); border-top-color: rgb(253, 220, 35); border-bottom-color: rgb(253, 220, 35); width: 100%; margin-top: 5%; align-self: auto; align-content: auto; align-items: auto; padding-bottom: 0;" />
+                            <ui:VisualElement style="flex-grow: 0; max-height: none; height: 200px; align-self: center; align-items: flex-start; align-content: auto; justify-content: flex-start; margin-left: 30px; margin-right: 30px; margin-top: 20px; padding-top: 10px; padding-bottom: 0; margin-bottom: 0; width: 85%; max-width: 85%; min-width: 85%;">
+                                <ui:Label text="world name" style="flex-grow: 0; height: 10px; margin-bottom: 5px; max-height: 20px; align-self: center; font-size: 39px; -unity-text-align: middle-left; align-content: auto; align-items: auto; flex-shrink: 0;" />
+                                <ui:TextField placeholder-text="World name" hide-placeholder-on-focus="false" name="World-Name" max-length="24" style="width: auto; max-width: 100%; min-width: 100%; overflow: hidden; max-height: 70%; margin-top: 20px; margin-bottom: 0; font-size: 16px; -unity-text-align: upper-left;">
                                     <Bindings>
-                                        <ui:DataBinding property="value" data-source-type="NewGameWindow, Toolkit" binding-mode="TwoWay" data-source-path="WorldName" />
+                                        <ui:DataBinding property="value" data-source-path="WorldName" data-source-type="NewGameWindow, Toolkit" binding-mode="ToSource" />
                                     </Bindings>
                                 </ui:TextField>
                             </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement style="flex-grow: 1; margin-right: 0;">
-                            <ui:Button text="Start" name="Start" enabled="true" class="disabled-button" style="-unity-background-image-tint-color: rgb(188, 188, 188); height: 90px; font-size: 60%; padding-bottom: 4%; width: 100%; margin-right: 0; padding-right: 0; overflow: hidden; visibility: visible; background-image: url(&quot;project://database/Assets/Sprites/Button.png?fileID=2800000&amp;guid=3e672b094164b1549a98c05385591f88&amp;type=3#Button&quot;); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-color: rgba(255, 255, 255, 0); margin-left: 0;" />
+                            <ui:Button text="Start" name="Start" enabled="true" class="disabled-button" style="-unity-background-image-tint-color: rgb(188, 188, 188); height: 90px; font-size: 60%; width: 100%; overflow: hidden; visibility: visible; background-image: url(&quot;project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&amp;guid=3e672b094164b1549a98c05385591f88&amp;type=3#Button&quot;); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-color: rgba(255, 255, 255, 0);" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="Load-Menu" enabled="true" class="blocker" style="flex-grow: 1; display: none;">
-            <ui:VisualElement class="background" style="flex-grow: 1; position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; visibility: visible; overflow: visible; display: flex;">
-                <ui:VisualElement name="Header-Bar" class="bar" style="flex-grow: 1; width: 100%; height: 10%; max-height: 10%; flex-direction: row;">
-                    <ui:Label text="Load Menu" name="Load-Header" style="max-height: 90%; height: 90%; font-size: 80%; -unity-text-align: middle-left; white-space: nowrap; left: 2.5%; top: 5%; bottom: 5%; background-color: rgba(249, 233, 141, 0); -unity-text-outline-color: rgba(249, 233, 141, 0); color: rgb(249, 233, 141); right: auto; max-width: 94%; width: 2736px; margin-top: 0.2%;" />
-                    <ui:Button text="Close" tooltip="Close" name="Save-Close-Button" class="bar" style="width: auto; -unity-text-align: middle-center; height: 50px; align-self: center; align-items: auto; align-content: auto; right: 5%; overflow: hidden; opacity: 1; font-size: 45%; color: rgb(249, 233, 141); border-left-color: rgba(89, 72, 48, 0); border-right-color: rgba(89, 72, 48, 0); border-top-color: rgba(89, 72, 48, 0); border-bottom-color: rgba(89, 72, 48, 0); white-space: nowrap; text-overflow: clip; top: 5%; max-height: none;" />
-                </ui:VisualElement>
-            </ui:VisualElement>
-        </ui:VisualElement>
+        <ui:Instance template="Load-Menu" name="Load-Menu" style="display: none; position: absolute; flex-grow: 1; width: 100%; height: 100%;" />
     </ui:VisualElement>
 </ui:UXML>

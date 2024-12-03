@@ -1,6 +1,17 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+public struct Save
+{
+    public WorldSave world;
+    public GameStateSave gameState;
+    public HumanSave[] humans;
+    public ResearchSave research;
+    public TradeSave trade;
+
+    public string worldName;
+}
+
 
 [Serializable]
 public class TradeSave

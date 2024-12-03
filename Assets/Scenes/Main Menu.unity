@@ -211,8 +211,9 @@ GameObject:
   - component: {fileID: 1793054203}
   - component: {fileID: 1793054204}
   - component: {fileID: 1793054205}
+  - component: {fileID: 1793054206}
   m_Layer: 5
-  m_Name: UIDocument
+  m_Name: Main Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -264,6 +265,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1432cc5145ada0b4292d4c8b7d0dd497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  toolkitControllers:
+  - {fileID: 1793054204}
+  - {fileID: 1793054205}
+  - {fileID: 1793054206}
 --- !u!114 &1793054204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,6 +291,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afe1e503ad2dbc94abcae7f35284d5df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1793054206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793054200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb5a809f323ed446a028905787da545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807

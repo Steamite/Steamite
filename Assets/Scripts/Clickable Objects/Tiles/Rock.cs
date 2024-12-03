@@ -79,8 +79,7 @@ public class Rock : ClickableObject
         }
         else
         {
-            Color c = gameObject.GetComponent<MeshRenderer>().material.color;
-            gameObject.GetComponent<MeshRenderer>().material.color = c / integrity * 2;
+            ColorWithIntegrity();
         }
         base.Load(save);
     }
@@ -93,4 +92,28 @@ public class Rock : ClickableObject
             transform.position.z);
     }
 
+    public void ColorWithIntegrity()
+    {
+        float f = 1;
+        Color c = gameObject.GetComponent<MeshRenderer>().material.color;
+        switch (integrity)
+        {
+            case < 2:
+                f = 1f;
+                break;
+            case < 4:
+                f = 0.8f;
+                break;
+            case < 6:
+                f = 0.6f;
+                break;
+            case <11:
+                f = 0.4f;
+                break;
+            default:
+                f = 0.2f;
+                break;
+        }
+        gameObject.GetComponent<MeshRenderer>().material.color = c * f;
+    }
 }

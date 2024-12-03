@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -66,10 +67,9 @@ public class LoadingScreen : MonoBehaviour
     /// After that loads "Level" scene.
     /// </summary>
     /// <param name="_folderName">Current folder name.</param>
-    public async void StartLoading(WorldSave _gridSave, GameStateSave _playerSettings, HumanSave[] _humanSaves,
-        ResearchSave _researchSave, TradeSave _tradeSave, string _folderName)
+    public async void StartLoading(Save save)
     {
-        folderName = _folderName;
+        folderName = save.worldName;
 
         transform.GetChild(0).gameObject.SetActive(true);
         transform.GetChild(0).GetChild(2).GetComponent<TMP_Text>().text = folderName;
@@ -80,7 +80,7 @@ public class LoadingScreen : MonoBehaviour
            await SceneManager.UnloadSceneAsync("Main Menu");
         }
         await SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
-        await LoadWorldData(_gridSave, _playerSettings, _humanSaves, _researchSave, _tradeSave);
+        await LoadWorldData(save);
         AfterLevelLoad(false);
     }
 
@@ -88,9 +88,14 @@ public class LoadingScreen : MonoBehaviour
     /// Preps <see cref="SceneRefs"/>, <see cref="CanvasManager"/> and loads saved data.
     /// </summary>
     /// <param name="obj"></param>
-    Task LoadWorldData(WorldSave worldSave, GameStateSave playerSettings, HumanSave[] humanSaves,
-        ResearchSave researchSave, TradeSave tradeSave)
+    Task LoadWorldData(Save save)
     {
+        WorldSave worldSave = save.world;
+        GameStateSave gameState = save.gameState;
+        HumanSave[] humanSaves = save.humans;
+        ResearchSave researchSave = save.research;
+        TradeSave tradeSave = save.trade;
+
         GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
         // create Progress val for loading slider
         int maxProgress = 0;
@@ -106,7 +111,7 @@ public class LoadingScreen : MonoBehaviour
             loadingSlider.value = value;
         });
         FillGrid(progress, worldSave);
-        FillGameState(progress, playerSettings);
+        FillGameState(progress, gameState);
         FillHumans(progress, humanSaves);
         FillResearches(progress, researchSave);
         FillTrade(progress, tradeSave);

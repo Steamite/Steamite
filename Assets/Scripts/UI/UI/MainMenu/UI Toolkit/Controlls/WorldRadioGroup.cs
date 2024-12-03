@@ -33,11 +33,6 @@ namespace RadioGroups
                     AddItem(new($"{choices[i]}", "world-radio-button", i));
                 }
             }
-            else
-            {
-                _selectedButton?.Deselect();
-                _selectedButton = null;
-            }
         }
         public override void Select(CustomRadioButton customRadioButton)
         {

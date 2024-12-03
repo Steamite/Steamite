@@ -1,23 +1,43 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class Menu : MonoBehaviour
 {
-    Action saveAction;
-    public void AssignSaveEvent(Action save) => saveAction = save;
+    [SerializeField] SaveDialog saveDialog;
+    [SerializeReference] MonoBehaviour loadMenu;
 
-    public void Toggle()
+    [SerializeField] UIDocument uiDocument;
+    bool active;
+
+    VisualElement menu;
+
+    public void Init(Action<string> save)
     {
-        if (UIRefs.research.window.activeSelf)
+        gameObject.SetActive(true);
+        saveDialog.Init(save);
+        ((IToolkitController)loadMenu).Init(uiDocument.rootVisualElement);
+        menu = uiDocument.rootVisualElement.Q<VisualElement>("Menu");
+        menu.Q<Button>("Close").RegisterCallback<ClickEvent>(Toggle);
+        menu.Q<Button>("Main-Menu").RegisterCallback<ClickEvent>(GoToMainMenu);
+        menu.Q<Button>("Quit").RegisterCallback<ClickEvent>(DoQuit);
+    } 
+
+    public void Toggle(ClickEvent _ = null)
+    {
+        if (saveDialog.opened)
+            saveDialog.ResetWindow();
+        else if (UIRefs.research.window.activeSelf)
             UIRefs.research.CloseWindow();
         else if (UIRefs.trade.window.activeSelf)
             UIRefs.trade.CloseWindow();
-
         else
         {
-            if (gameObject.activeSelf)
+            bool menuIsOn = menu.style.display == DisplayStyle.Flex;
+            if (menuIsOn)
             {
                 MainShortcuts.EnableInput();
                 SceneRefs.tick.Unpause();
@@ -27,29 +47,19 @@ public class Menu : MonoBehaviour
                 MainShortcuts.DisableInput(false);
                 SceneRefs.tick.ChangeGameSpeed(0);
             }
-            UIRefs.levelCamera.enabled = gameObject.activeSelf;
-            UIRefs.levelCamera.mainCamera.GetComponent<PhysicsRaycaster>().enabled = gameObject.activeSelf;
-            UIRefs.levelCamera.mainCamera.GetComponent<Physics2DRaycaster>().enabled = gameObject.activeSelf;
-            gameObject.SetActive(!gameObject.activeSelf);
+            UIRefs.levelCamera.enabled = menuIsOn;
+            UIRefs.levelCamera.mainCamera.GetComponent<PhysicsRaycaster>().enabled = menuIsOn;
+            UIRefs.levelCamera.mainCamera.GetComponent<Physics2DRaycaster>().enabled = menuIsOn;
+            menu.style.display = menuIsOn ? DisplayStyle.None : DisplayStyle.Flex;
         }
     }
-    public void GoToMainMenu()
+
+    public void GoToMainMenu(ClickEvent _)
     {
         SceneManager.LoadSceneAsync(0);
     }
-    public void DoQuit()
+    public void DoQuit(ClickEvent _)
     {
         Application.Quit();
-    }
-    public void Save()
-    {
-        try
-        {
-            saveAction.Invoke();
-        }
-        catch
-        {
-            return;
-        }
     }
 }
