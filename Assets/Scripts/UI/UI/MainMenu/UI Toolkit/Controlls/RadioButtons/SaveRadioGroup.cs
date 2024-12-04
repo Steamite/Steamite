@@ -2,10 +2,8 @@ using System;
 using UnityEngine.UIElements;
 
 using AbstractControls;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEngine.WSA;
 using UnityEngine;
 
 namespace RadioGroups
@@ -18,6 +16,7 @@ namespace RadioGroups
 
     public class SaveRadioGroup : CustomRadioButtonGroup
     {
+        public Action<int> deleteAction;
         [Obsolete]
         public new class UxmlFactory : UxmlFactory<SaveRadioGroup, UxmlTraits> { }
         protected override void DefaultBindItem(VisualElement element, int index)
@@ -40,12 +39,14 @@ namespace RadioGroups
         public override void Init(Action<int> onChange)
         {
             base.Init(onChange);
-            this.Q<Scroller>().style.flexGrow = 1;
-            this.Q<Scroller>().style.flexGrow = 1;
+            VisualElement el = this.Q<VisualElement>("unity-slider");
+            el.style.marginTop = 0;
+            el.style.marginBottom = 0;
         }
-        public override void Select(CustomRadioButton customRadioButton)
+
+        public void DeleteSave()
         {
-            base.Select(customRadioButton);
+            deleteAction(selectedId);
         }
 
         public Folder[] FillItemSource(string path, bool write, bool parentLevel)

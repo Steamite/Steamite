@@ -1,4 +1,3 @@
-using Mono.Cecil.Cil;
 using Newtonsoft.Json;
 using RadioGroups;
 using System.IO;
@@ -10,7 +9,7 @@ using UnityEngine.UIElements;
 public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
 {
     VisualElement menu;
-    SaveRadioGroup worldSaveGroup;
+    SaveRadioGroup worldGroup;
 
     VisualElement saveElement;
     SaveRadioGroup saveGroup;
@@ -27,15 +26,17 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
     public void Init(VisualElement root)
     {
         menu = root.Q<VisualElement>("Load-Menu");
-        worldSaveGroup = menu.Q<SaveRadioGroup>("World-List");
-
+        worldGroup = menu.Q<SaveRadioGroup>("World-List");
+        worldGroup.deleteAction = DeleteWorld;
 
         saveElement = menu.Q<VisualElement>("Saves");
         saveGroup = menu.Q<SaveRadioGroup>("Save-List");
+        saveGroup.deleteAction = DeleteSave;
+
         loadButton = menu.Q<Button>("Load");
         loadButton.RegisterCallback<ClickEvent>(LoadGame);
 
-        worlds = worldSaveGroup.FillItemSource($"{Application.persistentDataPath}/saves", false, true);
+        worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", false, true);
         continueButton = root.Q<Button>("Continue-Button");
         if(continueButton != null)
         {
@@ -56,9 +57,10 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
         ResetWindow();
     }
 
+
     void OpenMenu(ClickEvent _)
     {
-        worlds = worldSaveGroup.FillItemSource($"{Application.persistentDataPath}/saves", true, true);
+        worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", true, true);
         if (worlds != null && worlds.Length > 0)
         {
             menu.style.display = DisplayStyle.Flex;
@@ -88,7 +90,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
         selectedWorld = -1;
         selectedSave = -1;
         UpdateGrids();
-        worldSaveGroup.Init(
+        worldGroup.Init(
             (i) =>
             {
                 selectedWorld = i;
@@ -99,7 +101,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
             (i) =>
             {
                 selectedSave = i;
-                UpdateButtonState();
+                ToggleStyleButton(loadButton, selectedWorld > -1 && selectedSave > -1);
             });
 
         ToggleStyleButton(loadMenuButton, worlds != null && worlds.Length > 0);
@@ -111,7 +113,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
         if (selectedWorld != -1)
         {
             saveElement.AddToClassList("save-list-selected");
-            worldSaveGroup.AddToClassList("world-list-selected");
+            worldGroup.AddToClassList("world-list-selected");
             saves = saveGroup.FillItemSource(worlds[selectedWorld].path, true, false);
             if (saves == null)
             {
@@ -120,18 +122,25 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
                 return;
             }
             selectedSave = -1;
-            UpdateButtonState();
+            ToggleStyleButton(loadButton, selectedWorld > -1 && selectedSave > -1);
         }
         else
         {
             saveElement.RemoveFromClassList("save-list-selected");
-            worldSaveGroup.RemoveFromClassList("world-list-selected");
+            worldGroup.RemoveFromClassList("world-list-selected");
         }
     }
 
     public void UpdateButtonState()
     {
-        ToggleStyleButton(loadButton, selectedWorld > -1 && selectedSave > -1);
+        bool t = true;
+        if(worlds.Length == 0)
+        {
+            worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", false, true);
+            if (worlds.Length == 0)
+                t = false;
+        }
+        ToggleStyleButton(loadMenuButton, t);
     }
 
     void Continue(ClickEvent _)
@@ -157,6 +166,8 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
 
     async void Load()
     {
+        if (selectedSave == -1 || selectedSave > saves.Length)
+            return;
         Save save = LoadSavedData();
         if (GameObject.Find("Main Menu") == null)
         {
@@ -172,8 +183,9 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
     }
     Save LoadSavedData()
     {
-        Save save = new();
         string saveFolder = saves[selectedSave].path;
+        Save save = new();
+        save.worldName = SaveController.GetSaveName(worlds[selectedWorld].path);
 
         JsonSerializer jsonSerializer = SaveController.PrepSerializer();
         // for gridSave
@@ -206,5 +218,48 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
         save.trade = jsonSerializer.Deserialize<TradeSave>(jsonReader);
         jsonReader.Close();
         return save;
+    }
+
+
+    private void DeleteWorld(int worldIndex)
+    {
+        try
+        {
+            Directory.Delete(worlds[worldIndex].path, true);
+            worlds = worlds.Where(q => q.path != worlds[worldIndex].path).ToArray();
+            worldGroup.RemoveItem(worldIndex);
+            selectedWorld = -1;
+            selectedSave = -1;
+            if (saves.Length > 1)
+                UpdateGrids();
+            else
+            {
+                if(continueButton != null)
+                    ToggleStyleButton(continueButton, false);
+                ResetWindow();
+            }
+        }
+        catch
+        {
+        }
+    }
+    private void DeleteSave(int saveIndex)
+    {
+        try
+        {
+            if (saves.Length > 1)
+            {
+                Directory.Delete(saves[saveIndex].path, true);
+                saves = saves.Where(q => q.path != saves[saveIndex].path).ToArray();
+                saveGroup.RemoveItem(saveIndex);
+                selectedSave = -1;
+                ToggleStyleButton(loadButton, selectedWorld > -1 && selectedSave > -1);
+            }
+            else
+                DeleteWorld(selectedWorld);
+        }
+        catch
+        {
+        }
     }
 }

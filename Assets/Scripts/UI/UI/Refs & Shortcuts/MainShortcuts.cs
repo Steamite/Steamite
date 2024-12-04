@@ -23,6 +23,7 @@ public class MainShortcuts : MonoBehaviour
         handleGrid = false;
         handleWindows = win;
         UIRefs.levelCamera.enabled = false;
+        SceneRefs.gridTiles.activeObject = null;
     }
     public static void EnableInput()
     {

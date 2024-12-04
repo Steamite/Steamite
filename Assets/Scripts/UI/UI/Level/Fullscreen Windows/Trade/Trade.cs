@@ -70,12 +70,11 @@ public class Trade : FullscreenWindow
 
     public void LoadGame(TradeSave tradeSave)
     {
-        /*colonyLocation = tradeSave.colonyLocation;
+        colonyLocation = tradeSave.colonyLocation;
         tradeLocations = tradeSave.tradeLocations;
         expeditions = tradeSave.expeditions;
         outposts = tradeSave.outposts;
         MyRes.money = tradeSave.money;
-        */
         Init();
 
         // assigns sliders

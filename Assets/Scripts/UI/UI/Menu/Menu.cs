@@ -15,7 +15,7 @@ public class Menu : MonoBehaviour
 
     VisualElement menu;
 
-    public void Init(Action<string> save)
+    public Action Init(Action<string> save)
     {
         gameObject.SetActive(true);
         saveDialog.Init(save);
@@ -24,6 +24,8 @@ public class Menu : MonoBehaviour
         menu.Q<Button>("Close").RegisterCallback<ClickEvent>(Toggle);
         menu.Q<Button>("Main-Menu").RegisterCallback<ClickEvent>(GoToMainMenu);
         menu.Q<Button>("Quit").RegisterCallback<ClickEvent>(DoQuit);
+
+        return ((IGridMenu)loadMenu).UpdateButtonState;
     } 
 
     public void Toggle(ClickEvent _ = null)
