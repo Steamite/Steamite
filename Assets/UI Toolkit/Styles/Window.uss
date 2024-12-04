@@ -36,6 +36,11 @@
     transition-duration: 0.1s, 0.5s;
     transition-property: scale, opacity;
     transition-timing-function: ease-in, ease-in;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
 }
 
 .enabled-button:hover {
@@ -45,14 +50,6 @@
     transition-property: scale;
     transition-timing-function: ease-in;
     -unity-background-image-tint-color: rgb(180, 180, 180);
-}
-
-.disabled-button {
-    opacity: 0.3;
-    -unity-text-align: middle-center;
-    transition-property: opacity;
-    transition-duration: 0.25s;
-    transition-timing-function: ease-in;
 }
 
 .param-text-field {
@@ -70,6 +67,19 @@
     white-space: normal;
     -unity-text-align: upper-left;
     text-overflow: clip;
+}
+
+.disabled-button {
+    opacity: 0.3;
+    -unity-text-align: middle-center;
+    transition-property: opacity;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-in;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
 }
 
 .param-text-field:hover {

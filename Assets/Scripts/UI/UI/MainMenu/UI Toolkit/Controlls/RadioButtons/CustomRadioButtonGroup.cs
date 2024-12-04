@@ -1,3 +1,4 @@
+using RadioGroups;
 using System;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
@@ -61,6 +62,11 @@ namespace AbstractControls
             Rebuild();
         }
 
+        public void RemoveItem(int index)
+        {
+            _itemsSource.RemoveAt(index);
+            Rebuild();
+        }
         // Clears all items from the list
         protected void ClearItems()
         {
@@ -102,5 +108,6 @@ namespace AbstractControls
             _selectedButton = customRadioButton;
             selectedId = _selectedButton.value;
         }
+
     }
 }

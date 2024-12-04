@@ -90,6 +90,7 @@ public class LoadingScreen : MonoBehaviour
     /// <param name="obj"></param>
     Task LoadWorldData(Save save)
     {
+        MyGrid.worldName = save.worldName;
         WorldSave worldSave = save.world;
         GameStateSave gameState = save.gameState;
         HumanSave[] humanSaves = save.humans;
@@ -115,6 +116,7 @@ public class LoadingScreen : MonoBehaviour
         FillHumans(progress, humanSaves);
         FillResearches(progress, researchSave);
         FillTrade(progress, tradeSave);
+
 
         return Task.CompletedTask;
     }
@@ -156,7 +158,6 @@ public class LoadingScreen : MonoBehaviour
     {
         // Empties grid
         MyGrid.PrepGridLists();
-
         // creates an empty ground level
         for(int i = 0; i < gridSave.Length; i++)
         {

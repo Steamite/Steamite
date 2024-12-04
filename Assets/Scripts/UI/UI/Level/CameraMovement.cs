@@ -46,12 +46,15 @@ public class CameraMovement : MonoBehaviour
     
     float mod;
 
+    private void Awake()
+    {
+        transform.GetChild(0).LookAt(transform);
+    }
     private void OnEnable()
     {
         currentMovementX = 0;
         currentMovementY = 0;
         currentRotationY = 0;
-        transform.GetChild(0).LookAt(transform);
         cameraMap.Enable();
     }
     private void OnDisable()

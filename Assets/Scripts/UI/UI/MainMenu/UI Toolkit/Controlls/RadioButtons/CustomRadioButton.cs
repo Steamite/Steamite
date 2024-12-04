@@ -1,3 +1,4 @@
+using RadioGroups;
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -40,17 +41,18 @@ namespace AbstractControls
             value = i;
         }
 
-        public void Select(ClickEvent _)
+        public virtual void Select(ClickEvent _)
         {
             if (IsSelected)
                 return;
             IsSelected = true;
             RemoveFromClassList(styleClass);
             AddToClassList(styleClass + "-selected");
+
             parent.parent.parent.Q<CustomRadioButtonGroup>()?.Select(this);
         }
 
-        public void Deselect()
+        public virtual void Deselect()
         {
             IsSelected = false;
             RemoveFromClassList(styleClass + "-selected");

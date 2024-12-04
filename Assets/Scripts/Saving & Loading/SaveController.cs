@@ -7,13 +7,14 @@ using System.Collections;
 
 public class SaveController : MonoBehaviour
 {
+    Action saveUIAction;
+    string worldName;
     private void Start()
     {
         SceneRefs.tick.timeController.dayStart += () => SaveGame("", true);
-        UIRefs.pauseMenu.Init((s) => SaveGame(s, false));
-        
+        saveUIAction = UIRefs.pauseMenu.Init((s) => SaveGame(s, false));
+        worldName = MyGrid.worldName;
     }
-    public string activeWorld;
 
     void OnApplicationQuit()
     {
@@ -58,7 +59,6 @@ public class SaveController : MonoBehaviour
     /// <param name="autoSave"></param>
     public void SaveGame(string saveName, bool autoSave)
     {
-        activeWorld = MyGrid.worldName;
         if (Directory.GetDirectories($"{Application.persistentDataPath}").FirstOrDefault(q => q == $"{Application.persistentDataPath}/saves") == null)
             Directory.CreateDirectory($"{Application.persistentDataPath}/saves");
         
@@ -102,11 +102,11 @@ public class SaveController : MonoBehaviour
     /// <param name="autoSave">Save name.</param>
     void AfterSave(string tmpPath, string saveName, bool autoSave)
     {
-        if (activeWorld == "")
-            activeWorld = "noname";
+        if (worldName == "")
+            worldName = "noname";
 
-        string path = $"{Application.persistentDataPath}/saves/{activeWorld}";
-        if (Directory.GetDirectories($"{Application.persistentDataPath}/saves").FirstOrDefault(q => GetSaveName(q) == activeWorld) == null)
+        string path = $"{Application.persistentDataPath}/saves/{worldName}";
+        if (Directory.GetDirectories($"{Application.persistentDataPath}/saves").FirstOrDefault(q => GetSaveName(q) == worldName) == null)
             Directory.CreateDirectory($"{path}");
         path = $"{path}/{saveName}";
         Directory.CreateDirectory(path);
@@ -121,6 +121,7 @@ public class SaveController : MonoBehaviour
 
         Directory.Delete($"{tmpPath}");
         CanvasManager.ShowMessage(autoSave ? "Autosave" : "Saved succesfuly");
+        saveUIAction();
     }
 
 

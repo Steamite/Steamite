@@ -1,6 +1,5 @@
-using NUnit.Framework;
+#if UNITY_EDITOR
 using UnityEditor;
-using UnityEngine;
 
 [CustomEditor(typeof(MinableRes))]
 public class MinableResEditor : Editor
@@ -92,3 +91,4 @@ public class MinableResEditor : Editor
 
     #endregion
 }
+#endif
