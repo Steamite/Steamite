@@ -23,20 +23,26 @@ namespace RadioGroups
         protected override void DefaultBindItem(VisualElement element, int index)
         {
             base.DefaultBindItem(element, index);
-            (element as CustomRadioButton).text = _itemsSource[index].data;
-            (element as CustomRadioButton).style.fontSize = new(new Length(40, LengthUnit.Percent));
-            (element as CustomRadioButton).style.height = new(new Length(98.3f, LengthUnit.Pixel));
-            (element as CustomRadioButton).RegisterCallback<ClickEvent>((element as CustomRadioButton).Select);
+            (element as SaveRadioButton).text = _itemsSource[index].data;
+            (element as SaveRadioButton).saveDate.text = (_itemsSource[index] as SaveRadioButton).saveDate.text;
+            (element as SaveRadioButton).saveDate.style.paddingBottom = new(new Length(1, LengthUnit.Percent));
+            (element as SaveRadioButton).saveDate.style.paddingRight = new(new Length(2, LengthUnit.Percent));
+            (element as SaveRadioButton).style.marginBottom = new(new Length(1, LengthUnit.Percent));
+            (element as SaveRadioButton).style.fontSize = new(new Length(40, LengthUnit.Percent));
+            (element as SaveRadioButton).style.height = new(new Length(98.3f, LengthUnit.Pixel));
+            (element as SaveRadioButton).RegisterCallback<ClickEvent>((element as SaveRadioButton).Select);
         }
+
         protected override CustomRadioButton DefaultMakeItem()
         {
-            return new("string", "save-radio-button", -1);
+            return new SaveRadioButton("string", "save-radio-button", -1, new DateTime());
         }
         public override void Init(Action<int> onChange)
         {
             base.Init(onChange);
+            this.Q<Scroller>().style.flexGrow = 1;
+            this.Q<Scroller>().style.flexGrow = 1;
         }
-
         public override void Select(CustomRadioButton customRadioButton)
         {
             base.Select(customRadioButton);
@@ -74,7 +80,7 @@ namespace RadioGroups
 
                 if(write)
                     for (int i = 0; i < folders.Length; i++)
-                        AddItem(new(SaveController.GetSaveName(folders[i].path), "save-radio-button", i));
+                        AddItem(new SaveRadioButton(SaveController.GetSaveName(folders[i].path), "save-radio-button", i, folders[i].date));
                 return folders;
             }
             catch

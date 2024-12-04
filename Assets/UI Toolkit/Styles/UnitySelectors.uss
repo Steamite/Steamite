@@ -44,6 +44,7 @@
     border-right-color: rgba(0, 0, 0, 0);
     border-bottom-color: rgba(0, 0, 0, 0);
     background-image: none;
+    position: absolute;
 }
 
 #unity-high-button {
@@ -54,4 +55,9 @@
     border-right-color: rgba(0, 0, 0, 0);
     border-bottom-color: rgba(0, 0, 0, 0);
     background-image: none;
+    position: absolute;
+}
+
+#unity-content-container {
+    flex-grow: 1;
 }

@@ -55,7 +55,7 @@ public class MapGen : MonoBehaviour
             resPixels = new Color[gridSize * gridSize];
             map = new MapTile[gridSize, gridSize];
             CreateGrid();
-            PerlinNoise();
+            PerlinNoise(level);
 
             for (int x = 0; x < gridSize; x++)
             {
@@ -194,7 +194,7 @@ public class MapGen : MonoBehaviour
     #endregion Chunks
 
     #region Rocks
-    void PerlinNoise()
+    void PerlinNoise(int level)
     {
         float randomX = Random.Range(-500f, 500f);
         float randomY = Random.Range(-500f, 500f);
@@ -211,23 +211,57 @@ public class MapGen : MonoBehaviour
                     else
                         continue;
                 }
-                float f = Mathf.PerlinNoise(randomX + x / (float)gridSize, randomY + y / (float)gridSize);
-                if (f < 0.2f)
-                    f = 1;
-                else if (f < 0.4f)
-                    f = 3;
-                else if (f < 0.6f)
-                    f = 5;
-                else if (f < 0.8f)
-                    f = 10;
-                else
-                    f = 15;
+                float f = CalculateRockIntegrity(
+                    level, 
+                    Mathf.PerlinNoise(randomX + x / (float)gridSize, randomY + y / (float)gridSize));
+                
                 map[x, y].hardness += Mathf.RoundToInt(f);
 
                 if (changeColor)
                     resPixels[y * gridSize + x] = new(dirt.color.r / f *2, dirt.color.g / f*2, dirt.color.b / f*2, 1);
             }
         }
+    }
+    float CalculateRockIntegrity(int level, float f)
+    {
+        switch (level)
+        {
+            case 0:
+                f = Mathf.Clamp(f, 0, 0.39f);
+                break;
+            case 1:
+                f = Mathf.Clamp(f, 0.2f, 0.59f);
+                break;
+            case 2:
+                f = Mathf.Clamp(f, 0.4f, 0.79f);
+                break;
+            case 3:
+                f = Mathf.Clamp(f, 0.6f, 0.99f);
+                break;
+            case 4:
+                f = Mathf.Clamp(f, 0.7f, 1f);
+                break;
+        }
+
+        switch (f)
+        {
+            case < 0.2f:
+                f = 1;
+                break;
+            case < 0.4f:
+                f = 3;
+                break;
+            case < 0.6f:
+                f = 5;
+                break;
+            case < 0.8f:
+                f = 10;
+                break;
+            default:
+                f = 15;
+                break;
+        }
+        return f;
     }
     #endregion
 }
