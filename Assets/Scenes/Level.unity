@@ -2518,6 +2518,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 278693719}
   - {fileID: 7963969972101085784}
   - {fileID: 5549117578104021010}
   m_Father: {fileID: 1524870990}
@@ -3631,10 +3632,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 278693719}
-  - component: {fileID: 278693722}
   - component: {fileID: 278693721}
   - component: {fileID: 278693720}
   - component: {fileID: 278693723}
+  - component: {fileID: 278693724}
   m_Layer: 5
   m_Name: Levels
   m_TagString: Untagged
@@ -3649,7 +3650,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 278693718}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3660,12 +3661,12 @@ RectTransform:
   - {fileID: 1833495524}
   - {fileID: 928694998}
   - {fileID: 515217548}
-  m_Father: {fileID: 7963969972101085784}
+  m_Father: {fileID: 220867751}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.53888154, y: 0}
   m_AnchorMax: {x: 0.96500003, y: 1}
-  m_AnchoredPosition: {x: -121.88806, y: 0}
-  m_SizeDelta: {x: -283.7758, y: 0}
+  m_AnchoredPosition: {x: -1383.9835, y: 69.79999}
+  m_SizeDelta: {x: -698.6249, y: -716.261}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &278693720
 MonoBehaviour:
@@ -3705,32 +3706,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 278693718}
   m_CullTransparentMesh: 1
---- !u!114 &278693722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 278693718}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 5
-    m_Right: 50
-    m_Top: 5
-    m_Bottom: 5
-  m_ChildAlignment: 4
-  m_Spacing: 5
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!114 &278693723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3745,6 +3720,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   states: 0000000001000000020000000300000004000000
   currentState: 2
+--- !u!114 &278693724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278693718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 10
+  m_ChildAlignment: 4
+  m_Spacing: 10
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &283628047
 GameObject:
   m_ObjectHideFlags: 0
@@ -6451,7 +6452,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 515217550}
   m_OnClick:
     m_PersistentCalls:
@@ -10013,7 +10014,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1
+  m_text: '1
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -10649,7 +10652,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 928695000}
   m_OnClick:
     m_PersistentCalls:
@@ -10770,7 +10773,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 929246595}
   m_OnClick:
     m_PersistentCalls:
@@ -11728,7 +11731,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 110, y: 54.227}
+  m_SizeDelta: {x: 125.6, y: 54.227}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1052615214
 MonoBehaviour:
@@ -11750,7 +11753,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Level:'
+  m_text: Levels
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11784,7 +11787,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -11815,7 +11818,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 5, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -14852,7 +14855,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 2
+  m_text: '2
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -17322,6 +17327,7 @@ GameObject:
   - component: {fileID: 1708745676}
   - component: {fileID: 1708745677}
   - component: {fileID: 1708745682}
+  - component: {fileID: 1708745683}
   m_Layer: 5
   m_Name: Pause Menu
   m_TagString: Untagged
@@ -17364,6 +17370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saveDialog: {fileID: 777753792}
   loadMenu: {fileID: 405851069}
+  confrimWindow: {fileID: 1708745683}
   uiDocument: {fileID: 1708745682}
 --- !u!114 &1708745682
 MonoBehaviour:
@@ -17384,6 +17391,19 @@ MonoBehaviour:
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
+--- !u!114 &1708745683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708745675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b1af4cbceae072419ab8c95228c47e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialog: {fileID: 9197481963319205126, guid: 6ba2d918a4130bd4083d3afa9f88b90e, type: 3}
 --- !u!1001 &1721835938
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18743,7 +18763,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1833495526}
   m_OnClick:
     m_PersistentCalls:
@@ -39690,7 +39710,6 @@ RectTransform:
   - {fileID: 1853767849544422087}
   - {fileID: 4315159309300245738}
   - {fileID: 3778895095127324890}
-  - {fileID: 278693719}
   - {fileID: 8665585798493872979}
   - {fileID: 8325508908686296725}
   m_Father: {fileID: 220867751}
@@ -40370,7 +40389,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b51130b62dd87ca45a9cad0a7ebebbe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeWorld: 
 --- !u!114 &8150810313726245684
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,0 +1,67 @@
+.confirm-button {
+    flex-grow: 1;
+    width: 0;
+    min-width: 40%;
+    margin-right: 4%;
+    background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=3e672b094164b1549a98c05385591f88&type=3#Button");
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    color: rgb(249, 233, 141);
+    padding-bottom: 0;
+    padding-top: 0;
+    align-items: auto;
+    align-content: auto;
+}
+
+.confirm-button:hover {
+    flex-grow: 1;
+    width: 0;
+    min-width: 40%;
+    margin-right: 4%;
+    background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=3e672b094164b1549a98c05385591f88&type=3#Button");
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    color: rgb(249, 233, 141);
+    padding-bottom: 0;
+    padding-top: 0;
+    align-items: auto;
+    align-content: auto;
+    -unity-background-image-tint-color: rgb(0, 255, 181);
+}
+
+.cancel-button {
+    flex-grow: 1;
+    width: 0;
+    min-width: 40%;
+    margin-left: 4%;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(188, 188, 188, 0);
+    background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=3e672b094164b1549a98c05385591f88&type=3#Button");
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.cancel-button:hover {
+    flex-grow: 1;
+    width: 0;
+    min-width: 40%;
+    margin-left: 4%;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(188, 188, 188, 0);
+    background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=3e672b094164b1549a98c05385591f88&type=3#Button");
+    padding-bottom: 0;
+    padding-top: 0;
+    -unity-background-image-tint-color: rgb(193, 68, 14);
+}

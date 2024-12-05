@@ -207,7 +207,7 @@ public class LoadingScreen : MonoBehaviour
 
         MyRes.ActivateResources(newGame);
         await SceneManager.UnloadSceneAsync("LoadingScreen");
-        CanvasManager.stats.GetChild(0).GetChild(0).GetComponent<TimeButtons>().SetStartSpeed(SceneRefs.tick);
+        CanvasManager.stats.GetChild(1).GetChild(0).GetComponent<TimeButtons>().SetStartSpeed(SceneRefs.tick);
         humanActivation?.Invoke();
         SceneRefs.tick.timeController.Init(SceneRefs.tick, newGame);
         humanActivation = null;

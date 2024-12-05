@@ -16,7 +16,7 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="New-Game-Menu" class="blocker" style="display: flex;">
+        <ui:VisualElement name="New-Game-Menu" class="blocker" style="display: none;">
             <ui:VisualElement enabled="true" class="background">
                 <ui:VisualElement name="Header-Bar" class="bar" style="align-items: auto; align-self: auto; align-content: auto; justify-content: flex-start;">
                     <ui:Label text="New Game" name="New-Menu-Header" style="font-size: 80%; -unity-text-align: upper-left;" />
