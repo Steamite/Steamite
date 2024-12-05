@@ -61,7 +61,26 @@ public class SaveController : MonoBehaviour
     {
         if (Directory.GetDirectories($"{Application.persistentDataPath}").FirstOrDefault(q => q == $"{Application.persistentDataPath}/saves") == null)
             Directory.CreateDirectory($"{Application.persistentDataPath}/saves");
-        
+
+        if (!autoSave &&
+            Directory.GetDirectories($"{Application.persistentDataPath}/saves/{MyGrid.worldName}")
+            .Select(q => GetSaveName(q)).Contains(saveName))
+        {
+            ConfirmWindow.window.Open(
+                () =>
+                {
+                    Save(saveName, autoSave);
+                    UIRefs.pauseMenu.transform.GetChild(0).GetComponent<SaveDialog>().ResetWindow();
+                },
+                "Override save",
+                $"Are you sure you want to override this save: <color=\"orange\">{saveName}?");
+        }
+        else
+        {
+            Save(saveName, autoSave);
+        }
+    }
+    void Save(string saveName, bool autoSave) {
         string tmpPath = $"{Application.persistentDataPath}/saves/_tmp";
         Directory.CreateDirectory($"{tmpPath}");
         JsonSerializer jsonSerializer = PrepSerializer();

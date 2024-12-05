@@ -8,10 +8,10 @@ using UnityEngine.UIElements;
 public class Menu : MonoBehaviour
 {
     [SerializeField] SaveDialog saveDialog;
+    [SerializeField] ConfirmWindow confrimWindow;
     [SerializeReference] MonoBehaviour loadMenu;
 
     [SerializeField] UIDocument uiDocument;
-    bool active;
 
     VisualElement menu;
 
@@ -20,6 +20,7 @@ public class Menu : MonoBehaviour
         gameObject.SetActive(true);
         saveDialog.Init(save);
         ((IToolkitController)loadMenu).Init(uiDocument.rootVisualElement);
+        ((IToolkitController)confrimWindow).Init(uiDocument.rootVisualElement);
         menu = uiDocument.rootVisualElement.Q<VisualElement>("Menu");
         menu.Q<Button>("Close").RegisterCallback<ClickEvent>(Toggle);
         menu.Q<Button>("Main-Menu").RegisterCallback<ClickEvent>(GoToMainMenu);
@@ -28,15 +29,25 @@ public class Menu : MonoBehaviour
         return ((IGridMenu)loadMenu).UpdateButtonState;
     } 
 
-    public void Toggle(ClickEvent _ = null)
+    public bool Constrains()
     {
-        if (saveDialog.opened)
+        if (ConfirmWindow.window.opened)
+            ConfirmWindow.window.Close(false);
+        else if (saveDialog.opened)
             saveDialog.ResetWindow();
         else if (UIRefs.research.window.activeSelf)
             UIRefs.research.CloseWindow();
         else if (UIRefs.trade.window.activeSelf)
             UIRefs.trade.CloseWindow();
         else
+            return true;
+
+        return false;
+    }
+
+    public void Toggle(ClickEvent _ = null)
+    {
+        if(Constrains())
         {
             bool menuIsOn = menu.style.display == DisplayStyle.Flex;
             if (menuIsOn)

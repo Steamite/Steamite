@@ -100,9 +100,11 @@ public class NewGameWindow : MonoBehaviour, IToolkitController, IGridMenu
         }
         if (worldName != null)
         {
-            List<string> dir = Directory.GetDirectories(Application.persistentDataPath + "/saves").ToList();
-            if (overwrite || !dir.Contains(Application.persistentDataPath + "/saves/" + worldName))
+            List<string> dir = Directory.GetDirectories(Application.persistentDataPath + "/saves").Select(q=> SaveController.GetSaveName(q)).ToList();
+            if (overwrite || !dir.Contains(worldName))
             {
+                if (overwrite)
+                    Directory.Delete(Application.persistentDataPath + "/saves/" + worldName, true);
                 Directory.CreateDirectory(Application.persistentDataPath + "/saves/" + worldName);
                 if(selectedOption == 0)
                     GameObject.Find("Canvas").GetComponent<LoadingScreen>().NewGame(worldName);
@@ -113,7 +115,11 @@ public class NewGameWindow : MonoBehaviour, IToolkitController, IGridMenu
             }
             else
             {
-                transform.GetChild(2).GetChild(3).gameObject.SetActive(true);
+                transform.GetComponent<ConfirmWindow>().Open(
+                    () => CreateWorld(true),
+                    "Overwrite save",
+                    $"Are you sure you want to\n" +
+                    $"overwrite this save: <color=\"orange\">{worldName}</color>?");
             }
         }
         else

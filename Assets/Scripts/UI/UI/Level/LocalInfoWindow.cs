@@ -12,7 +12,8 @@ public class LocalInfoWindow : UIBehaviour
         notSet,
         set,
         buildings,
-        expeditions
+        expeditions,
+        levels
     }
 
     public void SetUp()
@@ -23,20 +24,25 @@ public class LocalInfoWindow : UIBehaviour
     }
     protected override void OnRectTransformDimensionsChange()
     {
-        if(status == Status.buildings)
+        float canvasHeight;
+        switch (status)
         {
-            float canvasHeight = c.renderingDisplaySize.y;// * c.scaleFactor;
-            rectTransform.anchoredPosition = new(gridPos.x, (gridPos.z + ((canvasHeight / 13) + (rectTransform.rect.height / 2)))* c.scaleFactor);
-            
-            transform.gameObject.SetActive(true);
+            case Status.buildings:
+                canvasHeight = c.renderingDisplaySize.y;
+                rectTransform.anchoredPosition = new(
+                    gridPos.x, 
+                    (gridPos.z + ((canvasHeight / 13) + (rectTransform.rect.height / 2))) * c.scaleFactor);
+                break;
+            case Status.expeditions:
+                canvasHeight = c.renderingDisplaySize.y;
+                rectTransform.anchoredPosition = new(
+                    gridPos.x + (rectTransform.rect.width / 2) + 13 * c.scaleFactor, 
+                    gridPos.z + (rectTransform.rect.height / 2) + 13 * c.scaleFactor);
+                break;
+            default:
+                return;
         }
-        else if(status == Status.expeditions)
-        {
-            float canvasHeight = c.renderingDisplaySize.y;// * c.scaleFactor;
-            rectTransform.anchoredPosition = new(gridPos.x + (rectTransform.rect.width / 2) + 13 * c.scaleFactor, gridPos.z + (rectTransform.rect.height / 2) + 13 * c.scaleFactor);
-
-            transform.gameObject.SetActive(true);
-        }
+        transform.gameObject.SetActive(true);
     }
     //-----------Display options-------------//
     public void DisplayInfo(Building prefab, Vector3 pos)
@@ -69,6 +75,7 @@ public class LocalInfoWindow : UIBehaviour
         }
     }
 
+    //public void DisplayInfo()
 
     void OnApplicationPause()
     {

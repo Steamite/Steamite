@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using Unity.Properties;
 using UnityEngine;
@@ -73,10 +74,7 @@ public class SaveDialog : MonoBehaviour, IGridMenu
 
     public void SaveGame(ClickEvent _)
     {
-        if(saveName.Length > 0)
-        {
+        if (saveName.Length > 0)
             saveAction(saveName);
-            ResetWindow();
-        }
     }
 }
