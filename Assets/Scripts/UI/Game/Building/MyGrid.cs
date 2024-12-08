@@ -28,7 +28,7 @@ public static class MyGrid
         GridChange += (int _, int _) => SceneRefs.gridTiles.ChangeSelMode(SelectionMode.nothing);
         GridChange += (int _, int _) => SceneRefs.gridTiles.Exit(SceneRefs.gridTiles.activeObject);
         GridChange += (int i, int newI) => SceneRefs.humans.SwitchLevel(i, newI);
-        ChangeGridLevel(2);
+        ChangeGridLevel(0);
     }
 
     #region Grid Access
@@ -80,10 +80,22 @@ public static class MyGrid
         {
             // creates an empty ground level
             GroundLevel _level;
-            if (i == 2)
-                _level = GameObject.Instantiate(mainLevel, new Vector3(0, i * 2, 0), Quaternion.identity, SceneRefs.gridTiles.transform);
+            if (i == 0)
+            {
+                _level = GameObject.Instantiate(mainLevel, 
+                    new Vector3(0, i * 2, 0), 
+                    Quaternion.identity, 
+                    SceneRefs.gridTiles.transform);
+                _level.unlocked = true;
+            }
             else
-                _level = GameObject.Instantiate(level, new Vector3(0, i * 2, 0), Quaternion.identity, SceneRefs.gridTiles.transform);
+            {
+                _level = GameObject.Instantiate(level, 
+                    new Vector3(0, i * 2, 0), 
+                    Quaternion.identity, 
+                    SceneRefs.gridTiles.transform);
+                _level.unlocked = false;
+            }
             levels[i] = _level;
             _level.CreateGrid();
         }
@@ -181,6 +193,7 @@ public static class MyGrid
     public static Transform FindLevelRocks(int lIndex) => levels[lIndex].rocks;
     public static Transform FindLevelBuildings(int lIndex) => levels[lIndex].buildings;
 
+    public static bool IsUnlocked(int lIndex) => levels[lIndex].unlocked;
     #endregion
 
     public static GridPos Rotate(GridPos offset, float rotation, bool isTile = false)

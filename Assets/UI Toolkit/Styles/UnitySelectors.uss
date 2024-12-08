@@ -61,3 +61,49 @@
 #unity-content-container {
     flex-grow: 1;
 }
+
+#unity-tab__header {
+    flex-grow: 1;
+    flex-shrink: 0;
+    max-width: 50%;
+    -unity-text-align: upper-center;
+    background-color: rgb(28, 28, 28);
+    border-left-color: rgb(28, 28, 28);
+    border-right-color: rgb(28, 28, 28);
+    border-top-color: rgb(28, 28, 28);
+    border-bottom-color: rgb(28, 28, 28);
+    border-top-width: 2px;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+#unity-tab__header-label {
+    -unity-text-align: middle-center;
+    align-self: auto;
+    align-items: auto;
+    justify-content: flex-start;
+    width: 100%;
+    align-content: auto;
+    color: rgb(249, 233, 141);
+}
+
+#unity-tab__header:checked {
+    background-color: rgb(73, 121, 107);
+}
+
+.radial-progress {
+    min-width: 26px;
+    min-height: 20px;
+    --track-color: rgb(130, 130, 130);
+    --progress-color: rgb(46, 132, 24);
+    --percentage-color: white;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    flex-direction: row;
+    justify-content: center;
+    width: 100px; 
+    height: 100px;
+}

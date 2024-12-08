@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
 abstract public class RadioButtons : MonoBehaviour
 {
     [SerializeField] protected List<int> states = new() {};
+    [SerializeField] protected int previusState = 0;
     [SerializeField] protected int currentState = 1;
+
 
     protected Button lastAccesedButton;
 
@@ -43,8 +46,9 @@ abstract public class RadioButtons : MonoBehaviour
     virtual protected void ButtonTrigger(Button button, int index)
     {
         DeselectButton();
-        SelectButton(button);
         currentState = index;
+        SelectButton(button);
+        previusState = currentState;
     }
 
     public void OutsideTrigger(int index)

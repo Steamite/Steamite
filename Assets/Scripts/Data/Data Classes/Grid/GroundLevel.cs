@@ -24,7 +24,7 @@ public class GroundLevel : MonoBehaviour
     public Transform pipes;
     public UIOverlay overlays;
 
-
+    public bool unlocked;
     #region Base Grid operations
     public ClickableObject GetGridItem(GridPos gp, bool isPipe = false)
     {
