@@ -356,7 +356,7 @@
                 },
                 {
                     "name": "Shift",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "45e8e85a-9da4-4f90-93d5-335f147360b6",
                     "expectedControlType": "",
                     "processors": "",

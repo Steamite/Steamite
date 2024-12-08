@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Elevator : Storage
@@ -37,5 +38,21 @@ public class Elevator : Storage
         if (main)
             print("can't destroy");
         return null;
+    }
+
+    public override InfoWindow OpenWindow(bool setUp = false)
+    {
+        InfoWindow info;
+        // if selected
+        if ((info = base.OpenWindow(setUp)) != null)
+        {
+            if (setUp)
+            {
+                info.currentTab = 0;
+            }
+            info.cTransform.GetChild(1).GetChild(0).gameObject.SetActive(true); // storage
+            info.cTransform.GetChild(1).GetChild(1).gameObject.SetActive(false); // storage
+        }
+        return info;
     }
 }

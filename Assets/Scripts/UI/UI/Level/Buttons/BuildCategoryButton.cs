@@ -31,6 +31,5 @@ public class BuildCategoryButton : MonoBehaviour
         {
             Debug.LogError($"Category button({name}) not inicialized!");
         }
-        
     }
 }

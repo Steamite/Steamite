@@ -40,3 +40,8 @@ MonoBehaviour:
     - _Colony
     - _Trade
     - _Outpost
+  - name: Info Window
+    backgroundColor: {r: 0.14507182, g: 0.38679248, b: 0.0748042, a: 1}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    objects:
+    - Info Window

@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 147690024}
   - component: {fileID: 147690023}
   - component: {fileID: 147690022}
+  - component: {fileID: 147690025}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -198,6 +199,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &147690025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 147690021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfcdff7e8c04985459f8eecda5992b89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action:
+    m_Name: Action
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 32fb8810-0d7b-4c82-881d-e3a7a6e1f337
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: d3a7b5b4-e07e-4ab3-b7d1-e73e65118c88
+      m_Path: <Keyboard>/escape
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Action
+      m_Flags: 0
+    m_Flags: 0
+  windows:
+  - {fileID: 1793054205}
+  - {fileID: 1793054206}
 --- !u!1 &1793054200
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,6 +352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b1af4cbceae072419ab8c95228c47e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  opened: 0
   dialog: {fileID: 9197481963319205126, guid: 6ba2d918a4130bd4083d3afa9f88b90e, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

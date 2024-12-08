@@ -77,4 +77,9 @@ public class SaveDialog : MonoBehaviour, IGridMenu
         if (saveName.Length > 0)
             saveAction(saveName);
     }
+
+    public bool IsOpen()
+    {
+        return opened;
+    }
 }

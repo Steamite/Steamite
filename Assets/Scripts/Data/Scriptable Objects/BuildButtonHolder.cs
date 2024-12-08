@@ -10,6 +10,7 @@ using UnityEngine;
 public class BuildCategWrapper
 {
     [SerializeField] public string categName;
+    [SerializeField] public Sprite categIcon;
     [SerializeField] public List<Building> buildings;
 }
 
