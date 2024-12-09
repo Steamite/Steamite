@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.UI;
 using TMPro;
 using System.Data;
+using UnityEngine.UIElements;
 
 public class ProductionBuilding : AssignBuilding
 {
@@ -16,29 +17,22 @@ public class ProductionBuilding : AssignBuilding
     public List<Human> working = new();
     public ProductionStates pStates = new();
 
-    ///////////////////////////////////////////////////
-    ///////////////////Overrides///////////////////////
-    ///////////////////////////////////////////////////
-    public override InfoWindow OpenWindow(bool setUp = false)
+    #region Window
+    protected override void SetupWindow(InfoWindow info, List<string> toEnable)
     {
-        InfoWindow info;
-        // if selected
-        if ((info = base.OpenWindow(setUp)) != null)
-        {
-            // if to be setup
-            if (setUp)
-            {
-                info.cTransform.GetChild(2).gameObject.SetActive(true);
-                info.cTransform.GetChild(3).gameObject.SetActive(false);
-                info.cTransform.GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = "Workers"; // worker table
-            }
-            // update
-            UpdateProductionInfo(info.cTransform);
-            return info;
-        }
-        return null;
+        if(toEnable.Count == 0)
+            toEnable.Add("Production");
+        base.SetupWindow(info, toEnable);
     }
 
+    protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info);
+        UpdateProductionInfo(info);
+    }
+    #endregion
+
+    #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -64,6 +58,7 @@ public class ProductionBuilding : AssignBuilding
         RefreshStatus();
         base.Load(save);
     }
+    #endregion
 
     public override void Store(Human h, int transferPerTick)
     {
@@ -291,11 +286,10 @@ public class ProductionBuilding : AssignBuilding
         transform.GetChild(0).GetChild(1).gameObject.SetActive(!pStates.supplied);
         transform.GetChild(0).GetChild(2).gameObject.SetActive(!pStates.space);
     }
-    protected virtual void UpdateProductionInfo(Transform t)
+    protected virtual void UpdateProductionInfo(InfoWindow info)
     {
-        t = t.GetChild(2);
 
-        // production button
+        /*// production button
         t.GetChild(0).GetComponent<ProductionButton>().UpdateButtonState(pTime.currentTime, pTime.prodTime);
 
         // production cost
@@ -308,7 +302,7 @@ public class ProductionBuilding : AssignBuilding
 
         // stored
         t.GetChild(3).GetComponent<TMP_Text>()
-        .text = MyRes.GetDisplayText(localRes.stored);
+        .text = MyRes.GetDisplayText(localRes.stored);*/
     }
 
 

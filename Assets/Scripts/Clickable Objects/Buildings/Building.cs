@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UIElements;
+using NUnit.Framework;
 
 public class Building : StorageObject
 {
@@ -26,35 +27,30 @@ public class Building : StorageObject
         jobSave.objectType = typeof(Building);
     }
 
-    /// <summary>
-    /// Sets up/Updates info window
-    /// </summary>
-    /// <param name="setUp">false = when only updating</param>
-    /// <returns></returns>
-    public override InfoWindow OpenWindow(bool setUp = false)
+    #region Window
+    sealed protected override void SetupWindow(InfoWindow info)
     {
-        InfoWindow info;
-        // if selected
-        if ((info = base.OpenWindow(setUp)) != null)
-        {
-            // sets window mod to buildings and toggles constructed/unconstructed
-            if (setUp)
-            {
-                info.SwitchMods(InfoMode.Building, name);
-                info.cTransform.parent.GetChild(0).gameObject.SetActive(!build.constructed); // unconstructed
-                info.cTransform.gameObject.SetActive(build.constructed); // constructed
-                for (int i = 0; i < info.cTransform.childCount; i++)
-                {
-                    info.cTransform.GetChild(i).gameObject.SetActive(false); // deactivate all build windows
-                }
-            }
-            if (build.constructed)
-                return info;
-            else
-                DefText(info.cTransform);
-        }
-        return null;
+        SetupWindow(info, new() { });
     }
+
+    protected virtual void SetupWindow(InfoWindow info, List<string> toEnable)
+    {
+        base.SetupWindow(info);
+        info.SwitchMods(InfoMode.Building);
+        info.ToggleChildElems(info.building, new() { build.constructed ? "Constructed" : "Construction-View" });
+        info.ToggleChildElems(info.constructed, toEnable);
+    }
+
+    protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info); 
+        if (!build.constructed)
+        {
+            info.building.Q<Label>("Progress").text = $"Construction Progress: {(build.constructionProgress / (float)build.maximalProgress * 100f):0}%";
+            info.FillResourceList(info.building.Q<VisualElement>("Resources"), localRes.stored, build.cost);
+        }
+    }
+    #endregion
 
     #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
@@ -314,19 +310,5 @@ public class Building : StorageObject
     public virtual Fluid GetFluid()
     {
         return null;
-    }
-
-
-    private void DefText(Transform cTransform)
-    {
-        // deactivate constructed part and activate unconstructed
-        cTransform.gameObject.SetActive(false);
-        cTransform.parent.GetChild(0).gameObject.SetActive(true);
-        // create a string and set it
-        string infoText =
-            $"{MyRes.GetDisplayText(localRes.stored, build.cost)}\n" +
-            $"Constructed: {build.constructionProgress}/{build.maximalProgress}";
-        cTransform.parent.GetChild(0).GetChild(0).GetComponent<TMP_Text>()
-            .text = infoText;
     }
 }

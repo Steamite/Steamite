@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 public class Humans : MonoBehaviour
 {
+
     public InfoWindow infoWindow;
     public GridTiles grid;
     [SerializeField] List<Human> humen;
@@ -13,12 +14,13 @@ public class Humans : MonoBehaviour
 
     [SerializeField] Human humanPref;
     [SerializeField] List<Material> hatMaterial;
+
     //Don't missmatch with "Human" this is a script for the parent object, no inheritence thou
     public void NewGameInit(ref Action humanActivation)
     {
         humen = new();
         int i = MyGrid.gridSize;
-        GridPos pos = new(i / 2, 2, i / 2);
+        GridPos pos = new(i / 2, 0, i / 2);
         for(i = 0; i < 3; i++)
         {
             // adding the human
@@ -54,5 +56,14 @@ public class Humans : MonoBehaviour
             AddHuman(SceneRefs.objectFactory.CreateSavedHuman(hSave), ref humanActivation);
             //progress.Report(progressGlobal++);
         }
+    }
+
+    public List<Human> GetPartTime()
+    {
+        return humen.Where(q => q.workplace == null).ToList();
+    }
+    public List<Human> GetHumen()
+    {
+        return humen;
     }
 }

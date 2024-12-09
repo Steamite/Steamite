@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Elevator : Storage
@@ -40,19 +41,17 @@ public class Elevator : Storage
         return null;
     }
 
-    public override InfoWindow OpenWindow(bool setUp = false)
+    #region Window
+    protected override void SetupWindow(InfoWindow info, List<String> strings)
     {
-        InfoWindow info;
-        // if selected
-        if ((info = base.OpenWindow(setUp)) != null)
-        {
-            if (setUp)
-            {
-                info.currentTab = 0;
-            }
-            info.cTransform.GetChild(1).GetChild(0).gameObject.SetActive(true); // storage
-            info.cTransform.GetChild(1).GetChild(1).gameObject.SetActive(false); // storage
-        }
-        return info;
+        base.SetupWindow(info, strings);
     }
+
+    protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info);
+        /* info.cTransform.GetChild(1).GetChild(0).gameObject.SetActive(true); // storage
+            info.cTransform.GetChild(1).GetChild(1).gameObject.SetActive(false); // storage*/
+    }
+    #endregion
 }

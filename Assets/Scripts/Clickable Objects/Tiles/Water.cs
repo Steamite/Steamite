@@ -10,20 +10,18 @@ public class Water : ClickableObject
     public readonly int quality = 50;
     public int ammount = 50;
 
-    ///////////////////////////////////////////////////
-    ///////////////////Overrides///////////////////////
-    ///////////////////////////////////////////////////
-    public override InfoWindow OpenWindow(bool setUp = false)
+    #region Window
+    protected override void SetupWindow(InfoWindow info)
     {
-        InfoWindow info = base.OpenWindow(setUp);
-        if (info)
-        {
-            if(setUp)
-                info.SwitchMods(InfoMode.Water, name);
-            info.clickObjectTransform.GetChild((int)InfoMode.Water).GetChild(0).GetComponent<TMP_Text>().text = $"Storing: {ammount}";
-        }
-        return info;
+        base.SetupWindow(info);
+        info.SwitchMods(InfoMode.Water);
     }
+    protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info);
+        //info.clickObjectTransform.GetChild((int)InfoMode.Water).GetChild(0).GetComponent<TMP_Text>().text = $"Storing: {ammount}";
+    }
+    #endregion
     #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {

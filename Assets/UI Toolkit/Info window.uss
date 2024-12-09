@@ -243,6 +243,16 @@
     border-bottom-left-radius: 5px;
     transition-property: all;
     transition-duration: 0.05s;
+    color: rgb(249, 233, 141);
+    -unity-text-align: middle-left;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(74, 74, 74);
+    border-right-color: rgb(74, 74, 74);
+    border-top-color: rgb(74, 74, 74);
+    border-bottom-color: rgb(74, 74, 74);
 }
 
 .worker-button:hover {

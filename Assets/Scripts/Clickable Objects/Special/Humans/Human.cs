@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 public enum JobState
 {
@@ -53,34 +54,26 @@ public class Human : ClickableObject
         ids.AddRange(transform.parent.parent.GetChild(1).GetComponentsInChildren<Human>().Select(q => q.id).ToList());
         CreateNewId(ids);
     }
-    public override InfoWindow OpenWindow(bool setUp = false)
+    #region Window
+    protected override void SetupWindow(InfoWindow info)
     {
-        InfoWindow info;
-        // if selected
-        if ((info = base.OpenWindow(setUp)) != null)
-        {
-            // set window mod to humans
-            if (setUp)
-            {
-                info.SwitchMods(InfoMode.Human, name);
-            }
-            string s;
-            // JOB INFO
-            s =
-                $"Job - {jData.job}\n" +
-                $"Object - {(jData.interest ? jData.interest.name : "")}";
-            info.clickObjectTransform.GetChild((int)InfoMode.Human).GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = s;
-            // STATUS INFO
-            s =
-                $"Efficiency - {efficiency.efficiency}\n" +
-                $"HasEaten - {hasEaten}\n" +
-                $"Inventory - {MyRes.GetDisplayText(inventory)}";
-            info.clickObjectTransform.GetChild((int)InfoMode.Human).GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = s;
-        }
-        // floating text update
-        transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
-        return null;
+        base.SetupWindow(info);
+        info.SwitchMods(InfoMode.Human);
     }
+
+    protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info);
+        VisualElement group = info.human.Q<VisualElement>("Stats");
+        group.Q<Label>("Specialization-Value").text = specialization.ToString();
+        group.Q<Label>("Efficiency-Value").text = efficiency.ToString();
+
+        group = group.parent.Q<VisualElement>("Job");
+        group.Q<Label>("Type-Value").text = jData.job.ToString();
+        group.Q<Label>("Position-Value").text = jData.interest?.GetPos().ToString();
+        group.Q<Label>("Object-Value").text = jData.interest?.name;
+    }
+    #endregion Window
     public void OnDrawGizmos()
     {
         if (selected)

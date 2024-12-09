@@ -1,6 +1,6 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <engine:VisualElement name="VisualElement" style="flex-grow: 0; flex-direction: row; height: auto; max-height: 50px; align-self: auto; flex-shrink: 0; max-width: 100%; min-width: 100%; align-content: stretch; align-items: stretch; justify-content: center; margin-top: 5px; margin-bottom: 5px; min-height: 50px;">
-        <engine:Label text="###/###" style="align-content: auto; align-self: auto; align-items: auto; -unity-text-align: middle-center; font-size: 25px;" />
-        <engine:VisualElement style="flex-grow: 1; max-width: 50px; max-height: 50px; background-image: url(&quot;project://database/Assets/Sprites/Textures/Button_Sprite.png?fileID=2800000&amp;guid=ab06e4b2b595a5d439dc3408edb876d1&amp;type=3#Button_Sprite&quot;); justify-content: flex-start;" />
+        <engine:Label text="###/###" name="Value" style="align-content: auto; align-self: auto; align-items: auto; -unity-text-align: middle-center; font-size: 25px;" />
+        <engine:VisualElement name="Icon" style="flex-grow: 1; max-width: 50px; max-height: 50px; background-image: url(&quot;project://database/Assets/Sprites/Icons/Info%20window/ResIcon@4x.png?fileID=2800000&amp;guid=9c948cd08b1522c4a95a3a66fe6242d4&amp;type=3#ResIcon@4x&quot;); justify-content: flex-start; -unity-background-image-tint-color: rgb(255, 255, 255);" />
     </engine:VisualElement>
 </engine:UXML>

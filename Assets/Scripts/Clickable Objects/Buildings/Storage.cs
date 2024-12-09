@@ -7,29 +7,25 @@ public class Storage : Building
 {
     public List<bool> canStore = new();
 
-    ///////////////////////////////////////////////////
-    ///////////////////Overrides///////////////////////
-    ///////////////////////////////////////////////////
-    public override InfoWindow OpenWindow(bool setUp = false)
+    #region Window
+    protected override void SetupWindow(InfoWindow info, List<string> toEnable)
     {
-        InfoWindow info;
-        // if selected
-        if ((info = base.OpenWindow(setUp)) != null)
-        {
-            if (setUp)
-            {
-                StorageAssign SA = info.cTransform.GetChild(1).GetComponent<StorageAssign>();
-                SA.building = this;
-                SA.SetStorageButton(GetComponent<Storage>().canStore, info.cTransform);
-                info.cTransform.GetChild(1).gameObject.SetActive(true); // storage
-                info.cTransform.GetChild(1).GetChild(0).gameObject.SetActive(true); // storage
-                info.cTransform.GetChild(1).GetChild(1).gameObject.SetActive(false); // storage
-            }
-            info.cTransform.GetChild(1).GetComponent<StorageAssign>().UpdateAmmounts();
-        }
-        return info;
-    }
+        toEnable.Add("Storage");
 
+        base.SetupWindow(info, toEnable);
+        /*StorageAssign SA = info.cTransform.GetChild(1).GetComponent<StorageAssign>();
+        SA.building = this;
+        SA.SetStorageButton(GetComponent<Storage>().canStore, info.cTransform);
+        info.cTransform.GetChild(1).gameObject.SetActive(true); // storage
+        info.cTransform.GetChild(1).GetChild(0).gameObject.SetActive(true); // storage
+        info.cTransform.GetChild(1).GetChild(1).gameObject.SetActive(false); // storage*/
+    }
+    protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info);
+        //info.constructed.Q<>("").UpdateAmmounts();
+    }
+    #endregion
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
