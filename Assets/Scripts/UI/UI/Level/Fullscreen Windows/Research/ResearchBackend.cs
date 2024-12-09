@@ -13,13 +13,21 @@ public class ResearchBackend : MonoBehaviour
         CanvasManager.researchAdapter.Init(DoResearch, DisplayInfoWindowDetails);
     }
 
-    void DisplayInfoWindowDetails(TMP_Text text)
+    ResearchDispayData DisplayInfoWindowDetails()
     {
-        text.gameObject.SetActive(true);
+        ResearchDispayData data = new();
         if (currentResearch)
-            text.text = currentResearch.name;
+        {
+            data.name = currentResearch.name;
+            data.progress = $"{(currentResearch.node.currentTime/(float)currentResearch.node.researchTime):0%}  %";
+        }
         else
-            text.text = "None";
+        {
+            data.name = "None";
+            data.progress = "0 %";
+        }
+        data.color = Random.ColorHSV();
+        return data;
     }
     //Start researching a research
     public void StartResearch(ResearchUIButton button)

@@ -186,24 +186,26 @@ public class Pipe : Building
             Debug.LogError("FUCK" + e);
         }
     }
-    public override InfoWindow OpenWindow(bool setUp = false)
+
+    #region Window
+
+    protected override void SetupWindow(InfoWindow info, List<String> toEnable)
     {
-        InfoWindow info;
-        // if selected
-        if ((info = base.OpenWindow(setUp)) != null)
-        {
-            if (setUp)
-            {
-                info.SwitchMods(InfoMode.Water, $"network {network.networkID}");
-                info.transform.GetChild(1).GetChild(4).GetChild(0).GetComponent<TMP_Text>().text =
-                    $"Network: {network.networkID} \n";
-            }
-            info.transform.GetChild(1).GetChild(4).GetChild(0).GetComponent<TMP_Text>().text += 
-                $"{PrintBuildings()}" +
-                $"{PrintStoredFluids()}";
-        }
-        return info;
+        base.SetupWindow(info, toEnable);
+        /*info.SwitchMods(InfoMode.Water, $"network {network.networkID}");
+        info.transform.GetChild(1).GetChild(4).GetChild(0).GetComponent<TMP_Text>().text =
+            $"Network: {network.networkID} \n";*/
     }
+
+    protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info);
+        /*info.transform.GetChild(1).GetChild(4).GetChild(0).GetComponent<TMP_Text>().text +=
+                $"{PrintBuildings()}" +
+                $"{PrintStoredFluids()}"; */
+    }
+    #endregion
+
     string PrintBuildings()
     {
         string s = "";

@@ -135,8 +135,8 @@ public class SteamGenerator : ProductionBuilding
     {
         return networkAccess.fluid;
     }
-    protected override void UpdateProductionInfo(Transform t)
-    {
+    protected override void UpdateProductionInfo(InfoWindow info)
+    {/*
         t = t.GetChild(2);
         t.GetChild(0).GetComponent<ProductionButton>().UpdateButtonState(pTime.currentTime, pTime.prodTime);
         // production cost
@@ -149,7 +149,7 @@ public class SteamGenerator : ProductionBuilding
 
         // stored
         t.GetChild(3).GetComponent<TMP_Text>()
-            .text = $"Steam: {networkAccess.fluid.ammount[1]}/{networkAccess.fluid.capacity[1]}";
+            .text = $"Steam: {networkAccess.fluid.ammount[1]}/{networkAccess.fluid.capacity[1]}";*/
     }
 
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)

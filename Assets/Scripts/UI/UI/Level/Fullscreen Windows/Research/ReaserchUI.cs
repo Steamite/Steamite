@@ -243,7 +243,7 @@ public class ResearchUI : FullscreenWindow
         if (selectedButton && selectedButton.node.id == button.node.id)
         {
             // info window
-            CanvasManager.infoWindow.SwitchMods(InfoMode.Research, button.name);
+            /*CanvasManager.infoWindow.SwitchMods(InfoMode.Research, button.name);
             Transform researchInfo = CanvasManager.infoWindow.researchTransform;
             researchInfo.GetChild(0).GetComponent<TMP_Text>().text = $"Unlocks <color=#D3D3D3>{button.node.name}</color>.";
             //ShowNeededResources(button.node, true);
@@ -268,13 +268,13 @@ public class ResearchUI : FullscreenWindow
                     researchInfo.GetChild(2).GetComponent<Button>().interactable = false;
                     researchInfo.GetChild(3).GetComponent<TMP_Text>().text = $"{button.node.researchTime * 5} research points needed";
                     break;
-            }
+            }*/
         }
     }
 
     public void ShowNeededResources(ResearchNode node, bool useGlobalStored)
     {
-        Transform researchInfo = CanvasManager.infoWindow.researchTransform;
+        /*Transform researchInfo = CanvasManager.infoWindow.researchTransform;
         TMP_Text types = researchInfo.GetChild(1).GetChild(0).GetComponent<TMP_Text>();
         TMP_Text ammounts = researchInfo.GetChild(1).GetChild(1).GetComponent<TMP_Text>();
         types.text = "";
@@ -294,7 +294,7 @@ public class ResearchUI : FullscreenWindow
                     $"{MyRes.resources.ammount[MyRes.resources.type.IndexOf(node.reseachCost.type[i])]} " +
                     $"/ {node.reseachCost.ammount[i].ToString()}";
             }
-        }
+        }*/
     }
 
     public void InfoWindowButtonClick()
@@ -339,7 +339,7 @@ public class ResearchUI : FullscreenWindow
 
     public IEnumerator UpdateButtonFill()
     {
-        elapsedProgress = backend.currentResearch.node.currentTime;
+        /*elapsedProgress = backend.currentResearch.node.currentTime;
         while (elapsedProgress < backend.currentResearch.node.researchTime)
         {
             elapsedProgress = Mathf.Lerp(elapsedProgress, backend.currentResearch.node.currentTime, Time.deltaTime * speed);
@@ -355,7 +355,8 @@ public class ResearchUI : FullscreenWindow
             yield return null;
         }
         // Research Finished
-        ResearchFinish();
+        ResearchFinish();*/
+        yield return null;
     }
 
     IEnumerator OpenResearchSmoothEnd()

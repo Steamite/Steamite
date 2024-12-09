@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Rigidbody))]
 public class ClickableObject : MonoBehaviour, 
@@ -75,16 +77,28 @@ public class ClickableObject : MonoBehaviour,
     /// Creates the info window, if first is false only updates the info.
     /// </summary>
     /// <param name="first">Prepare the window.</param>
-    /// <returns>info window reference</returns>
-    public virtual InfoWindow OpenWindow(bool setUp = false)
+    /// <returns>Info window reference, if the object is not selected returns null.</returns>
+    public void OpenWindow(bool setUp = false)
     {
-        if (!selected)
-            return null;
-        InfoWindow info = CanvasManager.infoWindow;
-        info.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new(0, 0);
-        info.gameObject.SetActive(true);
-        return info;
+        if (selected)
+        {
+            InfoWindow info = CanvasManager.infoWindow;
+            if (setUp) SetupWindow(info);
+            UpdateWindow(info);
+        }
     }
+
+    protected virtual void SetupWindow(InfoWindow info)
+    {
+        info.header.text = name;
+        info.window.style.display = DisplayStyle.Flex;
+    }
+
+    protected virtual void UpdateWindow(InfoWindow info)
+    {
+
+    }
+
     #endregion Window
     #region Saving
     public virtual ClickableObjectSave Save(ClickableObjectSave clickable = null)
@@ -111,7 +125,7 @@ public class ClickableObject : MonoBehaviour,
     {
         do
         {
-            id = Random.Range(0, int.MaxValue);
+            id = UnityEngine.Random.Range(0, int.MaxValue);
         } while (clickables.Where(q => q == id).Count() > 0);
         return;
     }

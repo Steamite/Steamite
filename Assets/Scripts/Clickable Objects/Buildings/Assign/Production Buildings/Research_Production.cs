@@ -1,5 +1,8 @@
+
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Research_Production : ProductionBuilding
 {
@@ -10,24 +13,27 @@ public class Research_Production : ProductionBuilding
         base.UniqueID();
     }
 
-    public override InfoWindow OpenWindow(bool setUp = false)
+    #region Window
+    protected override void SetupWindow(InfoWindow info, List<string> toEnable)
     {
-        InfoWindow info;
-        // if selected
-        if ((info = base.OpenWindow(setUp)) != null)
-        {
-            // if to be setup
-            if (setUp)
-            {
-                // disable production button
-                info.cTransform.GetChild(2).gameObject.SetActive(false);
-                CanvasManager.researchAdapter.DisplayResearch(info.cTransform.GetChild(3).GetComponent<TMP_Text>());
-            }
-            return info;
-        }
-        return null;
+        toEnable.Add("Research");
+        base.SetupWindow(info, toEnable);
+        /*info.cTransform.GetChild(2).gameObject.SetActive(false);
+        CanvasManager.researchAdapter.DisplayResearch(info.cTransform.GetChild(3).GetComponent<TMP_Text>());*/
     }
 
+    protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info);
+        ResearchDispayData data = CanvasManager.researchAdapter.DisplayResearch();
+        VisualElement research = info.constructed.Q<VisualElement>("Research");
+
+        research.Q<Label>("Name").text = data.name;
+        research.Q<VisualElement>("Image").style.unityBackgroundImageTintColor = data.color;
+        research.Q<Label>("Progress").text = data.progress;
+    }
+
+    #endregion
     public override void Load(ClickableObjectSave save)
     {
         base.Load(save);

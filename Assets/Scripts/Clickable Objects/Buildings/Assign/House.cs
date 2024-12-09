@@ -2,29 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class House : AssignBuilding
 {
     ///////////////////////////////////////////////////
     ///////////////////Overrides///////////////////////
     ///////////////////////////////////////////////////
-    public override InfoWindow OpenWindow(bool setUp = false)
+    #region Window
+    protected override void SetupWindow(InfoWindow info, List<string> toEnable)
     {
-        InfoWindow info = null;
-        // if selected
-        if ((info = base.OpenWindow(setUp)) != null)
-        {
-            // if to be setup
-            if (setUp)
-            {
-                info.cTransform.GetChild(info.cTransform.childCount - 1).GetComponent<TMP_Text>().text = $"Occupancy: {assigned.Count} / {limit}";
-                info.cTransform.GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = "Tenants"; // worker table
-            }
-            // update
-        }
-        return info;
+        base.SetupWindow(info, toEnable);
+        info.ToggleChildElems(info.constructed, new() {"assigned"});
     }
-
+    protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info);
+    }
+    #endregion
     public override void OrderDeconstruct()
     {
         base.OrderDeconstruct();

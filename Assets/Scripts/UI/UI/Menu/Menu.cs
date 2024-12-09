@@ -15,7 +15,7 @@ public class Menu : MonoBehaviour
 
     VisualElement menu;
 
-    public Action Init(Action<string> save)
+    public void Init(Action<string> save, ref Action afterSave)
     {
         gameObject.SetActive(true);
         saveDialog.Init(save);
@@ -26,7 +26,8 @@ public class Menu : MonoBehaviour
         menu.Q<Button>("Main-Menu").RegisterCallback<ClickEvent>(GoToMainMenu);
         menu.Q<Button>("Quit").RegisterCallback<ClickEvent>(DoQuit);
 
-        return ((IGridMenu)loadMenu).UpdateButtonState;
+        afterSave += ((IGridMenu)loadMenu).UpdateButtonState;
+        afterSave += () => ((IGridMenu)saveDialog).ResetWindow();
     } 
 
     public bool Constrains()

@@ -1,9 +1,0 @@
-<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Info%20window.uss?fileID=7433441132597879392&amp;guid=4aace8491f3a9d54d9fc0b08e0d01660&amp;type=3#Info window" />
-    <Style src="project://database/Assets/Game.uss?fileID=7433441132597879392&amp;guid=2c1bda3cb30822d47b53f433952363da&amp;type=3#Game" />
-    <engine:VisualElement class="worker-button">
-        <engine:Label text="Richard Kopp" style="flex-grow: 1; max-width: 38%; min-width: 38%; margin-left: 5px;" />
-        <engine:Label text="Programator" style="flex-grow: 1; max-width: 38%; min-width: 38%; flex-shrink: 1;" />
-        <engine:Label text="Working" style="flex-grow: 1; max-width: 20%; right: auto; min-width: 20%; flex-shrink: 1;" />
-    </engine:VisualElement>
-</engine:UXML>

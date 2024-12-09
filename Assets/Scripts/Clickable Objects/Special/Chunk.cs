@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 public class Chunk : StorageObject
 {
@@ -25,24 +21,20 @@ public class Chunk : StorageObject
         return new(transform.position.x, (transform.position.y - 1) / 2, transform.position.z);
     }
 
-    public override InfoWindow OpenWindow(bool first)
+    #region Window
+    protected override void SetupWindow(InfoWindow info)
     {
-        InfoWindow info;
-        // if selected
-        if ((info = base.OpenWindow(first).GetComponent<InfoWindow>()) != null)
-        {
-            // set window mod to Ore Info
-            if (first)
-            {
-                info.SwitchMods(InfoMode.Chunk, name);
-            }
-            info.clickObjectTransform.GetChild((int)InfoMode.Chunk).GetChild(0)
-                .GetComponent<TMP_Text>().text
-                    = $"Human: {string.Join(",", localRes.carriers.Select(q => q.name))} \nResources: {MyRes.GetDisplayText(localRes.stored)}";
-        }
-        return null;
+        base.SetupWindow(info);
+        info.SwitchMods(InfoMode.Chunk);
     }
 
+    protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info); 
+        info.chunk.Q<Label>("").text = $"{string.Join(',', localRes.carriers.Select(q => q.name))}";
+        info.FillResourceList(info.chunk.Q<VisualElement>("Yield"), localRes.stored);
+    }
+    #endregion
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -53,6 +45,12 @@ public class Chunk : StorageObject
             return base.Save(clickable);
         }
         return null;
+    }
+
+    public override void RequestRes(Resource request, Human h, int mod)
+    {
+        base.RequestRes(request, h, mod);
+        OpenWindow();
     }
     public override void Load(ClickableObjectSave save)
     {

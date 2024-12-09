@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class AssignBuilding : Building
 {
@@ -11,28 +12,20 @@ public class AssignBuilding : Building
     public List<Human> assigned = new();
     public int limit = 5;
 
-    ///////////////////////////////////////////////////
-    ///////////////////Overrides///////////////////////
-    ///////////////////////////////////////////////////
-
-    public override InfoWindow OpenWindow(bool setUp = false)
+    #region Window
+    protected override void SetupWindow(InfoWindow info, List<string> toEnable)
     {
-        InfoWindow info = null;
-        // if selected
-        if ((info = base.OpenWindow(setUp)) != null)
-        {
-            // if to be setup
-            if (setUp)
-            {
-                info.cTransform.GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = "FILL"; // worker table
-                info.cTransform.GetChild(0).GetComponent<WorkerAssign>().FillStart(this);
-                info.SetAssignButton(true, info.cTransform.GetChild(0).GetChild(2));
-            }
-            // update
-        }
-        return info;
-    }
+        toEnable.Add("Assign");
 
+        base.SetupWindow(info, toEnable);
+        info.constructed.Q<WorkerAssign>("Worker-Assign").FillStart(this);
+    }
+    protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info);
+        info.constructed.Q<Label>("Assigned-Count").text = $"Assigned: {assigned.Count}/{limit}";
+    }
+    #endregion
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)

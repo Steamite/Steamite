@@ -12,7 +12,7 @@ public class SaveController : MonoBehaviour
     private void Start()
     {
         SceneRefs.tick.timeController.dayStart += () => SaveGame("", true);
-        saveUIAction = UIRefs.pauseMenu.Init((s) => SaveGame(s, false));
+        UIRefs.pauseMenu.Init((s) => SaveGame(s, false), ref saveUIAction);
         worldName = MyGrid.worldName;
     }
 
@@ -70,7 +70,6 @@ public class SaveController : MonoBehaviour
                 () =>
                 {
                     Save(saveName, autoSave);
-                    UIRefs.pauseMenu.transform.GetChild(0).GetComponent<SaveDialog>().ResetWindow();
                 },
                 "Override save",
                 $"Are you sure you want to override this save: <color=\"orange\">{saveName}?");

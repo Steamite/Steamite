@@ -484,7 +484,7 @@ public class GridTiles : MonoBehaviour
             clickedObject.selected = false;
             Exit(clickedObject);
             clickedObject = null;
-            CanvasManager.infoWindow.gameObject.SetActive(false);
+            CanvasManager.infoWindow.Close();
         }
     }
     /// <summary>

@@ -4,18 +4,28 @@ using System.Data;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Rock : ClickableObject
 {
-    // data about the rock(set)
+    /// <summary>
+    /// data about the rock(set)
+    /// </summary>
     public Resource rockYield;
-   // public int hardness;
+    /// <summary>
+    /// public int hardness;
+    /// </summary>
     public float integrity;
 
-    // infuenced by the player
+    /// <summary>
+    /// infuenced by the player
+    /// </summary>
     public Human assigned;
     public bool toBeDug;
-    // prefab to replace with
+
+    /// <summary>
+    /// prefab to replace with
+    /// </summary>
     public string assetPath;
 
     ///////////////////////////////////////////////////
@@ -33,21 +43,17 @@ public class Rock : ClickableObject
     }
     #endregion Basic Operations
     #region Window
-    public override InfoWindow OpenWindow(bool setUp = false)
+    protected override void SetupWindow(InfoWindow info)
     {
-        InfoWindow info;
-        // if selected
-        if ((info = base.OpenWindow(setUp)) != null)
-        {
-            if (setUp)
-            {
-                info.SwitchMods(InfoMode.Rock, name); // set window mod to Ore Info
-                info.clickObjectTransform.GetChild(2).GetChild(1).GetComponent<TMP_Text>().text = MyRes.GetDisplayText(rockYield);
-            }
-            info.clickObjectTransform.GetChild(2).GetChild(0).GetComponent<TMP_Text>().text = $"Integrity: {Math.Round(integrity,2)}";
-            return info;
-        }
-        return null;
+        base.SetupWindow(info); 
+        info.SwitchMods(InfoMode.Rock); // set window mod to Ore Info
+        info.FillResourceList(info.rock.Q<VisualElement>("Yield"), rockYield);
+    }
+
+    protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info);
+        info.rock.Q<Label>("Integrity-Value").text = $"{integrity:0.#}";
     }
     #endregion Window
     #region Saving

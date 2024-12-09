@@ -3,104 +3,135 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using TMPro;
-using System.Threading.Tasks;
+using UnityEngine.UIElements;
+using NUnit.Framework;
 
-public class WorkerAssign : MonoBehaviour
+[UxmlElement]
+public partial class WorkerAssign : TabView
 {
-    [SerializeField] GameObject buttonPrefab;
-    Transform humans;
+    const string ASSIGN = "Assigned-List";
+    const string FREE = "Free-List";
+
     public AssignBuilding _building;
 
+    Humans humans;
+
+    List<Human> unassigned;
+    [UxmlAttribute]
+    VisualTreeAsset prefab;
+
+    public void Init()
+    {
+        InitListView(ASSIGN);
+        InitListView(FREE);
+    }
+
+    void InitListView(string s)
+    {
+        List<Human> humans = new();
+        ListView listView = this.Q<ListView>(s); // content for assigned
+        listView.itemsSource = humans;
+        listView.makeItem = () =>
+        {
+            VisualElement visualElement = prefab.CloneTree();
+            return visualElement;
+        };
+
+        var boo = s == "Free-List";
+
+        listView.bindItem = (el, i) =>
+        {
+            el.Q<Label>("Name").text = ((Human)listView.itemsSource[i]).name;
+            el.Q<Label>("Spec").text = ((Human)listView.itemsSource[i]).specialization.ToString();
+            el.Q<Label>("Job").text = ((Human)listView.itemsSource[i]).jData.job.ToString();
+            el.Q<Button>().clickable = new((_) => ManageHuman(((Human)listView.itemsSource[i]).id, boo));
+        };
+    }
+
+    
     public void FillStart(AssignBuilding _build)
     {
         _building = _build;
-        humans = SceneRefs.humans.transform;
-        Transform ContentWorkers = transform.GetChild(0).GetChild(0).GetChild(0).transform; // content for assigned
-        Transform ContentAssign = transform.GetChild(1).GetChild(0).GetChild(0).transform; // content for unassigned
+        humans = SceneRefs.humans;
+        ListView assignedList = this.Q<ListView>(ASSIGN); // content for assigned
 
-        List<Human> humen;
+        ListView freeList = this.Q<ListView>(FREE); // content for assigned
+
         if (_build.GetComponent<ProductionBuilding>())
         {
             // create buttons for humans without workplaces
-            humen = humans.GetChild(0).GetComponentsInChildren<Human>().ToList();
+            unassigned = humans.GetPartTime();
         }
         else
         {
             // create buttons for humans without homes
-            humen = humans.GetChild(0).GetComponentsInChildren<Human>().ToList();
-            humen.AddRange(humans.GetChild(1).GetComponentsInChildren<Human>().ToList());
-            humen.RemoveAll(q => _build.assigned.Contains(q) || q.home != null);
+            unassigned = humans.GetHumen();
+            unassigned.RemoveAll(q => _build.assigned.Contains(q) || q.home != null);
         }
         // create buttons for assigned humans
-        Fill(ContentWorkers, _build.assigned, buttonPrefab);
+        Fill(assignedList, _build.assigned);
         // create buttons for unassigned humans
-        Fill(ContentAssign, humen, buttonPrefab);
-        gameObject.SetActive(true);
+        Fill(freeList, unassigned);
     }
 
-    public void Fill(Transform listView, List<Human> humans, GameObject pref)
+    void Fill(ListView listView, List<Human> humans)
     {
-        List<string> rendered = new();
-        for (int i = 0; i < listView.childCount; i++)
+        List<Human> rendered = new();
+        foreach(Human h in listView.itemsSource)
         {
-            rendered.Add(listView.GetChild(i).GetChild(0).GetComponent<TMP_Text>().text);
+            rendered.Add(h);
         }
-        List<string> oldItems = rendered.ToList();
-        foreach (Human h in humans)
+
+        List<Human> pool = rendered.ToList();
+        foreach(Human h in humans)
         {
-            oldItems.Remove(h.name);
+            pool.Remove(h);
         }
-        foreach (Human h in humans)
+
+        foreach(Human h in humans)
         {
-            int i = rendered.IndexOf(h.name);
-            Transform g;
+            int i = rendered.IndexOf(h);
             if (i == -1)
             {
-                if (oldItems.Count > 0)
+                if(pool.Count > 0)
                 {
-                    g = listView.GetChild(rendered.IndexOf(oldItems[0]));
-                    oldItems.RemoveAt(0);
+                    i = rendered.IndexOf(pool[0]);
+                    listView.itemsSource[i] = h;
+                    pool.RemoveAt(0);
                 }
                 else
                 {
-                    g = Instantiate(pref, listView.transform).transform;
+                    listView.itemsSource.Add(h);
                 }
-                g.GetChild(0).GetComponent<TMP_Text>().text = h.name;
             }
-            else
-            {
-                g = listView.GetChild(i);
-                
-            }
-            g.GetChild(1).GetComponent<TMP_Text>().text = h.specialization.ToString();
-            g.GetChild(2).GetComponent<TMP_Text>().text = h.jData.job.ToString();
-            g.GetComponent<InfoButtons>().id = h.id;
         }
-        foreach(string name in oldItems)
+        foreach(Human h in pool)
         {
-            Destroy(listView.GetChild(rendered.IndexOf(name)).gameObject);
+            listView.itemsSource.Remove(h);
         }
-    } // filling the table with human elements
-    public void ManageHuman(int id) //adding or removing humans
+        listView.RefreshItems();
+    }
+
+    void ManageHuman(int id, bool add) //adding or removing humans
     {
-        bool add = _building.assigned.FindIndex(q => q.id == id) == -1;
         if (add && _building.limit <= _building.assigned.Count)
         {
-            print("no space");
+            Debug.LogError("no space");
             return;
         }
         if (_building.GetComponent<ProductionBuilding>())
         {
-            if(add)
+            if (add)
             {
-                Human human = humans.GetChild(0).GetComponentsInChildren<Human>().Single(q => q.id == id);
+                Human human = unassigned.First(q => q.id == id);
                 JobData jData = PathFinder.FindPath(
                     new List<ClickableObject>() { _building },
                     human);
                 if (jData.interest)
                 {
+                    unassigned.Remove(human);
                     _building.assigned.Add(human);
-                    human.transform.SetParent(humans.GetChild(1).transform);
+                    human.transform.SetParent(humans.transform.GetChild(1).transform);
                     human.workplace = _building as ProductionBuilding;
                     human.jData.interest = jData.interest;
                     human.jData.job = JobState.FullTime;
@@ -114,34 +145,39 @@ public class WorkerAssign : MonoBehaviour
                 else
                 {
                     Debug.LogError("cant find way here");
+                    return;
                 }
             }
             else
             {
-                Human human = humans.GetChild(1).GetComponentsInChildren<Human>().Single(q => q.id == id);
-                human.workplace = null;
+                Human human = _building.assigned.Single(q => q.id == id);
                 _building.assigned.Remove(human);
-                human.transform.SetParent(humans.GetChild(0).transform);
+                human.workplace = null;
+                human.transform.SetParent(humans.transform.GetChild(0).transform);
                 human.jData.job = JobState.Free;
                 human.Idle();
+                unassigned.Add(human);
             }
         }
         else if (_building.GetComponent<House>())
         {
-            Human human = humans.GetChild(0).GetComponentsInChildren<Human>().Union(humans.GetChild(1).GetComponentsInChildren<Human>()).Single(q => q.id == id);
             if (add)
             {
+                Human human = unassigned.First(q=> q.id == id);
                 human.home = _building.GetComponent<House>();
                 _building.assigned.Add(human);
             }
             else
             {
-                human.home = null;
+                Human human = _building.assigned.First(q => q.id == id);
                 _building.assigned.Remove(human);
+                unassigned.Add(human);
+                human.home = null;
             }
             _building.OpenWindow();
         }
-        
-        FillStart(_building);
+
+        Fill(this.Q<ListView>(ASSIGN), _building.assigned);
+        Fill(this.Q<ListView>(FREE), unassigned);
     }
 }

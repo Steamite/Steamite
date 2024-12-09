@@ -1,36 +1,29 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
-public class ProductionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+[UxmlElement]
+public partial class ProductionButton : Button
 {
+    [UxmlAttribute]
+    public bool enabled;
+
     
-    // Start is called before the first frame update
-
-    public void UpdateButtonState(float a, float b)
-    {
-        transform.GetChild(0).GetComponent<Image>().fillAmount = a > b ? 0.01f : a / b;
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        transform.GetChild(1).GetComponent<Image>().color = new(1, 0.54f, 0, 0.2f);
-    }
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        StopAllCoroutines();
-        transform.GetChild(1).GetComponent<Image>().color = new(0, 0, 0, 0);
-    }
-    public void OnPointerDown(PointerEventData eventData)
+    public void Init()
     {
         
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void UpdateButtonState(float a, float b)
     {
-        ProductionBuilding pD = transform.parent.parent.GetChild(0).GetComponent<WorkerAssign>()._building.GetComponent<ProductionBuilding>();
+        //transform.GetChild(0).GetComponent<Image>().fillAmount = a > b ? 0.01f : a / b;
+    }
+
+    void ToggleButton()
+    {
+        /*ProductionBuilding pD = transform.parent.parent.GetChild(0).GetComponent<WorkerAssign>()._building.GetComponent<ProductionBuilding>();
         bool stoped = pD.StopProduction();
         transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(!stoped);
-        transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(stoped);
+        transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(stoped);*/
     }
 }

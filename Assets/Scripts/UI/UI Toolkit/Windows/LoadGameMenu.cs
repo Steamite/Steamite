@@ -134,7 +134,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
     public void UpdateButtonState()
     {
         bool t = true;
-        if(worlds.Length == 0)
+        if(worlds == null || worlds.Length == 0)
         {
             worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", false, true);
             if (worlds.Length == 0)
