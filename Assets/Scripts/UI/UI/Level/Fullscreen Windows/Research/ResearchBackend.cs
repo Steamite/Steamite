@@ -10,7 +10,7 @@ public class ResearchBackend : MonoBehaviour
     public void Init(ResearchUI _UI)
     {
         UI = _UI;
-        CanvasManager.researchAdapter.Init(DoResearch, DisplayInfoWindowDetails);
+        SceneRefs.researchAdapter.Init(DoResearch, DisplayInfoWindowDetails);
     }
 
     ResearchDispayData DisplayInfoWindowDetails()

@@ -47,19 +47,19 @@ public class JobQueue : MonoBehaviour
         switch (job)
         {
             case JobState.Digging:
-                toBeDug.Add(interest.GetComponent<Rock>());
+                toBeDug.Add((Rock)interest);
                 break;
             case JobState.Constructing:
-                constructions.Add(interest.GetComponent<Building>());
+                constructions.Add((Building)interest);
                 break;
             case JobState.Deconstructing:
-                deconstructions.Add(interest.GetComponent<Building>());
+                deconstructions.Add((Building)interest);
                 break;
             case JobState.Supply:
-                supplyNeeded.Add(interest.GetComponent<ProductionBuilding>());
+                supplyNeeded.Add((ProductionBuilding)interest);
                 break;
             case JobState.Pickup:
-                pickupNeeded.Add(interest.GetComponent<ProductionBuilding>());
+                pickupNeeded.Add((ProductionBuilding)interest);
                 break;
         }
     }
@@ -71,8 +71,10 @@ public class JobQueue : MonoBehaviour
         {
             case JobState.Digging:
                 toBeDug.RemoveAll(q => q.id == interest.id); // remove from the list
-                assigned.Add(interest.GetComponent<Rock>().assigned);
-                interest.GetComponent<Rock>().assigned = null;
+
+                Rock rock = interest.GetComponent<Rock>();
+                assigned.Add(rock.Assigned);
+                rock.Assigned = null;
                 break;
             case JobState.Constructing:
                 constructions.RemoveAll(q => q.id == interest.id); // remove from the list

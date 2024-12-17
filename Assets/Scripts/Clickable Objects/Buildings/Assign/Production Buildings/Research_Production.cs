@@ -14,30 +14,29 @@ public class Research_Production : ProductionBuilding
     }
 
     #region Window
-    protected override void SetupWindow(InfoWindow info, List<string> toEnable)
+
+    protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
     {
         toEnable.Add("Research");
-        base.SetupWindow(info, toEnable);
-        /*info.cTransform.GetChild(2).gameObject.SetActive(false);
-        CanvasManager.researchAdapter.DisplayResearch(info.cTransform.GetChild(3).GetComponent<TMP_Text>());*/
+        base.OpenWindowWithToggle(info, toEnable);
     }
-
+/*
     protected override void UpdateWindow(InfoWindow info)
     {
         base.UpdateWindow(info);
-        ResearchDispayData data = CanvasManager.researchAdapter.DisplayResearch();
+        ResearchDispayData data = SceneRefs.researchAdapter.DisplayResearch();
         VisualElement research = info.constructed.Q<VisualElement>("Research");
 
         research.Q<Label>("Name").text = data.name;
         research.Q<VisualElement>("Image").style.unityBackgroundImageTintColor = data.color;
         research.Q<Label>("Progress").text = data.progress;
-    }
+    }*/
 
     #endregion
     public override void Load(ClickableObjectSave save)
     {
         base.Load(save);
-        //researchBackend = CanvasManager.research.GetComponent<ResearchBackend>();
+        //researchBackend = SceneRefs.research.GetComponent<ResearchBackend>();
     }
 
     public override void Produce(float speed)
@@ -47,7 +46,7 @@ public class Research_Production : ProductionBuilding
             gameObject.GetComponent<Animator>().SetBool("Rotate", true);
             b = false;
         }
-        CanvasManager.researchAdapter.DoProduction(speed);
+        SceneRefs.researchAdapter.DoProduction(speed);
     }
 
 

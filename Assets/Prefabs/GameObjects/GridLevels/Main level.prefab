@@ -61,6 +61,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55afff39916c3d445ae53bb0e85982a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  width: 21
+  height: 21
   rocks: {fileID: 1910636158182974494}
   roads: {fileID: 8459687587329189198}
   water: {fileID: 417579824795650653}
@@ -68,6 +70,7 @@ MonoBehaviour:
   buildings: {fileID: 8331111288221992689}
   pipes: {fileID: 3859038626553102039}
   overlays: {fileID: 9097239234769059568}
+  unlocked: 0
 --- !u!1 &4805848459828854716
 GameObject:
   m_ObjectHideFlags: 0
@@ -5499,6 +5502,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -6205,6 +6228,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -10321,6 +10348,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -13731,6 +13762,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -14159,6 +14210,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -15151,6 +15206,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -15895,6 +15954,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -18065,6 +18128,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -18685,6 +18752,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -20669,6 +20740,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -21103,6 +21194,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -22095,6 +22206,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -24867,6 +24982,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -25797,6 +25916,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal
@@ -26359,6 +26482,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: m_Name
       value: Coal

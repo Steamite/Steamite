@@ -2,30 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Storage : Building
 {
     public List<bool> canStore = new();
 
     #region Window
-    protected override void SetupWindow(InfoWindow info, List<string> toEnable)
+    protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
     {
         toEnable.Add("Storage");
-
-        base.SetupWindow(info, toEnable);
-        /*StorageAssign SA = info.cTransform.GetChild(1).GetComponent<StorageAssign>();
-        SA.building = this;
-        SA.SetStorageButton(GetComponent<Storage>().canStore, info.cTransform);
-        info.cTransform.GetChild(1).gameObject.SetActive(true); // storage
-        info.cTransform.GetChild(1).GetChild(0).gameObject.SetActive(true); // storage
-        info.cTransform.GetChild(1).GetChild(1).gameObject.SetActive(false); // storage*/
-    }
-    protected override void UpdateWindow(InfoWindow info)
-    {
-        base.UpdateWindow(info);
-        //info.constructed.Q<>("").UpdateAmmounts();
+        base.OpenWindowWithToggle(info, toEnable);
+        ((IUIElement)SceneRefs.infoWindow.constructedElement.Q<VisualElement>("Storage")).Fill(this);
     }
     #endregion
+
+    #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -40,7 +32,9 @@ public class Storage : Building
         if (build.constructed)
             SceneRefs.humans.GetComponent<JobQueue>().storages.Add(this);
     }
+    #endregion
 
+    #region Storing
     public override void RequestRes(Resource request, Human h, int mod)
     {
         if (build.constructed && mod == 1)
@@ -71,6 +65,12 @@ public class Storage : Building
         base.RequestRes(request, h, mod);
     }
 
+    public void DestroyResource(ResourceType type, int ammountToDestroy)
+    {
+        localRes.stored.ammount[localRes.stored.type.IndexOf(type)] -= ammountToDestroy;
+        UpdateWindow(nameof(LocalRes));
+    }
+    #endregion
     public override List<string> GetInfoText()
     {
         List<string> s = base.GetInfoText();
@@ -86,7 +86,7 @@ public class Storage : Building
         localRes.stored.type = templateRes.type;
         while(localRes.stored.ammount.Count < templateRes.type.Count)
         {
-            localRes.stored.ammount.Add(0);
+            localRes.stored.ammount.Add(400);
         }
         canStore = new();
         for (int i = 0; i < localRes.stored.ammount.Count; i++)
@@ -94,5 +94,6 @@ public class Storage : Building
             canStore.Add(true);
         }
         jQ.storages.Add(this);
+        localRes.stored.capacity = 5000;
     }
 }

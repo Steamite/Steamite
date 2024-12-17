@@ -115,7 +115,7 @@ public class TradeInfo : MonoBehaviour
             //-------------sell-----------\\
             MakeSummary(capacity, activeTrade.selling.ammount.Sum(), activeTrade.reward,
                 sellResText, sellCapText, sellCostText, ref buttonText, true);
-            List<Resource> availableResources = MyGrid.buildings.Where(q => q.GetComponent<Storage>() != null).Select(q => q.localRes.Future(true)).ToList();
+            List<Resource> availableResources = MyGrid.buildings.Where(q => q.GetComponent<Storage>() != null).Select(q => q.LocalRes.Future(true)).ToList();
             for (int i = 0; i < activeTrade.selling.ammount.Count; i++)
             {
                 if (activeTrade.selling.ammount[i] > availableResources.Sum(q => q.ammount[q.type.IndexOf(activeTrade.selling.type[i])]))
@@ -222,7 +222,7 @@ public class TradeInfo : MonoBehaviour
         }
         else
         {
-            CanvasManager.ShowMessage("No money");
+            SceneRefs.ShowMessage("No money");
         }
     }
 }

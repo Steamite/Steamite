@@ -34,23 +34,6 @@ public class FluidTank : Building
         base.FinishBuild();
     }
     #region Window
-    protected override void SetupWindow(InfoWindow info, List<string> toEnable)
-    {
-        base.SetupWindow(info, toEnable);
-        /*Transform storageMenu = info.transform.GetChild(1).GetChild(0).GetChild(1).GetChild(1);
-        storageMenu.gameObject.SetActive(true);
-        storageMenu.GetChild(0).gameObject.SetActive(false);
-        storageMenu.GetChild(1).gameObject.SetActive(true);
-        storageMenu.GetChild(1).GetChild(0).GetChild(3).GetComponent<Image>().color = fillColor;*/
-    }
-
-    protected override void UpdateWindow(InfoWindow info)
-    {
-        base.UpdateWindow(info);
-        /*storageMenu.GetChild(1).GetChild(0).GetChild(3).GetComponent<Image>().fillAmount = (float)networkAccess.fluid.ammount[0] / (float)networkAccess.fluid.capacity[0];
-        storageMenu.GetChild(1).GetChild(0).GetChild(2).GetComponent<TMP_Text>().text = $"{networkAccess.fluid.ammount[0]} / {networkAccess.fluid.capacity[0]}";
-        storageMenu.GetChild(1).GetChild(0).GetChild(3).GetChild(0).GetComponent<TMP_Text>().text = $"{networkAccess.fluid.ammount[0]}*/
-    }
     #endregion
 
     public override void DestoyBuilding()

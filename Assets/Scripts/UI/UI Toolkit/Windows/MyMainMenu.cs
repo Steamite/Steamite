@@ -3,28 +3,31 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class MyMainMenu : MonoBehaviour, IToolkitController
+namespace StartMenu
 {
-    VisualElement root;
-
-    [SerializeReference] public List<MonoBehaviour> toolkitControllers;
-
-    public void Init(VisualElement root)
+    public class MyMainMenu : MonoBehaviour, IToolkitController
     {
-        foreach(IToolkitController controller in toolkitControllers)
+        VisualElement root;
+
+        [SerializeReference] public List<MonoBehaviour> toolkitControllers;
+
+        public void Init(VisualElement root)
         {
-            controller.Init(root);
+            foreach (IToolkitController controller in toolkitControllers)
+            {
+                controller.Init(root);
+            }
         }
-    }
 
-    void Start()
-    {
-        root = gameObject.GetComponent<UIDocument>().rootVisualElement;
+        void Start()
+        {
+            root = gameObject.GetComponent<UIDocument>().rootVisualElement;
 
-        Init(root);
+            Init(root);
 
-        // opening load menu
-        Button button = root.Q<Button>("Exit-Button");
-        button.RegisterCallback<ClickEvent>((_) => Application.Quit());
+            // opening load menu
+            Button button = root.Q<Button>("Exit-Button");
+            button.RegisterCallback<ClickEvent>((_) => Application.Quit());
+        }
     }
 }

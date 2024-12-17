@@ -18,14 +18,14 @@ public class WaterPump : ProductionBuilding
         /*GridPos waterPos = new(transform.GetChild(1).gameObject);
         water = MyGrid.GetGridItem(waterPos) as Water;
         t = t.GetChild(2);
-        t.GetChild(0).GetComponent<ProductionButton>().UpdateButtonState(pTime.currentTime, pTime.prodTime);
+        t.GetChild(0).GetComponent<ProductionButton>().UpdateButtonState(currentTime, prodTime);
         
         // cost
         t.GetChild(1).GetComponent<TMP_Text>()
             .text = $"Water Deposit\n({water.ammount})";
         // production
         t.GetChild(2).GetComponent<TMP_Text>()
-            .text = $"Water: {pTime.modifier}";
+            .text = $"Water: {modifier}";
         // stored
         t.GetChild(3).GetComponent<TMP_Text>()
             .text = $"Water: {networkAccess.fluid.ammount[0]}/{networkAccess.fluid.capacity[0]}";*/
@@ -37,9 +37,9 @@ public class WaterPump : ProductionBuilding
     }
     protected override void Product()
     {
-        while (pTime.currentTime >= pTime.prodTime)
+        while (currentTime >= prodTime)
         {
-            pTime.currentTime -= pTime.prodTime;
+            currentTime -= prodTime;
             if (networkAccess.fluid.capacity[0] > networkAccess.fluid.ammount[0])
             {
                 ExtractWater(this);
@@ -85,9 +85,9 @@ public class WaterPump : ProductionBuilding
         else
         {
             pStates.supplied = false;
-            pTime.currentTime = 0;
+            currentTime = 0;
             RefreshStatus();
-            OpenWindow();
+            //OpenWindow();
         }
     }
     public override bool CanPlace()

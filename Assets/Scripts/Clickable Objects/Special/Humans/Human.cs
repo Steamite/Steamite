@@ -2,13 +2,18 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.Jobs.LowLevel.Unsafe;
+using Unity.Properties;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 public enum JobState
 {
+    Unset,
     Free,
     Digging, // dig out rock
     Constructing, // progress constructions
@@ -18,7 +23,7 @@ public enum JobState
     FullTime, // progress production
     Cleanup
 }
-public enum Specs
+public enum Specializations
 {
     Worker,
     Farmer,
@@ -26,10 +31,17 @@ public enum Specs
 }
 public class Human : ClickableObject
 {
+
     [Header("Human stats")]
-    [SerializeField]
-    public Efficiency efficiency = new();
-    public Specs specialization = Specs.Worker;
+    
+    Efficiency efficiency = new();
+    public Efficiency Efficiency
+    {
+        get { return efficiency; }
+        set { efficiency = value; }
+    }
+
+    public Specializations specialization = Specializations.Worker;
 
     public bool nightTime = false;
     public bool hasEaten = true;
@@ -40,40 +52,71 @@ public class Human : ClickableObject
 
     // Action data
     [Header("Action data")]
-    public JobData jData = new();
+
+    JobData jData;
+
+    #region Job Setters
+    [CreateProperty]
+    public JobData Job
+    {
+        get { return jData; }
+    }
+    public void SetJob(JobData data)
+    {
+        jData = data;
+        UpdateWindow(nameof(Job));
+    }
+    public void SetJob(JobState state = JobState.Unset, ClickableObject interest = null, List<GridPos> path = null)
+    {
+        if(state != JobState.Unset)
+            jData.job = state;
+        if (interest)
+            jData.interest = interest;
+        if (path != null)
+            jData.path = path;
+        UpdateWindow(nameof(Job));
+    }
+    #endregion
+    //public 
     public Building destination;
     public ProductionBuilding workplace;
     public Action<Human> repetableAction;
-    public Resource inventory = new();
-    ///////////////////////////////////////////////////
-    ///////////////////Overrides///////////////////////
-    ///////////////////////////////////////////////////
+
+    Resource inventory = new();
+    [CreateProperty]
+    public Resource Inventory => inventory;
+
+    #region Basic Operations
+    public override GridPos GetPos()
+    {
+        return new(transform.position.x, transform.localPosition.y / ClickabeObjectFactory.LEVEL_HEIGHT, transform.position.z);
+    }
     public override void UniqueID() // creates a random int
     {
         List<int> ids = transform.parent.parent.GetChild(0).GetComponentsInChildren<Human>().Select(q => q.id).ToList();
         ids.AddRange(transform.parent.parent.GetChild(1).GetComponentsInChildren<Human>().Select(q => q.id).ToList());
+        jData = new();
+        jData.job = JobState.Free;
         CreateNewId(ids);
     }
-    #region Window
-    protected override void SetupWindow(InfoWindow info)
-    {
-        base.SetupWindow(info);
-        info.SwitchMods(InfoMode.Human);
-    }
 
-    protected override void UpdateWindow(InfoWindow info)
+    public void ActivateHuman()
     {
-        base.UpdateWindow(info);
-        VisualElement group = info.human.Q<VisualElement>("Stats");
-        group.Q<Label>("Specialization-Value").text = specialization.ToString();
-        group.Q<Label>("Efficiency-Value").text = efficiency.ToString();
+#if UNITY_EDITOR
+        transform.GetChild(0).gameObject.SetActive(true);
+#endif
+        transform.parent.parent.GetComponent<Humans>().ticks.tickAction += DoRepetableAction;
+        DayTime dT = SceneRefs.tick.timeController;
+        dT.dayStart += Day;
+        dT.nightStart += Night;
 
-        group = group.parent.Q<VisualElement>("Job");
-        group.Q<Label>("Type-Value").text = jData.job.ToString();
-        group.Q<Label>("Position-Value").text = jData.interest?.GetPos().ToString();
-        group.Q<Label>("Object-Value").text = jData.interest?.name;
+        if (jData.job <= JobState.Free)
+        {
+            HumanActions.LookForNew(this);
+            return;
+        }
+        ChangeAction(HumanActions.Move);
     }
-    #endregion Window
     public void OnDrawGizmos()
     {
         if (selected)
@@ -85,12 +128,33 @@ public class Human : ClickableObject
             }
         }
     }
+    #endregion
 
-    public override GridPos GetPos()
+    #region Window
+    public override InfoWindow OpenWindow()
     {
-        return new(transform.position.x, transform.localPosition.y/2, transform.position.z);
+        InfoWindow info = base.OpenWindow();
+        info.Open(this, InfoMode.Human);
+        info.humanElement.Q<Label>("Specialization-Value").text = specialization.ToString();
+
+        return info;
     }
 
+    /*protected override void UpdateWindow(InfoWindow info)
+    {
+        base.UpdateWindow(info);
+        VisualElement group = info.human.Q<VisualElement>("Stats");
+        
+        group.Q<Label>("Efficiency-Value").text = efficiency.ToString();
+
+        group = group.parent.Q<VisualElement>("Job");
+        group.Q<Label>("Type-Value").text = jData.job.ToString();
+        group.Q<Label>("Position-Value").text = jData.interest?.GetPos().ToString();
+        group.Q<Label>("Object-Value").text = jData.interest?.name;
+    }*/
+    #endregion Window
+
+    #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -111,27 +175,10 @@ public class Human : ClickableObject
     {
         base.Load(save);
     }
-    ///////////////////////////////////////////////////
-    ///////////////////Methods/////////////////////////
-    ///////////////////////////////////////////////////
-    public void ActivateHuman()
-    {
-#if UNITY_EDITOR
-        transform.GetChild(0).gameObject.SetActive(true);
-#endif
-        transform.parent.parent.GetComponent<Humans>().ticks.tickAction += DoRepetableAction;
-        DayTime dT = SceneRefs.tick.timeController;
-        dT.dayStart += Day;
-        dT.nightStart += Night;
 
-        if (jData.job == JobState.Free)
-        {
-            HumanActions.LookForNew(this);
-            return;
-        }
-        ChangeAction(HumanActions.Move);
-    }
+    #endregion
 
+    #region Human actions
     public void DoRepetableAction()
     {
         if (repetableAction != null && !lookingForAJob)
@@ -147,11 +194,10 @@ public class Human : ClickableObject
     public void ChangeAction(Action<Human> action)
     {
         transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
-        OpenWindow();
         repetableAction = action;
     }
 
-    public void Decide() // for new Jobs or for managing fullTime jobs
+    public void Decide()
     {
         if (nightTime)
             return;
@@ -187,33 +233,32 @@ public class Human : ClickableObject
 
     public void Idle()
     {
-        jData = new JobData();
-        Elevator el = MyGrid.buildings.First(q => q.tag == "Elevator" && q.GetComponent<Elevator>().main).GetComponent<Elevator>();
-        GridPos v = new(el.transform.localPosition);
-        if (!v.Equals(new GridPos(transform.localPosition))) // if not standing on the elevator
+        ClickableObject el = MyGrid.buildings.First(q => q.tag == "Elevator" && q.GetComponent<Elevator>().main);
+        if (!el.GetPos().Equals(GetPos())) // if not standing on the elevator
         {
-            jData = PathFinder.FindPath(new() { el }, this);
-            if (jData.interest != null)
+            JobData data = PathFinder.FindPath(new() { el }, this);
+            data.job = JobState.Free;
+            if (data.interest != null)
+            {
+                SetJob(data);
                 ChangeAction(HumanActions.Move); //  go to the elevator and look for a new Job 
+            }
         }
-        else
-        {
-            OpenWindow();
-        }
+        else if (jData.job != JobState.Free)
+            SetJob(JobState.Free);
     }
+    #endregion
 
-
-    ///////////////////////////////////////////////////
-    ///////////////////Day/Night///////////////////////
-    ///////////////////////////////////////////////////
+    #region Day cycle
     public void Day()
     {
         nightTime = false; // stop sleeping
-        if (jData.job == JobState.Free)
+        if (jData.job <= JobState.Free)
             HumanActions.LookForNew(this);
         else
         {
-            jData.path = PathFinder.FindPath(new() { jData.interest }, this).path;
+
+            SetJob(path: PathFinder.FindPath(new() { jData.interest }, this).path);
             ChangeAction(HumanActions.Move);
         }
     }
@@ -228,5 +273,5 @@ public class Human : ClickableObject
         jData.path = PathFinder.FindWayHome(this);
         ChangeAction(HumanActions.Move);
     }
-
+    #endregion
 }

@@ -24,7 +24,7 @@ public abstract class FullscreenWindow : MonoBehaviour
         {
             SceneRefs.gridTiles.DeselectObjects();
             MainShortcuts.DisableInput();
-            CanvasManager.infoWindow.gameObject.SetActive(false);
+            SceneRefs.infoWindow.gameObject.SetActive(false);
             window.SetActive(true);
         }
         
@@ -36,7 +36,7 @@ public abstract class FullscreenWindow : MonoBehaviour
         if (window.activeSelf)
         {
             MainShortcuts.EnableInput();
-            CanvasManager.infoWindow.gameObject.SetActive(false);
+            SceneRefs.infoWindow.gameObject.SetActive(false);
             window.SetActive(false);
         }
     }

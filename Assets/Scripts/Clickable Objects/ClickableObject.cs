@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
@@ -8,14 +9,15 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(Rigidbody))]
 public class ClickableObject : MonoBehaviour, 
     IPointerEnterHandler, IPointerExitHandler, 
-    IPointerDownHandler, IPointerUpHandler
+    IPointerDownHandler, IPointerUpHandler, IUpdatable
 {
+    [HideInInspector]
+    public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
+
     public bool selected = false;
     public int id = -1;
 
-    ///////////////////////////////////////////////////
-    ///////////////////Overrides///////////////////////
-    ///////////////////////////////////////////////////
+    #region Object Operations
     public override bool Equals(object obj)
     {
         if (obj == null || GetType() != obj.GetType())
@@ -26,10 +28,8 @@ public class ClickableObject : MonoBehaviour,
     }
 
     public override int GetHashCode() { return base.GetHashCode(); }
+    #endregion
 
-    ///////////////////////////////////////////////////
-    ///////////////////Methods/////////////////////////
-    ///////////////////////////////////////////////////
     #region Basic Operations
     public virtual void UniqueID()
     {
@@ -45,7 +45,25 @@ public class ClickableObject : MonoBehaviour,
     {
         return "_";
     }
+
+
+    public virtual GridPos GetPos()
+    {
+        Debug.LogError("No Implementation");
+        GridPos gp = new();
+        return gp;
+    }
+
+    protected void CreateNewId(List<int> clickables) // creates a random int
+    {
+        do
+        {
+            id = UnityEngine.Random.Range(0, int.MaxValue);
+        } while (clickables.Where(q => q == id).Count() > 0);
+        return;
+    }
     #endregion Basic Operations
+
     #region Mouse Events
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
@@ -72,34 +90,37 @@ public class ClickableObject : MonoBehaviour,
             SceneRefs.gridTiles.BreakAction();
     }
     #endregion Mouse Events
+
     #region Window
     /// <summary>
-    /// Creates the info window, if first is false only updates the info.
+    /// Sets the header text and returns info window reference.
     /// </summary>
     /// <param name="first">Prepare the window.</param>
-    /// <returns>Info window reference, if the object is not selected returns null.</returns>
-    public void OpenWindow(bool setUp = false)
+    /// <returns>Info window reference, if the object is not selected throwns an error.</returns>
+    public virtual InfoWindow OpenWindow()
     {
         if (selected)
         {
-            InfoWindow info = CanvasManager.infoWindow;
-            if (setUp) SetupWindow(info);
-            UpdateWindow(info);
+            InfoWindow info = SceneRefs.infoWindow;
+            info.header.text = name;
+            return info;
         }
+        throw new ArgumentException();
     }
 
-    protected virtual void SetupWindow(InfoWindow info)
+    /// <summary>
+    /// Must be called after updating a bindable parameter. <br/>
+    /// Has effect only if there is an active binding. <br/>
+    /// Add <b>[CreateProperty]</b> to mark it.
+    /// </summary>
+    /// <param name="property">Name of the property, not field.</param>
+    public void UpdateWindow(string property = "")
     {
-        info.header.text = name;
-        info.window.style.display = DisplayStyle.Flex;
-    }
-
-    protected virtual void UpdateWindow(InfoWindow info)
-    {
-
+        propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
 
     #endregion Window
+
     #region Saving
     public virtual ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
@@ -113,20 +134,4 @@ public class ClickableObject : MonoBehaviour,
         id = save.id;
     }
     #endregion Saving
-
-    public virtual GridPos GetPos()
-    {
-        Debug.LogError("No Implementation");
-        GridPos gp = new();
-        return gp;
-    }
-
-    protected void CreateNewId(List<int> clickables) // creates a random int
-    {
-        do
-        {
-            id = UnityEngine.Random.Range(0, int.MaxValue);
-        } while (clickables.Where(q => q == id).Count() > 0);
-        return;
-    }
 }

@@ -220,7 +220,7 @@ public class GroundLevel : MonoBehaviour
 
     #region Removing from Grid
 
-    public void RemoveBuilding(Building building, GridPos gridPos)
+    public void UnsetBuilding(Building building, GridPos gridPos)
     {
         overlays.Remove(building.id, gridPos);
         List<Road> _roads = roads.GetComponentsInChildren<Road>().ToList();
@@ -242,8 +242,6 @@ public class GroundLevel : MonoBehaviour
             }
         }
     }
-
-
     #endregion Removing from Grid
 
     #region Checks

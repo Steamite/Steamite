@@ -8,6 +8,6 @@ public class DeconstructButton : MonoBehaviour
     {
         Building building = GameObject.Find("Grid").GetComponent<GridTiles>().clickedObject.GetComponent<Building>();
         building.OrderDeconstruct();
-        building.OpenWindow(true);
+        // UPDATE
     }
 }

@@ -9,8 +9,8 @@ public class ClickabeObjectFactory : MonoBehaviour
 
     public const int BUILD_OFFSET = 1;
     public const int CHUNK_OFFSET = 1;
-    public const int HUMAN_OFFSET = 1;
 
+    public const float HUMAN_OFFSET = 0.47f;
     public const float ROCK_OFFSET = 1.5f;
     public const float ROAD_OFFSET = 0.45f;
     #endregion
@@ -54,7 +54,7 @@ public class ClickabeObjectFactory : MonoBehaviour
         Rock r = (Rock)Instantiate(tilePrefabs.GetPrefab("Dirt"), new Vector3(gp.x, (gp.y * LEVEL_HEIGHT) + ROCK_OFFSET, gp.z), Quaternion.identity, MyGrid.FindLevelRocks(gp.y));
         r.GetComponent<Renderer>().material.color = color;
         r.rockYield = resource;
-        r.integrity = hardness;
+        r.Integrity = hardness;
         r.name = _name;
         r.UniqueID();
         MyGrid.SetGridItem(gp, r);
@@ -67,7 +67,7 @@ public class ClickabeObjectFactory : MonoBehaviour
         el.build.constructed = true;
         el.main = isMain;
         el.name = el.name.Replace("(Clone)", "");
-        MyGrid.PlaceBuild(el, true);
+        MyGrid.SetBuilding(el, true);
 
         return el;
     }
@@ -105,7 +105,7 @@ public class ClickabeObjectFactory : MonoBehaviour
             Quaternion.Euler(0, save.rotationY, 0),
             MyGrid.FindLevelBuildings(save.gridPos.y));
         b.Load(save);
-        MyGrid.PlaceBuild(b, true);
+        MyGrid.SetBuilding(b, true);
         return b;
     }
 
@@ -147,28 +147,23 @@ public class ClickabeObjectFactory : MonoBehaviour
             SceneRefs.humans.transform.GetChild(parent)).GetComponent<Human>();
         human.transform.GetChild(1).GetComponent<MeshRenderer>().material.color = save.color.ConvertColor();
         human.id = save.id;
-        human.jData = new(save.jobSave, human);
+        human.SetJob(new(save.jobSave, human));
         human.name = save.name;
-        human.inventory = save.inventory;
+        MyRes.ManageRes(human.Inventory, save.inventory, 1);
         human.specialization = save.specs;
-        if (human.jData.path.Count > 0)
+        if (human.Job.path.Count > 0)
             human.ChangeAction(HumanActions.Move);
         else
             human.Decide();
         // house assigment
         if (save.houseID != -1)
-        {
-            human.home = MyGrid.buildings.Where(q => q.id == save.houseID).
-                SingleOrDefault().GetComponent<House>();
-            human.home.assigned.Add(human);
-        }
+            MyGrid.buildings.Where(q => q.id == save.houseID).
+                SingleOrDefault().GetComponent<House>().ManageAssigned(human, true);
+
         // workplace assigment
         if (save.workplaceId != -1)
-        {
-            human.workplace = MyGrid.buildings.Where(q => q.id == save.workplaceId).
-                SingleOrDefault().GetComponent<ProductionBuilding>();
-            human.workplace.assigned.Add(human);
-        }
+            MyGrid.buildings.Where(q => q.id == save.workplaceId).
+                SingleOrDefault().GetComponent<ProductionBuilding>().ManageAssigned(human, true);
         return human;
     }
 

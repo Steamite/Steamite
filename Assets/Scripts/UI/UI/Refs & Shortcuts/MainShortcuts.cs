@@ -50,7 +50,7 @@ public class MainShortcuts : MonoBehaviour
             // toggle build menu
             if (buildMenu.triggered)
             {
-                Transform buildMenu = CanvasManager.buildMenu.transform;
+                Transform buildMenu = SceneRefs.buildMenu.transform;
                 Transform categories = buildMenu.GetChild(1);
                 buildMenu.gameObject.SetActive(!buildMenu.gameObject.activeSelf);
                 if (buildMenu.gameObject.activeSelf)

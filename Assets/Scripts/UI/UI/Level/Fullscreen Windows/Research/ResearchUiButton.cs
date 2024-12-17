@@ -123,23 +123,23 @@ public class ResearchUIButton : MonoBehaviour
 
     void ManageBuildButton()
     {
-        Transform button = CanvasManager.buildMenu.GetChild(1).GetChild(node.buttonCategory).transform.GetChild(node.buildButton);
+        Transform button = SceneRefs.buildMenu.GetChild(1).GetChild(node.buttonCategory).transform.GetChild(node.buildButton);
         switch (state)
         {
             case ButtonState.Unavailable:
                 button.gameObject.SetActive(false);
                 if (button.parent.GetComponentsInChildren<BuildButton>().Length == 0)
-                    CanvasManager.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(false);
+                    SceneRefs.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(false);
                 break;
             case ButtonState.Available:
                 button.gameObject.SetActive(true);
                 button.GetComponent<Button>().interactable = false;
-                CanvasManager.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(true);
+                SceneRefs.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(true);
                 break;
             case ButtonState.Completed:
                 button.gameObject.SetActive(true);
                 button.GetComponent<Button>().interactable = true;
-                CanvasManager.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(true);
+                SceneRefs.buildMenu.GetChild(0).GetChild(button.parent.GetSiblingIndex()).gameObject.SetActive(true);
                 break;
         }
     }
@@ -159,7 +159,7 @@ public class ResearchUIButton : MonoBehaviour
             }
             borderFill.fillAmount = 1;
         }
-        CanvasManager.ShowMessage($"Reseach finished: {node.name}");
+        SceneRefs.ShowMessage($"Reseach finished: {node.name}");
         Recolor(true);
         UIRefs.research.UpdateInfoWindow(this);
         ManageBuildButton();

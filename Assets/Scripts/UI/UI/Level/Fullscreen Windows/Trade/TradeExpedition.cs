@@ -27,7 +27,7 @@ public class TradeExpedition
             currentProgress = maxProgress;
             goingToTrade = false;
             return false;
-            //CanvasManager.tradeWindow.transform.GetChild(0).GetChild(0).GetChild(tradeLocation).GetComponent<Slider>().value =;
+            //SceneRefs.tradeWindow.transform.GetChild(0).GetChild(0).GetChild(tradeLocation).GetComponent<Slider>().value =;
         }
         else
         {

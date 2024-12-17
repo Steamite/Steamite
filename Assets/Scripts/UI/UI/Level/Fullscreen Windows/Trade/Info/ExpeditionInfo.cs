@@ -14,7 +14,7 @@ public class ExpeditionInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         if (expedition != null)
         {
             mouseOver = true;
-            CanvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().DisplayInfo(expedition, UIRefs.trade.transform.InverseTransformPoint(transform.GetComponent<RectTransform>().position));
+            SceneRefs.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().DisplayInfo(expedition, UIRefs.trade.transform.InverseTransformPoint(transform.GetComponent<RectTransform>().position));
         }
     }
     public void OnPointerExit(PointerEventData eventData)
@@ -22,7 +22,7 @@ public class ExpeditionInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         if (expedition != null)
         {
             mouseOver = false;
-            CanvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().HideInfo();
+            SceneRefs.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().HideInfo();
             follow = false;
         }
     }
@@ -50,7 +50,7 @@ public class ExpeditionInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         if (mouseOver)
         {
-            CanvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().DisplayInfo(
+            SceneRefs.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().DisplayInfo(
                 expedition, UIRefs.trade.transform.InverseTransformPoint(transform.GetComponent<RectTransform>().position));
             if (follow)
             {

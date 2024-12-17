@@ -46,7 +46,8 @@ public class SteamGenerator : ProductionBuilding
     }
     protected override bool ManageInputRes()
     {
-        if (!base.ManageInputRes())
+        return false;
+        /*if (!base.ManageInputRes())
             return false;
         if (!fluidSupplied)
         {
@@ -73,13 +74,13 @@ public class SteamGenerator : ProductionBuilding
             fluidSupplied = true;
             pStates.running = true;
         }
-        return true;
+        return true;*/
     }
     protected override void Product()
     {
-        while (pTime.currentTime >= pTime.prodTime)
+        /*while (currentTime >= prodTime)
         {
-            pTime.currentTime -= pTime.prodTime;
+            currentTime -= prodTime;
             if (networkAccess.fluid.capacity[1] > networkAccess.fluid.ammount[1])
             {
                 networkAccess.fluid.ammount[1] += steamProduction;
@@ -105,43 +106,41 @@ public class SteamGenerator : ProductionBuilding
                     RefreshStatus();
                 }
             }
-            OpenWindow();
             fluidSupplied = false;
             pStates.supplied = false;
             if (!ManageInputRes())
             {
                 return;
             }
-        }
+        }*/
     }
     /// <summary>
     /// Call after assinging lastWaterAccessNetworkElem
     /// </summary>
     void TakeWater()
     {
-        int index = lastWaterAccessNetworkElem.GetFluid().type.IndexOf(FluidType.Water);
+        /*int index = lastWaterAccessNetworkElem.GetFluid().type.IndexOf(FluidType.Water);
         int ammountToExtract = lastWaterAccessNetworkElem.GetFluid().ammount[index];
         if (ammountToExtract > networkAccess.fluid.capacity[0] - networkAccess.fluid.ammount[0])
             ammountToExtract = networkAccess.fluid.capacity[0] - networkAccess.fluid.ammount[0];
         networkAccess.fluid.ammount[0] += ammountToExtract;
-        lastWaterAccessNetworkElem.GetFluid().ammount[index] -= ammountToExtract;
-        lastWaterAccessNetworkElem.OpenWindow();
+        lastWaterAccessNetworkElem.GetFluid().ammount[index] -= ammountToExtract;*/
     }
     protected override void AfterProduction()
     {
         base.AfterProduction();
     }
-    public override Fluid GetFluid()
+    /*public override Fluid GetFluid()
     {
         return networkAccess.fluid;
-    }
+    }*/
     protected override void UpdateProductionInfo(InfoWindow info)
     {/*
         t = t.GetChild(2);
-        t.GetChild(0).GetComponent<ProductionButton>().UpdateButtonState(pTime.currentTime, pTime.prodTime);
+        t.GetChild(0).GetComponent<ProductionButton>().UpdateButtonState(currentTime, prodTime);
         // production cost
         t.GetChild(1).GetComponent<TMP_Text>()
-            .text = MyRes.GetDisplayText(pRes.inputResource.stored, pRes.productionCost) + $"{networkAccess.fluid.type[0]} {networkAccess.fluid.ammount[0]}/{waterCost}";
+            .text = MyRes.GetDisplayText(inputResource.stored, productionCost) + $"{networkAccess.fluid.type[0]} {networkAccess.fluid.ammount[0]}/{waterCost}";
 
         // production
         t.GetChild(2).GetComponent<TMP_Text>()

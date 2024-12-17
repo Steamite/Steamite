@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Template name="Load-Menu" src="project://database/Assets/UI%20Toolkit/Load-Menu.uxml?fileID=9197481963319205126&amp;guid=87550cde01cc7fa4a83489895c6bf595&amp;type=3#Load-Menu" />
+    <ui:Template name="Load-Menu" src="project://database/Assets/UI%20Toolkit/Main%20Menu/Load-Menu.uxml?fileID=9197481963319205126&amp;guid=87550cde01cc7fa4a83489895c6bf595&amp;type=3#Load-Menu" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Save%20window.uss?fileID=7433441132597879392&amp;guid=eca73d8699a9e1c41a8dd8849b9c0de9&amp;type=3#Save window" />
@@ -34,12 +34,12 @@
                         <ui:ScrollView horizontal-scroller-visibility="Hidden" name="MapParams" style="flex-grow: 0; height: 200%; visibility: visible; overflow: visible; display: flex; flex-shrink: 1;">
                             <Params.StringGenerationParameter name="Seed" label-text="Seed" style="font-size: 37px; -unity-text-align: middle-left; padding-left: 1px; margin-left: 2px;">
                                 <Bindings>
-                                    <ui:DataBinding property="TextValue" data-source-path="Seed" data-source-type="MapGeneration, Toolkit" binding-mode="TwoWay" />
+                                    <ui:DataBinding property="TextValue" data-source-path="Seed" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="TwoWay" />
                                 </Bindings>
                             </Params.StringGenerationParameter>
                             <Params.EnumGeneratioParameter label-text="Map Size" name="Map-Size" style="font-size: 37px; -unity-text-align: middle-left;">
                                 <Bindings>
-                                    <ui:DataBinding property="IntValue" data-source-path="MapSize" data-source-type="MapGeneration, Toolkit" binding-mode="ToSource" />
+                                    <ui:DataBinding property="IntValue" data-source-path="MapSize" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="ToSource" />
                                 </Bindings>
                             </Params.EnumGeneratioParameter>
                             <ui:Label text="Veins" style="align-content: flex-end; font-size: 43px; height: 50px; margin-top: 20px; justify-content: flex-end;">
@@ -47,27 +47,24 @@
                             </ui:Label>
                             <Params.EnumGeneratioParameter label-text="Size" name="Size" style="font-size: 37px; -unity-text-align: middle-left; margin-top: 15px;">
                                 <Bindings>
-                                    <ui:DataBinding property="intValue" data-source-path="VeinSize" data-source-type="MapGeneration, Toolkit" binding-mode="ToSource" />
-                                    <ui:DataBinding property="IntValue" data-source-path="VeinSize" data-source-type="MapGeneration, Toolkit" binding-mode="ToSource" />
+                                    <ui:DataBinding property="IntValue" data-source-path="VeinSize" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="ToSource" />
                                 </Bindings>
                             </Params.EnumGeneratioParameter>
                             <Params.EnumGeneratioParameter label-text="Richness" name="Richness" style="font-size: 37px; -unity-text-align: middle-left; margin-top: 10px;">
                                 <Bindings>
-                                    <ui:DataBinding property="intValue" data-source-path="VeinRichness" data-source-type="MapGeneration, Toolkit" binding-mode="ToSource" />
-                                    <ui:DataBinding property="IntValue" data-source-path="VeinRichness" data-source-type="MapGeneration, Toolkit" binding-mode="ToSource" />
+                                    <ui:DataBinding property="IntValue" data-source-path="VeinRichness" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="ToSource" />
                                 </Bindings>
                             </Params.EnumGeneratioParameter>
                             <Params.EnumGeneratioParameter label-text="Number" name="Number" style="font-size: 37px; -unity-text-align: middle-left; margin-top: 10px;">
                                 <Bindings>
-                                    <ui:DataBinding property="intValue" data-source-path="VeinCount" data-source-type="MapGeneration, Toolkit" binding-mode="ToSource" />
-                                    <ui:DataBinding property="IntValue" data-source-path="VeinCount" data-source-type="MapGeneration, Toolkit" binding-mode="ToSource" />
+                                    <ui:DataBinding property="IntValue" data-source-path="VeinCount" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="ToSource" />
                                 </Bindings>
                             </Params.EnumGeneratioParameter>
                         </ui:ScrollView>
                         <ui:Label text="No options&#10;available" name="PlaceHolder" style="-unity-text-align: middle-center; flex-grow: 1; flex-shrink: 1; font-size: 80px; display: flex;" />
                     </ui:VisualElement>
                     <ui:VisualElement name="Right-Bar" style="flex-grow: 1; flex-shrink: 1; margin-right: 1%;">
-                        <ui:VisualElement name="VisualElement" style="flex-grow: 1; height: 80%; visibility: visible;">
+                        <ui:VisualElement name="Placeholders" style="flex-grow: 1; height: 80%; visibility: visible;">
                             <ui:Label text="Predefined" name="Label" style="font-size: 50px; flex-grow: 0; height: 10%; align-self: flex-start; margin-left: 0; margin-right: 0;" />
                             <ui:Label text="Label" name="Label" style="flex-grow: 1; height: 10%; max-height: 20%; padding-bottom: 0; margin-bottom: 0; align-self: auto; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; font-size: 20px;" />
                             <ui:VisualElement name="VisualElement" style="flex-grow: 1; margin-bottom: 0; height: 100%; background-image: url(&quot;project://database/Assets/Sprites/Icons/Gear.png?fileID=2800000&amp;guid=fd35f4632523ad441b9cd8631eecdbc2&amp;type=3#Gear&quot;); border-top-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-bottom-left-radius: 1px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgb(253, 220, 35); border-right-color: rgb(253, 220, 35); border-top-color: rgb(253, 220, 35); border-bottom-color: rgb(253, 220, 35); width: 100%; margin-top: 5%; align-self: auto; align-content: auto; align-items: auto; padding-bottom: 0;" />
@@ -75,7 +72,7 @@
                                 <ui:Label text="world name" style="flex-grow: 0; height: 10px; margin-bottom: 5px; max-height: 20px; align-self: center; font-size: 39px; -unity-text-align: middle-left; align-content: auto; align-items: auto; flex-shrink: 0;" />
                                 <ui:TextField placeholder-text="World name" hide-placeholder-on-focus="false" name="World-Name" max-length="24" style="width: auto; max-width: 100%; min-width: 100%; overflow: hidden; max-height: 70%; margin-top: 20px; margin-bottom: 0; font-size: 16px; -unity-text-align: upper-left;">
                                     <Bindings>
-                                        <ui:DataBinding property="value" data-source-path="WorldName" data-source-type="NewGameWindow, Toolkit" binding-mode="ToSource" />
+                                        <ui:DataBinding property="value" data-source-path="WorldName" data-source-type="StartMenu.NewGameWindow, ToolkitUI" binding-mode="ToSource" />
                                     </Bindings>
                                 </ui:TextField>
                             </ui:VisualElement>
