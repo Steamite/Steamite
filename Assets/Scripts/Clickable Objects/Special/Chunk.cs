@@ -1,12 +1,11 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class Chunk : StorageObject
 {
-    ///////////////////////////////////////////////////
-    ///////////////////Overrides///////////////////////
-    ///////////////////////////////////////////////////
+    #region Basic Operations
     public override void UniqueID()
     {
         CreateNewId(MyGrid.chunks.Select(q => q.id).ToList());
@@ -21,20 +20,18 @@ public class Chunk : StorageObject
         return new(transform.position.x, (transform.position.y - 1) / 2, transform.position.z);
     }
 
-    #region Window
-    protected override void SetupWindow(InfoWindow info)
-    {
-        base.SetupWindow(info);
-        info.SwitchMods(InfoMode.Chunk);
-    }
+    #endregion
 
-    protected override void UpdateWindow(InfoWindow info)
+    #region Window
+    public override InfoWindow OpenWindow()
     {
-        base.UpdateWindow(info); 
-        info.chunk.Q<Label>("").text = $"{string.Join(',', localRes.carriers.Select(q => q.name))}";
-        info.FillResourceList(info.chunk.Q<VisualElement>("Yield"), localRes.stored);
+        InfoWindow info = base.OpenWindow();
+        info.Open(this, InfoMode.Chunk);
+        return info;
     }
     #endregion
+
+    #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -46,21 +43,17 @@ public class Chunk : StorageObject
         }
         return null;
     }
-
-    public override void RequestRes(Resource request, Human h, int mod)
-    {
-        base.RequestRes(request, h, mod);
-        OpenWindow();
-    }
     public override void Load(ClickableObjectSave save)
     {
         transform.GetChild(1).GetComponent<MeshRenderer>().material.color = (save as ChunkSave).resColor.ConvertColor();
         base.Load(save);
     }
+    #endregion
 
+    #region Storage
     public override void Store(Human h, int transferPerTick)
     {
-        Debug.LogError("Can't store in a chunk");
+        throw new NotSupportedException();
     }
     public override void Take(Human h, int transferPerTick)
     {
@@ -71,10 +64,11 @@ public class Chunk : StorageObject
         else
         {
             int index = localRes.carriers.IndexOf(h);
-            MyRes.MoveRes(h.inventory, localRes.stored, localRes.requests[index], transferPerTick);
+            MyRes.MoveRes(h.Inventory, localRes.stored, localRes.requests[index], transferPerTick);
+            UpdateWindow(nameof(LocalRes));
             if (localRes.requests[index].ammount.Sum() == 0)
             {
-                if (h.inventory.capacity - h.inventory.ammount.Sum() == 0)
+                if (h.Inventory.capacity - h.Inventory.ammount.Sum() == 0)
                 {
                     FindS(h);
                 }
@@ -92,28 +86,23 @@ public class Chunk : StorageObject
             Destroy(gameObject);
         }
     }
-
-    ///////////////////////////////////////////////////
-    ///////////////////Methods/////////////////////////
-    ///////////////////////////////////////////////////    
+    public override void RequestRes(Resource request, Human h, int mod)
+    {
+        base.RequestRes(request, h, mod);
+        UpdateWindow(nameof(LocalRes));
+    }
     void FindS(Human h)
     {
         MyRes.FindStorage(h);
-        if (h.jData.interest)
-        {
-            h.jData.job = JobState.Supply;
-            h.ChangeAction(HumanActions.Move);
-        }
-        else
+        if (!h.Job.interest)
             Debug.LogError("Fuck, where do I store this?");
     }
-
+    #endregion
     public void Init(Resource res)
     {
         UniqueID();
         localRes.stored = res;
         MyRes.UpdateResource(localRes.stored, 1);
-        GameObject.FindWithTag("Humans").GetComponent<JobQueue>().AddJob(JobState.Cleanup, this);
         name = name.Replace("(Clone)", " ");
         MyGrid.chunks.Add(this);
     }

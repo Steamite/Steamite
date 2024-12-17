@@ -63,7 +63,6 @@ public static class PathFinder
                     plan.path.RemoveAt(plan.path.Count - 1);
                 }
             }
-            h.OpenWindow();
             return new(_path: plan.path, _interest: interest);
         }
         return new JobData(_path: new(), _interest: null);
@@ -155,13 +154,13 @@ public static class PathFinder
             _jData = FindPath(new() { h.home }, h);
             if (_jData.interest)
             {
-                h.efficiency.ManageModifier(ModType.House, true);
+                h.Efficiency.ManageModifier(ModType.House, true);
                 return _jData.path;
             }
         }
         Building elevator = MyGrid.buildings.First(q => q is Elevator el && el.main);
         _jData = FindPath(new() { elevator }, h);
-        h.efficiency.ManageModifier(ModType.House, false);
+        h.Efficiency.ManageModifier(ModType.House, false);
         if (_jData.interest)
         {
             return _jData.path;

@@ -2,37 +2,41 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class MainMenuShortcuts : MonoBehaviour
+
+namespace StartMenu
 {
-    [SerializeField] InputAction action;
-    [SerializeField] List<MonoBehaviour> windows;
+    public class MainMenuShortcuts : MonoBehaviour
+    {
+        [SerializeField] InputAction action;
+        [SerializeField] List<MonoBehaviour> windows;
 
-    private void OnEnable()
-    {
-        action.Enable();
-    }
-    private void OnDisable()
-    {
-        action.Disable();
-    }
-
-    private void Update()
-    {
-        if (action.triggered)
+        private void OnEnable()
         {
-            if (ConfirmWindow.window.opened)
+            action.Enable();
+        }
+        private void OnDisable()
+        {
+            action.Disable();
+        }
+
+        private void Update()
+        {
+            if (action.triggered)
             {
-                ConfirmWindow.window.Close(false);
-                return;
-            }
-            foreach (IGridMenu item in windows.Cast<IGridMenu>())
-            {
-                if (item.IsOpen())
+                if (ConfirmWindow.window.opened)
                 {
-                    item.ResetWindow();
+                    ConfirmWindow.window.Close(false);
                     return;
                 }
+                foreach (IGridMenu item in windows)
+                {
+                    if (item.IsOpen())
+                    {
+                        item.ResetWindow();
+                        return;
+                    }
 
+                }
             }
         }
     }

@@ -213,14 +213,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   action:
     m_Name: Action
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 32fb8810-0d7b-4c82-881d-e3a7a6e1f337
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 87d7b5f7-ca8c-40ad-aa8a-8ec8bebb6a9c
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: d3a7b5b4-e07e-4ab3-b7d1-e73e65118c88
+      m_Id: ac21d1c0-42a9-4fe8-96b6-3ad4bb444dd0
       m_Path: <Keyboard>/escape
       m_Interactions: 
       m_Processors: 
@@ -229,8 +229,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   windows:
-  - {fileID: 1793054205}
-  - {fileID: 1793054206}
+  - {fileID: 1793054209}
+  - {fileID: 1793054203}
 --- !u!1 &1793054200
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,11 +241,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1793054202}
   - component: {fileID: 1793054201}
-  - component: {fileID: 1793054203}
   - component: {fileID: 1793054207}
-  - component: {fileID: 1793054206}
-  - component: {fileID: 1793054205}
+  - component: {fileID: 1793054209}
   - component: {fileID: 1793054208}
+  - component: {fileID: 1793054203}
+  - component: {fileID: 1793054205}
   m_Layer: 5
   m_Name: Main Menu
   m_TagString: Untagged
@@ -296,51 +296,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1793054200}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1432cc5145ada0b4292d4c8b7d0dd497, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  toolkitControllers:
-  - {fileID: 1793054207}
-  - {fileID: 1793054206}
-  - {fileID: 1793054205}
-  - {fileID: 1793054208}
---- !u!114 &1793054205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1793054200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 979f8d3ea9d33de449ba077b0aa0906b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1793054206
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1793054200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8bb5a809f323ed446a028905787da545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1793054207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1793054200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afe1e503ad2dbc94abcae7f35284d5df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1793054208
+--- !u!114 &1793054205
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -354,6 +313,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opened: 0
   dialog: {fileID: 9197481963319205126, guid: 6ba2d918a4130bd4083d3afa9f88b90e, type: 3}
+--- !u!114 &1793054207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793054200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1432cc5145ada0b4292d4c8b7d0dd497, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolkitControllers:
+  - {fileID: 1793054209}
+  - {fileID: 1793054208}
+  - {fileID: 1793054203}
+  - {fileID: 1793054205}
+--- !u!114 &1793054208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793054200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afe1e503ad2dbc94abcae7f35284d5df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1793054209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793054200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 979f8d3ea9d33de449ba077b0aa0906b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

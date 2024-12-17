@@ -112,7 +112,12 @@ public static class MyGrid
     #endregion Grid Creation
 
     #region Grid Updating
-    public static void PlaceBuild(Building building, bool load = false)
+    /// <summary>
+    /// Updates the building grid.
+    /// </summary>
+    /// <param name="building"></param>
+    /// <param name="load"></param>
+    public static void SetBuilding(Building building, bool load = false)
     {
         if (building.id == -1)
             building.UniqueID();
@@ -121,17 +126,14 @@ public static class MyGrid
         levels[gridPos.y].PlaceBuild(building, gridPos, load);
     }
 
-    public static void RemoveRock(Rock rock)
+    public static void UnsetRock(Rock rock)
     {
         SceneRefs.gridTiles.toBeDigged.Remove(rock); // removes from list
         SceneRefs.gridTiles.markedTiles.Remove(rock);
-        SceneRefs.gridTiles.
-            DestroyUnselect(rock);
-        
-        SceneRefs.objectFactory.CreateRoad(rock.GetPos(), true);
-        GameObject.Destroy(rock.gameObject); // destroys object
+        SceneRefs.gridTiles.DestroyUnselect(rock);
     }
-    public static void RemoveBuilding(Building building)
+
+    public static void UnsetBuilding(Building building)
     {
         if (building is Pipe)
         {
@@ -144,10 +146,10 @@ public static class MyGrid
             GridPos p = Rotate(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y);
             gridPos.x -= p.x;
             gridPos.z -= p.z;
-            //canvasManager.overlays.AddBuildingOverlay(gridPos, building.id);
+            //SceneRefs.overlays.AddBuildingOverlay(gridPos, building.id);
             if (building.build.blueprint.itemList.Count > 0)
             {
-                levels[gridPos.y].RemoveBuilding(building, gridPos);
+                levels[gridPos.y].UnsetBuilding(building, gridPos);
             }
         }
         /*if (building.GetType() != typeof(Pipe))
@@ -232,6 +234,7 @@ public static class MyGrid
         return currentLevel;
     }
 
+    #region Saving
     public static GridSave Save(int i)
     {
         GroundLevel level = levels[i];
@@ -277,4 +280,5 @@ public static class MyGrid
         }
         SceneRefs.humans.GetComponent<JobQueue>().toBeDug = SceneRefs.gridTiles.toBeDigged.ToList();
     }
+    #endregion
 }

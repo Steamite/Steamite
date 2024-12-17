@@ -10,13 +10,16 @@ using NUnit.Framework;
 
 public class Building : StorageObject
 {
+    [SerializeField]
     protected List<Color> myColor;
     [Header("Base")]
     public Build build = new();
 
-    ///////////////////////////////////////////////////
-    ///////////////////Overrides///////////////////////
-    ///////////////////////////////////////////////////
+    #region Basic Operations
+    protected virtual void Awake()
+    {
+        GetColors();
+    }
     public override void UniqueID()
     {
         CreateNewId(MyGrid.buildings.Select(q => q.id).ToList());
@@ -26,22 +29,33 @@ public class Building : StorageObject
         jobSave.objectId = id;
         jobSave.objectType = typeof(Building);
     }
+    public override GridPos GetPos()
+    {
+        GridPos pos = MyGrid.Rotate(build.blueprint.moveBy, transform.rotation.eulerAngles.y);
+        return new(
+            transform.position.x - pos.x,
+            (transform.position.y - 1) / 2,
+            transform.position.z - pos.z);
+    }
+    #endregion
 
     #region Window
-    sealed protected override void SetupWindow(InfoWindow info)
+    public override InfoWindow OpenWindow()
     {
-        SetupWindow(info, new() { });
+        InfoWindow info = base.OpenWindow();
+        info.Open(this, InfoMode.Building);
+        info.ToggleChildElems(info.buildingElement, new() { build.constructed ? "Constructed" : "Construction-View" });
+
+        OpenWindowWithToggle(info, new());
+        return info;
     }
 
-    protected virtual void SetupWindow(InfoWindow info, List<string> toEnable)
+    protected virtual void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
     {
-        base.SetupWindow(info);
-        info.SwitchMods(InfoMode.Building);
-        info.ToggleChildElems(info.building, new() { build.constructed ? "Constructed" : "Construction-View" });
-        info.ToggleChildElems(info.constructed, toEnable);
+        info.ToggleChildElems(info.constructedElement, toEnable);
     }
 
-    protected override void UpdateWindow(InfoWindow info)
+    /*protected override void UpdateWindow(InfoWindow info)
     {
         base.UpdateWindow(info); 
         if (!build.constructed)
@@ -49,7 +63,7 @@ public class Building : StorageObject
             info.building.Q<Label>("Progress").text = $"Construction Progress: {(build.constructionProgress / (float)build.maximalProgress * 100f):0}%";
             info.FillResourceList(info.building.Q<VisualElement>("Resources"), localRes.stored, build.cost);
         }
-    }
+    }*/
     #endregion
 
     #region Saving
@@ -87,16 +101,17 @@ public class Building : StorageObject
     }
     #endregion Saving
 
-    #region Storing
+    #region Storage
     public override void Store(Human human, int transferPerTick)
     {
         int index = localRes.carriers.IndexOf(human);
-        MyRes.MoveRes(localRes.stored, human.inventory, localRes.requests[index], transferPerTick);
+        MyRes.MoveRes(localRes.stored, human.Inventory, localRes.requests[index], transferPerTick);
+        UpdateWindow(nameof(LocalRes));
         if (localRes.requests[index].ammount.Sum() == 0)
         {
             if (!build.constructed && localRes.stored.Equals(build.cost))
             {
-                human.jData.job = JobState.Constructing;
+                human.SetJob(JobState.Constructing);
                 human.ChangeAction(HumanActions.Build);
                 localRes.mods[index] = 0;
                 return;
@@ -104,31 +119,14 @@ public class Building : StorageObject
             localRes.RemoveRequest(human);
             HumanActions.LookForNew(human);
         }
-        OpenWindow();
     }
     public override void Take(Human h, int transferPerTick)
     {
         base.Take(h, transferPerTick);
-        OpenWindow();
     }
     #endregion Storing
 
-    public override GridPos GetPos()
-    {
-        GridPos pos = MyGrid.Rotate(build.blueprint.moveBy, transform.rotation.eulerAngles.y);
-        return new(
-            transform.position.x - pos.x,
-            (transform.position.y - 1) / 2,
-            transform.position.z - pos.z);
-    }
-    ///////////////////////////////////////////////////
-    ///////////////////Methods/////////////////////////
-    ///////////////////////////////////////////////////
-    protected virtual void Awake()
-    {
-        GetColors();
-    }
-
+    #region Construction & Deconstruction
     /// <summary>
     /// sets constructed to true, clears resource for which it was built, and changes color to the original one
     /// </summary>
@@ -140,7 +138,6 @@ public class Building : StorageObject
             localRes.stored.ammount[i] = 0;
         }
         ChangeRenderMode(false);
-        OpenWindow(true); // if selected, update the info window
     }
 
     public virtual void OrderDeconstruct()
@@ -184,7 +181,7 @@ public class Building : StorageObject
                     queue.CancelJob(JobState.Deconstructing, this);
                     if(localRes.carriers.Count > 0)
                     {
-                        localRes.carriers[0].jData.job = JobState.Constructing;
+                        localRes.carriers[0].SetJob(JobState.Constructing);
                         localRes.carriers[0].ChangeAction(HumanActions.Build);
                     }
                 }
@@ -197,8 +194,6 @@ public class Building : StorageObject
                 foreach (Human carrier in localRes.carriers)
                 {
                     MyRes.FindStorage(carrier);
-                    carrier.ChangeAction(HumanActions.Move);
-                    carrier.jData.job = JobState.Supply;
                 }
                 Deconstruct(GetPos());
             }
@@ -222,7 +217,7 @@ public class Building : StorageObject
         Chunk c = null;
         if (r.ammount.Sum() > 0)
             c = SceneRefs.objectFactory.CreateAChunk(instantPos, r);
-        MyGrid.RemoveBuilding(this);
+        MyGrid.UnsetBuilding(this);
         DestoyBuilding(); // destroy self
         return c; 
     }
@@ -232,16 +227,17 @@ public class Building : StorageObject
         Destroy(gameObject);
         if (id > -1)
         {
-            MyGrid.RemoveBuilding(this);
+            MyGrid.UnsetBuilding(this);
         }
         else
         {
             MyGrid.GetOverlay().DeleteBuildGrid();
         }
     }
+
     public virtual void ChangeRenderMode(bool transparent)
     {
-        foreach(Material material in transform.GetComponentsInChildren<MeshRenderer>().Select(q=> q.material))
+        foreach (Material material in transform.GetComponentsInChildren<MeshRenderer>().Select(q => q.material))
         {
             if (transparent)
             {
@@ -265,7 +261,9 @@ public class Building : StorageObject
             }
         }
     }
+    #endregion
 
+    #region Placing
     public virtual Resource GetDiff(Resource inventory)
     {
         Resource r = null;
@@ -296,19 +294,12 @@ public class Building : StorageObject
         build.maximalProgress = build.cost.ammount.Sum() * 2;
         gT.HighLight(new(), gameObject);
 
-        Humans humans = GameObject.FindWithTag("Humans").GetComponent<Humans>();
-        humans.GetComponent<JobQueue>().AddJob(JobState.Constructing, this); // creates a new job with the data above
+        SceneRefs.humans.GetComponent<JobQueue>().AddJob(JobState.Constructing, this); // creates a new job with the data above
         MyRes.UpdateResource(build.cost, -1);
-        MyGrid.PlaceBuild(this);
+        MyGrid.SetBuilding(this);
         print(MyGrid.PrintGrid());
     }
 
-    public void GetColors()
-    {
-        myColor = transform.GetComponentsInChildren<MeshRenderer>().Select(q => q.material.color).ToList(); // saves the original color
-    }
-    public virtual Fluid GetFluid()
-    {
-        return null;
-    }
+    public void GetColors() => myColor = transform.GetComponentsInChildren<MeshRenderer>().Select(q => q.material.color).ToList(); // saves the original color
+    #endregion
 }

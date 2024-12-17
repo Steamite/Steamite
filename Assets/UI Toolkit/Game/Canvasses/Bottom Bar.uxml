@@ -1,0 +1,13 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement name="BuildMenu" style="flex-grow: 1; height: auto; max-height: 30%; align-self: auto; justify-content: flex-end; align-content: stretch; display: none; font-size: 22px; color: rgb(249, 233, 141); -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;);">
+        <engine:VisualElement name="Buildings" style="flex-grow: 1; max-height: 30%; background-color: rgb(70, 49, 27); margin-bottom: 1%; max-width: 80%; align-self: center; align-items: center; min-width: 80%; flex-direction: row; justify-content: center;">
+            <engine:Button text="Elevator" style="background-color: rgb(74, 74, 74); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; width: 6%; height: 80%; font-size: 18px; white-space: normal; padding-left: 0.3%; padding-right: 0.3%;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="Categories" style="flex-grow: 1; max-height: 40%; height: 100%; background-color: rgb(70, 49, 27); flex-direction: row; justify-content: center; align-self: auto; align-items: center;">
+            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/cogwheal@4x.png?fileID=2800000&amp;guid=31a2fc60fcb027a45869f7484256409a&amp;type=3#cogwheal@4x" class="category-button" />
+            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/humans@4x.png?fileID=2800000&amp;guid=ebd657dbff7382b49ac208b65a2fc976&amp;type=3#humans@4x" class="category-button" />
+            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/material@4x.png?fileID=2800000&amp;guid=523f332c4508d994e93b281eda38e8fc&amp;type=3#material@4x" class="category-button" />
+            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/Research@4x.png?fileID=2800000&amp;guid=4bf8d3f377b98204dadd2b0fd5899576&amp;type=3#Research@4x" class="category-button" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

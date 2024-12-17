@@ -98,7 +98,7 @@ public class SaveController : MonoBehaviour
         }
         catch (Exception e)
         {
-            CanvasManager.ShowMessage("An error ocured when saving.");
+            SceneRefs.ShowMessage("An error ocured when saving.");
             Debug.LogError("Saving error: " + e);
             if(jsonWriter.WriteState == 0)
             {
@@ -138,7 +138,7 @@ public class SaveController : MonoBehaviour
         }
 
         Directory.Delete($"{tmpPath}");
-        CanvasManager.ShowMessage(autoSave ? "Autosave" : "Saved succesfuly");
+        SceneRefs.ShowMessage(autoSave ? "Autosave" : "Saved succesfuly");
         saveUIAction();
     }
 

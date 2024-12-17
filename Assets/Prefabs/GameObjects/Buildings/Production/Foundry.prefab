@@ -53,6 +53,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -206,6 +209,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -294,6 +300,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -383,6 +392,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -481,6 +493,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -561,50 +576,51 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
+  myColor: []
   build:
     blueprint:
       size:
         x: 2
         z: 3
-        level: 0
+        y: 0
       moveBy:
         x: -0.5
         z: 0.5
-        level: 0
+        y: 0
       anchor:
         x: 1
         z: 1
-        level: 0
+        y: 0
       itemList:
       - pos:
           x: -1
           z: -1
-          level: 0
+          y: 0
         itemType: 1
       - pos:
           x: -1
           z: 0
-          level: 0
+          y: 0
         itemType: 1
       - pos:
           x: -1
           z: 1
-          level: 0
+          y: 0
         itemType: 3
       - pos:
           x: 0
           z: -1
-          level: 0
+          y: 0
         itemType: 1
       - pos:
           x: 0
           z: 0
-          level: 0
+          y: 0
         itemType: 4
       - pos:
           x: 0
           z: 1
-          level: 0
+          y: 0
         itemType: 3
     heigth: 0
     cost:
@@ -615,25 +631,15 @@ MonoBehaviour:
     deconstructing: 0
     constructionProgress: 0
     maximalProgress: 0
-  assigned: []
   limit: 5
-  pRes:
-    inputResource:
-      stored:
-        capacity: 20
-        type: 
-        ammount: 
-      requests: []
-      carriers: []
-      mods: 
-    productionCost:
-      capacity: -1
-      type: 00000000
-      ammount: 05000000
-    production:
-      capacity: -1
-      type: 01000000
-      ammount: 05000000
+  productionCost:
+    capacity: -1
+    type: 0000000001000000
+    ammount: 0100000002000000
+  production:
+    capacity: -1
+    type: 02000000
+    ammount: 01000000
   pTime:
     prodTime: 10
     currentTime: 0

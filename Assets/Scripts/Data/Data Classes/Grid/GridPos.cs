@@ -28,7 +28,7 @@ public class GridPos
     public override int GetHashCode() { return base.GetHashCode(); }
     public override string ToString()
     {
-        return $"x: {x}, y: {y}, z: {z}";
+        return $"({x}, {y}, {z})";
     }
     public GridPos()
     {

@@ -20,6 +20,8 @@ public class JobSave
     public JobSave(JobData jobData)
     {
         job = jobData.job;
+        if (job == JobState.Unset)
+            job = JobState.Free;
         path = jobData.path;
         // interest assign 
         if (jobData.interest)
@@ -129,7 +131,9 @@ public class AssignBSave : BSave
 public class ProductionBSave : AssignBSave
 {
     public StorageResSave inputRes;
-    public ProductionTime pTime;
+    public float prodTime = 20;
+    public float currentTime = 0;
+    public int modifier = 1;
     public ProductionStates pStates;
 }
 
@@ -174,7 +178,7 @@ public class HumanSave : ClickableObjectSave
     public float sleep;
     public bool hasEaten;
     // specializations
-    public Specs specs;
+    public Specializations specs;
     public int houseID;
     public int workplaceId;
     public HumanSave()

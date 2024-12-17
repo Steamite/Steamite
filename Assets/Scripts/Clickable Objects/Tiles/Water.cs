@@ -10,18 +10,31 @@ public class Water : ClickableObject
     public readonly int quality = 50;
     public int ammount = 50;
 
-    #region Window
-    protected override void SetupWindow(InfoWindow info)
+    #region Basic Operations
+    public override GridPos GetPos()
     {
-        base.SetupWindow(info);
-        info.SwitchMods(InfoMode.Water);
+        return new(transform.position.x, transform.position.y / 2, transform.position.z);
     }
-    protected override void UpdateWindow(InfoWindow info)
+    #endregion
+
+    #region Window
+    /*public override InfoWindow OpenWindow()
+    {
+        InfoWindow info;
+        if (info = base.OpenWindow())
+        {
+            info.SwitchMods(InfoMode.Water);
+            return info;
+        }
+        throw new ArgumentException();
+    }*/
+    /*protected override void UpdateWindow(InfoWindow info)
     {
         base.UpdateWindow(info);
         //info.clickObjectTransform.GetChild((int)InfoMode.Water).GetChild(0).GetComponent<TMP_Text>().text = $"Storing: {ammount}";
-    }
+    }*/
     #endregion
+
     #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
@@ -36,8 +49,4 @@ public class Water : ClickableObject
         base.Load(save);
     }
     #endregion Saving
-    public override GridPos GetPos()
-    {
-        return new(transform.position.x, transform.position.y/2, transform.position.z);
-    }
 }

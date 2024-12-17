@@ -5,9 +5,16 @@ public class Road : ClickableObject
 {
     public List<int> entryPoints = new(); // IDs of builds that have entry points on this piece of 
 
-    ///////////////////////////////////////////////////
-    ///////////////////Overrides///////////////////////
-    ///////////////////////////////////////////////////
+    #region Basic Operations
+    public override GridPos GetPos()
+    {
+        return new GridPos(
+            transform.position.x,
+            (transform.position.y - 0.45f) / 2,
+            transform.position.z);
+    }
+    #endregion
+
     #region Mouse Events
     public override void OnPointerDown(PointerEventData eventData)
     {
@@ -32,17 +39,11 @@ public class Road : ClickableObject
         }
     }
     #endregion Mouse Events
-
-    public override GridPos GetPos()
-    {
-        return new GridPos(
-            transform.position.x,
-            (transform.position.y - 0.45f) / 2,
-            transform.position.z);
-    }
-
+    
+    #region Save
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         return null;
     }
+    #endregion
 }

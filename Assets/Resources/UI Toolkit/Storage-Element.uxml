@@ -1,0 +1,11 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Storage.uss?fileID=7433441132597879392&amp;guid=dd112799686f6d0499122341a665d436&amp;type=3#Storage" />
+    <engine:VisualElement name="VisualElement" style="flex-grow: 1; margin-left: 2.5%; margin-right: 2.5%; background-color: rgb(74, 74, 74); border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-left-color: rgb(28, 28, 28); border-right-color: rgb(28, 28, 28); border-top-color: rgb(28, 28, 28); border-bottom-color: rgb(28, 28, 28); border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; flex-shrink: 0; max-width: 136px; max-height: 144px; min-height: 144px; min-width: 136px; overflow: visible;">
+        <engine:VisualElement name="Icon" style="flex-grow: 1; max-width: 50px; max-height: 50px; top: 10px; left: auto; background-image: url(&quot;project://database/Assets/Sprites/Icons/Info%20window/ResIcon@4x.png?fileID=2800000&amp;guid=9c948cd08b1522c4a95a3a66fe6242d4&amp;type=3#ResIcon@4x&quot;); min-width: 50px; min-height: 50px; align-items: center; align-self: center;" />
+        <engine:Label text="####" name="Ammount" style="-unity-text-align: middle-center; margin-top: 0; margin-right: 0; margin-bottom: 10%; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; top: 10%;" />
+        <engine:ToggleButtonGroup name="Can-Store" value="01" allow-empty-selection="false" is-multiple-selection="false">
+            <engine:Button icon-image="project://database/Assets/Sprites/Icons/Info%20window/Store.png?fileID=2800000&amp;guid=566909d68c9dc9047b789910463c180e&amp;type=3#Store" enabled="true" name="Store" class="can-store-button" />
+            <engine:Button icon-image="project://database/Assets/Sprites/Icons/Info%20window/Cancel.png?fileID=2800000&amp;guid=a038df6f8c235ab42ac4da953bbda40d&amp;type=3#Cancel" name="Not-Store" class="can-store-button" />
+        </engine:ToggleButtonGroup>
+    </engine:VisualElement>
+</engine:UXML>

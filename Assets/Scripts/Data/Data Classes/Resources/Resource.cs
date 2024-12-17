@@ -102,4 +102,16 @@ public class Resource
         }
         return !canAfford;
     }
+
+    internal void RemoveEmpty()
+    {
+        for(int i = type.Count-1; i > -1 ; i--)
+        {
+            if (ammount[i] == 0)
+            {
+                ammount.RemoveAt(i);
+                type.RemoveAt(i);
+            }
+        }
+    }
 }

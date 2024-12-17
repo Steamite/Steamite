@@ -17,6 +17,5 @@ public class UIRefs : MonoBehaviour
     public void Init()
     {
         instance = this;
-        gameObject.GetComponent<CanvasManager>().Init();
     }
 }

@@ -85,7 +85,7 @@ public class LoadingScreen : MonoBehaviour
     }
 
     /// <summary>
-    /// Preps <see cref="SceneRefs"/>, <see cref="CanvasManager"/> and loads saved data.
+    /// Preps <see cref="SceneRefs"/>, <see cref="SceneRefs"/> and loads saved data.
     /// </summary>
     /// <param name="obj"></param>
     Task LoadWorldData(Save save)
@@ -197,7 +197,7 @@ public class LoadingScreen : MonoBehaviour
     async void AfterLevelLoad(bool newGame)
     {
         //transform.parent.GetChild(1).GetComponent<AudioListener>().enabled = false;
-        CanvasManager.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().SetUp();
+        SceneRefs.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().SetUp();
         MyGrid.worldName = folderName;
         MyGrid.Init();
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;
@@ -207,8 +207,8 @@ public class LoadingScreen : MonoBehaviour
 
         MyRes.ActivateResources(newGame);
         await SceneManager.UnloadSceneAsync("LoadingScreen");
-        CanvasManager.stats.GetChild(1).GetChild(0).GetComponent<TimeButtons>().SetStartSpeed(SceneRefs.tick);
-        CanvasManager.stats.GetChild(0).GetComponent<LevelButtons>().Init();
+        SceneRefs.stats.GetChild(1).GetChild(0).GetComponent<TimeButtons>().SetStartSpeed(SceneRefs.tick);
+        SceneRefs.stats.GetChild(0).GetComponent<LevelButtons>().Init();
         humanActivation?.Invoke();
         SceneRefs.tick.timeController.Init(SceneRefs.tick, newGame);
         humanActivation = null;

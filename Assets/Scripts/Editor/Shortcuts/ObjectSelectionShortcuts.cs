@@ -11,7 +11,7 @@ public class ObjectSelectionShortcuts
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = CanvasManager.infoWindow.gameObject;
+        GameObject gameObject = SceneRefs.infoWindow.gameObject;
         Selection.activeGameObject = gameObject;
     }
 
@@ -38,7 +38,7 @@ public class ObjectSelectionShortcuts
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = CanvasManager.stats.GetChild(0).gameObject;
+        GameObject gameObject = SceneRefs.stats.GetChild(0).gameObject;
         Selection.activeGameObject = gameObject;
     }
 
@@ -47,7 +47,7 @@ public class ObjectSelectionShortcuts
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = CanvasManager.stats.GetChild(1).GetChild(0).gameObject;
+        GameObject gameObject = SceneRefs.stats.GetChild(1).GetChild(0).gameObject;
         Selection.activeGameObject = gameObject;
     }
 }

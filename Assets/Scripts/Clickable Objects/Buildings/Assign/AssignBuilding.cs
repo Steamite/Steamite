@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,23 +12,26 @@ public class AssignBuilding : Building
 {
 
     [Header("Humans")]
-    public List<Human> assigned = new();
+    protected List<Human> assigned = new();
+
+    [CreateProperty]
+    public List<Human> Assigned => assigned;
+    public bool ContainsWorker(Human human) => assigned.Contains(human);
+
     public int limit = 5;
 
+
     #region Window
-    protected override void SetupWindow(InfoWindow info, List<string> toEnable)
+
+    protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
     {
         toEnable.Add("Assign");
-
-        base.SetupWindow(info, toEnable);
-        info.constructed.Q<WorkerAssign>("Worker-Assign").FillStart(this);
-    }
-    protected override void UpdateWindow(InfoWindow info)
-    {
-        base.UpdateWindow(info);
-        info.constructed.Q<Label>("Assigned-Count").text = $"Assigned: {assigned.Count}/{limit}";
+        base.OpenWindowWithToggle(info, toEnable);
+        ((IUIElement)info.constructedElement.Q<VisualElement>("Assign")).Fill(this);
     }
     #endregion
+
+    #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -39,6 +45,7 @@ public class AssignBuilding : Building
         limit = (save as AssignBSave).limit;
         base.Load(save);
     }
+    #endregion
 
     public override List<string> GetInfoText()
     {
@@ -46,4 +53,16 @@ public class AssignBuilding : Building
         strings.Insert(0, $"Can assign up to: {limit} workers");
         return strings;
     }
+
+    #region Assign
+    public virtual void ManageAssigned(Human human, bool add)
+    {
+        throw new NotImplementedException();
+    }
+
+    public virtual List<Human> GetUnassigned()
+    {
+        throw new NotImplementedException();
+    }
+    #endregion
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 
@@ -48,8 +49,8 @@ public static class MyRes
                     //resourceBuffer = new(200);
                     _s.SetupStorage(resources, jQ);
                 }
-                globalStorageSpace += _s.localRes.stored.capacity - _s.localRes.stored.ammount.Sum();
-                ManageRes(resources, _s.localRes.stored, 1);
+                globalStorageSpace += _s.LocalRes.stored.capacity - _s.LocalRes.stored.ammount.Sum();
+                ManageRes(resources, _s.LocalRes.stored, 1);
             }
             Transform resourceInfo = GameObject.Find("Resource Info").gameObject.transform.transform;
             for (int i = 0; i < resourceInfo.childCount; i++)
@@ -98,8 +99,8 @@ public static class MyRes
     {
         money += change;
         UpdateMoneyText();
-        /*if(CanvasManager.trade.tradeInfo.gameObject.activeSelf)
-            CanvasManager.trade.tradeInfo.UpdateTradeText();*/
+        /*if(SceneRefs.trade.tradeInfo.gameObject.activeSelf)
+            SceneRefs.trade.tradeInfo.UpdateTradeText();*/
     }
     static void UpdateMoneyText()
     {
@@ -268,21 +269,22 @@ public static class MyRes
     public static bool FindResources(Human human, Building building, JobState j)
     {
         JobQueue jQ = GameObject.FindWithTag("Humans").GetComponent<JobQueue>();
-        Resource diff = building.GetDiff(human.inventory);
+        Resource diff = building.GetDiff(human.Inventory);
         List<StorageObject> stores = MyGrid.chunks.Union(jQ.pickupNeeded.Union(jQ.storages)).ToList();
         if (stores.Count > 0)
         {
-            List<ClickableObject> filtered = ResCmp(diff, stores, true, human.inventory.capacity - human.inventory.ammount.Sum());
+            List<ClickableObject> filtered = ResCmp(diff, stores, true, human.Inventory.capacity - human.Inventory.ammount.Sum());
             if (filtered.Count > 0)
             {
-                human.jData = PathFinder.FindPath(filtered, human);
-                if (human.jData.interest && PathFinder.FindPath(new() { building }, human).interest != null)
+                JobData job = PathFinder.FindPath(filtered, human);
+                if (job.interest && PathFinder.FindPath(new() { building }, human).interest != null)
                 {
                     human.destination = building;
-                    human.jData.job = JobState.Pickup;
-                    StorageResource sResource = human.jData.interest.GetComponent<StorageObject>().localRes;
+                    job.job = JobState.Pickup;
+                    human.SetJob(job);
+                    StorageResource sResource = job.interest.GetComponent<StorageObject>().LocalRes;
                     Resource resource = new();
-                    resource.capacity = human.inventory.capacity - human.inventory.ammount.Sum();
+                    resource.capacity = human.Inventory.capacity - human.Inventory.ammount.Sum();
                     Resource future = sResource.Future(true);
 
                     MoveRes(resource, future, diff, -1);
@@ -297,6 +299,7 @@ public static class MyRes
                     }
                     return true;
                 }
+                human.SetJob(job);
             }
         }
         return false;
@@ -314,7 +317,7 @@ public static class MyRes
         List<ClickableObject> storages = new();
         for (int i = 0; i < stores.Count; i++)
         {
-            Resource future = stores[i].localRes.Future(true);
+            Resource future = stores[i].LocalRes.Future(true);
             for (int j = 0; j < diff.type.Count; j++)
             {
                 int index = future.type.IndexOf(diff.type[j]);
@@ -456,11 +459,15 @@ public static class MyRes
     /// <param name="h"></param>
     public static void FindStorage(Human h)
     {
-        List<Storage> storages = FilterStorages(h.inventory, h, true);
-        if ((h.jData = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h)).interest)
+        List<Storage> storages = FilterStorages(h.Inventory, h, true);
+        JobData job = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h);
+        if (job.interest)
         {
-            h.jData.interest.GetComponent<StorageObject>().RequestRes(h.inventory, h, 1);
-            h.destination = (Building)h.jData.interest;
+            job.interest.GetComponent<StorageObject>().RequestRes(h.Inventory, h, 1);
+            h.destination = (Building)job.interest;
+            job.job = JobState.Supply;
+            h.ChangeAction(HumanActions.Move);
+            h.SetJob(job);
         }
     }
     static List<Storage> FilterStorages(Resource r, Human h, bool perfect)
@@ -470,8 +477,8 @@ public static class MyRes
         int wantToStore = r.ammount.Sum();
         for (int i = storages.Count - 1; i >= 0; i--)
         {
-            int spaceToStore = storages[i].localRes.stored.capacity - storages[i].localRes.Future().ammount.Sum();
-            if (spaceToStore == 0)
+            int spaceToStore = storages[i].LocalRes.stored.capacity - storages[i].LocalRes.Future().ammount.Sum();
+            if (spaceToStore <= 0)
                 continue;
             for (int j = 0; j < r.type.Count; j++)
             {
@@ -500,20 +507,18 @@ public static class MyRes
 
     public static void EatFood(Human human)
     {
-        int i = -1;
-        Storage store = storage.FirstOrDefault(q => q.localRes.stored.ammount[i = q.localRes.Future(true).type.IndexOf(ResourceType.Food)] > 0);
+        Storage store = storage.FirstOrDefault(q => q.LocalRes.stored.ammount[q.LocalRes.Future(true).type.IndexOf(ResourceType.Food)] > 0);
         if (store)
         {
-            store.localRes.stored.ammount[i]--;
+            store.DestroyResource(ResourceType.Food, 1);
             resources.ammount[resources.type.IndexOf(ResourceType.Food)]--;
-            store.OpenWindow(false);
             human.hasEaten = true;
-            human.efficiency.ManageModifier(ModType.Food, true);
+            human.Efficiency.ManageModifier(ModType.Food, true);
         }
         else
         {
             human.hasEaten = false;
-            human.efficiency.ManageModifier(ModType.Food, false);
+            human.Efficiency.ManageModifier(ModType.Food, false);
         }
     }
     public static void DeliverToElevator(Resource resource)
@@ -521,7 +526,7 @@ public static class MyRes
         Storage store = storage.FirstOrDefault(q => ((Elevator)q).main);
         if (store)
         {
-            MoveRes(store.localRes.stored, resource, resource, resource.ammount.Sum());
+            MoveRes(store.LocalRes.stored, resource, resource, resource.ammount.Sum());
         }
     }
 
@@ -530,20 +535,20 @@ public static class MyRes
         UpdateResource(r, -1);
         for (int i = 0; i < storage.Length; i++)
         {
-            Resource diff = DiffRes(r, storage[i].localRes.Future(true));
+            Resource diff = DiffRes(r, storage[i].LocalRes.Future(true));
             for(int j = r.type.Count-1; j >= 0; j--)
             {
                 int x = diff.type.IndexOf(r.type[j]);
                 if(x == -1)
                 {
-                    storage[i].localRes.stored.ammount[storage[i].localRes.stored.type.IndexOf(r.type[j])] -= r.ammount[j];
+                    storage[i].LocalRes.stored.ammount[storage[i].LocalRes.stored.type.IndexOf(r.type[j])] -= r.ammount[j];
                     r.ammount.RemoveAt(j);
                     r.type.RemoveAt(j);
                 }
                 else
                 {
                     int change = r.ammount[j] - diff.ammount[x];
-                    storage[i].localRes.stored.ammount[storage[i].localRes.stored.type.IndexOf(r.type[j])] -= change;
+                    storage[i].LocalRes.stored.ammount[storage[i].LocalRes.stored.type.IndexOf(r.type[j])] -= change;
                     r.ammount[j] -= change;
                 }
             }

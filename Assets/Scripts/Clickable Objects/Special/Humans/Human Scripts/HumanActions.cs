@@ -38,21 +38,22 @@ public static class HumanActions
     /// <param name="h"></param>
     public static void Move(Human h)
     {
-        if (h.jData.path.Count > 0)
+        JobData job = h.Job;
+        if (job.path.Count > 0)
         {
-            Rotate(h, h.jData.path[0]);
+            Rotate(h, job.path[0]);
             int y = Mathf.RoundToInt(h.transform.localPosition.y);
-            h.transform.localPosition = h.jData.path[0].ToVec();
+            h.transform.localPosition = job.path[0].ToVec();
             if(Mathf.RoundToInt(h.transform.localPosition.y) != y)
             {
                 h.gameObject.SetActive(MyGrid.currentLevel == h.GetPos().y);
             }
-            h.jData.path.RemoveAt(0);
+            job.path.RemoveAt(0);
         }
         else
         {
-            if (h.jData.interest != null)
-                Rotate(h, new(h.jData.interest.gameObject));
+            if (job.interest != null)
+                Rotate(h, new(job.interest.gameObject));
             h.ChangeAction(null);
             h.Decide();
         }
@@ -77,16 +78,9 @@ public static class HumanActions
     /// <param name="h"></param>
     public static void Dig(Human h)
     {
-        Rock r = h.jData.interest.GetComponent<Rock>();
-        r.integrity -= digSpeed * h.efficiency.efficiency;
-        r.OpenWindow();
-        if(r.integrity <= 0)
+        if(h.Job.interest.GetComponent<Rock>().DamageRock(digSpeed * h.Efficiency.efficiency))
         {
-            if (r.rockYield.ammount.Sum() > 0)
-                SceneRefs.objectFactory.CreateAChunk(r.GetPos(), r.rockYield);
-            // destroys the mined block
-            MyGrid.RemoveRock(r);
-            h.transform.parent.parent.GetComponent<JobQueue>().CancelJob(JobState.Digging, h.jData.interest); // removes job order
+            h.transform.parent.parent.GetComponent<JobQueue>().CancelJob(JobState.Digging, h.Job.interest); // removes job order
         }
     }
 
@@ -96,17 +90,16 @@ public static class HumanActions
     /// <param name="h"></param>
     public static void Build(Human h)
     {
-        Building building = h.jData.interest.GetComponent<Building>();
+        Building building = h.Job.interest.GetComponent<Building>();
         building.build.constructionProgress++;
         if (building.build.constructionProgress >= building.build.maximalProgress)
         {
-            h.jData.interest.GetComponent<Building>().FinishBuild();
+            building.GetComponent<Building>().FinishBuild();
             h.GetComponentInParent<JobQueue>().CancelJob(JobState.Constructing, building.GetComponent<ClickableObject>());
-            building.localRes.RemoveRequest(h);
+            building.LocalRes.RemoveRequest(h);
             LookForNew(h);
             return;
         }
-        building.OpenWindow(); // change to UpdateWindow
     }
 
     /// <summary>
@@ -115,13 +108,12 @@ public static class HumanActions
     /// <param name="h"></param>
     public static void Demolish(Human h)
     {
-        Building building = h.jData.interest.GetComponent<Building>();
+        Building building = h.Job.interest.GetComponent<Building>();
         building.build.constructionProgress -= 2;
-        building.OpenWindow();
         if (building.build.constructionProgress <= 0)
         {
             building.Deconstruct(h.GetPos());
-            h.GetComponentInParent<JobQueue>().CancelJob(JobState.Deconstructing, h.jData.interest);
+            h.GetComponentInParent<JobQueue>().CancelJob(JobState.Deconstructing, building);
             LookForNew(h);
         }
     }
@@ -130,7 +122,9 @@ public static class HumanActions
     {
         try
         {
-            h.jData.interest.GetComponent<StorageObject>().Store(h, transferPerTick);
+            h.Job.interest.GetComponent<StorageObject>().Store(h, transferPerTick);
+            h.UpdateWindow(nameof(Human.Inventory));
+            h.Inventory.RemoveEmpty();
         }
         catch (Exception e)
         {
@@ -142,7 +136,8 @@ public static class HumanActions
     {
         try
         {
-            h.jData.interest.GetComponent<StorageObject>().Take(h, transferPerTick);
+            h.Job.interest.GetComponent<StorageObject>().Take(h, transferPerTick);
+            h.UpdateWindow(nameof(Human.Inventory));
         }
         catch (Exception e)
         {
@@ -161,7 +156,6 @@ public static class HumanActions
         {
             JobQueue jobQueue = h.transform.parent.GetComponentInParent<JobQueue>();
             h.lookingForAJob = true;
-            h.jData = new();
 
             // go throuh the jobs according to priority
             foreach(JobState j in jobQueue.priority)
@@ -189,9 +183,9 @@ public static class HumanActions
         {
             case JobState.Digging:
                 // find toBeDug with no assigned workers
-                if (FindInterests(jobQueue.toBeDug.Where(q => q.assigned == null), h, j)) // if found
+                if (FindInterests(jobQueue.toBeDug.Where(q => q.Assigned == null), h, j)) // if found
                 {
-                    h.jData.interest.GetComponent<Rock>().assigned = h;
+                    h.Job.interest.GetComponent<Rock>().Assigned = h;
                     return false;
                 }
                 break;
@@ -199,38 +193,38 @@ public static class HumanActions
                 // builds that are only missing progress not resources
                 if (jobQueue.constructions.Count == 0)
                     break;
-                List<Building> buildings = jobQueue.constructions.Where(q => q.localRes.Future().Equals(q.build.cost)).ToList();
-                if (FindInterests(buildings.Where(q => q.localRes.carriers.Count == 0).Cast<ClickableObject>(), h, j))
+                List<Building> buildings = jobQueue.constructions.Where(q => q.LocalRes.Future().Equals(q.build.cost)).ToList();
+                if (FindInterests(buildings.Where(q => q.LocalRes.carriers.Count == 0).Cast<ClickableObject>(), h, j))
                 {
-                    h.jData.interest.GetComponent<Building>().localRes.AddRequest(new(), h, 0);
+                    h.Job.interest.GetComponent<Building>().LocalRes.AddRequest(new(), h, 0);
                     return false;
                 }
                 // builds that are missing resources to progress further
-                if (FilterBuilds(jobQueue.constructions.Where(q => !q.localRes.Future().Equals(q.build.cost)), h, j))
+                if (FilterBuilds(jobQueue.constructions.Where(q => !q.LocalRes.Future().Equals(q.build.cost)), h, j))
                     return false;
                 break;
             case JobState.Deconstructing:
                 // deconstructions with no workers assigned
-                if (FindInterests(jobQueue.deconstructions.Where(q => q.localRes.carriers.Count == 0).Cast<ClickableObject>(), h, j))
+                if (FindInterests(jobQueue.deconstructions.Where(q => q.LocalRes.carriers.Count == 0).Cast<ClickableObject>(), h, j))
                 {
-                    h.jData.interest.GetComponent<Building>().RequestRes(new(), h, 0);
+                    h.Job.interest.GetComponent<Building>().RequestRes(new(), h, 0);
                     return false;
                 }
                 break;
             case JobState.Pickup:
                 // if there's any space for it
                 if (MyRes.globalStorageSpace > 0)
-                    if (FindInterests(jobQueue.pickupNeeded.Where(q => q.localRes.Future().ammount.Sum() > 0).Cast<ClickableObject>(), h, j))
+                    if (FindInterests(jobQueue.pickupNeeded.Where(q => q.LocalRes.Future().ammount.Sum() > 0).Cast<ClickableObject>(), h, j))
                     {
-                        h.destination = h.jData.interest.GetComponent<Building>();
-                        Resource toMove = h.destination.localRes.Future();
+                        h.destination = h.Job.interest.GetComponent<Building>();
+                        Resource toMove = h.destination.LocalRes.Future();
                         Resource r = new();
-                        MyRes.MoveRes(r, toMove.Clone(), toMove, h.inventory.capacity < MyRes.globalStorageSpace ? h.inventory.capacity : MyRes.globalStorageSpace);
-                        h.destination.localRes.AddRequest(r, h, -1);
+                        MyRes.MoveRes(r, toMove.Clone(), toMove, h.Inventory.capacity < MyRes.globalStorageSpace ? h.Inventory.capacity : MyRes.globalStorageSpace);
+                        h.destination.LocalRes.AddRequest(r, h, -1);
                         MyRes.FindStorage(r, h);
                         if (toMove.ammount.Sum() == 0)
                         {
-                            jobQueue.CancelJob(JobState.Pickup, h.jData.interest);
+                            jobQueue.CancelJob(JobState.Pickup, h.Job.interest);
                         }
                         return false;
                     }
@@ -245,14 +239,14 @@ public static class HumanActions
                 if (MyRes.globalStorageSpace == 0)
                     return true;
                 IEnumerable<ClickableObject> chunks;
-                if ((chunks = MyGrid.chunks.Where(q => q.localRes.Future().ammount.Sum() > 0).Cast<ClickableObject>()).Count() > 0)
+                if ((chunks = MyGrid.chunks.Where(q => q.LocalRes.Future().ammount.Sum() > 0).Cast<ClickableObject>()).Count() > 0)
                 {
                     if (FindInterests(chunks, h, JobState.Pickup))
                     {
                         Resource toMove = new();
-                        Chunk chunk = (Chunk)h.jData.interest;
-                        Resource chunkStorage = chunk.localRes.Future();
-                        MyRes.MoveRes(toMove, chunkStorage, chunkStorage, h.inventory.capacity - h.inventory.ammount.Sum());
+                        Chunk chunk = (Chunk)h.Job.interest;
+                        Resource chunkStorage = chunk.LocalRes.Future();
+                        MyRes.MoveRes(toMove, chunkStorage, chunkStorage, h.Inventory.capacity - h.Inventory.ammount.Sum());
                         chunk.RequestRes(toMove, h, -1);
                         return false;
                     }
@@ -286,10 +280,11 @@ public static class HumanActions
     {
         if(interests.Count() > 0)
         {
-            h.jData = PathFinder.FindPath(interests.ToList(), h);
-            if (h.jData.interest)
+            JobData data = PathFinder.FindPath(interests.ToList(), h);
+            if (data.interest)
             {
-                h.jData.job = jobs;
+                data.job = jobs;
+                h.SetJob(data);
                 h.ChangeAction(Move);
                 h.lookingForAJob = false;
                 return true;
@@ -306,7 +301,7 @@ public static class HumanActions
     {
         if (h.workplace)
         {
-            h.workplace.Produce(h.efficiency.efficiency * productionSpeed);
+            h.workplace.Produce(h.Efficiency.efficiency * productionSpeed);
         }
         else
         {

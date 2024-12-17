@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using TMPro;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,22 +16,38 @@ public class Rock : ClickableObject
     /// <summary>
     /// public int hardness;
     /// </summary>
-    public float integrity;
+    [SerializeField]
+    float integrity;
+
+    [CreateProperty]
+    public float Integrity
+    {
+        get { return integrity; }
+        set { integrity = value; }
+    }
 
     /// <summary>
     /// infuenced by the player
     /// </summary>
-    public Human assigned;
+    Human assigned;
+    [CreateProperty]
+    public Human Assigned
+    {
+        get { return assigned; }
+        set 
+        { 
+            assigned = value;
+            UpdateWindow(nameof(Assigned));
+        }
+    }
     public bool toBeDug;
 
     /// <summary>
     /// prefab to replace with
     /// </summary>
     public string assetPath;
+    
 
-    ///////////////////////////////////////////////////
-    ///////////////////Overrides///////////////////////
-    ///////////////////////////////////////////////////
     #region Basic Operations
     public override void UniqueID()
     {
@@ -41,21 +58,26 @@ public class Rock : ClickableObject
         jobSave.objectId = id;
         jobSave.objectType = typeof(Rock);
     }
-    #endregion Basic Operations
-    #region Window
-    protected override void SetupWindow(InfoWindow info)
+    public override GridPos GetPos()
     {
-        base.SetupWindow(info); 
-        info.SwitchMods(InfoMode.Rock); // set window mod to Ore Info
-        info.FillResourceList(info.rock.Q<VisualElement>("Yield"), rockYield);
+        return new GridPos(
+            transform.position.x,
+            (transform.position.y - ClickabeObjectFactory.ROCK_OFFSET) / ClickabeObjectFactory.LEVEL_HEIGHT,
+            transform.position.z);
     }
+    #endregion Basic Operations
 
-    protected override void UpdateWindow(InfoWindow info)
+    #region Window
+    public override InfoWindow OpenWindow()
     {
-        base.UpdateWindow(info);
-        info.rock.Q<Label>("Integrity-Value").text = $"{integrity:0.#}";
+        InfoWindow info = base.OpenWindow();
+        info.Open(this, InfoMode.Rock);
+        //info.FillResourceList(info.rock.Q<VisualElement>("Yield"), rockYield);
+
+        return info;
     }
     #endregion Window
+
     #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
@@ -90,13 +112,25 @@ public class Rock : ClickableObject
         base.Load(save);
     }
     #endregion Saving
-    public override GridPos GetPos()
+
+    #region Rock actions
+    public bool DamageRock(float damage)
     {
-        return new GridPos(
-            transform.position.x,
-            (transform.position.y - 1.5f) / 2,
-            transform.position.z);
+        integrity -= damage;
+        if (integrity <= 0)
+        {
+            if (rockYield.ammount.Sum() > 0)
+                SceneRefs.objectFactory.CreateAChunk(GetPos(), rockYield);
+            MyGrid.UnsetRock(this);
+            SceneRefs.objectFactory.CreateRoad(GetPos(), true);
+            Destroy(gameObject);
+
+            return true;
+        }
+        UpdateWindow(nameof(Integrity));
+        return false;
     }
+
 
     public void ColorWithIntegrity()
     {
@@ -122,4 +156,6 @@ public class Rock : ClickableObject
         }
         gameObject.GetComponent<MeshRenderer>().material.color = c * f;
     }
+
+    #endregion
 }

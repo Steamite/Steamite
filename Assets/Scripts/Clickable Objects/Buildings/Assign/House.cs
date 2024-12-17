@@ -10,15 +10,12 @@ public class House : AssignBuilding
     ///////////////////Overrides///////////////////////
     ///////////////////////////////////////////////////
     #region Window
-    protected override void SetupWindow(InfoWindow info, List<string> toEnable)
+
+    protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
     {
-        base.SetupWindow(info, toEnable);
-        info.ToggleChildElems(info.constructed, new() {"assigned"});
+        OpenWindowWithToggle(info, toEnable);
     }
-    protected override void UpdateWindow(InfoWindow info)
-    {
-        base.UpdateWindow(info);
-    }
+
     #endregion
     public override void OrderDeconstruct()
     {
@@ -42,4 +39,27 @@ public class House : AssignBuilding
         strings[0] = $"Can house up to {limit} workers";
         return strings;
     }
+
+    #region Assign
+    public override void ManageAssigned(Human human, bool add)
+    {
+        if (add)
+        {
+            human.home = this;
+            assigned.Add(human);
+        }
+        else
+        {
+            human.home = null;
+            assigned.Remove(human);
+        }
+        UpdateWindow(nameof(Assigned));
+    }
+    public override List<Human> GetUnassigned()
+    {
+        List<Human> unassigned = SceneRefs.humans.GetHumen();
+        unassigned.RemoveAll(q => Assigned.Contains(q));
+        return unassigned;
+    }
+    #endregion
 }

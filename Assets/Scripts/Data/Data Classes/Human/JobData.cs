@@ -18,6 +18,7 @@ public struct JobData
             human.destination = MyGrid.buildings.Single(q => q.id == jobSave.destinationID);
             human.destination.TryLink(human);
         }
+
         if (typeof(Building) == jobSave.objectType)
         {
             interest = MyGrid.buildings.Single(q => q.id == jobSave.objectId);
@@ -25,12 +26,13 @@ public struct JobData
         else if (typeof(Rock) == jobSave.objectType)
         {
             interest = SceneRefs.gridTiles.toBeDigged.FirstOrDefault(q => q.id == jobSave.objectId);
-            interest.GetComponent<Rock>().assigned = human;
+            interest.GetComponent<Rock>().Assigned = human;
         }
         else if (typeof(Chunk) == jobSave.objectType)
         {
             interest = MyGrid.chunks.FirstOrDefault(q => q.id == jobSave.objectId);
         }
+
         if (interest)
         {
             if (!interest.Equals(human.destination))

@@ -230,7 +230,7 @@ public class GridTiles : MonoBehaviour
                 HighLight(c, activeObject.gameObject);
                 clickedObject = activeObject;
                 clickedObject.selected = true;
-                clickedObject.OpenWindow(true);
+                clickedObject.OpenWindow();
                 break;
             case SelectionMode.deconstruct:
                 Building b = activeObject.GetComponent<Building>();
@@ -484,7 +484,7 @@ public class GridTiles : MonoBehaviour
             clickedObject.selected = false;
             Exit(clickedObject);
             clickedObject = null;
-            CanvasManager.infoWindow.Close();
+            SceneRefs.infoWindow.Close();
         }
     }
     /// <summary>
@@ -622,7 +622,7 @@ public class GridTiles : MonoBehaviour
                 tile.toBeDug = true;
                 humans.GetComponent<JobQueue>().AddJob(JobState.Digging, tile);
             }
-            List<Human> workers = humans.transform.GetChild(0).GetComponentsInChildren<Human>().Where(h => h.jData.job == JobState.Free).ToList();
+            List<Human> workers = humans.transform.GetChild(0).GetComponentsInChildren<Human>().Where(h => h.Job.job == JobState.Free).ToList();
             foreach (var worker in workers) // triggers on every free human
             {
                 if (!worker.nightTime)
