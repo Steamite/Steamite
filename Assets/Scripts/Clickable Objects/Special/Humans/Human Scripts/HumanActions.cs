@@ -53,7 +53,7 @@ public static class HumanActions
         else
         {
             if (job.interest != null)
-                Rotate(h, new(job.interest.gameObject));
+                Rotate(h, job.interest.GetPos());
             h.ChangeAction(null);
             h.Decide();
         }
@@ -61,7 +61,7 @@ public static class HumanActions
 
     static void Rotate(Human h, GridPos point)
     {
-        GridPos humanPos = new(h.gameObject);
+        GridPos humanPos = h.GetPos();
         if(point.x > humanPos.x)
             h.transform.rotation = Quaternion.Euler(0, 180, 0);
         else if(point.x < humanPos.x)

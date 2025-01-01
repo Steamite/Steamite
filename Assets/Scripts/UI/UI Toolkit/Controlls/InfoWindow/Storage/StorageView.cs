@@ -10,6 +10,22 @@ using UnityEngine.UIElements;
 [UxmlElement]
 public partial class StorageView : TabView, IUIElement
 {
+#if UNITY_EDITOR
+    bool active;
+    [UxmlAttribute] bool storageTabActive
+    {
+        get => active;
+        set
+        {
+            active = value;
+            if (active)
+                activeTab = storageTab;
+            else
+                activeTab = levelTab;
+        }
+    }
+#endif
+
     [UxmlAttribute] public VisualTreeAsset elemPref;
 
     StorageTab storageTab;

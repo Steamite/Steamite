@@ -7,59 +7,8 @@
     border-bottom-color: rgba(0, 0, 0, 0);
 }
 
-#Load-Menu #unity-tracker {
-    --unity-cursor-color: rgb(249, 233, 141);
-    background-color: rgba(28, 28, 28, 0);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-}
-
-#Load-Menu #unity-dragger-border {
-    --unity-cursor-color: rgb(249, 233, 141);
-    background-color: rgb(28, 28, 28);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-}
-
-#Load-Menu #unity-dragger {
-    --unity-cursor-color: rgb(249, 233, 141);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-    background-image: none;
-    -unity-background-image-tint-color: rgb(255, 255, 255);
-    background-color: rgb(70, 49, 27);
-}
-
-#unity-low-button {
-    --unity-cursor-color: rgb(249, 233, 141);
-    background-color: rgba(28, 28, 28, 0);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-    background-image: none;
-    position: absolute;
-}
-
-#unity-high-button {
-    --unity-cursor-color: rgb(249, 233, 141);
-    background-color: rgba(28, 28, 28, 0);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-    background-image: none;
-    position: absolute;
-}
-
-#unity-content-container {
-    flex-grow: 1;
+.unity-base-text-field__input {
+    --unity-selection-color: rgba(255, 255, 0, 0.5);
 }
 
 #unity-tab__header {
@@ -89,31 +38,51 @@
 }
 
 #unity-tab__header:checked {
-    background-color: rgb(73, 121, 107);
+    background-color: rgb(249, 233, 141);
+    color: rgb(28, 28, 28);
 }
 
-.radial-progress {
-    min-width: 26px;
-    min-height: 20px;
-    --track-color: rgb(130, 130, 130);
-    --progress-color: rgb(46, 132, 24);
-    --percentage-color: white;
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    flex-direction: row;
-    justify-content: center;
-    width: 100px;
-    height: 100px;
+#unity-tab__header:checked > #unity-tab__header-label {
+    -unity-text-align: middle-center;
+    align-self: auto;
+    align-items: auto;
+    justify-content: flex-start;
+    width: 100%;
+    align-content: auto;
+    color: rgb(28, 28, 28);
+}
+
+.unity-tab__content-container {
+    flex-grow: 1;
 }
 
 .unity-tab-view__content-container {
     flex-grow: 1;
 }
 
-.unity-tab__content-container {
-    flex-grow: 1;
+________________ {
+}
+
+#unity-high-button {
+    --unity-cursor-color: rgb(249, 233, 141);
+    background-color: rgba(28, 28, 28, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    position: absolute;
+}
+
+#unity-low-button {
+    --unity-cursor-color: rgb(249, 233, 141);
+    background-color: rgba(28, 28, 28, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    position: absolute;
 }
 
 .unity-list-view__empty-label {
@@ -155,6 +124,25 @@
     overflow: hidden;
 }
 
+________________ {
+}
+
+.radial-progress {
+    min-width: 26px;
+    min-height: 20px;
+    --track-color: rgb(130, 130, 130);
+    --progress-color: rgb(46, 132, 24);
+    --percentage-color: white;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    flex-direction: row;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+}
+
 DoubleResourceList #unity-content-viewport {
     align-self: center;
     justify-content: center;
@@ -174,4 +162,12 @@ DoubleResourceList Scroller {
     min-height: 0;
     min-width: 0;
     overflow: hidden;
+}
+
+.def-style {
+    color: rgb(161, 148, 59);
+    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
+}
+
+________________ {
 }

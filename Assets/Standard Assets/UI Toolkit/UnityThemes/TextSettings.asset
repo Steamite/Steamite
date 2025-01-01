@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: TextSettings
   m_EditorClassIdentifier: 
   m_Version: 
-  m_DefaultFontAsset: {fileID: 11400000, guid: 25bf1cd4cf1b4174fbe661641450755e, type: 2}
+  m_DefaultFontAsset: {fileID: 11400000, guid: af9e8c26b1a3efc43acf5c1e1771e99f, type: 2}
   m_DefaultFontAssetPath: Fonts & Materials/custom fonts/assets/Alpha-Slab-One
-  m_FallbackFontAssets: []
+  m_FallbackFontAssets:
+  - {fileID: 11400000, guid: af9e8c26b1a3efc43acf5c1e1771e99f, type: 2}
+  - {fileID: 11400000, guid: 9ca32360aa46cf94594f3b2281728c7c, type: 2}
   m_MatchMaterialPreset: 0
   m_MissingCharacterUnicode: 0
   m_ClearDynamicDataOnBuild: 1

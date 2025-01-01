@@ -1,0 +1,145 @@
+.menu {
+    transition-duration: 2s;
+    transition-timing-function: ease-out;
+    translate: 0 0;
+    transition-property: translate;
+}
+
+.menu-new {
+    transition-duration: 2s;
+    transition-timing-function: ease-out;
+    translate: -100% 0;
+    transition-property: translate;
+}
+
+.menu-load {
+    transition-duration: 2s;
+    transition-timing-function: ease-out;
+    translate: 0 -100%;
+    transition-property: translate;
+}
+
+.window {
+    flex-grow: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    visibility: visible;
+    overflow: visible;
+    display: flex;
+    color: rgb(249, 233, 141);
+    translate: 105% 0;
+    transition-duration: 2s;
+    transition-timing-function: ease-out;
+    transition-property: translate;
+}
+
+_______________ {
+}
+
+.disabled-button {
+    opacity: 1;
+    -unity-text-align: middle-center;
+    transition-property: opacity;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-in;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=c23bbc337457b514697754b60fba36ea&type=3#Button");
+    -unity-background-image-tint-color: rgba(33, 28, 7, 0.69);
+    color: rgba(161, 148, 59, 0.31);
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.main-button {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    font-size: 90px;
+    min-width: 100%;
+    background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=c23bbc337457b514697754b60fba36ea&type=3#Button");
+    -unity-background-image-tint-color: rgb(60, 55, 22);
+    background-color: rgba(0, 0, 0, 0);
+    background-size: 100% 100%;
+    height: 18%;
+    width: auto;
+    color: rgb(161, 148, 59);
+    -unity-text-align: middle-center;
+    border-left-color: rgba(255, 255, 255, 0);
+    border-right-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-bottom-color: rgba(255, 255, 255, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    transition-duration: 0.2s;
+    max-width: none;
+}
+
+.main-button:hover {
+    scale: 1.05 1.05;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+    transition-property: all;
+    -unity-background-image-tint-color: rgb(40, 37, 15);
+    color: rgb(181, 166, 66);
+}
+
+.main-button:active {
+    -unity-background-image-tint-color: rgb(35, 32, 2);
+}
+
+.main-button-selected {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 5%;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    font-size: 90px;
+    min-width: 100%;
+    background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=c23bbc337457b514697754b60fba36ea&type=3#Button");
+    -unity-background-image-tint-color: rgb(35, 32, 2);
+    background-color: rgba(0, 0, 0, 0);
+    background-size: 100% 100%;
+    height: 18%;
+    width: 100%;
+    color: rgb(181, 166, 66);
+    -unity-text-align: middle-center;
+    border-left-color: rgba(255, 255, 255, 0);
+    border-right-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-bottom-color: rgba(255, 255, 255, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    transition-duration: 0.1s;
+    scale: 1.1 1.1;
+}
+
+.background {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+#Left-Bar #Worlds #unity-content-viewport {
+    overflow: visible;
+}
+
+#Left-Bar #Worlds #unity-content-container {
+    overflow: visible;
+}

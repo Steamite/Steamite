@@ -53,6 +53,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -167,6 +170,7 @@ GameObject:
   - component: {fileID: 6079932396248880365}
   - component: {fileID: 452135987344867831}
   - component: {fileID: 7408063851616091057}
+  - component: {fileID: 2767296565719767434}
   m_Layer: 7
   m_Name: Pipe
   m_TagString: Untagged
@@ -214,6 +218,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -282,20 +289,21 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
+  myColor: []
   build:
     blueprint:
       size:
         x: 0
         z: 0
-        level: 0
+        y: 0
       moveBy:
         x: 0
         z: 0
-        level: 0
+        y: 0
       anchor:
         x: 0
         z: 0
-        level: 0
+        y: 0
       itemList: []
     heigth: 0
     cost:
@@ -324,6 +332,33 @@ SortingGroup:
   m_SortingLayer: 2
   m_SortingOrder: 15
   m_SortAtRoot: 0
+--- !u!54 &2767296565719767434
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4905127315233248697}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &5218611042899198335
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,6 +412,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -497,6 +535,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -586,6 +627,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -635,6 +679,7 @@ GameObject:
   - component: {fileID: 7842307157348407047}
   - component: {fileID: -85555690278644832}
   - component: {fileID: 492768458719829812}
+  - component: {fileID: 4084886823629516137}
   m_Layer: 2
   m_Name: Steam Generator
   m_TagString: Untagged
@@ -684,6 +729,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -764,65 +812,66 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
+  myColor: []
   build:
     blueprint:
       size:
         x: 3
         z: 3
-        level: 0
+        y: 0
       moveBy:
         x: -1
         z: 0.5
-        level: 0
+        y: 0
       anchor:
         x: 2
         z: 1
-        level: 0
+        y: 0
       itemList:
       - pos:
           x: -2
           z: -1
-          level: 0
+          y: 0
         itemType: 1
       - pos:
           x: -2
           z: 0
-          level: 0
+          y: 0
         itemType: 1
       - pos:
           x: -2
           z: 1
-          level: 0
+          y: 0
         itemType: 3
       - pos:
           x: -1
           z: -1
-          level: 0
+          y: 0
         itemType: 1
       - pos:
           x: -1
           z: 0
-          level: 0
+          y: 0
         itemType: 1
       - pos:
           x: -1
           z: 1
-          level: 0
+          y: 0
         itemType: 3
       - pos:
           x: 0
           z: -1
-          level: 0
+          y: 0
         itemType: 1
       - pos:
           x: 0
           z: 0
-          level: 0
+          y: 0
         itemType: 4
       - pos:
           x: 0
           z: 1
-          level: 0
+          y: 0
         itemType: 3
     heigth: 0
     cost:
@@ -833,29 +882,17 @@ MonoBehaviour:
     deconstructing: 0
     constructionProgress: 0
     maximalProgress: 0
-  assigned: []
   limit: 5
-  pRes:
-    inputResource:
-      stored:
-        capacity: -1
-        type: 
-        ammount: 
-      requests: []
-      carriers: []
-      mods: 
-    productionCost:
-      capacity: 10
-      type: 00000000
-      ammount: 01000000
-    production:
-      capacity: -1
-      type: 
-      ammount: 
-  pTime:
-    prodTime: 10
-    currentTime: 0
-    modifier: 1
+  productionCost:
+    capacity: -1
+    type: 
+    ammount: 
+  production:
+    capacity: -1
+    type: 
+    ammount: 
+  prodTime: 20
+  modifier: 1
   working: []
   pStates:
     supplied: 0
@@ -864,17 +901,36 @@ MonoBehaviour:
     stoped: 0
     running: 0
   networkAccess:
-    rid: 1000
-  waterCost: 1
-  steamProduction: 2
-  fluidSupplied: 0
+    rid: -2
   references:
     version: 2
     RefIds:
-    - rid: 1000
-      type: {class: NetworkAccesBuilding, ns: , asm: Assembly-CSharp}
-      data:
-        fluid:
-          type: 0000000001000000
-          ammount: 0000000000000000
-          capacity: 1900000032000000
+    - rid: -2
+      type: {class: , ns: , asm: }
+--- !u!54 &4084886823629516137
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8473832138988228041}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 0
+  m_ImplicitTensor: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0

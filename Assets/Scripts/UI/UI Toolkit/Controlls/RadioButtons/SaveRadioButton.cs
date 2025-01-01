@@ -18,13 +18,11 @@ namespace RadioGroups
 
         public SaveRadioButton(string labelText, string _styleClass, int i, DateTime date) : base(labelText, _styleClass, i)
         {
-            style.unityTextAlign = TextAnchor.MiddleLeft;
-            style.paddingLeft = new(new Length(5, LengthUnit.Percent));
-
             saveDate = new TextElement();
             saveDate.text = date.ToString();
             saveDate.style.alignSelf = Align.FlexEnd;
             saveDate.style.unityTextAlign = TextAnchor.LowerRight;
+            saveDate.style.fontSize = 30;
             style.justifyContent = Justify.FlexEnd;
             this.Add(saveDate);
 
@@ -34,14 +32,14 @@ namespace RadioGroups
             this.Add(deleteButton);
         }
 
-        public override void Select(ClickEvent _)
+        public override void Select(bool triggerTransition = true)
         {
-            base.Select(_);
+            base.Select(triggerTransition);
             deleteButton.style.display = DisplayStyle.Flex;
         }
-        public override void Deselect()
+        public override void Deselect(bool triggerTransition = true)
         {
-            base.Deselect();
+            base.Deselect(triggerTransition);
             deleteButton.style.display = DisplayStyle.None;
         }
     }

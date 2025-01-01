@@ -79,7 +79,7 @@ namespace StartMenu
 
         #endregion
 
-        List<EnumGeneratioParameter> parameters;
+        List<EnumGenerationParameter> parameters;
 
         public void Init(VisualElement _root)
         {
@@ -90,19 +90,19 @@ namespace StartMenu
             parameters = new();
 
             // map size
-            parameters.Add(mapParams.Q<EnumGeneratioParameter>("Map-Size"));
+            parameters.Add(mapParams.Q<EnumGenerationParameter>("Map-Size"));
             mapSize = parameters[^1].Link(this);
 
             // vein size
-            parameters.Add(mapParams.Q<EnumGeneratioParameter>("Size"));
+            parameters.Add(mapParams.Q<EnumGenerationParameter>("Size"));
             veinSize = parameters[^1].Link(this);
 
             // vein richness
-            parameters.Add(mapParams.Q<EnumGeneratioParameter>("Richness"));
+            parameters.Add(mapParams.Q<EnumGenerationParameter>("Richness"));
             veinRichness = parameters[^1].Link(this);
 
             // vein count
-            parameters.Add(mapParams.Q<EnumGeneratioParameter>("Number"));
+            parameters.Add(mapParams.Q<EnumGenerationParameter>("Number"));
             veinCount = parameters[^1].Link(this);
         }
 

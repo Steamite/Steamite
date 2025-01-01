@@ -35,9 +35,6 @@ public class MapGen : MonoBehaviour
 
     string lastSeed = "";
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-
-    // TODO
     public void Generate(string _seed = null, GroundLevel templateLevel = null)
     {
         seed = _seed;

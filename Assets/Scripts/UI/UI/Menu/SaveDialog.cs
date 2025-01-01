@@ -35,21 +35,21 @@ public class SaveDialog : MonoBehaviour, IGridMenu
         saveButton = uiDoc.rootVisualElement.Q<Button>("Save-Game");
         closeButton = uiDoc.rootVisualElement.Q<Button>("Cancel-Save");
         
-        closeButton.RegisterCallback<ClickEvent>(ResetWindow);
+        closeButton.RegisterCallback<ClickEvent>(CloseWindow);
 
         Button b = uiDoc.rootVisualElement.Q<Button>("Save");
-        b.RegisterCallback<ClickEvent>((e) => OpenDialog(e));
+        b.RegisterCallback<ClickEvent>((e) => OpenWindow(e));
         saveName = "";
     }
 
-    public void OpenDialog(ClickEvent _)
+    public void OpenWindow(ClickEvent _)
     {
         uiDoc.rootVisualElement.Q<VisualElement>("Save-Dialog").style.display = DisplayStyle.Flex;
         saveButton.RegisterCallback<ClickEvent>(SaveGame);
         opened = true;
     }
 
-    public void ResetWindow(ClickEvent _ = null)
+    public void CloseWindow(ClickEvent _ = null)
     {
         uiDoc.rootVisualElement.Q<TextField>("SaveField").value = "";
         uiDoc.rootVisualElement.Q<VisualElement>("Save-Dialog").style.display = DisplayStyle.None;
@@ -81,5 +81,10 @@ public class SaveDialog : MonoBehaviour, IGridMenu
     public bool IsOpen()
     {
         return opened;
+    }
+
+    public void OpenWindow()
+    {
+        throw new NotImplementedException();
     }
 }
