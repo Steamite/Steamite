@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 public interface IGridMenu
 {
     public bool IsOpen();
-    public void ResetWindow(ClickEvent _ = null);
+    void OpenWindow(ClickEvent _ = null);
+    public void CloseWindow(ClickEvent _ = null);
     public void UpdateButtonState();
 }

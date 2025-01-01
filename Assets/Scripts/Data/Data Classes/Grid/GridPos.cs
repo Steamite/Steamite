@@ -51,13 +51,6 @@ public class GridPos
         y = Mathf.RoundToInt(vec.y);
         z = vec.z;
     }
-    public GridPos(GameObject g)
-    {
-        Vector3 vec = g.transform.localPosition;
-        x = vec.x;
-        y = Mathf.RoundToInt(vec.y / 2);
-        z = vec.z;
-    }
 
     public Vector3 ToVec(float Yoffset = 0)
     {

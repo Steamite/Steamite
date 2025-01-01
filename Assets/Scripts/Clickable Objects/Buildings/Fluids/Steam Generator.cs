@@ -10,11 +10,11 @@ public class SteamGenerator : ProductionBuilding
 {
     [Header("Fluid")]
     [SerializeReference] NetworkAccesBuilding networkAccess = new();
-    [SerializeField] int waterCost = 2;
-    [SerializeField] int steamProduction = 1;
-    [SerializeField] bool fluidSupplied = false;
-    Building lastWaterAccessNetworkElem = null;
-    Building lastSteamAccessNetworkElem = null;
+    //[SerializeField] int waterCost = 2;
+    //[SerializeField] int steamProduction = 1;
+    //[SerializeField] bool fluidSupplied = false;
+    /*Building lastWaterAccessNetworkElem = null;
+    Building lastSteamAccessNetworkElem = null;*/
     public override void UniqueID()
     {
         base.UniqueID();

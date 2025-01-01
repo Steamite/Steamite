@@ -97,9 +97,9 @@ public class WaterPump : ProductionBuilding
             res = false;
         if (!networkAccess.ConnectPipes(transform.GetChild(2)))
             res = false;
-        GridPos gridPos = new(transform.GetChild(2).gameObject);
+       /* GridPos gridPos = new(transform.GetChild(2).transform.position);
         if (MyGrid.GetGridItem(gridPos).PrintText() != "w")
-            res = false;
+            res = false;*/
         return res;
     }
     public override void PlaceBuilding(GridTiles gT)
@@ -110,8 +110,8 @@ public class WaterPump : ProductionBuilding
     public override void FinishBuild()
     {
         base.FinishBuild();
-        GridPos waterPos = new(transform.GetChild(2).gameObject);
-        water = MyGrid.GetGridItem(waterPos) as Water;
+        /*GridPos waterPos = new(transform.GetChild(2).gameObject);
+        water = MyGrid.GetGridItem(waterPos) as Water;*/
         networkAccess.ConnectToNetwork(transform.GetChild(3));
     }
     protected override void AfterProduction()

@@ -1,5 +1,7 @@
 using Newtonsoft.Json;
 using RadioGroups;
+using StartMenu;
+using System;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -26,12 +28,29 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
     public void Init(VisualElement root)
     {
         menu = root.Q<VisualElement>("Load-Menu");
+        menu.Q<VisualElement>("Background").ClearClassList();
         worldGroup = menu.Q<SaveRadioGroup>("World-List");
-        worldGroup.deleteAction = DeleteWorld;
+
+        worldGroup.deleteAction = (int i) =>
+        {
+            GetComponent<ConfirmWindow>().Open(
+                        () => DeleteWorld(i),
+                        "Delete world",
+                        $"Are you sure you want to\n" +
+                        $"delete this world <color=\"red\">{worlds[i]}</color> and saves that belong to it?");
+        };
+            
 
         saveElement = menu.Q<VisualElement>("Saves");
         saveGroup = menu.Q<SaveRadioGroup>("Save-List");
-        saveGroup.deleteAction = DeleteSave;
+        saveGroup.deleteAction = (int i) =>
+        {
+            GetComponent<ConfirmWindow>().Open(
+                        () => DeleteSave(i),
+                        "Delete world",
+                        $"Are you sure you want to\n" +
+                        $"delete this save <color=\"red\">{saves[i]}</color>?");
+        };
 
         loadButton = menu.Q<Button>("Load");
         loadButton.RegisterCallback<ClickEvent>(LoadGame);
@@ -45,48 +64,17 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
                 continueButton.RegisterCallback<ClickEvent>(Continue);
                 ToggleStyleButton(continueButton, true);
             }
+            menu.Q<VisualElement>("Background").AddToClassList("menu-view");
         }
         else
         {
             root.Q<Label>("Load-Header").text += " - " + MyGrid.worldName;
+            menu.Q<VisualElement>("Background").AddToClassList("game-window");
         }
         loadMenuButton = root.Q<Button>("Load-Game-Button");
-        loadMenuButton.RegisterCallback<ClickEvent>(OpenMenu);
+        loadMenuButton.RegisterCallback<ClickEvent>(OpenWindow);
 
-        menu.Q<Button>("Save-Close-Button").RegisterCallback<ClickEvent>(ResetWindow);
-        ResetWindow();
-    }
-
-
-    void OpenMenu(ClickEvent _)
-    {
-        worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", true, true);
-        if (worlds != null && worlds.Length > 0)
-        {
-            menu.style.display = DisplayStyle.Flex;
-        }
-        else
-        {
-            ToggleStyleButton(loadMenuButton, false);
-        }
-    } 
-
-    void ToggleStyleButton(Button button, bool activate)
-    {
-        if (activate)
-        {
-            button.RemoveFromClassList("disabled-button");
-            button.AddToClassList("enabled-button");
-        }
-        else
-        {
-            button.AddToClassList("disabled-button");
-            button.RemoveFromClassList("enabled-button");
-        }
-    }
-
-    public void ResetWindow(ClickEvent _ = null)
-    {
+        menu.Q<Button>("Save-Close-Button").RegisterCallback<ClickEvent>(CloseWindow);
         selectedWorld = -1;
         selectedSave = -1;
         UpdateGrids();
@@ -105,36 +93,37 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
             });
 
         ToggleStyleButton(loadMenuButton, worlds != null && worlds.Length > 0);
-        menu.style.display = DisplayStyle.None;
     }
 
-    public void UpdateGrids()
+    #region Window Logic
+    public bool IsOpen()
     {
-        if (selectedWorld != -1)
+        if (continueButton != null)
         {
-            saveElement.AddToClassList("save-list-selected");
-            worldGroup.AddToClassList("world-list-selected");
-            saves = saveGroup.FillItemSource(worlds[selectedWorld].path, true, false);
-            if (saves == null)
-            {
-                ResetWindow();
-                ToggleStyleButton(loadMenuButton, false);
-                return;
-            }
+            return false;
+        }
+        return menu.style.display == DisplayStyle.Flex;
+    }
+    public void OpenWindow(ClickEvent _ = null)
+    {
+        worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", true, true);
+        if (worlds != null && worlds.Length > 0)
+        {
+            selectedWorld = -1;
             selectedSave = -1;
-            ToggleStyleButton(loadButton, selectedWorld > -1 && selectedSave > -1);
+            UpdateGrids();
+            gameObject.GetComponent<MyMainMenu>().OpenWindow("load");
         }
         else
         {
-            saveElement.RemoveFromClassList("save-list-selected");
-            worldGroup.RemoveFromClassList("world-list-selected");
+            ToggleStyleButton(loadMenuButton, false);
         }
     }
-
+    public void CloseWindow(ClickEvent _ = null) => gameObject.GetComponent<MyMainMenu>().CloseWindow();
     public void UpdateButtonState()
     {
         bool t = true;
-        if(worlds == null || worlds.Length == 0)
+        if (worlds == null || worlds.Length == 0)
         {
             worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", false, true);
             if (worlds.Length == 0)
@@ -143,6 +132,46 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
         ToggleStyleButton(loadMenuButton, t);
     }
 
+    void ToggleStyleButton(Button button, bool activate)
+    {
+        if (activate)
+        {
+            button.RemoveFromClassList("disabled-button");
+            button.AddToClassList("main-button");
+        }
+        else
+        {
+            button.AddToClassList("disabled-button");
+            button.RemoveFromClassList("main-button");
+        }
+    }
+
+    public void UpdateGrids()
+    {
+        if (selectedWorld != -1)
+        {
+            menu.Q<Label>("Hint").style.display = DisplayStyle.None;
+            menu.Q<VisualElement>("List").style.display = DisplayStyle.Flex;
+            saves = saveGroup.FillItemSource(worlds[selectedWorld].path, true, false);
+            if (saves == null)
+            {
+                CloseWindow();
+                ToggleStyleButton(loadMenuButton, false);
+                return;
+            }
+            selectedSave = -1;
+            ToggleStyleButton(loadButton, selectedWorld > -1 && selectedSave > -1);
+        }
+        else
+        {
+            menu.Q<Label>("Hint").style.display = DisplayStyle.Flex;
+            menu.Q<VisualElement>("List").style.display = DisplayStyle.None;
+        }
+    }
+    #endregion
+
+
+    #region Loading Logic
     void Continue(ClickEvent _)
     {
         if(worlds.Length > 0)
@@ -185,7 +214,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
     {
         string saveFolder = saves[selectedSave].path;
         Save save = new();
-        save.worldName = SaveController.GetSaveName(worlds[selectedWorld].path);
+        save.worldName = worlds[selectedWorld].ToString();
 
         JsonSerializer jsonSerializer = SaveController.PrepSerializer();
         // for gridSave
@@ -219,8 +248,9 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
         jsonReader.Close();
         return save;
     }
+    #endregion
 
-
+    #region Save deletion
     private void DeleteWorld(int worldIndex)
     {
         try
@@ -230,17 +260,18 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
             worldGroup.RemoveItem(worldIndex);
             selectedWorld = -1;
             selectedSave = -1;
-            if (saves.Length > 1)
-                UpdateGrids();
-            else
+            UpdateGrids();
+            if (worlds.Length == 0)
             {
                 if(continueButton != null)
                     ToggleStyleButton(continueButton, false);
-                ResetWindow();
+                ToggleStyleButton(loadMenuButton, false);
+                CloseWindow();
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.LogError("Cannot delete world:\n" + ex);
         }
     }
     private void DeleteSave(int saveIndex)
@@ -258,13 +289,10 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
             else
                 DeleteWorld(selectedWorld);
         }
-        catch
+        catch(Exception ex)
         {
+            Debug.LogError("Cannot delete save:\n" + ex);
         }
     }
-
-    public bool IsOpen()
-    {
-        return menu.style.display == DisplayStyle.Flex;
-    }
+    #endregion Save deletion
 }

@@ -8,7 +8,7 @@ namespace StartMenu
     public class MainMenuShortcuts : MonoBehaviour
     {
         [SerializeField] InputAction action;
-        [SerializeField] List<MonoBehaviour> windows;
+        [SerializeField] MyMainMenu mainMenu;
 
         private void OnEnable()
         {
@@ -26,16 +26,10 @@ namespace StartMenu
                 if (ConfirmWindow.window.opened)
                 {
                     ConfirmWindow.window.Close(false);
-                    return;
                 }
-                foreach (IGridMenu item in windows)
+                else
                 {
-                    if (item.IsOpen())
-                    {
-                        item.ResetWindow();
-                        return;
-                    }
-
+                    mainMenu.CloseWindow();
                 }
             }
         }

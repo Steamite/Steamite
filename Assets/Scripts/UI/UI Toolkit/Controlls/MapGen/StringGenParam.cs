@@ -6,7 +6,8 @@ using UnityEngine.UIElements;
 
 namespace Params
 {
-    public class StringGenerationParameter : BindableElement
+    [UxmlElement]
+    public partial class StringGenerationParameter : BindableElement
     {
         string val;
         [CreateProperty]
@@ -15,11 +16,12 @@ namespace Params
             get { return val; }
             set { 
                 val = value;
+                Debug.Log(value);
             }
         }
 
         string _lText;
-        [CreateProperty]
+        [UxmlAttribute]
         public string labelText
         {
             get { return _lText; }
@@ -27,74 +29,9 @@ namespace Params
             {
                 _lText = value;
                 label.text = _lText;
-                //ElementAt(1).ElementAt(0).Q<TextElement>().text = _lText;
             }
         }
-
         protected Label label;
-
-        [Serializable]
-        public new class UxmlSerializedData : BindableElement.UxmlSerializedData
-        {
-            [SerializeField]
-            private string TextValue;
-            [SerializeField]
-            [HideInInspector]
-            [UxmlIgnore]
-            private UxmlAttributeFlags TextValue_UxmlAttributeFlags;
-
-            [SerializeField]
-            private string labelText;
-            [SerializeField]
-            [HideInInspector]
-            [UxmlIgnore]
-            private UxmlAttributeFlags labelText_UxmlAttributeFlags;
-
-            public override object CreateInstance()
-            {
-                return new StringGenerationParameter();
-            }
-
-            public override void Deserialize(object obj)
-            {
-                base.Deserialize(obj);
-                StringGenerationParameter generationParams = (StringGenerationParameter)obj;
-                if (UnityEngine.UIElements.UxmlSerializedData.ShouldWriteAttributeValue(TextValue_UxmlAttributeFlags))
-                {
-                    generationParams.TextValue = TextValue;
-                }
-                /*if (UnityEngine.UIElements.UxmlSerializedData.ShouldWriteAttributeValue(seed_UxmlAttributeFlags))
-                {
-                    generationParams.bindingPath = bindingPath;
-                }*/
-                if (UnityEngine.UIElements.UxmlSerializedData.ShouldWriteAttributeValue(labelText_UxmlAttributeFlags))
-                {
-                    generationParams.labelText = labelText;
-                }
-            }
-        }
-
-        [System.Obsolete]
-        public new class UxmlFactory : UxmlFactory<StringGenerationParameter, UxmlTraits> { }
-
-        [Obsolete]
-        public new class UxmlTraits : BindableElement.UxmlTraits
-        {
-            // Bindable attributes
-            private UxmlStringAttributeDescription TextValue = new UxmlStringAttributeDescription
-            {
-                name = "TextValue",
-                defaultValue = "default"
-            };
-
-            public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
-            {
-                base.Init(ve, bag, cc);
-
-                var control = (StringGenerationParameter)ve;
-                control.TextValue = TextValue.GetValueFromBag(bag, cc);
-            }
-        }
 
         public StringGenerationParameter()
         {
@@ -158,10 +95,7 @@ namespace Params
 
         public void Change(string newStr)
         {
-
-            this.Q<TextField>().value = newStr;
-            /*TextValue = newStr;
-            NotifyPropertyChanged(nameof(TextValue));*/
+            this.Q<TextField>().SetValueWithoutNotify(newStr);
         }
     }
 }

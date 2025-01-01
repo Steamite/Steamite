@@ -228,9 +228,7 @@ MonoBehaviour:
       m_Action: Action
       m_Flags: 0
     m_Flags: 0
-  windows:
-  - {fileID: 1793054209}
-  - {fileID: 1793054203}
+  mainMenu: {fileID: 1793054207}
 --- !u!1 &1793054200
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,7 +263,7 @@ MonoBehaviour:
   m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PanelSettings: {fileID: 11400000, guid: a847ba424f4b3eb4e93c6102663de2bb, type: 2}
+  m_PanelSettings: {fileID: 11400000, guid: 446c439d435ab0e44afc4b03c126e64a, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: 526b5dca86f8f504593e0d0f6d69e571, type: 3}
   m_SortingOrder: 0

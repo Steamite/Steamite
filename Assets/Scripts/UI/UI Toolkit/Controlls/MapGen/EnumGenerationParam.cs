@@ -13,7 +13,7 @@ namespace Params
         Abundant
     }
 
-    public class EnumGeneratioParameter : BindableElement
+    public class EnumGenerationParameter : BindableElement
     {
         protected int val;
         [CreateProperty]
@@ -22,7 +22,6 @@ namespace Params
             get { return val; }
             set { 
                 val = value;
-                //NotifyPropertyChanged("IntValue");
             }
         }
 
@@ -59,13 +58,13 @@ namespace Params
 
             public override object CreateInstance()
             {
-                return new EnumGeneratioParameter();
+                return new EnumGenerationParameter();
             }
 
             public override void Deserialize(object obj)
             {
                 base.Deserialize(obj);
-                EnumGeneratioParameter generationParams = (EnumGeneratioParameter)obj;
+                EnumGenerationParameter generationParams = (EnumGenerationParameter)obj;
                 if (UnityEngine.UIElements.UxmlSerializedData.ShouldWriteAttributeValue(IntValue_UxmlAttributeFlags))
                 {
                     generationParams.IntValue = IntValue;
@@ -82,7 +81,7 @@ namespace Params
         }
 
         [System.Obsolete]
-        public new class UxmlFactory : UxmlFactory<EnumGeneratioParameter, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<EnumGenerationParameter, UxmlTraits> { }
 
         [Obsolete]
         public new class UxmlTraits : BindableElement.UxmlTraits
@@ -98,20 +97,28 @@ namespace Params
             {
                 base.Init(ve, bag, cc);
 
-                var control = (EnumGeneratioParameter)ve;
+                var control = (EnumGenerationParameter)ve;
                 control.IntValue = IntValue.GetValueFromBag(bag, cc);
             }
         }
 
-        public EnumGeneratioParameter()
+        public EnumGenerationParameter()
         {
             style.height = new(new Length(50, LengthUnit.Pixel));
+            style.unityTextAlign = TextAnchor.MiddleLeft;
+            style.fontSize = 37;
+            style.marginTop = 10;
 
             EnumField enumField = new EnumField("Label", GenParamEnum.Medium);
             enumField.ElementAt(1).AddToClassList("enum-style");
             enumField.RegisterCallback<ChangeEvent<System.Enum>>(test);
             enumField.focusable = false;
+            enumField.AddToClassList("Empty");
+
+
             label = enumField.labelElement;
+            label.focusable = false;
+            label.AddToClassList("Empty");
             enumField.style.justifyContent = Justify.SpaceBetween;
 
             Add(enumField);
@@ -133,7 +140,7 @@ namespace Params
 
         public void Change(int i)
         {
-            this.Q<EnumField>().value = (GenParamEnum)i;
+            this.Q<EnumField>().SetValueWithoutNotify((GenParamEnum)i);
         }
     }
 }

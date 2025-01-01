@@ -23,7 +23,7 @@ namespace AbstractControls
             {
                 return _selID;//_selectedButton != null ? _selectedButton.value : -1; 
             }
-            private set
+            set
             {
                 _selID = value;
                 changeEvent?.Invoke(value);
@@ -59,12 +59,22 @@ namespace AbstractControls
         protected void RemoveItem(CustomRadioButton item)
         {
             _itemsSource.Remove(item);
+            if(item == _selectedButton)
+            {
+                _selectedButton?.Deselect();
+                _selectedButton = null;
+            }
             Rebuild();
         }
 
         public void RemoveItem(int index)
         {
             _itemsSource.RemoveAt(index);
+            if (index == selectedId)
+            {
+                selectedId = -1;
+                _selectedButton?.Deselect();
+            }
             Rebuild();
         }
         // Clears all items from the list
@@ -94,17 +104,19 @@ namespace AbstractControls
         public virtual void Init(Action<int> onChange)
         {
             _contentContainer = this.Q<VisualElement>("unity-content-container");
-            _contentContainer.style.flexGrow = 1;
+            //_contentContainer.style.flexGrow = 1;
             changeEvent = onChange;
+            selectedId = -1;
             if (_itemsSource.Count > 0) {
-                _selectedButton?.Deselect();
+                _selectedButton?.Deselect(false);
                 _selectedButton = null;
             }
         }
 
         public virtual void Select(CustomRadioButton customRadioButton)
         {
-            _selectedButton?.Deselect();
+            if(_selectedButton != customRadioButton)
+                _selectedButton?.Deselect();
             _selectedButton = customRadioButton;
             selectedId = _selectedButton.value;
         }

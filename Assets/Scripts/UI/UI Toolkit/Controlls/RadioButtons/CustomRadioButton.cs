@@ -32,32 +32,40 @@ namespace AbstractControls
         {
             styleClass = _styleClass;
             AddToClassList(_styleClass);
-            style.borderTopWidth = new(v: 0);
-            style.borderLeftWidth = new(v: 0);
-            style.borderRightWidth = new(v: 0);
-            style.borderBottomWidth = new(v: 0);
             text = labelText;
             data = labelText;
             value = i;
         }
 
-        public virtual void Select(ClickEvent _)
+        public virtual void Select(bool triggerTransition = true)
         {
             if (IsSelected)
                 return;
             IsSelected = true;
-            RemoveFromClassList(styleClass);
-            AddToClassList(styleClass + "-selected");
-
-            parent.parent.parent.Q<CustomRadioButtonGroup>()?.Select(this);
+            if (triggerTransition)
+            {
+                RemoveFromClassList(styleClass);
+                AddToClassList(styleClass + "-selected");
+                parent.parent.parent.Q<CustomRadioButtonGroup>()?.Select(this);
+            }
+            else
+            {
+                ToolkitUtils.ChangeClassWithoutTransition(styleClass, styleClass + "-selected", this);
+            }
         }
 
-        public virtual void Deselect()
+        public virtual void Deselect(bool triggerTransition = true)
         {
             IsSelected = false;
-            RemoveFromClassList(styleClass + "-selected");
-            AddToClassList(styleClass);
-            //style.backgroundColor = new(new Color(0.7372549f, 0.7372549f, 0.7372549f, 1));
+            if (triggerTransition)
+            {
+                RemoveFromClassList(styleClass + "-selected");
+                AddToClassList(styleClass);
+            }
+            else
+            {
+                ToolkitUtils.ChangeClassWithoutTransition(styleClass + "-selected", styleClass, this);
+            }
         }
     }
 

@@ -27,7 +27,7 @@ public class Menu : MonoBehaviour
         menu.Q<Button>("Quit").RegisterCallback<ClickEvent>(DoQuit);
 
         afterSave += ((IGridMenu)loadMenu).UpdateButtonState;
-        afterSave += () => ((IGridMenu)saveDialog).ResetWindow();
+        afterSave += () => ((IGridMenu)saveDialog).CloseWindow();
     } 
 
     public bool Constrains()
@@ -35,7 +35,7 @@ public class Menu : MonoBehaviour
         if (ConfirmWindow.window.opened)
             ConfirmWindow.window.Close(false);
         else if (saveDialog.opened)
-            saveDialog.ResetWindow();
+            saveDialog.CloseWindow();
         else if (UIRefs.research.window.activeSelf)
             UIRefs.research.CloseWindow();
         else if (UIRefs.trade.window.activeSelf)

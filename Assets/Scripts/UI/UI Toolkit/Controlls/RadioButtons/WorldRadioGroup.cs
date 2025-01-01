@@ -15,14 +15,15 @@ namespace RadioGroups
             element.style.marginTop = new(new Length(25, LengthUnit.Pixel));
             element.style.fontSize = new(new Length(40, LengthUnit.Percent));
             element.style.height = new(new Length(98.3f, LengthUnit.Pixel));
-            element.RegisterCallback<ClickEvent>((element as CustomRadioButton).Select);
+            element.RegisterCallback<ClickEvent>((_) => (element as CustomRadioButton).Select());
 
             (element as CustomRadioButton).text = _itemsSource[index].data;
         }
         protected override CustomRadioButton DefaultMakeItem()
         {
-            return new("string", "world-radio-button", -1);
+            return new("string", "main-button", -1);
         }
+
         public override void Init(Action<int> onChange)
         {
             base.Init(onChange);
@@ -30,7 +31,7 @@ namespace RadioGroups
             {
                 for (int i = 0; i < choices.Length; i++)
                 {
-                    AddItem(new($"{choices[i]}", "world-radio-button", i));
+                    AddItem(new($"{choices[i]}", "main-button", i));
                 }
             }
         }
