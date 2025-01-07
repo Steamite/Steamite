@@ -1,8 +1,9 @@
+using InfoWindowElements;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace InfoWindowElements
+namespace InfoWindowViews
 {
     [UxmlElement]
     public partial class ProductionButton : VisualElement, IUIElement
@@ -52,8 +53,7 @@ namespace InfoWindowElements
 
         public ProductionButton()
         {
-            inputResource = new();
-            inputResource.cost = true;
+            inputResource = new(true, "Input");
             Add(inputResource);
 
             VisualElement visualElement = new();
@@ -79,8 +79,7 @@ namespace InfoWindowElements
             radialElement.ElementAt(0).Add(button);
             #endregion
 
-            outputResource = new();
-            outputResource.cost = false;
+            outputResource = new(false, "Output");
             Add(outputResource);
             UpdateButton();
         }
@@ -93,16 +92,17 @@ namespace InfoWindowElements
             outputResource.Fill(data);
             radialElement.Fill(data);
 
-            DataBinding binding = SceneRefs.infoWindow.CreateBinding(nameof(ProductionBuilding.LocalRes));
+            DataBinding binding = Util.CreateBinding(nameof(ProductionBuilding.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"Space\n{res.stored.ammount.Sum()}/{res.stored.capacity}");
-            SceneRefs.infoWindow.AddBinding(new(capacityLabel, "text"), binding, data);
+            SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
             UpdateButton();
         }
 
         void ButtonClick()
         {
-            enable = building.StopProduction();
+
             UpdateButton();
+            enable = building.StopProduction();
         }
 
         void UpdateButton()

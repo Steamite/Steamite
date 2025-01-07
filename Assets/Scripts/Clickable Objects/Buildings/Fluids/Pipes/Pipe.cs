@@ -23,7 +23,7 @@ public class Pipe : Building
     }
     public override bool CanPlace()
     {
-        if (MyRes.DiffRes(build.cost, MyRes.resources).ammount.Sum() == 0)
+        if (MyRes.CanAfford(build.cost))
         {
             return MyGrid.CanPlace(this);
         }

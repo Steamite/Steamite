@@ -16,40 +16,51 @@
     flex-shrink: 0;
     max-width: 50%;
     -unity-text-align: upper-center;
-    background-color: rgb(28, 28, 28);
+    background-color: rgb(46, 29, 14);
     border-left-color: rgb(28, 28, 28);
     border-right-color: rgb(28, 28, 28);
     border-top-color: rgb(28, 28, 28);
     border-bottom-color: rgb(28, 28, 28);
-    border-top-width: 2px;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
+    border-top-width: 0;
+    border-right-width: 1px;
+    border-bottom-width: 2px;
+    border-left-width: 1px;
+    color: rgb(161, 148, 59);
+    align-content: stretch;
+    align-self: stretch;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
 }
 
-#unity-tab__header-label {
-    -unity-text-align: middle-center;
-    align-self: auto;
-    align-items: auto;
-    justify-content: flex-start;
-    width: 100%;
-    align-content: auto;
-    color: rgb(249, 233, 141);
+#unity-tab__header:hover {
+    background-color: rgb(101, 92, 37);
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
 }
 
 #unity-tab__header:checked {
-    background-color: rgb(249, 233, 141);
-    color: rgb(28, 28, 28);
+    background-color: rgb(141, 129, 51);
+    color: rgb(35, 32, 2);
+    -unity-text-align: upper-left;
+    -unity-font-style: bold;
+    transition-duration: 0.4s;
+    transition-timing-function: ease-out;
 }
 
-#unity-tab__header:checked > #unity-tab__header-label {
-    -unity-text-align: middle-center;
-    align-self: auto;
-    align-items: auto;
-    justify-content: flex-start;
-    width: 100%;
-    align-content: auto;
-    color: rgb(28, 28, 28);
+#unity-tab__header-underline {
+    visibility: hidden;
+    display: none;
+    overflow: hidden;
+    max-width: 0;
+}
+
+#unity-tab__header-label {
+    flex-grow: 1;
+    -unity-text-align: upper-center;
+}
+
+#unity-tab-view__header-container {
+    background-color: rgb(28, 28, 28);
 }
 
 .unity-tab__content-container {
@@ -58,9 +69,7 @@
 
 .unity-tab-view__content-container {
     flex-grow: 1;
-}
-
-________________ {
+    background-color: rgba(28, 28, 28, 0);
 }
 
 #unity-high-button {
@@ -103,28 +112,12 @@ ________________ {
     margin-bottom: 5px;
 }
 
-.unity-list-view__item {
-    transition-property: ignored;
-}
-
-.unity-list-view__item:hover {
-    background-color: rgba(0, 0, 0, 0);
-    transition-property: ignored;
-}
-
-.unity-list-view__item:selected {
-    background-color: rgba(0, 0, 0, 0);
-}
-
 .unity-collection-view__drag-hover-bar {
     transition-property: ignored;
     background-color: rgba(0, 0, 0, 0);
     display: none;
     visibility: hidden;
     overflow: hidden;
-}
-
-________________ {
 }
 
 .radial-progress {
@@ -143,31 +136,14 @@ ________________ {
     height: 100px;
 }
 
-DoubleResourceList #unity-content-viewport {
-    align-self: center;
-    justify-content: center;
-    align-content: stretch;
-    align-items: stretch;
-}
-
-DoubleResourceList Scroller {
-    align-self: auto;
-    justify-content: flex-start;
-    align-content: auto;
-    align-items: auto;
-    visibility: hidden;
-    display: none;
-    max-width: 0;
-    max-height: 0;
-    min-height: 0;
-    min-width: 0;
-    overflow: hidden;
-}
-
 .def-style {
     color: rgb(161, 148, 59);
     -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
 }
 
 ________________ {
+}
+
+.unity-list-view__item:hover {
+    background-color: rgba(0, 0, 0, 0);
 }

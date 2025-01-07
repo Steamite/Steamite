@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UIElements;
 
-namespace InfoWindowElements
+namespace InfoWindowViews
 {
 
     [UxmlElement]
@@ -17,7 +17,7 @@ namespace InfoWindowElements
         List<Human> unassigned;
 
         Humans humans;
-        InfoWindow infoWindow;
+        //InfoWindow infoWindow;
 
         [UxmlAttribute]
         VisualTreeAsset prefab;
@@ -68,9 +68,9 @@ namespace InfoWindowElements
                 el.Q<Label>("Name").text = human.name;
                 el.Q<Label>("Spec").text = human.specialization.ToString();
 
-                DataBinding binding = infoWindow.CreateBinding(nameof(Human.Job));
+                DataBinding binding = Util.CreateBinding(nameof(Human.Job));
                 binding.sourceToUiConverters.AddConverter((ref JobData data) => data.job.ToString());
-                infoWindow.AddBinding(new(el.Q<Label>("Job"), "text"), binding, human);
+                SceneRefs.infoWindow.RegisterTempBinding(new(el.Q<Label>("Job"), "text"), binding, human);
             };
 
             listView.unbindItem = (el, i) =>
@@ -93,13 +93,12 @@ namespace InfoWindowElements
             if (!humans)
             {
                 humans = SceneRefs.humans;
-                infoWindow = SceneRefs.infoWindow;
             }
 
             label.text = $"Assigned {building.Assigned.Count}/{building.limit}";
-            DataBinding binding = infoWindow.CreateBinding(nameof(AssignBuilding.Assigned));
+            DataBinding binding = Util.CreateBinding(nameof(AssignBuilding.Assigned));
             binding.sourceToUiConverters.AddConverter((ref List<Human> assig) => $"Assigned {assig.Count}/{building?.limit}");
-            infoWindow.AddBinding(new(label, "text"), binding, building);
+            SceneRefs.infoWindow.RegisterTempBinding(new(label, "text"), binding, building);
 
             unassigned = building.GetUnassigned();
 

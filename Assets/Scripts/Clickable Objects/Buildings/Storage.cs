@@ -68,7 +68,7 @@ public class Storage : Building
     public void DestroyResource(ResourceType type, int ammountToDestroy)
     {
         localRes.stored.ammount[localRes.stored.type.IndexOf(type)] -= ammountToDestroy;
-        UpdateWindow(nameof(LocalRes));
+        UIUpdate(nameof(LocalRes));
     }
     #endregion
     public override List<string> GetInfoText()

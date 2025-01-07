@@ -37,7 +37,7 @@ public class Rock : ClickableObject
         set 
         { 
             assigned = value;
-            UpdateWindow(nameof(Assigned));
+            UIUpdate(nameof(Assigned));
         }
     }
     public bool toBeDug;
@@ -127,7 +127,7 @@ public class Rock : ClickableObject
 
             return true;
         }
-        UpdateWindow(nameof(Integrity));
+        UIUpdate(nameof(Integrity));
         return false;
     }
 

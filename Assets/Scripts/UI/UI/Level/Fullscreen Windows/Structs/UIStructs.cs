@@ -27,7 +27,7 @@ public class TradeSave
         tradeLocations = t.tradeLocations;
         expeditions = t.expeditions;
         outposts = t.outposts;
-        money = MyRes.money;
+        money = MyRes.Money;
     }
     public TradeSave()
     {

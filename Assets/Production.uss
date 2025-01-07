@@ -1,0 +1,28 @@
+DoubleResourceList #unity-content-viewport {
+    align-self: center;
+    justify-content: center;
+    align-content: stretch;
+    align-items: stretch;
+}
+
+DoubleResourceList Scroller {
+    align-self: auto;
+    justify-content: flex-start;
+    align-content: auto;
+    align-items: auto;
+    visibility: hidden;
+    display: none;
+    max-width: 0;
+    max-height: 0;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+}
+
+#Production > #Input .unity-scroll-view__content-container {
+    padding-left: 35px;
+}
+
+#Production > #Output .unity-scroll-view__content-container {
+    padding-left: 17.5px;
+}

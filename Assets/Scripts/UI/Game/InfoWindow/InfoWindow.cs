@@ -16,15 +16,24 @@ public enum InfoMode
     Research,
 }
 
-public struct BindingContext
+public class BindingContext
 {
     public VisualElement context;
     public BindingId bindingId;
+    public bool clearDataSource;
 
-    public BindingContext(VisualElement _context, string _bindingId)
+    public BindingContext(VisualElement _context, string _bindingId, bool _clearDataSource = false)
     {
         context = _context;
         bindingId = new(_bindingId);
+        clearDataSource = _clearDataSource;
+    }
+
+    public void ClearBinding()
+    {
+        context.ClearBinding(bindingId);
+        if (clearDataSource)
+            context.dataSource = null;
     }
 }
 
@@ -76,10 +85,6 @@ public class InfoWindow : MonoBehaviour
 
         inConstructionElement = buildingElement.Q<VisualElement>("Construction-View");
         constructedElement = buildingElement.Q<VisualElement>("Constructed");
-
-        //constructed.Q<WorkerAssign>("Worker-Assign").Init();
-       // (()constructedElement.Q<VisualElement>("Production")).Init();
-        
     }
 
     #region Reseting Bindings
@@ -92,9 +97,7 @@ public class InfoWindow : MonoBehaviour
         if (hide)
             window.style.display = DisplayStyle.None;
 
-        foreach (BindingContext context in activeBindings)
-            context.context.ClearBinding(context.bindingId);
-        activeBindings = new();
+        ClearBindings();
 
         switch (lastInfo)
         {
@@ -113,6 +116,30 @@ public class InfoWindow : MonoBehaviour
                 break;
         }
     }
+    /// <summary>
+    /// Clears all active bindings.
+    /// </summary>
+    void ClearBindings()
+    {
+        foreach (BindingContext context in activeBindings)
+            context.ClearBinding();
+        activeBindings = new();
+    }
+
+    /// <summary>
+    /// Clears all bindings on a single Visual Element.
+    /// </summary>
+    /// <param name="element">Element to clear</param>
+    public void ClearBinding(VisualElement element)
+    {
+        BindingContext context = activeBindings.FirstOrDefault(q => q.context == element);
+        if (context != null)
+        {
+            activeBindings.Remove(context);
+            context.ClearBinding();
+        }
+    }
+
     void ResetView(VisualElement element)
     {
         element.style.display = DisplayStyle.None;
@@ -122,13 +149,16 @@ public class InfoWindow : MonoBehaviour
     #endregion
 
     #region Opening
+    /// <summary>
+    /// Displays the Info window and attaches dataSource to the selected category.
+    /// </summary>
+    /// <param name="dataSource">Datasource to assign.</param>
+    /// <param name="active">Where to assign the datasource.</param>
+    /// <exception cref="NotImplementedException"><paramref name="active"/> was out of range.</exception>
     public void Open(object dataSource, InfoMode active)
     {
-        if (active != lastInfo)
-        {
-            Close(false);
-            lastInfo = active;
-        }
+        Close(false);
+        lastInfo = active;
         window.style.display = DisplayStyle.Flex;
         DataBinding binding;
 
@@ -149,24 +179,24 @@ public class InfoWindow : MonoBehaviour
                 humanElement.Q<Label>("Specialization-Value").text = ((Human)dataSource).specialization.ToString();
 
                 // Efficiency Binding
-                binding = CreateBinding(nameof(Human.Efficiency));
+                binding = Util.CreateBinding(nameof(Human.Efficiency));
                 binding.sourceToUiConverters.AddConverter((ref Efficiency efficiency) => $"{efficiency.efficiency:0.#}");
-                AddBinding(new(humanElement.Q<Label>("Efficiency-Value"), "text"), binding, dataSource);
+                RegisterTempBinding(new(humanElement.Q<Label>("Efficiency-Value"), "text"), binding, dataSource);
 
                 // Job Binding
-                binding = CreateBinding(nameof(Human.Job));
+                binding = Util.CreateBinding(nameof(Human.Job));
                 binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{jobData.job}");
-                AddBinding(new(humanElement.Q<Label>("Type-Value"), "text"), binding, dataSource);
+                RegisterTempBinding(new(humanElement.Q<Label>("Type-Value"), "text"), binding, dataSource);
 
                 // Pos Binding
-                binding = CreateBinding(nameof(Human.Job));
+                binding = Util.CreateBinding(nameof(Human.Job));
                 binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{(jobData.interest ? jobData.interest.GetPos() : "None")}");
-                AddBinding(new(humanElement.Q<Label>("Position-Value"), "text"), binding, dataSource);
+                RegisterTempBinding(new(humanElement.Q<Label>("Position-Value"), "text"), binding, dataSource);
 
                 // Object Binding
-                binding = CreateBinding(nameof(Human.Job));
+                binding = Util.CreateBinding(nameof(Human.Job));
                 binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{(jobData.interest ? jobData.interest.name : "None")}");
-                AddBinding(new(humanElement.Q<Label>("Interest-Value"), "text"), binding, dataSource);
+                RegisterTempBinding(new(humanElement.Q<Label>("Interest-Value"), "text"), binding, dataSource);
 
                 humanElement.style.display = DisplayStyle.Flex;
                 break;
@@ -176,14 +206,14 @@ public class InfoWindow : MonoBehaviour
                 ((IUIElement)rockChunkElement.Q<ListView>("Yield")).Fill(dataSource);
 
                 // Assigned Binding
-                binding = CreateBinding(nameof(Rock.Assigned));
+                binding = Util.CreateBinding(nameof(Rock.Assigned));
                 binding.sourceToUiConverters.AddConverter((ref Human human) => $"{(human ? human.name: "None")}");
-                AddBinding(new(rockChunkElement.Q<Label>("Assigned-Value"), "text"), binding, dataSource);
+                RegisterTempBinding(new(rockChunkElement.Q<Label>("Assigned-Value"), "text"), binding, dataSource);
 
                 // Integrity Binding
-                binding = CreateBinding(nameof(Rock.Integrity));
+                binding = Util.CreateBinding(nameof(Rock.Integrity));
                 binding.sourceToUiConverters.AddConverter((ref float integrity) => $"{integrity:0.#}");
-                AddBinding(new(rockChunkElement.Q<Label>("Integrity-Value"), "text"), binding, dataSource);
+                RegisterTempBinding(new(rockChunkElement.Q<Label>("Integrity-Value"), "text"), binding, dataSource);
 
                 rockChunkElement.style.display = DisplayStyle.Flex;
                 ToggleChildElems(rockChunkElement.Q<VisualElement>("Text"), new() { "Assign", "Integrity" });
@@ -194,9 +224,9 @@ public class InfoWindow : MonoBehaviour
                 ((IUIElement)rockChunkElement.Q<ListView>("Yield")).Fill(dataSource);
 
                 // Assigned Binding
-                binding = CreateBinding(nameof(Chunk.LocalRes));
+                binding = Util.CreateBinding(nameof(Chunk.LocalRes));
                 binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"{(res.carriers.Count > 0 ? res.carriers.First().name : "None")}");
-                AddBinding(new(rockChunkElement.Q<Label>("Assigned-Value"), "text"), binding, dataSource);
+                RegisterTempBinding(new(rockChunkElement.Q<Label>("Assigned-Value"), "text"), binding, dataSource);
 
                 rockChunkElement.style.display = DisplayStyle.Flex;
                 ToggleChildElems(rockChunkElement.Q<VisualElement>("Text"), new() {"Assign"});
@@ -212,20 +242,23 @@ public class InfoWindow : MonoBehaviour
     #endregion
 
     #region Binding Creation
-    public DataBinding CreateBinding(string varName)
-    {
-        return new DataBinding
-        {
-            dataSourcePath = new PropertyPath(varName),
-            bindingMode = BindingMode.ToTarget
-        };
-    }
+    
 
-    public void AddBinding(BindingContext context, DataBinding binding, object dataSource)
+    /// <summary>
+    /// Adds temporary binding, doesn't attach a datasource, because Info window has already attached it to the needed module.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="binding"></param>
+    /// <param name="dataSource"></param>
+    /// <exception cref="NotSupportedException"></exception>
+    public void RegisterTempBinding(BindingContext context, DataBinding binding, object dataSource)
     {
+        if (activeBindings.FindIndex(q => q.context == context.context) > -1)
+            throw new NotSupportedException("This object already has a binding!");
         context.context.SetBinding(context.bindingId, binding);
         activeBindings.Add(context);
-        ((IUpdatable)dataSource).UpdateWindow(binding.dataSourcePath.ToString());
+        ((IUpdatable)dataSource).UIUpdate(binding.dataSourcePath.ToString());
     }
+
     #endregion
 }

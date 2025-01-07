@@ -22,8 +22,6 @@ namespace InfoWindowElements
     [UxmlElement("Resource-List")]
     public partial class ResourceList : ListView, IUIElement
     {
-        
-
         [CreateProperty]
         protected List<UIResource> resources
         {
@@ -34,6 +32,7 @@ namespace InfoWindowElements
                 RefreshItems();
             }
         }
+        bool showEmpty = false;
 
         public ResourceList()
         {
@@ -42,17 +41,17 @@ namespace InfoWindowElements
 
             makeItem = () =>
             {
-                Debug.Log($"Making item{name}");
+                Debug.Log($"Making item{name}, {itemsSource.Count}");
                 return itemTemplate.CloneTree();
             };
 
             bindItem = (el, i) =>
             {
                 Color c = SceneRefs.infoWindow.resourceSkins.GetResourceColor(((UIResource)itemsSource[i]).type);
+                if (!showEmpty)
+                    el.Q<Label>("Value").style.color = c;
 
                 el.Q<Label>("Value").text = ConvertString((UIResource)itemsSource[i]);
-                el.Q<Label>("Value").style.color = c;
-
                 el.Q<VisualElement>("Icon").style.unityBackgroundImageTintColor = c;
             };
 
@@ -76,19 +75,28 @@ namespace InfoWindowElements
             switch (data)
             {
                 case StorageObject:
-                    binding = SceneRefs.infoWindow.CreateBinding(nameof(StorageObject.LocalRes));
+                    binding = Util.CreateBinding(nameof(StorageObject.LocalRes));
                     binding.sourceToUiConverters.AddConverter((ref StorageResource stored) => ToUIRes(stored.stored));
-                    SceneRefs.infoWindow.AddBinding(new(this, "resources"), binding, data);
+                    SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Rock:
-                    binding = SceneRefs.infoWindow.CreateBinding(nameof(Rock.rockYield));
+                    binding = Util.CreateBinding(nameof(Rock.rockYield));
                     binding.sourceToUiConverters.AddConverter((ref Resource yeild) => ToUIRes(yeild));
-                    SceneRefs.infoWindow.AddBinding(new(this, "resources"), binding, data);
+                    SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Human:
-                    binding = SceneRefs.infoWindow.CreateBinding(nameof(Human.Inventory));
+                    binding = Util.CreateBinding(nameof(Human.Inventory));
                     binding.sourceToUiConverters.AddConverter((ref Resource inventory) => ToUIRes(inventory));
-                    SceneRefs.infoWindow.AddBinding(new(this, "resources"), binding, data);
+                    SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    break;
+                case ResourceDisplay:
+                    binding = Util.CreateBinding(nameof(ResourceDisplay.GlobalResources));
+                    binding.sourceToUiConverters.AddConverter((ref Resource globalRes) => ToUIRes(globalRes));
+                    SetBinding("resources", binding);
+                    dataSource = data;
+                    ((IUpdatable)data).UIUpdate(binding.dataSourcePath.ToString());
+                    (hierarchy.ElementAt(0) as ScrollView).verticalScrollerVisibility = ScrollerVisibility.Hidden;
+                    showEmpty = true;
                     break;
                 default:
                     throw new NotImplementedException();
@@ -100,7 +108,7 @@ namespace InfoWindowElements
             List<UIResource> res = new();
             for (int i = 0; i < storage.type.Count; i++)
             {
-                if (storage.ammount[i] > 0)
+                if (showEmpty || storage.ammount[i] > 0)
                     res.Add(new(storage.ammount[i], storage.type[i]));
             }
             return res;

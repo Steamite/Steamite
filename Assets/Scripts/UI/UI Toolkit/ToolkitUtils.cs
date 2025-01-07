@@ -13,9 +13,12 @@ public static class ToolkitUtils
     /// <param name="element">Element that needs to change.</param>
     public static void ChangeClassWithoutTransition(string oldClass, string newClass, VisualElement element)
     {
-        element.style.transitionDuration = new List<TimeValue> { new TimeValue(0, TimeUnit.Second) };
-        element.RemoveFromClassList(oldClass);
-        element.AddToClassList(newClass);
-        element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
+        if(oldClass != "" && newClass != "" && element != null)
+        {
+            element.style.transitionDuration = new List<TimeValue> { new TimeValue(0, TimeUnit.Second) };
+            element.RemoveFromClassList(oldClass);
+            element.AddToClassList(newClass);
+            element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
+        }
     }
 }

@@ -18,13 +18,14 @@ public enum ResourceType
 public static class MyRes
 {
     // fill with ALL of active resource objects!!!
-    public static Resource resourceBuffer;
-    public static Resource resources;
-    public static List<TMP_Text> textFields = new();
     public static int globalStorageSpace;
-    public static int money = 2000;
-    public static TMP_Text moneyField;
     static Storage[] storage;
+    static ResourceDisplay resDisplay;
+
+    public static int Money
+    {
+        get => resDisplay.Money;
+    }
 
     /// <summary>
     /// Starting function for the resource system.
@@ -35,9 +36,8 @@ public static class MyRes
         // Update text, or display error
         try
         {
-            resources = new();
-            textFields = new();
-            FillRes(setupStorages);
+            resDisplay = SceneRefs.stats.GetComponent<ResourceDisplay>();
+            Resource resource = resDisplay.InitializeResources(setupStorages);
             globalStorageSpace = 0;
 
             storage = MyGrid.buildings.Select(q => q.GetComponent<Storage>()).Where(q => q != null).ToArray();
@@ -46,20 +46,14 @@ public static class MyRes
             {
                 if (setupStorages)
                 {
-                    //resourceBuffer = new(200);
-                    _s.SetupStorage(resources, jQ);
+                    _s.SetupStorage(resource, jQ);
                 }
                 globalStorageSpace += _s.LocalRes.stored.capacity - _s.LocalRes.stored.ammount.Sum();
-                ManageRes(resources, _s.LocalRes.stored, 1);
+                ManageRes(resource, _s.LocalRes.stored, 1);
             }
             Transform resourceInfo = GameObject.Find("Resource Info").gameObject.transform.transform;
-            for (int i = 0; i < resourceInfo.childCount; i++)
-            {
-                textFields.Add(resourceInfo.GetChild(i).GetChild(0).GetComponent<TMP_Text>());
-            }
-            moneyField = resourceInfo.parent.GetChild(1).GetChild(0).GetComponent<TMP_Text>();
-            UpdateMoneyText();
-            UpdateResText();
+            resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
+            resDisplay.UIUpdate(nameof(ResourceDisplay.Money));
         }
         catch (Exception e)
         {
@@ -67,44 +61,9 @@ public static class MyRes
             Debug.LogError(e);
         }
     }
-
-    /// <summary>
-    /// Preps IDs for the MyRes class.
-    /// </summary>
-    /// <returns></returns>
-    static void FillRes(bool fillMoney)
-    {
-        if(fillMoney)
-            money = 2000;
-        string[] names = Enum.GetNames(typeof(ResourceType));
-        for (int i = 0; i < names.Length; i++)
-        {
-            resources.type.Add((ResourceType)i);
-            resources.ammount.Add(0);
-        }
-    }
-
-    /// <summary>
-    /// Updates UI view of resources.
-    /// </summary>
-    public static void UpdateResText()
-    {
-        for (int i = 0; i < textFields.Count && i < resources.ammount.Count; i++)
-        {
-            textFields[i].text = resources.ammount[i].ToString();
-        }
-    }
-
     public static void ManageMoney(int change)
     {
-        money += change;
-        UpdateMoneyText();
-        /*if(SceneRefs.trade.tradeInfo.gameObject.activeSelf)
-            SceneRefs.trade.tradeInfo.UpdateTradeText();*/
-    }
-    static void UpdateMoneyText()
-    {
-        moneyField.text = money.ToString();
+        resDisplay.Money += change;
     }
 
     /// <summary>
@@ -126,22 +85,6 @@ public static class MyRes
             return "Nothing";
     }
 
-    /// <summary>
-    /// for construction || production
-    /// </summary>
-    /// <param name="input"></param>
-    /// <param name="cost"></param>
-    /// <returns>data to display in the info window</returns>
-    static public string GetDisplayText(Resource input, Resource cost)
-    {
-        string s = "";
-        for (int i = 0; i < cost.type.Count; i++)
-        {
-            int x = input.type.IndexOf(cost.type[i]);
-            s += $"{Enum.GetName(typeof(ResourceType), cost.type[i])} {(x == -1 ? 0 : input.ammount[x])}/{cost.ammount[i]}\n";
-        }
-        return s;
-    }
 
     /// <summary>
     /// adds or removes resources in destination
@@ -367,7 +310,7 @@ public static class MyRes
             minus = j > -1 ? storA.ammount[j] : 0;
             if (minus > 0)
             {
-                int exchange = DiffZ(cost.ammount[i], minus);
+                int exchange = DiffInPositive(cost.ammount[i], minus);
                 if (exchange > 0)
                 {
                     ret.ammount.Add(exchange);
@@ -394,7 +337,7 @@ public static class MyRes
             minus += j > -1 ? storB.ammount[j] : 0;
             if (minus > 0)
             {
-                int exchange = DiffZ(cost.ammount[i], minus);
+                int exchange = DiffInPositive(cost.ammount[i], minus);
                 if (exchange > 0)
                 {
                     ret.ammount.Add(exchange);
@@ -409,34 +352,16 @@ public static class MyRes
         }
         return ret;
     }
-    public static int DiffZ(int a, int b)
+    public static int DiffInPositive(int a, int b)
     {
         int diff = a - b;
         return diff < 0 ? 0 : diff;
     }
-    public static int Diff(int a, int b)
-    {
-        int diff = a - b;
-        return diff < 0 ? diff + b : b;
-    }
     // Changes the state of a resources
     public static void UpdateResource(Resource cost, int mod)
     {
-        ManageRes(resources, cost, mod);
-        UpdateResText();
-    }
-
-    // returns the state of a resource, by it's name
-    public static bool CanAfford(Resource cost)
-    {
-        for (int i = 0; i < cost.type.Count; i++)
-        {
-            if (cost.ammount[i] > resources.ammount[i])
-            {
-                return false;
-            }
-        }
-        return true;
+        ManageRes(resDisplay.GlobalResources, cost, mod);
+        resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
     }
 
     /// <summary>
@@ -511,7 +436,7 @@ public static class MyRes
         if (store)
         {
             store.DestroyResource(ResourceType.Food, 1);
-            resources.ammount[resources.type.IndexOf(ResourceType.Food)]--;
+            UpdateResource(new Resource(new() { ResourceType.Food }, new() { 1 }), -1);
             human.hasEaten = true;
             human.Efficiency.ManageModifier(ModType.Food, true);
         }
@@ -555,4 +480,8 @@ public static class MyRes
         }
     }
 
+    public static bool CanAfford(Resource cost)
+    {
+        return DiffRes(cost, resDisplay.GlobalResources).ammount.Sum() == 0;
+    }
 }

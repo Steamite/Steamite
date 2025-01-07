@@ -86,7 +86,7 @@ public class TradeInfo : MonoBehaviour
                 dealTran.GetChild(0).GetComponent<TMP_Text>().text = deals[j].type.ToString();
                 dealTran.GetChild(1).GetComponent<TMP_Text>().text = deals[j].cost.ToString();
                 dealTran.GetChild(2).GetComponent<TMP_InputField>().text = "";
-                dealTran.GetChild(3).GetComponent<TMP_Text>().text = MyRes.resources.ammount[MyRes.resources.type.IndexOf(deals[j].type)].ToString();
+                //dealTran.GetChild(3).GetComponent<TMP_Text>().text = MyRes.resources.ammount[MyRes.resources.type.IndexOf(deals[j].type)].ToString();
             }
             else
                 dealTran.gameObject.SetActive(false);
@@ -105,7 +105,7 @@ public class TradeInfo : MonoBehaviour
 
             //-------------money summary------------\\
             int moneyC = activeTrade.reward - activeTrade.cost;
-            MakeSummary(MyRes.money, moneyC, moneyC + MyRes.money,
+            MakeSummary(MyRes.Money, moneyC, moneyC + MyRes.Money,
                 moneyChangeText, moneyText, finalMoneyText, ref buttonText, false);
 
             //-------------buy------------\\
@@ -204,10 +204,9 @@ public class TradeInfo : MonoBehaviour
     public void CommitTrade()
     {
         activeTrade = CalculateTradeCost();
-        if (MyRes.money + activeTrade.reward - activeTrade.cost >= 0)
+        if (MyRes.Money + activeTrade.reward - activeTrade.cost >= 0)
         {
-            Resource diff = MyRes.DiffRes(activeTrade.selling, MyRes.resources);
-            if (diff.ammount.Count > 0 && diff.ammount.Min() < 0)
+            if(!MyRes.CanAfford(activeTrade.selling))
                 return;
             // REMOVES resources
             MyRes.TakeFromGlobalStorage(activeTrade.selling);

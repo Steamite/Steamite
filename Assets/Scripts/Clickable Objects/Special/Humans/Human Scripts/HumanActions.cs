@@ -123,7 +123,7 @@ public static class HumanActions
         try
         {
             h.Job.interest.GetComponent<StorageObject>().Store(h, transferPerTick);
-            h.UpdateWindow(nameof(Human.Inventory));
+            h.UIUpdate(nameof(Human.Inventory));
             h.Inventory.RemoveEmpty();
         }
         catch (Exception e)
@@ -137,7 +137,7 @@ public static class HumanActions
         try
         {
             h.Job.interest.GetComponent<StorageObject>().Take(h, transferPerTick);
-            h.UpdateWindow(nameof(Human.Inventory));
+            h.UIUpdate(nameof(Human.Inventory));
         }
         catch (Exception e)
         {

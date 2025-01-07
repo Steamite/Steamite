@@ -46,7 +46,8 @@ public class MapGen : MonoBehaviour
 
         minCenter = (gridSize / 2) - 5;
         maxCenter = (gridSize / 2) + 5;
-        for(level = 0; level < 5; level++)
+
+        for (level = 0; level < 5; level++)
         {
             MyGrid.AddEmptyGridLevel(templateLevel, level, gridSize);
             resPixels = new Color[gridSize * gridSize];
@@ -66,8 +67,8 @@ public class MapGen : MonoBehaviour
                     }
                 }
             }
-            SceneRefs.objectFactory.CreateElevator(new(gridSize / 2, level, gridSize / 2), level == 2);
         }
+        SceneRefs.objectFactory.CreateElevator(new(gridSize / 2, 0, gridSize / 2), true);
         #endregion
     }
 
@@ -179,8 +180,17 @@ public class MapGen : MonoBehaviour
     bool CanPlace(int x, int y)
     {
         if (map[x, y] == null)
-            if (!((x > minCenter && x < maxCenter) && (y > minCenter && y < maxCenter)))
+        {
+            if (level == 0)
+            {
+                if (!((x > minCenter && x < maxCenter) && (y > minCenter && y < maxCenter)))
+                    return true;
+            }
+            else
+            {
                 return true;
+            }
+        }
         return false;
     }
     bool InBounds(int x, int y)

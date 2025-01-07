@@ -2,5 +2,5 @@
 
 public interface IUpdatable : INotifyBindablePropertyChanged
 {
-    public void UpdateWindow(string property = "");
+    public void UIUpdate(string property = "");
 }

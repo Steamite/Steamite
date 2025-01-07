@@ -1,13 +1,26 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:VisualElement name="BuildMenu" style="flex-grow: 1; height: auto; max-height: 30%; align-self: auto; justify-content: flex-end; align-content: stretch; display: none; font-size: 22px; color: rgb(249, 233, 141); -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;);">
-        <engine:VisualElement name="Buildings" style="flex-grow: 1; max-height: 30%; background-color: rgb(70, 49, 27); margin-bottom: 1%; max-width: 80%; align-self: center; align-items: center; min-width: 80%; flex-direction: row; justify-content: center;">
-            <engine:Button text="Elevator" style="background-color: rgb(74, 74, 74); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; width: 6%; height: 80%; font-size: 18px; white-space: normal; padding-left: 0.3%; padding-right: 0.3%;" />
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/BuildingMenu.uss?fileID=7433441132597879392&amp;guid=15aef92f4e6dc334d96513202cce8a1a&amp;type=3#BuildingMenu" />
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/StatusBar.uss?fileID=7433441132597879392&amp;guid=b591f8d887031d24b933f7e2268f24d0&amp;type=3#StatusBar" />
+    <engine:VisualElement name="BuildMenu" style="flex-grow: 1; height: auto; max-height: 30%; align-self: center; justify-content: space-between; align-content: stretch; display: flex; font-size: 22px; color: rgb(249, 233, 141); -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;); bottom: 0; position: absolute;">
+        <engine:VisualElement name="Buildings" class="bar" style="border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; margin-bottom: 10px; height: 120px;">
+            <engine:VisualElement name="Button" class="build-button">
+                <engine:VisualElement name="Background" class="ad" />
+                <engine:Label text="Research&#10;Tower" name="Label" enable-rich-text="true" />
+            </engine:VisualElement>
         </engine:VisualElement>
-        <engine:VisualElement name="Categories" style="flex-grow: 1; max-height: 40%; height: 100%; background-color: rgb(70, 49, 27); flex-direction: row; justify-content: center; align-self: auto; align-items: center;">
+        <engine:VisualElement name="Categories" class="bar">
             <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/cogwheal@4x.png?fileID=2800000&amp;guid=31a2fc60fcb027a45869f7484256409a&amp;type=3#cogwheal@4x" class="category-button" />
             <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/humans@4x.png?fileID=2800000&amp;guid=ebd657dbff7382b49ac208b65a2fc976&amp;type=3#humans@4x" class="category-button" />
-            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/material@4x.png?fileID=2800000&amp;guid=523f332c4508d994e93b281eda38e8fc&amp;type=3#material@4x" class="category-button" />
+            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/material@4x.png?fileID=2800000&amp;guid=523f332c4508d994e93b281eda38e8fc&amp;type=3#material@4x" class="category-button" style="padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px;" />
             <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/Research@4x.png?fileID=2800000&amp;guid=4bf8d3f377b98204dadd2b0fd5899576&amp;type=3#Research@4x" class="category-button" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+    <engine:VisualElement name="Switches" style="flex-grow: 0; left: 0; bottom: 0; flex-shrink: 0; position: absolute; height: 250px; width: 200px; align-content: flex-end; background-color: rgb(121, 111, 44); flex-direction: column-reverse;">
+        <engine:VisualElement style="flex-grow: 0; height: 50px; width: 100%; flex-direction: row; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; justify-content: space-between; background-color: rgb(40, 37, 15);">
+            <engine:Button icon-image="project://database/Assets/Resources/Icon/Pause.png?fileID=2800000&amp;guid=388d058ebff7c4844823b4c308f1488e&amp;type=3#Pause" name="Button" class="speed-button" style="padding-top: 3px; padding-right: 3px; padding-bottom: 3px; padding-left: 3px;" />
+            <engine:Button name="Button" text="1x" class="speed-button" />
+            <engine:Button name="Button" text="2x" class="speed-button" />
+            <engine:Button name="Button" text="5x" class="speed-button" />
         </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>

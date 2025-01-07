@@ -53,7 +53,7 @@ public class House : AssignBuilding
             human.home = null;
             assigned.Remove(human);
         }
-        UpdateWindow(nameof(Assigned));
+        UIUpdate(nameof(Assigned));
     }
     public override List<Human> GetUnassigned()
     {

@@ -1,23 +1,24 @@
 using RadioGroups;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace AbstractControls
 {
-    public class CustomRadioButtonGroup : ListView, IBindable
+    [UxmlElement]
+    public partial class CustomRadioButtonGroup : ListView, IBindable
     {
         protected List<CustomRadioButton> _itemsSource;
         protected CustomRadioButton _selectedButton;
 
-        protected VisualElement _contentContainer;
         protected ScrollView _scrollView;
 
-        event Action<int> changeEvent;
+        protected Action<int> changeEvent;
 
 
         int _selID;
-        protected int selectedId
+        protected int SelectedId
         {
             get
             {
@@ -30,32 +31,35 @@ namespace AbstractControls
             }
         }
 
-        #region Base
-
-        [Obsolete]
-        public new class UxmlFactory : UxmlFactory<CustomRadioButtonGroup, UxmlTraits> { }
+        #region List
 
         public CustomRadioButtonGroup()
         {
             // Initialize the internal item source
             _itemsSource = new List<CustomRadioButton>();
-            itemsSource = _itemsSource;
             // Default settings (adjust as needed)
             fixedItemHeight = 30;
             makeItem = DefaultMakeItem;
             bindItem = DefaultBindItem;
             bindingSourceSelectionMode = BindingSourceSelectionMode.AutoAssign;
-
+            reorderable = false;
+            selectionType = SelectionType.None;
         }
 
-        // Adds an item to the list and refreshes the ListView
+        /// <summary>
+        /// Adds an item to the list and refreshes the ListView
+        /// </summary>
+        /// <param name="item"></param>
         protected void AddItem(CustomRadioButton item)
         {
             _itemsSource.Add(item);
+            makeItem();
             Rebuild();
         }
-
-        // Removes an item from the list and refreshes the ListView
+        /// <summary>
+        /// Removes an item from the list and refreshes the ListView
+        /// </summary>
+        /// <param name="item"></param>
         protected void RemoveItem(CustomRadioButton item)
         {
             _itemsSource.Remove(item);
@@ -66,18 +70,23 @@ namespace AbstractControls
             }
             Rebuild();
         }
-
+        /// <summary>
+        /// // Removes an item from the list and refreshes the ListView
+        /// </summary>
+        /// <param name="index"></param>
         public void RemoveItem(int index)
         {
             _itemsSource.RemoveAt(index);
-            if (index == selectedId)
+            if (index == SelectedId)
             {
-                selectedId = -1;
+                SelectedId = -1;
                 _selectedButton?.Deselect();
             }
             Rebuild();
         }
-        // Clears all items from the list
+        /// <summary>
+        /// Clears all items from the list
+        /// </summary>
         protected void ClearItems()
         {
             _itemsSource.Clear();
@@ -85,10 +94,7 @@ namespace AbstractControls
         }
 
         // Default method for creating an item (override in specific use cases)
-        protected virtual CustomRadioButton DefaultMakeItem()
-        {
-            return new CustomRadioButton();
-        }
+        protected virtual CustomRadioButton DefaultMakeItem() => throw new NotImplementedException();
 
         // Default method for binding an item (override in specific use cases)
         protected virtual void DefaultBindItem(VisualElement element, int index)
@@ -96,6 +102,8 @@ namespace AbstractControls
             element.RemoveFromClassList("unity-collection-view__item");
             element.RemoveFromClassList("unity-list-view__item");
             (element as CustomRadioButton).value = index;
+            (element as CustomRadioButton).text = _itemsSource[index].text;
+            element.RegisterCallback<ClickEvent>((_) => (element as CustomRadioButton).Select());
             return;
         }
 
@@ -103,14 +111,9 @@ namespace AbstractControls
 
         public virtual void Init(Action<int> onChange)
         {
-            _contentContainer = this.Q<VisualElement>("unity-content-container");
-            //_contentContainer.style.flexGrow = 1;
+            itemsSource = _itemsSource;
+            SelectedId = -1;
             changeEvent = onChange;
-            selectedId = -1;
-            if (_itemsSource.Count > 0) {
-                _selectedButton?.Deselect(false);
-                _selectedButton = null;
-            }
         }
 
         public virtual void Select(CustomRadioButton customRadioButton)
@@ -118,8 +121,7 @@ namespace AbstractControls
             if(_selectedButton != customRadioButton)
                 _selectedButton?.Deselect();
             _selectedButton = customRadioButton;
-            selectedId = _selectedButton.value;
+            SelectedId = _selectedButton.value;
         }
-
     }
 }

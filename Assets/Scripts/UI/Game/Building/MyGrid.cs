@@ -167,6 +167,14 @@ public static class MyGrid
         Debug.Log(PrintGrid());
     }
 
+    public static void UnlockLevel(int levelToUnlock)
+    {
+        if (!IsUnlocked(levelToUnlock))
+        {
+            levels[levelToUnlock].unlocked = true;
+        }
+    }
+
     #endregion Grid Updating
 
     #region Checking
