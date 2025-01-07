@@ -18,26 +18,32 @@ namespace RadioGroups
         }
     }
 
-    public class SaveRadioGroup : CustomRadioButtonGroup
+    [UxmlElement]
+    public partial class SaveRadioGroup : CustomRadioButtonGroup
     {
         public Action<int> deleteAction;
         #region List
+        public SaveRadioGroup() : base()
+        {
+            Debug.Log(itemsSource);
+        }
         protected override void DefaultBindItem(VisualElement element, int index)
         {
             base.DefaultBindItem(element, index); 
             element.RemoveFromClassList("unity-text-element");
             element.RemoveFromClassList("unity-button");
-            (element as SaveRadioButton).text = _itemsSource[index].data;
-            (element as SaveRadioButton).saveDate.text = (_itemsSource[index] as SaveRadioButton).saveDate.text;
-            (element as SaveRadioButton).style.marginTop = 10;
+            SaveRadioButton saveRadioButton = (element as SaveRadioButton);
+            saveRadioButton.text = _itemsSource[index].data;
+            saveRadioButton.saveDate.text = (_itemsSource[index] as SaveRadioButton).saveDate.text;
+            saveRadioButton.style.marginTop = 10;
 
             // clears styles if scrolling and selected
-            if (selectedId == index)
-                (element as SaveRadioButton).Select(false);
+            if (SelectedId == index)
+                saveRadioButton.Select(false);
             else if (element.ClassListContains("save-radio-button-selected"))
-                (element as SaveRadioButton).Deselect(false);
+                saveRadioButton.Deselect(false);
 
-            (element as SaveRadioButton).RegisterCallback<ClickEvent>((_) => (element as SaveRadioButton).Select());
+            //saveRadioButton.RegisterCallback<ClickEvent>((_) => saveRadioButton.Select());
         }
         protected override CustomRadioButton DefaultMakeItem()
         {
@@ -45,8 +51,6 @@ namespace RadioGroups
         }
         #endregion
 
-        [Obsolete]
-        public new class UxmlFactory : UxmlFactory<SaveRadioGroup, UxmlTraits> { }
         public override void Init(Action<int> onChange)
         {
             base.Init(onChange);
@@ -58,15 +62,15 @@ namespace RadioGroups
         #region Saves
         public void DeleteSave()
         {
-            deleteAction(selectedId);
+            deleteAction(SelectedId);
         }
 
         public Folder[] FillItemSource(string path, bool write, bool parentLevel)
         {
             try
             {
-                selectedId = -1;
-                _itemsSource.RemoveAll(q => true);
+                SelectedId = -1;
+                ClearItems();
                 Folder[] folders;
 
                 if (parentLevel)
@@ -95,7 +99,8 @@ namespace RadioGroups
                 if(write)
                     for (int i = 0; i < folders.Length; i++)
                         AddItem(new SaveRadioButton(SaveController.GetSaveName(folders[i].path), "save-radio-button", i, folders[i].date));
-                this.Q<VisualElement>("unity-content-container").style.height = (folders.Length*113) + 30;
+                schedule.Execute(() => this.Q<VisualElement>("unity-content-container").style.height = (folders.Length * 113) + 30).ExecuteLater(5);
+                
                 return folders;
             }
             catch

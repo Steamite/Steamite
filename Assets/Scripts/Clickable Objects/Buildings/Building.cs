@@ -106,7 +106,7 @@ public class Building : StorageObject
     {
         int index = localRes.carriers.IndexOf(human);
         MyRes.MoveRes(localRes.stored, human.Inventory, localRes.requests[index], transferPerTick);
-        UpdateWindow(nameof(LocalRes));
+        UIUpdate(nameof(LocalRes));
         if (localRes.requests[index].ammount.Sum() == 0)
         {
             if (!build.constructed && localRes.stored.Equals(build.cost))
@@ -277,9 +277,7 @@ public class Building : StorageObject
 
     public virtual bool CanPlace()
     {
-        //bool can = MyRes.DiffRes(build.cost, MyRes.resources, new()).ammount.Sum() == 0;
-        bool tmp = MyGrid.CanPlace(this);
-        if (tmp)
+        if (MyRes.CanAfford(build.cost) && MyGrid.CanPlace(this))
             return true;
         else
             return false;

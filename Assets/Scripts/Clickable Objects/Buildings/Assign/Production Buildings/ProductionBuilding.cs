@@ -15,7 +15,7 @@ public class ProductionBuilding : AssignBuilding
         set
         {
             inputResource = value;
-            UpdateWindow(nameof(InputResource));
+            UIUpdate(nameof(InputResource));
         }
     }
     [Header("Production")]
@@ -30,7 +30,7 @@ public class ProductionBuilding : AssignBuilding
         set
         {
             currentTime = value;
-            UpdateWindow(nameof(CurrentTime));
+            UIUpdate(nameof(CurrentTime));
         }
     }
     public int modifier = 1;
@@ -92,7 +92,7 @@ public class ProductionBuilding : AssignBuilding
             if (index == -1)
                 print("");
             MyRes.MoveRes(inputResource.stored, h.Inventory, inputResource.requests[index], transferPerTick);
-            UpdateWindow(nameof(InputResource));
+            UIUpdate(nameof(InputResource));
             if (MyRes.DiffRes(productionCost, inputResource.stored).ammount.Sum() == 0)
             {
                 h.transform.parent.parent.GetComponent<JobQueue>().CancelJob(JobState.Supply, this);
@@ -265,7 +265,7 @@ public class ProductionBuilding : AssignBuilding
         {
             currentTime -= prodTime;
             MyRes.ManageRes(localRes.stored, production, 1);
-            UpdateWindow(nameof(LocalRes));
+            UIUpdate(nameof(LocalRes));
             MyRes.UpdateResource(production, 1);
             pStates.supplied = false;
             if (!ManageInputRes())
@@ -328,7 +328,7 @@ public class ProductionBuilding : AssignBuilding
             if (r.ammount.Sum() == 0)
             {
                 MyRes.ManageRes(inputResource.stored, productionCost, -1);
-                UpdateWindow(nameof(InputResource));
+                UIUpdate(nameof(InputResource));
                 MyRes.UpdateResource(productionCost, -1);
                 currentTime = 0.1f;
                 pStates.supplied = true;
@@ -404,7 +404,7 @@ public class ProductionBuilding : AssignBuilding
             human.SetJob(JobState.Free);
             human.Idle();
         }
-        UpdateWindow(nameof(Assigned));
+        UIUpdate(nameof(Assigned));
     }
     public override List<Human> GetUnassigned()
     {

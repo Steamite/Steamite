@@ -6,7 +6,7 @@
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/EnumFields.uss?fileID=7433441132597879392&amp;guid=ac7089baa58760749b4c48a5a9265607&amp;type=3#EnumFields" />
     <ui:VisualElement enabled="true" name="New-Menu" class="def-label" style="width: 100%; height: 100%; color: rgb(181, 166, 66); -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;);">
         <ui:VisualElement name="Header-Bar" class="bar" style="align-items: auto; align-self: auto; align-content: auto; justify-content: space-between;">
-            <ui:Button text="Close" tooltip="Close" name="New-Close-Button" class="main-button close-button" />
+            <ui:Button text="Close" tooltip="Close" name="New-Close-Button" class="main-button close-button" style="width: 14%; height: 80%; flex-shrink: 0; min-width: auto; margin-left: 5%; font-size: 60px;" />
             <ui:Label text="New Game" name="New-Menu-Header" style="max-height: 100%; font-size: 80px; bottom: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 5%; margin-bottom: 0; margin-left: 0;" />
         </ui:VisualElement>
         <ui:VisualElement name="Body" style="flex-grow: 1; flex-direction: row;">

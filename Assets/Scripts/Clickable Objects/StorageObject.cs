@@ -39,7 +39,7 @@ public class StorageObject : ClickableObject
     public virtual void Take(Human h, int transferPerTick)
     {
         MyRes.MoveRes(h.Inventory, localRes.stored, localRes.requests[localRes.carriers.IndexOf(h)], transferPerTick);
-        UpdateWindow(nameof(LocalRes));
+        UIUpdate(nameof(LocalRes));
         if (localRes.requests[localRes.carriers.IndexOf(h)].ammount.Sum() == 0)
         {
             localRes.RemoveRequest(h);

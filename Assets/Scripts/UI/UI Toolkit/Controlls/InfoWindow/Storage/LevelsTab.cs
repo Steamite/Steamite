@@ -1,95 +1,176 @@
+using AbstractControls;
+using RadioGroups;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UIElements;
 
-public enum LevelState
+namespace InfoWindowElements
 {
-    Selected,
-    Available,
-    Unavailable
-}
-[UxmlElement]
-public partial class LevelsTab : Tab, IUIElement
-{
-    [UxmlAttribute] List<LevelState> states = new() 
-    { 
-        LevelState.Selected, 
-        LevelState.Available, 
-        LevelState.Unavailable, 
-        LevelState.Unavailable, 
-        LevelState.Unavailable 
-    };
 
-    [UxmlAttribute] string[] headers = { "First floor", "Cave", "Water", "Random Header", "Deppest point" };
-    [UxmlAttribute] string[] bodies = { "aaaaaaaaa", "bbbbbbb", "cccccc", "ddddddd", "eeeeeee" };
-
-    //Resource[] levelcosts = new/{}
-
-    Label headerLabel;
-    Label stateLabel;
-    Label bodyLabel;
-
-    Button moveButton;
-    List<LevelUnlocker> levelUnlockers;
-
-
-    public LevelsTab() : base("Levels")
+    public enum LevelState
     {
-        style.flexGrow = 1;
-        contentContainer.style.flexDirection = FlexDirection.Row;
-        name = "Levels";
+        Unavailable, // too far
+        Available, // next locked level, cannot afford at the moment
+        CanUnlock, // next locked level, can afford at the moment
+        Unlocked, // unlocked level
+        Selected, // selected level
 
-        GroupBox levels = new();
-        levelUnlockers = new();
-        for (int i = 0; i < 5; i++)
-        {
-            levelUnlockers.Add(new LevelUnlocker(i, states[i], ChangeActiveView));
-            levels.Add(levelUnlockers[i]);
-        }
-        Add(levels);
-
-        VisualElement view = new();
-        view.name = "Level-View";
-        
-        headerLabel = new(headers[0]);
-        headerLabel.name = "Header";
-        view.Add(headerLabel);
-
-        stateLabel = new("OK");
-        stateLabel.name = "State";
-        view.Add(stateLabel);
-
-        bodyLabel = new(bodies[0]);
-        bodyLabel.name = "Body";
-        view.Add(bodyLabel);
-
-        moveButton = new();
-        view.Add(moveButton);
-        Add(view);
     }
-    public void Fill(object data)
+    [UxmlElement]
+    public partial class LevelsTab : Tab
     {
-        Storage storage = (Storage)data;
-        GridPos gridPos = storage.GetPos();
-        for (int i = 0; i < levelUnlockers.Count; i++)
+        public LevelPresent LevelData { get; private set; }
+        public int SelectedLevel { get; private set; }
+
+        LevelUnlockerRadioGroup levelGroup;
+
+        Label headerLabel;
+        Label stateLabel;
+        Label bodyLabel;
+        DoubleResourceList costList;
+        Button moveButton;
+
+        public LevelsTab() : base("Levels")
         {
+            LevelData = Resources.Load<LevelPresent>("Holders/Data/Level Present");
+            style.flexGrow = 1;
+            contentContainer.style.flexDirection = FlexDirection.Row;
+            name = "Levels";
 
+            levelGroup = new LevelUnlockerRadioGroup();
+            levelGroup.Init(
+                (i) =>
+                {
+                    ChangeActiveView(i);
+                    SelectedLevel = i;
+                });
+            Add(levelGroup);
+            
+
+            VisualElement view = new();
+            view.name = "Level-View";
+
+            headerLabel = new(LevelData.headers[0]);
+            headerLabel.name = "Header";
+            view.Add(headerLabel);
+
+            stateLabel = new("OK");
+            stateLabel.name = "State";
+            view.Add(stateLabel);
+
+            bodyLabel = new(LevelData.bodies[0]);
+            bodyLabel.name = "Body";
+            view.Add(bodyLabel);
+
+            costList = new(true, "Cost");
+            view.Add(costList);
+
+            moveButton = new();
+            moveButton.AddToClassList("main-button");
+            moveButton.RegisterCallback<ClickEvent>(HandleButton);
+            view.Add(moveButton);
+            Add(view);
         }
-    }
-    void ChangeActiveView(int i)
-    {
-        if (states[i] != LevelState.Available)
-            return;
-        headerLabel.text = headers[i];
-        bodyLabel.text = bodies[i];
 
-        int x = states.IndexOf(LevelState.Selected);
-        states[x] = LevelState.Available;
-        levelUnlockers[x].ToggleButtonStyle(states[x]);
+        public void Open(object data)
+        {
+            SelectedLevel = 0;
+            levelGroup.SetFill((Storage)data, LevelData);
+            ChangeActiveView(SelectedLevel);
+        }
 
-        states[i] = LevelState.Selected;
-        levelUnlockers[i].ToggleButtonStyle(states[i]);
+        void ChangeActiveView(int i)
+        {
+            headerLabel.text = LevelData.headers[i];
+            bodyLabel.text = LevelData.bodies[i];
 
-        
+            if (levelGroup[SelectedLevel] != LevelState.Unlocked)
+                SceneRefs.infoWindow.ClearBinding(costList);
+
+            LevelState state = levelGroup[i];
+            switch (state)
+            {
+                case LevelState.Available:
+                    moveButton.text = "Unlock";
+                    costList.style.display = DisplayStyle.Flex;
+                    costList.Fill(this);
+                    stateLabel.text = "Not enough resources";
+                    MoveButtonUpdate(true, "Unlock");
+                    break;
+                case LevelState.CanUnlock:
+                    moveButton.text = "Unlock";
+                    costList.style.display = DisplayStyle.Flex;
+                    costList.Fill(this);
+                    stateLabel.text = "Can unlock";
+                    MoveButtonUpdate(true, "Unlock");
+                    break;
+                case LevelState.Unlocked:
+                    costList.style.display = DisplayStyle.None;
+                    stateLabel.text = "Unlocked";
+                    MoveButtonUpdate(true, "Move to");
+                    break;
+                case LevelState.Selected:
+                    costList.style.display = DisplayStyle.None;
+                    stateLabel.text = "Unlocked";
+                    MoveButtonUpdate(false, "Move to");
+                    break;
+            }
+        }
+
+        public void UpdateState()
+        {
+            if (MyRes.CanAfford(LevelData.costs[SelectedLevel]))
+            {
+                if (levelGroup.SetStates(SelectedLevel, LevelState.CanUnlock))
+                {
+                    stateLabel.text = "Can unlock";
+                    MoveButtonUpdate(true, "Unlock");
+                }
+            }
+            else
+            {
+                if (levelGroup.SetStates(SelectedLevel, LevelState.Available))
+                {
+                    stateLabel.text = "Not enough resources";
+                    MoveButtonUpdate(false, "Unlock");
+                }
+            }
+        }
+
+        void MoveButtonUpdate(bool active, string name)
+        {
+            moveButton.text = name;
+            if (active)
+            {
+                moveButton.RemoveFromClassList("disabled-button");
+                moveButton.AddToClassList("main-button");
+            }
+            else
+            {
+                moveButton.RemoveFromClassList("main-button");
+                moveButton.AddToClassList("disabled-button");
+            }
+        }
+
+        void HandleButton(ClickEvent _)
+        {
+            switch (levelGroup[SelectedLevel])
+            {
+                case LevelState.CanUnlock:
+                    //ConfirmWindow.window.Open(MyGrid., "");
+                    break;
+                case LevelState.Unlocked:
+                    MyGrid.ChangeGridLevel(SelectedLevel);
+                    break;
+                case LevelState.Selected:
+                case LevelState.Available:
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
     }
 }

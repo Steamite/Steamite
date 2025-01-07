@@ -1,3 +1,10 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:VisualElement style="flex-grow: 1; display: none; visibility: hidden; overflow: hidden;" />
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/UnitySelectors.uss?fileID=7433441132597879392&amp;guid=3468915a4f8821544854e970a313de3c&amp;type=3#UnitySelectors" />
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/TopBar.uss?fileID=7433441132597879392&amp;guid=4fe123aa2d844744b9e1a00d21362590&amp;type=3#TopBar" />
+    <engine:VisualElement name="TopBar" style="flex-grow: 0; background-color: rgb(46, 29, 14); font-size: 64px; -unity-text-align: middle-left; align-self: stretch; align-items: stretch; align-content: stretch; padding-bottom: 0.5%; margin-top: 0; padding-top: 0.5%;">
+        <InfoWindowElements.Resource-List horizontal-scrolling="true" name="Resources" style="margin-left: 2.5%; margin-right: 2.5%; max-height: 65px; font-size: 35px; min-height: 65px; align-self: stretch; align-content: stretch; margin-top: 0; margin-bottom: 0;" />
+    </engine:VisualElement>
+    <engine:VisualElement name="Money-Background" style="position: absolute; background-color: rgb(46, 29, 14); align-self: center; top: 7%; border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-left-color: rgb(198, 131, 70); border-right-color: rgb(198, 131, 70); border-top-color: rgb(198, 131, 70); border-bottom-color: rgb(198, 131, 70); min-width: 145px;">
+        <engine:Label text="##### &lt;color=#FFD700&gt;£&lt;/color&gt;" name="Money-Value" style="-unity-text-align: middle-right; font-size: 31px; -unity-font-style: normal; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 2px; padding-right: 5px; padding-bottom: 2px; padding-left: 5px; color: rgb(255, 255, 255);" />
+    </engine:VisualElement>
 </engine:UXML>

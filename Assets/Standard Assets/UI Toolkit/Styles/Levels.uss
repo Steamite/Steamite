@@ -8,6 +8,24 @@ LevelsTab GroupBox {
     min-height: 100%;
     min-width: 20%;
     max-width: 20%;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 5px;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+LevelUnlockerRadioGroup #unity-content-container {
+    max-height: 100%;
+    justify-content: space-around;
+    margin-left: 0;
+    margin-right: 0;
+    min-height: 100%;
+    padding-right: 10px;
+    padding-left: 15px;
 }
 
 LevelUnlocker {
@@ -35,46 +53,28 @@ LevelUnlocker {
     border-bottom-left-radius: 10px;
     -unity-text-align: middle-center;
     font-size: 60px;
-    -unity-text-outline-color: rgb(28, 28, 28);
-    -unity-text-outline-width: 3px;
     transition-duration: 0.2s;
     opacity: 1;
+    text-shadow: 1px 1px 0 rgb(35, 32, 2);
+    color: rgb(101, 92, 37);
 }
 
 LevelUnlocker:disabled {
-    background-color: rgb(74, 74, 74);
-    opacity: 0.7;
+    background-color: rgb(68, 44, 21);
+    opacity: 0.5;
+    scale: 0.8 0.8;
 }
 
-.Level-Selected {
-    background-color: rgb(249, 233, 141);
-    transition-duration: 0.2s;
-    scale: 1.1 1.1;
-    color: rgb(28, 28, 28);
-    -unity-text-outline-color: rgb(50, 50, 50);
+.Level-Available {
+    background-color: rgb(35, 32, 2);
 }
 
-.Level-Opened {
-    max-width: 75px;
-    max-height: 75px;
-    flex-grow: 0;
-    align-self: center;
-    align-items: auto;
-    align-content: auto;
-    justify-content: flex-start;
-    height: 75px;
-    width: 75px;
-    flex-shrink: 0;
-    border-left-color: rgb(50, 50, 50);
-    border-right-color: rgb(50, 50, 50);
-    border-top-color: rgb(50, 50, 50);
-    border-bottom-color: rgb(50, 50, 50);
-    background-color: rgb(0, 0, 0);
-    opacity: 1;
-    scale: 1 1;
+.Level-Available:hover {
+    background-color: rgb(60, 55, 22);
+    scale: 1.05 1.05;
 }
 
-.Level-Opened:hover {
+.Level-Can-Unlock {
     max-width: 75px;
     max-height: 75px;
     flex-grow: 0;
@@ -89,20 +89,72 @@ LevelUnlocker:disabled {
     border-right-color: rgb(28, 28, 28);
     border-top-color: rgb(28, 28, 28);
     border-bottom-color: rgb(28, 28, 28);
-    background-color: rgb(50, 50, 50);
+    background-color: rgba(141, 129, 51, 0.84);
     opacity: 1;
+    scale: 1 1;
+    color: rgb(80, 74, 29);
+}
+
+.Level-Can-Unlock:hover {
+    scale: 1.05 1.05;
+    background-color: rgb(161, 148, 59);
+}
+
+.Level-Opened {
+    max-width: 75px;
+    max-height: 75px;
+    flex-grow: 0;
+    align-self: center;
+    align-items: auto;
+    align-content: auto;
+    justify-content: flex-start;
+    height: 75px;
+    width: 75px;
+    flex-shrink: 0;
+    opacity: 1;
+    scale: 1 1;
+    background-color: rgb(46, 29, 14);
+    color: rgb(80, 74, 29);
+    text-shadow: 1px 1px 0 rgb(35, 32, 2);
+}
+
+.Level-Opened:hover {
+    max-width: 75px;
+    max-height: 75px;
+    flex-grow: 0;
+    align-self: center;
+    align-items: auto;
+    align-content: auto;
+    justify-content: flex-start;
+    height: 75px;
+    width: 75px;
+    flex-shrink: 0;
+    background-color: rgb(114, 73, 35);
+    opacity: 1;
+    scale: 1.05 1.05;
+    color: rgb(161, 148, 59);
+}
+
+.Level-Selected {
+    background-color: rgb(141, 129, 51);
     scale: 1.2 1.2;
-    transition-duration: 0.2s;
+    color: rgb(35, 32, 2);
+    text-shadow: 1px 1px 0 rgb(80, 74, 29);
+}
+
+________________ {
 }
 
 #Level-View {
     flex-grow: 1;
-    justify-content: space-between;
+    justify-content: flex-start;
     margin-top: 5%;
-    margin-bottom: 10%;
+    margin-bottom: 0;
     margin-right: 5%;
-    margin-left: 5%;
+    margin-left: 2.5%;
     transition-duration: 0.2s;
+    align-self: stretch;
+    align-content: stretch;
 }
 
 #Level-View > #Header {
@@ -146,21 +198,19 @@ LevelUnlocker:disabled {
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
+    height: auto;
 }
 
 #Level-View > Button {
-    flex-grow: 1;
-    justify-content: space-between;
+    flex-grow: 0;
     margin-top: 0;
-    margin-bottom: 0;
-    margin-right: 5%;
-    margin-left: 5%;
+    margin-bottom: 5%;
+    margin-right: 0;
+    margin-left: 0;
     padding-top: 0;
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
-    align-self: stretch;
-    max-height: 15%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -169,15 +219,20 @@ LevelUnlocker:disabled {
     border-right-width: 3px;
     border-bottom-width: 3px;
     border-left-width: 3px;
-    border-left-color: rgb(74, 74, 74);
-    border-right-color: rgb(74, 74, 74);
-    border-top-color: rgb(74, 74, 74);
-    border-bottom-color: rgb(74, 74, 74);
-    background-color: rgb(28, 28, 28);
     transition-duration: 0.2s;
+    flex-shrink: 0;
+    height: 15%;
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    border-left-color: rgba(74, 74, 74, 0);
+    border-right-color: rgba(74, 74, 74, 0);
+    border-top-color: rgba(74, 74, 74, 0);
+    border-bottom-color: rgba(74, 74, 74, 0);
+    font-size: 50px;
 }
 
-#Level-View > Button:hover {
+#L {
     flex-grow: 1;
     justify-content: space-between;
     margin-top: 0;
@@ -203,4 +258,13 @@ LevelUnlocker:disabled {
     border-top-color: rgb(74, 74, 74);
     border-bottom-color: rgb(74, 74, 74);
     background-color: rgb(139, 140, 137);
+}
+
+#Level-View > DoubleResourceList {
+    align-self: center;
+    align-content: stretch;
+    flex-grow: 1;
+    margin-right: 2%;
+    min-width: 98%;
+    max-width: 100%;
 }

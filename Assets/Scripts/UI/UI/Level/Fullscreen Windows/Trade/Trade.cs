@@ -74,7 +74,7 @@ public class Trade : FullscreenWindow
         tradeLocations = tradeSave.tradeLocations;
         expeditions = tradeSave.expeditions;
         outposts = tradeSave.outposts;
-        MyRes.money = tradeSave.money;
+        SceneRefs.stats.GetComponent<ResourceDisplay>().Money = tradeSave.money;
         Init();
 
         // assigns sliders

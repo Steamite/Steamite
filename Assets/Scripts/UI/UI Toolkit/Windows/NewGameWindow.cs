@@ -37,7 +37,13 @@ namespace StartMenu
         {
             menu = _root.Q<VisualElement>("New-Menu");
             startButton = menu.Q<Button>("Start");
-            worlds = menu.Q<WorldRadioGroup>("Worlds");
+            worlds = menu.Q<WorldRadioGroup>("Worlds"); 
+            worlds.Init(
+                (i) =>
+                {
+                    selectedOption = i;
+                    UpdateButtonState();
+                });
             startButton.RegisterCallback<ClickEvent>(StartGame);
 
             menu.Q<TextField>("World-Name").dataSource = this;
@@ -56,13 +62,8 @@ namespace StartMenu
         public void OpenWindow(ClickEvent _ = null)
         {
             selectedOption = -1;
-            WorldName = ""; 
-            worlds.Init(
-                (i) =>
-                {
-                    selectedOption = i;
-                    UpdateButtonState();
-                });
+            WorldName = "";
+            worlds.Reset();
             gameObject.GetComponent<MyMainMenu>().OpenWindow("new");
         }
 

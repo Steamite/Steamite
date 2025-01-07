@@ -93,19 +93,19 @@ public class OutpostInfo : MonoBehaviour
         confirmTran.GetChild(0).GetComponent<TMP_Text>().text =
             $"{Outpost.upgradeCosts[outpostLevel].timeInTicks/4f} Hours";
 
-        
-        if (neededMoney > MyRes.money)
+        int money = MyRes.Money;
+        if (neededMoney > money)
         {
             useButton = false;
-            s = $"<color=red>Money: {MyRes.money}/{neededMoney}</color>\n";
+            s = $"<color=red>Money: {money}/{neededMoney}</color>\n";
         }
         else
         {
-            s = $"Money: {MyRes.money}/{neededMoney}\n";
+            s = $"Money: {money}/{neededMoney}\n";
         }
 
-        if (Outpost.upgradeCosts[outpostLevel].resource.ToStringTMP(ref s, MyRes.resources))
-            useButton = false;
+        /*if (Outpost.upgradeCosts[outpostLevel].resource.ToStringTMP(ref s, MyRes.resources))
+            useButton = false;*/
         confirmTran.GetChild(1).GetComponent<Button>().interactable = useButton;
         confirmTran.GetChild(2).GetComponent<TMP_Text>().text = s;
     }

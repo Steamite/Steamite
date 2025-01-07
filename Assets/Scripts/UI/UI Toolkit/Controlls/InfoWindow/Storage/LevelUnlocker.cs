@@ -1,37 +1,79 @@
-﻿using System;
+﻿using AbstractControls;
+using System;
 using UnityEngine.UIElements;
 
-[UxmlElement]
-public partial class LevelUnlocker : Button
+namespace InfoWindowElements
 {
-    public LevelUnlocker() : base()
-    {
 
-    }
-
-    public LevelUnlocker(int i, LevelState state, Action<int> onHover) : base()
+    [UxmlElement]
+    public partial class LevelUnlocker : CustomRadioButton
     {
-        text = i.ToString();
-        RegisterCallback<ClickEvent>((_) => onHover(i));
-        ToggleButtonStyle(state);
-    }
-
-    public void ToggleButtonStyle(LevelState state)
-    {
-        ClearClassList();
-        switch (state)
+        public LevelState state;
+        public LevelUnlocker() : base()
         {
-            case LevelState.Selected:
-                enabledSelf = true;
-                AddToClassList("Level-Selected");
-                break;
-            case LevelState.Available:
-                enabledSelf = true;
-                AddToClassList("Level-Opened");
-                break;
-            case LevelState.Unavailable:
-                enabledSelf = false;
-                break;
+            
         }
+
+        public LevelUnlocker(int i, LevelState _state) : base(i.ToString(), "", i)
+        {
+            state = _state;
+            ToggleButtonStyle(state);
+        }
+
+        public override void Deselect(bool triggerTransition = true)
+        {
+            base.Deselect();
+            if (state == LevelState.Selected)
+                ToggleButtonStyle(LevelState.Unlocked);
+            else
+                ToggleButtonStyle(state);
+        }
+        public override void Select(bool triggerTransition = true)
+        {
+            if(parent == null)
+            {
+                IsSelected = true;
+                return;
+            }
+            base.Select();
+            ToggleButtonStyle(LevelState.Selected);
+        }
+
+
+        #region Styling
+        public void ToggleButtonStyle()
+        {
+            ToggleButtonStyle(state);
+        }
+
+        void ToggleButtonStyle(LevelState _state)
+        {
+            ClearClassList();
+            switch (_state)
+            {
+                case LevelState.Unavailable:
+                    enabledSelf = false;
+                    break;
+                case LevelState.Available:
+                    enabledSelf = true;
+                    AddToClassList("Level-Available");
+                    break;
+                case LevelState.CanUnlock:
+                    enabledSelf = true;
+                    AddToClassList("Level-Can-Unlock");
+                    break;
+                case LevelState.Unlocked:
+                    enabledSelf = true;
+                    AddToClassList("Level-Opened");
+                    break;
+                case LevelState.Selected:
+                    enabledSelf = true;
+                    AddToClassList("Level-Selected");
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+        #endregion
     }
 }

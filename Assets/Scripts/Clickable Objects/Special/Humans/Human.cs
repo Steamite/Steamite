@@ -64,7 +64,7 @@ public class Human : ClickableObject
     public void SetJob(JobData data)
     {
         jData = data;
-        UpdateWindow(nameof(Job));
+        UIUpdate(nameof(Job));
     }
     public void SetJob(JobState state = JobState.Unset, ClickableObject interest = null, List<GridPos> path = null)
     {
@@ -74,7 +74,7 @@ public class Human : ClickableObject
             jData.interest = interest;
         if (path != null)
             jData.path = path;
-        UpdateWindow(nameof(Job));
+        UIUpdate(nameof(Job));
     }
     #endregion
     //public 

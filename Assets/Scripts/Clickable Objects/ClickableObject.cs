@@ -114,7 +114,7 @@ public class ClickableObject : MonoBehaviour,
     /// Add <b>[CreateProperty]</b> to mark it.
     /// </summary>
     /// <param name="property">Name of the property, not field.</param>
-    public void UpdateWindow(string property = "")
+    public void UIUpdate(string property = "")
     {
         propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }

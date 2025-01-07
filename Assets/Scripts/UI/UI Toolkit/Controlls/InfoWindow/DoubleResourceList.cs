@@ -17,23 +17,34 @@ namespace InfoWindowElements
     [UxmlElement]
     public partial class DoubleResourceList : ResourceList
     {
-        [UxmlAttribute] public bool cost;
+        [UxmlAttribute] bool cost;
 
-        
+        ///<summary> Do not use from code, this is only for adding the resource list from UI Builder.</summary>
         public DoubleResourceList() : base()
         {
             style.marginTop = new(new Length(9, LengthUnit.Percent));
             style.maxWidth = new(new Length(35, LengthUnit.Percent));
             style.alignContent = Align.Center;
+            cost = false;
+        }
+
+
+        public DoubleResourceList(bool _cost, string _name) : base()
+        {
+            style.marginTop = new(new Length(9, LengthUnit.Percent));
+            style.maxWidth = new(new Length(35, LengthUnit.Percent));
+            style.alignContent = Align.Center;
+            cost = _cost;
+            name = _name;
         }
 
         public override void Fill(object data)
         {
+            DataBinding binding;
             switch (data)
             {
                 case ProductionBuilding:
                     ProductionBuilding building = (ProductionBuilding)data;
-                    DataBinding binding;
                     resources = new();
 
                     if (cost)
@@ -43,7 +54,7 @@ namespace InfoWindowElements
                                     0,
                                     building.productionCost.ammount[i],
                                     building.productionCost.type[i]));
-                        binding = SceneRefs.infoWindow.CreateBinding(nameof(ProductionBuilding.InputResource));
+                        binding = Util.CreateBinding(nameof(ProductionBuilding.InputResource));
                     }
                     else
                     {
@@ -52,18 +63,42 @@ namespace InfoWindowElements
                                     0,
                                     building.production.ammount[i],
                                     building.production.type[i]));
-                        binding = SceneRefs.infoWindow.CreateBinding(nameof(ProductionBuilding.LocalRes));
+                        binding = Util.CreateBinding(nameof(ProductionBuilding.LocalRes));
                     }
 
                     binding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage.stored));
-                    SceneRefs.infoWindow.AddBinding(new(this, "resources"), binding, data);
+                    SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    break;
+                case LevelsTab:
+                    LevelsTab tab = (LevelsTab)data;
+                    Resource resource = tab.LevelData.costs[tab.SelectedLevel];
+                    resources = new();
+
+                    if (cost)
+                    {
+                        for (int i = 0; i < resource.type.Count; i++)
+                            resources.Add(new DoubleUIResource(
+                                    0,
+                                    resource.ammount[i],
+                                    resource.type[i]));
+                        binding = Util.CreateBinding(nameof(ResourceDisplay.GlobalResources));
+                    }
+                    else
+                        throw new NotImplementedException();
+
+
+                    binding.sourceToUiConverters.AddConverter((ref Resource globalStorage) =>
+                    {
+                        tab.UpdateState();
+                        return ToUIRes(globalStorage);
+                    });
+                    dataSource = SceneRefs.stats.GetComponent<ResourceDisplay>();
+                    SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, dataSource);
                     break;
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(data.ToString());
             }
         }
-
-
 
         protected override List<UIResource> ToUIRes(Resource storage)
         {
