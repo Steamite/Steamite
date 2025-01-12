@@ -12,7 +12,6 @@ public class BuildPipe : Pipe
     {
         network = p.network;
         id = p.id;
-        build = p.build;
         connectedBuilding = _connectedBuild;
     }
     public override void OnPointerEnter(PointerEventData eventData)

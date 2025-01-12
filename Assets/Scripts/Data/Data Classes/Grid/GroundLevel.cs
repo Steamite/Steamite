@@ -83,28 +83,6 @@ public class GroundLevel : MonoBehaviour
         grid = new ClickableObject[width, height];
         pipeGrid = new Pipe[width, height];
     }
-    
-    public StringBuilder PrintGrid()
-    {
-        // prints the entire grid
-        StringBuilder s = new();
-        for (int z = height - 1; z > 0; z--) // start at top
-        {
-            string _s = "";
-            for (int x = 0; x < width; x++) // start from left
-            {
-                ClickableObject item = grid[x, z];
-                if (item != null)
-                {
-                    _s += item.PrintText() + ";";
-                    continue;
-                }
-                _s += "_;";
-            }
-            s.AppendLine(_s);
-        }
-        return s;
-    }
     #endregion Base Grid operations
 
     #region Creation
@@ -159,7 +137,7 @@ public class GroundLevel : MonoBehaviour
             if (!building.GetComponent<BuildPipe>())
             {
                 PlaceBuild(building, load: true);
-                if (building.GetComponent<ProductionBuilding>() && building.build.constructed)
+                if (building.GetComponent<ProductionBuilding>() && building.constructed)
                 {
                     building.GetComponent<ProductionBuilding>().RefreshStatus();
                     building.GetComponent<ProductionBuilding>().RequestRestock();
@@ -187,9 +165,9 @@ public class GroundLevel : MonoBehaviour
         if (gridPos == null)
             gridPos = building.GetPos();
         overlays.AddBuildingOverlay(gridPos, building.id);
-        for (int i = building.build.blueprint.itemList.Count - 1; i > -1; i--)
+        for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
         {
-            NeededGridItem item = building.build.blueprint.itemList[i];
+            NeededGridItem item = building.blueprint.itemList[i];
             GridPos itemPos = MyGrid.Rotate(item.pos, building.transform.rotation.eulerAngles.y, true);
             int x = (int)(itemPos.x + gridPos.x);
             int y = (int)(gridPos.z - itemPos.z);
@@ -214,7 +192,7 @@ public class GroundLevel : MonoBehaviour
             }
         }
         if (!load)
-            overlays.DeleteBuildGrid();
+            overlays.HideGlobalEntryPoints();
     }
     #endregion Adding to Grid
 
@@ -224,9 +202,9 @@ public class GroundLevel : MonoBehaviour
     {
         overlays.Remove(building.id, gridPos);
         List<Road> _roads = roads.GetComponentsInChildren<Road>().ToList();
-        for (int i = building.build.blueprint.itemList.Count - 1; i > -1; i--)
+        for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
         {
-            NeededGridItem item = building.build.blueprint.itemList[i];
+            NeededGridItem item = building.blueprint.itemList[i];
             GridPos itemPos = MyGrid.Rotate(item.pos, building.transform.rotation.eulerAngles.y, true);
             int x = (int)(itemPos.x + gridPos.x);
             int y = (int)(gridPos.z - itemPos.z);
@@ -303,9 +281,9 @@ public class GroundLevel : MonoBehaviour
         List<Image> images = new();
         List<Image> entrances = new();
         int activeEntrances = -1;
-        for (int i = 0; i < building.build.blueprint.itemList.Count; i++)
+        for (int i = 0; i < building.blueprint.itemList.Count; i++)
         {
-            NeededGridItem item = building.build.blueprint.itemList[i];
+            NeededGridItem item = building.blueprint.itemList[i];
             GridPos itemPos = MyGrid.Rotate(item.pos, building.transform.rotation.eulerAngles.y, true);
             itemPos.x += gridPos.x;
             itemPos.z = gridPos.z - itemPos.z;

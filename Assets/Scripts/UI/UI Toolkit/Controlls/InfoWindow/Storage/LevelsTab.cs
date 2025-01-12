@@ -10,29 +10,43 @@ using UnityEngine.UIElements;
 namespace InfoWindowElements
 {
 
+    /// <summary>State of each level button.</summary>
     public enum LevelState
     {
-        Unavailable, // too far
-        Available, // next locked level, cannot afford at the moment
-        CanUnlock, // next locked level, can afford at the moment
-        Unlocked, // unlocked level
-        Selected, // selected level
-
+        /// <summary>Too far.</summary>
+        Unavailable,
+        /// <summary>Next locked level, cannot afford at the moment.</summary>
+        Available,
+        /// <summary>Next locked level, can afford at the moment.</summary>
+        CanUnlock,
+        /// <summary>unlocked level</summary>
+        Unlocked,
+        /// <summary>selected level</summary>
+        Selected,
     }
+
+    /// <summary>Tab for <see cref="Elevator"/> "Levels" tab.</summary>
     [UxmlElement]
     public partial class LevelsTab : Tab
     {
+        /// <summary>Data for unlocking and displaying info about each of the levels.</summary>
         public LevelPresent LevelData { get; private set; }
+        /// <summary>Active level in the <see cref="levelGroup"/>.</summary>
         public int SelectedLevel { get; private set; }
 
+        /// <summary>Control for level unlockers.</summary>
         LevelUnlockerRadioGroup levelGroup;
 
         Label headerLabel;
         Label stateLabel;
         Label bodyLabel;
         DoubleResourceList costList;
+        /// <summary>Button for moving between levels or unlocking new ones.</summary>
         Button moveButton;
 
+        /// <summary>
+        /// Creates a new <see cref="Tab"/> and initializes all parts of the view.
+        /// </summary>
         public LevelsTab() : base("Levels")
         {
             LevelData = Resources.Load<LevelPresent>("Holders/Data/Level Present");
@@ -41,7 +55,7 @@ namespace InfoWindowElements
             name = "Levels";
 
             levelGroup = new LevelUnlockerRadioGroup();
-            levelGroup.Init(
+            levelGroup.SetChangeCallback(
                 (i) =>
                 {
                     ChangeActiveView(i);
@@ -75,13 +89,20 @@ namespace InfoWindowElements
             Add(view);
         }
 
+        /// <summary>
+        /// Refreshes <see cref="levelGroup"/> and level info.
+        /// </summary>
+        /// <param name="data">Elevator that is selected.</param>
         public void Open(object data)
         {
-            SelectedLevel = 0;
-            levelGroup.SetFill((Storage)data, LevelData);
+            SelectedLevel = levelGroup.SelectUpdate((Storage)data, LevelData);
             ChangeActiveView(SelectedLevel);
         }
 
+        /// <summary>
+        /// Switches level info and Updates <see cref="moveButton"/>.
+        /// </summary>
+        /// <param name="i"></param>
         void ChangeActiveView(int i)
         {
             headerLabel.text = LevelData.headers[i];
@@ -120,7 +141,11 @@ namespace InfoWindowElements
             }
         }
 
-        public void UpdateState()
+        /// <summary>
+        /// Called when the selected level is not unlocked and global resources change. <br/>
+        /// Makes parameters for <see cref="MoveButtonUpdate"/>.
+        /// </summary>
+        public void UpdateCostView()
         {
             if (MyRes.CanAfford(LevelData.costs[SelectedLevel]))
             {
@@ -140,9 +165,14 @@ namespace InfoWindowElements
             }
         }
 
-        void MoveButtonUpdate(bool active, string name)
+        /// <summary>
+        /// Updates the <see cref="moveButton"/> according to parameters.
+        /// </summary>
+        /// <param name="active"></param>
+        /// <param name="displaystring">string to display</param>
+        void MoveButtonUpdate(bool active, string displaystring)
         {
-            moveButton.text = name;
+            moveButton.text = displaystring;
             if (active)
             {
                 moveButton.RemoveFromClassList("disabled-button");
@@ -155,6 +185,11 @@ namespace InfoWindowElements
             }
         }
 
+        /// <summary>
+        /// Handles clicking on the <see cref="moveButton"/>
+        /// </summary>
+        /// <param name="_">Discarded, used for cleaner call.</param>
+        /// <exception cref="NotImplementedException">Triggered by clicking on a button in the <see cref="LevelState.Unavailable"/>state.</exception>
         void HandleButton(ClickEvent _)
         {
             switch (levelGroup[SelectedLevel])

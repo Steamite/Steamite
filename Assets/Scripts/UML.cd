@@ -24,7 +24,7 @@
   <Class Name="Storage">
     <Position X="30.75" Y="16.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIAAwIAAAAEAAAAAAAABAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AIAAwIAAAAEAAAAAAAABAABCAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Storage.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -36,9 +36,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="ProductionBuilding">
-    <Position X="21.75" Y="20.5" Width="2" />
+    <Position X="22.25" Y="20.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>BIAKwJQQAAEIAIAAAEAChIAEAAABAIRAIEAAAUAACAA=</HashCode>
+      <HashCode>BIAKwIQQAEEIAIAAAEAChAQEAABFAITAIEAAgUAACBQ=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\Production Buildings\ProductionBuilding.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -52,21 +52,21 @@
   <Class Name="StorageObject">
     <Position X="21" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgIAQAAEAAAAAAAAAAAAEAAAAAAAAAAEAAQAAAAA=</HashCode>
+      <HashCode>AAAAgIAQAAEAAAAAAAQAAAAEAAAAAAAAAAEAAQAAAAA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\StorageObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Chunk">
     <Position X="12" Y="10" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAgIAAAAAAAAAABAQAgAgAAAAAAAAAAAECAQAAAAA=</HashCode>
+      <HashCode>IAAAgIAAAAEAAAAABAQAgAgAAAAAAAAAAAECAQAAAAA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Special\Chunk.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ClickableObject">
     <Position X="20" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IACAgKAAAAAIAAAAgAQAgAgAAAAgAIAAAAAAAwAEAgA=</HashCode>
+      <HashCode>IAiAgIAAAAAIAAAAgAQAgAgAAAAgAIAAAAAAAwAEAgA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\ClickableObject.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -81,14 +81,14 @@
   <Class Name="Rock">
     <Position X="9.75" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IEAAgIAAAAIAAAAAAAQAgAgAAAQAAAABABgCAQAAAAA=</HashCode>
+      <HashCode>IEAAgIAAAAIAAAAAAAQAgAgAAAQAAAABABgCAQAAAgA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Tiles\Rock.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Human">
     <Position X="5.25" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAEhIBAIBggAEAAAAwAADgAAAACIABGAAAABBQAAAI=</HashCode>
+      <HashCode>IAAEhIBAIAggAEAAABwAADgAAAAiIABGAAAABhQAAAI=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Special\Humans\Human.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -114,23 +114,31 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Research_Production">
-    <Position X="19.25" Y="28" Width="1.75" />
+    <Position X="18.75" Y="31" Width="1.75" />
     <TypeIdentifier>
       <HashCode>BIACgAAAAAAAAIAAAAQAAAAAAAAAAIAAAQAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\Production Buildings\Research_Production.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WaterPump">
-    <Position X="21.75" Y="28" Width="2" />
+    <Position X="25.25" Y="31.25" Width="2" />
+    <InheritanceLine Type="ProductionBuilding" ManuallyRouted="true">
+      <Path>
+        <Point X="23.25" Y="28.848" />
+        <Point X="23.25" Y="30.608" />
+        <Point X="26.25" Y="30.608" />
+        <Point X="26.25" Y="31.25" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
       <HashCode>BAACgIAAAAAAAIAAAEQAgAAEAAAAAABAICQAEUAAAAA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\Production\WaterPump.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SteamGenerator">
-    <Position X="24.5" Y="28" Width="2.25" />
+    <Position X="22" Y="31.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAACgIQAAAAAAJAAAEQAAAAEAIAAQAJAAAQEGEAAAAA=</HashCode>
+      <HashCode>AAACgIQAAAAAAIAAAEQAAAAEAAAAAABAAAQEEEAAAAA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\Steam Generator.cs</FileName>
     </TypeIdentifier>
   </Class>

@@ -53,6 +53,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -137,6 +140,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -251,6 +257,7 @@ GameObject:
   - component: {fileID: 6079932396248880365}
   - component: {fileID: 452135987344867831}
   - component: {fileID: 7408063851616091057}
+  - component: {fileID: 2767296565719767434}
   m_Layer: 7
   m_Name: Pipe
   m_TagString: Untagged
@@ -298,6 +305,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -366,30 +376,29 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
-  build:
-    blueprint:
-      size:
-        x: 0
-        z: 0
-        level: 0
-      moveBy:
-        x: 0
-        z: 0
-        level: 0
-      anchor:
-        x: 0
-        z: 0
-        level: 0
-      itemList: []
-    heigth: 0
-    cost:
-      capacity: -1
-      type: 
-      ammount: 
-    constructed: 0
-    deconstructing: 0
-    constructionProgress: 0
-    maximalProgress: 0
+  myColor: []
+  blueprint:
+    size:
+      x: 0
+      z: 0
+      y: 0
+    moveBy:
+      x: 0
+      z: 0
+      y: 0
+    anchor:
+      x: 0
+      z: 0
+      y: 0
+    itemList: []
+  cost:
+    capacity: -1
+    type: 
+    ammount: 
+  constructed: 0
+  deconstructing: 0
+  constructionProgress: 0
+  maximalProgress: 0
   network:
     pipes: []
     buildings: []
@@ -408,6 +417,33 @@ SortingGroup:
   m_SortingLayer: 2
   m_SortingOrder: 15
   m_SortAtRoot: 0
+--- !u!54 &2767296565719767434
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4905127315233248697}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &5218611042899198335
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,6 +497,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -581,6 +620,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -670,6 +712,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -719,6 +764,7 @@ GameObject:
   - component: {fileID: 7842307157348407047}
   - component: {fileID: -85555690278644832}
   - component: {fileID: 62586701505083539}
+  - component: {fileID: 4084886823629516137}
   m_Layer: 2
   m_Name: Water Pump
   m_TagString: Untagged
@@ -769,6 +815,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -849,73 +898,60 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
-  build:
-    blueprint:
-      size:
-        x: 1
-        z: 4
-        level: 0
-      moveBy:
+  myColor: []
+  blueprint:
+    size:
+      x: 1
+      z: 4
+      y: 0
+    moveBy:
+      x: 0
+      z: 0.5
+      y: 0
+    anchor:
+      x: 0
+      z: 2
+      y: 0
+    itemList:
+    - pos:
         x: 0
-        z: 0.5
-        level: 0
-      anchor:
+        z: -2
+        y: 0
+      itemType: 2
+    - pos:
         x: 0
-        z: 2
-        level: 0
-      itemList:
-      - pos:
-          x: 0
-          z: -2
-          level: 0
-        itemType: 2
-      - pos:
-          x: 0
-          z: -1
-          level: 0
-        itemType: 1
-      - pos:
-          x: 0
-          z: 0
-          level: 0
-        itemType: 4
-      - pos:
-          x: 0
-          z: 1
-          level: 0
-        itemType: 3
-    heigth: 0
-    cost:
-      capacity: -1
-      type: 01000000
-      ammount: 05000000
-    constructed: 0
-    deconstructing: 0
-    constructionProgress: 0
-    maximalProgress: 0
-  assigned: []
+        z: -1
+        y: 0
+      itemType: 1
+    - pos:
+        x: 0
+        z: 0
+        y: 0
+      itemType: 4
+    - pos:
+        x: 0
+        z: 1
+        y: 0
+      itemType: 3
+  cost:
+    capacity: -1
+    type: 
+    ammount: 
+  constructed: 0
+  deconstructing: 0
+  constructionProgress: 0
+  maximalProgress: 0
   limit: 5
-  pRes:
-    inputResource:
-      stored:
-        capacity: -1
-        type: 
-        ammount: 
-      requests: []
-      carriers: []
-      mods: 
-    productionCost:
-      capacity: -1
-      type: 
-      ammount: 
-    production:
-      capacity: 0
-      type: 
-      ammount: 
-  pTime:
-    prodTime: 1
-    currentTime: 0
-    modifier: 1
+  productionCost:
+    capacity: -1
+    type: 
+    ammount: 
+  production:
+    capacity: -1
+    type: 
+    ammount: 
+  prodTime: 20
+  modifier: 1
   working: []
   pStates:
     supplied: 1
@@ -928,3 +964,30 @@ MonoBehaviour:
       type: 00000000
       ammount: 00000000
       capacity: 19000000
+--- !u!54 &4084886823629516137
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8473832138988228041}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

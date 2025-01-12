@@ -7,18 +7,31 @@ using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// Makes up most of the map, holds valuable resources. <br/>
+/// Can be Dug out.
+/// </summary>
 public class Rock : ClickableObject
 {
-    /// <summary>
-    /// data about the rock(set)
-    /// </summary>
+    #region Variables
+    /// <summary>Data about the rock(set).</summary>
     public Resource rockYield;
-    /// <summary>
-    /// public int hardness;
-    /// </summary>
-    [SerializeField]
-    float integrity;
 
+    /// <summary>Remaining rock integrity.</summary>
+    [SerializeField] float integrity;
+
+    /// <summary>Assigned <see cref="Human"/>.</summary>
+    Human assigned;
+
+    /// <summary>Is marked to be digged out.</summary>
+    public bool toBeDug;
+
+    /// <summary>Prefab to replace.</summary>
+    public string assetPath;
+    #endregion
+
+    #region Properties
+    /// <inheritdoc cref="integrity"/>
     [CreateProperty]
     public float Integrity
     {
@@ -26,38 +39,24 @@ public class Rock : ClickableObject
         set { integrity = value; }
     }
 
-    /// <summary>
-    /// infuenced by the player
-    /// </summary>
-    Human assigned;
+    /// <inheritdoc cref="assigned"/>
     [CreateProperty]
     public Human Assigned
     {
         get { return assigned; }
-        set 
-        { 
+        set
+        {
             assigned = value;
             UIUpdate(nameof(Assigned));
         }
     }
-    public bool toBeDug;
-
-    /// <summary>
-    /// prefab to replace with
-    /// </summary>
-    public string assetPath;
-    
+    #endregion
 
     #region Basic Operations
-    public override void UniqueID()
-    {
-        CreateNewId(transform.parent.GetComponentsInChildren<Rock>().Select(q => q.id).ToList());
-    }
-    public override void GetID(JobSave jobSave)
-    {
-        jobSave.objectId = id;
-        jobSave.objectType = typeof(Rock);
-    }
+    /// <summary>Creates a list from all Rocks on the same level.</summary>
+    public override void UniqueID() => CreateNewId(transform.parent.GetComponentsInChildren<Rock>().Select(q => q.id).ToList());
+    
+    /// <inheritdoc/>
     public override GridPos GetPos()
     {
         return new GridPos(
@@ -68,17 +67,21 @@ public class Rock : ClickableObject
     #endregion Basic Operations
 
     #region Window
+    /// <summary>
+    /// <inheritdoc/>
+    /// And opens the info window with <see cref="InfoMode.Rock"/>.
+    /// </summary>
+    /// <returns><inheritdoc/></returns>
     public override InfoWindow OpenWindow()
     {
         InfoWindow info = base.OpenWindow();
         info.Open(this, InfoMode.Rock);
-        //info.FillResourceList(info.rock.Q<VisualElement>("Yield"), rockYield);
-
         return info;
     }
     #endregion Window
 
     #region Saving
+    /// <inheritdoc/>
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -95,6 +98,8 @@ public class Rock : ClickableObject
         (clickable as RockSave).toBeDug = toBeDug;
         return base.Save(clickable);
     }
+
+    /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
         integrity = (save as RockSave).integrity;
@@ -114,6 +119,12 @@ public class Rock : ClickableObject
     #endregion Saving
 
     #region Rock actions
+    /// <summary>
+    /// Lowers <see cref="integrity"/>, and if reaches zero the rock is destroyed. <br/>
+    /// Updates UI.
+    /// </summary>
+    /// <param name="damage">Damage to integrity</param>
+    /// <returns>If the rock is destroyed.</returns>
     public bool DamageRock(float damage)
     {
         integrity -= damage;
@@ -121,17 +132,15 @@ public class Rock : ClickableObject
         {
             if (rockYield.ammount.Sum() > 0)
                 SceneRefs.objectFactory.CreateAChunk(GetPos(), rockYield);
-            MyGrid.UnsetRock(this);
             SceneRefs.objectFactory.CreateRoad(GetPos(), true);
-            Destroy(gameObject);
-
+            MyGrid.UnsetRock(this);
             return true;
         }
         UIUpdate(nameof(Integrity));
         return false;
     }
 
-
+    /// <summary>Colors dirt, based on integrity.</summary>
     public void ColorWithIntegrity()
     {
         float f = 1;

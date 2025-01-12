@@ -31,7 +31,7 @@ public class ResearchUI : FullscreenWindow
 
     [Header("Fill animation")]
     public float speed = 3;
-    public float elapsedProgress;
+    public float elapsedprogress;
     //Vector2 screenScale;
     ResearchUIButton selectedButton;
     //-----------------------------------\\
@@ -254,7 +254,7 @@ public class ResearchUI : FullscreenWindow
                     if (button.node.currentTime == 0)
                         researchInfo.GetChild(3).GetComponent<TMP_Text>().text = $"{button.node.researchTime * 5} research points needed";
                     else
-                        researchInfo.GetChild(3).GetComponent<TMP_Text>().text = $"{Mathf.RoundToInt(elapsedProgress * 5)} / {button.node.researchTime * 5} research points";
+                        researchInfo.GetChild(3).GetComponent<TMP_Text>().text = $"{Mathf.RoundToInt(elapsedprogress * 5)} / {button.node.researchTime * 5} research points";
                     break;
                 case ResearchUIButton.ButtonState.Completed:
                     selectedButton = null;
@@ -338,16 +338,16 @@ public class ResearchUI : FullscreenWindow
 
     public IEnumerator UpdateButtonFill()
     {
-        /*elapsedProgress = backend.currentResearch.node.currentTime;
-        while (elapsedProgress < backend.currentResearch.node.researchTime)
+        /*elapsedprogress = backend.currentResearch.node.currentTime;
+        while (elapsedprogress < backend.currentResearch.node.researchTime)
         {
-            elapsedProgress = Mathf.Lerp(elapsedProgress, backend.currentResearch.node.currentTime, Time.deltaTime * speed);
-            float fill = elapsedProgress / backend.currentResearch.node.researchTime;
+            elapsedprogress = Mathf.Lerp(elapsedprogress, backend.currentResearch.node.currentTime, Time.deltaTime * speed);
+            float fill = elapsedprogress / backend.currentResearch.node.researchTime;
             if (window.gameObject.activeSelf)
             {
                 backend.currentResearch.borderFill.fillAmount = fill;
                 SceneRefs.infoWindow.researchTransform.GetChild(3).GetComponent<TMP_Text>().text
-                    = $"{Mathf.RoundToInt(elapsedProgress * 5)} / {backend.currentResearch.node.researchTime * 5} research points";
+                    = $"{Mathf.RoundToInt(elapsedprogress * 5)} / {backend.currentResearch.node.researchTime * 5} research points";
             }
             openResearchFill.fillAmount = fill;
             openResearchText.text = $"{Mathf.RoundToInt(fill * 100)}%";

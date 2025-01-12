@@ -4,19 +4,23 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace RadioGroups
-{
-    public class SaveRadioButton : CustomRadioButton
+{/*
+    public class SaveRadioButtonData : CustomRadioButtonData
+    {
+        public Button
+    }
+*/
+    [UxmlElement]
+    public partial class SaveRadioButton : CustomRadioButton
     {
         public TextElement saveDate;
         public Button deleteButton;
 
-        [System.Obsolete]
-        public new class UxmlFactory : UxmlFactory<CustomRadioButton, UxmlTraits> { }
         public SaveRadioButton() : base()
         {
         }
 
-        public SaveRadioButton(string labelText, string _styleClass, int i, DateTime date) : base(labelText, _styleClass, i)
+        public SaveRadioButton(string labelText, string _styleClass, int i, DateTime date) : base(labelText, _styleClass, i, false)
         {
             saveDate = new TextElement();
             saveDate.text = date.ToString();
@@ -42,5 +46,9 @@ namespace RadioGroups
             base.Deselect(triggerTransition);
             deleteButton.style.display = DisplayStyle.None;
         }
+        /*public override void Bind(CustomRadioButtonData buttonData)
+        {
+            base.Bind(buttonData);
+        }*/
     }
 }

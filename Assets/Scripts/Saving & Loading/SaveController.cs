@@ -192,7 +192,7 @@ public class SaveController : MonoBehaviour
     void SaveGameState(string path, bool autoSave, JsonSerializer jsonSerializer)
     {
         GameStateSave gameState = new();
-        gameState.priorities = SceneRefs.humans.GetComponent<JobQueue>().priority;
+        gameState.priorities = SceneRefs.jobQueue.priority;
         SceneRefs.tick.timeController.Save(gameState);
         gameState.autoSave = autoSave;
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-//efficiency
 [Serializable]
 public class Efficiency
 {
@@ -14,6 +13,11 @@ public class Efficiency
     [NonSerialized]
     public float efficiency = 1;
 
+    /// <summary>
+    /// Adds or removes a modifier, then recalculates <see cref="efficiency"/>.
+    /// </summary>
+    /// <param name="_modType">Mod type to add.</param>
+    /// <param name="improvement">Add or Remove.</param>
     public void ManageModifier(ModType _modType, bool improvement)
     {
         EfficiencyMod mod = modifiers.FirstOrDefault(q => q.modType == _modType);

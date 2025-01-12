@@ -1135,83 +1135,70 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
-  build:
-    blueprint:
-      size:
-        x: 2
-        z: 3
-        level: 0
-      moveBy:
-        x: -0.5
-        z: 0.5
-        level: 0
-      anchor:
-        x: 1
+  myColor: []
+  blueprint:
+    size:
+      x: 2
+      z: 3
+      y: 0
+    moveBy:
+      x: -0.5
+      z: 0.5
+      y: 0
+    anchor:
+      x: 1
+      z: 1
+      y: 0
+    itemList:
+    - pos:
+        x: -1
+        z: -1
+        y: 0
+      itemType: 1
+    - pos:
+        x: -1
+        z: 0
+        y: 0
+      itemType: 1
+    - pos:
+        x: -1
         z: 1
-        level: 0
-      itemList:
-      - pos:
-          x: -1
-          z: -1
-          level: 0
-        itemType: 1
-      - pos:
-          x: -1
-          z: 0
-          level: 0
-        itemType: 1
-      - pos:
-          x: -1
-          z: 1
-          level: 0
-        itemType: 3
-      - pos:
-          x: 0
-          z: -1
-          level: 0
-        itemType: 1
-      - pos:
-          x: 0
-          z: 0
-          level: 0
-        itemType: 4
-      - pos:
-          x: 0
-          z: 1
-          level: 0
-        itemType: 3
-    heigth: 0
-    cost:
-      capacity: -1
-      type: 0100000002000000
-      ammount: 0f00000002000000
-    constructed: 0
-    deconstructing: 0
-    constructionProgress: 0
-    maximalProgress: 0
-  assigned: []
+        y: 0
+      itemType: 3
+    - pos:
+        x: 0
+        z: -1
+        y: 0
+      itemType: 1
+    - pos:
+        x: 0
+        z: 0
+        y: 0
+      itemType: 4
+    - pos:
+        x: 0
+        z: 1
+        y: 0
+      itemType: 3
+  cost:
+    capacity: -1
+    type: 01000000
+    ammount: 0a000000
+  constructed: 0
+  deconstructing: 0
+  constructionProgress: 0
+  maximalProgress: 20
   limit: 5
-  pRes:
-    inputResource:
-      stored:
-        capacity: -1
-        type: 
-        ammount: 
-      requests: []
-      carriers: []
-      mods: 
-    productionCost:
-      capacity: -1
-      type: 
-      ammount: 
-    production:
-      capacity: -1
-      type: 
-      ammount: 
-  pTime:
-    prodTime: 20
-    currentTime: 0
-    modifier: 1
+  productionCost:
+    capacity: -1
+    type: 
+    ammount: 
+  production:
+    capacity: -1
+    type: 
+    ammount: 
+  prodTime: 20
+  modifier: 1
   working: []
   pStates:
     supplied: 0
@@ -1233,7 +1220,7 @@ SortingGroup:
   m_SortAtRoot: 0
 --- !u!95 &6658061809421152745
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1247,6 +1234,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1

@@ -1,28 +1,27 @@
 ﻿using AbstractControls;
+using RadioGroups;
 using System;
 using UnityEngine.UIElements;
 
 namespace InfoWindowElements
 {
-
     [UxmlElement]
     public partial class LevelUnlocker : CustomRadioButton
     {
-        public LevelState state;
         public LevelUnlocker() : base()
         {
             
         }
 
-        public LevelUnlocker(int i, LevelState _state) : base(i.ToString(), "", i)
+        public LevelUnlocker(int i, LevelState _state) : base(i.ToString(), "", i, true)
         {
-            state = _state;
-            ToggleButtonStyle(state);
+            ToggleButtonStyle(_state);
         }
 
         public override void Deselect(bool triggerTransition = true)
         {
             base.Deselect();
+            LevelState state = ((LevelUnlockerRadioGroup)parent)[value];
             if (state == LevelState.Selected)
                 ToggleButtonStyle(LevelState.Unlocked);
             else
@@ -30,26 +29,17 @@ namespace InfoWindowElements
         }
         public override void Select(bool triggerTransition = true)
         {
-            if(parent == null)
-            {
-                IsSelected = true;
-                return;
-            }
             base.Select();
             ToggleButtonStyle(LevelState.Selected);
         }
 
 
         #region Styling
-        public void ToggleButtonStyle()
-        {
-            ToggleButtonStyle(state);
-        }
 
-        void ToggleButtonStyle(LevelState _state)
+        public void ToggleButtonStyle(LevelState state)
         {
             ClearClassList();
-            switch (_state)
+            switch (state)
             {
                 case LevelState.Unavailable:
                     enabledSelf = false;

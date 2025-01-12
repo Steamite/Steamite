@@ -20,7 +20,7 @@ public class House : AssignBuilding
     public override void OrderDeconstruct()
     {
         base.OrderDeconstruct();
-        if (build.constructed)
+        if (constructed)
         {
             foreach (Human h in assigned)
             {

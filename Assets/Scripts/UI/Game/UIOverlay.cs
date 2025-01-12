@@ -18,12 +18,12 @@ public class UIOverlay : MonoBehaviour
     {
         if (overlayParent.gameObject.activeSelf)
         {
-            GridPos gp = MyGrid.Rotate(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y);
+            GridPos gp = MyGrid.Rotate(building.blueprint.moveBy, building.transform.rotation.eulerAngles.y);
             overlayParent.anchoredPosition = new(building.transform.position.x - gp.x, building.transform.position.z - gp.z);
             overlayParent.localRotation = Quaternion.Euler(180, 0, building.transform.rotation.eulerAngles.y);
             if(buildGridCreated == false)
             {
-                foreach (NeededGridItem item in building.build.blueprint.itemList)
+                foreach (NeededGridItem item in building.blueprint.itemList)
                 {
                     RectTransform tile = Instantiate(overlayTile, overlayParent).GetComponent<RectTransform>();
                     tile.anchoredPosition = new(item.pos.x, item.pos.z);
@@ -37,7 +37,7 @@ public class UIOverlay : MonoBehaviour
             buildGridCreated = true;
         }
     }
-    public void DeleteBuildGrid()
+    public void HideGlobalEntryPoints()
     {
         for (int i = overlayParent.childCount-1; i >= 0; i--)
         {

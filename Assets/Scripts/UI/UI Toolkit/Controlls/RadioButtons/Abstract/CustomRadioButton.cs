@@ -11,6 +11,7 @@ namespace AbstractControls
 
         public string styleClass;
 
+        bool inGroup;
         public CustomRadioButton()
         {
             styleClass = "save-radio-button";
@@ -21,13 +22,15 @@ namespace AbstractControls
         }
 
 
-        public CustomRadioButton(string labelText, string _styleClass, int i)
+        public CustomRadioButton(string labelText, string _styleClass, int i, bool _inGroup)
         {
             styleClass = _styleClass;
             AddToClassList(_styleClass);
             text = labelText;
             data = labelText;
             value = i;
+            inGroup = _inGroup;
+            RegisterCallback<ClickEvent>((_) => Select());
         }
 
         /// <summary>
@@ -46,7 +49,15 @@ namespace AbstractControls
                     RemoveFromClassList(styleClass);
                     AddToClassList(styleClass + "-selected");
                 }
-                    parent.parent.parent.Q<CustomRadioButtonGroup>().Select(this);
+
+                if(inGroup)
+                {
+                    ((CustomRadioButtonGroup)parent).Select(value);
+                }
+                else
+                {
+                    parent.parent.parent.Q<CustomRadioButtonList>().Select(this);
+                }
             }
             else if (styleClass != "")
             {
@@ -75,5 +86,4 @@ namespace AbstractControls
             }
         }
     }
-
 }

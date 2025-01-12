@@ -62,6 +62,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -142,61 +145,59 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
-  build:
-    blueprint:
-      size:
-        x: 2
-        z: 3
-        level: 0
-      moveBy:
-        x: -0.5
-        z: 0.5
-        level: 0
-      anchor:
-        x: 1
+  myColor: []
+  blueprint:
+    size:
+      x: 2
+      z: 3
+      y: 0
+    moveBy:
+      x: -0.5
+      z: 0.5
+      y: 0
+    anchor:
+      x: 1
+      z: 1
+      y: 0
+    itemList:
+    - pos:
+        x: -1
+        z: -1
+        y: 0
+      itemType: 1
+    - pos:
+        x: -1
+        z: 0
+        y: 0
+      itemType: 1
+    - pos:
+        x: -1
         z: 1
-        level: 0
-      itemList:
-      - pos:
-          x: -1
-          z: -1
-          level: 0
-        itemType: 1
-      - pos:
-          x: -1
-          z: 0
-          level: 0
-        itemType: 1
-      - pos:
-          x: -1
-          z: 1
-          level: 0
-        itemType: 3
-      - pos:
-          x: 0
-          z: -1
-          level: 0
-        itemType: 1
-      - pos:
-          x: 0
-          z: 0
-          level: 0
-        itemType: 4
-      - pos:
-          x: 0
-          z: 1
-          level: 0
-        itemType: 3
-    heigth: 0
-    cost:
-      capacity: -1
-      type: 
-      ammount: 
-    constructed: 0
-    deconstructing: 0
-    constructionProgress: 0
-    maximalProgress: 0
-  assigned: []
+        y: 0
+      itemType: 3
+    - pos:
+        x: 0
+        z: -1
+        y: 0
+      itemType: 1
+    - pos:
+        x: 0
+        z: 0
+        y: 0
+      itemType: 4
+    - pos:
+        x: 0
+        z: 1
+        y: 0
+      itemType: 3
+  cost:
+    capacity: -1
+    type: 01000000
+    ammount: 0a000000
+  constructed: 0
+  deconstructing: 0
+  constructionProgress: 0
+  maximalProgress: 20
   limit: 2
 --- !u!54 &4084886823629516137
 Rigidbody:

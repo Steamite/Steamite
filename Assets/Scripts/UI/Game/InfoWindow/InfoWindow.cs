@@ -40,6 +40,7 @@ public class BindingContext
 
 public class InfoWindow : MonoBehaviour
 {
+    #region Variables
     [SerializeField] VisualTreeAsset resourceItem;
     public ResourceSkins resourceSkins;
 
@@ -64,7 +65,7 @@ public class InfoWindow : MonoBehaviour
     List<BindingContext> activeBindings;
 
     InfoMode lastInfo;
-
+    #endregion
 
     void Awake()
     {
@@ -168,9 +169,21 @@ public class InfoWindow : MonoBehaviour
             case InfoMode.Water:
             case InfoMode.Research:
                 throw new NotImplementedException();
+
             case InfoMode.Building:
                 buildingElement.dataSource = dataSource;
                 buildingElement.style.display = DisplayStyle.Flex;
+                
+                Building building = (Building)dataSource;
+                ToggleChildElems(buildingElement, new() { building.constructed ? "Constructed" : "Construction-View" });
+                if (!building.constructed)
+                {
+                    binding = Util.CreateBinding(nameof(building.constructionProgress));
+                    binding.sourceToUiConverters.AddConverter((ref float progress) => $"Construction progress: {(progress/building.maximalProgress)*100:0}%");
+                    RegisterTempBinding(new(inConstructionElement.Q<Label>("Progress"), "text"), binding, building);
+
+                    ((IUIElement)buildingElement.Q<VisualElement>("Resources")).Fill(building);
+                }
                 break;
 
             case InfoMode.Human:

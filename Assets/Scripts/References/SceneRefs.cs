@@ -10,11 +10,13 @@ public class SceneRefs : MonoBehaviour
     [SerializeField] GridTiles _gridTiles;
     [SerializeField] ClickabeObjectFactory _objectFactory;
     [SerializeField] Humans _humans;
+    [SerializeField] JobQueue _jobQueue;
     [SerializeField] Tick _tick;
 
     public static GridTiles gridTiles => instance._gridTiles;
     public static ClickabeObjectFactory objectFactory => instance._objectFactory;
     public static Humans humans => instance._humans;
+    public static JobQueue jobQueue => instance._jobQueue;
     public static Tick tick => instance._tick;
 
 

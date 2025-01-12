@@ -5895,6 +5895,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 8331111288221992689}
     m_Modifications:
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: constructed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: build.constructed
       value: 1
       objectReference: {fileID: 0}
@@ -8526,6 +8530,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8331111288221992689}
     m_Modifications:
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: constructed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: build.constructed
       value: 1
@@ -14037,6 +14045,10 @@ PrefabInstance:
     - target: {fileID: -85555690278644832, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
       propertyPath: m_SortingLayerID
       value: -323003751
+      objectReference: {fileID: 0}
+    - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      propertyPath: constructed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
       propertyPath: build.constructed
@@ -23769,6 +23781,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: constructed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: build.constructed
       value: 1
       objectReference: {fileID: 0}
@@ -28165,6 +28181,10 @@ PrefabInstance:
     - target: {fileID: 7082463086967758584, guid: f13d54c177aeb26438817d736c69c281, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
+      propertyPath: constructed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
       propertyPath: build.constructed

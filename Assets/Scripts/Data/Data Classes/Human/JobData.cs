@@ -19,25 +19,23 @@ public struct JobData
             human.destination.TryLink(human);
         }
 
-        if (typeof(Building) == jobSave.objectType)
+        switch (jobSave.interestType)
         {
-            interest = MyGrid.buildings.Single(q => q.id == jobSave.objectId);
+            case JobSave.InterestType.B:
+                interest = MyGrid.buildings.Single(q => q.id == jobSave.interestID);
+                break;
+            case JobSave.InterestType.R:
+                interest = SceneRefs.gridTiles.toBeDigged.FirstOrDefault(q => q.id == jobSave.interestID);
+                interest.GetComponent<Rock>().Assigned = human;
+                break;
+            case JobSave.InterestType.C:
+                interest = MyGrid.chunks.FirstOrDefault(q => q.id == jobSave.interestID);
+                break;
+            default:
+                return;
         }
-        else if (typeof(Rock) == jobSave.objectType)
-        {
-            interest = SceneRefs.gridTiles.toBeDigged.FirstOrDefault(q => q.id == jobSave.objectId);
-            interest.GetComponent<Rock>().Assigned = human;
-        }
-        else if (typeof(Chunk) == jobSave.objectType)
-        {
-            interest = MyGrid.chunks.FirstOrDefault(q => q.id == jobSave.objectId);
-        }
-
-        if (interest)
-        {
-            if (!interest.Equals(human.destination))
-                interest.GetComponent<StorageObject>()?.TryLink(human);
-        }
+        if (!interest.Equals(human.destination))
+            interest.GetComponent<StorageObject>()?.TryLink(human);
     }
     public JobData(List<GridPos> _path, ClickableObject _interest)
     {

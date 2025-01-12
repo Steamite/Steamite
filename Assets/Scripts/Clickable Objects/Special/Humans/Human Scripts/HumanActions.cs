@@ -3,14 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>Actions that can <see cref="Human"/>s do, and looking for new jobs.</summary>
 public static class HumanActions
 {
+    #region Variables
+    
+    /// <summary>Max ammount of resources that can be transfered each tick.</summary>
     static int transferPerTick = 5;
 
-    // Efficiency
+    //Efficiency modifiers
+    /// <summary>Multiplies progress of <see cref="Dig(Human)"/> action.</summary>
     static float digSpeed = 1f;
+    /// <summary>Multiplies progress of <see cref="Build(Human)"/> action.</summary>
     static float buildSpeed = 1f;
+    /// <summary>Multiplies progress of <see cref="DoProduction(Human)"/> action.</summary>
     static float productionSpeed = 1f;
+    #endregion
 
     public static void ChangeEfficiency(JobState toChange, int ammount)
     {
@@ -32,10 +40,11 @@ public static class HumanActions
         }
     }
 
+    #region Movement
     /// <summary>
-    /// moves worker to the next position in list, and deletes it. Upon reaching the end, decide what to do next(using jData)
+    /// Moves worker to the next position in list, and deletes it. Upon reaching the end, decide what to do next(using jData).
     /// </summary>
-    /// <param name="h"></param>
+    /// <param name="h">Actor doing the action.</param>
     public static void Move(Human h)
     {
         JobData job = h.Job;
@@ -59,6 +68,11 @@ public static class HumanActions
         }
     }
 
+    /// <summary>
+    /// After <see cref="Move(Human)"/> rotates toward next position.
+    /// </summary>
+    /// <param name="h"><inheritdoc cref="Move(Human)"/></param>
+    /// <param name="point">next position</param>
     static void Rotate(Human h, GridPos point)
     {
         GridPos humanPos = h.GetPos();
@@ -71,34 +85,53 @@ public static class HumanActions
         else if (point.z < humanPos.z)
             h.transform.rotation = Quaternion.Euler(0, 270, 0);
     }
+    #endregion
 
+    #region Rocks
     /// <summary>
-    /// digs the stone(lowers the rock integrity)
+    /// Lowers integrity of the interest(must be <see cref="Rock"/>). If <paramref name="h"/> destroyes it, removes coresponding job.
     /// </summary>
-    /// <param name="h"></param>
+    /// <param name="h"><inheritdoc cref="Move(Human)"/></param>
     public static void Dig(Human h)
     {
-        if(h.Job.interest.GetComponent<Rock>().DamageRock(digSpeed * h.Efficiency.efficiency))
+        if(h.Job.interest.GetComponent<Rock>().DamageRock(digSpeed * h.Efficiency))
         {
             h.transform.parent.parent.GetComponent<JobQueue>().CancelJob(JobState.Digging, h.Job.interest); // removes job order
         }
     }
+    #endregion
 
+    #region Production
     /// <summary>
-    /// if there're all needed resources, progress build, otherwise store
+    /// adds to production progress, if there's no workplace go Idle
+    /// </summary>
+    /// <param name="h"></param>
+    public static void DoProduction(Human h)
+    {
+        if (h.workplace)
+        {
+            h.workplace.Produce(h.Efficiency * productionSpeed);
+        }
+        else
+        {
+            h.Idle();
+        }
+    }
+    #endregion
+
+    #region Buildings
+    /// <summary>
+    /// Adds to production progress
     /// </summary>
     /// <param name="h"></param>
     public static void Build(Human h)
     {
         Building building = h.Job.interest.GetComponent<Building>();
-        building.build.constructionProgress++;
-        if (building.build.constructionProgress >= building.build.maximalProgress)
+        if (building.ProgressConstruction(h.Efficiency * buildSpeed))
         {
-            building.GetComponent<Building>().FinishBuild();
-            h.GetComponentInParent<JobQueue>().CancelJob(JobState.Constructing, building.GetComponent<ClickableObject>());
             building.LocalRes.RemoveRequest(h);
+            SceneRefs.jobQueue.CancelJob(JobState.Constructing, building);
             LookForNew(h);
-            return;
         }
     }
 
@@ -109,8 +142,8 @@ public static class HumanActions
     public static void Demolish(Human h)
     {
         Building building = h.Job.interest.GetComponent<Building>();
-        building.build.constructionProgress -= 2;
-        if (building.build.constructionProgress <= 0)
+        building.constructionProgress -= 2;
+        if (building.constructionProgress <= 0)
         {
             building.Deconstruct(h.GetPos());
             h.GetComponentInParent<JobQueue>().CancelJob(JobState.Deconstructing, building);
@@ -118,6 +151,9 @@ public static class HumanActions
         }
     }
 
+    #endregion
+
+    #region Storage
     public static void Store(Human h)
     {
         try
@@ -131,7 +167,6 @@ public static class HumanActions
             Debug.LogError(e);
         }
     }
-
     public static void Take(Human h)
     {
         try
@@ -144,14 +179,17 @@ public static class HumanActions
             Debug.LogError(e);
         }
     }
+    #endregion
 
+    #region Idle
     /// <summary>
-    /// looks for new jobs, or chunks to empty, TODO: resuply and emptying is not a job, make it like a chunk wíth higher priority
+    /// Looks for new jobs.
     /// </summary>
-    /// <param name="h"></param>
+    /// <param name="h">Human that needs the new job.</param>
     public static void LookForNew(Human h)
     {
         h.destination = null;
+        h.ChangeAction(null);
         if (!h.nightTime && !h.lookingForAJob)
         {
             JobQueue jobQueue = h.transform.parent.GetComponentInParent<JobQueue>();
@@ -164,6 +202,9 @@ public static class HumanActions
                     return;
             }
         }
+        else if(h.lookingForAJob)
+            Debug.LogError("SOMETHING IS WRONG, should not get here!");
+
         h.ChangeAction(null);
         h.Idle();
         h.lookingForAJob = false;
@@ -193,14 +234,14 @@ public static class HumanActions
                 // builds that are only missing progress not resources
                 if (jobQueue.constructions.Count == 0)
                     break;
-                List<Building> buildings = jobQueue.constructions.Where(q => q.LocalRes.Future().Equals(q.build.cost)).ToList();
+                List<Building> buildings = jobQueue.constructions.Where(q => q.LocalRes.Future().Equals(q.cost)).ToList();
                 if (FindInterests(buildings.Where(q => q.LocalRes.carriers.Count == 0).Cast<ClickableObject>(), h, j))
                 {
-                    h.Job.interest.GetComponent<Building>().LocalRes.AddRequest(new(), h, 0);
+                    h.Job.interest.GetComponent<Building>().RequestRes(new(), h, 0);
                     return false;
                 }
                 // builds that are missing resources to progress further
-                if (FilterBuilds(jobQueue.constructions.Where(q => !q.LocalRes.Future().Equals(q.build.cost)), h, j))
+                if (FilterBuilds(jobQueue.constructions.Where(q => !q.LocalRes.Future().Equals(q.cost)), h, j))
                     return false;
                 break;
             case JobState.Deconstructing:
@@ -220,7 +261,7 @@ public static class HumanActions
                         Resource toMove = h.destination.LocalRes.Future();
                         Resource r = new();
                         MyRes.MoveRes(r, toMove.Clone(), toMove, h.Inventory.capacity < MyRes.globalStorageSpace ? h.Inventory.capacity : MyRes.globalStorageSpace);
-                        h.destination.LocalRes.AddRequest(r, h, -1);
+                        h.destination.RequestRes(r, h, -1);
                         MyRes.FindStorage(r, h);
                         if (toMove.ammount.Sum() == 0)
                         {
@@ -292,20 +333,5 @@ public static class HumanActions
         }
         return false;
     }
-
-    /// <summary>
-    /// adds to production progress, if there's no workplace go Idle
-    /// </summary>
-    /// <param name="h"></param>
-    public static void DoProduction(Human h)
-    {
-        if (h.workplace)
-        {
-            h.workplace.Produce(h.Efficiency.efficiency * productionSpeed);
-        }
-        else
-        {
-            h.Idle();
-        }
-    }
+    #endregion 
 }

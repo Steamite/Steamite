@@ -1,8 +1,6 @@
 using AbstractControls;
 using InfoWindowElements;
-using System;
 using UnityEngine.UIElements;
-using static UnityEngine.Analytics.IAnalytic;
 
 namespace RadioGroups
 {
@@ -10,64 +8,58 @@ namespace RadioGroups
     [UxmlElement]
     public partial class LevelUnlockerRadioGroup : CustomRadioButtonGroup
     {
+        LevelState[] states;
+
         new public LevelState this[int i]
         {
-            get => ((LevelUnlocker)_itemsSource[i]).state;
+            get => states[i];
         }
+
         #region Base
         public LevelUnlockerRadioGroup() : base()
         {
-            fixedItemHeight = 75;
-            for (int i = 0; i < 5; i++)
-            {
-                AddItem(new LevelUnlocker(i, LevelState.Unavailable));
-            }
+            states = new LevelState[5];
+            choices = new string[] { "1", "2", "3", "4", "5"};
         }
-        protected override CustomRadioButton DefaultMakeItem() => new LevelUnlocker();
-        protected override void DefaultBindItem(VisualElement element, int index)
+
+        protected override CustomRadioButton CreateButton(int i)
         {
-            base.DefaultBindItem(element, index);
-            LevelUnlocker elem = (LevelUnlocker)element;
-            if (((LevelUnlocker)_itemsSource[index]).IsSelected)
-                _selectedButton = elem;
-            elem.state = ((LevelUnlocker)_itemsSource[index]).state;
-            elem.ToggleButtonStyle();
+            return new LevelUnlocker(i, states[i]);
         }
         #endregion
 
 
-        public int SetFill(Storage storage, LevelPresent levelData)
+        public int SelectUpdate(Storage storage, LevelPresent levelData)
         {
             GridPos gridPos = storage.GetPos();
 
-            SelectedId = gridPos.y;
-            if (_selectedButton != null)
+            if (SelectedChoice > -1)
             {
-                _selectedButton.Deselect();
-                _selectedButton = null;
+                ((LevelUnlocker)ElementAt(SelectedChoice)).Deselect();
             }
+            SelectedChoice = gridPos.y;
             bool unlocked = true;
             // check up
-            for (int i = SelectedId - 1; i > -1; i--)
+            for (int i = SelectedChoice - 1; i > -1; i--)
             {
                 gridPos.y = i;
-                CheckLevel(gridPos, ref unlocked, levelData, (LevelUnlocker)_itemsSource[i]);
+                CheckLevel(gridPos, ref unlocked, levelData);
             }
 
             // check down
             unlocked = true;
-            for (int i = SelectedId + 1; i < 5; i++)
+            for (int i = SelectedChoice + 1; i < 5; i++)
             {
                 gridPos.y = i;
-                CheckLevel(gridPos, ref unlocked, levelData, (LevelUnlocker)_itemsSource[i]);
+                CheckLevel(gridPos, ref unlocked, levelData);
             }
 
-            ((LevelUnlocker)_itemsSource[SelectedId]).state = LevelState.Selected;
-            ((LevelUnlocker)_itemsSource[SelectedId]).Select();
+            states[SelectedChoice] = LevelState.Selected;
+            ((LevelUnlocker)ElementAt(SelectedChoice)).Select();
 
-            RefreshItems();
-            return SelectedId;
+            return SelectedChoice;
         }
+
 
         /// <summary>
         /// Checks level supplyied by for loop.
@@ -75,31 +67,31 @@ namespace RadioGroups
         /// <param name="i">level number</param>
         /// <param name="gridPos">elevator position</param>
         /// <param name="unlocked">Is it contineous?</param>
-        void CheckLevel(GridPos gridPos, ref bool unlocked, LevelPresent levelData, LevelUnlocker levelUnlocker)
+        void CheckLevel(GridPos gridPos, ref bool unlocked, LevelPresent levelData)
         {
             if (unlocked)
             {
                 if (MyGrid.GetGridItem(gridPos) is Elevator)
-                    levelUnlocker.state = LevelState.Unlocked;
+                    SetStates(gridPos.y, LevelState.Unlocked);
                 else
                 {
                     unlocked = false;
                     if (MyRes.CanAfford(levelData.costs[gridPos.y]))
-                        levelUnlocker.state = LevelState.CanUnlock;
+                        SetStates(gridPos.y, LevelState.CanUnlock);
                     else
-                        levelUnlocker.state = LevelState.Available;
+                        SetStates(gridPos.y, LevelState.Available);
                 }
             }
             else
-                levelUnlocker.state = LevelState.Unavailable;
+                SetStates(gridPos.y, LevelState.Unavailable);
         }
 
         public bool SetStates(int i, LevelState state)
         {
-            LevelUnlocker unlocker = (LevelUnlocker)_itemsSource[i];
-            if(unlocker.state != state)
+            if(states[i] != state)
             {
-                unlocker.state = state;
+                states[i] = state;
+                ((LevelUnlocker)ElementAt(i)).ToggleButtonStyle(state);
                 return true;
             }
             return false;

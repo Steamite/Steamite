@@ -5,11 +5,12 @@ using System.Linq;
 using UnityEngine.UIElements;
 using Unity.Properties;
 
+/// <summary>Adds Production Handling.</summary>
 public class ProductionBuilding : AssignBuilding
 {
+    /// <summary>The Storage for paying the production cost.</summary>
     StorageResource inputResource = new();
-    [CreateProperty]
-    public StorageResource InputResource
+    [CreateProperty] public StorageResource InputResource
     {
         get => inputResource;
         set
@@ -18,11 +19,15 @@ public class ProductionBuilding : AssignBuilding
             UIUpdate(nameof(InputResource));
         }
     }
-    [Header("Production")]
-    public Resource productionCost = new();
+
+    /// <summary>Cost of one production cycle.</summary>
+    [Header("Production")] public Resource productionCost = new();
+    /// <summary>Production cycle yeild.</summary>
     public Resource production = new();
-    [Header("Time")]
-    public float prodTime = 20;
+    
+    /// <summary>Time it takes to finish one production cycle.</summary>
+    [Header("Time")] public float prodTime = 20;
+    /// <summary>Current progress.</summary>
     protected float currentTime = 0;
     [CreateProperty] public float CurrentTime
     {
@@ -33,20 +38,32 @@ public class ProductionBuilding : AssignBuilding
             UIUpdate(nameof(CurrentTime));
         }
     }
+    /// <summary>Multiplies the weight of progress additions.</summary>
     public int modifier = 1;
-    [Header("States")]
-    public List<Human> working = new();
+
+    /// <summary>List of currently pressent and working <see cref="Human"/>s.</summary>
+    [Header("States")] public List<Human> working = new();
+    /// <summary>Holds data about production status.</summary>
     public ProductionStates pStates = new();
 
 
-
     #region Window
+    /// <summary>
+    /// If there's no other component in <see href="toEnable"/> adds "Production", and fills it.
+    /// </summary>
+    /// <inheritdoc/>
     protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
     {
         if (toEnable.Count == 0)
+        {
             toEnable.Add("Production");
-        base.OpenWindowWithToggle(info, toEnable);
-        ((IUIElement)info.constructedElement.Q<VisualElement>("Production")).Fill(this);
+            base.OpenWindowWithToggle(info, toEnable);
+            ((IUIElement)info.constructedElement.Q<VisualElement>("Production")).Fill(this);
+        }
+        else
+        {
+            base.OpenWindowWithToggle(info, toEnable);
+        }
     }
     #endregion
 
@@ -72,11 +89,11 @@ public class ProductionBuilding : AssignBuilding
         pStates = (save as ProductionBSave).pStates;
         if (pStates.supply && pStates.supplied == false)
         {
-            SceneRefs.humans.GetComponent<JobQueue>().AddJob(JobState.Supply, this);
+            SceneRefs.jobQueue.AddJob(JobState.Supply, this);
         }
-        if (build.constructed && GetDiff(new()).ammount.Sum() > 0)
+        if (constructed && GetDiff(new()).ammount.Sum() > 0)
         {
-            SceneRefs.humans.GetComponent<JobQueue>().AddJob(JobState.Pickup, this);
+            SceneRefs.jobQueue.AddJob(JobState.Pickup, this);
         }
         RefreshStatus();
         base.Load(save);
@@ -86,7 +103,7 @@ public class ProductionBuilding : AssignBuilding
     #region Storage
     public override void Store(Human h, int transferPerTick)
     {
-        if (build.constructed)
+        if (constructed)
         {
             int index = inputResource.carriers.IndexOf(h);
             if (index == -1)
@@ -113,7 +130,7 @@ public class ProductionBuilding : AssignBuilding
             int index = localRes.carriers.IndexOf(h);
             if (localRes.requests[index].ammount.Sum() == 0)
             {
-                if (localRes.stored.Equals(build.cost))
+                if (localRes.stored.Equals(cost))
                 {
                     localRes.requests[index].ammount = new();
                     localRes.requests[index].type = new();
@@ -126,12 +143,13 @@ public class ProductionBuilding : AssignBuilding
                 return;
             }
             MyRes.MoveRes(localRes.stored, h.Inventory, localRes.requests[index], transferPerTick);
+            UIUpdate(nameof(LocalRes));
         }
     }
     public override void RequestRes(Resource request, Human human, int mod)
     {
         StorageResource storage = null;
-        if (build.constructed && mod == 1)
+        if (constructed && mod == 1)
             storage = inputResource;
         else
             storage = localRes;
@@ -161,9 +179,9 @@ public class ProductionBuilding : AssignBuilding
     public override void OrderDeconstruct()
     {
         base.OrderDeconstruct();
-        if (build.constructed)
+        if (constructed)
         {
-            if (build.deconstructing) // has just been ordered
+            if (deconstructing) // has just been ordered
             {
                 inputResource.ReassignCarriers(false);
                 Human human = localRes.carriers.Count > 0 && assigned.Count > 0 ? assigned[0] : null;
@@ -194,7 +212,7 @@ public class ProductionBuilding : AssignBuilding
     }
     public override Chunk Deconstruct(GridPos instantPos)
     {
-        SceneRefs.humans.GetComponent<JobQueue>().CancelJob(JobState.Supply, this);
+        SceneRefs.jobQueue.CancelJob(JobState.Supply, this);
         Chunk c = base.Deconstruct(instantPos);
         if(inputResource.stored.ammount.Sum() > 0){
             if (!c)
@@ -217,7 +235,7 @@ public class ProductionBuilding : AssignBuilding
     #region Placing
     public override Resource GetDiff(Resource r)
     {
-        if (!build.constructed)
+        if (!constructed)
         {
             return base.GetDiff(r);
         }
@@ -350,7 +368,7 @@ public class ProductionBuilding : AssignBuilding
 
     public void RequestRestock()
     {
-        JobQueue jQ = SceneRefs.humans.GetComponent<JobQueue>();
+        JobQueue jQ = SceneRefs.jobQueue;
         if (!jQ.supplyNeeded.Contains(this) && pStates.supply)
         {
             jQ.AddJob(JobState.Supply, this);
@@ -359,7 +377,7 @@ public class ProductionBuilding : AssignBuilding
 
     public void RequestPickup()
     {
-        JobQueue jQ = SceneRefs.humans.GetComponent<JobQueue>();
+        JobQueue jQ = SceneRefs.jobQueue;
         if (!jQ.pickupNeeded.Contains(this))
         {
             jQ.AddJob(JobState.Pickup, this);

@@ -64,7 +64,7 @@ public class ClickabeObjectFactory : MonoBehaviour
     public Elevator CreateElevator(GridPos gp, bool isMain = false)
     {
         Elevator el = (Elevator)Instantiate(buildPrefabs.GetPrefab("Elevator"), new Vector3(gp.x, (gp.y * LEVEL_HEIGHT) + BUILD_OFFSET, gp.z), Quaternion.identity, MyGrid.FindLevelBuildings(gp.y));
-        el.build.constructed = true;
+        el.constructed = true;
         el.main = isMain;
         el.name = el.name.Replace("(Clone)", "");
         MyGrid.SetBuilding(el, true);
@@ -74,10 +74,13 @@ public class ClickabeObjectFactory : MonoBehaviour
 
     public Chunk CreateAChunk(GridPos gridPos, Resource startingResource)
     {
-        Chunk chunk = Instantiate(specialPrefabs.GetPrefab("Chunk"), gridPos.ToVec(CHUNK_OFFSET), Quaternion.identity, MyGrid.FindLevelChunks(gridPos.y)).GetComponent<Chunk>();
-        chunk.Init(startingResource);
-
-        return chunk;
+        if(startingResource.ammount.Sum() > 0)
+        {
+            Chunk chunk = Instantiate(specialPrefabs.GetPrefab("Chunk"), gridPos.ToVec(CHUNK_OFFSET), Quaternion.identity, MyGrid.FindLevelChunks(gridPos.y)).GetComponent<Chunk>();
+            chunk.Init(startingResource);
+            return chunk;
+        }
+        return null;
     }
     
     public Human CreateAHuman(GridPos gp, Material material, int i)
@@ -99,7 +102,7 @@ public class ClickabeObjectFactory : MonoBehaviour
     {
         Building _pref = buildPrefabs.GetPrefab(save.prefabName) as Building; // find the prefab
 
-        GridPos rotate = MyGrid.Rotate(save.build.blueprint.moveBy, transform.rotation.eulerAngles.y);
+        GridPos rotate = MyGrid.Rotate(save.blueprint.moveBy, transform.rotation.eulerAngles.y);
         Building b = Instantiate(_pref,
             new Vector3(save.gridPos.x + rotate.x, (save.gridPos.y * LEVEL_HEIGHT) + BUILD_OFFSET, save.gridPos.z + rotate.z),
             Quaternion.Euler(0, save.rotationY, 0),

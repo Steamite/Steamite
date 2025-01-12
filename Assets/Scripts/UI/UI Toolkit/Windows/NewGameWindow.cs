@@ -38,7 +38,7 @@ namespace StartMenu
             menu = _root.Q<VisualElement>("New-Menu");
             startButton = menu.Q<Button>("Start");
             worlds = menu.Q<WorldRadioGroup>("Worlds"); 
-            worlds.Init(
+            worlds.SetChangeCallback(
                 (i) =>
                 {
                     selectedOption = i;
