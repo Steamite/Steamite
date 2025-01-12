@@ -84,7 +84,7 @@ public class Trade : FullscreenWindow
             {
                 LoadExpedition(exp);
             }
-            SceneRefs.tick.tickAction += MoveTradeRouteProgress;
+            SceneRefs.tick.tickAction += MoveTradeRouteprogress;
             StartCoroutine(MoveTradeRoute());
         }
     }
@@ -147,7 +147,7 @@ public class Trade : FullscreenWindow
             dropdown.options.Add(new(s));
         }
         if (outposts.Count(q => !q.constructed) > 0)
-            SceneRefs.tick.tickAction += outpostInfo.UpdateOutpostProgress;
+            SceneRefs.tick.tickAction += outpostInfo.UpdateOutpostprogress;
     }
     
     /// <summary>
@@ -352,11 +352,11 @@ public class Trade : FullscreenWindow
         slider.transform.rotation = Quaternion.Euler(new Vector3(0, 0, dif.x > 0 ? (180 * f / Mathf.PI) : -180 + (180 * f / Mathf.PI)));
 
         expedition.tradeLocation = lastIndex;
-        expedition.maxProgress = slider.maxValue;
+        expedition.maxprogress = slider.maxValue;
         expeditions.Add(expedition);
         if (expeditions.Count == 1)
         {
-            SceneRefs.tick.tickAction += MoveTradeRouteProgress;
+            SceneRefs.tick.tickAction += MoveTradeRouteprogress;
             StartCoroutine(MoveTradeRoute());
         }
     }
@@ -372,7 +372,7 @@ public class Trade : FullscreenWindow
 
         float tangens = Mathf.Atan(dif.y / dif.x);
         Slider slider = t.GetChild(expedition.sliderID).GetComponent<Slider>();
-        slider.maxValue = expedition.maxProgress;
+        slider.maxValue = expedition.maxprogress;
 
         slider.GetComponent<RectTransform>().sizeDelta = 
             new(
@@ -387,14 +387,14 @@ public class Trade : FullscreenWindow
         slider.transform.position = (posTran + colonyTran) / 2;
         slider.handleRect.GetComponent<ExpeditionInfo>().SetExpedition(expedition);
         slider.gameObject.SetActive(true);
-        slider.value = expedition.currentProgress;
+        slider.value = expedition.currentprogress;
     }
 
-    void MoveTradeRouteProgress()
+    void MoveTradeRouteprogress()
     {
         foreach(TradeExpedition exp in expeditions)
         {
-            exp.currentProgress += exp.goingToTrade ? 4 : -4;
+            exp.currentprogress += exp.goingToTrade ? 4 : -4;
         }
     }
 
@@ -406,7 +406,7 @@ public class Trade : FullscreenWindow
             {
                 TradeExpedition exp = expeditions[i];
                 Slider slider = window.transform.GetChild(0).GetChild(1).GetChild(exp.sliderID).GetComponent<Slider>();
-                slider.value = Mathf.Lerp(slider.value, exp.currentProgress, expeditionSpeed * Time.deltaTime * Time.timeScale);
+                slider.value = Mathf.Lerp(slider.value, exp.currentprogress, expeditionSpeed * Time.deltaTime * Time.timeScale);
                 slider.handleRect.GetComponent<ExpeditionInfo>().MoveInfo();
                 if(exp.goingToTrade ? slider.value >= slider.maxValue : slider.value <= 0)
                 {
@@ -416,7 +416,7 @@ public class Trade : FullscreenWindow
                         tradeInfo.UpdateTradeText();
                         if (expeditions.Count == 0)
                         {
-                            SceneRefs.tick.tickAction -= MoveTradeRouteProgress;
+                            SceneRefs.tick.tickAction -= MoveTradeRouteprogress;
                             yield break;
                         }
                     }

@@ -50,10 +50,12 @@ namespace InfoWindowViews
 
         public void Fill(object data)
         {
+            storage = (Storage)data;
             switch (data)
             {
                 case Elevator:
                     hierarchy.ElementAt(0).style.display = DisplayStyle.Flex;
+                    levelTab.Open(storage);
                     break;
                 case Storage:
                     activeTab = contentContainer.Q<Tab>("Storage");
@@ -62,9 +64,7 @@ namespace InfoWindowViews
                 default:
                     throw new NotImplementedException();
             }
-            storage = (Storage)data;
             storageTab.Open(storage, elemPref);
-            levelTab.Open(storage);
         }
     }
 }

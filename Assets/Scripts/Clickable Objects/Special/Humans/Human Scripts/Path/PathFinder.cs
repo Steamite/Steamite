@@ -96,7 +96,7 @@ public static class PathFinder
                     continue;
                 }*/
                 
-                foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q=> q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q=>q.transform))//item in building.build.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
+                foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q=> q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q=>q.transform))//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
                 {
                     coordinates.positions.Add(new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z)));
                     entryPoints.Add(i);
@@ -119,7 +119,7 @@ public static class PathFinder
         foreach (Building el in MyGrid.buildings.Where(q => q is Elevator))
         {
             GridPos gp = el.GetPos();
-            foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q => q.name == el.id.ToString()).GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.build.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance).Skip(1))
+            foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q => q.name == el.id.ToString()).GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance).Skip(1))
             {
                 coordinates.elevPositions.Add(gp);
                 coordinates.elevEnterPositions.Add(new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z)));
@@ -154,13 +154,13 @@ public static class PathFinder
             _jData = FindPath(new() { h.home }, h);
             if (_jData.interest)
             {
-                h.Efficiency.ManageModifier(ModType.House, true);
+                h.ModifyEfficiency(ModType.House, true);
                 return _jData.path;
             }
         }
         Building elevator = MyGrid.buildings.First(q => q is Elevator el && el.main);
         _jData = FindPath(new() { elevator }, h);
-        h.Efficiency.ManageModifier(ModType.House, false);
+        h.ModifyEfficiency(ModType.House, false);
         if (_jData.interest)
         {
             return _jData.path;
@@ -295,7 +295,7 @@ public static class PathFinder
 
                     foreach (RectTransform t in MyGrid.GetOverlay(level).buildingOverlays
                         .First(q => q.name == el.id.ToString())
-                        .GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.build.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance).Skip(1))
+                        .GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance).Skip(1))
                     {
                         PathNode finishMove =
                             new(new(Mathf.Round(t.transform.position.x), level, Mathf.Round(t.transform.position.z)), outElevatorNode.minCost + 1, outElevatorNode);
@@ -319,10 +319,10 @@ public static class PathFinder
     }
     #endregion Tile Checks
 
-    static GridPos LastStep(GridPos _vec, GameObject build, int mod)
+    static GridPos LastStep(GridPos _vec, GameObject building, int mod)
     {
         GridPos vec = new(_vec.x, _vec.y, _vec.z);
-        float rotation = build.transform.eulerAngles.y;
+        float rotation = building.transform.eulerAngles.y;
         int rot = Mathf.RoundToInt(rotation / 90f);
         switch (rot)
         {

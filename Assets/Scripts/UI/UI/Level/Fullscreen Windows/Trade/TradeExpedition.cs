@@ -9,8 +9,8 @@ public class TradeExpedition
     public int tradeLocation = -1;
     public int sliderID = -1;
 
-    public float currentProgress = 0;
-    public float maxProgress = 0;
+    public float currentprogress = 0;
+    public float maxprogress = 0;
 
     public Resource buying;
     public int reward;
@@ -24,7 +24,7 @@ public class TradeExpedition
     {
         if (goingToTrade)
         {
-            currentProgress = maxProgress;
+            currentprogress = maxprogress;
             goingToTrade = false;
             return false;
             //SceneRefs.tradeWindow.transform.GetChild(0).GetChild(0).GetChild(tradeLocation).GetComponent<Slider>().value =;

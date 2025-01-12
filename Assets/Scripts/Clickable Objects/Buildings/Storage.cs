@@ -29,15 +29,15 @@ public class Storage : Building
     {
         base.Load(save);
         canStore = (save as StorageBSave).canStore;
-        if (build.constructed)
-            SceneRefs.humans.GetComponent<JobQueue>().storages.Add(this);
+        if (constructed)
+            SceneRefs.jobQueue.storages.Add(this);
     }
     #endregion
 
     #region Storing
     public override void RequestRes(Resource request, Human h, int mod)
     {
-        if (build.constructed && mod == 1)
+        if (constructed && mod == 1)
         {
             int spaceToStore = localRes.stored.capacity - localRes.Future().ammount.Sum();
             Resource transferRes = new();

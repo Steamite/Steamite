@@ -44,11 +44,3 @@ _______________ {
     left: 0;
     top: 0;
 }
-
-#Left-Bar #Worlds #unity-content-viewport {
-    overflow: visible;
-}
-
-#Left-Bar #Worlds #unity-content-container {
-    overflow: visible;
-}

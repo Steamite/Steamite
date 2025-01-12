@@ -1,28 +1,26 @@
 using System;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
+/// <summary>
+/// Holds resources that are laying on a Road. <br/>
+/// Created by destroying <see cref="Rock"/>s and <see cref="Building"/>s.
+/// </summary>
 public class Chunk : StorageObject
 {
     #region Basic Operations
+    /// <summary>Creates a list from <see cref="MyGrid.chunks"/></summary>
     public override void UniqueID()
     {
         CreateNewId(MyGrid.chunks.Select(q => q.id).ToList());
     }
-    public override void GetID(JobSave jobSave)
-    {
-        jobSave.objectId = id;
-        jobSave.objectType = typeof(Chunk);
-    }
-    public override GridPos GetPos()
-    {
-        return new(transform.position.x, (transform.position.y - 1) / 2, transform.position.z);
-    }
+    /// <inheritdoc/>
+    public override GridPos GetPos() => new(transform.position.x, (transform.position.y - 1) / 2, transform.position.z);
 
     #endregion
 
     #region Window
+    /// <inheritdoc/>
     public override InfoWindow OpenWindow()
     {
         InfoWindow info = base.OpenWindow();
@@ -32,6 +30,7 @@ public class Chunk : StorageObject
     #endregion
 
     #region Saving
+    /// <inheritdoc/>
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -43,6 +42,7 @@ public class Chunk : StorageObject
         }
         return null;
     }
+    /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
         transform.GetChild(1).GetComponent<MeshRenderer>().material.color = (save as ChunkSave).resColor.ConvertColor();
@@ -51,10 +51,17 @@ public class Chunk : StorageObject
     #endregion
 
     #region Storage
-    public override void Store(Human h, int transferPerTick)
-    {
-        throw new NotSupportedException();
-    }
+    /// <summary>
+    /// Throws an error, it's not allowed to store resources in a chunk.
+    /// </summary>
+    public override void Store(Human h, int transferPerTick) => throw new NotSupportedException();
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// If there are no resources left, destroyes the chunk.
+    /// </summary>
+    /// <param name="h"><inheritdoc/></param>
+    /// <param name="transferPerTick"><inheritdoc/></param>
     public override void Take(Human h, int transferPerTick)
     {
         if (h.destination != null)
@@ -86,11 +93,24 @@ public class Chunk : StorageObject
             Destroy(gameObject);
         }
     }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// Also updates UI.
+    /// </summary>
+    /// <param name="request"><inheritdoc/></param>
+    /// <param name="h"><inheritdoc/></param>
+    /// <param name="mod"><inheritdoc/></param>
     public override void RequestRes(Resource request, Human h, int mod)
     {
         base.RequestRes(request, h, mod);
         UIUpdate(nameof(LocalRes));
     }
+    
+    /// <summary>
+    /// Finds storage that can store local resources.
+    /// </summary>
+    /// <param name="h"><see cref="Human"/> that is looking for a place to deposite resources.</param>
     void FindS(Human h)
     {
         MyRes.FindStorage(h);
@@ -98,6 +118,12 @@ public class Chunk : StorageObject
             Debug.LogError("Fuck, where do I store this?");
     }
     #endregion
+
+    /// <summary>
+    /// Assigns ID, resources and self to <see cref="MyGrid.chunks"/>.<br/> 
+    /// Updates global resource counter. And fix object name.
+    /// </summary>
+    /// <param name="res"></param>
     public void Init(Resource res)
     {
         UniqueID();

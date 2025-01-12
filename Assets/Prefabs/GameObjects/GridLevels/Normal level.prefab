@@ -70,6 +70,7 @@ MonoBehaviour:
   buildings: {fileID: 8331111288221992689}
   pipes: {fileID: 3859038626553102039}
   overlays: {fileID: 9097239234769059568}
+  unlocked: 0
 --- !u!1 &4805848459828854716
 GameObject:
   m_ObjectHideFlags: 0
@@ -18774,6 +18775,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8331111288221992689}
     m_Modifications:
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: constructed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: build.constructed
       value: 1

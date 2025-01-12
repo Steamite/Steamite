@@ -40,66 +40,63 @@ namespace InfoWindowElements
 
         public override void Fill(object data)
         {
-            DataBinding binding;
+            DataBinding binding = null;
             switch (data)
             {
-                case ProductionBuilding:
-                    ProductionBuilding building = (ProductionBuilding)data;
-                    resources = new();
-
-                    if (cost)
+                case Building:
+                    Building b = (Building)data;
+                    if (!b.constructed)
                     {
-                        for (int i = 0; i < building.productionCost.type.Count; i++)
-                            resources.Add(new DoubleUIResource(
-                                    0,
-                                    building.productionCost.ammount[i],
-                                    building.productionCost.type[i]));
-                        binding = Util.CreateBinding(nameof(ProductionBuilding.InputResource));
+                        binding = SetupResTypes(b.cost, nameof(Building.LocalRes));
+                    }
+                    else if (data is ProductionBuilding)
+                    {
+                        if (cost)
+                            binding = SetupResTypes(((ProductionBuilding)b).productionCost, nameof(ProductionBuilding.InputResource));
+                        else
+                            binding = SetupResTypes(((ProductionBuilding)b).production, nameof(ProductionBuilding.LocalRes));
                     }
                     else
-                    {
-                        for (int i = 0; i < building.production.type.Count; i++)
-                            resources.Add(new DoubleUIResource(
-                                    0,
-                                    building.production.ammount[i],
-                                    building.production.type[i]));
-                        binding = Util.CreateBinding(nameof(ProductionBuilding.LocalRes));
-                    }
-
+                        break;
                     binding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage.stored));
-                    SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
+
                 case LevelsTab:
                     LevelsTab tab = (LevelsTab)data;
                     Resource resource = tab.LevelData.costs[tab.SelectedLevel];
-                    resources = new();
 
                     if (cost)
-                    {
-                        for (int i = 0; i < resource.type.Count; i++)
-                            resources.Add(new DoubleUIResource(
-                                    0,
-                                    resource.ammount[i],
-                                    resource.type[i]));
-                        binding = Util.CreateBinding(nameof(ResourceDisplay.GlobalResources));
-                    }
+                        binding = SetupResTypes(resource, nameof(ResourceDisplay.GlobalResources));
                     else
                         throw new NotImplementedException();
 
 
                     binding.sourceToUiConverters.AddConverter((ref Resource globalStorage) =>
                     {
-                        tab.UpdateState();
+                        tab.UpdateCostView();
                         return ToUIRes(globalStorage);
                     });
-                    dataSource = SceneRefs.stats.GetComponent<ResourceDisplay>();
-                    SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, dataSource);
+                    data = SceneRefs.stats.GetComponent<ResourceDisplay>();
+                    dataSource = data;
                     break;
                 default:
                     throw new NotImplementedException(data.ToString());
             }
+            SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
         }
 
+        DataBinding SetupResTypes(Resource resource, string propName)
+        {
+            resources = new();
+            for (int i = 0; i < resource.type.Count; i++)
+                resources.Add(new DoubleUIResource(
+                        0,
+                        resource.ammount[i],
+                        resource.type[i]));
+            return Util.CreateBinding(propName);
+        }
+
+        #region Convertors
         protected override List<UIResource> ToUIRes(Resource storage)
         {
             for (int i = 0; i < storage.type.Count; i++)
@@ -118,6 +115,7 @@ namespace InfoWindowElements
             else
                 return $"{((DoubleUIResource)resource).secondAmmount}({resource.ammount})";
         }
+        #endregion
     }
 }
 

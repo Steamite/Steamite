@@ -57,23 +57,10 @@ public static class MyGrid
         GameObject.Find("Scene").GetComponent<SceneRefs>().Init();
         currentLevel = 2;
     }
-
-    public static StringBuilder PrintGrid()
-    {
-        StringBuilder grids = new();
-        int i = 0;
-        foreach (GroundLevel level in levels.Where(q => q))
-        {
-            grids.AppendLine($"Grid {i}:");
-            grids.Append(level.PrintGrid());
-            i++;
-        }
-        return grids;
-    }
     #endregion Grid Access
 
     #region Grid Creation
-    public static StringBuilder CreateGrid(GroundLevel level, GroundLevel mainLevel)
+    public static void CreateGrid(GroundLevel level, GroundLevel mainLevel)
     {
         PrepGridLists();
         for (int i = 0; i < 5; i++)
@@ -99,7 +86,6 @@ public static class MyGrid
             levels[i] = _level;
             _level.CreateGrid();
         }
-        return PrintGrid();
     }
 
     public static GroundLevel AddEmptyGridLevel(GroundLevel templateLevel, int i, int gridSize)
@@ -131,6 +117,7 @@ public static class MyGrid
         SceneRefs.gridTiles.toBeDigged.Remove(rock); // removes from list
         SceneRefs.gridTiles.markedTiles.Remove(rock);
         SceneRefs.gridTiles.DestroyUnselect(rock);
+        GameObject.Destroy(rock.gameObject);
     }
 
     public static void UnsetBuilding(Building building)
@@ -143,28 +130,16 @@ public static class MyGrid
         {
             SceneRefs.gridTiles.DestroyUnselect(building);
             GridPos gridPos = building.GetPos();
-            GridPos p = Rotate(building.build.blueprint.moveBy, building.transform.rotation.eulerAngles.y);
+            GridPos p = Rotate(building.blueprint.moveBy, building.transform.rotation.eulerAngles.y);
             gridPos.x -= p.x;
             gridPos.z -= p.z;
-            //SceneRefs.overlays.AddBuildingOverlay(gridPos, building.id);
-            if (building.build.blueprint.itemList.Count > 0)
+            if (building.blueprint.itemList.Count > 0)
             {
                 levels[gridPos.y].UnsetBuilding(building, gridPos);
             }
         }
-        /*if (building.GetType() != typeof(Pipe))
-        {
-            foreach ((RectTransform t in SceneRefs.OverlayCanvas.buildingOverlays.First(q => q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q => q.transform)))
-            {
-                int x = Mathf.CeilToInt(entryPoint.position.x);
-                int z = Mathf.CeilToInt(entryPoint.position.z);
-                Road gR = (grid[x, z] as Road);
-                gR?.entryPoints.RemoveAll(q => q == building.id);
-                Debug.Log(grid[x, z].PrintText());
-            }
-        }*/
         buildings.Remove(building);
-        Debug.Log(PrintGrid());
+        GameObject.Destroy(building.gameObject);
     }
 
     public static void UnlockLevel(int levelToUnlock)
@@ -286,7 +261,7 @@ public static class MyGrid
                 }
             }
         }
-        SceneRefs.humans.GetComponent<JobQueue>().toBeDug = SceneRefs.gridTiles.toBeDigged.ToList();
+        SceneRefs.jobQueue.toBeDug = SceneRefs.gridTiles.toBeDigged.ToList();
     }
     #endregion
 }

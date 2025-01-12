@@ -577,60 +577,58 @@ MonoBehaviour:
     carriers: []
     mods: 
   myColor: []
-  build:
-    blueprint:
-      size:
-        x: 2
-        z: 3
+  blueprint:
+    size:
+      x: 2
+      z: 3
+      y: 0
+    moveBy:
+      x: -0.5
+      z: 0.5
+      y: 0
+    anchor:
+      x: 1
+      z: 1
+      y: 0
+    itemList:
+    - pos:
+        x: -1
+        z: -1
         y: 0
-      moveBy:
-        x: -0.5
-        z: 0.5
+      itemType: 1
+    - pos:
+        x: -1
+        z: 0
         y: 0
-      anchor:
-        x: 1
+      itemType: 1
+    - pos:
+        x: -1
         z: 1
         y: 0
-      itemList:
-      - pos:
-          x: -1
-          z: -1
-          y: 0
-        itemType: 1
-      - pos:
-          x: -1
-          z: 0
-          y: 0
-        itemType: 1
-      - pos:
-          x: -1
-          z: 1
-          y: 0
-        itemType: 3
-      - pos:
-          x: 0
-          z: -1
-          y: 0
-        itemType: 1
-      - pos:
-          x: 0
-          z: 0
-          y: 0
-        itemType: 4
-      - pos:
-          x: 0
-          z: 1
-          y: 0
-        itemType: 3
-    heigth: 0
-    cost:
-      capacity: -1
-      type: 01000000
-      ammount: 14000000
-    constructed: 0
-    deconstructing: 0
-    constructionProgress: 0
-    maximalProgress: 0
+      itemType: 3
+    - pos:
+        x: 0
+        z: -1
+        y: 0
+      itemType: 1
+    - pos:
+        x: 0
+        z: 0
+        y: 0
+      itemType: 4
+    - pos:
+        x: 0
+        z: 1
+        y: 0
+      itemType: 3
+  cost:
+    capacity: -1
+    type: 0100000002000000
+    ammount: 0a00000005000000
+  constructed: 0
+  deconstructing: 0
+  constructionProgress: 0
+  maximalProgress: 30
   limit: 5
   productionCost:
     capacity: -1
@@ -640,10 +638,8 @@ MonoBehaviour:
     capacity: -1
     type: 02000000
     ammount: 01000000
-  pTime:
-    prodTime: 10
-    currentTime: 0
-    modifier: 1
+  prodTime: 20
+  modifier: 1
   working: []
   pStates:
     supplied: 0

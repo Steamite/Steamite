@@ -19,7 +19,7 @@ namespace RadioGroups
     }
 
     [UxmlElement]
-    public partial class SaveRadioGroup : CustomRadioButtonGroup
+    public partial class SaveRadioGroup : CustomRadioButtonList
     {
         public Action<int> deleteAction;
         #region List

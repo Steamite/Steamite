@@ -41,7 +41,7 @@ public static class MyRes
             globalStorageSpace = 0;
 
             storage = MyGrid.buildings.Select(q => q.GetComponent<Storage>()).Where(q => q != null).ToArray();
-            JobQueue jQ = SceneRefs.humans.GetComponent<JobQueue>();
+            JobQueue jQ = SceneRefs.jobQueue;
             foreach (Storage _s in storage)
             {
                 if (setupStorages)
@@ -225,13 +225,13 @@ public static class MyRes
                     human.destination = building;
                     job.job = JobState.Pickup;
                     human.SetJob(job);
-                    StorageResource sResource = job.interest.GetComponent<StorageObject>().LocalRes;
+                    StorageObject sResource = job.interest.GetComponent<StorageObject>();
                     Resource resource = new();
                     resource.capacity = human.Inventory.capacity - human.Inventory.ammount.Sum();
-                    Resource future = sResource.Future(true);
+                    Resource future = sResource.LocalRes.Future(true);
 
                     MoveRes(resource, future, diff, -1);
-                    sResource.AddRequest(resource, human, -1);
+                    sResource.RequestRes(resource, human, -1);
                     human.destination.RequestRes(resource.Clone(), human, 1);
                     human.ChangeAction(HumanActions.Move);
                     human.lookingForAJob = false;
@@ -437,13 +437,11 @@ public static class MyRes
         {
             store.DestroyResource(ResourceType.Food, 1);
             UpdateResource(new Resource(new() { ResourceType.Food }, new() { 1 }), -1);
-            human.hasEaten = true;
-            human.Efficiency.ManageModifier(ModType.Food, true);
+            human.ModifyEfficiency(ModType.Food, true);
         }
         else
         {
-            human.hasEaten = false;
-            human.Efficiency.ManageModifier(ModType.Food, false);
+            human.ModifyEfficiency(ModType.Food, false);
         }
     }
     public static void DeliverToElevator(Resource resource)

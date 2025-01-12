@@ -26,7 +26,7 @@ public class StorageResource
     }
 
     /// <summary>
-    /// adds a reguest to the storage objects
+    /// Adds a request for moving resources.<br/>
     /// </summary>
     /// <param name="resource">requested resource</param>
     /// <param name="human">human who requested it</param>
@@ -95,11 +95,18 @@ public class StorageResource
         }
         return futureRes;
     }
+    /// <summary>
+    /// Links the <paramref name="h"/> using <see cref="carrierIDs"/>, which is assigned when loading.
+    /// </summary>
+    /// <param name="h"><see cref="Human"/> that is to be linked.</param>
     public void LinkHuman(Human h)
     {
         int index = carrierIDs.FindIndex(q => q == h.id);
         if (index > -1)
         {
+            carrierIDs.Remove(index);
+            if (carrierIDs.Count == 0)
+                carrierIDs = null;
             if (carriers.Count <= index)
             {
                 carriers.Add(h);

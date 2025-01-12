@@ -19,13 +19,13 @@ public class BlueprintEditor : PropertyDrawer
 
         if ((Building)property.serializedObject.targetObject){
             // Draw fields - pass GUIContent.none to each so they are drawn without labels
-            if (((Building)property.serializedObject.targetObject).build.blueprint.itemList.Count == 0)
+            if (((Building)property.serializedObject.targetObject).blueprint.itemList == null || ((Building)property.serializedObject.targetObject).blueprint.itemList.Count == 0)
                 GUI.backgroundColor = Color.red;
             else
                 GUI.backgroundColor = Color.white;
             if (GUI.Button(buttonReact, "Manage"))
             {
-                BuildEditor.ShowWindow(((Building)property.serializedObject.targetObject).build.blueprint, property);
+                BuildEditor.ShowWindow(((Building)property.serializedObject.targetObject).blueprint, property);
             }
         }
         EditorGUI.EndProperty();

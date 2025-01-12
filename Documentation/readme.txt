@@ -1,1 +1,0 @@
-If you want acess to the documentation message me on discord(isakobe). It's on confluence so I can't make it public.

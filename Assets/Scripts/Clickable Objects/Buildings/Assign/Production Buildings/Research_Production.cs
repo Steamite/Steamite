@@ -29,7 +29,7 @@ public class Research_Production : ProductionBuilding
 
         research.Q<Label>("Name").text = data.name;
         research.Q<VisualElement>("Image").style.unityBackgroundImageTintColor = data.color;
-        research.Q<Label>("Progress").text = data.progress;
+        research.Q<Label>("progress").text = data.progress;
     }*/
 
     #endregion
@@ -56,7 +56,7 @@ public class Research_Production : ProductionBuilding
     }
     public override void Store(Human h, int transferPerTick)
     {
-        if (!build.constructed)
+        if (!constructed)
             base.Store(h, transferPerTick);
         else
         {
@@ -65,7 +65,7 @@ public class Research_Production : ProductionBuilding
     }
     public override Resource GetDiff(Resource r)
     {
-        if(!build.constructed)
+        if(!constructed)
             return base.GetDiff(r);
         else
         {

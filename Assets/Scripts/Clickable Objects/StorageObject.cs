@@ -1,15 +1,18 @@
+using Mono.Cecil;
 using System;
 using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 
-public class StorageObject : ClickableObject
+public abstract class StorageObject : ClickableObject
 {
-    [SerializeField]
-    protected StorageResource localRes = new();
-    [CreateProperty]
-    public StorageResource LocalRes => localRes;
+    /// <summary>Stored resouces, which also contain all requests.</summary>
+    [SerializeField] protected StorageResource localRes = new();
+    
+    /// <inheritdoc/>
+    [CreateProperty] public StorageResource LocalRes => localRes;
     #region Saving
+    /// <inheritdoc/>
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -18,6 +21,7 @@ public class StorageObject : ClickableObject
         (clickable as StorageObjectSave).gridPos = GetPos(); // used for not rounded values
         return base.Save(clickable);
     }
+    /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
         localRes = new((save as StorageObjectSave).resSave);
@@ -26,16 +30,18 @@ public class StorageObject : ClickableObject
     #endregion Saving
 
     #region Storage
-    public virtual void Store(Human h, int transferPerTick)
-    {
-        throw new NotImplementedException();
-    }
+    /// <summary>
+    /// Implements store funcionality.
+    /// </summary>
+    /// <param name="h"><see cref="Human"/> that is storing resources.</param>
+    /// <param name="transferPerTick">Max resources that can be transfered.</param>
+    public abstract void Store(Human h, int transferPerTick);
 
     /// <summary>
-    /// Removes resource from the object(chunk, building)
+    /// Moves resources from <see cref="localRes"/> to <see cref="Human.inventory"/>.<br/>
     /// </summary>
-    /// <param name="resId"></param>
-    /// <param name="ammount"></param>
+    /// <param name="h"><see cref="Human"/> that is taking resources.</param>
+    /// <param name="transferPerTick">Max resources that can be transfered.</param>
     public virtual void Take(Human h, int transferPerTick)
     {
         MyRes.MoveRes(h.Inventory, localRes.stored, localRes.requests[localRes.carriers.IndexOf(h)], transferPerTick);
@@ -51,15 +57,16 @@ public class StorageObject : ClickableObject
                 h.ChangeAction(HumanActions.Move);
                 return;
             }
-            h.Idle();
+            HumanActions.LookForNew(h);
         }
     }
 
-    public virtual void RequestRes(Resource request, Human h, int mod)
+    /// <inheritdoc cref="StorageResource.AddRequest(Resource, Human, int)"/>
+    public virtual void RequestRes(Resource request, Human human, int mod)
     {
-        localRes.AddRequest(request, h, mod);
+        localRes.AddRequest(request, human, mod);
     }
-
+    /// <inheritdoc cref="StorageResource.LinkHuman(Human)"/>
     public virtual void TryLink(Human h)
     {
         localRes.LinkHuman(h);

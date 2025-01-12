@@ -1,127 +1,75 @@
-using RadioGroups;
 using System;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace AbstractControls
 {
     [UxmlElement]
-    public partial class CustomRadioButtonGroup : ListView, IBindable
+    public partial class CustomRadioButtonGroup : VisualElement
     {
-        protected List<CustomRadioButton> _itemsSource;
-        protected CustomRadioButton _selectedButton;
+        protected event Action<int> changeEvent;
 
-        protected ScrollView _scrollView;
-
-        protected Action<int> changeEvent;
-
-
-        int _selID;
-        protected int SelectedId
+        public int SelectedChoice
         {
-            get
-            {
-                return _selID;//_selectedButton != null ? _selectedButton.value : -1; 
-            }
-            set
-            {
-                _selID = value;
-                changeEvent?.Invoke(value);
-            }
+            get;
+            protected set;
         }
 
-        #region List
 
+        string[] _choices = { "1", "2" };
+        [UxmlAttribute] protected string[] choices 
+        { 
+            get => _choices; 
+            set 
+            { 
+                _choices = value;
+                Rebuild();
+            } 
+        }
         public CustomRadioButtonGroup()
         {
-            // Initialize the internal item source
-            _itemsSource = new List<CustomRadioButton>();
-            // Default settings (adjust as needed)
-            fixedItemHeight = 30;
-            makeItem = DefaultMakeItem;
-            bindItem = DefaultBindItem;
-            bindingSourceSelectionMode = BindingSourceSelectionMode.AutoAssign;
-            reorderable = false;
-            selectionType = SelectionType.None;
+            SelectedChoice = -1;
+            style.flexGrow = 1;
+            style.justifyContent = Justify.SpaceAround;
         }
 
-        /// <summary>
-        /// Adds an item to the list and refreshes the ListView
-        /// </summary>
-        /// <param name="item"></param>
-        protected void AddItem(CustomRadioButton item)
+        void Rebuild()
         {
-            _itemsSource.Add(item);
-            makeItem();
-            Rebuild();
-        }
-        /// <summary>
-        /// Removes an item from the list and refreshes the ListView
-        /// </summary>
-        /// <param name="item"></param>
-        protected void RemoveItem(CustomRadioButton item)
-        {
-            _itemsSource.Remove(item);
-            if(item == _selectedButton)
+            for (int i = 0; i < childCount; i++)
             {
-                _selectedButton?.Deselect();
-                _selectedButton = null;
+                BindButton((CustomRadioButton)ElementAt(i), i);
             }
-            Rebuild();
-        }
-        /// <summary>
-        /// // Removes an item from the list and refreshes the ListView
-        /// </summary>
-        /// <param name="index"></param>
-        public void RemoveItem(int index)
-        {
-            _itemsSource.RemoveAt(index);
-            if (index == SelectedId)
+            if(childCount < choices.Length)
             {
-                SelectedId = -1;
-                _selectedButton?.Deselect();
+                for (int i = childCount; i < choices.Length; i++)
+                {
+                    CustomRadioButton button = CreateButton(i);
+                    var x = i;
+                    button.RegisterCallback<ClickEvent>((_) => Select(x));
+                    Add(button);
+                }
             }
-            Rebuild();
+            else if (childCount > choices.Length)
+            {
+                for (int i = childCount; i >= choices.Length; i--)
+                {
+                    RemoveAt(i);
+                }
+            }
         }
-        /// <summary>
-        /// Clears all items from the list
-        /// </summary>
-        protected void ClearItems()
+        protected virtual void BindButton(CustomRadioButton button, int i) => button.text = choices[i];
+        protected virtual CustomRadioButton CreateButton(int i) => new CustomRadioButton(choices[i], "", i, true);
+
+        public virtual void SetChangeCallback(Action<int> onChange)
         {
-            _itemsSource.Clear();
-            Rebuild();
-        }
-
-        // Default method for creating an item (override in specific use cases)
-        protected virtual CustomRadioButton DefaultMakeItem() => throw new NotImplementedException();
-
-        // Default method for binding an item (override in specific use cases)
-        protected virtual void DefaultBindItem(VisualElement element, int index)
-        {
-            element.RemoveFromClassList("unity-collection-view__item");
-            element.RemoveFromClassList("unity-list-view__item");
-            (element as CustomRadioButton).value = index;
-            (element as CustomRadioButton).text = _itemsSource[index].text;
-            element.RegisterCallback<ClickEvent>((_) => (element as CustomRadioButton).Select());
-            return;
-        }
-
-        #endregion
-
-        public virtual void Init(Action<int> onChange)
-        {
-            itemsSource = _itemsSource;
-            SelectedId = -1;
             changeEvent = onChange;
         }
 
-        public virtual void Select(CustomRadioButton customRadioButton)
+        public virtual void Select(int value)
         {
-            if(_selectedButton != customRadioButton)
-                _selectedButton?.Deselect();
-            _selectedButton = customRadioButton;
-            SelectedId = _selectedButton.value;
+            if (SelectedChoice > -1 && SelectedChoice != value)
+                ((CustomRadioButton)ElementAt(SelectedChoice)).Deselect();
+            SelectedChoice = value;
+            changeEvent?.Invoke(value);
         }
     }
 }

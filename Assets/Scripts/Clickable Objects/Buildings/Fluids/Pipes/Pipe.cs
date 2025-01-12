@@ -15,7 +15,7 @@ public class Pipe : Building
         base.OrderDeconstruct();
         if (Input.GetButton("Shift"))
         {
-            foreach (Pipe pipe in transform.GetComponentsInChildren<PipePart>().Select(q => q.connectedPipe).Where(q => q.build.deconstructing == false))
+            foreach (Pipe pipe in transform.GetComponentsInChildren<PipePart>().Select(q => q.connectedPipe).Where(q => q.deconstructing == false))
             {
                 pipe.OrderDeconstruct();
             }
@@ -23,7 +23,7 @@ public class Pipe : Building
     }
     public override bool CanPlace()
     {
-        if (MyRes.CanAfford(build.cost))
+        if (MyRes.CanAfford(cost))
         {
             return MyGrid.CanPlace(this);
         }
@@ -89,12 +89,12 @@ public class Pipe : Building
     {
         gameObject.layer = 7;
         GetComponent<SortingGroup>().sortingLayerName = "Pipes";
-        build.maximalProgress = build.cost.ammount.Sum() * 2;
+        maximalProgress = cost.ammount.Sum() * 2;
         gT.HighLight(new(), gameObject);
 
         Humans humans = GameObject.FindWithTag("Humans").GetComponent<Humans>();
         humans.GetComponent<JobQueue>().AddJob(JobState.Constructing, this); // creates a new job with the data above
-        MyRes.UpdateResource(build.cost, -1);
+        MyRes.UpdateResource(cost, -1);
     }
     public void ConnectPipe(int _case, Pipe connectedPipe, bool canNext)
     {
@@ -239,13 +239,13 @@ public class Pipe : Building
         GridPos pos = new(transform.position);
         MyGrid.SetGridItem(pos, this, true);
         MyGrid.CanPlace(this);
-        if (build.constructed)
+        if (constructed)
             FinishBuild();
     }
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         // if constructed or ordered to be deconstructed save all data
-        if(!build.constructed || build.deconstructing)
+        if(!constructed || deconstructing)
         {
             if (clickable == null)
                 clickable = new PipeBSave();
@@ -271,8 +271,7 @@ public class Pipe : Building
         }
         else
         {
-            build = new();
-            build.constructed = true;
+            constructed = true;
             id = save.id;
             network.networkID = (save as LightWeightPipeBSave).networkID;
         }

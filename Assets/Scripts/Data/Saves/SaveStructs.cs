@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Properties;
 using UnityEngine;
 
 
@@ -8,11 +9,23 @@ using UnityEngine;
 [Serializable]
 public class JobSave
 {
+    /// <summary>Helps with finding the interest, by chosing the correct list to search in.</summary>
+    public enum InterestType
+    {
+        /// <summary>No interest.</summary>
+        Nothing,
+        /// <summary>Interest is a <see cref="Building"/></summary>
+        B,
+        /// <summary>Interest is a <see cref="Rock"/></summary>
+        R,
+        /// <summary>Interest is a <see cref="Chunk"/></summary>
+        C
+    }
     public JobState job;
     public List<GridPos> path;
-    public int objectId;
     public int destinationID;
-    public Type objectType = null; // -1 – unassigned; 0 – nothing; 1 – building; 2 – rock; 3 – chunk
+    public int interestID;
+    public InterestType interestType; // -1 – unassigned; 0 – nothing; 1 – building; 2 – rock; 3 – chunk
     public JobSave()
     {
 
@@ -20,15 +33,13 @@ public class JobSave
     public JobSave(JobData jobData)
     {
         job = jobData.job;
-        if (job == JobState.Unset)
-            job = JobState.Free;
         path = jobData.path;
         // interest assign 
         if (jobData.interest)
             jobData.interest.GetComponent<ClickableObject>().GetID(this);
         else
         {
-            objectId = -1;
+            interestID = -1;
         }
     }
 }
@@ -108,9 +119,16 @@ public class ChunkSave : StorageObjectSave
 [Serializable]
 public class BSave : StorageObjectSave
 {
-    public Build build;
+    ///public Build build;
     public string prefabName;
     public float rotationY;
+    
+    public BuildingGrid blueprint;
+    public Resource cost;
+    public bool constructed;
+    public bool deconstructing;
+    public float constructionProgress;
+    public int maximalProgress;
 }
 
 [Serializable]
@@ -176,7 +194,6 @@ public class HumanSave : ClickableObjectSave
     public Resource inventory;
     // statuses
     public float sleep;
-    public bool hasEaten;
     // specializations
     public Specializations specs;
     public int houseID;

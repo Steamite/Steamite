@@ -23,6 +23,12 @@ public class AssignBuilding : Building
 
     #region Window
 
+
+    /// <summary>
+    /// <inheritdoc/> <br/>
+    /// Adds Assign list to <paramref name="toEnable"/>.
+    /// </summary>
+    /// <inheritdoc/>
     protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
     {
         toEnable.Add("Assign");

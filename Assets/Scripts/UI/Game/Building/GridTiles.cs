@@ -84,9 +84,9 @@ public class GridTiles : MonoBehaviour
                     Building b = enterObject.GetComponent<Building>();
                     if (b) 
                     {
-                        if (b.build.deconstructing)
+                        if (b.deconstructing)
                             c += Color.red / 2;/*
-                        else if (!b.build.constructed)
+                        else if (!b.constructed)
                             c +=;*/
                     }
                 }
@@ -94,7 +94,7 @@ public class GridTiles : MonoBehaviour
             case SelectionMode.deconstruct:
                 Building _b = enterObject.GetComponent<Building>();
                 if (_b)
-                    if (_b.build.deconstructing)
+                    if (_b.deconstructing)
                         c = Color.red / 2;
                     else
                         c = Color.red;
@@ -128,8 +128,8 @@ public class GridTiles : MonoBehaviour
                 }
                 else
                 {
-                    Build __b = buildBlueprint.build;
-                    GridPos grid = MyGrid.Rotate(__b.blueprint.moveBy, buildBlueprint.transform.eulerAngles.y);
+                    //Build __b = buildBlueprint.build;
+                    GridPos grid = MyGrid.Rotate(buildBlueprint.blueprint.moveBy, buildBlueprint.transform.eulerAngles.y);
                     grid = new(activePos.x + grid.x, (MyGrid.currentLevel * ClickabeObjectFactory.LEVEL_HEIGHT) + ClickabeObjectFactory.BUILD_OFFSET, activePos.z + grid.z);
                     buildBlueprint.transform.position = new(grid.x, grid.y, grid.z);
                     c = buildBlueprint.CanPlace() ? Color.blue : Color.red;
@@ -162,7 +162,7 @@ public class GridTiles : MonoBehaviour
                     c = new();
                 if (r && r.toBeDug)
                     c += toBeDugColor;
-                else if (b && b.build.deconstructing)
+                else if (b && b.deconstructing)
                     c += Color.red/2;
                 else if (pipe)
                 {
@@ -173,7 +173,7 @@ public class GridTiles : MonoBehaviour
                 break;
             case SelectionMode.deconstruct:
                 Building _b = exitObject.GetComponent<Building>();
-                if (_b && _b.build.deconstructing)
+                if (_b && _b.deconstructing)
                     c = Color.red * 0.75f;
                 else
                     c = new();
@@ -237,7 +237,7 @@ public class GridTiles : MonoBehaviour
                 if (b)
                 {
                     b.OrderDeconstruct();
-                    if (b && !b.build.deconstructing)
+                    if (b && !b.deconstructing)
                         c = Color.red;
                     else
                         c = Color.red / 2;
@@ -503,7 +503,7 @@ public class GridTiles : MonoBehaviour
                 }
                 else
                 {
-                    buildBlueprint.DestoyBuilding();
+                    DestroyBlueprint();
                     Blueprint();
                     return;
                 }
@@ -529,14 +529,8 @@ public class GridTiles : MonoBehaviour
                     break;
                 case SelectionMode.build:
                     Camera.main.GetComponent<PhysicsRaycaster>().eventMask = defaultMask;
-                    MyGrid.GetOverlay().DeleteBuildGrid();
                     if (buildBlueprint)
-                        buildBlueprint.DestoyBuilding();
-                    foreach(ClickableObject clickable in markedTiles)
-                    {
-                        clickable.GetComponent<Building>().DestoyBuilding();
-                    }
-                    markedTiles = new();
+                        DestroyBlueprint();
                     break;
             }
             DeselectObjects();
@@ -581,7 +575,7 @@ public class GridTiles : MonoBehaviour
         Quaternion q = new();
         if (buildBlueprint)
             q = new(buildBlueprint.transform.rotation.x, buildBlueprint.transform.rotation.y, buildBlueprint.transform.rotation.z, buildBlueprint.transform.rotation.w);
-        GridPos gp = MyGrid.Rotate(buildingPrefab.build.blueprint.moveBy, buildingPrefab.transform.eulerAngles.y);
+        GridPos gp = MyGrid.Rotate(buildingPrefab.blueprint.moveBy, buildingPrefab.transform.eulerAngles.y);
         gp = new(activePos.x + gp.x, (MyGrid.currentLevel * ClickabeObjectFactory.LEVEL_HEIGHT) + ClickabeObjectFactory.BUILD_OFFSET, activePos.z + gp.z);
         buildBlueprint = Instantiate(buildingPrefab.gameObject, new Vector3(gp.x, gp.y, gp.z), Quaternion.identity, transform).GetComponent<Building>(); // creates the building prefab
         buildBlueprint.transform.rotation = q;
@@ -649,5 +643,11 @@ public class GridTiles : MonoBehaviour
         {
             DeselectObjects();
         }
+    }
+
+    void DestroyBlueprint()
+    {
+        MyGrid.GetOverlay().HideGlobalEntryPoints();
+        Destroy(buildBlueprint.gameObject);
     }
 }

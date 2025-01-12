@@ -98,16 +98,16 @@ public class LoadingScreen : MonoBehaviour
         TradeSave tradeSave = save.trade;
 
         GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
-        // create Progress val for loading slider
-        int maxProgress = 0;
+        // create progress val for loading slider
+        int maxprogress = 0;
         for(int i = 0; i < worldSave.gridSave.Length; i++)
-            maxProgress += worldSave.gridSave[i].width * worldSave.gridSave[i].height * 2; // Tiles and pipes
-        maxProgress += worldSave.objectsSave.buildings.Length * buildWeigth; //scale number
-        maxProgress += worldSave.objectsSave.chunks.Length;
-        maxProgress += humanSaves.Length;
-        maxProgress += researchSave.categories.SelectMany(q => q.nodes).Count();
-        loadingSlider.maxValue = maxProgress;
-        Progress<int> progress = new Progress<int>(value =>
+            maxprogress += worldSave.gridSave[i].width * worldSave.gridSave[i].height * 2; // Tiles and pipes
+        maxprogress += worldSave.objectsSave.buildings.Length * buildWeigth; //scale number
+        maxprogress += worldSave.objectsSave.chunks.Length;
+        maxprogress += humanSaves.Length;
+        maxprogress += researchSave.categories.SelectMany(q => q.nodes).Count();
+        loadingSlider.maxValue = maxprogress;
+        IProgress<int> progress = new Progress<int>(value =>
         {
             loadingSlider.value = value;
         });
@@ -177,17 +177,17 @@ public class LoadingScreen : MonoBehaviour
 
     void FillGameState(IProgress<int> progress, GameStateSave gameState)
     {
-        SceneRefs.humans.GetComponent<JobQueue>().priority = gameState.priorities;
+        SceneRefs.jobQueue.priority = gameState.priorities;
         SceneRefs.tick.timeController.Load(gameState);
     }
 
-    void FillResearches(Progress<int> progress, ResearchSave researchSave)
+    void FillResearches(IProgress<int> progress, ResearchSave researchSave)
     {
         actionText.text = "Remembering research";
         UIRefs.research.LoadGame(researchSave);
     }
 
-    void FillTrade(Progress<int> progress, TradeSave tradeSave)
+    void FillTrade(IProgress<int> progress, TradeSave tradeSave)
     {
         actionText.text = "Making Deals";
         UIRefs.trade.LoadGame(tradeSave);

@@ -1,105 +1,140 @@
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using TMPro;
-using Unity.Jobs.LowLevel.Unsafe;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
+/// <summary>Categorizes all jobs.</summary>
 public enum JobState
 {
-    Unset,
+    /// <summary>Idle, will do temporary work if he finds his way.</summary>
     Free,
-    Digging, // dig out rock
-    Constructing, // progress constructions
-    Deconstructing, // progress deconstruction
-    Pickup, // taking resources to a storage
-    Supply, // taking resources from a storage (elevator, chunk) to a building
-    FullTime, // progress production
+    /// <summary>Digging out a <see cref="Rock"/>.</summary>
+    Digging,
+    /// <summary>Constructing a <see cref="Building"/>.</summary>
+    Constructing,
+    /// <summary>Deconstructing a <see cref="Building"/>.</summary>
+    Deconstructing,
+    /// <summary>Getting resources for a construction or production.</summary>
+    Pickup,
+    /// <summary>Delivering found resources.</summary>
+    Supply,
+    /// <summary>Assigned in a <see cref="AssignBuilding"/>.</summary>
+    FullTime,
+    /// <summary>Cleaning <see cref="Chunk"/>s.</summary>
     Cleanup
 }
+
+/// <summary>Specialization of the worker, provides bonuses in certain areas. (WIP)</summary>
 public enum Specializations
 {
     Worker,
     Farmer,
     Miner
 }
+
+/// <summary>Humans walk around the map and complete tasks ordered by the player.</summary>
 public class Human : ClickableObject
 {
-
+    #region Variables
+    /// <summary>Determines the rate of proggers when doing a job.</summary>
     [Header("Human stats")]
-    
     Efficiency efficiency = new();
-    public Efficiency Efficiency
-    {
-        get { return efficiency; }
-        set { efficiency = value; }
-    }
-
+    /// <summary>Specialization of the worker, provides bonuses in certain areas. (WIP)</summary>
     public Specializations specialization = Specializations.Worker;
-
+    /// <summary>If it's time to go to sleep.</summary>
     public bool nightTime = false;
-    public bool hasEaten = true;
+    /// <summary>Fail-save to prevent looking for a job multiple times at once, Remove after testing.</summary>
     public bool lookingForAJob = false;
-
-    // job data
+    /// <summary>Pointer to the assigned <see cref="House"/>.</summary>
     public House home;
 
-    // Action data
+    /// <summary>Holds data about the current assigment.</summary>
     [Header("Action data")]
+    JobData jData = new();
 
-    JobData jData;
+    /// <summary>
+    /// Used for delivery jobs, marks the destination.<br/> 
+    /// Because <see cref="JobData.interest"/> has first the storage to take from.
+    /// </summary>
+    public Building destination;
+    /// <summary>Marks the assigned workplace.</summary>
+    public ProductionBuilding workplace;
+    /// <summary>Action to execute next tick.</summary>
+    Action<Human> repetableAction;
+    /// <summary>Resources that are being carried.</summary>
+    Resource inventory = new();
 
-    #region Job Setters
-    [CreateProperty]
-    public JobData Job
+    #endregion
+
+    #region Properties
+    /// <inheritdoc cref="inventory"/>
+    [CreateProperty] public Resource Inventory => inventory;
+
+
+    /// <inheritdoc cref="efficiency"/>
+    [CreateProperty] public float Efficiency => efficiency.efficiency;
+    /// <summary>
+    /// Updates efficiency modifiers and UI.
+    /// </summary>
+    /// <param name="_modType"><inheritdoc cref="Efficiency.ManageModifier(ModType, bool)" path="/param[@name='_modType']"/></param>
+    /// <param name="improvement"><inheritdoc cref="Efficiency.ManageModifier(ModType, bool)" path="/param[@name='improvement']"/></param>
+    public void ModifyEfficiency(ModType _modType, bool improvement)
     {
-        get { return jData; }
+        efficiency.ManageModifier(_modType, improvement);
+        UIUpdate("Efficiency");
     }
+
+    /// <inheritdoc cref="jData"/>
+    [CreateProperty]
+    public JobData Job => jData;
+    /// <summary>
+    /// Updates whole <see cref="jData"/> and updates UI.
+    /// </summary>
+    /// <param name="data">New <see cref="jData"/></param>
     public void SetJob(JobData data)
     {
         jData = data;
         UIUpdate(nameof(Job));
+#if UNITY_EDITOR
+        transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
+#endif
     }
-    public void SetJob(JobState state = JobState.Unset, ClickableObject interest = null, List<GridPos> path = null)
-    {
-        if(state != JobState.Unset)
-            jData.job = state;
+    /// <summary>
+    /// Updates a part of <see cref="jData"/>.
+    /// </summary>
+    /// <param name="state">New job.</param>
+    /// <param name="interest">New interest.</param>
+    /// <param name="path">New path.</param>
+    public void SetJob(JobState state, ClickableObject interest = null, List<GridPos> path = null)
+    {   
+        jData.job = state;
         if (interest)
             jData.interest = interest;
         if (path != null)
             jData.path = path;
         UIUpdate(nameof(Job));
+#if UNITY_EDITOR
+        transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
+#endif
     }
     #endregion
-    //public 
-    public Building destination;
-    public ProductionBuilding workplace;
-    public Action<Human> repetableAction;
-
-    Resource inventory = new();
-    [CreateProperty]
-    public Resource Inventory => inventory;
 
     #region Basic Operations
-    public override GridPos GetPos()
-    {
-        return new(transform.position.x, transform.localPosition.y / ClickabeObjectFactory.LEVEL_HEIGHT, transform.position.z);
-    }
-    public override void UniqueID() // creates a random int
-    {
-        List<int> ids = transform.parent.parent.GetChild(0).GetComponentsInChildren<Human>().Select(q => q.id).ToList();
-        ids.AddRange(transform.parent.parent.GetChild(1).GetComponentsInChildren<Human>().Select(q => q.id).ToList());
-        jData = new();
-        jData.job = JobState.Free;
-        CreateNewId(ids);
-    }
+    /// <inheritdoc/>
+    public override GridPos GetPos() => new(transform.position.x, transform.localPosition.y / ClickabeObjectFactory.LEVEL_HEIGHT, transform.position.z);
+    
+    /// <summary>
+    /// Creates a list from <see cref="Humans.humen"/>.
+    /// </summary>
+    public override void UniqueID() => CreateNewId(SceneRefs.humans.GetHumen().Select(q => q.id).ToList());
 
+    /// <summary>
+    /// Links tick, day and night actions.
+    /// </summary>
     public void ActivateHuman()
     {
 #if UNITY_EDITOR
@@ -110,13 +145,15 @@ public class Human : ClickableObject
         dT.dayStart += Day;
         dT.nightStart += Night;
 
-        if (jData.job <= JobState.Free)
-        {
+        if (jData.job == JobState.Free)
             HumanActions.LookForNew(this);
-            return;
-        }
-        ChangeAction(HumanActions.Move);
+        else
+            ChangeAction(HumanActions.Move);
     }
+
+    /// <summary>
+    /// Displays path in editor.
+    /// </summary>
     public void OnDrawGizmos()
     {
         if (selected)
@@ -131,30 +168,21 @@ public class Human : ClickableObject
     #endregion
 
     #region Window
+    /// <summary>
+    /// <inheritdoc/>
+    /// And opens the info window with <see cref="InfoMode.Human"/>.
+    /// </summary>
+    /// <returns><inheritdoc/></returns>
     public override InfoWindow OpenWindow()
     {
         InfoWindow info = base.OpenWindow();
         info.Open(this, InfoMode.Human);
-        info.humanElement.Q<Label>("Specialization-Value").text = specialization.ToString();
-
         return info;
     }
-
-    /*protected override void UpdateWindow(InfoWindow info)
-    {
-        base.UpdateWindow(info);
-        VisualElement group = info.human.Q<VisualElement>("Stats");
-        
-        group.Q<Label>("Efficiency-Value").text = efficiency.ToString();
-
-        group = group.parent.Q<VisualElement>("Job");
-        group.Q<Label>("Type-Value").text = jData.job.ToString();
-        group.Q<Label>("Position-Value").text = jData.interest?.GetPos().ToString();
-        group.Q<Label>("Object-Value").text = jData.interest?.name;
-    }*/
     #endregion Window
 
     #region Saving
+    /// <inheritdoc/>
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -165,12 +193,12 @@ public class Human : ClickableObject
         (clickable as HumanSave).jobSave = new(jData);
         (clickable as HumanSave).jobSave.destinationID = destination ? destination.id : -1;
         (clickable as HumanSave).inventory = inventory;
-        (clickable as HumanSave).hasEaten = hasEaten;
         (clickable as HumanSave).specs = specialization;
         (clickable as HumanSave).houseID = home ? home.id : -1;
         (clickable as HumanSave).workplaceId = workplace ? workplace.id : -1;
         return base.Save(clickable);
     }
+    /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
         base.Load(save);
@@ -179,11 +207,12 @@ public class Human : ClickableObject
     #endregion
 
     #region Human actions
+    /// <summary>Called each tick, either calls the action or looks for a new job.</summary>
     public void DoRepetableAction()
     {
-        if (repetableAction != null && !lookingForAJob)
+        if (repetableAction != null)
         {
-            repetableAction.Invoke(this);
+            repetableAction(this);
         }
         else if(!nightTime)
         {
@@ -191,12 +220,13 @@ public class Human : ClickableObject
         }
     }
 
-    public void ChangeAction(Action<Human> action)
-    {
-        transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
-        repetableAction = action;
-    }
+    /// <summary>
+    /// Reassignes <see cref="repetableAction"/>.
+    /// </summary>
+    /// <param name="action">New <see cref="repetableAction"/>.</param>
+    public void ChangeAction(Action<Human> action) => repetableAction = action;
 
+    /// <summary>Changes <see cref="repetableAction"/> according to <see cref="jData"/>.</summary>
     public void Decide()
     {
         if (nightTime)
@@ -231,6 +261,7 @@ public class Human : ClickableObject
         }
     }
 
+    /// <summary>Gets the Main <see cref="Elevator"/> and if the Human isn't there move to it, else set free state.</summary>
     public void Idle()
     {
         ClickableObject el = MyGrid.buildings.First(q => q.tag == "Elevator" && q.GetComponent<Elevator>().main);
@@ -250,6 +281,7 @@ public class Human : ClickableObject
     #endregion
 
     #region Day cycle
+    /// <summary>Triggered on day action, resumes the last job, or finds a new one.</summary>
     public void Day()
     {
         nightTime = false; // stop sleeping
@@ -257,12 +289,12 @@ public class Human : ClickableObject
             HumanActions.LookForNew(this);
         else
         {
-
-            SetJob(path: PathFinder.FindPath(new() { jData.interest }, this).path);
+            SetJob(jData.job, path: PathFinder.FindPath(new() { jData.interest }, this).path);
             ChangeAction(HumanActions.Move);
         }
     }
 
+    /// <summary>Triggered on night action, eats food and goes to sleep.</summary>
     public void Night()
     {
         if (!nightTime)
