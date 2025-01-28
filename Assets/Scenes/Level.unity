@@ -2432,7 +2432,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ece469e808b7936429fb7255bac000ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceItem: {fileID: 9197481963319205126, guid: 75f0b1c46d6ecae44a0c8d663c0e6930, type: 3}
   resourceSkins: {fileID: 11400000, guid: dfd579e8b556f6349986be678d48fc0f, type: 2}
 --- !u!114 &225780446
 MonoBehaviour:
@@ -2814,10 +2813,7 @@ MonoBehaviour:
   expeditionSpeed: 0.13
   colonyLocation:
     name: Scottish Highlands
-    pos:
-      x: 69
-      z: -93
-      y: 0
+    pos: {x: 69, y: 0, z: -93}
     passiveProductions:
     - productionName: Workforce
       currentProduction: 2
@@ -7566,7 +7562,7 @@ MonoBehaviour:
   researchCategoryPref: {fileID: 413424511023610807, guid: 73efd173be5c0364f9183328a93c818f, type: 3}
   line: {fileID: 7206134379434204088, guid: ae499704ae44d7d4993251caeeb79b6f, type: 3}
   speed: 3
-  elapsedProgress: 0
+  elapsedprogress: 0
 --- !u!114 &745012306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21733,7 +21729,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2035
   buildingPrefab: {fileID: 0}
-  selMode: 0
+  activeControl: 0
   activePos:
     x: 0
     z: 0
@@ -21745,7 +21741,6 @@ MonoBehaviour:
   drag: 0
   deselect: 0
   markedTiles: []
-  toBeDigged: []
   buildBlueprint: {fileID: 0}
   clickedObject: {fileID: 0}
   activeObject: {fileID: 0}
@@ -22370,19 +22365,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4282336160114326398}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bc34dc838f5cc94a8da392006eb3c76, type: 3}
+  m_Script: {fileID: 11500000, guid: 3553c806b45f48847a1b26b11a0a26fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infoWindow: {fileID: 0}
-  grid: {fileID: 3114157475242612541}
-  humen: []
-  ticks: {fileID: 8150810313726245684}
+  humans: []
   modifiers: {fileID: 11400000, guid: 27cb62711b616aa498ce9e9bd2e199c4, type: 2}
-  humanPref: {fileID: 1473993148650924280, guid: bb04261d9ee89ab4689ab8b1a838fea3, type: 3}
   hatMaterial:
-  - {fileID: 2100000, guid: b5f30f2240431994d9e086497d722cf8, type: 2}
-  - {fileID: 2100000, guid: 43e49889b608b2a4b966f61e6304c882, type: 2}
-  - {fileID: 2100000, guid: 7629ee13c529bc2409a0b78d63480dcf, type: 2}
+  - {fileID: 2100000, guid: 3d93355836a1dbf439a00211e5ef7ead, type: 2}
+  - {fileID: 2100000, guid: 6fbaac42f905fb741a15756572babf24, type: 2}
+  - {fileID: 2100000, guid: 9d370affe00619e48817cbc76ad2c11c, type: 2}
 --- !u!1 &3951656264117289432
 GameObject:
   m_ObjectHideFlags: 0
@@ -26699,7 +26690,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lastTick: 0
-  lastButton: {fileID: 0}
   timeController: {fileID: 4315159309300245739}
 --- !u!114 &8150810313726245685
 MonoBehaviour:

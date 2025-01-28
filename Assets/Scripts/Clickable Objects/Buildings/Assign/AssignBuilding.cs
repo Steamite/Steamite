@@ -1,29 +1,25 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using TMPro;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>Adds ability to assign <see cref="Human"/>s.</summary>
 public class AssignBuilding : Building
 {
-
-    [Header("Humans")]
-    protected List<Human> assigned = new();
-
-    [CreateProperty]
-    public List<Human> Assigned => assigned;
-    public bool ContainsWorker(Human human) => assigned.Contains(human);
-
+    #region Variables
+    /// <summary>List of assigned <see cref="Human"/>s.</summary>
+    [Header("Humans")] protected List<Human> assigned = new();
     public int limit = 5;
+    #endregion
 
+    #region Properties
+    [CreateProperty] public List<Human> Assigned => assigned;
+    public bool ContainsWorker(Human human) => assigned.Contains(human);
+    #endregion
 
     #region Window
-
-
     /// <summary>
     /// <inheritdoc/> <br/>
     /// Adds Assign list to <paramref name="toEnable"/>.
@@ -38,6 +34,7 @@ public class AssignBuilding : Building
     #endregion
 
     #region Saving
+    /// <inheritdoc/>
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
@@ -46,6 +43,7 @@ public class AssignBuilding : Building
         (clickable as AssignBSave).limit = limit;
         return base.Save(clickable);
     }
+    /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
         limit = (save as AssignBSave).limit;
@@ -53,6 +51,7 @@ public class AssignBuilding : Building
     }
     #endregion
 
+    /// <inheritdoc/>
     public override List<string> GetInfoText()
     {
         List<string> strings = base.GetInfoText();
@@ -61,14 +60,12 @@ public class AssignBuilding : Building
     }
 
     #region Assign
-    public virtual void ManageAssigned(Human human, bool add)
-    {
-        throw new NotImplementedException();
-    }
+    public virtual void ManageAssigned(Human human, bool add) => throw new NotImplementedException();
 
-    public virtual List<Human> GetUnassigned()
-    {
-        throw new NotImplementedException();
-    }
+    /// <summary>
+    /// Returns humans that are not assigned in the buildings.
+    /// </summary>
+    /// <returns><see cref="NotImplementedException"/> </returns>
+    public virtual List<Human> GetUnassigned() => throw new NotImplementedException();
     #endregion
 }

@@ -3,22 +3,37 @@ using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// Class for displaying global resources and money.
+/// </summary>
 public class ResourceDisplay : MonoBehaviour, IUpdatable
 {
+    #region UI UPDATE
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
     public void UIUpdate(string property = "")
     {
         propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
+    #endregion
 
+    #region Variables
+    /// <summary>Unused stored resources.</summary>
     Resource resources;
-    [CreateProperty] 
-    public Resource GlobalResources 
+    /// <summary>Money for upgrades and trading</summary>
+    int money;
+    /// <summary>Resource display on the top bar.</summary>
+    IUIElement resourceList;
+    /// <summary>Money bar in the top center.</summary>
+    Label moneyLabel;
+    #endregion
+
+    #region Properties
+    /// <inheritdoc cref="resources"/>
+    [CreateProperty]
+    public Resource GlobalResources
     {
         get => resources;
-    }
-
-    int money;
+    }/// <inheritdoc cref="resources"/>
     [CreateProperty]
     public int Money
     {
@@ -29,10 +44,14 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
             UIUpdate(nameof(Money));
         }
     }
+    #endregion
 
-    IUIElement resourceList;
-    Label moneyLabel;
-
+    #region Init
+    /// <summary>
+    /// Gets references and fills UI Elements.
+    /// </summary>
+    /// <param name="fillMoney">If the game is new then set default value for <see cref="Money"/>.</param>
+    /// <returns>Empty Resources of all types.</returns>
     public Resource InitializeResources(bool fillMoney)
     {
         resources = new();
@@ -58,4 +77,5 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
         resourceList.Fill(this);
         return resources;
     }
+    #endregion
 }

@@ -5,27 +5,44 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>Basic highlight color(for selection).</summary>
 public static class MyGrid
 {
+    #region Variables
+    /// <summary>Number of Levels in game.</summary>
     public const int NUMBER_OF_LEVELS = 5;
+    /// <summary>List of all buildings on all levels.</summary>
     public static List<Building> buildings = new();
+    /// <summary>List of all chunks on all levels.</summary>
     public static List<Chunk> chunks = new();
-    public static List<Human> humans = new();
+    /// <summary>List of all fluid networks on all levels.</summary>
     public static List<FluidNetwork> fluidNetworks = new();
 
+    /// <summary>All levels.</summary>
     static GroundLevel[] levels;
 
-    public static int currentLevel { get; private set; }
-    public static string startSceneName;
-
-    public static int gridSize { get { return levels[currentLevel].height; } }
-
+    /// <summary>Event for switching between levels.</summary>
     static Action<int, int> GridChange;
+    /// <summary>World name(for saving).</summary>
     public static string worldName;
+#if UNITY_EDITOR_WIN
+    public static string startSceneName;
+#endif
+    #endregion
 
+    #region Getters
+    /// <summary>Get current active level.</summary>
+    public static int currentLevel { get; private set; }
+    /// <summary>Get grid size.(from one of the levels)</summary>
+    public static int gridSize { get { return levels[currentLevel].height; } }
+    #endregion
+
+    /// <summary>
+    /// Links <see cref="GridChange"/> events. And changes the active level.
+    /// </summary>
     public static void Init()
     {
-        GridChange += (int _, int _) => SceneRefs.gridTiles.ChangeSelMode(SelectionMode.nothing);
+        GridChange += (int _, int _) => SceneRefs.gridTiles.ChangeSelMode(ControlMode.nothing);
         GridChange += (int _, int _) => SceneRefs.gridTiles.Exit(SceneRefs.gridTiles.activeObject);
         GridChange += (int i, int newI) => SceneRefs.humans.SwitchLevel(i, newI);
         ChangeGridLevel(0);
@@ -105,16 +122,13 @@ public static class MyGrid
     /// <param name="load"></param>
     public static void SetBuilding(Building building, bool load = false)
     {
-        if (building.id == -1)
-            building.UniqueID();
-        
         GridPos gridPos = building.GetPos();
         levels[gridPos.y].PlaceBuild(building, gridPos, load);
     }
 
     public static void UnsetRock(Rock rock)
     {
-        SceneRefs.gridTiles.toBeDigged.Remove(rock); // removes from list
+        SceneRefs.jobQueue.toBeDug.Remove(rock); // removes from list
         SceneRefs.gridTiles.markedTiles.Remove(rock);
         SceneRefs.gridTiles.DestroyUnselect(rock);
         GameObject.Destroy(rock.gameObject);
@@ -129,12 +143,9 @@ public static class MyGrid
         else
         {
             SceneRefs.gridTiles.DestroyUnselect(building);
-            GridPos gridPos = building.GetPos();
-            GridPos p = Rotate(building.blueprint.moveBy, building.transform.rotation.eulerAngles.y);
-            gridPos.x -= p.x;
-            gridPos.z -= p.z;
             if (building.blueprint.itemList.Count > 0)
             {
+                GridPos gridPos = building.GetPos();
                 levels[gridPos.y].UnsetBuilding(building, gridPos);
             }
         }
@@ -181,6 +192,13 @@ public static class MyGrid
     public static bool IsUnlocked(int lIndex) => levels[lIndex].unlocked;
     #endregion
 
+    /// <summary>
+    /// Rotates the <paramref name="offset"/> by rotation.
+    /// </summary>
+    /// <param name="offset">Original value.</param>
+    /// <param name="rotation">Dermining value</param>
+    /// <param name="isTile">If it's a building or a tile.</param>
+    /// <returns>Rotated <paramref name="offset"/>.</returns>
     public static GridPos Rotate(GridPos offset, float rotation, bool isTile = false)
     {
         GridPos gp;
@@ -202,19 +220,21 @@ public static class MyGrid
                     gp = new(-offset.z, offset.x);
                 break;
             default:
-                gp = new(offset.x, offset.z);
-                break;
+                return new(offset.x, offset.z);
         }
         return gp;
     }
 
-    static public int ChangeGridLevel(int newLevel)
+    /// <summary>
+    /// Only way to change active level view. Triggers the <see cref="GridChange"/> event.
+    /// </summary>
+    /// <param name="newLevel">New level to switch to.</param>
+    static public void ChangeGridLevel(int newLevel)
     {
         GridChange?.Invoke(currentLevel, newLevel);
         levels[currentLevel].gameObject.SetActive(false);
         currentLevel = newLevel;
         levels[currentLevel].gameObject.SetActive(true);
-        return currentLevel;
     }
 
     #region Saving
@@ -261,7 +281,6 @@ public static class MyGrid
                 }
             }
         }
-        SceneRefs.jobQueue.toBeDug = SceneRefs.gridTiles.toBeDigged.ToList();
     }
     #endregion
 }

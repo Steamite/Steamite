@@ -4,6 +4,7 @@ using UnityEngine.Rendering;
 using System.Collections.Generic;
 using System;
 using Unity.Properties;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// Class for buildings, which can be constructed on free tiles. 
@@ -15,15 +16,17 @@ public class Building : StorageObject
     /// <summary>Used for determening buildings.</summary>
     [SerializeField] protected List<Color> myColor;
     
-    [Header("Size")]
+    /// <summary>Building layout(entry points, anchor, ...).</summary>
     public BuildingGrid blueprint;
-    [Header("Storage")]
+    /// <summary>Construction cost in resources.</summary>
     public Resource cost;
-    [Header("States")]
+    /// <summary>Is constructed.</summary>
     public bool constructed;
+    /// <summary>Is being deconstructed.</summary>
     public bool deconstructing;
-    [CreateProperty]
-    public float constructionProgress;
+    /// <summary>Progress of construction/deconstruction.</summary>
+    [CreateProperty] public float constructionProgress;
+    /// <summary>.</summary>
     public int maximalProgress;
 
 
@@ -35,7 +38,10 @@ public class Building : StorageObject
 
     /// <summary>Creates a list from <see cref="MyGrid.buildings"/></summary>
     public override void UniqueID() => CreateNewId(MyGrid.buildings.Select(q => q.id).ToList());
-    /// <inheritdoc/>
+    /// <summary>
+    /// Calculates positio using the anchor from <see cref="blueprint"/>.
+    /// </summary>
+    /// <returns><inheritdoc/></returns>
     public override GridPos GetPos()
     {
         GridPos pos = MyGrid.Rotate(blueprint.moveBy, transform.rotation.eulerAngles.y);
@@ -247,17 +253,14 @@ public class Building : StorageObject
     public virtual Chunk Deconstruct(GridPos instantPos)
     {
         Resource r = new();
-        // if constructed
         if (constructed)
         {
-            // get half of build cost
             MyRes.ManageRes(r, cost, 1);
             for (int i = 0; i < r.ammount.Count; i++)
             {
                 r.ammount[i] /= 2;
             }
         }
-        // get all stored resources
         MyRes.ManageRes(r, localRes.stored, 1);
         DestoyBuilding(); // destroy self
         return SceneRefs.objectFactory.CreateAChunk(instantPos, r);
@@ -277,7 +280,10 @@ public class Building : StorageObject
             throw new NotImplementedException();
         }
     }
-
+    /// <summary>
+    /// Changes building materials to transparent or opague.
+    /// </summary>
+    /// <param name="transparent">Requested render mode.</param>
     public virtual void ChangeRenderMode(bool transparent)
     {
         foreach (Material material in transform.GetComponentsInChildren<MeshRenderer>().Select(q => q.material))
@@ -307,17 +313,24 @@ public class Building : StorageObject
     #endregion
 
     #region Placing
+    /// <summary>
+    /// Calculates missing resources needed for construction.
+    /// </summary>
+    /// <param name="inventory">Inventory of the carrier.</param>
+    /// <returns>Missing resources.</returns>
     public virtual Resource GetDiff(Resource inventory)
     {
         Resource r = null;
         r = MyRes.DiffRes(cost, localRes.Future(), inventory);
         return r;
     }
+    /// <summary>Short info for building buttons.</summary>
     public virtual List<string> GetInfoText()
     {
         return new() { $"<u>Costs</u>:\n{MyRes.GetDisplayText(cost)}" };
     }
 
+    /// <summary>Checks if you can afford the building.</summary>
     public virtual bool CanPlace()
     {
         if (MyRes.CanAfford(cost) && MyGrid.CanPlace(this))
@@ -325,6 +338,11 @@ public class Building : StorageObject
         else
             return false;
     }
+
+    /// <summary>
+    /// Placing building by player.
+    /// </summary>
+    /// <param name="gT"></param>
     public virtual void PlaceBuilding(GridTiles gT)
     {
         foreach (Transform t in transform.GetComponentsInChildren<Transform>())
@@ -337,9 +355,14 @@ public class Building : StorageObject
 
         SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         MyRes.UpdateResource(cost, -1);
+        UniqueID();
+
         MyGrid.SetBuilding(this);
     }
 
+    /// <summary>
+    /// Fills <see cref="myColor"/>.
+    /// </summary>
     public void GetColors() => myColor = transform.GetComponentsInChildren<MeshRenderer>().Select(q => q.material.color).ToList(); // saves the original color
     #endregion
 }

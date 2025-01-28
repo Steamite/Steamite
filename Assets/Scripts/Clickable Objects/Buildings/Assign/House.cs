@@ -3,20 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
-
+/// <summary>Provides a place to sleep for <see cref="Human"/>s.</summary>
 public class House : AssignBuilding
 {
-    ///////////////////////////////////////////////////
-    ///////////////////Overrides///////////////////////
-    ///////////////////////////////////////////////////
-    #region Window
-
-    protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
-    {
-        OpenWindowWithToggle(info, toEnable);
-    }
-
-    #endregion
+    /// <summary>
+    /// <inheritdoc/> <br/>
+    /// Also sends assigned Humans to the elevator.
+    /// </summary>
     public override void OrderDeconstruct()
     {
         base.OrderDeconstruct();
@@ -33,6 +26,7 @@ public class House : AssignBuilding
         }
     }
 
+    /// <inheritdoc/>
     public override List<string> GetInfoText()
     {
         List<string> strings = base.GetInfoText();
@@ -41,6 +35,11 @@ public class House : AssignBuilding
     }
 
     #region Assign
+    /// <summary>
+    /// Changes the <see cref="Human.home"/>.
+    /// </summary>
+    /// <param name="human">To modify.</param>
+    /// <param name="add">Add or remove.</param>
     public override void ManageAssigned(Human human, bool add)
     {
         if (add)
@@ -55,6 +54,10 @@ public class House : AssignBuilding
         }
         UIUpdate(nameof(Assigned));
     }
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <returns><returns>Returns homeless <see cref="Human"/>s</returns></returns>
     public override List<Human> GetUnassigned()
     {
         List<Human> unassigned = SceneRefs.humans.GetHumen();

@@ -6,6 +6,6 @@ public interface IUIElement
     /// <summary>
     /// Adds data binding based on the type of <see cref="data"/>.
     /// </summary>
-    /// <param name="DataSource">Object containing data to render.</param>
-    public void Fill(object DataSource);
+    /// <param name="data"> Object containing data to render.</param>
+    public void Fill(object data);
 }

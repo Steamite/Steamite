@@ -6,24 +6,32 @@ using UnityEngine.UIElements;
 
 namespace InfoWindowViews
 {
-
+    /// <summary>Control for managing assigned <see cref="Human"/>s.</summary>
     [UxmlElement]
     public partial class WorkerAssign : VisualElement, IUIElement
     {
-        const string ASSIGN = "Assigned";
-        const string FREE = "Unassigned";
+        #region Variables
+        /// <summary>Tab title for assigned.</summary>
+        [UxmlAttribute] string ASSIGN = "Assigned";
+        /// <summary>Tab title for unassigned.</summary>
+        [UxmlAttribute] string FREE = "Unassigned";
 
+        /// <summary>Inspected building-</summary>
         AssignBuilding building;
+        /// <summary>List of unassigned <see cref="Human"/>.</summary>
         List<Human> unassigned;
 
-        Humans humans;
-        //InfoWindow infoWindow;
+        /// <summary>HumanUtil for accesing <see cref="Human"/>.</summary>
+        HumanUtil humans;
 
-        [UxmlAttribute]
-        VisualTreeAsset prefab;
+        /// <summary>Item prefab.</summary>
+        [UxmlAttribute] VisualTreeAsset prefab;
 
+        /// <summary>Header label.</summary>
         Label label;
+        /// <summary>Tab view for managment.</summary>
         TabView view;
+        #endregion
 
         #region Builder init
         public WorkerAssign()
@@ -42,6 +50,11 @@ namespace InfoWindowViews
             view.Add(InitListView(FREE));
         }
 
+        /// <summary>
+        /// Inits one of the tabs. Links item actions and applies styles.
+        /// </summary>
+        /// <param name="tabName">New tab name.</param>
+        /// <returns>The new ready tab.</returns>
         Tab InitListView(string tabName)
         {
             List<Human> humans = new();
@@ -75,6 +88,7 @@ namespace InfoWindowViews
 
             listView.unbindItem = (el, i) =>
             {
+                SceneRefs.infoWindow.ClearBinding(el.Q<Label>("Job"));
                 Debug.LogWarning($"Unassigned: {boo}, {el.Q<Label>("Name").text}");
             };
 
@@ -87,6 +101,7 @@ namespace InfoWindowViews
         #endregion
 
         #region Logic
+        /// <inheritdoc/>
         public void Fill(object obj)
         {
             building = (AssignBuilding)obj;
@@ -157,8 +172,8 @@ namespace InfoWindowViews
             if (add)
             {
                 Human h = unassigned.First(q => q.id == id);
-                building.ManageAssigned(h, true);
                 unassigned.Remove(h);
+                building.ManageAssigned(h, true);
             }
             else
             {

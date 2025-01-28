@@ -1,14 +1,24 @@
 using System.Collections.Generic;
 using System;
 
+/// <summary>Helps with fulfiling resource orders and make logistics more efficient.</summary>
 [Serializable]
 public class StorageResource
 {
+    #region Variables
+    /// <summary>Stored resources that are realy there.</summary>
     public Resource stored;
+    /// <summary>All resources that were requested(store && take).</summary>
     public List<Resource> requests;
+    /// <summary>All carriers for resouces.</summary>
     public List<Human> carriers;
+    /// <summary>ID of carriers for loading(is needed to ensure the correct aligment with <see cref="requests"/>).</summary>
     private List<int> carrierIDs;
+    /// <summary>All states of requests(-1 = take, 1 = store).</summary>
     public List<int> mods;
+    #endregion
+
+    #region Constructors
     public StorageResource()
     {
         stored = new();
@@ -24,7 +34,8 @@ public class StorageResource
         carriers = new();
         carrierIDs = resSave.carriers;
     }
-
+    #endregion
+    
     /// <summary>
     /// Adds a request for moving resources.<br/>
     /// </summary>
@@ -50,6 +61,10 @@ public class StorageResource
         mods.RemoveAt(index);
     }
 
+    /// <summary>
+    /// Reassign when setting a building to deconstruction.
+    /// </summary>
+    /// <param name="assign"></param>
     public void ReassignCarriers(bool assign = true)
     {
         if (carriers.Count > 0)

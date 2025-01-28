@@ -5,10 +5,14 @@ using System.Linq;
 using System;
 using System.Collections;
 
+/// <summary>Unities Saving.</summary>
 public class SaveController : MonoBehaviour
 {
+    /// <summary>Action trigger after a succesful saving(to update ui).</summary>
     Action saveUIAction;
+    /// <summary>Name of the world.</summary>
     string worldName;
+    #region Init
     private void Start()
     {
         SceneRefs.tick.timeController.dayStart += () => SaveGame("", true);
@@ -32,6 +36,7 @@ public class SaveController : MonoBehaviour
         jsonSerializer.Formatting = Formatting.Indented;
         return jsonSerializer;
     }
+    #endregion
 
     /// <summary>
     /// Gets save name from path.
@@ -79,7 +84,14 @@ public class SaveController : MonoBehaviour
             Save(saveName, autoSave);
         }
     }
-    void Save(string saveName, bool autoSave) {
+
+    /// <summary>
+    /// Saves the game state into a temp folder that is then moved elsewhere.
+    /// </summary>
+    /// <param name="saveName">Name of the new save.</param>
+    /// <param name="autoSave">Is it an auto save.</param>
+    void Save(string saveName, bool autoSave) 
+    {
         string tmpPath = $"{Application.persistentDataPath}/saves/_tmp";
         Directory.CreateDirectory($"{tmpPath}");
         JsonSerializer jsonSerializer = PrepSerializer();
@@ -143,6 +155,7 @@ public class SaveController : MonoBehaviour
     }
 
 
+    #region Save Parts
     //-------Grid-------\\
     void SaveGrid(string path, JsonSerializer jsonSerializer)
     {
@@ -246,5 +259,5 @@ public class SaveController : MonoBehaviour
         jsonSerializer.Serialize(jsonTextWriter, new TradeSave(trade));
         jsonTextWriter.Close();
     }
+    #endregion
 }
-

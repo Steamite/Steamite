@@ -1,17 +1,17 @@
 using InfoWindowElements;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
-using Unity.Properties;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace InfoWindowViews
 {
+    /// <summary>
+    /// Info window view mode for storage building buildings. <br/>
+    /// Made up of two tabs: <bold>storage</bold> one and the <bold>level</bold> one(only for elevators).
+    /// </summary>
     [UxmlElement]
     public partial class StorageView : TabView, IUIElement
     {
+        #region Variables
 #if UNITY_EDITOR
         bool active;
         [UxmlAttribute]
@@ -34,11 +34,12 @@ namespace InfoWindowViews
         StorageTab storageTab;
         LevelsTab levelTab;
         Storage storage;
+        #endregion
         public StorageView()
         {
             #region Tabs
             style.flexGrow = 1;
-            storageTab = new StorageTab();
+            storageTab = new StorageTab(elemPref);
             Add(storageTab);
 
             levelTab = new LevelsTab();
@@ -48,6 +49,7 @@ namespace InfoWindowViews
             #endregion
         }
 
+        /// <inheritdoc/>
         public void Fill(object data)
         {
             storage = (Storage)data;
@@ -64,7 +66,7 @@ namespace InfoWindowViews
                 default:
                     throw new NotImplementedException();
             }
-            storageTab.Open(storage, elemPref);
+            storageTab.Open(storage);
         }
     }
 }

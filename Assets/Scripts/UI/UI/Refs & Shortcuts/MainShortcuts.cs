@@ -65,14 +65,14 @@ public class MainShortcuts : MonoBehaviour
             // toggle dig
             if (dig.triggered)
             {
-                gt.ChangeSelMode(SelectionMode.dig);
+                gt.ChangeSelMode(ControlMode.dig);
                 gt.Exit(gt.activeObject);
                 gt.Enter(gt.activeObject);
             }
             // toggle deconstruct
             else if (deconstruction.triggered)
             {
-                gt.ChangeSelMode(SelectionMode.deconstruct);
+                gt.ChangeSelMode(ControlMode.deconstruct);
                 gt.Exit(gt.activeObject);
                 gt.Enter(gt.activeObject);
             }
@@ -80,7 +80,7 @@ public class MainShortcuts : MonoBehaviour
             else if (buildRotate.triggered)
             {
                 float axis = buildRotate.ReadValue<float>();
-                if (SceneRefs.gridTiles.selMode == SelectionMode.build)
+                if (SceneRefs.gridTiles.activeControl == ControlMode.build)
                 {
                     if (SceneRefs.gridTiles.buildBlueprint.GetComponent<Pipe>())
                         return;
@@ -99,7 +99,7 @@ public class MainShortcuts : MonoBehaviour
 
         if (shift.inProgress)
         {
-            if(gt.selMode == SelectionMode.deconstruct)
+            if(gt.activeControl == ControlMode.deconstruct)
             {
                 gt.Enter(gt.activeObject);
             }

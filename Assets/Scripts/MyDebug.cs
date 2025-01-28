@@ -1,21 +1,11 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MyDebug : MonoBehaviour
 {
-    [SerializeField] TMP_InputField inputField;
-    private void Update()
-    {
-        if(Input.GetKey(KeyCode.Semicolon)){
-            bool active = !transform.GetChild(0).gameObject.activeSelf;
-            transform.GetChild(0).gameObject.SetActive(active);
-            if (active)
-                inputField.text = "";
-        }
-    }
-
-
+/*
     public void OnEnd()
     {
         try
@@ -40,5 +30,5 @@ public class MyDebug : MonoBehaviour
         {
             Debug.LogException(e);
         }
-    }
+    }*/
 }

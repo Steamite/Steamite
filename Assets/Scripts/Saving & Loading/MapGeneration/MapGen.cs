@@ -2,40 +2,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>Class generating new maps.</summary>
 public class MapGen : MonoBehaviour
 {
-    [Header("Generation Parameters")]
-    [SerializeField] int veinRichness = 1;
+    #region Variables
+    /// <summary>Determines the richness of the each node richness.</summary>
+    [Header("Generation Parameters")][SerializeField] int veinRichness = 1;
+    /// <summary>Number of nodes in each vein.</summary>
     [SerializeField] int veinSize = 1;
+    /// <summary>Number of veins.</summary>
     [SerializeField] int veinCount = 1;
+    /// <summary>Random seed for the random generator.</summary>
     [SerializeField] int randomSeed;
+    /// <summary>Seed containing all generation parameters.</summary>
     [SerializeField] string seed = "";
 
-    [Header("Spiral Parameters")]
-    [SerializeField] int minToRemove = 2;
+    /// <summary>Minimal to remove chance.</summary>
+    [Header("NEG SPIRAL")][SerializeField] int minToRemove = 2;
+    /// <summary>Maximal to remove chance.</summary>
     [SerializeField] int maxToRemove = 25;
-    [SerializeField] int minToAdd = 1;
+    
+    /// <summary>Minimal to add chance.</summary>
+    [Header("POS SPIRAL")][SerializeField] int minToAdd = 1;
+    /// <summary>Maximal to add chance.</summary>
     [SerializeField] int maxToAdd = 6;
 
-    [Header("Map params")]
-    [SerializeField] int[] gridSizes;
+    /// <summary>Contains the posible map sizes to chose from.</summary>
+    [Header("Map params")][SerializeField] int[] gridSizes;
 
+    /// <summary>Chosen size of grid./summary>
     int gridSize;
+    /// <summary>Number of the generated level./summary>
     int level;
+    /// <summary>Level that's being generated at the moment./summary>
     MapTile[,] map;
-    Color[] resPixels;
 
-    [Header("Resource data")]
-    [SerializeField] List<MinableRes> minableResources;
+    /// <summary>List of resources that are posible to spawn./summary>
+    [Header("Resource data")][SerializeField] List<MinableRes> minableResources;
+    /// <summary>Material for dirt rocks./summary>
     [SerializeField] Material dirt;
 
-
+    /// <summary>Left/Top./summary>
     int minCenter;
+    /// <summary>Right/Bottom./summary>
     int maxCenter;
+    #endregion
 
-    string lastSeed = "";
-
-    public void Generate(string _seed = null, GroundLevel templateLevel = null)
+    #region Initialization
+    /// <summary>
+    /// Generates and creates a new map.
+    /// </summary>
+    /// <param name="_seed">Seed containing all generation paramaters.</param>
+    /// <param name="templateLevel">Level template for creating <see cref="GroundLevel"/>s.</param>
+    public void Generate(string _seed, GroundLevel templateLevel)
     {
         seed = _seed;
         ParseInput();
@@ -43,14 +62,12 @@ public class MapGen : MonoBehaviour
         MyGrid.PrepGridLists();
         #region Generation
 
-
         minCenter = (gridSize / 2) - 5;
         maxCenter = (gridSize / 2) + 5;
 
         for (level = 0; level < 5; level++)
         {
             MyGrid.AddEmptyGridLevel(templateLevel, level, gridSize);
-            resPixels = new Color[gridSize * gridSize];
             map = new MapTile[gridSize, gridSize];
             CreateGrid();
             PerlinNoise(level);
@@ -60,7 +77,7 @@ public class MapGen : MonoBehaviour
                 for (int y = 0; y < gridSize; y++)
                 {
                     if (map[x, y] != null)
-                        SceneRefs.objectFactory.CreateRock(new(x, level, y), resPixels[y * gridSize + x], map[x, y].resource, map[x, y].hardness, map[x, y].name);
+                        SceneRefs.objectFactory.CreateRock(new(x, level, y), map[x,y].color, map[x, y].resource, map[x, y].hardness, map[x, y].name);
                     else
                     {
                         SceneRefs.objectFactory.CreateRoad(new(x, level, y), true);
@@ -72,6 +89,7 @@ public class MapGen : MonoBehaviour
         #endregion
     }
 
+    /// <summary>Extracts parameters from the <see cref="seed"/>.</summary>
     void ParseInput()
     {
         // Input preformating
@@ -96,23 +114,27 @@ public class MapGen : MonoBehaviour
 
         Random.InitState(randomSeed);
     }
+    #endregion
 
-    #region Chunks
+    #region Veins
+    /// <summary>Generates veins on a level.</summary>
     void CreateGrid()
     {
-        //Visualization
         foreach (MinableRes minable in minableResources)
         {
             int _veinCount = minable.count[level].Value(veinCount);
             for (int i = 0; i < _veinCount; i++)
             {
-                CreateAGroup(minable);
+                SpiralVein(minable);
             }
         }
-
-
     }
-    void CreateAGroup(MinableRes minable)
+
+    /// <summary>
+    /// Creates a resource vein.
+    /// </summary>
+    /// <param name="minable">Sets the parameters of the vein.</param>
+    void SpiralVein(MinableRes minable)
     {
         int x, z;
 
@@ -125,9 +147,17 @@ public class MapGen : MonoBehaviour
         int _veinSize = minable.size[level].Value(veinSize);
 
         while (_veinSize > 0)
-            CreateTiles(ref _veinSize, minable, x, z + 1);
+            AddTiles(ref _veinSize, minable, x, z + 1);
     }
-    void CreateTiles(ref int numberOfTiles, MinableRes minable, int x, int z)
+
+    /// <summary>
+    /// Starts a series of placing.
+    /// </summary>
+    /// <param name="numberOfTiles">Number of tiles that are to be placed.</param>
+    /// <param name="minable">Vein parameters.</param>
+    /// <param name="x">Position to start.</param>
+    /// <param name="z">Position to start</param>
+    void AddTiles(ref int numberOfTiles, MinableRes minable, int x, int z)
     {
         int maxX = 0;
         int maxY = 1;
@@ -137,20 +167,33 @@ public class MapGen : MonoBehaviour
         while (rockChance > 10 && numberOfTiles > 0 && maxX < 15 && maxY < 15)
         {
             maxY++;
-            if (Spiral(ref x, ref z, maxY, ref rockChance, ref numberOfTiles, false, -1, minable))
+            if (SpiralRow(ref x, ref z, maxY, ref rockChance, ref numberOfTiles, false, -1, minable))
                 break;
             maxX++;
-            if (Spiral(ref x, ref z, maxX, ref rockChance, ref numberOfTiles, true, 1, minable))
+            if (SpiralRow(ref x, ref z, maxX, ref rockChance, ref numberOfTiles, true, 1, minable))
                 break;
-            if (Spiral(ref x, ref z, maxY, ref rockChance, ref numberOfTiles, false, 1, minable))
+            if (SpiralRow(ref x, ref z, maxY, ref rockChance, ref numberOfTiles, false, 1, minable))
                 break;
-            if (Spiral(ref x, ref z, maxX, ref rockChance, ref numberOfTiles, true, -1, minable))
+            if (SpiralRow(ref x, ref z, maxX, ref rockChance, ref numberOfTiles, true, -1, minable))
                 break;
             if (lastnum == numberOfTiles)
                 numberOfTiles = 0;
         }
     }
-    bool Spiral(ref int x, ref int y, int maxCord, ref int rockChance, ref int numberOfTiles, bool changeX, int mod, MinableRes minable)
+
+    /// <summary>
+    /// Creates a serie for tiles.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="maxCord">Max Offset</param>
+    /// <param name="rockChance">Chance for placing the tile.</param>
+    /// <param name="numberOfTiles"><inheritdoc cref="AddTiles(ref int, MinableRes, int, int)"  path="/param[@name='numberOfTiles']"/></param>
+    /// <param name="changeX">horizontal/vertical placement</param>
+    /// <param name="mod">Value direction</param>
+    /// <param name="minable"><inheritdoc cref="AddTiles(ref int, MinableRes, int, int)"  path="/param[@name='minable']"/></param>
+    /// <returns></returns>
+    bool SpiralRow(ref int x, ref int y, int maxCord, ref int rockChance, ref int numberOfTiles, bool changeX, int mod, MinableRes minable)
     {
         for (int i = 0; i < maxCord; i++)
         {
@@ -164,7 +207,6 @@ public class MapGen : MonoBehaviour
                 if (InBounds(x, y) && CanPlace(x, y))
                 {
                     map[x, y] = new(minable, minable.richness[level].Value(veinRichness));
-                    resPixels[y * gridSize + x] = minable.color;
                     numberOfTiles--;
                     if (numberOfTiles <= 0)
                         return true;
@@ -177,6 +219,12 @@ public class MapGen : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Checks if the place is free for placing.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
     bool CanPlace(int x, int y)
     {
         if (map[x, y] == null)
@@ -200,7 +248,7 @@ public class MapGen : MonoBehaviour
 
     #endregion Chunks
 
-    #region Rocks
+    #region Integrity
     void PerlinNoise(int level)
     {
         float randomX = Random.Range(-500f, 500f);
@@ -223,9 +271,9 @@ public class MapGen : MonoBehaviour
                     Mathf.PerlinNoise(randomX + x / (float)gridSize, randomY + y / (float)gridSize));
                 
                 map[x, y].hardness += Mathf.RoundToInt(f);
-
+                
                 if (changeColor)
-                    resPixels[y * gridSize + x] = new(dirt.color.r / f *2, dirt.color.g / f*2, dirt.color.b / f*2, 1);
+                    map[x, y].color = new(dirt.color.r / f *2, dirt.color.g / f*2, dirt.color.b / f*2, 1);
             }
         }
     }

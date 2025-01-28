@@ -1,31 +1,53 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
 using System.Linq;
 using UnityEngine;
 using System;
 
-#if UNITY_EDITOR
+/// <summary>Used for modifying <see cref="ResearchData"/>.</summary>
 public class ResearchEditor : EditorWindow
 {
+    #region Variables
+    /// <summary>Data source.</summary>
     ResearchData researchData;
+    /// <summary>Last interacted node.</summary>
     ResearchNode selectedNode;
+    /// <summary>Name of the opened category.</summary>
     string categName = "";
+    /// <summary>Node depth to add to</summary>
     string nodeLevel = "0";
+    
+    /// <summary>Node width</summary>
     const float nodeWidth = 175;
+    /// <summary>Node height</summary>
     const float nodeHeight = 195;
+    /// <summary><see cref="nodeWidth"/> + space around</summary>
     const float nodeSpace = nodeWidth + 75;
 
+    /// <summary>If the last click was on the destroy button</summary>
     static bool destroing;
+    /// <summary>If the last click was on the connect button</summary>
     static bool connecting;
+    /// <summary>If the last click was on the disconnect button</summary>
     static bool disconecting;
+    /// <summary>Scroll position.</summary>
     static Vector2 scroll = new();
+    /// <summary>Selected category tab.</summary>
     static int selTab = -1;
+    /// <summary>Texture for lines.</summary>
     [SerializeField]Texture2D point;
+    /// <summary>Texture for connection buttons</summary>
     [SerializeField] Texture2D circle;
+    /// <summary>Style for buttons</summary>
     GUIStyle circleButtonStyle;
 
+    /// <summary>Instance of the window.</summary>
     static EditorWindow open;
+    #endregion
 
+    #region Opening
+    /// <summary>Opens the window, if it's already opened close it.</summary>
     [MenuItem("Custom Editors/Research Editor %t", priority = 15)]
     public static void ShowWindow()
     {
@@ -37,6 +59,8 @@ public class ResearchEditor : EditorWindow
         else
             open.Close();
     }
+    
+    /// <summary>Fills the button style and recalculates head placement</summary>
     void Init()
     {
         titleContent = new("Research Editor");
@@ -50,6 +74,8 @@ public class ResearchEditor : EditorWindow
         maximized = false;
         CalculateHeads();
     }
+    #endregion
+
     void OnGUI()
     {
         GUI.contentColor = Color.white;
@@ -61,7 +87,7 @@ public class ResearchEditor : EditorWindow
             selTab = 0;
         SwitchCategory();
     }
-
+    /// <summary>Handles the top bar</summary>
     void SwitchCategory()
     {
         string[] tabs = researchData.categories.Select(q => $"{q.categName} ({q.nodes.Count(q => q.buildButton > -1)})").Append("create new").ToArray();

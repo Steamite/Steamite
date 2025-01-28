@@ -5,6 +5,10 @@ using UnityEngine.UIElements;
 
 namespace InfoWindowElements
 {
+    /// <summary>
+    /// <inheritdoc/> <br\>
+    /// Adds a second ammount.(for costs)
+    /// </summary>
     public class DoubleUIResource : UIResource
     {
         public int secondAmmount;
@@ -17,8 +21,10 @@ namespace InfoWindowElements
     [UxmlElement]
     public partial class DoubleResourceList : ResourceList
     {
+        /// <summary>Display as x/y or x (y).</summary>
         [UxmlAttribute] bool cost;
 
+        #region Constructors
         ///<summary> Do not use from code, this is only for adding the resource list from UI Builder.</summary>
         public DoubleResourceList() : base()
         {
@@ -28,7 +34,6 @@ namespace InfoWindowElements
             cost = false;
         }
 
-
         public DoubleResourceList(bool _cost, string _name) : base()
         {
             style.marginTop = new(new Length(9, LengthUnit.Percent));
@@ -37,7 +42,10 @@ namespace InfoWindowElements
             cost = _cost;
             name = _name;
         }
+        #endregion
 
+        #region Init
+        /// <inheritdoc/>
         public override void Fill(object data)
         {
             DataBinding binding = null;
@@ -85,6 +93,12 @@ namespace InfoWindowElements
             SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
         }
 
+        /// <summary>
+        /// Prepares UI resources for all <see cref="ResourceType"/>s in <paramref name="resource"/>.
+        /// </summary>
+        /// <param name="resource">Cost resource.</param>
+        /// <param name="propName">Name of the datasource property.</param>
+        /// <returns></returns>
         DataBinding SetupResTypes(Resource resource, string propName)
         {
             resources = new();
@@ -95,8 +109,10 @@ namespace InfoWindowElements
                         resource.type[i]));
             return Util.CreateBinding(propName);
         }
+        #endregion
 
         #region Convertors
+        /// <inheritdoc/>
         protected override List<UIResource> ToUIRes(Resource storage)
         {
             for (int i = 0; i < storage.type.Count; i++)
@@ -108,6 +124,11 @@ namespace InfoWindowElements
             return resources;
         }
 
+        /// <summary>
+        /// Adds a second resource to display.
+        /// </summary>
+        /// <param name="resource">Data.</param>
+        /// <returns>Based on <see cref="cost"/></returns>
         protected override string ConvertString(UIResource resource)
         {
             if (cost)

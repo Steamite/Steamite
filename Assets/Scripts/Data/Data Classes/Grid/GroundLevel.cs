@@ -6,26 +6,47 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>Util class for managment of each different level.</summary>
 public class GroundLevel : MonoBehaviour
 {
-    [Header("Grid")]
-    public int width = 21;
+    #region Variables
+    /// <summary>grid witdth(x)</summary>
+    [Header("Grid")]public int width = 21;
+    /// <summary>grid height(y)</summary>
     public int height = 21;
-    
+
+    /// <summary>grid itself</summary>
     ClickableObject[,] grid;
+    /// <summary>pipes on the grid</summary>
     Pipe[,] pipeGrid;
 
-    [Header("Reference")]
-    public Transform rocks;
+    /// <summary>Rock holder</summary>
+    [Header("Reference")] public Transform rocks;
+    /// <summary>Road holder</summary>
     public Transform roads;
+    /// <summary>Water holder</summary>
     public Transform water;
+    /// <summary>Chunk holder</summary>
     public Transform chunks;
+    /// <summary>Building holder</summary>
     public Transform buildings;
+    /// <summary>Pipe holder</summary>
     public Transform pipes;
+
+    /// <summary>Entrypoint overlay</summary>
     public UIOverlay overlays;
 
+    /// <summary>If the level is unlocked(has a elevator).</summary>
     public bool unlocked;
+    #endregion
+
     #region Base Grid operations
+    /// <summary>
+    /// Returns contents of a tile on the <paramref name="gp"/> position.
+    /// </summary>
+    /// <param name="gp">Position of interest.</param>
+    /// <param name="isPipe">Look into the pipe grid.</param>
+    /// <returns>The content of the tile.</returns>
     public ClickableObject GetGridItem(GridPos gp, bool isPipe = false)
     {
         int x = Mathf.RoundToInt(gp.x);
@@ -41,6 +62,13 @@ public class GroundLevel : MonoBehaviour
         else
             return grid[x, y];
     }
+
+    /// <summary>
+    /// Updates the grid by replacing the content of a tile.
+    /// </summary>
+    /// <param name="gp">Position of interest.</param>
+    /// <param name="clickable">New content.</param>
+    /// <param name="isPipe">Change in pipeGrid.</param>
     public void SetGridItem(GridPos gp, ClickableObject clickable, bool isPipe = false)
     {
         int x = Mathf.RoundToInt(gp.x);
@@ -72,6 +100,10 @@ public class GroundLevel : MonoBehaviour
             grid[x, y] = clickable;
     }
 
+    /// <summary>
+    /// Creates a new <see cref="grid"/> and <see cref="pipeGrid"/>.
+    /// </summary>
+    /// <param name="gridSize">Size for the new grid.</param>
     public void ClearGrid(int gridSize = -1)
     {
         if(gridSize > -1)
@@ -86,52 +118,64 @@ public class GroundLevel : MonoBehaviour
     #endregion Base Grid operations
 
     #region Creation
+
+    /// <summary>
+    /// Registers all parts of the grid.
+    /// </summary>
+    /// <param name="gridSize">Size of the grid.</param>
     public void CreateGrid(int gridSize = -1)
     {
         ClearGrid(gridSize);
         
-        FillRocks(rocks); // adds ores
-        FillRoads(roads); // adds roads
-        FillWater(water); // adds water
-        FillBuildings(buildings); // adds Buildings and (entry points)
-        FillPipes(pipes); // adds Pipes
+        FillRoads(); // adds roads
+        FillRocks(); // adds ores
+        FillWater(); // adds water
+        FillBuildings(); // adds Buildings and (entry points)
 
         gameObject.SetActive(false);
     }
+
     #region specific Creations
-    void FillRoads(Transform objects)
+    /// <summary>Registers all instantiated roads.</summary>
+    void FillRoads()
     {
-        for (int j = 0; j < objects.childCount; j++)
+        for (int j = 0; j < roads.childCount; j++)
         {
-            GridPos vec = new(objects.GetChild(j).transform.localPosition);
-            SetGridItem(vec, objects.GetChild(j).GetComponent<Road>());
+            GridPos vec = new(roads.GetChild(j).transform.localPosition);
+            SetGridItem(vec, roads.GetChild(j).GetComponent<Road>());
         }
     }
-    void FillRocks(Transform objects)
+    
+    /// <summary>Registers all instantiated rocks.</summary>
+    void FillRocks()
     {
-        for (int j = 0; j < objects.childCount; j++)
+        for (int j = 0; j < rocks.childCount; j++)
         {
-            GridPos vec = new(objects.GetChild(j).transform.localPosition);
-            Rock rock = objects.GetChild(j).GetComponent<Rock>();
+            GridPos vec = new(rocks.GetChild(j).transform.localPosition);
+            Rock rock = rocks.GetChild(j).GetComponent<Rock>();
             SetGridItem(vec, rock);
-            GetGridItem(vec).UniqueID();
+            rock.UniqueID();
             if (rock.rockYield.ammount.Sum() == 0)
             {
                 rock.ColorWithIntegrity();
             }
         }
     }
-    void FillWater(Transform objects)
+
+    /// <summary>Registers all instantiated waters.</summary>
+    void FillWater()
     {
-        for (int j = 0; j < objects.childCount; j++)
+        for (int j = 0; j < water.childCount; j++)
         {
-            GridPos vec = new(objects.GetChild(j).transform.localPosition);
-            SetGridItem(vec, objects.GetChild(j).GetComponent<Water>());
+            GridPos vec = new(water.GetChild(j).transform.localPosition);
+            SetGridItem(vec, water.GetChild(j).GetComponent<Water>());
         }
     }
-    void FillBuildings(Transform objects)
+
+    /// <summary>Registers all instantiated buildings.</summary>
+    void FillBuildings()
     {
-        foreach (Building building in objects.GetComponentsInChildren<Building>())
+        foreach (Building building in buildings.GetComponentsInChildren<Building>())
         {
             building.UniqueID();
             if (!building.GetComponent<BuildPipe>())
@@ -147,18 +191,18 @@ public class GroundLevel : MonoBehaviour
                 building.GetComponent<BuildPipe>().PlacePipe();
         }
     }
-    void FillPipes(Transform objects)
-    {
-        foreach (Pipe pipe in objects.GetComponentsInChildren<Pipe>())
-        {
-            pipe.PlacePipe();
-        }
-    }
     #endregion
 
     #endregion Creation
 
     #region Adding to Grid
+    /// <summary>
+    /// Used for placing the building when ordering construction, or loading a level. <br/>
+    /// Registers the building and updates entry points.
+    /// </summary>
+    /// <param name="building">Building thats being placed.</param>
+    /// <param name="gridPos">building anchor position.</param>
+    /// <param name="load">If load is true creates, creates new roads and doesn't recycle entrypoints.</param>
     public void PlaceBuild(Building building, GridPos gridPos = null, bool load = false)
     {
         MyGrid.buildings.Add(building);
@@ -197,10 +241,14 @@ public class GroundLevel : MonoBehaviour
     #endregion Adding to Grid
 
     #region Removing from Grid
-
+    /// <summary>
+    /// Unregisters the building and entrypoints.
+    /// </summary>
+    /// <param name="building">Building being removed.</param>
+    /// <param name="gridPos">Building position</param>
     public void UnsetBuilding(Building building, GridPos gridPos)
     {
-        overlays.Remove(building.id, gridPos);
+        overlays.Remove(building.id, gridPos.y);
         List<Road> _roads = roads.GetComponentsInChildren<Road>().ToList();
         for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
         {
@@ -223,6 +271,13 @@ public class GroundLevel : MonoBehaviour
     #endregion Removing from Grid
 
     #region Checks
+    /// <summary>
+    /// Checks if a pipe can be placed on the <paramref name="pos"/> position. <br/>
+    /// Must not be placed over a different pipe.
+    /// </summary>
+    /// <param name="pipe">Pipe to place (used here for visual effects)</param>
+    /// <param name="pos">Position to check if available.</param>
+    /// <returns>If it's ok to build there or not.</returns>
     public bool CanPlace(Pipe pipe, GridPos pos)
     {
         bool canPlace = !pipeGrid[(int)pos.x, (int)pos.z] || pipeGrid[(int)pos.x, (int)pos.z].id == pipe.id;
@@ -271,10 +326,18 @@ public class GroundLevel : MonoBehaviour
         }
         return false;
     }
+
+    /// <summary>
+    /// Checks if a <see cref="Building"/> can be placed at <paramref name="gridPos"/>. <br/>
+    /// Iterates though all tiles in blueprint and marks their state.
+    /// </summary>
+    /// <param name="building">Building that's being placed.</param>
+    /// <param name="gridPos">Anchor position</param>
+    /// <returns>If it's ok to build there or not.</returns>
     public bool CanPlace(Building building, GridPos gridPos)
     {
         bool canBuild = true;
-        overlays.CreateBuildGrid(building);
+        overlays.MovePlaceOverlay(building);
         // checks all Parts of a building
         Transform overlay = overlays.overlayParent;
         List<Road> roads = new();
@@ -365,6 +428,12 @@ public class GroundLevel : MonoBehaviour
         return canBuild;
     }
 
+    /// <summary>
+    /// Checks if the current building is not obscurring the last entry point of another building.
+    /// </summary>
+    /// <param name="roads">Road tiles that the building is occupying.</param>
+    /// <param name="tiles">All building tiles to mark the states.</param>
+    /// <returns>If it's ok to build there or not.</returns>
     bool CheckEntranceObscursion(List<Road> roads, List<Image> tiles)
     {
         Dictionary<int, int> buildings = new();

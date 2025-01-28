@@ -4,14 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>Handles the game clock.</summary>
 public class Tick : MonoBehaviour
 {
+    #region Variables
+    /// <summary>The tick counter, resets if it reaches uint capacity.</summary>
     public uint lastTick = 0;
-
+    /// <summary>The most subscribed action in the whole project, Triggers each tick.</summary>
     public event Action tickAction;
-    public Button lastButton;
-
+    /// <summary>Handles user input for changing game speed.</summary>
     public DayTime timeController;
+    #endregion
 
     public void AwakeTicks(int clockSpeed)
     {
@@ -19,6 +22,7 @@ public class Tick : MonoBehaviour
         StartCoroutine(DoTick());
     }
 
+    #region Speed Managing
     public void ChangeGameSpeed(float _speed)
     {
         StopAllCoroutines();
@@ -34,6 +38,7 @@ public class Tick : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(DoTick());
     }
+    #endregion
 
     IEnumerator DoTick()
     {
@@ -45,8 +50,6 @@ public class Tick : MonoBehaviour
                 lastTick = 0;
             else
                 lastTick++;
-
-            //Debug.Log(lastTick);
         }
     }
 }

@@ -6,16 +6,20 @@ using UnityEngine.UIElements;
 
 namespace InfoWindowElements
 {
+    /// <summary></summary>
     [UxmlElement]
     public partial class RadialFillElement : VisualElement, INotifyValueChanged<float>, IUIElement
     {
+        public enum FillDirection
+        {
+            Clockwise,
+            AntiClockwise
+        }
+
+        #region Variables
         float maxValue;
         protected float m_value = float.NaN;
-        public void SetValueWithoutNotify(float newValue)
-        {
-            m_value = newValue;
-            radialFill.MarkDirtyRepaint();
-        }
+        
 
         #region Attributes
         [UxmlAttribute]
@@ -59,14 +63,26 @@ namespace InfoWindowElements
 
         #endregion
 
-        public enum FillDirection
-        {
-            Clockwise,
-            AntiClockwise
-        }
-
+        
         public FillDirection fillDirection { get; set; }
         private float m_overlayImageScale;
+
+        public VisualElement radialFill;
+        public VisualElement overlayImage;
+
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Updates the fill value and repaints.
+        /// </summary>
+        /// <param name="newValue">New fill value.</param>
+        public void SetValueWithoutNotify(float newValue)
+        {
+            m_value = newValue;
+            radialFill.MarkDirtyRepaint();
+        }
+
         public float overlayImageScale
         {
             get
@@ -77,11 +93,10 @@ namespace InfoWindowElements
             set => m_overlayImageScale = value;
         }
 
-        private float radius => (width > height) ? width / 2 : height / 2;
+        float radius => (width > height) ? width / 2 : height / 2;
+        #endregion
 
-        public VisualElement radialFill;
-        public VisualElement overlayImage;
-
+        #region Constructor
         public RadialFillElement()
         {
             name = "radial-fill-element";
@@ -117,12 +132,27 @@ namespace InfoWindowElements
             value = 0.5f;
             fillColor = new(1, 1, 1, 1);
         }
+        #endregion
+        
+        /// <inheritdoc/>
+        public void Fill(object data)
+        {
+            maxValue = ((ProductionBuilding)data).prodTime;
+            DataBinding binding = Util.CreateBinding(nameof(ProductionBuilding.CurrentTime));
+            binding.sourceToUiConverters.AddConverter((ref float time) => time / maxValue);
+            SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(value)), binding, data);
+        }
 
+        #region Radial Logic
         public void AngleUpdate(ChangeEvent<float> evt)
         {
             radialFill?.MarkDirtyRepaint();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mgc"></param>
         public void OnGenerateVisualContent(MeshGenerationContext mgc)
         {
             // default draw 1 triangle
@@ -209,13 +239,7 @@ namespace InfoWindowElements
                 }
             }
         }
+        #endregion
 
-        public void Fill(object data)
-        {
-            maxValue = ((ProductionBuilding)data).prodTime;
-            DataBinding binding = Util.CreateBinding(nameof(ProductionBuilding.CurrentTime));
-            binding.sourceToUiConverters.AddConverter((ref float time) => time/maxValue);
-            SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(value)), binding, data);
-        }
     }
 }

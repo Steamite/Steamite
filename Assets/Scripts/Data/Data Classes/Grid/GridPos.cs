@@ -1,17 +1,21 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Class used for unitialized coordnites.<br/>
+/// Used for saving insed of Vector3(it has a circular reference that is bad).
+/// </summary>
 [Serializable]
 public class GridPos
 {
-    [SerializeField]
-    public float x;
-    [SerializeField]
-    public float z;
-    [SerializeField]
-    public int y;
+    /// <summary>X coord on grid.</summary>
+    [SerializeField] public float x;
+    /// <summary>Y coord on grid.</summary>
+    [SerializeField] public float z;
+    /// <summary>Level on grid.</summary>
+    [SerializeField] public int y;
 
-    // override object.Equals
+    #region Base
     public override bool Equals(object obj)
     {
         if (obj == null || GetType() != obj.GetType())
@@ -30,6 +34,9 @@ public class GridPos
     {
         return $"({x}, {y}, {z})";
     }
+    #endregion
+
+    #region Constructors
     public GridPos()
     {
 
@@ -56,7 +63,8 @@ public class GridPos
     {
         return new(
             x, 
-            (y * 2) + Yoffset,
+            (y * ClickabeObjectFactory.LEVEL_HEIGHT) + Yoffset,
             z);
     }
+    #endregion
 }

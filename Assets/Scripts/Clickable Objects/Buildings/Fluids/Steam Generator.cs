@@ -134,22 +134,7 @@ public class SteamGenerator : ProductionBuilding
     {
         return networkAccess.fluid;
     }*/
-    protected override void UpdateProductionInfo(InfoWindow info)
-    {/*
-        t = t.GetChild(2);
-        t.GetChild(0).GetComponent<ProductionButton>().UpdateButtonState(currentTime, prodTime);
-        // production cost
-        t.GetChild(1).GetComponent<TMP_Text>()
-            .text = MyRes.GetDisplayText(inputResource.stored, productionCost) + $"{networkAccess.fluid.type[0]} {networkAccess.fluid.ammount[0]}/{waterCost}";
-
-        // production
-        t.GetChild(2).GetComponent<TMP_Text>()
-            .text = $"Steam: {steamProduction}";
-
-        // stored
-        t.GetChild(3).GetComponent<TMP_Text>()
-            .text = $"Steam: {networkAccess.fluid.ammount[1]}/{networkAccess.fluid.capacity[1]}";*/
-    }
+    
 
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {

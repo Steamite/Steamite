@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
-
+/// <summary>Custom made queue to effectivly find paths.</summary>
+/// https://github.com/delta-cs/lectures/blob/master/12_binarni_halda/12_binarni_halda.pdf
 class Queue
 {
     List<PathNode> queue;

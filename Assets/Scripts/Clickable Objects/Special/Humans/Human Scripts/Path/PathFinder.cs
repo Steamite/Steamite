@@ -6,35 +6,49 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-class SearchCoordinates
-{
-    public List<GridPos> positions;
-    public List<GridPos> elevEnterPositions;
-    public List<GridPos> elevPositions;
-    public List<List<int>> connections;
-
-    public SearchCoordinates(GridPos gridPos)
-    {
-        positions = new() { gridPos};
-        elevEnterPositions = new();
-        elevPositions = new();
-        connections = new();
-    }
-    public SearchCoordinates()
-    {
-        positions = new();
-        elevEnterPositions = new();
-        elevPositions = new();
-        connections = new();
-    }
-}
 
 public static class PathFinder
 {
-    const float ROAD_COST = 1;
+    #region Struct
+    /// <summary>Holds info about elevators and new interests.</summary>
+    struct SearchCoords
+    {
+        /// <summary>Entry points to possible interests, coresponds to <b>entrypoints</b> in <see cref="Prep(GridPos, List{ClickableObject})"/></summary>
+        public List<GridPos> entryPoints;
+        /// <summary>Entry points to elevators.</summary>
+        public List<GridPos> elevEnterPositions;
+        /// <summary>Elevator anchors.</summary>
+        public List<GridPos> elevPositions;
+        /// <summary>Elevator connections, which are purged after one use.</summary>
+        public List<List<int>> connections;
+
+        /// <summary>
+        /// Assigns interests.
+        /// </summary>
+        /// <param name="gridPos"></param>
+        public SearchCoords(GridPos gridPos)
+        {
+            entryPoints = new() { gridPos };
+            elevEnterPositions = new();
+            elevPositions = new();
+            connections = new();
+        }
+    }
+    #endregion
+
+    #region Variables
+    const float ROAD_COST = 1f;
     const float FASTROUTE_COST = 0.75f;
     const float ELEVATOR_COST = 2f;
+    #endregion
+
     #region Humans
+    /// <summary>
+    /// Access point for <see cref="Human"/> paths. <br/>
+    /// </summary>
+    /// <param name="objects">Possible interests.</param>
+    /// <param name="h">Human that needs the path.</param>
+    /// <returns>New path with an interest (the closest object from <paramref name="objects"/>).</returns>
     public static JobData FindPath(List<ClickableObject> objects, Human h)
     {
         if (objects.Count == 0)
@@ -53,7 +67,7 @@ public static class PathFinder
                     plan.path.RemoveAt(plan.path.Count - 1);
                 }
                 else if(MyGrid.GetGridItem(_start).id != b.id && plan.foundNormaly)
-                    plan.path.Add(LastStep(plan.path.Count > 0 ? plan.path[^1] : _start, b.gameObject, 1));
+                    plan.path.Add(BuildingStep(plan.path.Count > 0 ? plan.path[^1] : _start, b.gameObject, 1));
             }
             else
             {
@@ -67,10 +81,22 @@ public static class PathFinder
         }
         return new JobData(_path: new(), _interest: null);
     }
+    /// <summary>
+    /// Scrapes positions from <paramref name="objects"/>. <br/>
+    /// Then calls <see cref="LookForPath(GridPos, Building, SearchCoords, Plan, Type)"/>.
+    /// </summary>
+    /// <param name="_start"></param>
+    /// <param name="objects"></param>
+    /// <returns>Path to the object and index of the object.</returns>
     async static Task<Plan> Prep(GridPos _start, List<ClickableObject> objects)
     {
         List<int> entryPoints = new();
-        SearchCoordinates coordinates = new();
+        SearchCoords coordinates = new();
+        coordinates.entryPoints = new();
+        coordinates.elevEnterPositions = new();
+        coordinates.elevPositions = new();
+        coordinates.connections = new();
+
         Building part = MyGrid.GetGridItem(_start).GetComponent<Building>(); // gets tile build reference if standing on it
         Plan plan = new();
 
@@ -98,7 +124,7 @@ public static class PathFinder
                 
                 foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q=> q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q=>q.transform))//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
                 {
-                    coordinates.positions.Add(new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z)));
+                    coordinates.entryPoints.Add(new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z)));
                     entryPoints.Add(i);
                 }
                 if (part != null && part.id == building.id) // the build that the worker is standing on, is one of the destinations 
@@ -110,7 +136,7 @@ public static class PathFinder
             }
             else
             {
-                coordinates.positions.Add(objects[i].GetPos());
+                coordinates.entryPoints.Add(objects[i].GetPos());
                 entryPoints.Add(i);
             }
         }
@@ -145,30 +171,17 @@ public static class PathFinder
         }
         return plan;
     }
-    
-    public static List<GridPos> FindWayHome(Human h)
-    {
-        JobData _jData;
-        if (h.home)
-        {
-            _jData = FindPath(new() { h.home }, h);
-            if (_jData.interest)
-            {
-                h.ModifyEfficiency(ModType.House, true);
-                return _jData.path;
-            }
-        }
-        Building elevator = MyGrid.buildings.First(q => q is Elevator el && el.main);
-        _jData = FindPath(new() { elevator }, h);
-        h.ModifyEfficiency(ModType.House, false);
-        if (_jData.interest)
-        {
-            return _jData.path;
-        }
-        return new();
-    }
-#endregion Humans
 
+    #endregion Humans
+
+    #region Pipes
+    /// <summary>
+    /// Finds shortest path connecting <paramref name="startPos"/> and <paramref name="activePos"/>.
+    /// </summary>
+    /// <param name="startPos">Path start position.</param>
+    /// <param name="activePos">Path end position.</param>
+    /// <param name="enterObjectType">Object filter, null means anything.</param>
+    /// <returns>path</returns>
     public static List<GridPos> FindPath(GridPos startPos, GridPos activePos, Type enterObjectType)
     {
         Plan p = new();
@@ -176,15 +189,23 @@ public static class PathFinder
             LookForPath(startPos, null, new(activePos), p, enterObjectType);
         return p.path;
     }
-    
+    #endregion
+
     #region Looping
-    static Task LookForPath(GridPos _start, Building buildingTile, SearchCoordinates searchCoords, Plan plan, Type enterObjectType)
+    /// <summary>
+    /// Starts really searching for the path.
+    /// </summary>
+    /// <param name="_start">Starting position.</param>
+    /// <param name="buildingTile">Building on <paramref name="_start"/> position.</param>
+    /// <param name="searchCoords">Search Data.</param>
+    /// <param name="plan">Result</param>
+    /// <param name="enterObjectType">Object filter, null means anything.</param>
+    /// <returns></returns>
+    static Task LookForPath(GridPos _start, Building buildingTile, SearchCoords searchCoords, Plan plan, Type enterObjectType)
     {
         // Move if starting inside a building
         if (buildingTile != null)
-        {
-            _start = LastStep(_start, buildingTile.gameObject, -1);
-        }
+            _start = BuildingStep(_start, buildingTile.gameObject, -1);
 
         Queue queue = new(_start);
         // Check if you already arrived, or try to access different levels
@@ -229,23 +250,31 @@ public static class PathFinder
     #endregion Looping
 
     #region Tile Checks
+    /// <summary>
+    /// Checks if the Tile can be accesed.
+    /// </summary>
+    /// <param name="clickable">tile</param>
+    /// <param name="t">requested type</param>
+    /// <returns></returns>
     static bool CanEnter(ClickableObject clickable, Type t)
     {
         return clickable.GetType() == t;
-        /*if(t == null)
-        {
-            return true;
-        }
-        else
-        {
-            return MyGrid.GetGridItem(vec, t == typeof(Pipe))?.GetType() == t;
-        }*/
     }
-    static bool Check(PathNode checkNode, SearchCoordinates searchCoords, Plan plan, Queue queue, bool firstPass = true)
+
+    /// <summary>
+    /// Goes through all entrypoints in <paramref name="searchCoords"/> and tries to end the search.
+    /// </summary>
+    /// <param name="checkNode">Node to check.</param>
+    /// <param name="searchCoords">Search Data</param>
+    /// <param name="plan">Result</param>
+    /// <param name="queue">Queue for efficient search.</param>
+    /// <param name="firstPass">Was called recursivly?</param>
+    /// <returns>True to continue, false to end search.</returns>
+    static bool Check(PathNode checkNode, SearchCoords searchCoords, Plan plan, Queue queue, bool firstPass = true)
     {
         int id = -1;
         int count = 0;
-        foreach (GridPos pos in searchCoords.positions)
+        foreach (GridPos pos in searchCoords.entryPoints)
         {
             if (checkNode.pos.Equals(pos))
             {
@@ -276,7 +305,15 @@ public static class PathFinder
         }
     }
 
-    static bool MoveToNewLevel(SearchCoordinates searchCoords, PathNode checkNode, Plan plan, Queue queue)
+    /// <summary>
+    /// Tries to add new path nodes to different levels.
+    /// </summary>
+    /// <param name="searchCoords">Path Data</param>
+    /// <param name="checkNode">Tile</param>
+    /// <param name="plan">Result</param>
+    /// <param name="queue">Search queue.</param>
+    /// <returns></returns>
+    static bool MoveToNewLevel(SearchCoords searchCoords, PathNode checkNode, Plan plan, Queue queue)
     {
         for (int i = 0; i < searchCoords.elevEnterPositions.Count; i++)
         {
@@ -319,7 +356,17 @@ public static class PathFinder
     }
     #endregion Tile Checks
 
-    static GridPos LastStep(GridPos _vec, GameObject building, int mod)
+    /// <summary>
+    /// Moves in/out of building with entrypoints. (else they would go though walls)
+    /// </summary>
+    /// <param name="_vec">position</param>
+    /// <param name="building">building</param>
+    /// <param name="mod">
+    ///     1  = in <br/>
+    ///     -1 = out
+    /// </param>
+    /// <returns>Calculated additional position.</returns>
+    static GridPos BuildingStep(GridPos _vec, GameObject building, int mod)
     {
         GridPos vec = new(_vec.x, _vec.y, _vec.z);
         float rotation = building.transform.eulerAngles.y;
@@ -342,5 +389,4 @@ public static class PathFinder
         return vec;
     }
 
-    
 }

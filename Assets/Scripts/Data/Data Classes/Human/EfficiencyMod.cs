@@ -1,26 +1,28 @@
 using System;
 using UnityEngine;
 
-public enum ModType
-{
-    Food,
-    House,
-    Lazy
-}
-
+/// <summary>Efficiency modifier, works in stacks(the longer it is the stronger it grows).</summary>
 [Serializable]
 public class EfficiencyMod
 {
-    [SerializeField]
-    string name;
-    public ModType modType;
+    #region Variables
+    /// <summary>Modifier name for.</summary>
+    [SerializeField] public string name;
+    /// <summary>Modifier name for.</summary>
+    [HideInInspector] public ModType modType;
+    /// <summary>Current modifier state(can range from <see cref="negCount"/> to <see cref="posCount"/>).</summary>
     public int count = 1;
-    [Header("positive")]
-    public int posCount;
+
+    /// <summary>Max count</summary>
+    [Header("positive")] public int posCount;
+    /// <summary>Efficiency influence for each stack</summary>
     public float posInfluence;
-    [Header("negative")]
-    public int negCount;
+
+    /// <summary>Min count</summary>
+    [Header("negative")] public int negCount;
+    /// <summary>Efficiency influence for each negative stack</summary>
     public float negInfluence;
+    #endregion
 
     public EfficiencyMod()
     {

@@ -7,9 +7,13 @@ using UnityEngine.UIElements;
 
 namespace InfoWindowElements
 {
+    /// <summary>Parsed data used directly for displaying.<br/>
+    /// Parsed using binding convertors.</summary>
     public class UIResource
     {
+        /// <summary>Resource ammount.</summary>
         public int ammount;
+        /// <summary>Resource type.</summary>
         public ResourceType type;
 
         public UIResource(int _ammount, ResourceType _type)
@@ -19,11 +23,16 @@ namespace InfoWindowElements
         }
     }
 
+    /// <summary>
+    /// Creates a simple list with one item for each resource type. <br/>
+    /// Can hide empty ones.
+    /// </summary>
     [UxmlElement("Resource-List")]
     public partial class ResourceList : ListView, IUIElement
     {
-        [CreateProperty]
-        protected List<UIResource> resources
+        #region Properties
+        /// <summary>Binding link(_itemSource)</summary>
+        [CreateProperty] protected List<UIResource> resources
         {
             get { return (List<UIResource>)itemsSource; }
             set
@@ -32,8 +41,14 @@ namespace InfoWindowElements
                 RefreshItems();
             }
         }
-        bool showEmpty = false;
+        #endregion
 
+        #region Variables
+        /// <summary>If disabled hides resources with 0.</summary>
+        bool showEmpty = false;
+        #endregion
+
+        #region Constructors
         public ResourceList()
         {
             itemTemplate = Resources.Load<VisualTreeAsset>("UI Toolkit/Resource-Text-Icon");
@@ -68,7 +83,9 @@ namespace InfoWindowElements
             virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             focusable = false;
         }
+        #endregion
 
+        /// <inheritdoc/>
         public virtual void Fill(object data)
         {
             DataBinding binding;
@@ -103,6 +120,12 @@ namespace InfoWindowElements
             }
         }
 
+        #region Convertors
+        /// <summary>
+        /// Splits and parses <paramref name="storage"/> by each each <see cref="ResourceType"/>.
+        /// </summary>
+        /// <param name="storage">Resources from the datasource.</param>
+        /// <returns></returns>
         protected virtual List<UIResource> ToUIRes(Resource storage)
         {
             List<UIResource> res = new();
@@ -114,9 +137,15 @@ namespace InfoWindowElements
             return res;
         }
 
+        /// <summary>
+        /// Basic string parser.
+        /// </summary>
+        /// <param name="resource">What to parse</param>
+        /// <returns>Just the resource ammount.</returns>
         protected virtual string ConvertString(UIResource resource)
         {
             return $"{resource.ammount}";
         }
+        #endregion
     }
 }

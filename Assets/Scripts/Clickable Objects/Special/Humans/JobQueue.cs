@@ -1,48 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Unity.Jobs;
 using UnityEngine;
 
+/// <summary>Handles and stores job requests.</summary>
 public class JobQueue : MonoBehaviour
 {
-    [Header("Job Objects")]
-    public List<Rock> toBeDug = new();                      // digging
-    public List<Building> constructions = new();            // building
-    public List<Building> deconstructions = new();          // deconstructing
-    public List<ProductionBuilding> supplyNeeded = new();   // supplying
-    public List<StorageObject> pickupNeeded = new();        // supplying, pickup
-    public List<Storage> storages = new();                  // supplying
-    //public List<Chunk> chunks = new();              // supplying, cleanup
-    [Header("Modifiable")]
+    /// <summary>Rocks marked for digging out.</summary>
+    [Header("Job Objects")] public List<Rock> toBeDug = new();
+    /// <summary>Buildings in construction.</summary>
+    public List<Building> constructions = new();
+    /// <summary>Buildings in deconstruction.</summary>
+    public List<Building> deconstructions = new();
+    /// <summary>Production buildings that need input resources.</summary>
+    public List<ProductionBuilding> supplyNeeded = new();
+    /// <summary>Chunks and Production buildings that have something to store.</summary>
+    public List<StorageObject> pickupNeeded = new();
+
+    /// <summary>Storages</summary>
+    [Header("")] public List<Storage> storages = new();
+    /// <summary>Job priority</summary>
     public List<JobState> priority;
 
     /// <summary>
-    /// moves job priority up or down
+    /// Registers new job.
     /// </summary>
-    /// <param name="previus"></param>
-    /// <param name="newPrio"></param>
-    public void ChangePriority(int previus, int newPrio)
-    {
-        JobState j = priority[previus];
-        if (previus > newPrio)
-        {
-            for (int i = previus; i > newPrio; i--)
-            {
-                priority[previus] = priority[previus - 1];
-            }
-        }
-        else
-        {
-            for (int i = previus; i < newPrio; i++)
-            {
-                priority[previus] = priority[previus + 1];
-            }
-        }
-        priority[newPrio] = j;
-    }
-    public void AddJob(JobState job, ClickableObject interest) // logs a new object that needs to be done
+    /// <param name="job">Which type of job was added.</param>
+    /// <param name="interest">Job interest to store.</param>
+    public void AddJob(JobState job, ClickableObject interest)
     {
         switch (job)
         {
@@ -64,6 +48,11 @@ public class JobQueue : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Unregisters a job, either by completion or player canclation.
+    /// </summary>
+    /// <param name="job">Which type of job was canceled.</param>
+    /// <param name="interest">Job interest to remove.</param>
     public void CancelJob(JobState job, ClickableObject interest) // removes a logged object
     {
         List<Human> assigned = new();

@@ -9,10 +9,13 @@ using UnityEngine.UIElements;
 
 namespace StartMenu
 {
+    /// <summary>Gathers data from all parameters and merges them into the seed.</summary>
     public class MapGeneration : MonoBehaviour, IToolkitController
     {
+        /// <summary>Parent reference for all parameters.</summary>
         VisualElement mapParams;
 
+        /// <summary>Notify other values.</summary>
         bool changeSeed = true;
 
         #region generation props
@@ -79,8 +82,13 @@ namespace StartMenu
 
         #endregion
 
+        /// <summary>List of all available parameter controls.</summary>
         List<EnumGenerationParameter> parameters;
 
+        /// <summary>
+        /// Adds paramaters to the list(<see cref="parameters"/>)
+        /// </summary>
+        /// <param name="_root">Element containing "Map-Parameters" element.</param>
         public void Init(VisualElement _root)
         {
             mapParams = _root.Q<VisualElement>("Map-Parameters");
@@ -106,6 +114,11 @@ namespace StartMenu
             veinCount = parameters[^1].Link(this);
         }
 
+        /// <summary>
+        /// When changing enum val, changes seed.
+        /// </summary>
+        /// <param name="index">enum index</param>
+        /// <param name="value">new enum value</param>
         void UpdateSeed(int index, int value)
         {
             if (changeSeed)
@@ -132,12 +145,16 @@ namespace StartMenu
             }
         }
 
+        /// <summary>
+        /// When changing seed, updates all enums.
+        /// </summary>
+        /// <param name="s"></param>
         void UpdateEnums(string s)
         {
             for (int i = 0; i < 4 && i < s.Length; i++)
             {
                 changeSeed = false;
-                parameters[i].Change(MyMath.HexToEnum(s[i]));
+                parameters[i].Change(MyMath.HexToDec($"{s[i]}")%3);
                 changeSeed = true;
             }
         }
