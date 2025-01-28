@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
+/// <summary>Enforces all parameters to have the same length.</summary>
 [CustomEditor(typeof(MinableRes))]
 public class MinableResEditor : Editor
 {

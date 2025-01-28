@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
+/// <summary>Data about passive production upgrade state.</summary>
 [Serializable]
 public struct PassiveProduction
 {
+    /// <summary>Name of this production.</summary>
     public string productionName;
-    [Range(1, 5)]
-    public int currentProduction;
-    [Range(1, 5)]
-    public int maxProduction;
+    /// <summary>Upgrade level.</summary>
+    [Range(1, 5)]public int currentProduction;
+    /// <summary>Max Upgrade level.</summary>
+    [Range(1, 5)]public int maxProduction;
 
     public PassiveProduction(string _name, int _current, int _max)
     {
@@ -20,12 +21,17 @@ public struct PassiveProduction
     }
 }
 
+/// <summary>Colony location show where the colony is, provides some passive production.</summary>
 [Serializable]
 public class ColonyLocation
 {
+    /// <summary>Colony name.</summary>
     public string name;
+    /// <summary>Colony position on the screen.</summary>
     public GridPos pos;
+    /// <summary>Upgradable passive production data.</summary>
     [SerializeField] public List<PassiveProduction> passiveProductions;
+    /// <summary>Colony stats data.</summary>
     [SerializeField] public List<PassiveProduction> stats;
 
     public int GetCurrentProduction(string prodName)

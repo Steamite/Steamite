@@ -1,9 +1,13 @@
 using System;
 
+/// <summary>One tile/node in path, used in pathfinding.</summary>
 class PathNode
 {
+    /// <summary>node position</summary>
     public GridPos pos;
+    /// <summary>cost to reach</summary>
     public float minCost;
+    /// <summary>previus node, forms a chain back to start</summary>
     public PathNode previous;
     public PathNode(GridPos _pos, float _minCost, PathNode _previous)
     {

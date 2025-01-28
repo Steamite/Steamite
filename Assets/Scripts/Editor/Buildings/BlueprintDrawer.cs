@@ -2,9 +2,11 @@
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>Show the "Manage" button in buildings.</summary>
 [CustomPropertyDrawer(typeof(BuildingGrid))]
-public class BlueprintEditor : PropertyDrawer
+public class BlueprintDrawer : PropertyDrawer
 {
+    /// <summary>Adds the Manage button.</summary>
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Using BeginProperty / EndProperty on the parent property means that
@@ -25,7 +27,7 @@ public class BlueprintEditor : PropertyDrawer
                 GUI.backgroundColor = Color.white;
             if (GUI.Button(buttonReact, "Manage"))
             {
-                BuildEditor.ShowWindow(((Building)property.serializedObject.targetObject).blueprint, property);
+                BuildEditor.ShowWindow((Building)property.serializedObject.targetObject);
             }
         }
         EditorGUI.EndProperty();

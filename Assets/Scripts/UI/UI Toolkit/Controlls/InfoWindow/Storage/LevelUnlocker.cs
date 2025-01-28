@@ -5,9 +5,11 @@ using UnityEngine.UIElements;
 
 namespace InfoWindowElements
 {
+    /// <summary>Represents each level in <see cref="LevelsTab"/>.</summary>
     [UxmlElement]
     public partial class LevelUnlocker : CustomRadioButton
     {
+        #region Constructors
         public LevelUnlocker() : base()
         {
             
@@ -17,7 +19,10 @@ namespace InfoWindowElements
         {
             ToggleButtonStyle(_state);
         }
+        #endregion
 
+        #region Selection
+        /// <inheritdoc/>
         public override void Deselect(bool triggerTransition = true)
         {
             base.Deselect();
@@ -27,15 +32,20 @@ namespace InfoWindowElements
             else
                 ToggleButtonStyle(state);
         }
+
+        /// <inheritdoc/>
         public override void Select(bool triggerTransition = true)
         {
             base.Select();
             ToggleButtonStyle(LevelState.Selected);
         }
-
+        #endregion
 
         #region Styling
-
+        /// <summary>
+        /// Changes the style classes and enabledSelf.
+        /// </summary>
+        /// <param name="state">New state.</param>
         public void ToggleButtonStyle(LevelState state)
         {
             ClearClassList();

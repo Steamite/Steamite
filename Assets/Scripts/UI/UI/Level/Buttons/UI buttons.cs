@@ -6,13 +6,13 @@ public class UIbuttons : MonoBehaviour
     public void ToggleAction(int i)
     {
         GridTiles gridTiles = SceneRefs.gridTiles;
-        if(gridTiles.selMode == (SelectionMode)i)
+        if(gridTiles.activeControl == (ControlMode)i)
         {
             gridTiles.activeObject = null;
-            gridTiles.ChangeSelMode(SelectionMode.nothing);
+            gridTiles.ChangeSelMode(ControlMode.nothing);
         }
         else
-            gridTiles.ChangeSelMode((SelectionMode)i);
+            gridTiles.ChangeSelMode((ControlMode)i);
     }
 
 }

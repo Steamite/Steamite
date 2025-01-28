@@ -13,27 +13,10 @@ public class WaterPump : ProductionBuilding
         base.UniqueID();
         networkAccess.ID(transform.GetChild(2));
     }
-    protected override void UpdateProductionInfo(InfoWindow info)
-    {
-        /*GridPos waterPos = new(transform.GetChild(1).gameObject);
-        water = MyGrid.GetGridItem(waterPos) as Water;
-        t = t.GetChild(2);
-        t.GetChild(0).GetComponent<ProductionButton>().UpdateButtonState(currentTime, prodTime);
-        
-        // cost
-        t.GetChild(1).GetComponent<TMP_Text>()
-            .text = $"Water Deposit\n({water.ammount})";
-        // production
-        t.GetChild(2).GetComponent<TMP_Text>()
-            .text = $"Water: {modifier}";
-        // stored
-        t.GetChild(3).GetComponent<TMP_Text>()
-            .text = $"Water: {networkAccess.fluid.ammount[0]}/{networkAccess.fluid.capacity[0]}";*/
-    }
-    public override void Produce(float speed)
+    public override void ProgressProduction(float speed)
     {
         if(pStates.supplied)
-            base.Produce(speed);
+            base.ProgressProduction(speed);
     }
     protected override void Product()
     {

@@ -7,14 +7,18 @@ using UnityEngine.UIElements;
 
 namespace InfoWindowElements
 {
+    /// <summary>Tab for resource storing managment.</summary>
     [UxmlElement]
     public partial class StorageTab : Tab
     {
-        #region Elements
+        /// <summary>Stores references for one resource type in view.</summary>
         struct StorageElem
         {
+            /// <summary>Icon reference</summary>
             public VisualElement icon;
+            /// <summary>Ammount label reference</summary>
             public Label label;
+            /// <summary>Toggle buttons reference</summary>
             public ToggleButtonGroup canStore;
 
             public StorageElem(VisualElement element)
@@ -25,22 +29,40 @@ namespace InfoWindowElements
             }
         }
 
+        #region Variables
+        /// <summary>Prefab for resource elements.</summary>
         public VisualTreeAsset elemPref;
+        /// <summary>Reference to label displaying capacity state.</summary>
         Label capacityLabel;
+        /// <summary>Refence to scroller.</summary>
         ScrollView storageScroll;
+        /// <summary>Last row group for adding new elems.</summary>
         VisualElement lastRow;
-        #endregion
 
-        [CreateProperty]
-        List<UIResource> resources;
+        /// <summary>Data.</summary>
+        [CreateProperty] List<UIResource> resources;
+        /// <summary>List of all storage elems.</summary>
         List<StorageElem> storageElems;
 
+        /// <summary>Datasource.</summary>
         Storage storage;
+        #endregion
 
+        #region Constructors
         public StorageTab() : base("Storage")
+        {
+            
+        }
+
+        /// <summary>
+        /// Default constructor that adds and sets basic elements.
+        /// </summary>
+        /// <param name="_elemPref">Prefab for creating elems.</param>
+        public StorageTab(VisualTreeAsset _elemPref)
         {
             style.flexGrow = 1;
             name = "Storage";
+            elemPref = _elemPref;
 
             resources = new();
             storageElems = new();
@@ -58,11 +80,15 @@ namespace InfoWindowElements
             storageScroll.style.minHeight = new(new Length(100, LengthUnit.Percent));
             Add(storageScroll);
         }
+        #endregion
 
-        public void Open(Storage _storage, VisualTreeAsset _elemPref)
+        /// <summary>
+        /// Fills the elemlist
+        /// </summary>
+        /// <param name="_storage">Data source</param>
+        public void Open(Storage _storage)
         {
             storage = _storage;
-            elemPref = _elemPref;
             DataBinding binding = Util.CreateBinding(nameof(Storage.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource store) => ToUIRes(store));
             SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, storage);
@@ -75,12 +101,17 @@ namespace InfoWindowElements
             {
                 for (int i = 0; i < storage.canStore.Count; i++)
                 {
-                    UpdateGroup(storageElems[i], i);
+                    UpdateGroup(i);
                 }
             }
         }
 
         #region Storage Managment
+        /// <summary>
+        /// Parses the data from <paramref name="storage"/>.
+        /// </summary>
+        /// <param name="storage">New data.</param>
+        /// <returns></returns>
         List<UIResource> ToUIRes(StorageResource storage)
         {
             for (int i = 0; i < storage.stored.type.Count; i++)
@@ -88,7 +119,11 @@ namespace InfoWindowElements
                 if (i >= resources.Count)
                 {
                     if (i % 3 == 0)
-                        AddNewRow();
+                    {
+                        lastRow = new();
+                        lastRow.AddToClassList("storage-row");
+                        storageScroll.Add(lastRow);
+                    }
                     AddNewElem(new(storage.stored.ammount[i], storage.stored.type[i]));
                 }
                 else if (resources[i].ammount != storage.stored.ammount[i])
@@ -100,23 +135,36 @@ namespace InfoWindowElements
             return resources;
         }
 
+        /// <summary>
+        /// Changes canstore for one resource.
+        /// </summary>
+        /// <param name="b">New state</param>
+        /// <param name="i">Resource index</param>
         void ToggleCanStore(bool b, int i)
         {
             storage.canStore[i] = b;
         }
-        void UpdateGroup(StorageElem storageElem, int x)
+
+        /// <summary>
+        /// Updates the canstore buttons on <paramref name="storageElem"/> elem.
+        /// </summary>
+        /// <param name="x">Index of the resource elem.</param>
+        void UpdateGroup(int x)
         {
-            ToggleButtonGroupState state = storageElem.canStore.value;
+            ToggleButtonGroupState state = storageElems[x].canStore.value;
             state.ResetAllOptions();
-            storageElem.canStore.value = state;
+            storageElems[x].canStore.value = state;
             state[0] = storage.canStore[x];
             state[1] = !storage.canStore[x];
-            storageElem.canStore.value = state;
+            storageElems[x].canStore.value = state;
         }
-
         #endregion
 
         #region New elements
+        /// <summary>
+        /// Creates and links a new element.
+        /// </summary>
+        /// <param name="uiResource"></param>
         void AddNewElem(UIResource uiResource)
         {
             resources.Add(uiResource);
@@ -135,17 +183,10 @@ namespace InfoWindowElements
             }
             storageElem.label.text = uiResource.ammount.ToString();
 
-            UpdateGroup(storageElem, x);
-
             storageElems.Add(storageElem);
+            UpdateGroup(x);
             lastRow.Add(element);
-        }
 
-        void AddNewRow()
-        {
-            lastRow = new();
-            lastRow.AddToClassList("storage-row");
-            storageScroll.Add(lastRow);
         }
         #endregion
 

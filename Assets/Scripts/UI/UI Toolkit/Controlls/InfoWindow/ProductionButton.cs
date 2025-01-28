@@ -5,10 +5,11 @@ using UnityEngine.UIElements;
 
 namespace InfoWindowViews
 {
+    /// <summary>Control for displaying info about production.</summary>
     [UxmlElement]
     public partial class ProductionButton : VisualElement, IUIElement
     {
-        #region Attributes
+        #region Variables
         bool enable;
         [UxmlAttribute] bool Play 
         {
@@ -31,16 +32,12 @@ namespace InfoWindowViews
                     radialElement.fillColor = fillColor;
             }
         }
-
-
         [UxmlAttribute] Texture2D pauseTex { get; set; }
         [UxmlAttribute] Texture2D resumeTex { get; set; }
-
         #endregion
-
         [UxmlAttribute] VisualTreeAsset resourcePrefab;
 
-        #endregion
+
         #region References
         DoubleResourceList inputResource;
         DoubleResourceList outputResource;
@@ -49,8 +46,11 @@ namespace InfoWindowViews
         RadialFillElement radialElement;
         Button button;
         #endregion
-        ProductionBuilding building;
 
+        ProductionBuilding building;
+        #endregion
+
+        #region Constructors
         public ProductionButton()
         {
             inputResource = new(true, "Input");
@@ -83,7 +83,9 @@ namespace InfoWindowViews
             Add(outputResource);
             UpdateButton();
         }
+        #endregion
 
+        /// <inheritdoc/>
         public void Fill(object data)
         {
             building = (ProductionBuilding)data;
@@ -98,13 +100,14 @@ namespace InfoWindowViews
             UpdateButton();
         }
 
+        /// <summary>Handles the button click.</summary>
         void ButtonClick()
         {
-
             UpdateButton();
             enable = building.StopProduction();
         }
 
+        /// <summary>Changes the button texture image.</summary>
         void UpdateButton()
         {
             button.iconImage = Play ? resumeTex : pauseTex; // Resources.Load<Texture2D>("Icon/Pause");

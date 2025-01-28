@@ -25,7 +25,6 @@ namespace RadioGroups
         #region List
         public SaveRadioGroup() : base()
         {
-            Debug.Log(itemsSource);
         }
         protected override void DefaultBindItem(VisualElement element, int index)
         {

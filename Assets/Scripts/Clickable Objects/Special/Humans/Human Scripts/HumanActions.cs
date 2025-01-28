@@ -110,7 +110,7 @@ public static class HumanActions
     {
         if (h.workplace)
         {
-            h.workplace.Produce(h.Efficiency * productionSpeed);
+            h.workplace.ProgressProduction(h.Efficiency * productionSpeed);
         }
         else
         {

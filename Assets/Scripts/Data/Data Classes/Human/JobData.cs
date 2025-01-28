@@ -2,12 +2,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
+/// <summary>Job for humans.</summary>
 [Serializable]
 public struct JobData
 {
+    #region Variables
+    /// <summary>Type of job, determines actions.</summary>
     public JobState job;
+    /// <summary>Path to reach the interest, or the destination.</summary>
     public List<GridPos> path;
+    /// <summary>Object to do something with.</summary>
     public ClickableObject interest;
+    #endregion
+
+    #region Constructors
     public JobData(JobSave jobSave, Human human)
     {
         job = jobSave.job;
@@ -25,7 +33,7 @@ public struct JobData
                 interest = MyGrid.buildings.Single(q => q.id == jobSave.interestID);
                 break;
             case JobSave.InterestType.R:
-                interest = SceneRefs.gridTiles.toBeDigged.FirstOrDefault(q => q.id == jobSave.interestID);
+                interest = SceneRefs.jobQueue.toBeDug.FirstOrDefault(q => q.id == jobSave.interestID);
                 interest.GetComponent<Rock>().Assigned = human;
                 break;
             case JobSave.InterestType.C:
@@ -43,5 +51,5 @@ public struct JobData
         interest = _interest;
         job = JobState.Free;
     }
+    #endregion
 }
-

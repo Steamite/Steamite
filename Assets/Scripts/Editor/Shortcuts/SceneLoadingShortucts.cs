@@ -1,19 +1,28 @@
-
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using System.IO;
 
+/// <summary>Editor shorcuts for quickly switching levels(only in edit mode).</summary>
 [InitializeOnLoad]
 public class SceneLoadingShortucts : MonoBehaviour
 {
+    /// <summary>Base path to the scene folde</summary>
     static readonly string scenePath = "Assets/Scenes/";
 
+    /// <summary>
+    /// Needs to be initialized to register the event.
+    /// </summary>
     static SceneLoadingShortucts()
     {
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
     }
+
+    /// <summary>
+    /// If the scene is played from "Level" scene, then initializes all previus parts.
+    /// </summary>
+    /// <param name="state">New state.</param>
     static void OnPlayModeStateChanged(PlayModeStateChange state)
     {
         if (state == PlayModeStateChange.ExitingEditMode)
@@ -22,12 +31,12 @@ public class SceneLoadingShortucts : MonoBehaviour
             {
                 EditorSceneManager.SaveOpenScenes();
                 string activeSceneName = EditorSceneManager.GetActiveScene().name;
-                if (activeSceneName != "Open Scene")
+                if (activeSceneName != "Splash Screen")
                 {
-                    EditorSceneManager.OpenScene($"{scenePath}Open Scene.unity");
+                    EditorSceneManager.OpenScene($"{scenePath}Splash Screen.unity");
                     //EditorSceneManager.activeSceneChangedInEditMode += SceneReturn;
                 }
-                GameObject.Find("Loader").GetComponent<FirstScene>().loadNewGame = true;
+                GameObject.Find("Loader").GetComponent<SplashScreen>().loadNewGame = true;
                 EditorApplication.EnterPlaymode();
                 File.WriteAllText($"{Application.persistentDataPath}/openScene.txt", activeSceneName);
             }
@@ -44,13 +53,13 @@ public class SceneLoadingShortucts : MonoBehaviour
     }
     
 
-    [MenuItem("Custom Editors/Load/Open Scene _F1", priority = 0)]
+    [MenuItem("Custom Editors/Load/Splash Screen _F1", priority = 0)]
     static void LoadOpenScene()
     {
-        if (EditorSceneManager.GetActiveScene().name != "Open Scene")
+        if (EditorSceneManager.GetActiveScene().name != "Splash Screen")
         {
             EditorSceneManager.SaveOpenScenes();
-            EditorSceneManager.OpenScene($"{scenePath}Open Scene.unity");
+            EditorSceneManager.OpenScene($"{scenePath}Splash Screen.unity");
         }
     }
     [MenuItem("Custom Editors/Load/Main Menu _F2", priority = 1)]

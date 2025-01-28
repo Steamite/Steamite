@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class FirstScene : MonoBehaviour
+/// <summary>
+/// First splash screen scene.
+/// </summary>
+public class SplashScreen : MonoBehaviour
 {
     [NonSerialized] public bool loadNewGame = false;
     private async void Awake()

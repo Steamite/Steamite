@@ -5,17 +5,29 @@ using UnityEngine.UIElements;
 using System.Linq;
 using Unity.Properties;
 
+/// <summary>All groups of objects that can be inspected. For switching info window views.</summary>
 public enum InfoMode
 {
+    /// <summary>Nothing is selected.</summary>
     None,
+    /// <summary><see cref="global::Building"/> is selected.</summary>
     Building,
+    /// <summary><see cref="global::Human"/> is selected.</summary>
     Human,
+    /// <summary><see cref="global::Rock"/> is selected.</summary>
     Rock,
+    /// <summary><see cref="global::Chunk"/> is selected.</summary>
     Chunk,
+    /// <summary><see cref="global::Water"/> is selected.</summary>
     Water,
+    /// <summary><see cref="ResearchNode"/> is selected.</summary>
     Research,
 }
 
+/// <summary>
+/// A temporary binding context that only exists for the time of inspection.<br/>
+/// Used by ALL <see cref="InfoWindow"/> bindings.
+/// </summary>
 public class BindingContext
 {
     public VisualElement context;
@@ -38,35 +50,40 @@ public class BindingContext
 }
 
 
+/// <summary>Inspection window for everithing in <see cref="InfoMode</summary>
 public class InfoWindow : MonoBehaviour
 {
     #region Variables
-    [SerializeField] VisualTreeAsset resourceItem;
+    /// <summary>For styling resouces in UI elements.</summary>
     public ResourceSkins resourceSkins;
 
-    // universal shorcuts
+    /// <summary>Info window text header.</summary>
     public Label header;
+    /// <summary>Info window itself.</summary>
     public VisualElement window;
 
-    // main shorcuts
-    public VisualElement buildingElement;
-    public VisualElement humanElement;
+    /// <summary><see cref="Building"/> group.</summary>
+    VisualElement buildingElement;
+    /// <summary><see cref="Human"/> group.</summary>
+    VisualElement humanElement;
+    /// <summary><see cref="Rock"/> && <see cref="Chunk"/> group.</summary>
     VisualElement rockChunkElement;
-    public VisualElement researchElement;
+    /// <summary><see cref="ResearchNode"/> group.</summary>
+    VisualElement researchElement;
 
-    // additional shorcuts
+    /// <summary>View for buildings that are beeing constructed.</summary>
     public VisualElement inConstructionElement;
+    /// <summary>View for buildings that are constructed.</summary>
     public VisualElement constructedElement;
 
-    //Unlocked resources
-    /// <summary>
-    /// List containing all active bindings, that are cleared on <see cref="Close"/>.
-    /// </summary>
+    /// <summary>List containing all active bindings, that are cleared on <see cref="Close(bool)"/>.</summary>
     List<BindingContext> activeBindings;
 
+    /// <summary>Stores last opened mode. To hide it and remove datasource.</summary>
     InfoMode lastInfo;
     #endregion
 
+    /// <summary>Fills all control references.</summary>
     void Awake()
     {
         activeBindings = new();
@@ -117,9 +134,7 @@ public class InfoWindow : MonoBehaviour
                 break;
         }
     }
-    /// <summary>
-    /// Clears all active bindings.
-    /// </summary>
+    /// <summary>Clears all active bindings.</summary>
     void ClearBindings()
     {
         foreach (BindingContext context in activeBindings)
@@ -141,6 +156,10 @@ public class InfoWindow : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Hides and clears <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">Element to hide.</param>
     void ResetView(VisualElement element)
     {
         element.style.display = DisplayStyle.None;
@@ -247,6 +266,11 @@ public class InfoWindow : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Enables selected elements and disables others.
+    /// </summary>
+    /// <param name="element">Parent element.</param>
+    /// <param name="toEnable">List of child elements to enable.</param>
     public void ToggleChildElems(VisualElement element, List<string> toEnable) =>
         element.Children().ToList().ForEach(
             q => q.style.display = toEnable.Contains(q.name)
@@ -255,19 +279,17 @@ public class InfoWindow : MonoBehaviour
     #endregion
 
     #region Binding Creation
-    
-
     /// <summary>
     /// Adds temporary binding, doesn't attach a datasource, because Info window has already attached it to the needed module.
     /// </summary>
     /// <param name="context"></param>
     /// <param name="binding"></param>
     /// <param name="dataSource"></param>
-    /// <exception cref="NotSupportedException"></exception>
+    /// <exception cref="NotSupportedException">Forgeting to unregister bindings.</exception>
     public void RegisterTempBinding(BindingContext context, DataBinding binding, object dataSource)
     {
         if (activeBindings.FindIndex(q => q.context == context.context) > -1)
-            throw new NotSupportedException("This object already has a binding!");
+            throw new NotSupportedException("This object already has a binding! Clear it first.");
         context.context.SetBinding(context.bindingId, binding);
         activeBindings.Add(context);
         ((IUpdatable)dataSource).UIUpdate(binding.dataSourcePath.ToString());

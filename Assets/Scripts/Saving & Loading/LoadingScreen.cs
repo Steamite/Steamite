@@ -2,32 +2,49 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>Handles scene transitions.</summary>
 public class LoadingScreen : MonoBehaviour
 {
+    #region Variables
+    /// <summary>Save name.</summary>
     string folderName;
-    int buildWeigth = 5;
-    int progressGlobal = 1;
 
+    const int BUILD_WEIGHT = 5;
+    const int CHUNK_WEIGHT = 1;
+    const int TILE_WEIGHT = 2;
+    const int HUMAN_WEIGHT = 2;
+
+    /// <summary>Load progress for the load bar.</summary>
+    int progressGlobal = 0;
+
+    /// <summary>Start normal Level.</summary>
     [SerializeField] GroundLevel startLevel;
+    /// <summary>Start main Level.</summary>
     [SerializeField] GroundLevel mainLevel;
+    /// <summary>Empty template level.</summary>
     [SerializeField] GroundLevel templateLevel;
 
+    /// <summary>Text showing the task at hand.</summary>
     [SerializeField] TMP_Text actionText;
+    /// <summary>Bar showing the loading progress.</summary>
     [SerializeField] Slider loadingSlider;
+    /// <summary>Action that is triggered after loading everything(Let's humans listen to ticks).</summary>
     public event Action humanActivation;
+    #endregion
 
-    GameObject roadPref;
+    #region Scene Managment
+    /// <summary>Loads the Main Menu scene.</summary>
     public void OpenMainMenu()
     {
         OpenScene(2); // the loading Process
     }
 
+    /// <summary>Loads a new scene.</summary>
     async void OpenScene(int id, string seed = "")
     {
         await SceneManager.LoadSceneAsync(id, LoadSceneMode.Additive);
@@ -51,6 +68,11 @@ public class LoadingScreen : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Creates a new game save and Load it's scene.
+    /// </summary>
+    /// <param name="_folderName">Save name</param>
+    /// <param name="seed">Generation seed</param>
     public async void NewGame(string _folderName, string seed = ""/*, bool tutorial*/)
     {
         folderName = _folderName;
@@ -59,6 +81,7 @@ public class LoadingScreen : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(true);
         OpenScene(3, seed);
     }
+    #endregion
 
     #region Loading Game State
     /// <summary>
@@ -101,10 +124,10 @@ public class LoadingScreen : MonoBehaviour
         // create progress val for loading slider
         int maxprogress = 0;
         for(int i = 0; i < worldSave.gridSave.Length; i++)
-            maxprogress += worldSave.gridSave[i].width * worldSave.gridSave[i].height * 2; // Tiles and pipes
-        maxprogress += worldSave.objectsSave.buildings.Length * buildWeigth; //scale number
-        maxprogress += worldSave.objectsSave.chunks.Length;
-        maxprogress += humanSaves.Length;
+            maxprogress += worldSave.gridSave[i].width * worldSave.gridSave[i].height * TILE_WEIGHT; // Tiles and pipes
+        maxprogress += worldSave.objectsSave.buildings.Length * BUILD_WEIGHT; //scale number
+        maxprogress += worldSave.objectsSave.chunks.Length * CHUNK_WEIGHT;
+        maxprogress += humanSaves.Length * HUMAN_WEIGHT;
         maxprogress += researchSave.categories.SelectMany(q => q.nodes).Count();
         loadingSlider.maxValue = maxprogress;
         IProgress<int> progress = new Progress<int>(value =>
@@ -141,7 +164,7 @@ public class LoadingScreen : MonoBehaviour
             SceneRefs.objectFactory
                 .CreateAChunk(chunkSave.gridPos, chunkSave.resSave.stored)
                 .Load(chunkSave);
-            progress.Report(progressGlobal += 1);
+            progress.Report(progressGlobal += CHUNK_WEIGHT);
         }
     }
 
@@ -150,7 +173,7 @@ public class LoadingScreen : MonoBehaviour
         foreach (BSave save in buildings) // for each saved building
         {
             SceneRefs.objectFactory.CreateSavedBuilding(save);
-            progress.Report(progressGlobal += buildWeigth);
+            progress.Report(progressGlobal += BUILD_WEIGHT);
         }
     }
 
@@ -162,14 +185,14 @@ public class LoadingScreen : MonoBehaviour
         for(int i = 0; i < gridSave.Length; i++)
         {
             MyGrid.Load(gridSave[i], templateLevel, i);
-            //progress.Report(progressGlobal += );
+            progress.Report(progressGlobal += TILE_WEIGHT);
         }
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;
     }
     void FillHumans(IProgress<int> progress, HumanSave[] humanSaves)
     {
         actionText.text = "Kidnaping workers";
-        SceneRefs.humans.LoadHumans(progress, humanSaves, ref humanActivation);
+        SceneRefs.humans.LoadHumans(progress, humanSaves, ref humanActivation, HUMAN_WEIGHT, ref progressGlobal);
     }
     #endregion Model Loading
 
@@ -194,6 +217,11 @@ public class LoadingScreen : MonoBehaviour
     }
     #endregion UI loading
     #endregion Loading Game State
+
+    /// <summary>
+    /// Things that need to be after both loading and creating a new game.
+    /// </summary>
+    /// <param name="newGame">Is it the new game(used for calling the same methods just with different paramaters).</param>
     async void AfterLevelLoad(bool newGame)
     {
         //transform.parent.GetChild(1).GetComponent<AudioListener>().enabled = false;
@@ -210,7 +238,7 @@ public class LoadingScreen : MonoBehaviour
         SceneRefs.stats.GetChild(1).GetChild(0).GetComponent<TimeButtons>().SetStartSpeed(SceneRefs.tick);
         SceneRefs.stats.GetChild(0).GetComponent<LevelButtons>().Init();
         humanActivation?.Invoke();
-        SceneRefs.tick.timeController.Init(SceneRefs.tick, newGame);
         humanActivation = null;
+        SceneRefs.tick.timeController.Init(SceneRefs.tick, newGame);
     }
 }

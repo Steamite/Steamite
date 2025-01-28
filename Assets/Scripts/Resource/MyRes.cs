@@ -5,6 +5,7 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 
+/// <summary>All available resource types.</summary>
 [Serializable]
 public enum ResourceType
 {
@@ -15,18 +16,24 @@ public enum ResourceType
     Wood,
 }
 
+/// <summary>A util library for resource operations</summary>
 public static class MyRes
 {
-    // fill with ALL of active resource objects!!!
+    #region Variables
+    /// <summary>Used for faster determening new jobs faster.</summary>
     public static int globalStorageSpace;
+    /// <summary>All storage buildings.</summary>
     static Storage[] storage;
+    /// <summary>Reference to global resource storage counter.</summary>
     static ResourceDisplay resDisplay;
+    #endregion
 
-    public static int Money
-    {
-        get => resDisplay.Money;
-    }
+    #region Getters
+    /// <summary>Reference to global money.</summary>
+    public static int Money => resDisplay.Money;
+    #endregion
 
+    #region Init
     /// <summary>
     /// Starting function for the resource system.
     /// </summary>
@@ -61,11 +68,9 @@ public static class MyRes
             Debug.LogError(e);
         }
     }
-    public static void ManageMoney(int change)
-    {
-        resDisplay.Money += change;
-    }
+    #endregion
 
+    #region UI Updates
     /// <summary>
     /// for generic resources
     /// </summary>
@@ -85,9 +90,30 @@ public static class MyRes
             return "Nothing";
     }
 
+    /// <summary>
+    /// Updates Global resource and forces an update.
+    /// </summary>
+    /// <param name="cost"><inheritdoc cref="ManageRes(Resource, Resource, float)" path="/param[@name='source']"/></param>
+    /// <param name="mod"><inheritdoc cref="ManageRes(Resource, Resource, float)" path="/param[@name='mod']"/></param>
+    public static void UpdateResource(Resource cost, int mod)
+    {
+        ManageRes(resDisplay.GlobalResources, cost, mod);
+        resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
+    }
+    #endregion
+
+    #region Resource moving
+    /// <summary>
+    /// Changes the ammount of money.
+    /// </summary>
+    /// <param name="change">Ammount to add(if negative subtracts).</param>
+    public static void ManageMoney(int change)
+    {
+        resDisplay.Money += change;
+    }
 
     /// <summary>
-    /// adds or removes resources in destination
+    /// Adds or removes resources in destination.
     /// </summary>
     /// <param name="destination">What will change</param>
     /// <param name="source">Change ammount</param>
@@ -202,7 +228,9 @@ public static class MyRes
         }
 
     }
-
+    #endregion
+    
+    #region Job finding
     /// <summary>
     /// Finds the closest stockpite with needed resources, if found some, orders to move to it.
     /// </summary>
@@ -248,6 +276,83 @@ public static class MyRes
         return false;
     }
 
+    /// <summary>
+    /// find only where to store, not how to get there
+    /// </summary>
+    /// <param name="r"></param>
+    /// <param name="h"></param>
+    public static void FindStorage(Resource r, Human h)
+    {
+        List<Storage> storages = FilterStorages(r, h, true);
+        h.destination = PathFinder.FindPath(storages.Select(q => q.GetComponent<ClickableObject>()).ToList(), h).interest.GetComponent<Building>();
+        if (h.destination)
+        {
+            h.destination.RequestRes(r, h, 1);
+        }
+    }
+
+    /// <summary>
+    /// find and keep path to the storage
+    /// </summary>
+    /// <param name="h"></param>
+    public static void FindStorage(Human h)
+    {
+        List<Storage> storages = FilterStorages(h.Inventory, h, true);
+        JobData job = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h);
+        if (job.interest)
+        {
+            job.interest.GetComponent<StorageObject>().RequestRes(h.Inventory, h, 1);
+            h.destination = (Building)job.interest;
+            job.job = JobState.Supply;
+            h.ChangeAction(HumanActions.Move);
+            h.SetJob(job);
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="r"></param>
+    /// <param name="h"></param>
+    /// <param name="perfect"></param>
+    /// <returns></returns>
+    static List<Storage> FilterStorages(Resource r, Human h, bool perfect)
+    {
+        JobQueue jQ = h.transform.parent.parent.GetComponent<JobQueue>();
+        List<Storage> storages = jQ.storages.ToList();
+        int wantToStore = r.ammount.Sum();
+        for (int i = storages.Count - 1; i >= 0; i--)
+        {
+            int spaceToStore = storages[i].LocalRes.stored.capacity - storages[i].LocalRes.Future().ammount.Sum();
+            if (spaceToStore <= 0)
+                continue;
+            for (int j = 0; j < r.type.Count; j++)
+            {
+                if (storages[i].canStore[(int)r.type[j]] == true)
+                {
+                    if (perfect)
+                    {
+                        if (wantToStore <= spaceToStore)
+                            continue;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                storages.RemoveAt(i);
+                break;
+            }
+        }
+        if (storages.Count == 0 && perfect)
+        {
+            return FilterStorages(r, h, false);
+        }
+        return storages;
+    }
+    #endregion
+
+    #region Comparing
     /// <summary>
     /// Filters storages, first with those that have all that's needed, if none found try atleast part of the diff
     /// </summary>
@@ -325,6 +430,14 @@ public static class MyRes
         }
         return ret;
     }
+
+    /// <summary>
+    /// <inheritdoc cref="DiffRes(Resource, Resource)"/>
+    /// </summary>
+    /// <param name="cost"><inheritdoc cref="DiffRes(Resource, Resource)" path="/param[@name='cost']"/></param>
+    /// <param name="storA"><inheritdoc cref="DiffRes(Resource, Resource)" path="/param[@name='storA']"/></param>
+    /// <param name="storB">Second available resource.</param>
+    /// <returns></returns>
     public static Resource DiffRes(Resource cost, Resource storA, Resource storB)
     {
         Resource ret = new();
@@ -352,84 +465,35 @@ public static class MyRes
         }
         return ret;
     }
-    public static int DiffInPositive(int a, int b)
+    
+    /// <summary>
+    /// Compares values and returns the difference between <paramref name="a"/> and <paramref name="b"/>.
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
+    static int DiffInPositive(int a, int b)
     {
         int diff = a - b;
         return diff < 0 ? 0 : diff;
     }
-    // Changes the state of a resources
-    public static void UpdateResource(Resource cost, int mod)
-    {
-        ManageRes(resDisplay.GlobalResources, cost, mod);
-        resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
-    }
 
     /// <summary>
-    /// find only where to store, not how to get there
+    /// Compares against global resources.
     /// </summary>
-    /// <param name="r"></param>
-    /// <param name="h"></param>
-    public static void FindStorage(Resource r, Human h)
+    /// <param name="cost">Asking cost.</param>
+    /// <returns>If the cost can be afforded.</returns>
+    public static bool CanAfford(Resource cost)
     {
-        List<Storage> storages = FilterStorages(r, h, true);
-        h.destination = PathFinder.FindPath(storages.Select(q => q.GetComponent<ClickableObject>()).ToList(), h).interest.GetComponent<Building>();
-        if (h.destination)
-        {
-            h.destination.RequestRes(r, h, 1);
-        }
+        return DiffRes(cost, resDisplay.GlobalResources).ammount.Sum() == 0;
     }
-    /// <summary>
-    /// find and keep path to the storage
-    /// </summary>
-    /// <param name="h"></param>
-    public static void FindStorage(Human h)
-    {
-        List<Storage> storages = FilterStorages(h.Inventory, h, true);
-        JobData job = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h);
-        if (job.interest)
-        {
-            job.interest.GetComponent<StorageObject>().RequestRes(h.Inventory, h, 1);
-            h.destination = (Building)job.interest;
-            job.job = JobState.Supply;
-            h.ChangeAction(HumanActions.Move);
-            h.SetJob(job);
-        }
-    }
-    static List<Storage> FilterStorages(Resource r, Human h, bool perfect)
-    {
-        JobQueue jQ = h.transform.parent.parent.GetComponent<JobQueue>();
-        List<Storage> storages = jQ.storages.ToList();
-        int wantToStore = r.ammount.Sum();
-        for (int i = storages.Count - 1; i >= 0; i--)
-        {
-            int spaceToStore = storages[i].LocalRes.stored.capacity - storages[i].LocalRes.Future().ammount.Sum();
-            if (spaceToStore <= 0)
-                continue;
-            for (int j = 0; j < r.type.Count; j++)
-            {
-                if (storages[i].canStore[(int)r.type[j]] == true)
-                {
-                    if (perfect)
-                    {
-                        if (wantToStore <= spaceToStore)
-                            continue;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-                storages.RemoveAt(i);
-                break;
-            }
-        }
-        if (storages.Count == 0 && perfect)
-        {
-            return FilterStorages(r, h, false);
-        }
-        return storages;
-    }
+    #endregion
 
+    #region Magical actions
+    /// <summary>
+    /// Removes one unit of <see cref="ResourceType.Food"/> from a random storage.
+    /// </summary>
+    /// <param name="human">Human that is effected by result.</param>
     public static void EatFood(Human human)
     {
         Storage store = storage.FirstOrDefault(q => q.LocalRes.stored.ammount[q.LocalRes.Future(true).type.IndexOf(ResourceType.Food)] > 0);
@@ -444,6 +508,12 @@ public static class MyRes
             human.ModifyEfficiency(ModType.Food, false);
         }
     }
+
+    /// <summary>
+    /// Passive production or trade, just resources that come from the outside and "Magicly spawn".<br/>
+    /// Deposited to main elevator regardles of capacity.
+    /// </summary>
+    /// <param name="resource">Resources to add.</param>
     public static void DeliverToElevator(Resource resource)
     {
         Storage store = storage.FirstOrDefault(q => ((Elevator)q).main);
@@ -453,33 +523,33 @@ public static class MyRes
         }
     }
 
-    public static void TakeFromGlobalStorage(Resource r)
+    /// <summary>
+    /// Paying for trade or outposts, takes resources from all storages.
+    /// </summary>
+    /// <param name="cost">Cost to pay.</param>
+    public static void TakeFromGlobalStorage(Resource cost)
     {
-        UpdateResource(r, -1);
+        UpdateResource(cost, -1);
         for (int i = 0; i < storage.Length; i++)
         {
-            Resource diff = DiffRes(r, storage[i].LocalRes.Future(true));
-            for(int j = r.type.Count-1; j >= 0; j--)
+            Resource diff = DiffRes(cost, storage[i].LocalRes.Future(true));
+            for(int j = cost.type.Count-1; j >= 0; j--)
             {
-                int x = diff.type.IndexOf(r.type[j]);
+                int x = diff.type.IndexOf(cost.type[j]);
                 if(x == -1)
                 {
-                    storage[i].LocalRes.stored.ammount[storage[i].LocalRes.stored.type.IndexOf(r.type[j])] -= r.ammount[j];
-                    r.ammount.RemoveAt(j);
-                    r.type.RemoveAt(j);
+                    storage[i].LocalRes.stored.ammount[storage[i].LocalRes.stored.type.IndexOf(cost.type[j])] -= cost.ammount[j];
+                    cost.ammount.RemoveAt(j);
+                    cost.type.RemoveAt(j);
                 }
                 else
                 {
-                    int change = r.ammount[j] - diff.ammount[x];
-                    storage[i].LocalRes.stored.ammount[storage[i].LocalRes.stored.type.IndexOf(r.type[j])] -= change;
-                    r.ammount[j] -= change;
+                    int change = cost.ammount[j] - diff.ammount[x];
+                    storage[i].LocalRes.stored.ammount[storage[i].LocalRes.stored.type.IndexOf(cost.type[j])] -= change;
+                    cost.ammount[j] -= change;
                 }
             }
         }
     }
-
-    public static bool CanAfford(Resource cost)
-    {
-        return DiffRes(cost, resDisplay.GlobalResources).ammount.Sum() == 0;
-    }
+    #endregion
 }

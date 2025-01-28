@@ -1,15 +1,20 @@
-
 using System.Collections.Generic;
 using System;
-using UnityEngine.Rendering;
 
+/// <summary>Game resources.</summary>
 [Serializable]
 public class Resource
 {
-    public int capacity = -1; // -1 = no limit
-    public List<ResourceType> type = new(); // stores all resource types
+    #region Variables
+    /// <summary>Capacity in this resource (-1 means there's no limit)</summary>
+    public int capacity = -1;
+    /// <summary>Resource types here, coresponds to the <see cref="ammount"/>.</summary>
+    public List<ResourceType> type = new();
+    /// <summary>Resource ammounts here, coresponds to the <see cref="type"/>.</summary>
     public List<int> ammount = new();
+    #endregion
 
+    #region Constructors
     public Resource(List<ResourceType> _type, List<int> _ammount)
     {
         type = _type;
@@ -23,20 +28,9 @@ public class Resource
     {
 
     }
-    /// <returns>a new identical resource</returns>
-    public Resource Clone()
-    {
-        Resource clone = new();
-        for (int i = 0; i < type.Count; i++)
-        {
-            clone.type.Add(type[i]);
-            if (ammount.Count <= i)
-                clone.ammount.Add(0);
-            else
-                clone.ammount.Add(ammount[i]);
-        }
-        return clone;
-    }
+    #endregion
+
+    #region Overrides
     // override object.Equals
     public override bool Equals(object resource)
     {
@@ -79,31 +73,25 @@ public class Resource
         }
         return s;
     }
+    #endregion
 
-    /// <summary>
-    /// Creates a string ready to be displayed.
-    /// </summary>
-    /// <param name="str">String to add to.</param>
-    /// <param name="available">Storage resources.</param>
-    /// <returns>True if you cannot afford it.</returns>
-    public bool ToStringTMP(ref string str, Resource available)
+    /// <returns>a new identical resource</returns>
+    public Resource Clone()
     {
-        bool canAfford = true;
-        Resource diff = MyRes.DiffRes(this, available);
+        Resource clone = new();
         for (int i = 0; i < type.Count; i++)
         {
-            if (diff.type.Contains(type[i]))
-            {
-                str += $"<color=red>{type[i]}: {available.ammount[available.type.IndexOf(type[i])]}/{ammount[i]}</color>\n";
-                canAfford = false;
-            }
+            clone.type.Add(type[i]);
+            if (ammount.Count <= i)
+                clone.ammount.Add(0);
             else
-                str += $"{type[i]}: {available.ammount[available.type.IndexOf(type[i])]}/{ammount[i]}\n";
+                clone.ammount.Add(ammount[i]);
         }
-        return !canAfford;
+        return clone;
     }
 
-    internal void RemoveEmpty()
+    /// <summary>Removes empty resources.</summary>
+    public void RemoveEmpty()
     {
         for(int i = type.Count-1; i > -1 ; i--)
         {

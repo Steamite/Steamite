@@ -4,17 +4,23 @@ using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>Groups all connected pipes and buildings to enable moving fluids between them.</summary>
 [Serializable]
 public class FluidNetwork
 {
+    #region Variables
+    /// <summary>All connected pipes in the network.</summary>
     public List<Pipe> pipes = new();
+    /// <summary>All connected buildings in the network.</summary>
     public List<Building> buildings = new();
+    /// <summary>Network ID for identification and display.</summary>
     public int networkID = -1;
+    /// <summary>Network name for display.</summary>
     public string networkName;
+    #endregion
 
-    /// <summary>
-    /// Constructor, used when creating pipes or spliting networks.
-    /// </summary>
+    #region Constructors
+    /// <summary>Constructor, used when creating pipes or spliting networks.</summary>
     public FluidNetwork()
     {
         CreateID();
@@ -30,9 +36,7 @@ public class FluidNetwork
         CreateID();
     }
 
-    /// <summary>
-    /// Creates a unique id for the network.
-    /// </summary>
+    /// <summary>Creates a unique id for the network.</summary>
     void CreateID()
     {
         if (MyGrid.fluidNetworks.Count > 0)
@@ -40,10 +44,9 @@ public class FluidNetwork
         else
             networkID = 0;
     }
+    #endregion
 
-    //--------------------------------------------------------\\
-    //------------------Updating the network------------------\\
-    //--------------------------------------------------------\\
+    #region Modifying
     /// <summary>
     /// Takes other network and merges it with this one.
     /// </summary>
@@ -137,4 +140,5 @@ public class FluidNetwork
             }
         }
     }
+    #endregion
 }

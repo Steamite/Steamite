@@ -27,3 +27,10 @@ MonoBehaviour:
     posInfluence: 10
     negCount: 2
     negInfluence: 15
+  - name: Lazy
+    modType: 1
+    count: 0
+    posCount: 1
+    posInfluence: 10
+    negCount: 2
+    negInfluence: 15

@@ -4,18 +4,20 @@ using UnityEngine.UIElements;
 
 namespace RadioGroups
 {
-
+    /// <summary>Radio group for managing switchin between level unlockers.</summary>
     [UxmlElement]
     public partial class LevelUnlockerRadioGroup : CustomRadioButtonGroup
     {
+        #region Variables
         LevelState[] states;
 
         new public LevelState this[int i]
         {
             get => states[i];
         }
+        #endregion
 
-        #region Base
+        #region Constructors
         public LevelUnlockerRadioGroup() : base()
         {
             states = new LevelState[5];
@@ -28,7 +30,12 @@ namespace RadioGroups
         }
         #endregion
 
-
+        /// <summary>
+        /// Resets the view and selects the current level.
+        /// </summary>
+        /// <param name="storage">Storage building that's being inspected.</param>
+        /// <param name="levelData">Data containing costs for each of the button.</param>
+        /// <returns>New level.</returns>
         public int SelectUpdate(Storage storage, LevelPresent levelData)
         {
             GridPos gridPos = storage.GetPos();
@@ -86,6 +93,12 @@ namespace RadioGroups
                 SetStates(gridPos.y, LevelState.Unavailable);
         }
 
+        /// <summary>
+        /// Direct manipulation with button states, used to switch between affordable and too expenisve.
+        /// </summary>
+        /// <param name="i">Which state to set for.</param>
+        /// <param name="state">Value to set.</param>
+        /// <returns></returns>
         public bool SetStates(int i, LevelState state)
         {
             if(states[i] != state)

@@ -57,12 +57,15 @@ public class ResearchBackend : MonoBehaviour
         currentResearch = null;
     }
     
-    //Called by every worker in a research building
-    public void DoResearch(float speed)
+    /// <summary>
+    /// Called by every worker in a research building
+    /// </summary>
+    /// <param name="efficiecy">Ammount to add.</param>
+    public void DoResearch(float efficiecy)
     {
         if (currentResearch)
         {
-            currentResearch.node.currentTime += speed * 1;
+            currentResearch.node.currentTime += efficiecy * 1;
         }
     }
 }

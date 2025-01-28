@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,7 +13,7 @@ public class BuildButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         GridTiles sel = GameObject.Find("Grid").GetComponent<GridTiles>();
         sel.buildingPrefab = buildPrefab;
-        sel.ChangeSelMode(SelectionMode.build);
+        sel.ChangeSelMode(ControlMode.build);
     }
     
     public void ResearchUnlock()

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 
+/// <summary>Pathfinding result, needs to parsed to <see cref="JobData"/>.</summary>
 [Serializable]
 public class Plan
 {

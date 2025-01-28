@@ -3,9 +3,9 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
+/// <summary>Editor shorcuts for selecting the more common scene objects.</summary>
 public class ObjectSelectionShortcuts
 {
-    
     [MenuItem("Custom Editors/Selection/info window _1", priority = -1)]
     static public void SelectInfoWindow()
     {
@@ -15,7 +15,7 @@ public class ObjectSelectionShortcuts
         Selection.activeGameObject = gameObject;
     }
 
-    [MenuItem("Custom Editors/Selection/ trade view _2", priority = -1)]
+    [MenuItem("Custom Editors/Selection/trade view _2", priority = -1)]
     static public void SelectResearch()
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")

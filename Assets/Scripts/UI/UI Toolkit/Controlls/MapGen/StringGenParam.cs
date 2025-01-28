@@ -6,10 +6,21 @@ using UnityEngine.UIElements;
 
 namespace Params
 {
+    /// <summary>Text input field parameter.</summary>
     [UxmlElement]
     public partial class StringGenerationParameter : BindableElement
     {
+        #region Variables
+        /// <summary>Text value.</summary>
         string val;
+        /// <summary>Label text value.</summary>
+        string _lText;
+        /// <summary>Label for identifying.</summary>
+        protected Label label;
+        #endregion
+
+        #region Properties
+        /// <inheritdoc cref="val"/>
         [CreateProperty]
         public string TextValue
         {
@@ -20,7 +31,6 @@ namespace Params
             }
         }
 
-        string _lText;
         [UxmlAttribute]
         public string labelText
         {
@@ -31,8 +41,9 @@ namespace Params
                 label.text = _lText;
             }
         }
-        protected Label label;
+        #endregion
 
+        #region Construction
         public StringGenerationParameter()
         {
             style.height = new(new Length(50, LengthUnit.Pixel));
@@ -58,7 +69,13 @@ namespace Params
             VisualElement el = textField.Q<VisualElement>("unity-text-input");
             el.AddToClassList("param-text-field");
         }
+        #endregion
 
+        /// <summary>
+        /// Links to seed.
+        /// </summary>
+        /// <param name="mapGeneration">Data source.</param>
+        /// <returns>New seed.</returns>
         public string Link(MapGeneration mapGeneration)
         {
             dataSource = mapGeneration;
@@ -93,6 +110,10 @@ namespace Params
             return _seed;
         }
 
+        /// <summary>
+        /// Is updated from outside.
+        /// </summary>
+        /// <param name="newStr">New value.</param>
         public void Change(string newStr)
         {
             this.Q<TextField>().SetValueWithoutNotify(newStr);

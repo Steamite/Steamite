@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>Class for handling efficiency of <see cref="Human"/> actions.</summary>
 [Serializable]
 public class Efficiency
 {
-    [SerializeField]
-    List<EfficiencyMod> modifiers = new();
-    [SerializeField]
-    float baseEfficiecny = 1;
-    [NonSerialized]
-    public float efficiency = 1;
+    #region Variables
+    /// <summary>All currently active modifiers.</summary>
+    [SerializeField] List<EfficiencyMod> modifiers = new();
+    /// <summary>Base efficiency without modifiers.</summary>
+    [SerializeField] float baseEfficiecny = 1;
+    /// <summary>Current efficiency.</summary>
+    [NonSerialized] public float efficiency = 1;
+    #endregion
 
     /// <summary>
     /// Adds or removes a modifier, then recalculates <see cref="efficiency"/>.
@@ -50,6 +53,7 @@ public class Efficiency
         CalculateEfficiecy();
     }
 
+    /// <summary>Recalculates new <see cref="efficiency"/>.</summary>
     void CalculateEfficiecy()
     {
         efficiency = baseEfficiecny;

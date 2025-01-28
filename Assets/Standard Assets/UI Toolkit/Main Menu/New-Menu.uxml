@@ -24,7 +24,7 @@
                             <ui:DataBinding property="TextValue" data-source-path="Seed" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="ToSource" />
                         </Bindings>
                     </Params.StringGenerationParameter>
-                    <Params.EnumGenerationParameter label-text="Map Size" name="Map-Size" data-source-type="StartMenu.MapGeneration, ToolkitUI" style="font-size: 37px; -unity-text-align: middle-left;">
+                    <Params.EnumGenerationParameter label-text="Map Size" name="Map-Size" data-source-type="StartMenu.MapGeneration, ToolkitUI" input="MapSize" style="font-size: 37px; -unity-text-align: middle-left;">
                         <Bindings>
                             <ui:DataBinding property="IntValue" data-source-path="MapSize" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="ToSource" />
                         </Bindings>
@@ -32,17 +32,17 @@
                     <ui:Label text="Veins" style="align-content: flex-end; font-size: 43px; height: 50px; margin-top: 20px; justify-content: flex-end; margin-bottom: 17px;">
                         <ui:VisualElement style="flex-grow: 0; background-color: rgb(141, 129, 51); top: 20%; width: 80%; height: 3px; margin-top: 0; justify-content: space-between; align-self: flex-start; align-items: flex-end;" />
                     </ui:Label>
-                    <Params.EnumGenerationParameter label-text="Size" name="Size" data-source-type="StartMenu.MapGeneration, ToolkitUI">
+                    <Params.EnumGenerationParameter label-text="Size" name="Size" data-source-type="StartMenu.MapGeneration, ToolkitUI" input="Veins">
                         <Bindings>
                             <ui:DataBinding property="IntValue" data-source-path="VeinSize" binding-mode="ToSource" />
                         </Bindings>
                     </Params.EnumGenerationParameter>
-                    <Params.EnumGenerationParameter label-text="Richness" name="Richness">
+                    <Params.EnumGenerationParameter label-text="Richness" name="Richness" input="Veins">
                         <Bindings>
                             <ui:DataBinding property="IntValue" data-source-path="VeinRichness" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="ToSource" />
                         </Bindings>
                     </Params.EnumGenerationParameter>
-                    <Params.EnumGenerationParameter label-text="Number" name="Number">
+                    <Params.EnumGenerationParameter label-text="Number" name="Number" input="Veins">
                         <Bindings>
                             <ui:DataBinding property="IntValue" data-source-path="VeinCount" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="ToSource" />
                         </Bindings>

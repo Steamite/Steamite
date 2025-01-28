@@ -4,48 +4,62 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public enum SelectionMode
+/// <summary>Handles different control states for <see cref="GridTiles"/>.</summary>
+public enum ControlMode
 {
+    /// <summary>Basic inspection mode.</summary>
     nothing,
+    /// <summary>Building deconstruction mode.</summary>
     deconstruct,
+    /// <summary>Rock digging mode.(If started on marked Rocks, unmarks insted)</summary>
     dig,
+    /// <summary>Building placement mode.</summary>
     build
 }
 
-/// <summary>
-/// Handles Input on the game Grid.
-/// </summary>
+/// <summary>Handles Input on the game Grid.</summary>
 public class GridTiles : MonoBehaviour
 {
-    //public bool dragBuildState = false; // follow mouse or find closest route
+    #region Variables
+    /// <summary>Raycast mask for building.</summary>
     public LayerMask buildingMask;
+    /// <summary>Default raycast mask for the rest of time.</summary>
     public LayerMask defaultMask;
-    [Header("Tilemaps")]
-    public Building buildingPrefab;
-    public SelectionMode selMode = SelectionMode.nothing;
+    
+    /// <summary>Currently selected building for construction.</summary>
+    [Header("Tilemaps")] public Building buildingPrefab;
+    /// <summary>Current active control mode.</summary>
+    public ControlMode activeControl = ControlMode.nothing;
 
+    /// <summary>Last mouse position.</summary>
     public GridPos activePos;
+    /// <summary>Starting mouse position when dragging.</summary>
     public GridPos startPos;
 
+    /// <summary>If the mouse is down and trying to drag.</summary>
     public bool drag = false;
+    /// <summary>Drag started on a marked tile.</summary>
     public bool deselect = false;
 
+    /// <summary>Tiles marked while dragging.</summary>
     public List<ClickableObject> markedTiles;
-    public List<Rock> toBeDigged = new();
+    /// <summary>Building that's currently beeing placed.</summary>
     public Building buildBlueprint;
 
-    /// <summary> clicked(selected) </summary>
+    /// <summary>Clicked(selected) object.</summary>
     public ClickableObject clickedObject;
-    /// <summary> mouse over </summary>
+    /// <summary>Last object with mouse contact.</summary>
     public ClickableObject activeObject;
 
-    public Texture2D[] cursors;
-    public Color highlight = Color.white/3; // WHITE / 3
+    /// <summary>List of all usable cursors.</summary>
+    [Tooltip("used to help determine control states")] public Texture2D[] cursors;
+    /// <summary>Basic highlight color(for selection).</summary>
+    public Color highlight = Color.white/3;
+    /// <summary>Color for selecting what do dig.</summary>
     public Color toBeDugColor = (Color.yellow + Color.red) / 2;
+    #endregion
 
-    /// <summary>
-    /// Called when altTabing from the game.
-    /// </summary>
+    /// <summary>Called when AltTabing from the game.</summary>
     void OnApplicationFocus(bool focus)
     {
         if (!focus)
@@ -67,9 +81,9 @@ public class GridTiles : MonoBehaviour
         Color c = new();
         activeObject = enterObject;
         activePos = enterObject.GetPos();
-        switch (selMode)
+        switch (activeControl)
         {
-            case SelectionMode.nothing:
+            case ControlMode.nothing:
                 
                 if (activeObject.selected)// if active
                     c = highlight * 3; // WHITE
@@ -91,7 +105,7 @@ public class GridTiles : MonoBehaviour
                     }
                 }
                 break;
-            case SelectionMode.deconstruct:
+            case ControlMode.deconstruct:
                 Building _b = enterObject.GetComponent<Building>();
                 if (_b)
                     if (_b.deconstructing)
@@ -101,7 +115,7 @@ public class GridTiles : MonoBehaviour
                 else
                     return;
                 break;
-            case SelectionMode.dig:
+            case ControlMode.dig:
                 Rock _r = enterObject.GetComponent<Rock>();
                 if (drag)
                 {
@@ -120,7 +134,7 @@ public class GridTiles : MonoBehaviour
                     }
                 }
                 break;
-            case SelectionMode.build:
+            case ControlMode.build:
                 if (drag)
                 {
                     CalcPipes();
@@ -150,9 +164,9 @@ public class GridTiles : MonoBehaviour
             return;
         Color c = new();
         Material[] m = exitObject.GetComponentsInChildren<MeshRenderer>().Select(q=> q.material).ToArray();
-        switch (selMode)
+        switch (activeControl)
         {
-            case SelectionMode.nothing:
+            case ControlMode.nothing:
                 Rock r = exitObject.GetComponent<Rock>();
                 Building b = exitObject.GetComponent<Building>();
                 Pipe pipe = exitObject.GetComponent<Pipe>();
@@ -171,14 +185,14 @@ public class GridTiles : MonoBehaviour
                 }
 
                 break;
-            case SelectionMode.deconstruct:
+            case ControlMode.deconstruct:
                 Building _b = exitObject.GetComponent<Building>();
                 if (_b && _b.deconstructing)
                     c = Color.red * 0.75f;
                 else
                     c = new();
                 break;
-            case SelectionMode.dig:
+            case ControlMode.dig:
                 Rock _r = exitObject.GetComponent<Rock>();
                 if (_r)
                 {
@@ -190,7 +204,7 @@ public class GridTiles : MonoBehaviour
                         c = new();
                 }
                 break;
-            case SelectionMode.build:
+            case ControlMode.build:
                 return;
         }
         HighLight(c, exitObject.gameObject);
@@ -211,9 +225,9 @@ public class GridTiles : MonoBehaviour
         }
         Color c = new();
         Material[] m = activeObject.GetComponentsInChildren<MeshRenderer>().Where(q => q != null).Select(q => q.material).ToArray();
-        switch (selMode)
+        switch (activeControl)
         {
-            case SelectionMode.nothing:
+            case ControlMode.nothing:
                 Rock r = activeObject.GetComponent<Rock>();
                 if (clickedObject)
                 {
@@ -232,7 +246,7 @@ public class GridTiles : MonoBehaviour
                 clickedObject.selected = true;
                 clickedObject.OpenWindow();
                 break;
-            case SelectionMode.deconstruct:
+            case ControlMode.deconstruct:
                 Building b = activeObject.GetComponent<Building>();
                 if (b)
                 {
@@ -244,7 +258,7 @@ public class GridTiles : MonoBehaviour
                     HighLight(c, b.gameObject);
                 }
                 break;
-            case SelectionMode.dig:
+            case ControlMode.dig:
                 Rock _r = activeObject.GetComponent<Rock>();
                 if (_r)
                 {
@@ -254,7 +268,7 @@ public class GridTiles : MonoBehaviour
                     markedTiles = new() { _r };
                 }
                 break;
-            case SelectionMode.build:
+            case ControlMode.build:
                 if (buildBlueprint.CanPlace())
                 {
                     if (buildBlueprint.GetComponent<Pipe>())
@@ -277,13 +291,13 @@ public class GridTiles : MonoBehaviour
     /// </summary>
     public void Up()
     {
-        switch (selMode)
+        switch (activeControl)
         {
-            case SelectionMode.nothing:
-            case SelectionMode.deconstruct:
+            case ControlMode.nothing:
+            case ControlMode.deconstruct:
                 // nothing
                 break;
-            case SelectionMode.build:
+            case ControlMode.build:
 
                 if (drag)
                 {
@@ -307,7 +321,7 @@ public class GridTiles : MonoBehaviour
                     }
                     else
                     {
-                        ChangeSelMode(SelectionMode.nothing);
+                        ChangeSelMode(ControlMode.nothing);
                         buildBlueprint = null;
                     }
                 }
@@ -322,7 +336,7 @@ public class GridTiles : MonoBehaviour
                     else
                     {
                         buildBlueprint = null;
-                        ChangeSelMode(SelectionMode.nothing);
+                        ChangeSelMode(ControlMode.nothing);
                     }
                 }
                 else 
@@ -330,7 +344,7 @@ public class GridTiles : MonoBehaviour
                     Debug.LogWarning("Can't place here!!");
                 }
                 break;
-            case SelectionMode.dig:
+            case ControlMode.dig:
                 PrepDig();
                 markedTiles = new();
                 break;
@@ -339,7 +353,23 @@ public class GridTiles : MonoBehaviour
 
     #endregion Mouse Events
 
-    #region Multiselecting
+    #region Multiselecting  
+    /// <summary>
+    /// Called when canceling drag, changes highlight of all rocks in markedTiles.
+    /// </summary>
+    void ClearMarks()
+    {
+        if (markedTiles != null)
+        {
+            foreach (Rock r in markedTiles)
+            {
+                Color c = new();
+                if (r.toBeDug)
+                    c = (Color.yellow + Color.red) / 2;
+                HighLight(c, r.gameObject);
+            }
+        }
+    }
     /// <summary>
     /// ReMarks all rock in range from start to activePos. 
     /// </summary>
@@ -351,9 +381,10 @@ public class GridTiles : MonoBehaviour
         float z = (Mathf.FloorToInt(startPos.z) - activePos.z) / 2f;
         rocks.AddRange(Physics.OverlapBox(new Vector3(startPos.x - x, (startPos.y*2) + ClickabeObjectFactory.ROCK_OFFSET, startPos.z - z), new(Mathf.Abs(x), 0.5f, Mathf.Abs(z))).Where(q => q.GetComponent<Rock>() != null).Select(q => q.GetComponent<Rock>()).ToList());
         List<ClickableObject> filtered = rocks.ToList();
+        List<Rock> toBeDug = SceneRefs.jobQueue.toBeDug;
         foreach (Rock g in rocks)
         {
-            if (!deselect && toBeDigged.Contains(g))
+            if (!deselect && toBeDug.Contains(g))
             {
                 filtered.Remove(g);
             }
@@ -416,23 +447,7 @@ public class GridTiles : MonoBehaviour
     }
     #endregion Multiselecting
 
-    /// <summary>
-    /// Called when canceling drag, changes highlight of all rocks in markedTiles.
-    /// </summary>
-    void ClearMarks()
-    {
-        if (markedTiles != null)
-        {
-            foreach (Rock r in markedTiles)
-            {
-                Color c = new();
-                if (r.toBeDug)
-                    c = (Color.yellow + Color.red) / 2;
-                HighLight(c, r.gameObject);
-            }
-        }
-    }
-
+    #region Colors
     /// <summary>
     /// HighLights all materials on toBeChanged to c.
     /// </summary>
@@ -440,9 +455,9 @@ public class GridTiles : MonoBehaviour
     /// <param name="toBeChanged"></param>
     public void HighLight(Color c, GameObject toBeChanged)
     {
-        foreach (Material material in 
+        foreach (Material material in
             toBeChanged.GetComponentsInChildren<MeshRenderer>()
-            .Where(q=> q).Select(q=> q.material)
+            .Where(q => q).Select(q => q.material)
             .Union(toBeChanged.GetComponentsInChildren<SkinnedMeshRenderer>()
             .Where(q => q).Select(q => q.material)))
         {
@@ -465,14 +480,16 @@ public class GridTiles : MonoBehaviour
             m.EnableKeyword("_EMISSION");
         }
     }
+    #endregion
 
+    #region Control switching
     /// <summary>
     /// Called on press of right mouse button.
     /// </summary>
     public void BreakAction()
     {
         drag = false;
-        ChangeSelMode(SelectionMode.nothing);
+        ChangeSelMode(ControlMode.nothing);
     }
     /// <summary>
     /// Removes clickedObject from selection.
@@ -491,15 +508,15 @@ public class GridTiles : MonoBehaviour
     /// Changes the current tool mod, and manages transitions betwean them.
     /// </summary>
     /// <param name="mode"></param>
-    public void ChangeSelMode(SelectionMode mode)
+    public void ChangeSelMode(ControlMode mode)
     {
-        if(mode == selMode && mode != SelectionMode.nothing)
+        if (mode == activeControl && mode != ControlMode.nothing)
         {
-            if(selMode == SelectionMode.build)
+            if (activeControl == ControlMode.build)
             {
-                if(buildingPrefab.name == buildBlueprint.name)
+                if (buildingPrefab.name == buildBlueprint.name)
                 {
-                    ChangeSelMode(SelectionMode.nothing);
+                    ChangeSelMode(ControlMode.nothing);
                 }
                 else
                 {
@@ -508,26 +525,26 @@ public class GridTiles : MonoBehaviour
                     return;
                 }
             }
-            ChangeSelMode(SelectionMode.nothing);
+            ChangeSelMode(ControlMode.nothing);
         }
         else
         {
-            switch (selMode)
+            switch (activeControl)
             {
-                case SelectionMode.deconstruct:
-                    selMode = SelectionMode.nothing;
+                case ControlMode.deconstruct:
+                    activeControl = ControlMode.nothing;
                     break;
-                case SelectionMode.dig:
-                    foreach(Rock r in markedTiles)
+                case ControlMode.dig:
+                    foreach (Rock r in markedTiles)
                     {
                         HighLight(new(), r.gameObject);
                     }
                     markedTiles = new();
                     startPos = null;
                     drag = false;
-                    selMode = SelectionMode.nothing;
+                    activeControl = ControlMode.nothing;
                     break;
-                case SelectionMode.build:
+                case ControlMode.build:
                     Camera.main.GetComponent<PhysicsRaycaster>().eventMask = defaultMask;
                     if (buildBlueprint)
                         DestroyBlueprint();
@@ -537,23 +554,23 @@ public class GridTiles : MonoBehaviour
             bool visible = true;
             Texture2D cur = null;
             Vector2 vec = new();
-            selMode = mode;
+            activeControl = mode;
             switch (mode)
             {
-                case SelectionMode.nothing:
+                case ControlMode.nothing:
                     cur = default;
                     vec = Vector2.zero;
                     Enter(activeObject);
                     break;
-                case SelectionMode.deconstruct:
+                case ControlMode.deconstruct:
                     cur = cursors[0];
                     vec = new(15f, 15f);
                     break;
-                case SelectionMode.dig:
+                case ControlMode.dig:
                     cur = cursors[1];
                     vec = new(1, 16f);
                     break;
-                case SelectionMode.build:
+                case ControlMode.build:
                     cur = default;
                     vec = Vector2.zero;
                     Camera.main.GetComponent<PhysicsRaycaster>().eventMask = buildingMask;
@@ -564,8 +581,10 @@ public class GridTiles : MonoBehaviour
             {
                 Cursor.SetCursor(cur, vec, CursorMode.ForceSoftware);
             }
-        }   
+        }
     }
+    #endregion
+
 
     /// <summary>
     /// Instantiates and sets a copy of a building prefab.
@@ -586,19 +605,20 @@ public class GridTiles : MonoBehaviour
     }
 
     /// <summary>
-    /// Changes the state of rocks in markedTiles, if the first one was toBeDigged, cancels them.<br/>
+    /// Changes the state of rocks in <see cref="markedTiles"/>, if the first one was marked, cancels them.<br/>
     /// Else marks orders their excavation.
     /// </summary>
     void PrepDig()
     {
+        List<Rock> toBeDug = SceneRefs.jobQueue.toBeDug;
         drag = false;
-        Humans humans = transform.parent.parent.GetChild(2).GetComponent<Humans>();
+        HumanUtil humans = transform.parent.parent.GetChild(2).GetComponent<HumanUtil>();
         if (deselect)
         {
             JobQueue jobQueue = humans.GetComponent<JobQueue>();
             foreach (Rock markTile in markedTiles.Select(q => q.GetComponent<Rock>())) // removes to be dug
             {
-                toBeDigged.RemoveAll(q => q == markTile);
+                toBeDug.RemoveAll(q => q == markTile);
                 markTile.toBeDug = false;
                 HighLight(new(), markTile.gameObject);
                 jobQueue.CancelJob(JobState.Digging, markTile);
@@ -606,13 +626,13 @@ public class GridTiles : MonoBehaviour
         }
         else
         {
-            foreach (var toBeDug in toBeDigged) // removes to be dug
+            foreach (var dig in toBeDug) // removes to be dug
             {
-                markedTiles.RemoveAll(q => q == toBeDug);
+                markedTiles.RemoveAll(q => q == dig);
             }
             foreach (Rock tile in markedTiles)
             {
-                toBeDigged.Add(tile); // add rock
+                toBeDug.Add(tile); // add rock
                 tile.toBeDug = true;
                 humans.GetComponent<JobQueue>().AddJob(JobState.Digging, tile);
             }
@@ -645,6 +665,9 @@ public class GridTiles : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Destroys the blueprint object and overlaygroup.
+    /// </summary>
     void DestroyBlueprint()
     {
         MyGrid.GetOverlay().HideGlobalEntryPoints();

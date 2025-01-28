@@ -92,7 +92,7 @@ public class Pipe : Building
         maximalProgress = cost.ammount.Sum() * 2;
         gT.HighLight(new(), gameObject);
 
-        Humans humans = GameObject.FindWithTag("Humans").GetComponent<Humans>();
+        HumanUtil humans = GameObject.FindWithTag("Humans").GetComponent<HumanUtil>();
         humans.GetComponent<JobQueue>().AddJob(JobState.Constructing, this); // creates a new job with the data above
         MyRes.UpdateResource(cost, -1);
     }

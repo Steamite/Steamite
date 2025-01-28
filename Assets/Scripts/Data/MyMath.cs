@@ -1,7 +1,13 @@
 using UnityEngine;
 
+/// <summary>Util class for converting hex to dec and back.</summary>
 public static class MyMath
 {
+    /// <summary>
+    /// Converts a hex string into a dec string.
+    /// </summary>
+    /// <param name="s">Hexadecimal number.</param>
+    /// <returns>Converted decimal number.</returns>
     public static int HexToDec(string s)
     {
         int length = s.Length;
@@ -24,22 +30,5 @@ public static class MyMath
             }
         }
         return result;
-    }
-
-    public static char DecToHex(int i)
-    {
-        if(i > 9)
-        {
-            return (char)(i + 55);
-        }
-        else
-        {
-            return (char)(i + 48);
-        }
-    }
-
-    public static int HexToEnum(char c)
-    {
-        return HexToDec("" + c) % 3;
     }
 }

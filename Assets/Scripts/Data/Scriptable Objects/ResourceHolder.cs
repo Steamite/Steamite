@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+/// <summary>Holds prefabs for Factory instantialization.</summary>
 [CreateAssetMenu(fileName = "Resource holder", menuName = "ScriptableObjects/Resource Holder", order = 1)]
 public class ResourceHolder : ScriptableObject
 {
+    /// <summary>Registered prefabs</summary>
     [SerializeField] List<ClickableObject> prefabs = new();
 
-    public List<ClickableObject> GetPrefabs()
-    {
-        return prefabs;
-    }
+    /// <summary>
+    /// Finds a prefab by name.
+    /// </summary>
+    /// <param name="prefName">Name of the prefab.</param>
+    /// <returns>Matching prefab.</returns>
     public ClickableObject GetPrefab(string prefName)
     {
         for(int i = 0; i < prefabs.Count; i++)
@@ -22,31 +25,15 @@ public class ResourceHolder : ScriptableObject
         Debug.LogError("Could not find Prefab!" + prefName);
         return null;
     }
+    /// <summary>
+    /// Gets prefab at <paramref name="index"/>.
+    /// </summary>
+    /// <param name="index">Index of the prefab.</param>
+    /// <returns>Prefab at input index.</returns>
     public ClickableObject GetPrefab(int index)
     {
         if (index < prefabs.Count)
             return prefabs[index];
         return null;
-    }
-
-    public void LoadPrefs()
-    {
-        bool change = false;
-        BuildButtonHolder buildButtons = (BuildButtonHolder)Resources.Load("Holders/Models/BuildButton Data");
-        foreach(BuildCategWrapper wrap in buildButtons.buildingCategories)
-        {
-            foreach(Building b in wrap.buildings)
-            {
-                if (!prefabs.Contains(b))
-                {
-                    change = true;
-                    prefabs.Add(b);
-                }
-            }
-        }
-#if UNITY_EDITOR
-        if (change)
-            EditorUtility.SetDirty(this);
-#endif
     }
 }

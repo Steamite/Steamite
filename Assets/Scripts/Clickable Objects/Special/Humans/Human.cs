@@ -128,7 +128,7 @@ public class Human : ClickableObject
     public override GridPos GetPos() => new(transform.position.x, transform.localPosition.y / ClickabeObjectFactory.LEVEL_HEIGHT, transform.position.z);
     
     /// <summary>
-    /// Creates a list from <see cref="Humans.humen"/>.
+    /// Creates a list from <see cref="HumanUtil.humans"/>.
     /// </summary>
     public override void UniqueID() => CreateNewId(SceneRefs.humans.GetHumen().Select(q => q.id).ToList());
 
@@ -140,7 +140,7 @@ public class Human : ClickableObject
 #if UNITY_EDITOR
         transform.GetChild(0).gameObject.SetActive(true);
 #endif
-        transform.parent.parent.GetComponent<Humans>().ticks.tickAction += DoRepetableAction;
+        SceneRefs.tick.tickAction += DoRepetableAction;
         DayTime dT = SceneRefs.tick.timeController;
         dT.dayStart += Day;
         dT.nightStart += Night;
@@ -302,8 +302,35 @@ public class Human : ClickableObject
             MyRes.EatFood(this);
             nightTime = true;
         }
-        jData.path = PathFinder.FindWayHome(this);
+
+        jData.path = GoHome();
         ChangeAction(HumanActions.Move);
+    }
+
+    /// <summary>
+    /// Tries to find way home, if there's no way home then atleast to the elevator.
+    /// </summary>
+    /// <returns>Found path.</returns>
+    public List<GridPos> GoHome()
+    {
+        JobData _jData;
+        if (home)
+        {
+            _jData = PathFinder.FindPath(new() { home }, this);
+            if (_jData.interest)
+            {
+                ModifyEfficiency(ModType.House, true);
+                return _jData.path;
+            }
+        }
+        Building elevator = MyGrid.buildings.First(q => q is Elevator el && el.main);
+        _jData = PathFinder.FindPath(new() { elevator }, this);
+        ModifyEfficiency(ModType.House, false);
+        if (_jData.interest)
+        {
+            return _jData.path;
+        }
+        return new();
     }
     #endregion
 }
