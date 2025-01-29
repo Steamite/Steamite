@@ -62,8 +62,9 @@ public class Building : StorageObject
     {
         InfoWindow info = base.OpenWindow();
         info.Open(this, InfoMode.Building);
-
-        OpenWindowWithToggle(info, new());
+        
+        if(constructed)
+            OpenWindowWithToggle(info, new());
         return info;
     }
 
@@ -74,7 +75,7 @@ public class Building : StorageObject
     /// <param name="toEnable">List of components to enable in the Visual Element.</param>
     protected virtual void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
     {
-        info.ToggleChildElems(info.constructedElement, toEnable);
+        info.ToggleChildElems(info.constructedElement, toEnable, this);
     }
     #endregion
 
@@ -181,6 +182,7 @@ public class Building : StorageObject
             localRes.stored.ammount[i] = 0;
         }
         ChangeRenderMode(false);
+        OpenWindow();
     }
     #endregion
 

@@ -36,7 +36,7 @@ namespace RadioGroups
         /// <param name="storage">Storage building that's being inspected.</param>
         /// <param name="levelData">Data containing costs for each of the button.</param>
         /// <returns>New level.</returns>
-        public int SelectUpdate(Storage storage, LevelPresent levelData)
+        public int SelectUpdate(Elevator storage, LevelPresent levelData)
         {
             GridPos gridPos = storage.GetPos();
 

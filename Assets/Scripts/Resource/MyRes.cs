@@ -23,7 +23,7 @@ public static class MyRes
     /// <summary>Used for faster determening new jobs faster.</summary>
     public static int globalStorageSpace;
     /// <summary>All storage buildings.</summary>
-    static Storage[] storage;
+    static IStorage[] storage;
     /// <summary>Reference to global resource storage counter.</summary>
     static ResourceDisplay resDisplay;
     #endregion
@@ -47,16 +47,18 @@ public static class MyRes
             Resource resource = resDisplay.InitializeResources(setupStorages);
             globalStorageSpace = 0;
 
-            storage = MyGrid.buildings.Select(q => q.GetComponent<Storage>()).Where(q => q != null).ToArray();
+            storage = MyGrid.buildings.Select(q => q.GetComponent<IStorage>()).Where(q => q != null).ToArray();
             JobQueue jQ = SceneRefs.jobQueue;
-            foreach (Storage _s in storage)
+            foreach (IStorage _s in storage)
             {
                 if (setupStorages)
                 {
                     _s.SetupStorage(resource, jQ);
                 }
-                globalStorageSpace += _s.LocalRes.stored.capacity - _s.LocalRes.stored.ammount.Sum();
-                ManageRes(resource, _s.LocalRes.stored, 1);
+                else
+                    jQ.storages.Add(_s);
+                globalStorageSpace += _s.LocalResources.stored.capacity - _s.LocalResources.stored.ammount.Sum();
+                ManageRes(resource, _s.LocalResources.stored, 1);
             }
             Transform resourceInfo = GameObject.Find("Resource Info").gameObject.transform.transform;
             resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
@@ -241,7 +243,7 @@ public static class MyRes
     {
         JobQueue jQ = GameObject.FindWithTag("Humans").GetComponent<JobQueue>();
         Resource diff = building.GetDiff(human.Inventory);
-        List<StorageObject> stores = MyGrid.chunks.Union(jQ.pickupNeeded.Union(jQ.storages)).ToList();
+        List<StorageObject> stores = MyGrid.chunks.Union(jQ.pickupNeeded.Union(jQ.storages.Cast<Building>())).ToList();
         if (stores.Count > 0)
         {
             List<ClickableObject> filtered = ResCmp(diff, stores, true, human.Inventory.capacity - human.Inventory.ammount.Sum());
@@ -283,8 +285,8 @@ public static class MyRes
     /// <param name="h"></param>
     public static void FindStorage(Resource r, Human h)
     {
-        List<Storage> storages = FilterStorages(r, h, true);
-        h.destination = PathFinder.FindPath(storages.Select(q => q.GetComponent<ClickableObject>()).ToList(), h).interest.GetComponent<Building>();
+        List<IStorage> storages = FilterStorages(r, h, true);
+        h.destination = PathFinder.FindPath(storages.Select(q => ((MonoBehaviour)q).GetComponent<ClickableObject>()).ToList(), h).interest.GetComponent<Building>();
         if (h.destination)
         {
             h.destination.RequestRes(r, h, 1);
@@ -297,7 +299,7 @@ public static class MyRes
     /// <param name="h"></param>
     public static void FindStorage(Human h)
     {
-        List<Storage> storages = FilterStorages(h.Inventory, h, true);
+        List<IStorage> storages = FilterStorages(h.Inventory, h, true);
         JobData job = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h);
         if (job.interest)
         {
@@ -306,6 +308,10 @@ public static class MyRes
             job.job = JobState.Supply;
             h.ChangeAction(HumanActions.Move);
             h.SetJob(job);
+        }
+        else
+        {
+            h.SetJob(JobState.Free, null, null);
         }
     }
 
@@ -316,19 +322,19 @@ public static class MyRes
     /// <param name="h"></param>
     /// <param name="perfect"></param>
     /// <returns></returns>
-    static List<Storage> FilterStorages(Resource r, Human h, bool perfect)
+    static List<IStorage> FilterStorages(Resource r, Human h, bool perfect)
     {
         JobQueue jQ = h.transform.parent.parent.GetComponent<JobQueue>();
-        List<Storage> storages = jQ.storages.ToList();
+        List<IStorage> storages = jQ.storages.ToList();
         int wantToStore = r.ammount.Sum();
         for (int i = storages.Count - 1; i >= 0; i--)
         {
-            int spaceToStore = storages[i].LocalRes.stored.capacity - storages[i].LocalRes.Future().ammount.Sum();
+            int spaceToStore = storages[i].LocalResources.stored.capacity - storages[i].LocalResources.Future().ammount.Sum();
             if (spaceToStore <= 0)
                 continue;
             for (int j = 0; j < r.type.Count; j++)
             {
-                if (storages[i].canStore[(int)r.type[j]] == true)
+                if (storages[i].CanStore[(int)r.type[j]] == true)
                 {
                     if (perfect)
                     {
@@ -496,8 +502,8 @@ public static class MyRes
     /// <param name="human">Human that is effected by result.</param>
     public static void EatFood(Human human)
     {
-        Storage store = storage.FirstOrDefault(q => q.LocalRes.stored.ammount[q.LocalRes.Future(true).type.IndexOf(ResourceType.Food)] > 0);
-        if (store)
+        IStorage store = storage.FirstOrDefault(q => q.LocalResources.stored.ammount[q.LocalResources.Future(true).type.IndexOf(ResourceType.Food)] > 0);
+        if (store != null)
         {
             store.DestroyResource(ResourceType.Food, 1);
             UpdateResource(new Resource(new() { ResourceType.Food }, new() { 1 }), -1);
@@ -516,10 +522,10 @@ public static class MyRes
     /// <param name="resource">Resources to add.</param>
     public static void DeliverToElevator(Resource resource)
     {
-        Storage store = storage.FirstOrDefault(q => ((Elevator)q).main);
-        if (store)
+        IStorage store = storage.FirstOrDefault(q => ((Elevator)q).main);
+        if (store != null)
         {
-            MoveRes(store.LocalRes.stored, resource, resource, resource.ammount.Sum());
+            MoveRes(store.LocalResources.stored, resource, resource, resource.ammount.Sum());
         }
     }
 
@@ -532,20 +538,20 @@ public static class MyRes
         UpdateResource(cost, -1);
         for (int i = 0; i < storage.Length; i++)
         {
-            Resource diff = DiffRes(cost, storage[i].LocalRes.Future(true));
+            Resource diff = DiffRes(cost, storage[i].LocalResources.Future(true));
             for(int j = cost.type.Count-1; j >= 0; j--)
             {
                 int x = diff.type.IndexOf(cost.type[j]);
                 if(x == -1)
                 {
-                    storage[i].LocalRes.stored.ammount[storage[i].LocalRes.stored.type.IndexOf(cost.type[j])] -= cost.ammount[j];
+                    storage[i].LocalResources.stored.ammount[storage[i].LocalResources.stored.type.IndexOf(cost.type[j])] -= cost.ammount[j];
                     cost.ammount.RemoveAt(j);
                     cost.type.RemoveAt(j);
                 }
                 else
                 {
                     int change = cost.ammount[j] - diff.ammount[x];
-                    storage[i].LocalRes.stored.ammount[storage[i].LocalRes.stored.type.IndexOf(cost.type[j])] -= change;
+                    storage[i].LocalResources.stored.ammount[storage[i].LocalResources.stored.type.IndexOf(cost.type[j])] -= change;
                     cost.ammount[j] -= change;
                 }
             }

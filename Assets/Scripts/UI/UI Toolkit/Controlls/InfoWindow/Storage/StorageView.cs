@@ -28,18 +28,18 @@ namespace InfoWindowViews
             }
         }
 #endif
-
-        [UxmlAttribute] public VisualTreeAsset elemPref;
+        
+        [UxmlAttribute] public VisualTreeAsset ElemPref { get => storageTab.elemPref; set => storageTab.elemPref = value; }
 
         StorageTab storageTab;
         LevelsTab levelTab;
-        Storage storage;
+        IStorage storage;
         #endregion
         public StorageView()
         {
             #region Tabs
             style.flexGrow = 1;
-            storageTab = new StorageTab(elemPref);
+            storageTab = new StorageTab();
             Add(storageTab);
 
             levelTab = new LevelsTab();
@@ -52,17 +52,17 @@ namespace InfoWindowViews
         /// <inheritdoc/>
         public void Fill(object data)
         {
-            storage = (Storage)data;
+            storage = (IStorage)data;
             switch (data)
             {
                 case Elevator:
                     hierarchy.ElementAt(0).style.display = DisplayStyle.Flex;
                     levelTab.Open(storage);
-                    break;
+                    break;/*
                 case Storage:
                     activeTab = contentContainer.Q<Tab>("Storage");
                     hierarchy.ElementAt(0).style.display = DisplayStyle.None;
-                    break;
+                    break;*/
                 default:
                     throw new NotImplementedException();
             }

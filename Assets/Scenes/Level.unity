@@ -2813,7 +2813,10 @@ MonoBehaviour:
   expeditionSpeed: 0.13
   colonyLocation:
     name: Scottish Highlands
-    pos: {x: 69, y: 0, z: -93}
+    pos:
+      x: 69
+      z: -93
+      y: 0
     passiveProductions:
     - productionName: Workforce
       currentProduction: 2
