@@ -17,7 +17,7 @@ public class JobQueue : MonoBehaviour
     public List<StorageObject> pickupNeeded = new();
 
     /// <summary>Storages</summary>
-    [Header("")] public List<Storage> storages = new();
+    [Header("")] public List<IStorage> storages = new();
     /// <summary>Job priority</summary>
     public List<JobState> priority;
 

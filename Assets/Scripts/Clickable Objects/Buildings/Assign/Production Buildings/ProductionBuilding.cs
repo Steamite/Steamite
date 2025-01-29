@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 using Unity.Properties;
 
 /// <summary>Adds Production Handling.</summary>
-public class ProductionBuilding : AssignBuilding
+public class ProductionBuilding : Building, IAssign
 {
     #region Variables
     /// <summary>The Storage for paying the production cost.</summary>
@@ -52,6 +52,9 @@ public class ProductionBuilding : AssignBuilding
             UIUpdate(nameof(CurrentTime));
         }
     }
+
+    [CreateProperty] public List<Human> Assigned { get; set; } = new();
+    [CreateProperty] public int assignLimit { get; set; } = 3;
     #endregion
 
     #region Window
@@ -64,8 +67,8 @@ public class ProductionBuilding : AssignBuilding
         if (toEnable.Count == 0)
         {
             toEnable.Add("Production");
+            toEnable.Add("Assign");
             base.OpenWindowWithToggle(info, toEnable);
-            ((IUIElement)info.constructedElement.Q<VisualElement>("Production")).Fill(this);
         }
         else
         {
@@ -191,8 +194,8 @@ public class ProductionBuilding : AssignBuilding
             if (deconstructing) // has just been ordered
             {
                 inputResource.ReassignCarriers(false);
-                Human human = localRes.carriers.Count > 0 && assigned.Count > 0 ? assigned[0] : null;
-                foreach (Human h in assigned)
+                Human human = localRes.carriers.Count > 0 && Assigned.Count > 0 ? Assigned[0] : null;
+                foreach (Human h in Assigned)
                 {
                     h.workplace = null;
                     if(h != human)
@@ -210,7 +213,7 @@ public class ProductionBuilding : AssignBuilding
             }
             else // has just been canceled
             {
-                foreach(Human h in assigned)
+                foreach(Human h in Assigned)
                 {
 
                 }
@@ -266,7 +269,7 @@ public class ProductionBuilding : AssignBuilding
     public override List<string> GetInfoText()
     {
         List<string> strings = base.GetInfoText();
-        strings[0] = $"Can employ up to {limit} workers";
+        strings[0] = $"Can employ up to {assignLimit} workers";
         strings.Insert(1, $"<u>Produces</u>: \n{MyRes.GetDisplayText(production)}");
         if (productionCost.ammount.Sum() > 0)
             strings[1] += $", from: \n{MyRes.GetDisplayText(productionCost)}";
@@ -393,7 +396,7 @@ public class ProductionBuilding : AssignBuilding
     #endregion
 
     #region Assign
-    public override void ManageAssigned(Human human, bool add)
+    public void ManageAssigned(Human human, bool add)
     {
         if (add)
         {
@@ -402,7 +405,7 @@ public class ProductionBuilding : AssignBuilding
                 human);
             if (job.interest)
             {
-                assigned.Add(human);
+                Assigned.Add(human);
                 human.transform.SetParent(SceneRefs.humans.transform.GetChild(1).transform);
                 human.workplace = this;
                 job.job = JobState.FullTime;
@@ -422,7 +425,7 @@ public class ProductionBuilding : AssignBuilding
         }
         else
         {
-            assigned.Remove(human);
+            Assigned.Remove(human);
             human.workplace = null;
             human.transform.SetParent(SceneRefs.humans.transform.GetChild(0).transform);
             human.SetJob(JobState.Free);
@@ -434,7 +437,7 @@ public class ProductionBuilding : AssignBuilding
     /// <inheritdoc/>
     /// </summary>
     /// <returns></returns>
-    public override List<Human> GetUnassigned()
+    public List<Human> GetUnassigned()
     {
         return SceneRefs.humans.GetPartTime();
     }

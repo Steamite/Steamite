@@ -16,7 +16,7 @@ MonoBehaviour:
   categories:
   - categName: Population
     nodes:
-    - name: House
+    - name: Research tower
       id: 3
       gp:
         x: 529.5
@@ -30,8 +30,8 @@ MonoBehaviour:
         capacity: -1
         type: 
         ammount: 
-      buttonCategory: 0
-      buildButton: 0
+      buttonCategory: 1
+      buildButton: 2
       unlockedBy: 
       unlocks: 070000000d000000
     - name: Elevator

@@ -95,7 +95,7 @@ namespace InfoWindowElements
         /// <param name="data">Elevator that is selected.</param>
         public void Open(object data)
         {
-            SelectedLevel = levelGroup.SelectUpdate((Storage)data, LevelData);
+            SelectedLevel = levelGroup.SelectUpdate((Elevator)data, LevelData);
             ChangeActiveView(SelectedLevel);
         }
 

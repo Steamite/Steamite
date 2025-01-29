@@ -22,7 +22,7 @@ public enum JobState
     Pickup,
     /// <summary>Delivering found resources.</summary>
     Supply,
-    /// <summary>Assigned in a <see cref="AssignBuilding"/>.</summary>
+    /// <summary>Assigned in a <see cref="IAssign"/>.</summary>
     FullTime,
     /// <summary>Cleaning <see cref="Chunk"/>s.</summary>
     Cleanup

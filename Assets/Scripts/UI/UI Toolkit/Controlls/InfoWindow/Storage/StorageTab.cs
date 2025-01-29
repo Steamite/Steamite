@@ -45,24 +45,17 @@ namespace InfoWindowElements
         List<StorageElem> storageElems;
 
         /// <summary>Datasource.</summary>
-        Storage storage;
+        IStorage storage;
         #endregion
 
         #region Constructors
-        public StorageTab() : base("Storage")
-        {
-            
-        }
-
         /// <summary>
         /// Default constructor that adds and sets basic elements.
         /// </summary>
-        /// <param name="_elemPref">Prefab for creating elems.</param>
-        public StorageTab(VisualTreeAsset _elemPref)
+        public StorageTab() : base("Storage")
         {
             style.flexGrow = 1;
             name = "Storage";
-            elemPref = _elemPref;
 
             resources = new();
             storageElems = new();
@@ -86,20 +79,20 @@ namespace InfoWindowElements
         /// Fills the elemlist
         /// </summary>
         /// <param name="_storage">Data source</param>
-        public void Open(Storage _storage)
+        public void Open(IStorage _storage)
         {
             storage = _storage;
-            DataBinding binding = Util.CreateBinding(nameof(Storage.LocalRes));
+            DataBinding binding = Util.CreateBinding(nameof(Building.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource store) => ToUIRes(store));
             SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, storage);
 
-            binding = Util.CreateBinding(nameof(Storage.LocalRes));
+            binding = Util.CreateBinding(nameof(Building.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource store) => $"Capacity: {store.stored.ammount.Sum()}/{store.stored.capacity}");
             SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, storage);
 
             if (storageElems.Count > 0)
             {
-                for (int i = 0; i < storage.canStore.Count; i++)
+                for (int i = 0; i < storage.CanStore.Count; i++)
                 {
                     UpdateGroup(i);
                 }
@@ -142,7 +135,7 @@ namespace InfoWindowElements
         /// <param name="i">Resource index</param>
         void ToggleCanStore(bool b, int i)
         {
-            storage.canStore[i] = b;
+            storage.CanStore[i] = b;
         }
 
         /// <summary>
@@ -154,8 +147,8 @@ namespace InfoWindowElements
             ToggleButtonGroupState state = storageElems[x].canStore.value;
             state.ResetAllOptions();
             storageElems[x].canStore.value = state;
-            state[0] = storage.canStore[x];
-            state[1] = !storage.canStore[x];
+            state[0] = storage.CanStore[x];
+            state[1] = !storage.CanStore[x];
             storageElems[x].canStore.value = state;
         }
         #endregion

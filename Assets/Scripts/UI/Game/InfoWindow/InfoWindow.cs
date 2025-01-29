@@ -4,6 +4,7 @@ using System;
 using UnityEngine.UIElements;
 using System.Linq;
 using Unity.Properties;
+using static UnityEngine.Analytics.IAnalytic;
 
 /// <summary>All groups of objects that can be inspected. For switching info window views.</summary>
 public enum InfoMode
@@ -271,10 +272,28 @@ public class InfoWindow : MonoBehaviour
     /// </summary>
     /// <param name="element">Parent element.</param>
     /// <param name="toEnable">List of child elements to enable.</param>
-    public void ToggleChildElems(VisualElement element, List<string> toEnable) =>
+    public void ToggleChildElems(VisualElement element, List<string> toEnable)
+    {
         element.Children().ToList().ForEach(
             q => q.style.display = toEnable.Contains(q.name)
             ? DisplayStyle.Flex : DisplayStyle.None);
+    }
+
+    /// <summary>
+    /// Also fills them selected elements and disables others.
+    /// </summary>
+    /// <param name="element">Parent element.</param>
+    /// <param name="toEnable">List of child elements to enable.</param>
+    public void ToggleChildElems(VisualElement element, List<string> toEnable, Building building)
+    {
+        element.Children().ToList().ForEach(
+            q => q.style.display = toEnable.Contains(q.name)
+            ? DisplayStyle.Flex : DisplayStyle.None);
+        foreach (string s in toEnable)
+        {
+            ((IUIElement)element.Q<VisualElement>(s)).Fill(building);
+        }
+    }
 
     #endregion
 

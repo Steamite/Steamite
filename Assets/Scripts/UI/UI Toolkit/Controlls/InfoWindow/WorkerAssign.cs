@@ -17,7 +17,7 @@ namespace InfoWindowViews
         [UxmlAttribute] string FREE = "Unassigned";
 
         /// <summary>Inspected building-</summary>
-        AssignBuilding building;
+        IAssign building;
         /// <summary>List of unassigned <see cref="Human"/>.</summary>
         List<Human> unassigned;
 
@@ -104,15 +104,15 @@ namespace InfoWindowViews
         /// <inheritdoc/>
         public void Fill(object obj)
         {
-            building = (AssignBuilding)obj;
+            building = (IAssign)obj;
             if (!humans)
             {
                 humans = SceneRefs.humans;
             }
 
-            label.text = $"Assigned {building.Assigned.Count}/{building.limit}";
-            DataBinding binding = Util.CreateBinding(nameof(AssignBuilding.Assigned));
-            binding.sourceToUiConverters.AddConverter((ref List<Human> assig) => $"Assigned {assig.Count}/{building?.limit}");
+            label.text = $"Assigned {building.Assigned.Count}/{building.assignLimit}";
+            DataBinding binding = Util.CreateBinding(nameof(IAssign.Assigned));
+            binding.sourceToUiConverters.AddConverter((ref List<Human> assig) => $"Assigned {assig.Count}/{building?.assignLimit}");
             SceneRefs.infoWindow.RegisterTempBinding(new(label, "text"), binding, building);
 
             unassigned = building.GetUnassigned();
