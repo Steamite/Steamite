@@ -25,80 +25,94 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
 
     Folder[] worlds;
     Folder[] saves;
+
+    bool isMainMenu;
     public void Init(VisualElement root)
     {
+        isMainMenu = false;
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            if (SceneManager.GetSceneAt(i).buildIndex == 2)
+                isMainMenu = true;
+        }
         menu = root.Q<VisualElement>("Load-Menu");
         menu.Q<VisualElement>("Background").ClearClassList();
-        worldGroup = menu.Q<SaveRadioGroup>("World-List");
-
-        worldGroup.deleteAction = (int i) =>
+        if (isMainMenu)
         {
-            GetComponent<ConfirmWindow>().Open(
-                        () => DeleteWorld(i),
-                        "Delete world",
-                        $"Are you sure you want to\n" +
-                        $"delete this world <color=\"red\">{worlds[i]}</color> and saves that belong to it?");
-        };
-            
+            worldGroup = menu.Q<SaveRadioGroup>("World-List");
 
-        saveElement = menu.Q<VisualElement>("Saves");
-        saveGroup = menu.Q<SaveRadioGroup>("Save-List");
-        saveGroup.deleteAction = (int i) =>
-        {
-            GetComponent<ConfirmWindow>().Open(
-                        () => DeleteSave(i),
-                        "Delete world",
-                        $"Are you sure you want to\n" +
-                        $"delete this save <color=\"red\">{saves[i]}</color>?");
-        };
-
-        loadButton = menu.Q<Button>("Load");
-        loadButton.RegisterCallback<ClickEvent>(LoadGame);
-
-        worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", false, true);
-        continueButton = root.Q<Button>("Continue-Button");
-        if(continueButton != null)
-        {
-            if (worlds != null && worlds.Length > 0)
+            worldGroup.deleteAction = (int i) =>
             {
-                continueButton.RegisterCallback<ClickEvent>(Continue);
-                ToggleStyleButton(continueButton, true);
-            }
-            menu.Q<VisualElement>("Background").AddToClassList("menu-view");
-        }
-        else
-        {
-            root.Q<Label>("Load-Header").text += " - " + MyGrid.worldName;
-            menu.Q<VisualElement>("Background").AddToClassList("game-window");
-        }
-        loadMenuButton = root.Q<Button>("Load-Game-Button");
-        loadMenuButton.RegisterCallback<ClickEvent>(OpenWindow);
-
-        menu.Q<Button>("Save-Close-Button").RegisterCallback<ClickEvent>(CloseWindow);
-        selectedWorld = -1;
-        selectedSave = -1;
-        UpdateGrids();
-        worldGroup.Init(
+                GetComponent<ConfirmWindow>().Open(
+                            () => DeleteWorld(i),
+                            "Delete world",
+                            $"Are you sure you want to\n" +
+                            $"delete this world <color=\"red\">{worlds[i]}</color> and saves that belong to it?");
+            };
+            worldGroup.Init(
             (i) =>
             {
                 selectedWorld = i;
                 UpdateGrids();
             });
 
+
+            worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", false, true);
+            continueButton = root.Q<Button>("Continue-Button");
+            if (worlds != null && worlds.Length > 0)
+            {
+                continueButton.RegisterCallback<ClickEvent>(Continue);
+                ToggleStyleButton(continueButton, true);
+            }
+            selectedWorld = -1;
+        }
+        else
+        {
+            worlds = new Folder[] { new() };
+            worlds[0].path = $"{Application.persistentDataPath}/saves/{MyGrid.worldName}";
+            selectedWorld = 0;
+            root.Q<Label>("Load-Header").text += " - " + MyGrid.worldName;
+        }
+        selectedSave = -1;
+
+        #region Save List
+        saveElement = menu.Q<VisualElement>("Saves");
+        saveGroup = menu.Q<SaveRadioGroup>("Save-List");
+        saveGroup.deleteAction = (int i) =>
+        {
+            ConfirmWindow.window.Open(
+                        () => DeleteSave(i),
+                        "Delete world",
+                        $"Are you sure you want to\n" +
+                        $"delete this save <color=\"red\">{saves[i]}</color>?");
+        };
         saveGroup.Init(
             (i) =>
             {
                 selectedSave = i;
                 ToggleStyleButton(loadButton, selectedWorld > -1 && selectedSave > -1);
             });
+        #endregion
 
+        #region Load Game button
+        loadButton = menu.Q<Button>("Load");
+        loadButton.RegisterCallback<ClickEvent>(LoadGame);
+        #endregion
+
+        menu.Q<VisualElement>("Background").AddToClassList("menu-view");
+        loadMenuButton = root.Q<Button>("Load-Game-Button");
+        loadMenuButton.RegisterCallback<ClickEvent>(OpenWindow);
+
+        menu.Q<Button>("Save-Close-Button").RegisterCallback<ClickEvent>(CloseWindow);
+        
+        UpdateGrids();
         ToggleStyleButton(loadMenuButton, worlds != null && worlds.Length > 0);
     }
 
     #region Window Logic
     public bool IsOpen()
     {
-        if (continueButton != null)
+        if (isMainMenu)
         {
             return false;
         }
@@ -106,20 +120,37 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
     }
     public void OpenWindow(ClickEvent _ = null)
     {
-        worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", true, true);
+        if(isMainMenu)
+            worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", true, true);
         if (worlds != null && worlds.Length > 0)
         {
-            selectedWorld = -1;
-            selectedSave = -1;
-            UpdateGrids();
-            gameObject.GetComponent<MyMainMenu>().OpenWindow("load");
+            if (isMainMenu)
+            {
+                selectedWorld = -1;
+                selectedSave = -1;
+                UpdateGrids();
+                gameObject.GetComponent<MyMainMenu>().OpenWindow("load");
+
+            }
+            else
+            {
+                selectedSave = -1;
+                UpdateGrids();
+                menu.style.display = DisplayStyle.Flex;
+            }
         }
         else
         {
             ToggleStyleButton(loadMenuButton, false);
         }
     }
-    public void CloseWindow(ClickEvent _ = null) => gameObject.GetComponent<MyMainMenu>().CloseWindow();
+    public void CloseWindow(ClickEvent _ = null) 
+    {
+        if (isMainMenu)
+            gameObject.GetComponent<MyMainMenu>().CloseWindow();
+        else
+            menu.style.display = DisplayStyle.None;
+    }
     public void UpdateButtonState()
     {
         bool t = true;
@@ -263,7 +294,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
             UpdateGrids();
             if (worlds.Length == 0)
             {
-                if(continueButton != null)
+                if(isMainMenu)
                     ToggleStyleButton(continueButton, false);
                 ToggleStyleButton(loadMenuButton, false);
                 CloseWindow();

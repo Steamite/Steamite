@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Template name="Load-Menu" src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Main%20Menu/Load-Menu.uxml?fileID=9197481963319205126&amp;guid=87550cde01cc7fa4a83489895c6bf595&amp;type=3#Load-Menu" />
+    <ui:Template name="Load-Menu-Levels" src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Game/Canvases/Load-Menu-Levels.uxml?fileID=9197481963319205126&amp;guid=4404fe66fb314bc44913602e2d44cb19&amp;type=3#Load-Menu-Levels" />
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Save%20window.uss?fileID=7433441132597879392&amp;guid=eca73d8699a9e1c41a8dd8849b9c0de9&amp;type=3#Save window" />
@@ -28,5 +28,5 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:Instance template="Load-Menu" name="Load-Menu" style="position: absolute; width: 100%; height: 100%; display: none; color: rgb(249, 233, 141);" />
+    <ui:Instance template="Load-Menu-Levels" name="Load-Menu" style="display: none; width: 100%; height: 100%; position: absolute;" />
 </ui:UXML>
