@@ -152,7 +152,7 @@ public class ProductionBSave : AssignBSave
     public float prodTime = 20;
     public float currentTime = 0;
     public int modifier = 1;
-    public ProductionStates pStates;
+    public ProductionStates ProdStates;
 }
 
 public class PipeBSave : BSave

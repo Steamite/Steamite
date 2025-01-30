@@ -20828,9 +20828,7 @@ MonoBehaviour:
   toBeDug: []
   constructions: []
   deconstructions: []
-  supplyNeeded: []
   pickupNeeded: []
-  storages: []
   priority: 0400000005000000060000000200000001000000030000000700000008000000
 --- !u!1 &2029702140026209828
 GameObject:

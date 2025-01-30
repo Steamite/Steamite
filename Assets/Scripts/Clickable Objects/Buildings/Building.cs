@@ -77,6 +77,8 @@ public class Building : StorageObject
     {
         info.ToggleChildElems(info.constructedElement, toEnable, this);
     }
+
+
     #endregion
 
     #region Saving

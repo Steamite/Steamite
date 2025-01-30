@@ -108,9 +108,9 @@ public static class HumanActions
     /// <param name="h"></param>
     public static void DoProduction(Human h)
     {
-        if (h.workplace)
+        if (h.workplace != null)
         {
-            h.workplace.ProgressProduction(h.Efficiency * productionSpeed);
+            ((IProduction)h.workplace).ProgressProduction(h.Efficiency * productionSpeed);
         }
         else
         {
@@ -273,7 +273,7 @@ public static class HumanActions
             case JobState.Supply:
                 if (jobQueue.supplyNeeded.Count == 0)
                     break;
-                if (FilterBuilds(jobQueue.supplyNeeded.Select(q => q.GetComponent<Building>()), h, j))
+                if (FilterBuilds(jobQueue.supplyNeeded.Select(q => (Building)q), h, j))
                     return false;
                 break;
             case JobState.Cleanup:

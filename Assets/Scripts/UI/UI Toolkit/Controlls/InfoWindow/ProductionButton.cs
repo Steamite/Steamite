@@ -47,7 +47,7 @@ namespace InfoWindowViews
         Button button;
         #endregion
 
-        ProductionBuilding building;
+        IProduction building;
         #endregion
 
         #region Constructors
@@ -88,13 +88,13 @@ namespace InfoWindowViews
         /// <inheritdoc/>
         public void Fill(object data)
         {
-            building = (ProductionBuilding)data;
-            enable = building.pStates.stoped;
+            building = (IProduction)data;
+            enable = building.Stoped;
             inputResource.Fill(data);
             outputResource.Fill(data);
             radialElement.Fill(data);
 
-            DataBinding binding = Util.CreateBinding(nameof(ProductionBuilding.LocalRes));
+            DataBinding binding = Util.CreateBinding(nameof(Building.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"Space\n{res.stored.ammount.Sum()}/{res.stored.capacity}");
             SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
             UpdateButton();
