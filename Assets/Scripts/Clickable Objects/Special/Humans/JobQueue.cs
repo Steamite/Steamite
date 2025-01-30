@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Jobs;
 using UnityEngine;
 
 /// <summary>Handles and stores job requests.</summary>
@@ -83,6 +86,41 @@ public class JobQueue : MonoBehaviour
         {
             if(h)
                 HumanActions.LookForNew(h);
+        }
+    }
+
+    /// <summary>
+    /// Takes a human away from a job, if you need to assign a new job but don't want to destroy the previous.
+    /// </summary>
+    /// <param name="human"></param>
+    public void FreeHuman(Human human)
+    {
+        ClickableObject interest = human.Job.interest;
+        if (!interest)
+            return;
+        switch (human.Job.job)
+        {
+            case JobState.Digging:
+                ((Rock)interest).Assigned = null;
+                break;
+            case JobState.Constructing:
+            case JobState.Deconstructing:
+                ((Building)interest).LocalRes.RemoveRequest(human);
+                break;
+            case JobState.Supply:
+            case JobState.Pickup:
+                if(human.Job.interest != human.destination)
+                    ((StorageObject)human.Job.interest).LocalRes.RemoveRequest(human);
+                if (human.destination)
+                {
+                    if (human.destination.constructed && human.destination is IResourceProduction)
+                        ((IResourceProduction)human.destination).InputResource.RemoveRequest(human);
+                    else
+                        human.destination.LocalRes.RemoveRequest(human);
+                }
+
+                SceneRefs.objectFactory.CreateAChunk(human.GetPos(), human.Inventory, false);
+                break;
         }
     }
 }

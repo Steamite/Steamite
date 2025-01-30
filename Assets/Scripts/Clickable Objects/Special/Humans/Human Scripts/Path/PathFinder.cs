@@ -366,7 +366,7 @@ public static class PathFinder
     ///     -1 = out
     /// </param>
     /// <returns>Calculated additional position.</returns>
-    static GridPos BuildingStep(GridPos _vec, GameObject building, int mod)
+    public static GridPos BuildingStep(GridPos _vec, GameObject building, int mod)
     {
         GridPos vec = new(_vec.x, _vec.y, _vec.z);
         float rotation = building.transform.eulerAngles.y;

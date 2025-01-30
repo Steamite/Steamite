@@ -36,6 +36,8 @@ public class Menu : MonoBehaviour
             ConfirmWindow.window.Close(false);
         else if (saveDialog.opened)
             saveDialog.CloseWindow();
+        else if (((IGridMenu)loadMenu).IsOpen())
+            ((IGridMenu)loadMenu).CloseWindow();
         else if (UIRefs.research.window.activeSelf)
             UIRefs.research.CloseWindow();
         else if (UIRefs.trade.window.activeSelf)

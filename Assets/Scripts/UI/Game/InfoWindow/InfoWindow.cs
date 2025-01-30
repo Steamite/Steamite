@@ -131,6 +131,7 @@ public class InfoWindow : MonoBehaviour
                 ResetView(humanElement);
                 break;
             case InfoMode.Rock:
+            case InfoMode.Chunk:
                 ResetView(rockChunkElement);
                 break;
         }
@@ -291,7 +292,8 @@ public class InfoWindow : MonoBehaviour
             ? DisplayStyle.Flex : DisplayStyle.None);
         foreach (string s in toEnable)
         {
-            ((IUIElement)element.Q<VisualElement>(s)).Fill(building);
+            if(element is IUIElement)
+                ((IUIElement)element.Q<VisualElement>(s)).Fill(building);
         }
     }
 

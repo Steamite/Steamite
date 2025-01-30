@@ -124,11 +124,13 @@ public class Chunk : StorageObject
     /// Updates global resource counter. And fix object name.
     /// </summary>
     /// <param name="res"></param>
-    public void Init(Resource res)
+    /// <param name="updateGlobalResource">Do you want to add the resources to the global resource counter?</param>
+    public void Init(Resource res, bool updateGlobalResource)
     {
         UniqueID();
         localRes.stored = res;
-        MyRes.UpdateResource(localRes.stored, 1);
+        if(updateGlobalResource)
+            MyRes.UpdateResource(localRes.stored, 1);
         name = name.Replace("(Clone)", " ");
         MyGrid.chunks.Add(this);
     }

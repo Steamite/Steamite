@@ -23,15 +23,5 @@ public interface IProduction
 
     /// <summary>Called when <see cref="currentTime"/> reaches <see cref="prodTime"/>.</summary>
     public void Product();
-
-    /// <summary>
-    /// Manual production toggle.
-    /// </summary>
-    /// <returns>New toggle state.</returns>
-    public bool StopProduction()
-    {
-        Stoped = !Stoped;
-        return Stoped;
-    }
     #endregion
 }

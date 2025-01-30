@@ -27,6 +27,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
     Folder[] saves;
 
     bool isMainMenu;
+
     public void Init(VisualElement root)
     {
         isMainMenu = false;
