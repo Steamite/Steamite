@@ -197,7 +197,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
         if(InputResource.stored.ammount.Sum() > 0){
             if (!c)
             {
-                c = SceneRefs.objectFactory.CreateAChunk(instantPos, InputResource.stored);
+                c = SceneRefs.objectFactory.CreateAChunk(instantPos, InputResource.stored, true);
             }
             else
                 MyRes.ManageRes(c.LocalRes.stored, InputResource.stored, 1);
@@ -255,6 +255,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
                 human.workplace = this;
                 job.job = JobState.FullTime;
 
+                SceneRefs.jobQueue.FreeHuman(human);
                 if (!human.nightTime)
                     human.SetJob(job);
                 else

@@ -9,7 +9,6 @@ public interface IAssign
     [CreateProperty] public List<Human> Assigned { get; set; }
     public int assignLimit { get; set; }
 
-
     #region Assigment
     /// <summary>
     /// Assigns or unassigns the <paramref name="human"/>.

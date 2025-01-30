@@ -162,7 +162,7 @@ public class LoadingScreen : MonoBehaviour
         foreach (ChunkSave chunkSave in chunks)
         {
             SceneRefs.objectFactory
-                .CreateAChunk(chunkSave.gridPos, chunkSave.resSave.stored)
+                .CreateAChunk(chunkSave.gridPos, chunkSave.resSave.stored, true)
                 .Load(chunkSave);
             progress.Report(progressGlobal += CHUNK_WEIGHT);
         }

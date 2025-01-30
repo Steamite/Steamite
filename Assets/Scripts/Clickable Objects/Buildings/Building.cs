@@ -267,7 +267,7 @@ public class Building : StorageObject
         }
         MyRes.ManageRes(r, localRes.stored, 1);
         DestoyBuilding(); // destroy self
-        return SceneRefs.objectFactory.CreateAChunk(instantPos, r);
+        return SceneRefs.objectFactory.CreateAChunk(instantPos, r, true);
     }
     /// <summary>
     /// Removes the building from 

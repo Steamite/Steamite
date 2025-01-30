@@ -94,17 +94,22 @@ public class ClickabeObjectFactory : MonoBehaviour
     /// </summary>
     /// <param name="gp">Position to create at.</param>
     /// <param name="resources">Resource fill.</param>
+    /// <param name="updateGlobalResource">Do you want to add the resources to the global resource counter?</param>
     /// <returns></returns>
-    public Chunk CreateAChunk(GridPos gp, Resource resources)
+    public Chunk CreateAChunk(GridPos gp, Resource resources, bool updateGlobalResource)
     {
         if(resources.ammount.Sum() > 0)
         {
+            Building building = MyGrid.GetGridItem(gp) as Building;
+            if (building)
+                gp = PathFinder.BuildingStep(gp, building.gameObject, -1);
+
             Chunk chunk = Instantiate(
                 specialPrefabs.GetPrefab("Chunk"), 
                 gp.ToVec(CHUNK_OFFSET), 
                 Quaternion.identity, 
                 MyGrid.FindLevelChunks(gp.y)).GetComponent<Chunk>();
-            chunk.Init(resources);
+            chunk.Init(resources, updateGlobalResource);
             return chunk;
         }
         return null;

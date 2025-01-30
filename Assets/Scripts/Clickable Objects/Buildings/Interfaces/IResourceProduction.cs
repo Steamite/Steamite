@@ -21,6 +21,11 @@ public interface IResourceProduction : IProduction
     #endregion
 
     #region Storing
+    /// <summary>
+    /// Handles storing to <see cref="InputResource"/>. Call if storing, and constructed.
+    /// </summary>
+    /// <param name="human">Human that's doing the storing.</param>
+    /// <param name="transferPerTick">Max transfer ammount.</param>
     void StoreProdResources(Human human, int transferPerTick)
     {
         int index = InputResource.carriers.IndexOf(human);
@@ -115,6 +120,17 @@ public interface IResourceProduction : IProduction
         ((MonoBehaviour)this).transform.GetChild(0).GetChild(0).gameObject.SetActive(Stoped);
         ((MonoBehaviour)this).transform.GetChild(0).GetChild(1).gameObject.SetActive(!ProdStates.supplied);
         ((MonoBehaviour)this).transform.GetChild(0).GetChild(2).gameObject.SetActive(!ProdStates.space);
+    }
+
+    /// <summary>
+    /// Manual production toggle.
+    /// </summary>
+    /// <returns>New toggle state.</returns>
+    public bool StopProduction()
+    {
+        Stoped = !Stoped;
+        RefreshStatus();
+        return Stoped;
     }
     #endregion
 

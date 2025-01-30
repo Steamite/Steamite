@@ -47,7 +47,7 @@ namespace InfoWindowViews
         Button button;
         #endregion
 
-        IProduction building;
+        IResourceProduction building;
         #endregion
 
         #region Constructors
@@ -88,7 +88,7 @@ namespace InfoWindowViews
         /// <inheritdoc/>
         public void Fill(object data)
         {
-            building = (IProduction)data;
+            building = (IResourceProduction)data;
             enable = building.Stoped;
             inputResource.Fill(data);
             outputResource.Fill(data);
@@ -103,8 +103,8 @@ namespace InfoWindowViews
         /// <summary>Handles the button click.</summary>
         void ButtonClick()
         {
-            UpdateButton();
             enable = building.StopProduction();
+            UpdateButton();
         }
 
         /// <summary>Changes the button texture image.</summary>
