@@ -2,8 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>Building that doesn't produce resources but creates research.</summary>
-public class Research_Production : ProductionBuilding
+public class Research_Production : Building, IProduction, IAssign
 {
+    public List<Human> Assigned { get; set; }
+    public int assignLimit { get; set; }
+    public float ProdTime { get; set; }
+    public float CurrentTime { get; set; }
+    public int Modifier { get; set; }
+    public bool Stoped { get; set; }
+
     #region Window
     /// <summary>
     /// Adds "Research" to <paramref name="toEnable"/>. <br/>
@@ -23,16 +30,29 @@ public class Research_Production : ProductionBuilding
     /// Triggers research event.
     /// </summary>
     /// <param name="speed"></param>
-    public override void ProgressProduction(float speed)
+    public void ProgressProduction(float speed)
     {
         SceneRefs.researchAdapter.DoProduction(speed);
     }
 
-    /// <summary>Does nothing.</summary>
-    protected override void AfterProduction(){}
-    /// <summary>Does nothing.</summary>
-    protected override void Product(){}
-    /// <summary>Does nothing.</summary>
-    public override void RefreshStatus(){}
+    public void ManageAssigned(Human human, bool add)
+    {
+        if (add)
+        {
+            human.workplace = this;
+            Assigned.Add(human);
+        }
+    }
+
+    public List<Human> GetUnassigned()
+    {
+        return SceneRefs.humans.GetPartTime();
+    }
+
+    public void Product()
+    {
+        // Stop animation
+    }
+
     #endregion
 }

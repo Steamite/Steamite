@@ -6,55 +6,38 @@ using UnityEngine.UIElements;
 using Unity.Properties;
 
 /// <summary>Adds Production Handling.</summary>
-public class ProductionBuilding : Building, IAssign
+public class ProductionBuilding : Building, IAssign, IResourceProduction
 {
     #region Variables
-    /// <summary>The Storage for paying the production cost.</summary>
-    StorageResource inputResource = new();
-
-    /// <summary>Cost of one production cycle.</summary>
-    [Header("Production")] public Resource productionCost = new();
-    /// <summary>Production cycle yeild.</summary>
-    public Resource production = new();
-
-    /// <summary>Time it takes to finish one production cycle.</summary>
-    [Header("Time")] public float prodTime = 20;
-    /// <summary>Current progress.</summary>
-    protected float currentTime = 0;
-    /// <summary>Multiplies the weight of progress additions.</summary>
-    public int modifier = 1;
-
-    /// <summary>List of currently pressent and working <see cref="Human"/>s.</summary>
-    [Header("States")] public List<Human> working = new();
-    /// <summary>Holds data about production status.</summary>
-    public ProductionStates pStates = new();
+    [SerializeField][Header("Production")] float productionTime;
+    [SerializeField] int productionModifier = 1;
+    
+    [SerializeField] Resource productionCost;
+    [SerializeField] Resource productionYield;
     #endregion
 
     #region Properties
-    /// <inheritdoc cref="inputResource"/>
-    [CreateProperty] public StorageResource InputResource
-    {
-        get => inputResource;
-        set
-        {
-            inputResource = value;
-            UIUpdate(nameof(InputResource));
-        }
-    }
 
-    /// <inheritdoc cref="currentTime"/>
-    [CreateProperty] public float CurrentTime
-    {
-        get => currentTime;
-        set
-        {
-            currentTime = value;
-            UIUpdate(nameof(CurrentTime));
-        }
-    }
+    #region Time
+    [CreateProperty] public float CurrentTime { get; set; } = 0;
+    [CreateProperty] public bool Stoped { get; set; } = false;
+    public float ProdTime { get => productionTime; set => productionTime = value; }
+    public int Modifier { get => productionModifier; set => productionModifier = value; }
+    #endregion
 
+    #region Assign
     [CreateProperty] public List<Human> Assigned { get; set; } = new();
     [CreateProperty] public int assignLimit { get; set; } = 3;
+    #endregion
+
+    #region Resources
+    [CreateProperty] public ProductionStates ProdStates { get; set; } = new();
+    [CreateProperty] public StorageResource LocalResource { get => LocalRes; }
+    [CreateProperty] public StorageResource InputResource { get; set; } = new();
+    public Resource ProductionCost { get => productionCost; }
+    public Resource ProductionYield { get => productionYield; }
+    #endregion
+
     #endregion
 
     #region Window
@@ -83,23 +66,23 @@ public class ProductionBuilding : Building, IAssign
     {
         if (clickable == null)
             clickable = new ProductionBSave();
-        (clickable as ProductionBSave).inputRes = new(inputResource);
-        (clickable as ProductionBSave).prodTime = prodTime;
-        (clickable as ProductionBSave).currentTime = currentTime;
-        (clickable as ProductionBSave).modifier = modifier;
-        (clickable as ProductionBSave).pStates = pStates;
+        (clickable as ProductionBSave).inputRes = new(InputResource);
+        (clickable as ProductionBSave).prodTime = ProdTime;
+        (clickable as ProductionBSave).currentTime = CurrentTime;
+        (clickable as ProductionBSave).modifier = Modifier;
+        (clickable as ProductionBSave).ProdStates = ProdStates;
         return base.Save(clickable);
     }
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-        inputResource = new((save as ProductionBSave).inputRes);
+        InputResource = new((save as ProductionBSave).inputRes);
 
-        prodTime = (save as ProductionBSave).prodTime;
-        currentTime = (save as ProductionBSave).currentTime;
-        modifier = (save as ProductionBSave).modifier;
-        pStates = (save as ProductionBSave).pStates;
-        if (pStates.supply && pStates.supplied == false)
+        ProdTime = (save as ProductionBSave).prodTime;
+        CurrentTime = (save as ProductionBSave).currentTime;
+        Modifier = (save as ProductionBSave).modifier;
+        ProdStates = (save as ProductionBSave).ProdStates;
+        if (!ProdStates.supplied)
         {
             SceneRefs.jobQueue.AddJob(JobState.Supply, this);
         }
@@ -107,7 +90,7 @@ public class ProductionBuilding : Building, IAssign
         {
             SceneRefs.jobQueue.AddJob(JobState.Pickup, this);
         }
-        RefreshStatus();
+        ((IResourceProduction)this).RefreshStatus();
         base.Load(save);
     }
     #endregion
@@ -123,25 +106,7 @@ public class ProductionBuilding : Building, IAssign
     {
         if (constructed)
         {
-            int index = inputResource.carriers.IndexOf(human);
-            if (index == -1)
-                print("");
-            MyRes.MoveRes(inputResource.stored, human.Inventory, inputResource.requests[index], transferPerTick);
-            UIUpdate(nameof(InputResource));
-            if (MyRes.DiffRes(productionCost, inputResource.stored).ammount.Sum() == 0)
-            {
-                human.transform.parent.parent.GetComponent<JobQueue>().CancelJob(JobState.Supply, this);
-                pStates.supplied = true;
-                RefreshStatus();
-            }
-            if (inputResource.requests[index].ammount.Sum() == 0)
-            {
-                inputResource.RemoveRequest(human);
-
-                human.destination = null;
-                HumanActions.LookForNew(human);
-                return;
-            }
+            ((IResourceProduction)this).StoreProdResources(human, transferPerTick);
         }
         else
         {
@@ -153,7 +118,7 @@ public class ProductionBuilding : Building, IAssign
     {
         StorageResource storage = null;
         if (constructed && mod == 1)
-            storage = inputResource;
+            storage = InputResource;
         else
             storage = localRes;
         storage.AddRequest(request, human, mod);
@@ -162,7 +127,7 @@ public class ProductionBuilding : Building, IAssign
     /// <inheritdoc/>
     public override void TryLink(Human h)
     {
-        inputResource.LinkHuman(h);
+        InputResource.LinkHuman(h);
         base.TryLink(h);
     }
     #endregion
@@ -175,14 +140,13 @@ public class ProductionBuilding : Building, IAssign
     public override void FinishBuild()
     {
         base.FinishBuild();
-        if (productionCost.ammount.Sum() == 0)
+        if (ProductionCost.ammount.Sum() == 0)
         {
-            pStates.supplied = true;
-            pStates.supply = false;
+            ProdStates.supplied = true;
             return;
         }
-        RefreshStatus();
-        RequestRestock();
+        ((IResourceProduction)this).RefreshStatus();
+        ((IResourceProduction)this).RequestRestock();
     }
 
     /// <inheritdoc/>
@@ -193,14 +157,13 @@ public class ProductionBuilding : Building, IAssign
         {
             if (deconstructing) // has just been ordered
             {
-                inputResource.ReassignCarriers(false);
+                InputResource.ReassignCarriers(false);
                 Human human = localRes.carriers.Count > 0 && Assigned.Count > 0 ? Assigned[0] : null;
                 foreach (Human h in Assigned)
                 {
                     h.workplace = null;
                     if(h != human)
                         HumanActions.LookForNew(h);
-                    working.RemoveAll(q => h);
                     StopAllCoroutines();
                 }
                 if (human)
@@ -231,13 +194,13 @@ public class ProductionBuilding : Building, IAssign
     {
         SceneRefs.jobQueue.CancelJob(JobState.Supply, this);
         Chunk c = base.Deconstruct(instantPos);
-        if(inputResource.stored.ammount.Sum() > 0){
+        if(InputResource.stored.ammount.Sum() > 0){
             if (!c)
             {
-                c = SceneRefs.objectFactory.CreateAChunk(instantPos, inputResource.stored);
+                c = SceneRefs.objectFactory.CreateAChunk(instantPos, InputResource.stored);
             }
             else
-                MyRes.ManageRes(c.LocalRes.stored, inputResource.stored, 1);
+                MyRes.ManageRes(c.LocalRes.stored, InputResource.stored, 1);
         }
         return c;
     }
@@ -260,8 +223,8 @@ public class ProductionBuilding : Building, IAssign
         else
         {
             Resource x = new();
-            MyRes.ManageRes(x, productionCost, 2);
-            return MyRes.DiffRes(x, inputResource.Future(), r);
+            MyRes.ManageRes(x, ProductionCost, 2);
+            return MyRes.DiffRes(x, InputResource.Future(), r);
         }
     }
 
@@ -270,129 +233,11 @@ public class ProductionBuilding : Building, IAssign
     {
         List<string> strings = base.GetInfoText();
         strings[0] = $"Can employ up to {assignLimit} workers";
-        strings.Insert(1, $"<u>Produces</u>: \n{MyRes.GetDisplayText(production)}");
-        if (productionCost.ammount.Sum() > 0)
-            strings[1] += $", from: \n{MyRes.GetDisplayText(productionCost)}";
+        strings.Insert(1, $"<u>Produces</u>: \n{MyRes.GetDisplayText(ProductionYield)}");
+        if (ProductionCost.ammount.Sum() > 0)
+            strings[1] += $", from: \n{MyRes.GetDisplayText(ProductionCost)}";
         return strings;
     }
-    #endregion
-
-    #region Production
-    /// <summary>
-    /// Adds <paramref name="progress"/> to <see cref="currentTime"/>.
-    /// </summary>
-    /// <param name="progress">Ammount to add.</param>
-    public virtual void ProgressProduction(float progress)
-    {
-        if (!pStates.stoped)
-        {
-            if (!pStates.running && pStates.supply)
-            {
-                ManageInputRes();
-            }
-            else
-            {
-                CurrentTime += modifier * progress;
-                if(currentTime >= prodTime && pStates.space)
-                {
-                    Product();
-                    AfterProduction();
-                }
-            }
-        }
-    }
-
-    /// <summary>Called when <see cref="currentTime"/> reaches <see cref="prodTime"/>.</summary>
-    protected virtual void Product()
-    {
-        while (currentTime >= prodTime && (localRes.stored.capacity == -1 || localRes.stored.ammount.Sum() < localRes.stored.capacity))
-        {
-            currentTime -= prodTime;
-            MyRes.ManageRes(localRes.stored, production, 1);
-            UIUpdate(nameof(LocalRes));
-            MyRes.UpdateResource(production, 1);
-            pStates.supplied = false;
-            if (!ManageInputRes())
-                return;
-        }
-    }
-    /// <summary>Place for custom implementations on child classes.</summary>
-    protected virtual void AfterProduction()
-    {
-        RequestPickup();
-    }
-
-    /// <summary>
-    /// Manual production toggle.
-    /// </summary>
-    /// <returns>New toggle state.</returns>
-    public bool StopProduction()
-    {
-        pStates.stoped = !pStates.stoped;
-        transform.GetChild(0).GetChild(0).gameObject.SetActive(pStates.stoped);
-        return pStates.stoped;
-    }
-    /// <summary>Toggles state indicators.</summary>
-    public virtual void RefreshStatus()
-    {
-        transform.GetChild(0).GetChild(0).gameObject.SetActive(pStates.stoped);
-        transform.GetChild(0).GetChild(1).gameObject.SetActive(!pStates.supplied);
-        transform.GetChild(0).GetChild(2).gameObject.SetActive(!pStates.space);
-    }
-    #endregion
-
-    #region Production Resources
-    /// <summary>
-    /// Triggered before starting each production cycle. <br/>
-    /// Consumes production cost or requests new resources.
-    /// </summary>
-    /// <returns>Returns production is running.</returns>
-    protected virtual bool ManageInputRes()
-    {
-        if (pStates.supply && !pStates.supplied)
-        {
-            Resource r = MyRes.DiffRes(productionCost, inputResource.stored);
-
-            if (r.ammount.Sum() == 0)
-            {
-                MyRes.ManageRes(inputResource.stored, productionCost, -1);
-                UIUpdate(nameof(InputResource));
-                MyRes.UpdateResource(productionCost, -1);
-                currentTime = 0.1f;
-                pStates.supplied = true;
-                pStates.running = true;
-                return true;
-            }
-            else if (inputResource.carriers.Count == 0)
-            {
-                RequestRestock();
-                transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
-                pStates.supplied = false;
-            }
-            return false;
-        }
-        pStates.running = true;
-        return true;
-    }
-
-    /// <summary>Adds a <see cref="JobState.Supply"/> job order.</summary>
-    public void RequestRestock()
-    {
-        JobQueue jQ = SceneRefs.jobQueue;
-        if (!jQ.supplyNeeded.Contains(this) && pStates.supply)
-            jQ.AddJob(JobState.Supply, this);
-    }
-
-    /// <summary>Adds a <see cref="JobState.Pickup"/> job order.</summary>
-    public void RequestPickup()
-    {
-        JobQueue jQ = SceneRefs.jobQueue;
-        if (!jQ.pickupNeeded.Contains(this))
-        {
-            jQ.AddJob(JobState.Pickup, this);
-        }
-    }
-
     #endregion
 
     #region Assign
@@ -433,6 +278,7 @@ public class ProductionBuilding : Building, IAssign
         }
         UIUpdate(nameof(Assigned));
     }
+
     /// <summary>
     /// <inheritdoc/>
     /// </summary>

@@ -37,7 +37,9 @@ namespace InfoWindowElements
         public DoubleResourceList(bool _cost, string _name) : base()
         {
             style.marginTop = new(new Length(9, LengthUnit.Percent));
-            style.maxWidth = new(new Length(35, LengthUnit.Percent));
+            style.width = new(new Length(35, LengthUnit.Percent));
+            style.flexGrow = 0;
+            //style.minWidth = new(new Length(35, LengthUnit.Percent));
             style.alignContent = Align.Center;
             cost = _cost;
             name = _name;
@@ -57,12 +59,12 @@ namespace InfoWindowElements
                     {
                         binding = SetupResTypes(b.cost, nameof(Building.LocalRes));
                     }
-                    else if (data is ProductionBuilding)
+                    else if (data is IResourceProduction)
                     {
                         if (cost)
-                            binding = SetupResTypes(((ProductionBuilding)b).productionCost, nameof(ProductionBuilding.InputResource));
+                            binding = SetupResTypes(((IResourceProduction)b).ProductionCost, "InputResource");
                         else
-                            binding = SetupResTypes(((ProductionBuilding)b).production, nameof(ProductionBuilding.LocalRes));
+                            binding = SetupResTypes(((IResourceProduction)b).ProductionYield, nameof(Building.LocalRes));
                     }
                     else
                         break;

@@ -15,7 +15,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="House">
-    <Position X="16.25" Y="23" Width="1.75" />
+    <Position X="16.25" Y="17.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AIAAwIAAAAAIAAAAAAAABBAAAAAAAABAAAAAAAAAAgA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\House.cs</FileName>
@@ -23,15 +23,15 @@
     <Lollipop Position="0.169" />
   </Class>
   <Class Name="ProductionBuilding">
-    <Position X="22" Y="22.5" Width="2" />
+    <Position X="22" Y="19.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AIAKwIQQAEEIAIAAAAAChBQFAABFAITAIAAAgQAAChQ=</HashCode>
+      <HashCode>AYAIxIAQAAEIAIAQAAAAhFAEAAAEIIBAAABAkQAAAgA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\Production Buildings\ProductionBuilding.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Elevator">
-    <Position X="25.5" Y="17" Width="1.75" />
+    <Position X="25.25" Y="17" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AIAAwIAAAAEAAAAAAAAAgAAAAQACAABAAAAAAQAAAAQ=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Elevator.cs</FileName>
@@ -103,25 +103,12 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Research_Production">
-    <Position X="18.5" Y="33.5" Width="1.75" />
+    <Position X="18.75" Y="19.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AIACAAAAAAAAAIAAAAAAAAABAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AIACBAAAAAAIAAAAAAAABFABAAAAAAAAAABAgAAAAgA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\Production Buildings\Research_Production.cs</FileName>
     </TypeIdentifier>
-  </Class>
-  <Class Name="WaterPump">
-    <Position X="25" Y="33.75" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AAACgIAAAAAAAIAAAEQAgAAFAAAAAABAICQAEQAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\Production\WaterPump.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="SteamGenerator">
-    <Position X="21.75" Y="33.75" Width="2.25" />
-    <TypeIdentifier>
-      <HashCode>AAACgIQAAAAAAIAAAEQAAAAEAAAAAABAAAQEEAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\Steam Generator.cs</FileName>
-    </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="FluidTank">
     <Position X="11.75" Y="16.75" Width="1.5" />

@@ -181,10 +181,10 @@ public class GroundLevel : MonoBehaviour
             if (!building.GetComponent<BuildPipe>())
             {
                 PlaceBuild(building, load: true);
-                if (building.GetComponent<ProductionBuilding>() && building.constructed)
+                if (building.GetComponent<IResourceProduction>() != null && building.constructed)
                 {
-                    building.GetComponent<ProductionBuilding>().RefreshStatus();
-                    building.GetComponent<ProductionBuilding>().RequestRestock();
+                    building.GetComponent<IResourceProduction>().RefreshStatus();
+                    building.GetComponent<IResourceProduction>().RequestRestock();
                 }
             }
             else

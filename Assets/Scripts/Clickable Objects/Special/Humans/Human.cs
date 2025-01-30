@@ -62,7 +62,7 @@ public class Human : ClickableObject
     /// </summary>
     public Building destination;
     /// <summary>Marks the assigned workplace.</summary>
-    public ProductionBuilding workplace;
+    public IAssign workplace;
     /// <summary>Action to execute next tick.</summary>
     Action<Human> repetableAction;
     /// <summary>Resources that are being carried.</summary>
@@ -195,7 +195,7 @@ public class Human : ClickableObject
         (clickable as HumanSave).inventory = inventory;
         (clickable as HumanSave).specs = specialization;
         (clickable as HumanSave).houseID = home ? home.id : -1;
-        (clickable as HumanSave).workplaceId = workplace ? workplace.id : -1;
+        (clickable as HumanSave).workplaceId = workplace != null ? ((ClickableObject)workplace).id : -1;
         return base.Save(clickable);
     }
     /// <inheritdoc/>

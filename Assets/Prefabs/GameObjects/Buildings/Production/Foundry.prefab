@@ -629,24 +629,16 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 30
-  limit: 5
+  productionTime: 10
+  productionModifier: 1
   productionCost:
     capacity: -1
     type: 0000000001000000
-    ammount: 0100000002000000
-  production:
+    ammount: 0200000001000000
+  productionYield:
     capacity: -1
-    type: 02000000
-    ammount: 01000000
-  prodTime: 20
-  modifier: 1
-  working: []
-  pStates:
-    supplied: 0
-    supply: 1
-    space: 1
-    stoped: 0
-    running: 0
+    type: 01000000
+    ammount: 02000000
 --- !u!54 &4084886823629516137
 Rigidbody:
   m_ObjectHideFlags: 0
