@@ -2,17 +2,23 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
 
+/// <summary>Control for the map element in trading, has basic moving and zooming.</summary>
 [UxmlElement]
 public partial class Map : VisualElement
 {
-    VisualElement mapElem;
+
+    #region Variables
+    #region Elements
+    /// <summary>The map image control.</summary>
+    protected VisualElement mapElem;
     VisualElement arrowLeft;
     VisualElement arrowRight;
     VisualElement arrowTop;
     VisualElement arrowBottom;
-    
+    #endregion
+
+    #region Textures
     Texture2D mapImg;
     [UxmlAttribute] Texture2D mapImage 
     { 
@@ -37,20 +43,25 @@ public partial class Map : VisualElement
             arrowBottom.style.backgroundImage = value;
         }
     }
+    #endregion
 
     [UxmlAttribute] InputActionAsset actions;
-    [UxmlAttribute][Range(1, 200)] float moveSpeed = 30;
-    [UxmlAttribute][Range(1, 200)] float zoomSpeed = 20;
-    [UxmlAttribute][Range(0.1f, 20)] float zoomMoveSpeed = 20;
+    /// <summary>Speed for scaled movement.</summary>
+    [UxmlAttribute][Range(1, 200)] float moveSpeed = 100;
+    /// <summary>Speed for zooming.</summary>
+    [UxmlAttribute][Range(1, 200)] float zoomSpeed = 150;
 
+    /// <summary>Image Width.</summary>
+    protected float baseWidth = 1855;
+    /// <summary>Image Height.</summary>
+    protected float baseHeight = 2160;
 
-    float baseWidth = 1759;
-    float baseHeight = 2048;
+    /// <summary>Current zoom level.</summary>
+    protected float zoom = 1;
+    #endregion
 
-    float zoom = 1;
-    bool move;
-
-    public void ToggleControls()
+    /// <summary>Toggles the assigned action map (<see cref="actions"/>).</summary>
+    protected void ToggleControls()
     {
         if(actions.enabled)
             actions.Disable();
@@ -58,6 +69,7 @@ public partial class Map : VisualElement
             actions.Enable();
     }
 
+    #region Constructors
     public Map() : base()
     {
         mapElem = new();
@@ -76,7 +88,7 @@ public partial class Map : VisualElement
         #endregion
 
 
-        RegisterCallback<WheelEvent>(ZoomMap);
+        RegisterCallback<WheelEvent>((eve) => ZoomMap(eve));
         RegisterCallback<MouseMoveEvent>(
             (eve) => 
             {
@@ -86,6 +98,13 @@ public partial class Map : VisualElement
         );
     }
 
+    /// <summary>
+    /// Creates and Adds an arrow indicator based on positional parameters and rotation.
+    /// </summary>
+    /// <param name="horizontal">bool = left/right; Length = value and unit</param>
+    /// <param name="vertical">bool = top/bottom; Length = value and unit</param>
+    /// <param name="rotation">Rotation of the arrow (on the Z-axis).</param>
+    /// <returns></returns>
     VisualElement CreateArrow(Tuple<bool, StyleLength> horizontal, Tuple<bool, StyleLength> vertical, float rotation)
     {
         VisualElement arrow = new();
@@ -106,8 +125,14 @@ public partial class Map : VisualElement
         Add(arrow);
         return arrow;
     }
+    #endregion
 
-    void ZoomMap(WheelEvent wheelEvent)
+    #region User input
+    /// <summary>
+    /// Triggered by moving the mouse wheel over the map, zooms on the current view center.
+    /// </summary>
+    /// <param name="wheelEvent">Scroll event.</param>
+    protected virtual bool ZoomMap(WheelEvent wheelEvent)
     {
         if (!actions.actionMaps[3].actions[0].inProgress)
         {
@@ -120,13 +145,19 @@ public partial class Map : VisualElement
                 mapElem.style.minHeight = (zoom * baseHeight);
                 mapElem.style.minWidth = (zoom * baseWidth);
 
-                move = true;
                 Move(new Vector2(baseWidth, baseHeight) * (oldZ - zoom)/2);
+                return true;
             }
+            return false;
         }
+        return false;
     }
 
-    void Move(Vector2 moveBy)
+    /// <summary>
+    /// Moves the <see cref="mapElem"/> by the passed value.
+    /// </summary>
+    /// <param name="moveBy">Direction and value to move by.</param>
+    protected virtual void Move(Vector2 moveBy)
     {
         Vector3 position = mapElem.transform.position;
         float clamp;
@@ -150,4 +181,5 @@ public partial class Map : VisualElement
 
         mapElem.transform.position = position;
     }
+    #endregion
 }
