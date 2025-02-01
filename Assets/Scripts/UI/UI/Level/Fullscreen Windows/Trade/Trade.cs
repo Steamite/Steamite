@@ -46,6 +46,13 @@ public class Trade : FullscreenWindow
     int lastIndex;
     SelectedCateg isLastLocation;
 
+    
+
+    private void Awake()
+    {
+        //ToggleControls();
+    }
+
     public override void OpenWindow()
     {
         base.OpenWindow();
@@ -63,6 +70,7 @@ public class Trade : FullscreenWindow
 
     public void NewGame()
     {
+        return;
         tradeLocations = ((TradeHolder)Resources.Load("Holders/Data/Trade Data")).tradeLocations;
         expeditions = new();
         Init();
@@ -70,6 +78,7 @@ public class Trade : FullscreenWindow
 
     public void LoadGame(TradeSave tradeSave)
     {
+        return;
         colonyLocation = tradeSave.colonyLocation;
         tradeLocations = tradeSave.tradeLocations;
         expeditions = tradeSave.expeditions;
@@ -94,6 +103,7 @@ public class Trade : FullscreenWindow
     /// </summary>
     void Init()
     {
+        return;
         lastIndex = -2;
         isLastLocation = SelectedCateg.None;
         header.text = colonyLocation.name;

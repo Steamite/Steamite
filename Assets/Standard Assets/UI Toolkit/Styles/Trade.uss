@@ -1,0 +1,32 @@
+.trade-categ {
+    flex-grow: 0;
+    height: 40%;
+}
+
+#unity-text-input {
+    padding-top: 0;
+    padding-right: 5%;
+    padding-bottom: 0;
+    padding-left: 0;
+    -unity-text-align: middle-right;
+    background-color: rgb(46, 29, 14);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+Map > #MapImage {
+    min-width: 1759px;
+    min-height: 2048px;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+Map > #Arrow {
+    position: absolute;
+    width: 20px;
+    height: 50px;
+}

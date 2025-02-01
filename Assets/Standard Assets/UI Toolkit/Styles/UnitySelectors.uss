@@ -147,3 +147,23 @@ ________________ {
 .unity-list-view__item:hover {
     background-color: rgba(0, 0, 0, 0);
 }
+
+.small-window {
+    position: absolute;
+    background-color: rgb(46, 29, 14);
+    align-self: center;
+    top: 7%;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-left-color: rgb(198, 131, 70);
+    border-right-color: rgb(198, 131, 70);
+    border-top-color: rgb(198, 131, 70);
+    border-bottom-color: rgb(198, 131, 70);
+    min-width: 145px;
+}

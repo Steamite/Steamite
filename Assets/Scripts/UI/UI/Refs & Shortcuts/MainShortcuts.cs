@@ -17,6 +17,7 @@ public class MainShortcuts : MonoBehaviour
     [SerializeField] public InputActionAsset inputAsset;
     static bool handleGrid = true;
     static bool handleWindows = true;
+
     public static void DisableInput(bool win = true)
     {
         SmallerShortcuts.DisableInput(win);

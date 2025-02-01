@@ -6,14 +6,24 @@ public class SmallerShortcuts : MonoBehaviour
     [SerializeField] public InputActionAsset inputAsset;
     [SerializeField] public RadioButtons timeButtons;
     [SerializeField] public RadioButtons levelButtons;
-    InputAction shift => inputAsset.actionMaps[1].FindAction("Shift");
 
-    InputActionMap bindingMap => inputAsset.actionMaps[2];
-    InputAction gameSpeed => bindingMap.FindAction("Game Speed");
-    InputAction level => bindingMap.FindAction("Level");
-    
+    InputAction shift;
+
+    InputActionMap smallShortcuts;
+    InputAction gameSpeed;
+    InputAction level;
+
     static bool handleGrid = true;
     static bool handleWindows = false;
+
+    private void Awake()
+    {
+        shift = inputAsset.actionMaps[1].FindAction("Shift");
+
+        smallShortcuts = inputAsset.actionMaps[2];
+        gameSpeed = smallShortcuts.FindAction("Game Speed");
+        level = smallShortcuts.FindAction("Level");
+    }
 
     public static void DisableInput(bool win = true)
     {
@@ -28,11 +38,11 @@ public class SmallerShortcuts : MonoBehaviour
 
     private void OnEnable()
     {
-        bindingMap.Enable();
+        smallShortcuts.Enable();
     }
     private void OnDisable()
     {
-        bindingMap.Disable();
+        smallShortcuts.Disable();
     }
 
     private void Update()

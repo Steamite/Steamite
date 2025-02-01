@@ -60,7 +60,7 @@ public class LoadingScreen : MonoBehaviour
             else
                 MyGrid.CreateGrid(startLevel, mainLevel);
             UIRefs.research.NewGame();
-            UIRefs.trade.NewGame();
+            //UIRefs.trade.NewGame();
             SceneRefs.humans.NewGameInit(ref humanActivation);
             AfterLevelLoad(true);
         }

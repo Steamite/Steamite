@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>Editor shorcuts for selecting the more common scene objects.</summary>
 public class ObjectSelectionShortcuts
 {
-    [MenuItem("Custom Editors/Selection/info window _1", priority = -1)]
+    [MenuItem("Custom Editors/Selection/info window", priority = -1)]
     static public void SelectInfoWindow()
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
@@ -15,7 +15,7 @@ public class ObjectSelectionShortcuts
         Selection.activeGameObject = gameObject;
     }
 
-    [MenuItem("Custom Editors/Selection/trade view _2", priority = -1)]
+    [MenuItem("Custom Editors/Selection/trade view ", priority = -1)]
     static public void SelectResearch()
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
@@ -24,7 +24,7 @@ public class ObjectSelectionShortcuts
         Selection.activeGameObject = gameObject;
     }
 
-    [MenuItem("Custom Editors/Selection/pause menu _3", priority = -1)]
+    [MenuItem("Custom Editors/Selection/pause menu ", priority = -1)]
     static public void SelectPauseMenu()
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
@@ -33,7 +33,7 @@ public class ObjectSelectionShortcuts
         Selection.activeGameObject = gameObject;
     }
 
-    [MenuItem("Custom Editors/Selection/time _4", priority = -1)]
+    [MenuItem("Custom Editors/Selection/time", priority = -1)]
     static public void SelectTimeMenu()
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
@@ -42,7 +42,7 @@ public class ObjectSelectionShortcuts
         Selection.activeGameObject = gameObject;
     }
 
-    [MenuItem("Custom Editors/Selection/resources _5", priority = -1)]
+    [MenuItem("Custom Editors/Selection/resources", priority = -1)]
     static public void SelectResourceMenu()
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
