@@ -1,12 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class Trading : MonoBehaviour
 {
-    Map map;
+    TradeMap map;
+    [SerializeField] TradeHolder tradeHolder;
     private void Awake()
     {
-        map = GetComponent<UIDocument>().rootVisualElement.Q<Map>("Map");
-        map.ToggleControls();
+        map = GetComponent<UIDocument>().rootVisualElement.Q<TradeMap>("Map");
+        map.FillTradeLocations(tradeHolder);
     }
 }

@@ -15,8 +15,8 @@ MonoBehaviour:
   startingLocations:
   - name: Snowlandia
     pos:
-      x: 0
-      z: 0
+      x: 900
+      z: 1117
       y: 0
     passiveProductions:
     - productionName: Workforce
@@ -38,8 +38,8 @@ MonoBehaviour:
   tradeLocations:
   - name: Dean Forrest
     pos:
-      x: -273
-      z: 250
+      x: 1127
+      z: 1702
       y: 0
     wantToSell:
     - name: Wood
@@ -54,8 +54,8 @@ MonoBehaviour:
       cost: 4
   - name: Wye valley
     pos:
-      x: 138
-      z: -358
+      x: 496
+      z: 987
       y: 0
     wantToSell:
     - name: Food
@@ -70,8 +70,8 @@ MonoBehaviour:
       cost: 4
   - name: Scottish Highlands
     pos:
-      x: 256
-      z: 250
+      x: 896
+      z: 448
       y: 0
     wantToSell:
     - name: Stone
