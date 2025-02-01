@@ -102,7 +102,7 @@ public class SaveController : MonoBehaviour
             SaveHumans(tmpPath, jsonSerializer);
             SaveGameState(tmpPath, autoSave, jsonSerializer);
             SaveResearch(tmpPath, jsonSerializer);
-            SaveTrade(tmpPath, jsonSerializer);
+            //SaveTrade(tmpPath, jsonSerializer);
 
             if (autoSave)
                 saveName = "autosave";

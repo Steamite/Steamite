@@ -292,8 +292,9 @@ public class InfoWindow : MonoBehaviour
             ? DisplayStyle.Flex : DisplayStyle.None);
         foreach (string s in toEnable)
         {
-            if(element is IUIElement)
-                ((IUIElement)element.Q<VisualElement>(s)).Fill(building);
+            VisualElement elem = element.Q<VisualElement>(s);
+            if (elem is IUIElement)
+                ((IUIElement)elem).Fill(building);
         }
     }
 
