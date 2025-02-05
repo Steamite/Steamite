@@ -93,7 +93,7 @@ namespace AbstractControls
                 (eve) =>
                 {
                     if (actions.actionMaps[3].actions[0].inProgress)
-                        Move(eve.mouseDelta * moveSpeed * Time.deltaTime * zoom);
+                        Move(eve.mouseDelta * moveSpeed * Time.deltaTime * zoom / Time.timeScale);
                 }
             );
         }
@@ -138,7 +138,7 @@ namespace AbstractControls
             {
                 int zoomMod = wheelEvent.delta.y > 0 ? -1 : 1;
                 float oldZ = zoom;
-                zoom = Mathf.Clamp(zoom + (0.1f * zoomMod) * zoomSpeed * Time.deltaTime, resolvedStyle.width / baseWidth, 2);
+                zoom = Mathf.Clamp(zoom + (0.1f * zoomMod) * zoomSpeed * Time.deltaTime / Time.timeScale, resolvedStyle.width / baseWidth, 2);
 
                 if (oldZ != zoom)
                 {

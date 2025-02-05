@@ -6,34 +6,44 @@ using UnityEngine.UIElements;
 
 public class Trading : FullscreenWindow
 {
-    #region Variables
-    IUIElement map;
-    [SerializeField] List<TradeConvoy> convoys;
-    [SerializeField] TradeHolder tradeHolder;
-    int selectedColony = 0;
-
-    public int maxConvoy = 3;
+    #region Const
     public const int CONVOY_STORAGE_LIMIT = 50;
     const int CONVOY_SPEED = 10;
+    public int maxConvoy = 3;
+    #endregion
+
+    #region Variables
+    public IUIElement map;
+
+    [SerializeField] List<TradeConvoy> convoys;
+
+    public ColonyLocation colonyLocation;
+    public List<TradeLocation> tradeLocations;
     #endregion
 
     #region Properties
     public int AvailableConvoy => maxConvoy - convoys.Count;
     public bool ConvoyOnRoute(int locationIndex) => convoys.Count(q => q.tradeLocation == locationIndex) == 1;
-    public ColonyLocation colonyLocation => tradeHolder.startingLocations[selectedColony];
-    public List<TradeLocation> tradeLocations => tradeHolder.tradeLocations;
     public void RemoveConvoy(TradeConvoy convoy) => convoys.Remove(convoy);
+    public List<TradeConvoy> GetConvoys() => convoys;
     #endregion
 
-    public void NewGame()
+    public void NewGame(int selectedColony)
     {
+        TradeHolder tradeHolder = Resources.Load<TradeHolder>("Holders/Data/Trade Data");
+        colonyLocation = tradeHolder.startingLocations[selectedColony];
+        tradeLocations = tradeHolder.tradeLocations;
+
         convoys = new();
         Init();
     }
 
     public void LoadGame(TradeSave tradeSave)
     {
-        throw new NotImplementedException();
+        convoys = tradeSave.convoys;
+        colonyLocation = tradeSave.colonyLocation;
+        tradeLocations = tradeSave.tradeLocations;
+        Init();
     }
 
     public void Init()

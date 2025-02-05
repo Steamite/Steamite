@@ -1,0 +1,102 @@
+#MapImage > #Sliders > VisualElement {
+    align-self: center;
+    align-items: center;
+    position: absolute;
+    justify-content: center;
+    align-content: center;
+    width: 0;
+    height: 0;
+}
+
+.map-slider {
+    position: relative;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+.map-slider #unity-tracker {
+    border-left-color: rgb(35, 32, 2);
+    border-right-color: rgb(35, 32, 2);
+    border-top-color: rgb(35, 32, 2);
+    border-bottom-color: rgb(35, 32, 2);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    height: 20%;
+    margin-top: 0;
+    top: 40%;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.map-slider #unity-tracker > #unity-fill {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.map-slider #unity-dragger {
+    height: 30px;
+    top: 44%;
+    width: 30px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("project://database/Assets/Sprites/Textures/Circle.png?fileID=2800000&guid=5228e8ecb6e2a4d448697e7dcece5ee1&type=3#Circle");
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.free #unity-tracker {
+    background-color: rgb(159, 102, 49);
+}
+
+.trading #unity-tracker {
+    background-color: rgb(68, 44, 21);
+}
+
+.trading #unity-tracker > #unity-fill {
+    background-color: rgb(181, 166, 66);
+}
+
+.trading #unity-dragger {
+    -unity-background-image-tint-color: rgb(141, 129, 51);
+}
+
+.retreat #unity-tracker {
+    background-color: rgb(181, 166, 66);
+}
+
+.retreat #unity-tracker > #unity-fill {
+    background-color: rgb(68, 44, 21);
+}
+
+.retreat #unity-dragger {
+    -unity-background-image-tint-color: rgb(114, 73, 35);
+}

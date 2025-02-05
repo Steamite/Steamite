@@ -12,29 +12,13 @@ namespace TradeWindowElements
     [UxmlElement]
     public partial class TradeMap : Map, IToolkitController, IUIElement
     {
-        #region Textures
-        Texture2D locationImg;
-        [UxmlAttribute]
-        Texture2D locationImage
-        {
-            get => locationImg;
-            set
-            {
-                locationImg = value;
-                if (mapElem != null)
-                {
-                    mapElem.ElementAt(1).Children().ToList().ForEach(q => q.style.backgroundImage = value);
-                }
-            }
-        }
-        #endregion
 #if UNITY_EDITOR_WIN
-        public TradeMap() : base()
+        /*public TradeMap() : base()
         {
             UIRefs.SetTrade();
             Init(null);
             ((Slider)ElementAt(0).ElementAt(0).ElementAt(2).ElementAt(0)).value = 300;
-        }
+        }*/
 #endif
         List<LocationButton> locationButtons = new();
         VisualElement sliderGroup;
@@ -57,6 +41,7 @@ namespace TradeWindowElements
             mapElem.Add(sliderGroup);
             Slider slider;
             Vector2 basePos = UIRefs.trading.colonyLocation.pos.ToVecUI();
+            List<TradeConvoy> convoys = UIRefs.trading.GetConvoys();
             for (int i = 0; i < UIRefs.trading.tradeLocations.Count; i++)
             {
                 Vector2 locationPos = UIRefs.trading.tradeLocations[i].pos.ToVecUI();
@@ -67,8 +52,18 @@ namespace TradeWindowElements
                 slider.style.height = 50;
                 slider.focusable = false;
                 slider.fill = true;
+                int j = convoys.FindIndex(q=> q.tradeLocation == i);
+                if (j > -1)
+                {
+                    if (convoys[j].firstPhase)
+                        slider.AddToClassList("trading");
+                    else
+                        slider.AddToClassList("retreat");
+                }
+                else
+                    slider.AddToClassList("free");
 
-
+                slider.AddToClassList("map-slider");
                 Vector2 dif = locationPos - basePos;
                 float f = Mathf.Atan(dif.y / dif.x);
                 slider.transform.rotation = Quaternion.Euler(new Vector3(0, 0, dif.x > 0 ? (180 * f / Mathf.PI) : -180 + (180 * f / Mathf.PI)));
@@ -100,9 +95,6 @@ namespace TradeWindowElements
                         (Slider)sliderGroup.ElementAt(i).ElementAt(0),
                         UIRefs.trading.colonyLocation.pos.ToVecUI());
 
-
-                locationButton.style.backgroundImage = locationImg;
-
                 locationGroup.Add(locationButton);
                 locationButtons.Add(locationButton);
 
@@ -118,11 +110,13 @@ namespace TradeWindowElements
             //TODO: NEED TO MOVE TRADE SLIDERS
             ((TradeLocationButton)ElementAt(0).ElementAt(1).ElementAt(1)).SelectWithoutTransition(true);
             ((Label)parent.ElementAt(1).ElementAt(0)).text = $"{UIRefs.trading.AvailableConvoy}/{UIRefs.trading.maxConvoy} Convoyes";
-            foreach(TradeConvoy tradeConvoy in (List<TradeConvoy>)data)
+
+            Slider slider;
+            foreach (TradeConvoy tradeConvoy in (List<TradeConvoy>)data)
             {
-                ((Slider)ElementAt(0).ElementAt(0).ElementAt(tradeConvoy.tradeLocation).ElementAt(0)).value = tradeConvoy.currentprogress;
+                slider = (Slider)ElementAt(0).ElementAt(0).ElementAt(tradeConvoy.tradeLocation).ElementAt(0);
+                slider.value = tradeConvoy.currentprogress;
             }
-            
             EnableInput();
         }
 
