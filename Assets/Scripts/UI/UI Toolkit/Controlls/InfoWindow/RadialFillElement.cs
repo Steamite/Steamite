@@ -135,10 +135,10 @@ namespace InfoWindowElements
         #endregion
         
         /// <inheritdoc/>
-        public void Fill(object data)
+        public void Open(object data)
         {
             maxValue = ((ProductionBuilding)data).ProdTime;
-            DataBinding binding = Util.CreateBinding(nameof(ProductionBuilding.CurrentTime));
+            DataBinding binding = BindingUtil.CreateBinding(nameof(ProductionBuilding.CurrentTime));
             binding.sourceToUiConverters.AddConverter((ref float time) => time / maxValue);
             SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(value)), binding, data);
         }

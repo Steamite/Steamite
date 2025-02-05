@@ -6,7 +6,7 @@ namespace RadioGroups
 {
     /// <summary>Radio group for managing switchin between level unlockers.</summary>
     [UxmlElement]
-    public partial class LevelUnlockerRadioGroup : CustomRadioButtonGroup
+    public partial class LevelUnlockerRadioGroup : TextRadioButtonGroup
     {
         #region Variables
         LevelState[] states;
@@ -24,7 +24,7 @@ namespace RadioGroups
             choices = new string[] { "1", "2", "3", "4", "5"};
         }
 
-        protected override CustomRadioButton CreateButton(int i)
+        protected override TextRadioButton CreateButton(int i)
         {
             return new LevelUnlocker(i, states[i]);
         }

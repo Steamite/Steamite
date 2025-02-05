@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 public static class ToolkitUtils
 {
+    public static ResourceSkins resSkins;
     /// <summary>
     /// Switches classes on an element with no transition duration, the duration must be on the classes, else it will not be restored afterwards.
     /// </summary>
@@ -20,5 +21,17 @@ public static class ToolkitUtils
             element.AddToClassList(newClass);
             element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
         }
+    }
+
+    public static void InitSkins()
+    {
+        resSkins = Resources.Load<ResourceSkins>("Holders/Data/Resource Skin");
+    }
+
+    public static VisualElement GetRoot(VisualElement element)
+    {
+        if (element.parent != null)
+            return GetRoot(element.parent);
+        return element;
     }
 }

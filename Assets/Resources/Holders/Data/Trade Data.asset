@@ -41,46 +41,69 @@ MonoBehaviour:
       x: 1127
       z: 1702
       y: 0
-    wantToSell:
-    - name: Wood
+    Buy:
+    - name: 
+      type: 1
+      cost: 3
+    - name: 
+      type: 2
+      cost: 5
+    Sell:
+    - name: 
+      type: 3
+      cost: 1
+    - name: 
       type: 4
       cost: 2
-    - name: Coal
-      type: 0
-      cost: 3
-    wantToBuy:
-    - name: Metal
-      type: 1
-      cost: 4
   - name: Wye valley
     pos:
       x: 496
       z: 987
       y: 0
-    wantToSell:
-    - name: Food
-      type: 3
-      cost: 1
-    wantToBuy:
-    - name: Coal
-      type: 0
-      cost: 2
-    - name: Metal
+    Buy:
+    - name: 
       type: 1
-      cost: 4
+      cost: 3
+    - name: 
+      type: 2
+      cost: 5
+    Sell: []
   - name: Scottish Highlands
     pos:
       x: 896
       z: 448
       y: 0
-    wantToSell:
-    - name: Stone
+    Buy: []
+    Sell:
+    - name: 
+      type: 1
+      cost: 3
+    - name: 
       type: 2
-      cost: 1
-    wantToBuy:
-    - name: Coal
-      type: 0
-      cost: 2
-    - name: Wood
-      type: 4
-      cost: 4
+      cost: 5
+  - name: test1
+    pos:
+      x: 300
+      z: 1700
+      y: 0
+    Buy:
+    - name: 
+      type: 1
+      cost: 3
+    - name: 
+      type: 2
+      cost: 5
+    Sell: []
+  - name: test1
+    pos:
+      x: 1000
+      z: 800
+      y: 0
+    Buy: []
+    Sell:
+    - name: 
+      type: 1
+      cost: 3
+    - name: 
+      type: 2
+      cost: 5

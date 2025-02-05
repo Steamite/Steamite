@@ -48,7 +48,7 @@ namespace InfoWindowElements
 
         #region Init
         /// <inheritdoc/>
-        public override void Fill(object data)
+        public override void Open(object data)
         {
             DataBinding binding = null;
             switch (data)
@@ -109,7 +109,7 @@ namespace InfoWindowElements
                         0,
                         resource.ammount[i],
                         resource.type[i]));
-            return Util.CreateBinding(propName);
+            return BindingUtil.CreateBinding(propName);
         }
         #endregion
 

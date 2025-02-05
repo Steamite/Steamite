@@ -38,10 +38,10 @@ public class Menu : MonoBehaviour
             saveDialog.CloseWindow();
         else if (((IGridMenu)loadMenu).IsOpen())
             ((IGridMenu)loadMenu).CloseWindow();
-        else if (UIRefs.research.window.activeSelf)
+        else if (UIRefs.research.window.style.display == DisplayStyle.Flex)
             UIRefs.research.CloseWindow();
-        else if (UIRefs.trade.window.activeSelf)
-            UIRefs.trade.CloseWindow();
+        else if (UIRefs.trading.window.style.display == DisplayStyle.Flex)
+            UIRefs.trading.CloseWindow();
         else
             return true;
 

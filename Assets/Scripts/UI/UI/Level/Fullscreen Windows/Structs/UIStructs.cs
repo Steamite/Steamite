@@ -18,17 +18,17 @@ public class TradeSave
 {
     public ColonyLocation colonyLocation;
     public List<TradeLocation> tradeLocations;
-    public List<TradeExpedition> expeditions;
+    public List<TradeConvoy> expeditions;
     public List<Outpost> outposts;
     public int money;
-    public TradeSave(Trade t)
+    /*public TradeSave( t)
     {
         colonyLocation = t.colonyLocation;
         tradeLocations = t.tradeLocations;
         expeditions = t.expeditions;
         outposts = t.outposts;
         money = MyRes.Money;
-    }
+    }*/
     public TradeSave()
     {
 

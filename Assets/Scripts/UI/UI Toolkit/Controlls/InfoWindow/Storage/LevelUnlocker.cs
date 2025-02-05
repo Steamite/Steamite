@@ -7,7 +7,7 @@ namespace InfoWindowElements
 {
     /// <summary>Represents each level in <see cref="LevelsTab"/>.</summary>
     [UxmlElement]
-    public partial class LevelUnlocker : CustomRadioButton
+    public partial class LevelUnlocker : TextRadioButton
     {
         #region Constructors
         public LevelUnlocker() : base()
@@ -15,7 +15,7 @@ namespace InfoWindowElements
             
         }
 
-        public LevelUnlocker(int i, LevelState _state) : base(i.ToString(), "", i, true)
+        public LevelUnlocker(int i, LevelState _state) : base("", i, true, i.ToString())
         {
             ToggleButtonStyle(_state);
         }
@@ -34,9 +34,9 @@ namespace InfoWindowElements
         }
 
         /// <inheritdoc/>
-        public override void Select(bool triggerTransition = true)
+        protected override void SelectChange(bool UpdateGroup)
         {
-            base.Select();
+            base.SelectChange(UpdateGroup);
             ToggleButtonStyle(LevelState.Selected);
         }
         #endregion

@@ -25,7 +25,7 @@ public static class MyRes
     /// <summary>All storage buildings.</summary>
     static IStorage[] storage;
     /// <summary>Reference to global resource storage counter.</summary>
-    static ResourceDisplay resDisplay;
+    public static ResourceDisplay resDisplay;
     #endregion
 
     #region Getters
@@ -74,26 +74,7 @@ public static class MyRes
 
     #region UI Updates
     /// <summary>
-    /// for generic resources
-    /// </summary>
-    /// <param name="r"></param>
-    /// <returns>data to display in the info window</returns>
-    public static string GetDisplayText(Resource r)
-    {
-        string s = "";
-        for (int i = 0; i < r.type.Count && i < r.ammount.Count; i++)
-        {
-            if (r.ammount[i] > 0)
-                s += $"{Enum.GetName(typeof(ResourceType), r.type[i])}: {r.ammount[i]}\n";
-        }
-        if (s.Length > 0)
-            return s.Remove(s.Length - 1);
-        else
-            return "Nothing";
-    }
-
-    /// <summary>
-    /// Updates Global resource and forces an update.
+    /// Updates Global resource(JUST UI, and comparing) and forces an update.
     /// </summary>
     /// <param name="cost"><inheritdoc cref="ManageRes(Resource, Resource, float)" path="/param[@name='source']"/></param>
     /// <param name="mod"><inheritdoc cref="ManageRes(Resource, Resource, float)" path="/param[@name='mod']"/></param>
@@ -526,6 +507,11 @@ public static class MyRes
         if (store != null)
         {
             MoveRes(store.LocalResources.stored, resource, resource, resource.ammount.Sum());
+            UpdateResource(resource, 1);
+        }
+        else
+        {
+            Debug.LogError("find a way to store over capacity.");
         }
     }
 
@@ -542,16 +528,16 @@ public static class MyRes
             for(int j = cost.type.Count-1; j >= 0; j--)
             {
                 int x = diff.type.IndexOf(cost.type[j]);
-                if(x == -1)
+                if (x == -1)
                 {
-                    storage[i].LocalResources.stored.ammount[storage[i].LocalResources.stored.type.IndexOf(cost.type[j])] -= cost.ammount[j];
+                    storage[i].LocalResources.stored[cost.type[j]] -= cost.ammount[j];
                     cost.ammount.RemoveAt(j);
                     cost.type.RemoveAt(j);
                 }
                 else
                 {
                     int change = cost.ammount[j] - diff.ammount[x];
-                    storage[i].LocalResources.stored.ammount[storage[i].LocalResources.stored.type.IndexOf(cost.type[j])] -= change;
+                    storage[i].LocalResources.stored[cost.type[j]] -= change;
                     cost.ammount[j] -= change;
                 }
             }

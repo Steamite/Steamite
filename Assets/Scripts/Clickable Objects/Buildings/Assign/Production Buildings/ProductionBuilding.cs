@@ -233,9 +233,9 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     {
         List<string> strings = base.GetInfoText();
         strings[0] = $"Can employ up to {assignLimit} workers";
-        strings.Insert(1, $"<u>Produces</u>: \n{MyRes.GetDisplayText(ProductionYield)}");
+        strings.Insert(1, $"<u>Produces</u>: \n{ProductionYield.GetDisplayText()}");
         if (ProductionCost.ammount.Sum() > 0)
-            strings[1] += $", from: \n{MyRes.GetDisplayText(ProductionCost)}";
+            strings[1] += $", from: \n{ProductionCost.GetDisplayText()}";
         return strings;
     }
     #endregion

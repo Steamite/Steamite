@@ -23,12 +23,8 @@ public struct PassiveProduction
 
 /// <summary>Colony location show where the colony is, provides some passive production.</summary>
 [Serializable]
-public class ColonyLocation
+public class ColonyLocation : Location
 {
-    /// <summary>Colony name.</summary>
-    public string name;
-    /// <summary>Colony position on the screen.</summary>
-    public GridPos pos;
     /// <summary>Upgradable passive production data.</summary>
     [SerializeField] public List<PassiveProduction> passiveProductions;
     /// <summary>Colony stats data.</summary>

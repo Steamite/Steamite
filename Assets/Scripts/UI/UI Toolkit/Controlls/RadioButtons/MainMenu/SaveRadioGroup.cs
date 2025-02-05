@@ -32,13 +32,13 @@ namespace RadioGroups
             element.RemoveFromClassList("unity-text-element");
             element.RemoveFromClassList("unity-button");
             SaveRadioButton saveRadioButton = (element as SaveRadioButton);
-            saveRadioButton.text = _itemsSource[index].data;
+            saveRadioButton.text = ((TextRadioButton)_itemsSource[index]).data;
             saveRadioButton.saveDate.text = (_itemsSource[index] as SaveRadioButton).saveDate.text;
             saveRadioButton.style.marginTop = 10;
 
             // clears styles if scrolling and selected
             if (SelectedId == index)
-                saveRadioButton.Select(false);
+                saveRadioButton.SelectWithoutTransition(false);
             else if (element.ClassListContains("save-radio-button-selected"))
                 saveRadioButton.Deselect(false);
 

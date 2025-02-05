@@ -66,5 +66,12 @@ public class GridPos
             (y * ClickabeObjectFactory.LEVEL_HEIGHT) + Yoffset,
             z);
     }
+
+    public Vector2 ToVecUI()
+    {
+        if (y != 0)
+            Debug.LogError("Probably wrong assigment");
+        return new(x, z);
+    }
     #endregion
 }

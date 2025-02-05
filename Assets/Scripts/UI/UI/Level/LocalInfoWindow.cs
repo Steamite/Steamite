@@ -60,9 +60,9 @@ public class LocalInfoWindow : UIBehaviour
         }
     }
 
-    public void DisplayInfo(TradeExpedition expedition, Vector3 pos)
+    public void DisplayInfo(TradeConvoy expedition, Vector3 pos)
     {
-        // triggers on button enter, works after setingUp
+        /*// triggers on button enter, works after setingUp
         if (status != Status.notSet)
         {
             status = Status.expeditions;
@@ -72,7 +72,7 @@ public class LocalInfoWindow : UIBehaviour
             transform.GetChild(1).GetComponent<TMP_Text>().text = expedition.ToString();
             transform.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 100);
             gameObject.SetActive(true);
-        }
+        }*/
     }
 
     //public void DisplayInfo()

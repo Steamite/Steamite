@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class MainShortcuts : MonoBehaviour
 {
@@ -110,13 +111,15 @@ public class MainShortcuts : MonoBehaviour
         {
             if (research.triggered)
             {
-                UIRefs.trade.CloseWindow();
+                if(UIRefs.trading.window.style.display == DisplayStyle.Flex)
+                    UIRefs.trading.CloseWindow();
                 UIRefs.research.ToggleWindow();
             }
             if (trade.triggered)
             {
-                UIRefs.research.CloseWindow();
-                UIRefs.trade.ToggleWindow();
+                if(UIRefs.research.window.style.display == DisplayStyle.Flex)
+                    UIRefs.research.CloseWindow();
+                UIRefs.trading.ToggleWindow();
             }
         }
         // opens ingame menu

@@ -14,16 +14,19 @@ public struct TradeDeal
     public int cost;
 }
 
-/// <summary>Trade locations.</summary>
-[Serializable]
-public class TradeLocation
+public abstract class Location
 {
     /// <summary>Location display name.</summary>
     [Header("Location")] public string name;
     /// <summary>Location world position.</summary>
     public GridPos pos;
-    /// <summary>Selling deals.</summary>
-    public List<TradeDeal> wantToSell;
+}
+/// <summary>Trade locations.</summary>
+[Serializable]
+public class TradeLocation: Location
+{
     /// <summary>Buing deals.</summary>
-    public List<TradeDeal> wantToBuy;
+    public List<TradeDeal> Buy;
+    /// <summary>Selling deals.</summary>
+    public List<TradeDeal> Sell;
 }

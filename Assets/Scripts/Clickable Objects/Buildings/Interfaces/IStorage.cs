@@ -41,7 +41,7 @@ public interface IStorage
     /// <param name="ammountToDestroy">Ammount of resources.</param>
     public void DestroyResource(ResourceType type, int ammountToDestroy)
     {
-        LocalResources.stored.ammount[LocalResources.stored.type.IndexOf(type)] -= ammountToDestroy;
+        LocalResources.stored[type] -= ammountToDestroy;
         ((Building)this).UIUpdate(nameof(Building.LocalRes));
     }
 }

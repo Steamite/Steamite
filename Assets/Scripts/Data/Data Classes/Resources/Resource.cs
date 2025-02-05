@@ -73,6 +73,12 @@ public class Resource
         }
         return s;
     }
+
+    public int this[ResourceType _type]
+    {
+        get => ammount[type.IndexOf(_type)];
+        set => ammount[type.IndexOf(_type)] = value;
+    }
     #endregion
 
     /// <returns>a new identical resource</returns>
@@ -101,5 +107,30 @@ public class Resource
                 type.RemoveAt(i);
             }
         }
+    }
+
+    /// <summary>
+    /// for generic resources
+    /// </summary>
+    /// <param name="r"></param>
+    /// <returns>data to display in the info window</returns>
+    public string GetDisplayText()
+    {
+        string s = "";
+        for (int i = 0; i < type.Count && i < ammount.Count; i++)
+        {
+            if (ammount[i] > 0)
+                s += $"{Enum.GetName(typeof(ResourceType), type[i])}: {ammount[i]}\n";
+        }
+        if (s.Length > 0)
+            return s.Remove(s.Length - 1);
+        else
+            return "Nothing";
+    }
+
+    public void Add(ResourceType _type, int _ammount)
+    {
+        type.Add(_type);
+        ammount.Add(_ammount);
     }
 }

@@ -6,7 +6,6 @@ namespace AbstractControls
     public partial class CustomRadioButton : Button
     {
         public bool IsSelected { get; protected set; }
-        public string data;
         public int value;
 
         public string styleClass;
@@ -16,18 +15,14 @@ namespace AbstractControls
         {
             styleClass = "save-radio-button";
             AddToClassList("save-radio-button");
-            text = "string";
-            data = "string";
             value = -1;
         }
 
 
-        public CustomRadioButton(string labelText, string _styleClass, int i, bool _inGroup)
+        public CustomRadioButton(string _styleClass, int i, bool _inGroup)
         {
             styleClass = _styleClass;
             AddToClassList(_styleClass);
-            text = labelText;
-            data = labelText;
             value = i;
             inGroup = _inGroup;
             RegisterCallback<ClickEvent>((_) => Select());
@@ -36,21 +31,34 @@ namespace AbstractControls
         /// <summary>
         /// Sets <see cref="IsSelected"/> to true, styles the button and sends an event to the button group.
         /// </summary>
-        /// <param name="triggerTransition">If triggered by user, and should perform transition over duration, or instantly.</param>
-        public virtual void Select(bool triggerTransition = true)
+        public void Select()
         {
             if (IsSelected)
                 return;
-            IsSelected = true;
-            if (triggerTransition)
+            SelectChange(true);
+            if (styleClass != "")
             {
-                if (styleClass != "")
-                {
-                    RemoveFromClassList(styleClass);
-                    AddToClassList(styleClass + "-selected");
-                }
+                RemoveFromClassList(styleClass);
+                AddToClassList(styleClass + "-selected");
+            }
+        }
 
-                if(inGroup)
+        /// <summary>
+        /// Sets <see cref="IsSelected"/> to true, styles the button and sends an event to the button group.
+        /// </summary>
+        /// <param name="UpdateGroup">Should the parent group be updated.</param>
+        public void SelectWithoutTransition(bool UpdateGroup)
+        {
+            SelectChange(UpdateGroup);
+            ToolkitUtils.ChangeClassWithoutTransition(styleClass, styleClass + "-selected", this);
+        }
+
+        protected virtual void SelectChange(bool UpdateGroup)
+        {
+            IsSelected = true;
+            if (UpdateGroup)
+            {
+                if (inGroup)
                 {
                     ((CustomRadioButtonGroup)parent).Select(value);
                 }
@@ -59,12 +67,8 @@ namespace AbstractControls
                     parent.parent.parent.Q<CustomRadioButtonList>().Select(this);
                 }
             }
-            else if (styleClass != "")
-            {
-                    ToolkitUtils.ChangeClassWithoutTransition(styleClass, styleClass + "-selected", this);
-            }
-        }
 
+        }
         /// <summary>
         /// Sets <see cref="IsSelected"/> to false and resets styling.
         /// </summary>

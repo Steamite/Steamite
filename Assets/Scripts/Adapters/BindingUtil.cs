@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 /// <summary>
 /// FIND A BETTER PLACE FOR THE METHOD!
 /// </summary>
-public static class Util
+public static class BindingUtil
 {
 
     /// <summary>

@@ -59,14 +59,15 @@ public class ResearchUI : FullscreenWindow
 
     void Initialize(ResearchCategory[] researches, int _currentResearch = -1)
     {
-        window.gameObject.SetActive(true);
+        GetWindow();
+        //window.gameObject.SetActive(true);
         backend = gameObject.GetComponent<ResearchBackend>();
         backend.Init(this);
 
         BuildButtonHolder buildButtons = (BuildButtonHolder)Resources.Load("Holders/Models/BuildButton Data");
         InitializeBuildButtons(buildButtons);
         InitializeResearchButtons(buildButtons, researches, _currentResearch);
-        window.gameObject.SetActive(false);
+        //window.gameObject.SetActive(false);
 
         // freeing useless prefabs
         buttonBuildPref = null;
@@ -380,13 +381,13 @@ public class ResearchUI : FullscreenWindow
     public override void OpenWindow()
     {
         base.OpenWindow();
-        backend.currentResearch?.StartAnim();
+        //backend.currentResearch?.StartAnim();
     }
 
     public override void CloseWindow()
     {
         selectedButton = null;
-        backend.currentResearch?.EndAnim();
+        //backend.currentResearch?.EndAnim();
         base.CloseWindow();
     }
 

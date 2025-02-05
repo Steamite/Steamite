@@ -17,10 +17,10 @@ public class OutpostInfo : MonoBehaviour
     [SerializeField] Color balanceColor;
 
     [Header("")]
-    [SerializeField] Trade trade;
+    //[SerializeField] Trade trade;
 
     int activeOutpost = 0;
-
+    /*
     /// <summary>
     /// Creates the page for a outpost.
     /// </summary>
@@ -104,8 +104,8 @@ public class OutpostInfo : MonoBehaviour
             s = $"Money: {money}/{neededMoney}\n";
         }
 
-        /*if (Outpost.upgradeCosts[outpostLevel].resource.ToStringTMP(ref s, MyRes.resources))
-            useButton = false;*/
+        //if (Outpost.upgradeCosts[outpostLevel].resource.ToStringTMP(ref s, MyRes.resources))
+        //    useButton = false;
         confirmTran.GetChild(1).GetComponent<Button>().interactable = useButton;
         confirmTran.GetChild(2).GetComponent<TMP_Text>().text = s;
     }
@@ -181,4 +181,5 @@ public class OutpostInfo : MonoBehaviour
             }
         }
     }
+}*/
 }

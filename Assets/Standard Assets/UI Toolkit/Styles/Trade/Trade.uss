@@ -1,0 +1,101 @@
+#Map > #MapImage {
+    min-width: 1759px;
+    min-height: 2048px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    -unity-background-image-tint-color: rgb(137, 87, 42);
+}
+
+#Map > #Arrow {
+    position: absolute;
+    width: 20px;
+    height: 50px;
+}
+
+#MapImage Slider {
+    position: relative;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+#MapImage > VisualElement {
+    position: absolute;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+#MapImage > #Sliders > VisualElement {
+    align-self: center;
+    align-items: center;
+    position: absolute;
+    justify-content: center;
+    align-content: center;
+    width: 0;
+    height: 0;
+}
+
+.trade-button {
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+.trade-button-selected {
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    -unity-background-image-tint-color: rgb(207, 176, 56);
+}
+
+#MapImage Slider {
+}
+
+#Sliders #unity-tracker {
+    background-color: rgb(182, 116, 56);
+    border-left-color: rgb(35, 32, 2);
+    border-right-color: rgb(35, 32, 2);
+    border-top-color: rgb(35, 32, 2);
+    border-bottom-color: rgb(35, 32, 2);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    height: 20%;
+    margin-top: 0;
+    top: 40%;
+}
+
+#Sliders #unity-tracker > #unity-fill {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    background-color: rgb(181, 166, 66);
+}
+
+#Sliders #unity-dragger {
+    height: 30px;
+    top: 44%;
+    width: 30px;
+    background-image: url("project://database/Assets/Sprites/Textures/Circle.png?fileID=2800000&guid=5228e8ecb6e2a4d448697e7dcece5ee1&type=3#Circle");
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: rgb(141, 129, 51);
+}

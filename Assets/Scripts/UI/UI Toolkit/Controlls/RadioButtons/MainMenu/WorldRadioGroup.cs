@@ -4,7 +4,7 @@ using AbstractControls;
 namespace RadioGroups
 {
     [UxmlElement]
-    public partial class WorldRadioGroup : CustomRadioButtonGroup
+    public partial class WorldRadioGroup : TextRadioButtonGroup
     {
         public WorldRadioGroup() : base()
         {
@@ -15,9 +15,9 @@ namespace RadioGroups
         {
             ((CustomRadioButton)ElementAt(0)).Select();
         }
-        protected override CustomRadioButton CreateButton(int i)
+        protected override TextRadioButton CreateButton(int i)
         {
-            CustomRadioButton button = new CustomRadioButton(choices[i], "main-button", i, true);
+            TextRadioButton button = new TextRadioButton("main-button", i, true, choices[i]);
             button.style.fontSize = 65;
             button.style.marginTop = 0;
             return button;

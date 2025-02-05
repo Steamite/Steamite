@@ -56,7 +56,7 @@ public class InfoWindow : MonoBehaviour
 {
     #region Variables
     /// <summary>For styling resouces in UI elements.</summary>
-    public ResourceSkins resourceSkins;
+    //public ResourceSkins resourceSkins;
 
     /// <summary>Info window text header.</summary>
     public Label header;
@@ -199,36 +199,36 @@ public class InfoWindow : MonoBehaviour
                 ToggleChildElems(buildingElement, new() { building.constructed ? "Constructed" : "Construction-View" });
                 if (!building.constructed)
                 {
-                    binding = Util.CreateBinding(nameof(building.constructionProgress));
+                    binding = BindingUtil.CreateBinding(nameof(building.constructionProgress));
                     binding.sourceToUiConverters.AddConverter((ref float progress) => $"Construction progress: {(progress/building.maximalProgress)*100:0}%");
                     RegisterTempBinding(new(inConstructionElement.Q<Label>("Progress"), "text"), binding, building);
 
-                    ((IUIElement)buildingElement.Q<VisualElement>("Resources")).Fill(building);
+                    ((IUIElement)buildingElement.Q<VisualElement>("Resources")).Open(building);
                 }
                 break;
 
             case InfoMode.Human:
                 humanElement.dataSource = dataSource;
-                ((IUIElement)humanElement.Q<ListView>("Inventory")).Fill(dataSource);
+                ((IUIElement)humanElement.Q<ListView>("Inventory")).Open(dataSource);
                 humanElement.Q<Label>("Specialization-Value").text = ((Human)dataSource).specialization.ToString();
 
                 // Efficiency Binding
-                binding = Util.CreateBinding(nameof(Human.Efficiency));
+                binding = BindingUtil.CreateBinding(nameof(Human.Efficiency));
                 binding.sourceToUiConverters.AddConverter((ref Efficiency efficiency) => $"{efficiency.efficiency:0.#}");
                 RegisterTempBinding(new(humanElement.Q<Label>("Efficiency-Value"), "text"), binding, dataSource);
 
                 // Job Binding
-                binding = Util.CreateBinding(nameof(Human.Job));
+                binding = BindingUtil.CreateBinding(nameof(Human.Job));
                 binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{jobData.job}");
                 RegisterTempBinding(new(humanElement.Q<Label>("Type-Value"), "text"), binding, dataSource);
 
                 // Pos Binding
-                binding = Util.CreateBinding(nameof(Human.Job));
+                binding = BindingUtil.CreateBinding(nameof(Human.Job));
                 binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{(jobData.interest ? jobData.interest.GetPos() : "None")}");
                 RegisterTempBinding(new(humanElement.Q<Label>("Position-Value"), "text"), binding, dataSource);
 
                 // Object Binding
-                binding = Util.CreateBinding(nameof(Human.Job));
+                binding = BindingUtil.CreateBinding(nameof(Human.Job));
                 binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{(jobData.interest ? jobData.interest.name : "None")}");
                 RegisterTempBinding(new(humanElement.Q<Label>("Interest-Value"), "text"), binding, dataSource);
 
@@ -237,15 +237,15 @@ public class InfoWindow : MonoBehaviour
 
             case InfoMode.Rock:
                 rockChunkElement.dataSource = dataSource;
-                ((IUIElement)rockChunkElement.Q<ListView>("Yield")).Fill(dataSource);
+                ((IUIElement)rockChunkElement.Q<ListView>("Yield")).Open(dataSource);
 
                 // Assigned Binding
-                binding = Util.CreateBinding(nameof(Rock.Assigned));
+                binding = BindingUtil.CreateBinding(nameof(Rock.Assigned));
                 binding.sourceToUiConverters.AddConverter((ref Human human) => $"{(human ? human.name: "None")}");
                 RegisterTempBinding(new(rockChunkElement.Q<Label>("Assigned-Value"), "text"), binding, dataSource);
 
                 // Integrity Binding
-                binding = Util.CreateBinding(nameof(Rock.Integrity));
+                binding = BindingUtil.CreateBinding(nameof(Rock.Integrity));
                 binding.sourceToUiConverters.AddConverter((ref float integrity) => $"{integrity:0.#}");
                 RegisterTempBinding(new(rockChunkElement.Q<Label>("Integrity-Value"), "text"), binding, dataSource);
 
@@ -255,10 +255,10 @@ public class InfoWindow : MonoBehaviour
 
             case InfoMode.Chunk:
                 rockChunkElement.dataSource = dataSource;
-                ((IUIElement)rockChunkElement.Q<ListView>("Yield")).Fill(dataSource);
+                ((IUIElement)rockChunkElement.Q<ListView>("Yield")).Open(dataSource);
 
                 // Assigned Binding
-                binding = Util.CreateBinding(nameof(Chunk.LocalRes));
+                binding = BindingUtil.CreateBinding(nameof(Chunk.LocalRes));
                 binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"{(res.carriers.Count > 0 ? res.carriers.First().name : "None")}");
                 RegisterTempBinding(new(rockChunkElement.Q<Label>("Assigned-Value"), "text"), binding, dataSource);
 
@@ -294,7 +294,7 @@ public class InfoWindow : MonoBehaviour
         {
             VisualElement elem = element.Q<VisualElement>(s);
             if (elem is IUIElement)
-                ((IUIElement)elem).Fill(building);
+                ((IUIElement)elem).Open(building);
         }
     }
 

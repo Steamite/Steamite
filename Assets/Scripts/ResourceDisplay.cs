@@ -33,7 +33,8 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
     public Resource GlobalResources
     {
         get => resources;
-    }/// <inheritdoc cref="resources"/>
+    }
+    /// <inheritdoc cref="money"/>
     [CreateProperty]
     public int Money
     {
@@ -67,14 +68,14 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
         VisualElement root = gameObject.GetComponent<UIDocument>().rootVisualElement;
 
         moneyLabel = root.Q<Label>("Money-Value");
-        DataBinding binding = Util.CreateBinding(nameof(Money));
+        DataBinding binding = BindingUtil.CreateBinding(nameof(Money));
         binding.sourceToUiConverters.AddConverter((ref int _Money) => $"{Money} <color=#FFD700>£</color>");
         moneyLabel.SetBinding("text", binding);
         moneyLabel.dataSource = this;
 
 
         resourceList = root.Q<ListView>("Resources") as IUIElement;
-        resourceList.Fill(this);
+        resourceList.Open(this);
         return resources;
     }
     #endregion

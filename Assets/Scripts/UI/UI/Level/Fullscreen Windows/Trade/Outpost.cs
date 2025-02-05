@@ -86,8 +86,8 @@ public class Outpost
         MyRes.ManageMoney(-upgradeCosts[level].money);
         if (level == 0)
         {
-            Trade trade = UIRefs.trade;
-            Button button = trade.AddOutpostButton(trade.transform.GetChild(0).GetChild(2), trade.outposts.Count+1);
+            /*Trade trade = UIRefs.trade;
+            Button button = trade.AddOutpostButton(trade.transform.GetChild(0).GetChild(2), trade.outposts.Count+1);*/
         }
     }
 
@@ -99,8 +99,8 @@ public class Outpost
         constructed = true;
         if(level == 0)
         {
-            Trade trade = UIRefs.trade;
-            trade.transform.GetChild(0).GetChild(2).GetChild(trade.outposts.Count-1).GetChild(0).GetComponent<Image>().color = trade.availableColor;
+            /*Trade trade = UIRefs.trade;
+            trade.transform.GetChild(0).GetChild(2).GetChild(trade.outposts.Count-1).GetChild(0).GetComponent<Image>().color = trade.availableColor;*/
         }
         level++;
         timeToFinish = SceneRefs.tick.timeController.GetWeekTime(); // marks the finished time
