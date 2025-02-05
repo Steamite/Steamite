@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [Serializable]
 public class TradeConvoy
@@ -26,6 +27,9 @@ public class TradeConvoy
     {
         currentprogress = 2 * maxprogress - currentprogress;
         firstPhase = false;
+        VisualElement slider = ((VisualElement)UIRefs.trading.map).ElementAt(0).ElementAt(0).ElementAt(tradeLocation).ElementAt(0);
+        slider.RemoveFromClassList("trading");
+        slider.AddToClassList("retreat");
     }
 
     void FinishConvoy()
@@ -33,6 +37,10 @@ public class TradeConvoy
         MyRes.DeliverToElevator(buying);
         MyRes.ManageMoney(reward);
         UIRefs.trading.RemoveConvoy(this);
+        Slider slider = (Slider)((VisualElement)UIRefs.trading.map).ElementAt(0).ElementAt(0).ElementAt(tradeLocation).ElementAt(0);
+        slider.RemoveFromClassList("retreat");
+        slider.AddToClassList("free");
+        slider.value = 0;
     }
 
     public void Move(float speed)

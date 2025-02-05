@@ -12,18 +12,13 @@ namespace TradeWindowElements
         Vector2 basePosition;
         Slider slider;
 
-        public TradeLocationButton()
-        {
-
-
-        }
+        public TradeLocationButton() : base(){}
 
         public TradeLocationButton(Vector2 _pos, int i, Slider _slider, Vector2 _basePosition) : base(_pos, i)
         {
             slider = _slider;
             basePosition = _basePosition;
         }
-
 
         public override void RecalculateLayout(float zoom)
         {
@@ -39,6 +34,12 @@ namespace TradeWindowElements
 
             slider.style.width = width;
             slider.style.height = height;
+
+            VisualElement dragger = slider.ElementAt(0).ElementAt(0).ElementAt(2);
+            width = 30 * zoom;
+            dragger.style.width = width;
+            dragger.style.height = width;
+            dragger.style.top = (height - width) / 2;
         }
     }
 }

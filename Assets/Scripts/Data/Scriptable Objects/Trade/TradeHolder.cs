@@ -7,7 +7,7 @@ using UnityEngine;
 public class TradeHolder : ScriptableObject
 {
     /// <summary>All posible starting locations(WIP).</summary>
-    public List<ColonyLocation> startingLocations = new();
+    public List<ColonyLocation> startingLocations;
     /// <summary>All posible trade locations(WIP).</summary>
     public List<TradeLocation> tradeLocations = new();
 }

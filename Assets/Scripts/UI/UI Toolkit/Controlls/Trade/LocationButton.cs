@@ -11,6 +11,7 @@ namespace TradeWindowElements
     {
         public const int elementSize = 150;
         protected Vector2 pos;
+        VisualElement backgroundElem;
 
         #region Constructors
         public LocationButton()
@@ -18,10 +19,12 @@ namespace TradeWindowElements
 
         }
 
-        public LocationButton(Vector2 _pos, int i) : base("trade-button", i, true)
+        public LocationButton(Vector2 _pos, int i) : base("location-button", i, true)
         {
             pos = _pos;
-            style.position = Position.Absolute;
+
+            backgroundElem = new();
+            Add(backgroundElem);
         }
         #endregion
 
@@ -37,6 +40,15 @@ namespace TradeWindowElements
         protected override void SelectChange(bool UpdateGroup)
         {
             base.SelectChange(UpdateGroup);
+            backgroundElem.RegisterCallback<TransitionEndEvent>((_) => ToggleInClassList("rotate"));
+            AddToClassList("rotate");
+        }
+
+        public override void Deselect(bool triggerTransition = true)
+        {
+            base.Deselect(triggerTransition);
+            backgroundElem.UnregisterCallback<TransitionEndEvent>((_) => ToggleInClassList("rotate"));
+            RemoveFromClassList("rotate");
         }
     }
 }

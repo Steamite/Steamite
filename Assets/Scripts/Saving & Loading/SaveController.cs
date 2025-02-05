@@ -102,7 +102,7 @@ public class SaveController : MonoBehaviour
             SaveHumans(tmpPath, jsonSerializer);
             SaveGameState(tmpPath, autoSave, jsonSerializer);
             SaveResearch(tmpPath, jsonSerializer);
-            //SaveTrade(tmpPath, jsonSerializer);
+            SaveTrade(tmpPath, jsonSerializer);
 
             if (autoSave)
                 saveName = "autosave";
@@ -254,10 +254,9 @@ public class SaveController : MonoBehaviour
     //------Trade------\\
     void SaveTrade(string path, JsonSerializer jsonSerializer)
     {
-        /*Trade trade = UIRefs.trade;
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Trade.json"));
-        jsonSerializer.Serialize(jsonTextWriter, new TradeSave(trade));
-        jsonTextWriter.Close();*/
+        jsonSerializer.Serialize(jsonTextWriter, new TradeSave(UIRefs.trading));
+        jsonTextWriter.Close();
     }
     #endregion
 }

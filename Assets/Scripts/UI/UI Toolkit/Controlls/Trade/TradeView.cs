@@ -288,16 +288,20 @@ namespace TradeWindowElements
         {
             if (confirmButton.ClassListContains("main-button"))
             {
+                Slider slider = (Slider)ToolkitUtils.GetRoot(this).Q<TradeMap>("Map").ElementAt(0).ElementAt(0).ElementAt(selectedLocationIndex).ElementAt(0);
                 UIRefs.trading.Trade(
                     new TradeConvoy(
                         GetTradeResources(selectedLocation.Buy, 0),
                         SellMoney,
                         selectedLocationIndex,
-                        ((Slider)ToolkitUtils.GetRoot(this).Q<TradeMap>("Map").ElementAt(0).ElementAt(0).ElementAt(selectedLocationIndex).ElementAt(0)).highValue),
+                        slider.highValue),
                     GetTradeResources(selectedLocation.Sell, 1), 
                     BuyMoney);
                 Open(selectedLocationIndex);
+
                 ((Label)parent.parent.ElementAt(1).ElementAt(1).ElementAt(0)).text = $"{UIRefs.trading.AvailableConvoy}/{UIRefs.trading.maxConvoy} Convoyes";
+                slider.RemoveFromClassList("free");
+                slider.AddToClassList("trading");
             }
         }
 
