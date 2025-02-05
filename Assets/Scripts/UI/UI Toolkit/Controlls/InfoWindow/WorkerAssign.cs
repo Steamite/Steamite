@@ -81,7 +81,7 @@ namespace InfoWindowViews
                 el.Q<Label>("Name").text = human.name;
                 el.Q<Label>("Spec").text = human.specialization.ToString();
 
-                DataBinding binding = Util.CreateBinding(nameof(Human.Job));
+                DataBinding binding = BindingUtil.CreateBinding(nameof(Human.Job));
                 binding.sourceToUiConverters.AddConverter((ref JobData data) => data.job.ToString());
                 SceneRefs.infoWindow.RegisterTempBinding(new(el.Q<Label>("Job"), "text"), binding, human);
             };
@@ -102,7 +102,7 @@ namespace InfoWindowViews
 
         #region Logic
         /// <inheritdoc/>
-        public void Fill(object obj)
+        public void Open(object obj)
         {
             building = (IAssign)obj;
             if (!humans)
@@ -111,7 +111,7 @@ namespace InfoWindowViews
             }
 
             label.text = $"Assigned {building.Assigned.Count}/{building.assignLimit}";
-            DataBinding binding = Util.CreateBinding(nameof(IAssign.Assigned));
+            DataBinding binding = BindingUtil.CreateBinding(nameof(IAssign.Assigned));
             binding.sourceToUiConverters.AddConverter((ref List<Human> assig) => $"Assigned {assig.Count}/{building?.assignLimit}");
             SceneRefs.infoWindow.RegisterTempBinding(new(label, "text"), binding, building);
 

@@ -331,7 +331,7 @@ public class Building : StorageObject
     /// <summary>Short info for building buttons.</summary>
     public virtual List<string> GetInfoText()
     {
-        return new() { $"<u>Costs</u>:\n{MyRes.GetDisplayText(cost)}" };
+        return new() { $"<u>Costs</u>:\n{cost.GetDisplayText()}" };
     }
 
     /// <summary>Checks if you can afford the building.</summary>

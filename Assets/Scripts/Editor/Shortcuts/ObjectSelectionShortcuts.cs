@@ -20,8 +20,8 @@ public class ObjectSelectionShortcuts
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = UIRefs.trade.window.transform.GetChild(3).GetChild(1).GetChild(1).gameObject;
-        Selection.activeGameObject = gameObject;
+        //GameObject gameObject = UIRefs.trade.window.transform.GetChild(3).GetChild(1).GetChild(1).gameObject;
+        //Selection.activeGameObject = gameObject;
     }
 
     [MenuItem("Custom Editors/Selection/pause menu ", priority = -1)]

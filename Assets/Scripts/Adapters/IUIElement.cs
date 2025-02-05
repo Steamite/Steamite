@@ -7,5 +7,5 @@ public interface IUIElement
     /// Adds data binding based on the type of <see cref="data"/>.
     /// </summary>
     /// <param name="data"> Object containing data to render.</param>
-    public void Fill(object data);
+    public void Open(object data);
 }

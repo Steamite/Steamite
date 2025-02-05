@@ -50,7 +50,7 @@ namespace InfoWindowViews
         }
 
         /// <inheritdoc/>
-        public void Fill(object data)
+        public void Open(object data)
         {
             storage = (IStorage)data;
             switch (data)

@@ -86,15 +86,15 @@ namespace InfoWindowViews
         #endregion
 
         /// <inheritdoc/>
-        public void Fill(object data)
+        public void Open(object data)
         {
             building = (IResourceProduction)data;
             enable = building.Stoped;
-            inputResource.Fill(data);
-            outputResource.Fill(data);
-            radialElement.Fill(data);
+            inputResource.Open(data);
+            outputResource.Open(data);
+            radialElement.Open(data);
 
-            DataBinding binding = Util.CreateBinding(nameof(Building.LocalRes));
+            DataBinding binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"Space\n{res.stored.ammount.Sum()}/{res.stored.capacity}");
             SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
             UpdateButton();

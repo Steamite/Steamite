@@ -82,11 +82,11 @@ namespace InfoWindowElements
         public void Open(IStorage _storage)
         {
             storage = _storage;
-            DataBinding binding = Util.CreateBinding(nameof(Building.LocalRes));
+            DataBinding binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource store) => ToUIRes(store));
             SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, storage);
 
-            binding = Util.CreateBinding(nameof(Building.LocalRes));
+            binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource store) => $"Capacity: {store.stored.ammount.Sum()}/{store.stored.capacity}");
             SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, storage);
 
@@ -168,7 +168,7 @@ namespace InfoWindowElements
             storageElem.canStore.Q<Button>("Not-Store").RegisterCallback<ClickEvent>((_) => ToggleCanStore(false, x));
             try
             {
-                storageElem.icon.style.unityBackgroundImageTintColor = SceneRefs.infoWindow.resourceSkins.GetResourceColor(uiResource.type);
+                storageElem.icon.style.unityBackgroundImageTintColor = ToolkitUtils.resSkins.GetResourceColor(uiResource.type);
             }
             catch
             {

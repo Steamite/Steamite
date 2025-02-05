@@ -60,7 +60,7 @@ public class LoadingScreen : MonoBehaviour
             else
                 MyGrid.CreateGrid(startLevel, mainLevel);
             UIRefs.research.NewGame();
-            //UIRefs.trade.NewGame();
+            UIRefs.trading.NewGame();
             SceneRefs.humans.NewGameInit(ref humanActivation);
             AfterLevelLoad(true);
         }
@@ -213,7 +213,7 @@ public class LoadingScreen : MonoBehaviour
     void FillTrade(IProgress<int> progress, TradeSave tradeSave)
     {
         actionText.text = "Making Deals";
-        UIRefs.trade.LoadGame(tradeSave);
+        UIRefs.trading.LoadGame(tradeSave);
     }
     #endregion UI loading
     #endregion Loading Game State
@@ -240,5 +240,11 @@ public class LoadingScreen : MonoBehaviour
         humanActivation?.Invoke();
         humanActivation = null;
         SceneRefs.tick.timeController.Init(SceneRefs.tick, newGame);
+
+#if UNITY_EDITOR_WIN
+        UIRefs.trading.OpenWindow();
+#endif
     }
+
+
 }

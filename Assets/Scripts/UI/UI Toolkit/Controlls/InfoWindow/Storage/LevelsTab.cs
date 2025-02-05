@@ -117,14 +117,14 @@ namespace InfoWindowElements
                 case LevelState.Available:
                     moveButton.text = "Unlock";
                     costList.style.display = DisplayStyle.Flex;
-                    costList.Fill(this);
+                    costList.Open(this);
                     stateLabel.text = "Not enough resources";
                     MoveButtonUpdate(true, "Unlock");
                     break;
                 case LevelState.CanUnlock:
                     moveButton.text = "Unlock";
                     costList.style.display = DisplayStyle.Flex;
-                    costList.Fill(this);
+                    costList.Open(this);
                     stateLabel.text = "Can unlock";
                     MoveButtonUpdate(true, "Unlock");
                     break;

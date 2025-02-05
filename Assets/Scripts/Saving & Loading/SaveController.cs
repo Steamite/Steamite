@@ -254,10 +254,10 @@ public class SaveController : MonoBehaviour
     //------Trade------\\
     void SaveTrade(string path, JsonSerializer jsonSerializer)
     {
-        Trade trade = UIRefs.trade;
+        /*Trade trade = UIRefs.trade;
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Trade.json"));
         jsonSerializer.Serialize(jsonTextWriter, new TradeSave(trade));
-        jsonTextWriter.Close();
+        jsonTextWriter.Close();*/
     }
     #endregion
 }

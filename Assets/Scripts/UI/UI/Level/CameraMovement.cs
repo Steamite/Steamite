@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 public class CameraMovement : MonoBehaviour
 {
-    InputActionMap cameraMap => asset?.inputAsset.actionMaps[0];
+    InputActionMap cameraMap => mainShortcuts?.inputAsset.actionMaps[0];
     InputAction move => cameraMap.FindAction("Move");
     InputAction rotate => cameraMap.FindAction("Rotate");
     InputAction zoom => cameraMap.FindAction("Zoom");
@@ -13,7 +13,7 @@ public class CameraMovement : MonoBehaviour
     InputAction panButton => cameraMap.FindAction("Drag - Down");
     InputAction panMove => cameraMap.FindAction("Drag - Move");
 
-    [SerializeField] MainShortcuts asset;
+    [SerializeField] MainShortcuts mainShortcuts;
     [SerializeField] public GameObject mainCamera;
 
 

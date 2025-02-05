@@ -11,7 +11,7 @@ namespace RadioGroups
     }
 */
     [UxmlElement]
-    public partial class SaveRadioButton : CustomRadioButton
+    public partial class SaveRadioButton : TextRadioButton
     {
         public TextElement saveDate;
         public Button deleteButton;
@@ -20,7 +20,7 @@ namespace RadioGroups
         {
         }
 
-        public SaveRadioButton(string labelText, string _styleClass, int i, DateTime date) : base(labelText, _styleClass, i, false)
+        public SaveRadioButton(string labelText, string _styleClass, int i, DateTime date) : base(_styleClass, i, false, labelText)
         {
             saveDate = new TextElement();
             saveDate.text = date.ToString();
@@ -36,9 +36,9 @@ namespace RadioGroups
             this.Add(deleteButton);
         }
 
-        public override void Select(bool triggerTransition = true)
+        protected override void SelectChange(bool UpdateGroup)
         {
-            base.Select(triggerTransition);
+            base.SelectChange(UpdateGroup);
             deleteButton.style.display = DisplayStyle.Flex;
         }
         public override void Deselect(bool triggerTransition = true)

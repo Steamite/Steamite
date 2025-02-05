@@ -62,7 +62,7 @@ namespace InfoWindowElements
 
             bindItem = (el, i) =>
             {
-                Color c = SceneRefs.infoWindow.resourceSkins.GetResourceColor(((UIResource)itemsSource[i]).type);
+                Color c = ToolkitUtils.resSkins.GetResourceColor(((UIResource)itemsSource[i]).type);
                 if (!showEmpty)
                     el.Q<Label>("Value").style.color = c;
 
@@ -86,28 +86,30 @@ namespace InfoWindowElements
         #endregion
 
         /// <inheritdoc/>
-        public virtual void Fill(object data)
+        public virtual void Open(object data)
         {
             DataBinding binding;
             switch (data)
             {
                 case StorageObject:
-                    binding = Util.CreateBinding(nameof(StorageObject.LocalRes));
+                    binding = BindingUtil.CreateBinding(nameof(StorageObject.LocalRes));
                     binding.sourceToUiConverters.AddConverter((ref StorageResource stored) => ToUIRes(stored.stored));
                     SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Rock:
-                    binding = Util.CreateBinding(nameof(Rock.rockYield));
+                    binding = BindingUtil.CreateBinding(nameof(Rock.rockYield));
                     binding.sourceToUiConverters.AddConverter((ref Resource yeild) => ToUIRes(yeild));
                     SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Human:
-                    binding = Util.CreateBinding(nameof(Human.Inventory));
+                    binding = BindingUtil.CreateBinding(nameof(Human.Inventory));
                     binding.sourceToUiConverters.AddConverter((ref Resource inventory) => ToUIRes(inventory));
                     SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case ResourceDisplay:
-                    binding = Util.CreateBinding(nameof(ResourceDisplay.GlobalResources));
+                    ToolkitUtils.InitSkins();
+
+                    binding = BindingUtil.CreateBinding(nameof(ResourceDisplay.GlobalResources));
                     binding.sourceToUiConverters.AddConverter((ref Resource globalRes) => ToUIRes(globalRes));
                     SetBinding("resources", binding);
                     dataSource = data;
