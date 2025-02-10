@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TradeData.Locations;
 using UnityEngine;
 
 /// <summary>Holds data to modify about trading.</summary>

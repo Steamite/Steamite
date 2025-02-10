@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 
 namespace StartMenu
 {
+
     /// <summary>Gathers data from all parameters and merges them into the seed.</summary>
     public class MapGeneration : MonoBehaviour, IToolkitController
     {

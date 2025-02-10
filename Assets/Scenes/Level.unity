@@ -2420,9 +2420,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c6b6f1f558a7443b6959ecea9214ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  convoys: []
-  tradeHolder: {fileID: 11400000, guid: 6b646499a1cd52b498b719bab9f98e8c, type: 2}
   maxConvoy: 3
+  convoys: []
+  colonyLocation:
+    name: 
+    pos:
+      x: 0
+      z: 0
+      y: 0
+    passiveProductions: []
+    stats:
+    - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
+  tradeLocations: []
 --- !u!1 &891795801
 GameObject:
   m_ObjectHideFlags: 0

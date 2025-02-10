@@ -27,7 +27,7 @@ MonoBehaviour:
   m_DefaultSpriteAssetPath: Sprite Assets/
   m_FallbackSpriteAssets: []
   m_MissingSpriteCharacterUnicode: 0
-  m_DefaultStyleSheet: {fileID: 0}
+  m_DefaultStyleSheet: {fileID: 11400000, guid: 62ee7b0da76bce8499d9b3dc0d9c3593, type: 2}
   m_StyleSheetsResourcePath: Text Style Sheets/
   m_DefaultColorGradientPresetsPath: Text Color Gradients/
   m_UnicodeLineBreakingRules:

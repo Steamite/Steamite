@@ -90,7 +90,7 @@ public static class MyRes
     /// Changes the ammount of money.
     /// </summary>
     /// <param name="change">Ammount to add(if negative subtracts).</param>
-    public static void ManageMoney(int change)
+    public static void UpdateMoney(int change)
     {
         resDisplay.Money += change;
     }
@@ -503,7 +503,7 @@ public static class MyRes
     /// <param name="resource">Resources to add.</param>
     public static void DeliverToElevator(Resource resource)
     {
-        IStorage store = storage.FirstOrDefault(q => ((Elevator)q).main);
+        IStorage store = Elevator.main;
         if (store != null)
         {
             MoveRes(store.LocalResources.stored, resource, resource, resource.ammount.Sum());

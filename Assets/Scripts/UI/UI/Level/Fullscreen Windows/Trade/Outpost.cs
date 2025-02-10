@@ -83,7 +83,7 @@ public class Outpost
         constructed = false;
         timeToFinish = upgradeCosts[level].timeInTicks;
         MyRes.TakeFromGlobalStorage(upgradeCosts[level].resource);
-        MyRes.ManageMoney(-upgradeCosts[level].money);
+        MyRes.UpdateMoney(-upgradeCosts[level].money);
         if (level == 0)
         {
             /*Trade trade = UIRefs.trade;

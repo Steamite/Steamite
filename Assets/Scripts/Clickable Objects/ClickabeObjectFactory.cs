@@ -82,7 +82,9 @@ public class ClickabeObjectFactory : MonoBehaviour
             Quaternion.identity, 
             MyGrid.FindLevelBuildings(gp.y)).GetComponent<Elevator>();
         el.constructed = true;
-        el.main = isMain;
+        if (isMain)
+            Elevator.main = el;
+        el.isMain = isMain;
         el.name = el.name.Replace("(Clone)", "");
         MyGrid.SetBuilding(el, true);
 

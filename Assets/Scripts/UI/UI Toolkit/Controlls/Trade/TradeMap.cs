@@ -1,25 +1,19 @@
 using AbstractControls;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace TradeWindowElements
 {
     [UxmlElement]
-    public partial class TradeMap : Map, IToolkitController, IUIElement
+    public partial class TradeMap : Map, IInitiableUI, IUIElement
     {
-#if UNITY_EDITOR_WIN
         /*public TradeMap() : base()
         {
             UIRefs.SetTrade();
             Init(null);
             ((Slider)ElementAt(0).ElementAt(0).ElementAt(2).ElementAt(0)).value = 300;
         }*/
-#endif
         List<LocationButton> locationButtons = new();
         VisualElement sliderGroup;
 
@@ -27,7 +21,7 @@ namespace TradeWindowElements
         /// <summary>
         /// Initialization for the map, creates needed elements on the map.
         /// </summary>
-        public void Init(VisualElement root)
+        public void Init()
         {
             CreateSliders();
             CreateLocations();
@@ -85,7 +79,7 @@ namespace TradeWindowElements
             {
                 if (i == -1)
                 {
-                    locationButton = new(UIRefs.trading.colonyLocation.pos.ToVecUI(), i);
+                    locationButton = new(UIRefs.trading.colonyLocation.pos.ToVecUI(), 0);
                     locationButton.style.unityBackgroundImageTintColor = Color.blue;
                 }
                 else
@@ -108,7 +102,7 @@ namespace TradeWindowElements
         public void Open(object data)
         {
             //TODO: NEED TO MOVE TRADE SLIDERS
-            ((TradeLocationButton)ElementAt(0).ElementAt(1).ElementAt(1)).SelectWithoutTransition(true);
+            ((TradeLocationButton)ElementAt(0).ElementAt(1).ElementAt(1)).Select();
             ((Label)parent.ElementAt(1).ElementAt(0)).text = $"{UIRefs.trading.AvailableConvoy}/{UIRefs.trading.maxConvoy} Convoyes";
 
             Slider slider;
@@ -134,6 +128,5 @@ namespace TradeWindowElements
         }
 
         #endregion
-
     }
 }

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using TradeData.Locations;
+
 public struct Save
 {
     public WorldSave world;

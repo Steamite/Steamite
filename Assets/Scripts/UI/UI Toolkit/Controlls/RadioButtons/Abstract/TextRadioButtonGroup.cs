@@ -7,7 +7,8 @@ using UnityEngine.UIElements;
 
 namespace AbstractControls
 {
-    public class TextRadioButtonGroup : CustomRadioButtonGroup
+    [UxmlElement]
+    public partial class TextRadioButtonGroup : CustomRadioButtonGroup
     {
         string[] _choices = { };
         [UxmlAttribute]
