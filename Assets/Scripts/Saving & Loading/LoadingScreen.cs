@@ -1,4 +1,6 @@
+using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
@@ -90,8 +92,9 @@ public class LoadingScreen : MonoBehaviour
     /// After that loads "Level" scene.
     /// </summary>
     /// <param name="_folderName">Current folder name.</param>
-    public async void StartLoading(Save save)
+    public async void StartLoading(string folderName, string worldName)
     {
+        Save save = LoadSavedData(folderName, worldName);
         folderName = save.worldName;
 
         transform.GetChild(0).gameObject.SetActive(true);
@@ -106,6 +109,47 @@ public class LoadingScreen : MonoBehaviour
         await LoadWorldData(save);
         AfterLevelLoad(false);
     }
+
+
+    Save LoadSavedData(string folderName, string worldName)
+    {
+        Save save = new();
+        save.worldName = worldName;
+
+        JsonSerializer jsonSerializer = SaveController.PrepSerializer();
+        // for gridSave
+        save.world = new();
+        JsonTextReader jsonReader = new(new StreamReader($"{folderName}/Grid.json"));
+        save.world.objectsSave = jsonSerializer.Deserialize<BuildsAndChunksSave>(jsonReader);
+        jsonReader.Close();
+        // for all levels
+        save.world.gridSave = new GridSave[MyGrid.NUMBER_OF_LEVELS];
+        for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
+        {
+            jsonReader = new(new StreamReader($"{folderName}/Level{i}.json"));
+            save.world.gridSave[i] = jsonSerializer.Deserialize<GridSave>(jsonReader);
+            jsonReader.Close();
+        }
+        // for playerSettings
+        jsonReader = new(new StreamReader($"{folderName}/PlayerSettings.json"));
+        save.gameState = jsonSerializer.Deserialize<GameStateSave>(jsonReader);
+        jsonReader.Close();
+        // for humanSaves
+        jsonReader = new(new StreamReader($"{folderName}/Humans.json"));
+        save.humans = jsonSerializer.Deserialize<HumanSave[]>(jsonReader);
+        jsonReader.Close();
+        // for researchCategories
+        jsonReader = new(new StreamReader($"{folderName}/Research.json"));
+        save.research = jsonSerializer.Deserialize<ResearchSave>(jsonReader);
+        jsonReader.Close();
+        // for trading
+        jsonReader = new(new StreamReader($"{folderName}/Trade.json"));
+        save.trade = jsonSerializer.Deserialize<TradeSave>(jsonReader);
+        jsonReader.Close();
+        return save;
+    }
+
+
 
     /// <summary>
     /// Preps <see cref="SceneRefs"/>, <see cref="SceneRefs"/> and loads saved data.
@@ -240,10 +284,6 @@ public class LoadingScreen : MonoBehaviour
         humanActivation?.Invoke();
         humanActivation = null;
         SceneRefs.tick.timeController.Init(SceneRefs.tick, newGame);
-
-#if UNITY_EDITOR_WIN
-        UIRefs.trading.OpenWindow();
-#endif
     }
 
 

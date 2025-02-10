@@ -229,56 +229,17 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
     {
         if (selectedSave == -1 || selectedSave > saves.Length)
             return;
-        Save save = LoadSavedData();
         if (GameObject.Find("Main Menu") == null)
         {
-            await SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
             Scene scene = SceneManager.GetActiveScene();
+            await SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive); // scene 1 is loading screen
             await SceneManager.UnloadSceneAsync(scene);
         }
         else
         {
         }
-        GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>().
-            StartLoading(save);
-    }
-    Save LoadSavedData()
-    {
-        string saveFolder = saves[selectedSave].path;
-        Save save = new();
-        save.worldName = worlds[selectedWorld].ToString();
-
-        JsonSerializer jsonSerializer = SaveController.PrepSerializer();
-        // for gridSave
-        save.world = new();
-        JsonTextReader jsonReader = new(new StreamReader($"{saveFolder}/Grid.json"));
-        save.world.objectsSave = jsonSerializer.Deserialize<BuildsAndChunksSave>(jsonReader);
-        jsonReader.Close();
-
-        save.world.gridSave = new GridSave[MyGrid.NUMBER_OF_LEVELS];
-        for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
-        {
-            jsonReader = new(new StreamReader($"{saveFolder}/Level{i}.json"));
-            save.world.gridSave[i] = jsonSerializer.Deserialize<GridSave>(jsonReader);
-            jsonReader.Close();
-        }
-
-        // for playerSettings
-        jsonReader = new(new StreamReader($"{saveFolder}/PlayerSettings.json"));
-        save.gameState = jsonSerializer.Deserialize<GameStateSave>(jsonReader);
-        jsonReader.Close();
-        // for humanSaves
-        jsonReader = new(new StreamReader($"{saveFolder}/Humans.json"));
-        save.humans = jsonSerializer.Deserialize<HumanSave[]>(jsonReader);
-        jsonReader.Close();
-        // for researchCategories
-        jsonReader = new(new StreamReader($"{saveFolder}/Research.json"));
-        save.research = jsonSerializer.Deserialize<ResearchSave>(jsonReader);
-        jsonReader.Close();
-        jsonReader = new(new StreamReader($"{saveFolder}/Trade.json"));
-        save.trade = jsonSerializer.Deserialize<TradeSave>(jsonReader);
-        jsonReader.Close();
-        return save;
+        GameObject.Find("Loading Screen").transform.GetChild(0)
+            .GetComponent<LoadingScreen>().StartLoading(saves[selectedSave].path, worlds[selectedWorld].ToString());
     }
     #endregion
 

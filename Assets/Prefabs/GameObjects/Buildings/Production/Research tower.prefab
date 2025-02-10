@@ -1188,24 +1188,6 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 20
-  limit: 5
-  productionCost:
-    capacity: -1
-    type: 
-    ammount: 
-  production:
-    capacity: -1
-    type: 
-    ammount: 
-  prodTime: 20
-  modifier: 1
-  working: []
-  pStates:
-    supplied: 0
-    supply: 1
-    space: 1
-    stoped: 0
-    running: 0
 --- !u!210 &9080560569971430985
 SortingGroup:
   m_ObjectHideFlags: 0

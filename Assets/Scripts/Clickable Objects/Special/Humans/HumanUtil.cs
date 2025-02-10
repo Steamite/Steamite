@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using static UnityEditor.PlayerSettings;
 
 /// <summary>"Util" class for managing humans.</summary>
 public class HumanUtil : MonoBehaviour
@@ -42,6 +43,7 @@ public class HumanUtil : MonoBehaviour
             AddHuman(SceneRefs.objectFactory.CreateAHuman(pos, hatMaterial[i], i), ref humanActivation);
         }
     }
+
     /// <summary>
     /// Loads all Humans.
     /// </summary>
@@ -57,6 +59,7 @@ public class HumanUtil : MonoBehaviour
             progress.Report(currentProg += HumanWeight);
         }
     }
+
     /// <summary>
     /// Adds human to list and links activate action. Used when loading or starting a new.
     /// </summary>
@@ -68,6 +71,14 @@ public class HumanUtil : MonoBehaviour
         humans.Add(h);
     }
     #endregion
+
+    public void AddHuman()
+    {
+        int i = UnityEngine.Random.Range(0, 2);
+        Human human = SceneRefs.objectFactory.CreateAHuman(Elevator.main.GetPos(), hatMaterial[i], i);
+        humans.Add(human);
+        human.ActivateHuman();
+    }
 
     /// <summary>
     /// Triggered by <see cref="MyGrid.GridChange"/> toggles Human visibility.

@@ -264,7 +264,7 @@ public class Human : ClickableObject
     /// <summary>Gets the Main <see cref="Elevator"/> and if the Human isn't there move to it, else set free state.</summary>
     public void Idle()
     {
-        ClickableObject el = MyGrid.buildings.First(q => q.tag == "Elevator" && q.GetComponent<Elevator>().main);
+        ClickableObject el = Elevator.main;
         if (!el.GetPos().Equals(GetPos())) // if not standing on the elevator
         {
             JobData data = PathFinder.FindPath(new() { el }, this);
@@ -323,8 +323,7 @@ public class Human : ClickableObject
                 return _jData.path;
             }
         }
-        Building elevator = MyGrid.buildings.First(q => q is Elevator el && el.main);
-        _jData = PathFinder.FindPath(new() { elevator }, this);
+        _jData = PathFinder.FindPath(new() { Elevator.main }, this);
         ModifyEfficiency(ModType.House, false);
         if (_jData.interest)
         {

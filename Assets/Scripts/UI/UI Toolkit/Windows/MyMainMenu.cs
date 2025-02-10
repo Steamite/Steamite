@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace StartMenu
 {
-    public class MyMainMenu : MonoBehaviour, IToolkitController
+    public class MyMainMenu : MonoBehaviour
     {
         public VisualElement root;
         VisualElement elements;
@@ -15,20 +15,16 @@ namespace StartMenu
         [SerializeReference] public List<MonoBehaviour> toolkitControllers;
         string lastStyle;
 
-        public void Init(VisualElement root)
-        {
-            foreach (IToolkitController controller in toolkitControllers)
-            {
-                controller.Init(root);
-            }
-        }
-
         void Start()
         {
             root = gameObject.GetComponent<UIDocument>().rootVisualElement;
             elements = root.Q<VisualElement>("Elements");
             blocker = root.Q<VisualElement>("Main-Blocker");
-            Init(root);
+
+            foreach (IToolkitController controller in toolkitControllers)
+            {
+                controller.Init(root);
+            }
 
             // opening load menu
             Button button = root.Q<Button>("Exit-Button");

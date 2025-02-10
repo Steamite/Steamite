@@ -10,7 +10,8 @@ using UnityEngine;
 public class Elevator : Building, IStorage
 {
     #region Variables
-    public bool main = false;
+    public static Elevator main;
+    public bool isMain = false;
     /// <inheritdoc/>
     [CreateProperty] public List<bool> CanStore { get; set; } = new();
     public StorageResource LocalResources => localRes;
@@ -45,7 +46,9 @@ public class Elevator : Building, IStorage
     public override void Load(ClickableObjectSave save)
     {
         CanStore = (save as StorageBSave).canStore;
-        main = (save as StorageBSave).main;
+        isMain = (save as StorageBSave).main;
+        if (isMain)
+            main = this;
         base.Load(save);
     }
     #endregion

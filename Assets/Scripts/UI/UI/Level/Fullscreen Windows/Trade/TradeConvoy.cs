@@ -35,7 +35,7 @@ public class TradeConvoy
     void FinishConvoy()
     {
         MyRes.DeliverToElevator(buying);
-        MyRes.ManageMoney(reward);
+        MyRes.UpdateMoney(reward);
         UIRefs.trading.RemoveConvoy(this);
         Slider slider = (Slider)((VisualElement)UIRefs.trading.map).ElementAt(0).ElementAt(0).ElementAt(tradeLocation).ElementAt(0);
         slider.RemoveFromClassList("retreat");

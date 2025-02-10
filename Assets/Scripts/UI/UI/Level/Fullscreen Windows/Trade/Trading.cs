@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TradeData.Locations;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -49,8 +50,11 @@ public class Trading : FullscreenWindow
     public void Init()
     {
         GetWindow();
-        map = (IUIElement)GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Map");
-        ((IToolkitController)map).Init(GetComponent<UIDocument>().rootVisualElement);
+        VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+        map = (IUIElement)root.Q<VisualElement>("Map");
+        ((IInitiableUI)map).Init();
+        ((IInitiableUI)root.Q<VisualElement>("ColonyView")).Init();
+
 
         //Moves all convoys each tick.
         SceneRefs.tick.tickAction += 
@@ -76,7 +80,7 @@ public class Trading : FullscreenWindow
     {
         convoys.Add(convoy);
         MyRes.TakeFromGlobalStorage(sellResource);
-        MyRes.ManageMoney(buyMoney);
+        MyRes.UpdateMoney(buyMoney);
     }
 
 }
