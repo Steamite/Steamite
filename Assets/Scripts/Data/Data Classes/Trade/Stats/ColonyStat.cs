@@ -15,11 +15,14 @@ namespace TradeData.Stats
         /// <summary>Current state, starting value set whe initializing a new game.</summary>
         [HideInInspector] public int currentState;
         /// <summary>Max possible state, set when initialining a new game.</summary>
-        [HideInInspector] public int maxState;
+        public int maxState;
 
         /// <summary>Resources needed for upgrading to that level.</summary>
-        [SerializeField][Tooltip("Capacity is used as money cost.")]List<Resource> resourceUpgradeCost;
+        [SerializeField]public List<Resource> resourceUpgradeCost;
 
+        /// <summary>
+        /// Inits empty upgradeCosts.
+        /// </summary>
         public ColonyStat()
         {
             resourceUpgradeCost = new();

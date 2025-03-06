@@ -16,6 +16,7 @@ public class ResourceSkin
 [CreateAssetMenu(fileName = "Resource Skin", menuName = "Scriptable Objects/Resource Skin")]
 public class ResourceSkins : ScriptableObject
 {
+    [SerializeField] public ResourceSkin moneySkin;
     /// <summary>List of all skins.</summary>
     [SerializeField] public List<ResourceSkin> skins = new();
     
@@ -47,8 +48,10 @@ public class ResourceSkins : ScriptableObject
     /// </summary>
     /// <param name="resourceType">Type of resource.</param>
     /// <returns>The skin for this resource.</returns>
-    public Color GetResourceColor(ResourceType resourceType)
+    public Color GetResourceColor(Enum resourceType)
     {
-        return skins.FirstOrDefault(q => q.name == resourceType.ToString()).color;
+        if (resourceType == null)
+            return moneySkin.color;
+        return skins[(int)(ResourceType)resourceType].color;
     }
 }

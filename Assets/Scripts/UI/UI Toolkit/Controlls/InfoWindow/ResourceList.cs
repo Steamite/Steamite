@@ -14,12 +14,27 @@ namespace InfoWindowElements
         /// <summary>Resource ammount.</summary>
         public int ammount;
         /// <summary>Resource type.</summary>
-        public ResourceType type;
+        public Enum type;
 
+        /// <summary>
+        /// For resources.
+        /// </summary>
+        /// <param name="_ammount"></param>
+        /// <param name="_type"></param>
         public UIResource(int _ammount, ResourceType _type)
         {
             ammount = _ammount;
             type = _type;
+        }
+
+        /// <summary>
+        /// For money.
+        /// </summary>
+        /// <param name="_ammount"></param>
+        public UIResource(int _ammount)
+        {
+            ammount = _ammount;
+            type = null;
         }
     }
 
@@ -41,41 +56,27 @@ namespace InfoWindowElements
                 RefreshItems();
             }
         }
+
         #endregion
 
         #region Variables
         /// <summary>If disabled hides resources with 0.</summary>
         bool showEmpty = false;
+
+        public const int ICON_SIZE = 60;
+        [UxmlAttribute] public int iconSize = 60;
         #endregion
 
         #region Constructors
         public ResourceList()
         {
-            itemTemplate = Resources.Load<VisualTreeAsset>("UI Toolkit/Resource-Text-Icon");
+            itemTemplate = Resources.Load<VisualTreeAsset>("UI Toolkit/Resource Text Icon");
             itemsSource = new List<UIResource>();
+            focusable = false;
 
-            makeItem = () =>
-            {
-                Debug.Log($"Making item{name}, {itemsSource.Count}");
-                return itemTemplate.CloneTree();
-            };
-
-            bindItem = (el, i) =>
-            {
-                Color c = ToolkitUtils.resSkins.GetResourceColor(((UIResource)itemsSource[i]).type);
-                if (!showEmpty)
-                    el.Q<Label>("Value").style.color = c;
-
-                el.Q<Label>("Value").text = ConvertString((UIResource)itemsSource[i]);
-                el.Q<VisualElement>("Icon").style.unityBackgroundImageTintColor = c;
-            };
-
-            makeNoneElement = () =>
-            {
-                Label l = new Label("Nothing");
-                l.AddToClassList("unity-list-view__empty-label");
-                return l;
-            };
+            makeItem = MakeItem;
+            bindItem = BindItem;
+            makeNoneElement = MakeNoneElement;
 
             style.flexGrow = 1;
             selectionType = SelectionType.None;
@@ -85,7 +86,60 @@ namespace InfoWindowElements
         }
         #endregion
 
-        /// <inheritdoc/>
+        #region Item Actions
+        /// <summary>
+        /// Customizible function for instantiating items.
+        /// </summary>
+        /// <returns>The instantiated item.</returns>
+        protected virtual VisualElement MakeItem()
+        {
+            Debug.Log($"Making item{name}, {itemsSource.Count}, {parent.name}/{name}");
+            VisualElement element = itemTemplate.CloneTree();
+            element.ElementAt(0).ElementAt(0).style.fontSize = 40 * iconSize / ICON_SIZE;
+            element.ElementAt(0).ElementAt(1).style.width = iconSize;
+            element.ElementAt(0).ElementAt(1).style.height = iconSize;
+            return element;
+        }
+
+        /// <summary>
+        /// Customizible function for binding data to items.
+        /// </summary>
+        /// <param name="el">Element to bind to.</param>
+        /// <param name="i">Index of the element.</param>
+        protected virtual void BindItem(VisualElement el, int i)
+        {
+            el.RemoveFromClassList("unity-collection-view__item");
+            Color c = ToolkitUtils.resSkins.GetResourceColor(((UIResource)itemsSource[i]).type);
+            el.Q<Label>("Value").style.color = ToolkitUtils.textColor;
+
+            el.Q<Label>("Value").text = ConvertString((UIResource)itemsSource[i]);
+            el.Q<VisualElement>("Icon").style.unityBackgroundImageTintColor = c;
+        }
+
+        /// <summary>
+        /// Customizible function for creating the empty element.
+        /// </summary>
+        /// <returns>Created none element.</returns>
+        protected virtual VisualElement MakeNoneElement()
+        {
+            Label l = new Label("Nothing");
+            l.style.marginBottom = 0;
+            l.style.marginTop = 0;
+            l.style.marginLeft = 0;
+            l.style.marginRight = 0;
+
+
+            l.style.paddingBottom = 0;
+            l.style.paddingTop = 0;
+            l.style.paddingLeft = 0;
+            l.style.paddingRight = 0;
+
+
+            l.AddToClassList("unity-list-view__empty-label");
+            return l;
+        }
+        #endregion
+
         public virtual void Open(object data)
         {
             DataBinding binding;
@@ -107,7 +161,7 @@ namespace InfoWindowElements
                     SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case ResourceDisplay:
-                    ToolkitUtils.InitSkins();
+                    ToolkitUtils.Init();
 
                     binding = BindingUtil.CreateBinding(nameof(ResourceDisplay.GlobalResources));
                     binding.sourceToUiConverters.AddConverter((ref Resource globalRes) => ToUIRes(globalRes));

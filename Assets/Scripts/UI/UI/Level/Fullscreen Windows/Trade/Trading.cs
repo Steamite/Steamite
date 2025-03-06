@@ -53,7 +53,7 @@ public class Trading : FullscreenWindow
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
         map = (IUIElement)root.Q<VisualElement>("Map");
         ((IInitiableUI)map).Init();
-        ((IInitiableUI)root.Q<VisualElement>("ColonyView")).Init();
+        ((IInitiableUI)root.Q<VisualElement>("Colony")).Init();
 
 
         //Moves all convoys each tick.

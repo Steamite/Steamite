@@ -41,32 +41,9 @@ public class LoadingScreen : MonoBehaviour
 
     #region Scene Managment
     /// <summary>Loads the Main Menu scene.</summary>
-    public void OpenMainMenu()
+    public async void OpenMainMenu()
     {
-        OpenScene(2); // the loading Process
-    }
-
-    /// <summary>Loads a new scene.</summary>
-    async void OpenScene(int id, string seed = "")
-    {
-        await SceneManager.LoadSceneAsync(id, LoadSceneMode.Additive);
-        
-        Debug.Log("start:" + Time.realtimeSinceStartup);
-        if(id == 3) // if loading level
-        {
-            GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
-            if (seed != "")
-            {
-                gameObject.GetComponent<MapGen>().Generate(seed, templateLevel);
-            }
-            else
-                MyGrid.CreateGrid(startLevel, mainLevel);
-            UIRefs.research.NewGame();
-            UIRefs.trading.NewGame(0);
-            SceneRefs.humans.NewGameInit(ref humanActivation);
-            AfterLevelLoad(true);
-        }
-        Debug.Log("end:" + Time.realtimeSinceStartup);
+        await SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
         transform.GetChild(0).gameObject.SetActive(false);
     }
 
@@ -81,7 +58,19 @@ public class LoadingScreen : MonoBehaviour
         if (folderName != "test - TopGun")
             await SceneManager.UnloadSceneAsync("Main Menu");
         transform.GetChild(0).gameObject.SetActive(true);
-        OpenScene(3, seed);
+
+        await SceneManager.LoadSceneAsync(3, LoadSceneMode.Additive);
+        GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
+        if (seed != "")
+        {
+            gameObject.GetComponent<MapGen>().Generate(seed, templateLevel);
+        }
+        else
+            MyGrid.CreateGrid(startLevel, mainLevel);
+        UIRefs.research.NewGame();
+        UIRefs.trading.NewGame(0);
+        SceneRefs.humans.NewGameInit(ref humanActivation);
+        AfterLevelLoad(true);
     }
     #endregion
 
@@ -106,7 +95,7 @@ public class LoadingScreen : MonoBehaviour
            await SceneManager.UnloadSceneAsync("Main Menu");
         }
         await SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
-        await LoadWorldData(save);
+        await LoadWorldData(save);   
         AfterLevelLoad(false);
     }
 

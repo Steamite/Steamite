@@ -1,11 +1,12 @@
 #ResText {
     flex-direction: row;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 10%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-right: 5%;
     max-width: 100%;
     flex-grow: 1;
     justify-content: center;
+    padding-left: 10%;
 }
 
 #ResText > #Value {

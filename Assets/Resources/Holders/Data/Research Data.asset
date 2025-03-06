@@ -34,3 +34,59 @@ MonoBehaviour:
       buildButton: 0
       unlockedBy: 
       unlocks: 
+  - categName: Production
+    nodes:
+    - name: Foundry
+      id: 1
+      gp:
+        x: 529.5
+        z: 20
+        y: 0
+      realX: 960
+      researched: 0
+      currentTime: 0
+      researchTime: 100
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buttonCategory: 1
+      buildButton: 0
+      unlockedBy: 
+      unlocks: 02000000
+    - name: Elevator
+      id: 2
+      gp:
+        x: 404.5
+        z: 265
+        y: 1
+      realX: 765.51056
+      researched: 0
+      currentTime: 0
+      researchTime: 200
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buttonCategory: 2
+      buildButton: 0
+      unlockedBy: 01000000
+      unlocks: 
+    - name: node 3
+      id: 3
+      gp:
+        x: 654.5
+        z: 265
+        y: 1
+      realX: 1154.4895
+      researched: 0
+      currentTime: 0
+      researchTime: 200
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buttonCategory: -1
+      buildButton: -1
+      unlockedBy: 
+      unlocks: 

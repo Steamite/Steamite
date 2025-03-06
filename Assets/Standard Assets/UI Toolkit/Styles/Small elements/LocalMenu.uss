@@ -1,0 +1,62 @@
+.local-menu > VisualElement {
+    padding-top: 0;
+    padding-bottom: 5%;
+    margin-top: -5%;
+    align-items: center;
+}
+
+.local-menu > #Header {
+    white-space: pre-wrap;
+    -unity-text-align: upper-center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.local-menu > #Summary {
+    white-space: normal;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    font-size: 20px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 2px;
+    padding-left: 10px;
+}
+
+.local-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70%;
+    font-size: 30px;
+    border-left-color: rgb(28, 28, 28);
+    border-right-color: rgb(28, 28, 28);
+    border-top-color: rgb(28, 28, 28);
+    border-bottom-color: rgb(28, 28, 28);
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color: rgb(46, 29, 14);
+    height: auto;
+    flex-grow: 0;
+    max-height: none;
+    opacity: 0.02;
+}
+
+.open {
+    transition-duration: 1s;
+    transition-property: opacity;
+}

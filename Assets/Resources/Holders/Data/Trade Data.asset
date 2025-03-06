@@ -18,23 +18,12 @@ MonoBehaviour:
       x: 900
       z: 1117
       y: 0
-    passiveProductions:
-    - productionName: Workforce
-      currentProduction: 2
-      maxProduction: 5
-    - productionName: Water
-      currentProduction: 3
-      maxProduction: 3
-    - productionName: Wood
-      currentProduction: 2
-      maxProduction: 4
-    - productionName: Food
-      currentProduction: 4
-      maxProduction: 5
+    passiveProductions: []
     stats:
-    - productionName: Trade
-      currentProduction: 3
-      maxProduction: 5
+    - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
+    - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
+    - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
+    - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
   tradeLocations:
   - name: Dean Forrest
     pos:

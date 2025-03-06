@@ -1,8 +1,8 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/UnitySelectors.uss?fileID=7433441132597879392&amp;guid=3468915a4f8821544854e970a313de3c&amp;type=3#UnitySelectors" />
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/ResTextIcon.uss?fileID=7433441132597879392&amp;guid=ba69689a5a10d134db4984cf209a7f00&amp;type=3#ResTextIcon" />
-    <engine:VisualElement name="ResText" style="padding-right: 0;">
-        <engine:Label text="###/###" name="Value" display-tooltip-when-elided="false" triple-click-selects-line="false" double-click-selects-word="false" style="-unity-text-align: middle-right; margin-right: 4%; max-width: 45%; max-height: 100%;" />
+    <engine:VisualElement name="ResText" style="justify-content: space-between;">
+        <engine:Label text="###/###" name="Value" display-tooltip-when-elided="false" triple-click-selects-line="false" double-click-selects-word="false" style="-unity-text-align: middle-right; margin-right: 0; margin-top: 0; margin-bottom: 0; margin-left: 0;" />
         <engine:VisualElement name="Icon" />
     </engine:VisualElement>
 </engine:UXML>

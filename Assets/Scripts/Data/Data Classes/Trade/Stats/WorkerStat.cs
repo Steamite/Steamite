@@ -26,7 +26,7 @@ namespace TradeData.Stats
             if (complete)
                 return "Affects how many new workers will arrive each week.";
             else
-                return "+ 2";
+                return $"+ {currentState * 2}";
         }
     }
 }

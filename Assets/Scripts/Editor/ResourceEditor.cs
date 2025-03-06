@@ -1,15 +1,6 @@
-﻿using NUnit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TradeData.Stats;
-using Unity.Properties;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.Windows;
 
 [CustomPropertyDrawer(typeof(Resource))]
 public class ResourceEditor : PropertyDrawer
@@ -160,5 +151,4 @@ public class ResourceEditor : PropertyDrawer
 
         return root;
     }
-
 }
