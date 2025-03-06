@@ -94,25 +94,25 @@ namespace StartMenu
         {
             mapParams = _root.Q<VisualElement>("Map-Parameters");
 
-            seed = mapParams.Q<StringGenerationParameter>("Seed").Link(this);
+            seed = mapParams.Q<StringGenerationParameter>("Seed").Link(this, "Seed");
 
             parameters = new();
 
             // map size
             parameters.Add(mapParams.Q<EnumGenerationParameter>("Map-Size"));
-            mapSize = parameters[^1].Link(this);
+            mapSize = parameters[^1].Link(this, "Map Size");
 
             // vein size
             parameters.Add(mapParams.Q<EnumGenerationParameter>("Size"));
-            veinSize = parameters[^1].Link(this);
+            veinSize = parameters[^1].Link(this, "Size");
 
             // vein richness
             parameters.Add(mapParams.Q<EnumGenerationParameter>("Richness"));
-            veinRichness = parameters[^1].Link(this);
+            veinRichness = parameters[^1].Link(this, "Richness");
 
             // vein count
             parameters.Add(mapParams.Q<EnumGenerationParameter>("Number"));
-            veinCount = parameters[^1].Link(this);
+            veinCount = parameters[^1].Link(this, "Number");
         }
 
         /// <summary>

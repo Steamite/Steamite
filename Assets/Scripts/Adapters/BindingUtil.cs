@@ -7,7 +7,6 @@ using UnityEngine.UIElements;
 /// </summary>
 public static class BindingUtil
 {
-
     /// <summary>
     /// Creates a standardized data binding.
     /// </summary>

@@ -12,11 +12,17 @@ public class Elevator : Building, IStorage
     #region Variables
     public static Elevator main;
     public bool isMain = false;
+
     /// <inheritdoc/>
     [CreateProperty] public List<bool> CanStore { get; set; } = new();
     public StorageResource LocalResources => localRes;
     #endregion
-
+    public override void UniqueID()
+    {
+        base.UniqueID();
+        if (isMain == true)
+            main = this;
+    }
     #region Window
     /// <inheritdoc/>
     protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
@@ -40,13 +46,13 @@ public class Elevator : Building, IStorage
         if (clickable == null)
             clickable = new StorageBSave();
         (clickable as StorageBSave).canStore = CanStore;
-        (clickable as StorageBSave).main = main;
+        (clickable as StorageBSave).isMain = isMain;
         return base.Save(clickable);
     }
     public override void Load(ClickableObjectSave save)
     {
         CanStore = (save as StorageBSave).canStore;
-        isMain = (save as StorageBSave).main;
+        isMain = (save as StorageBSave).isMain;
         if (isMain)
             main = this;
         base.Load(save);

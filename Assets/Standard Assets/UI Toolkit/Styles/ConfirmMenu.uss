@@ -55,3 +55,21 @@
     -unity-background-image-tint-color: rgb(46, 29, 14);
     color: rgb(198, 131, 70);
 }
+
+.resize-window {
+    flex-grow: 0;
+    background-color: rgb(70, 49, 27);
+    width: 100%;
+    left: 35%;
+    height: auto;
+    max-height: none;
+    max-width: 30%;
+    top: 25%;
+    -unity-font-definition: resource('Fonts & Materials/custom fonts/fonts/AlfaSlabOne-Regular');
+    align-content: auto;
+    align-items: stretch;
+    flex-shrink: 1;
+    flex-basis: auto;
+    display: flex;
+    position: absolute;
+}

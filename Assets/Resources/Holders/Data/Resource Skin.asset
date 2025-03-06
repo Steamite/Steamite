@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c8d3a39d7e67d4c8066cbcc2bda0fb, type: 3}
   m_Name: Resource Skin
   m_EditorClassIdentifier: 
+  moneySkin:
+    name: Money
+    color: {r: 1, g: 0.8431373, b: 0, a: 1}
+    icon: {fileID: 0}
   skins:
   - name: Coal
     color: {r: 0.10980392, g: 0.10980392, b: 0.10980392, a: 1}

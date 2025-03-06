@@ -14,20 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Workers
   currentState: 0
-  maxState: 0
+  maxState: 4
   resourceUpgradeCost:
   - capacity: 200
     type: 00000000
-    ammount: 00000000
+    ammount: 09000000
   - capacity: 400
-    type: 
-    ammount: 
+    type: 0100000000000000
+    ammount: 0f00000014000000
   - capacity: 800
-    type: 
-    ammount: 
+    type: 0200000001000000
+    ammount: 0a00000032000000
   - capacity: 1200
-    type: 
-    ammount: 
+    type: 0100000004000000
+    ammount: 0f0000002d000000
   - capacity: 2000
-    type: 
-    ammount: 
+    type: 0300000000000000
+    ammount: 0200000032000000

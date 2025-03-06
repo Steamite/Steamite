@@ -59,18 +59,27 @@
     border-bottom-left-radius: 5px;
 }
 
-#Stats > TemplateContainer {
-    width: 24%;
-}
-
-#Stats > VisualElement {
-    width: 24%;
-}
-
 ColonyView > VisualElement {
     height: 50%;
 }
 
 ColonyView {
     flex-grow: 1;
+}
+
+ColonyView > VisualElement > Label {
+    padding-top: 2%;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 4%;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    -unity-text-align: middle-left;
+}
+
+ColonyView > VisualElement > VisualElement {
+    height: 100%;
+    flex-direction: row;
 }

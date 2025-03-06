@@ -155,8 +155,9 @@ namespace Params
         /// </summary>
         /// <param name="mapGeneration">Map generation seed source.</param>
         /// <returns></returns>
-        public int Link(MapGeneration mapGeneration)
+        public int Link(MapGeneration mapGeneration, string displayName)
         {
+            label.text = displayName;
             dataSource = mapGeneration;
             return IntValue;
         }

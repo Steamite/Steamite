@@ -76,8 +76,9 @@ namespace Params
         /// </summary>
         /// <param name="mapGeneration">Data source.</param>
         /// <returns>New seed.</returns>
-        public string Link(MapGeneration mapGeneration)
+        public string Link(MapGeneration mapGeneration, string displayName)
         {
+            label.text = displayName;
             dataSource = mapGeneration;
             string _seed = "";
 

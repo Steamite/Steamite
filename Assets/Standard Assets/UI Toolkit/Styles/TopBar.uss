@@ -26,7 +26,7 @@
 }
 
 #TopBar .unity-list-view__item {
-    justify-content: flex-end;
+    justify-content: flex-start;
     max-height: 60px;
     min-height: 60px;
     max-width: 180px;
@@ -53,8 +53,8 @@
     max-height: 50px;
     min-height: 50px;
     padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
+    padding-right: 5px;
+    padding-top: 5px;
     padding-bottom: 0;
 }
 
@@ -73,7 +73,7 @@
 
 #TopBar .unity-list-view__item #Icon {
     text-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    margin-top: 0;
+    margin-top: -3px;
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;

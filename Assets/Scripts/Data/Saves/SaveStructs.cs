@@ -135,7 +135,7 @@ public class BSave : StorageObjectSave
 public class StorageBSave : BSave
 {
     public List<bool> canStore;
-    public bool main;
+    public bool isMain;
 }
 
 [Serializable]
