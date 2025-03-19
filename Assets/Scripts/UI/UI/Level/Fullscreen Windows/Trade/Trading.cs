@@ -31,8 +31,8 @@ public class Trading : FullscreenWindow
 
     public void NewGame(int selectedColony)
     {
-        TradeHolder tradeHolder = Resources.Load<TradeHolder>("Holders/Data/Trade Data");
-        colonyLocation = tradeHolder.startingLocations[selectedColony];
+        TradeHolder tradeHolder = Resources.Load<TradeHolder>("Holders/Data/Trade Locations/Snowlandia");
+        colonyLocation = tradeHolder.startingLocation;
         tradeLocations = tradeHolder.tradeLocations;
 
         convoys = new();
@@ -41,9 +41,17 @@ public class Trading : FullscreenWindow
 
     public void LoadGame(TradeSave tradeSave)
     {
-        convoys = tradeSave.convoys;
-        colonyLocation = tradeSave.colonyLocation;
+		TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Trade Locations/{tradeSave.colonyLocation}");
+		colonyLocation = tradeHolder.startingLocation;
+
+        for (int i = 0; i < colonyLocation.passiveProductions.Count; i++)
+            colonyLocation.passiveProductions[i].LoadState(tradeSave.prodLevels[i]);
+        for (int i = 0; i < colonyLocation.stats.Count; i++)
+			colonyLocation.stats[i].LoadState(tradeSave.statLevels[i]);
+
         tradeLocations = tradeSave.tradeLocations;
+        convoys = tradeSave.convoys;
+        SceneRefs.stats.GetComponent<ResourceDisplay>().Money = tradeSave.money;
         Init();
     }
 
@@ -57,15 +65,17 @@ public class Trading : FullscreenWindow
 
 
         //Moves all convoys each tick.
-        SceneRefs.tick.tickAction += 
+        SceneRefs.tick.SubscribeToTicks( 
             () =>
             {
                 for (int i = convoys.Count - 1; i >= 0; i--)
                     convoys[i].Move(CONVOY_SPEED);
-            };
+            });
+        SceneRefs.tick.timeController.SubscribeToEvent(colonyLocation.DoProduction, DayTime.TimeEventType.Week);
     }
 
-    public override void OpenWindow()
+	#region Window
+	public override void OpenWindow()
     {
         base.OpenWindow();
         map.Open(convoys);
@@ -75,8 +85,10 @@ public class Trading : FullscreenWindow
     {
         base.CloseWindow();
     }
+	#endregion
+ 
 
-    public void Trade(TradeConvoy convoy, Resource sellResource, int buyMoney)
+	public void Trade(TradeConvoy convoy, Resource sellResource, int buyMoney)
     {
         convoys.Add(convoy);
         MyRes.TakeFromGlobalStorage(sellResource);

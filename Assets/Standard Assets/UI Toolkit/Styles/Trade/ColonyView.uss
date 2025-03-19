@@ -24,6 +24,10 @@
     background-color: rgb(161, 148, 59);
 }
 
+.available:hover {
+    background-color: rgb(141, 129, 51);
+}
+
 .completed {
     background-color: rgb(80, 74, 29);
 }
@@ -57,6 +61,7 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
+    max-width: 25%;
 }
 
 ColonyView > VisualElement {

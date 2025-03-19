@@ -31,13 +31,8 @@ public class LocalMenu : MonoBehaviour
                 Vector2 vec = element.worldBound.position;
 
                 menu.style.left = vec.x + 75;
-                menu.schedule.Execute(() => 
-                { 
-                    menu.style.top = element.worldBound.y - (menu.resolvedStyle.height / 2 + 100);
-                    menu.style.opacity = 100;
-                }).ExecuteLater(10);
-
-
+                menu.style.bottom = (ToolkitUtils.GetRoot(element).resolvedStyle.height - element.worldBound.y) - element.resolvedStyle.height / 2;
+				menu.style.opacity = 100;
                 break;
         }
     }

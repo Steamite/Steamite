@@ -4,26 +4,42 @@ using UnityEngine;
 using TMPro;
 using System;
 
+
 /// <summary>Counts, shows and triggers events related to time.</summary>
 public class DayTime : MonoBehaviour
 {
-    #region Variables
-    /// <summary>
-    /// How long an ingame hour lasts.
-    /// </summary>
-    /// <seealso href="../../../Documentation/Time scale.xlsx">
-    /// Time scale table.
-    /// </seealso>
-    [SerializeField]float ticksPerHour = 4;
+    /// <summary>Events used for event subscribing.</summary>
+	public enum TimeEventType
+	{
+        /// <inheritdoc cref="dayStart"/>
+		Day,
+        /// <inheritdoc cref="nightStart"/>
+		Night,
+        /// <inheritdoc cref="weekStart"/>
+		Week,
+        /// <summary>WIP</summary>
+		Month,
+		/// <summary>WIP</summary>
+		Year
+	}
+
+	#region Variables
+	/// <summary>
+	/// How long an ingame hour lasts.
+	/// </summary>
+	/// <seealso href="../../../Documentation/Time scale.xlsx">
+	/// Time scale table.
+	/// </seealso>
+	[SerializeField]float ticksPerHour = 4;
     /// <summary>Progresses time by this(60/<see cref="ticksPerHour"/>).</summary>
     [SerializeField]int minutesPerTick;
 
-    /// <summary>Subscriable event, triggered when starting Night(21:00).</summary>
-    public event Action nightStart;
-    /// <summary>Subscriable event, triggered when starting Day(06:00).</summary>
-    public event Action dayStart;
+	/// <summary>Subscribable event, triggered when starting Day(06:00).</summary>
+	event Action dayStart;
+    /// <summary>Subscribable event, triggered when starting Night(21:00).</summary>
+    event Action nightStart;
     /// <summary>Subscriable event, triggered when starting a Week.</summary>
-    public event Action weekEnd;
+    event Action weekStart;
 
     /// <summary>Current time of the day(counts as hours when starting a new game).</summary>
     [SerializeField] int timeInMinutes = 4;
@@ -32,21 +48,76 @@ public class DayTime : MonoBehaviour
 
     /// <summary>Text that shows the time.<summary>
     [SerializeField] TMP_Text time;
-    #endregion
+	#endregion
 
-    /// <summary>
-    /// Calculates <see cref="minutesPerTick"/>, links tick event and default all parts of text.
-    /// </summary>
-    /// <param name="tick">Reference to link to the tick event.</param>
-    /// <param name="newGame">If new game multiply <see cref="timeInMinutes"/> by 60.</param>
-    public void Init(Tick tick, bool newGame)
+	#region Listeners
+	/// <summary>
+	/// Allows other objects to listen to time events.
+	/// </summary>
+	/// <param name="subscriber">What to do when the event triggers.</param>
+	/// <param name="timeEvent">Which event to listen to.</param>
+	/// <exception cref="NotImplementedException"></exception>
+	public void SubscribeToEvent(Action subscriber, TimeEventType timeEvent)
+    {
+		switch (timeEvent)
+		{
+			case TimeEventType.Day:
+                dayStart += subscriber;
+				break;
+			case TimeEventType.Night:
+                nightStart += subscriber;
+				break;
+			case TimeEventType.Week:
+                weekStart += subscriber;
+				break;
+			case TimeEventType.Month:
+			case TimeEventType.Year:
+			default:
+				throw new NotImplementedException();
+		}
+	}
+
+	/// <summary>
+	/// Removes listeners for time events.
+	/// </summary>
+	/// <param name="subscriber">Listener to remove.</param>
+	/// <param name="timeEvent">Which event to remove from.</param>
+	/// <exception cref="NotImplementedException"></exception>
+	public void UnsubscribeToEvent(Action subscriber, TimeEventType timeEvent)
+	{
+		switch (timeEvent)
+		{
+			case TimeEventType.Day:
+				dayStart -= subscriber;
+				break;
+			case TimeEventType.Night:
+				nightStart -= subscriber;
+				break;
+			case TimeEventType.Week:
+				weekStart -= subscriber;
+				break;
+			case TimeEventType.Month:
+			case TimeEventType.Year:
+			default:
+				throw new NotImplementedException();
+		}
+	}
+	#endregion
+
+
+	/// <summary>
+	/// Calculates <see cref="minutesPerTick"/>, links tick event and default all parts of text.
+	/// </summary>
+	/// <param name="tick">Reference to link to the tick event.</param>
+	/// <param name="newGame">If new game multiply <see cref="timeInMinutes"/> by 60.</param>
+	public void Init(Tick tick, bool newGame)
     {
         minutesPerTick = (int)(60f / ticksPerHour);
         if(newGame)
             timeInMinutes *= 60;
-        if (timeInMinutes < 6 * 60 || timeInMinutes > 23 * 60)
+        if (timeInMinutes < 6 * 60 || timeInMinutes > 21 * 60)
             nightStart?.Invoke();
-        tick.tickAction += UpdateTime;
+        tick.SubscribeToTicks(UpdateTime);
 
         transform.GetChild(0).GetComponent<TMP_Text>().text = $"{(timeInMinutes / 60).ToString().PadLeft(2, '0')}:{(timeInMinutes % 60).ToString().PadLeft(2, '0')}"; ;
         transform.GetChild(1).GetComponent<TMP_Text>().text = $"Day: {(numberOfDays % 7) + 1}";
@@ -66,7 +137,7 @@ public class DayTime : MonoBehaviour
                 numberOfDays++;
                 if (numberOfDays % 7 == 0)
                 {
-                    weekEnd?.Invoke();
+                    weekStart?.Invoke();
                     if (numberOfDays % 28 == 0)
                     {
                         if (numberOfDays % 336 == 0)
@@ -118,5 +189,5 @@ public class DayTime : MonoBehaviour
         timeInMinutes = gameState.dayTime;
         numberOfDays = gameState.numberOfDays;
     }
-    #endregion
+	#endregion
 }

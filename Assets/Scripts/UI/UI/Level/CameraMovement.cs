@@ -4,21 +4,21 @@ using UnityEngine.UIElements;
 
 public class CameraMovement : MonoBehaviour
 {
-    InputActionMap cameraMap => mainShortcuts?.inputAsset.actionMaps[0];
-    InputAction move => cameraMap.FindAction("Move");
-    InputAction rotate => cameraMap.FindAction("Rotate");
-    InputAction zoom => cameraMap.FindAction("Zoom");
-    InputAction reset => cameraMap.FindAction("Reset");
+    InputActionMap cameraMap;
+    InputAction move;
+    InputAction rotate;
+    InputAction zoom;
+    InputAction reset;
 
-    InputAction panButton => cameraMap.FindAction("Drag - Down");
-    InputAction panMove => cameraMap.FindAction("Drag - Move");
+    InputAction panButton;
+    InputAction panMove;
+    InputAction isMod;
 
     [SerializeField] MainShortcuts mainShortcuts;
     [SerializeField] public GameObject mainCamera;
 
 
     [Header("General")]
-    /// <summary> multiplier in GetSpeed </summary>
     [SerializeField] float generalSpeed = 3;
 
     [Header("Movement")]
@@ -29,7 +29,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] int maxMovement = 50;
 
     [Header("Edge Thresholds")]
-    [SerializeField] float mouseThreshold = 0.495f;
+    [SerializeField] float mouseThreshold = 0.05f;
 
     [Header("Rotation")]
     [SerializeField] float addRotationY = 2;
@@ -42,14 +42,24 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] float maxY = 20;
 
     [Header("Pan")]
-    [SerializeField] float maxPan = 0.1f;
+    [SerializeField] float panAmmount = 0.1f;
     
     float mod;
 
     private void Awake()
     {
         transform.GetChild(0).LookAt(transform);
-    }
+		cameraMap = mainShortcuts?.inputAsset.actionMaps[0];
+		move = cameraMap.FindAction("Move");
+		rotate = cameraMap.FindAction("Rotate");
+		zoom = cameraMap.FindAction("Zoom");
+		reset = cameraMap.FindAction("Reset");
+
+		panButton = cameraMap.FindAction("Drag - Down");
+		panMove = cameraMap.FindAction("Drag - Move");
+		isMod = mainShortcuts?.inputAsset.actionMaps[1].FindAction("Shift");
+	}
+
     private void OnEnable()
     {
         currentMovementX = 0;
@@ -65,7 +75,7 @@ public class CameraMovement : MonoBehaviour
 
     void Update()
     {
-        mod = Input.GetKey(KeyCode.LeftShift) ? 2 : 1;
+        mod = isMod.IsInProgress() ? 2 : 1;
         mod *= Time.timeScale;
 
         Move();
@@ -88,15 +98,32 @@ public class CameraMovement : MonoBehaviour
     void Move()
     {
         Vector2 vec = move.ReadValue<Vector2>();
-        Vector3 mouse = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        mouse.x -= 0.5f;
-        mouse.y -= 0.5f;
+        Vector2 mouse = Mouse.current.position.value;
+        Debug.Log("Mouse:" + mouse);
         transform.Translate(
-            GetSpeed(ref currentMovementX, addMovement, removeMovement, maxMovement, MergeMove(Edge(mouse.x, mouseThreshold), vec.x)),
+            GetSpeed(
+                ref currentMovementX, 
+                addMovement, 
+                removeMovement, 
+                maxMovement, 
+                MergeMove(
+                    Edge(
+                        mouse.x, 
+                        Screen.width), 
+                    vec.x)),
             0,
-            GetSpeed(ref currentMovementY, addMovement, removeMovement, maxMovement, MergeMove(Edge(mouse.y, mouseThreshold), vec.y)));
-        //EdgeMove();
+            GetSpeed(
+                ref currentMovementY, 
+                addMovement, 
+                removeMovement, 
+                maxMovement, 
+                MergeMove(
+                    Edge(
+                        mouse.y, 
+                        Screen.height), 
+                    vec.y)));
     }
+
     float MergeMove(float mouse, float key)
     {
         if(Mathf.Abs(mouse) > 0)
@@ -119,24 +146,23 @@ public class CameraMovement : MonoBehaviour
         return key;
         
     }
-    float Edge(float mouse, float threshold)
+
+	/// <summary>
+	/// Handles movement on when mouse is on the edge of the screen.
+	/// </summary>
+	/// <param name="mouse">Mouse position</param>
+	/// <param name="axisSize">Edge threshold.</param>
+	/// <returns></returns>
+	float Edge(float mouse, float axisSize)
     {
-        if(Mathf.Abs(mouse) < 0.5f)
-        {
-            if (mouse > 0)
-            {
-                mouse -= threshold;
-                if (mouse < 0)
-                    return 0;
-            }
-            else if (mouse < 0)
-            {
-                mouse += threshold;
-                if (mouse > 0)
-                    return 0;
-            }
-            return mouse;
-        }
+        float div = mouse / axisSize;
+        Debug.Log("Div:" + div);
+        if (div < 0 || div > 1)
+            return 0;
+		else if (div < mouseThreshold)
+            return -div;
+        else if (div > 1 - mouseThreshold)
+            return div;
         return 0;
     }
 
@@ -156,15 +182,18 @@ public class CameraMovement : MonoBehaviour
         Pan();
     }
 
+    /// <summary>
+    /// Checks pan direction and moves by <see cref="panAmmount"/>.
+    /// </summary>
     void Pan()
     {
         if (panButton.inProgress)
         {
             float delta = panMove.ReadValue<Vector2>().y;
             if (delta > 0)
-                delta = maxPan;
+                delta = panAmmount;
             else if (delta < 0)
-                delta = -maxPan;
+                delta = -panAmmount;
             if (transform.GetChild(0).localRotation.eulerAngles.x < 10)
                 transform.GetChild(0).localRotation = Quaternion.Euler(10, 0, 0);
             else if(transform.GetChild(0).localRotation.eulerAngles.x > 85)

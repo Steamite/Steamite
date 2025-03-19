@@ -54,7 +54,7 @@
                     "name": "Drag - Down",
                     "type": "Button",
                     "id": "e724a6eb-786f-490e-bbd5-9994aef54c5c",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -376,7 +376,7 @@
                     "name": "Trade",
                     "type": "Button",
                     "id": "bb009f70-64a7-42d4-9f21-6c8e2943b5b4",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

@@ -140,10 +140,10 @@ public class Human : ClickableObject
 #if UNITY_EDITOR
         transform.GetChild(0).gameObject.SetActive(true);
 #endif
-        SceneRefs.tick.tickAction += DoRepetableAction;
+        SceneRefs.tick.SubscribeToTicks(DoRepetableAction);
         DayTime dT = SceneRefs.tick.timeController;
-        dT.dayStart += Day;
-        dT.nightStart += Night;
+        dT.SubscribeToEvent(Day, DayTime.TimeEventType.Day);
+        dT.SubscribeToEvent(Night, DayTime.TimeEventType.Night);
 
         if (jData.job == JobState.Free)
             HumanActions.LookForNew(this);

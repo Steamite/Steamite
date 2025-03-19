@@ -42,6 +42,8 @@ public class Menu : MonoBehaviour
             UIRefs.research.CloseWindow();
         else if (UIRefs.trading.window.style.display == DisplayStyle.Flex)
             UIRefs.trading.CloseWindow();
+        else if (SceneRefs.gridTiles.activeControl != ControlMode.nothing)
+            SceneRefs.gridTiles.ChangeSelMode(ControlMode.nothing);
         else
             return true;
 

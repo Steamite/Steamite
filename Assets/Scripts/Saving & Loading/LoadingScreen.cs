@@ -14,7 +14,7 @@ public class LoadingScreen : MonoBehaviour
 {
     #region Variables
     /// <summary>Save name.</summary>
-    string folderName;
+    string worldName;
 
     const int BUILD_WEIGHT = 5;
     const int CHUNK_WEIGHT = 1;
@@ -54,8 +54,8 @@ public class LoadingScreen : MonoBehaviour
     /// <param name="seed">Generation seed</param>
     public async void NewGame(string _folderName, string seed = ""/*, bool tutorial*/)
     {
-        folderName = _folderName;
-        if (folderName != "test - TopGun")
+        worldName = _folderName;
+        if (worldName != "test - TopGun")
             await SceneManager.UnloadSceneAsync("Main Menu");
         transform.GetChild(0).gameObject.SetActive(true);
 
@@ -81,13 +81,13 @@ public class LoadingScreen : MonoBehaviour
     /// After that loads "Level" scene.
     /// </summary>
     /// <param name="_folderName">Current folder name.</param>
-    public async void StartLoading(string folderName, string worldName)
+    public async void StartLoading(string _folderName, string _worldName)
     {
-        Save save = LoadSavedData(folderName, worldName);
-        folderName = save.worldName;
+        Save save = LoadSavedData(_folderName);
+        worldName = _worldName;
 
         transform.GetChild(0).gameObject.SetActive(true);
-        transform.GetChild(0).GetChild(2).GetComponent<TMP_Text>().text = folderName;
+        transform.GetChild(0).GetChild(2).GetComponent<TMP_Text>().text = _folderName;
         transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
 
         if (GameObject.Find("Main Menu"))
@@ -100,39 +100,43 @@ public class LoadingScreen : MonoBehaviour
     }
 
 
-    Save LoadSavedData(string folderName, string worldName)
+    /// <summary>
+    /// Fills the save struct with the data from json.
+    /// </summary>
+    /// <param name="_folderName">Path to the save folder.</param>
+    /// <returns></returns>
+    Save LoadSavedData(string _folderName)
     {
         Save save = new();
-        save.worldName = worldName;
 
         JsonSerializer jsonSerializer = SaveController.PrepSerializer();
         // for gridSave
         save.world = new();
-        JsonTextReader jsonReader = new(new StreamReader($"{folderName}/Grid.json"));
+        JsonTextReader jsonReader = new(new StreamReader($"{_folderName}/Grid.json"));
         save.world.objectsSave = jsonSerializer.Deserialize<BuildsAndChunksSave>(jsonReader);
         jsonReader.Close();
         // for all levels
         save.world.gridSave = new GridSave[MyGrid.NUMBER_OF_LEVELS];
         for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
         {
-            jsonReader = new(new StreamReader($"{folderName}/Level{i}.json"));
+            jsonReader = new(new StreamReader($"{_folderName}/Level{i}.json"));
             save.world.gridSave[i] = jsonSerializer.Deserialize<GridSave>(jsonReader);
             jsonReader.Close();
         }
         // for playerSettings
-        jsonReader = new(new StreamReader($"{folderName}/PlayerSettings.json"));
+        jsonReader = new(new StreamReader($"{_folderName}/PlayerSettings.json"));
         save.gameState = jsonSerializer.Deserialize<GameStateSave>(jsonReader);
         jsonReader.Close();
         // for humanSaves
-        jsonReader = new(new StreamReader($"{folderName}/Humans.json"));
+        jsonReader = new(new StreamReader($"{_folderName}/Humans.json"));
         save.humans = jsonSerializer.Deserialize<HumanSave[]>(jsonReader);
         jsonReader.Close();
         // for researchCategories
-        jsonReader = new(new StreamReader($"{folderName}/Research.json"));
+        jsonReader = new(new StreamReader($"{_folderName}/Research.json"));
         save.research = jsonSerializer.Deserialize<ResearchSave>(jsonReader);
         jsonReader.Close();
         // for trading
-        jsonReader = new(new StreamReader($"{folderName}/Trade.json"));
+        jsonReader = new(new StreamReader($"{_folderName}/Trade.json"));
         save.trade = jsonSerializer.Deserialize<TradeSave>(jsonReader);
         jsonReader.Close();
         return save;
@@ -146,7 +150,7 @@ public class LoadingScreen : MonoBehaviour
     /// <param name="obj"></param>
     Task LoadWorldData(Save save)
     {
-        MyGrid.worldName = save.worldName;
+        MyGrid.worldName = worldName;
         WorldSave worldSave = save.world;
         GameStateSave gameState = save.gameState;
         HumanSave[] humanSaves = save.humans;
@@ -172,13 +176,16 @@ public class LoadingScreen : MonoBehaviour
         FillHumans(progress, humanSaves);
         FillResearches(progress, researchSave);
         FillTrade(progress, tradeSave);
-
-
         return Task.CompletedTask;
     }
 
 
     #region Model Loading
+    /// <summary>
+    /// Loads grid objects.
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="worldSave"></param>
     void FillGrid(IProgress<int> progress, WorldSave worldSave)
     {
         actionText.text = "Loading grid";
@@ -189,7 +196,12 @@ public class LoadingScreen : MonoBehaviour
         CreateBuildings(progress, worldSave.objectsSave.buildings);
         
     }
-
+    
+    /// <summary>
+    /// Creates chunks.
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="chunks"></param>
     void CreateChunks(IProgress<int> progress, ChunkSave[] chunks)
     {
         foreach (ChunkSave chunkSave in chunks)
@@ -201,6 +213,11 @@ public class LoadingScreen : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Creates Buildings.
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="buildings"></param>
     void CreateBuildings(IProgress<int> progress, BSave[] buildings)
     {
         foreach (BSave save in buildings) // for each saved building
@@ -210,6 +227,11 @@ public class LoadingScreen : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Recreates the tiles of the grid.
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="gridSave"></param>
     void CreateGrid(IProgress<int> progress, GridSave[] gridSave)
     {
         // Empties grid
@@ -222,6 +244,12 @@ public class LoadingScreen : MonoBehaviour
         }
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;
     }
+
+    /// <summary>
+    /// Loads humans.
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="humanSaves"></param>
     void FillHumans(IProgress<int> progress, HumanSave[] humanSaves)
     {
         actionText.text = "Kidnaping workers";
@@ -231,18 +259,33 @@ public class LoadingScreen : MonoBehaviour
 
     #region UI loading
 
+    /// <summary>
+    /// Loads player preferences.
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="gameState"></param>
     void FillGameState(IProgress<int> progress, GameStateSave gameState)
     {
         SceneRefs.jobQueue.priority = gameState.priorities;
         SceneRefs.tick.timeController.Load(gameState);
     }
 
+    /// <summary>
+    /// Loads Research.
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="researchSave"></param>
     void FillResearches(IProgress<int> progress, ResearchSave researchSave)
     {
         actionText.text = "Remembering research";
         UIRefs.research.LoadGame(researchSave);
     }
 
+    /// <summary>
+    /// Loads Trading.
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="tradeSave"></param>
     void FillTrade(IProgress<int> progress, TradeSave tradeSave)
     {
         actionText.text = "Making Deals";
@@ -259,21 +302,20 @@ public class LoadingScreen : MonoBehaviour
     {
         //transform.parent.GetChild(1).GetComponent<AudioListener>().enabled = false;
         SceneRefs.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().SetUp();
-        MyGrid.worldName = folderName;
+        MyGrid.worldName = worldName;
         MyGrid.Init();
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;
         Camera.main.GetComponent<PhysicsRaycaster>().enabled = true;
         Camera.main.GetComponent<Physics2DRaycaster>().enabled = true;
         Camera.main.GetComponent<AudioListener>().enabled = true;
 
-        MyRes.ActivateResources(newGame);
-        await SceneManager.UnloadSceneAsync("LoadingScreen");
+
+		MyRes.ActivateResources(newGame);
+		await SceneManager.UnloadSceneAsync("LoadingScreen");
         SceneRefs.stats.GetChild(1).GetChild(0).GetComponent<TimeButtons>().SetStartSpeed(SceneRefs.tick);
         SceneRefs.stats.GetChild(0).GetComponent<LevelButtons>().Init();
         humanActivation?.Invoke();
         humanActivation = null;
         SceneRefs.tick.timeController.Init(SceneRefs.tick, newGame);
     }
-
-
 }

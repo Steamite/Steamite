@@ -516,7 +516,7 @@ public static class MyRes
     }
 
     /// <summary>
-    /// Paying for trade or outposts, takes resources from all storages.
+    /// Paying for trade or outposts, takes resources from any storage.
     /// </summary>
     /// <param name="cost">Cost to pay.</param>
     public static void TakeFromGlobalStorage(Resource cost)
