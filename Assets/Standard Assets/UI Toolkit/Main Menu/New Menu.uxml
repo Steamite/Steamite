@@ -1,0 +1,73 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Main%20Menu.uss?fileID=7433441132597879392&amp;guid=91ba141990bab14419ef28afeec0dc78&amp;type=3#Main Menu" />
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/UnitySelectors.uss?fileID=7433441132597879392&amp;guid=3468915a4f8821544854e970a313de3c&amp;type=3#UnitySelectors" />
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/EnumFields.uss?fileID=7433441132597879392&amp;guid=ac7089baa58760749b4c48a5a9265607&amp;type=3#EnumFields" />
+    <ui:VisualElement enabled="true" name="New-Menu" class="def-label" style="width: 100%; height: 100%; color: rgb(181, 166, 66); -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;);">
+        <ui:VisualElement name="Header-Bar" class="bar" style="align-items: auto; align-self: auto; align-content: auto; justify-content: space-between;">
+            <ui:Button text="Close" tooltip="Close" name="New-Close-Button" class="main-button close-button" style="width: 14%; height: 80%; flex-shrink: 0; min-width: auto; margin-left: 5%; font-size: 60px;" />
+            <ui:Label text="New Game" name="New-Menu-Header" style="max-height: 100%; font-size: 80px; bottom: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 5%; margin-bottom: 0; margin-left: 0;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Body" style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement name="Left-Bar" style="flex-grow: 0; width: 25%; height: 91%; margin-left: 2.5%; margin-right: 2.5%; margin-top: 1%; margin-bottom: 2%; flex-direction: row; flex-shrink: 0; overflow: visible;">
+                <ui:VisualElement style="flex-grow: 0; overflow: visible; align-self: flex-end; align-items: auto; height: 100%; align-content: auto; max-height: 100%;">
+                    <ui:Label text="World Selection" style="font-size: 40px; -unity-text-align: upper-center; align-content: auto; align-items: flex-start; align-self: flex-start;" />
+                    <RadioGroups.WorldRadioGroup fixed-item-height="30" binding-source-selection-mode="AutoAssign" selection-type="None" allow-add="false" allow-remove="false" name="Worlds" style="flex-grow: 0; max-height: 700px; width: 100%; justify-content: flex-start; margin-top: 50px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="VisualElement" style="flex-grow: 0; width: 5px; height: 90%; background-color: rgb(141, 129, 51); position: relative; align-self: center; display: flex; margin-top: 0;" />
+            <ui:VisualElement name="Map-Parameters" style="flex-grow: 1; width: auto; margin-left: 2.5%; margin-right: 2.5%; margin-top: 2.5%; flex-shrink: 0; max-width: 40%;">
+                <ui:ScrollView horizontal-scroller-visibility="Hidden" name="MapParams" style="flex-grow: 0; height: 200%; visibility: visible; overflow: visible; display: flex; flex-shrink: 1;">
+                    <Params.StringGenerationParameter name="Seed" label-text="Seed" style="font-size: 37px; -unity-text-align: middle-left; padding-left: 1px; margin-left: 2px; flex-grow: 0; max-height: 50px;">
+                        <Bindings>
+                            <ui:DataBinding property="TextValue" data-source-path="Seed" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="ToSource" />
+                        </Bindings>
+                    </Params.StringGenerationParameter>
+                    <Params.EnumGenerationParameter label-text="Map Size" name="Map-Size" data-source-type="StartMenu.MapGeneration, ToolkitUI" input="MapSize" style="font-size: 37px; -unity-text-align: middle-left;">
+                        <Bindings>
+                            <ui:DataBinding property="IntValue" data-source-path="MapSize" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="ToSource" />
+                        </Bindings>
+                    </Params.EnumGenerationParameter>
+                    <ui:Label text="Veins" style="align-content: flex-end; font-size: 43px; height: 50px; margin-top: 20px; justify-content: flex-end; margin-bottom: 17px;">
+                        <ui:VisualElement style="flex-grow: 0; background-color: rgb(141, 129, 51); top: 20%; width: 80%; height: 3px; margin-top: 0; justify-content: space-between; align-self: flex-start; align-items: flex-end;" />
+                    </ui:Label>
+                    <Params.EnumGenerationParameter label-text="Size" name="Size" data-source-type="StartMenu.MapGeneration, ToolkitUI" input="Veins">
+                        <Bindings>
+                            <ui:DataBinding property="IntValue" data-source-path="VeinSize" binding-mode="ToSource" />
+                        </Bindings>
+                    </Params.EnumGenerationParameter>
+                    <Params.EnumGenerationParameter label-text="Richness" name="Richness" input="Veins">
+                        <Bindings>
+                            <ui:DataBinding property="IntValue" data-source-path="VeinRichness" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="ToSource" />
+                        </Bindings>
+                    </Params.EnumGenerationParameter>
+                    <Params.EnumGenerationParameter label-text="Number" name="Number" input="Veins">
+                        <Bindings>
+                            <ui:DataBinding property="IntValue" data-source-path="VeinCount" data-source-type="StartMenu.MapGeneration, ToolkitUI" binding-mode="ToSource" />
+                        </Bindings>
+                    </Params.EnumGenerationParameter>
+                </ui:ScrollView>
+                <ui:Label text="No options&#10;available" name="PlaceHolder" style="-unity-text-align: middle-center; flex-grow: 1; flex-shrink: 1; font-size: 80px; display: flex;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Right-Bar" style="flex-grow: 1; flex-shrink: 1; margin-right: 1%;">
+                <ui:Label text="Predefined" name="Label" style="font-size: 50px; flex-grow: 0; height: 10%; align-self: flex-start; margin-left: 0; margin-right: 0;" />
+                <ui:VisualElement name="Placeholders" style="flex-grow: 1; height: 80%; visibility: visible;">
+                    <ui:Label text="Label" name="Label" style="flex-grow: 1; height: 10%; max-height: 20%; padding-bottom: 0; margin-bottom: 0; align-self: auto; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; font-size: 20px;" />
+                    <ui:VisualElement name="VisualElement" style="flex-grow: 1; margin-bottom: 0; height: 100%; background-image: url(&quot;project://database/Assets/Sprites/Icons/Gear.png?fileID=2800000&amp;guid=fd35f4632523ad441b9cd8631eecdbc2&amp;type=3#Gear&quot;); border-top-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-bottom-left-radius: 1px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgb(253, 220, 35); border-right-color: rgb(253, 220, 35); border-top-color: rgb(253, 220, 35); border-bottom-color: rgb(253, 220, 35); width: 100%; margin-top: 5%; align-self: auto; align-content: auto; align-items: auto; padding-bottom: 0;" />
+                    <ui:VisualElement style="flex-grow: 0; max-height: none; height: 200px; align-self: center; align-items: flex-start; align-content: auto; justify-content: flex-start; margin-left: 30px; margin-right: 30px; margin-top: 20px; padding-top: 10px; padding-bottom: 0; margin-bottom: 0; width: 85%; max-width: 85%; min-width: 85%;">
+                        <ui:Label text="World name" style="flex-grow: 0; height: 70px; margin-bottom: 0; max-height: 45px; align-self: center; font-size: 40px; -unity-text-align: middle-left; align-content: auto; align-items: auto; flex-shrink: 0; margin-top: 0; margin-right: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+                        <ui:TextField placeholder-text="World name" hide-placeholder-on-focus="false" name="World-Name" max-length="24" style="width: auto; max-width: 100%; min-width: 100%; overflow: hidden; max-height: 70%; margin-top: 4%; margin-bottom: 0; font-size: 16px; -unity-text-align: upper-left;">
+                            <Bindings>
+                                <ui:DataBinding property="value" data-source-path="WorldName" data-source-type="StartMenu.NewGameWindow, ToolkitUI" binding-mode="ToSource" />
+                            </Bindings>
+                        </ui:TextField>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1; margin-right: 0; padding-bottom: 10%;">
+                    <ui:Button text="Start" name="Start" enabled="true" class="disabled-button" style="height: 90px; width: 100%; overflow: hidden; visibility: visible; font-size: 70px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

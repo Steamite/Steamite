@@ -1,0 +1,6 @@
+@import url("unity-theme://default");
+
+@import url("/Assets/Standard Assets/UI Toolkit/Styles/EnumFields.uss");
+@import url("/Assets/Standard Assets/UI Toolkit/Styles/UnitySelectors.uss");
+
+VisualElement {}
