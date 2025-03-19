@@ -1,0 +1,107 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using Unity.Properties;
+using UnityEngine;
+using UnityEngine.UIElements;
+/// <summary>Provides a place to sleep for <see cref="Human"/>s.</summary>
+public class House : Building, IAssign
+{
+    [CreateProperty] public List<Human> Assigned { get; set; } = new();
+    public int assignLimit { get; set; } = 5;
+
+    #region Deconstruction
+    /// <summary>
+    /// <inheritdoc/> <br/>
+    /// Also sends assigned Humans to the elevator.
+    /// </summary>
+    public override void OrderDeconstruct()
+    {
+        base.OrderDeconstruct();
+        if (constructed)
+        {
+            foreach (Human h in Assigned)
+            {
+                h.home = null;
+                if (h.nightTime)
+                {
+                    h.Night();
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region UI
+    /// <summary>
+    /// <inheritdoc/> <br/>
+    /// Adds Assign list to <paramref name="toEnable"/>.
+    /// </summary>
+    /// <inheritdoc/>
+    protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
+    {
+        toEnable.Add("Assign");
+        base.OpenWindowWithToggle(info, toEnable);
+    }
+
+    /// <inheritdoc/>
+    public override List<string> GetInfoText()
+    {
+        List<string> strings = base.GetInfoText();
+        strings[0] = $"Can house up to {assignLimit} workers";
+        return strings;
+    }
+    #endregion
+
+    #region Assign
+    /// <summary>
+    /// <inheritdoc/> <br/>
+    /// And it's <see cref="Human.home"/>.
+    /// </summary>
+    /// <param name="human"><inheritdoc/></param>
+    /// <param name="add"><inheritdoc/></param>
+    public void ManageAssigned(Human human, bool add)
+    {
+        if (add)
+        {
+            Assigned.Add(human);
+            human.home = this;
+        }
+        else
+        {
+            Assigned.Remove(human);
+            human.home = null;
+        }
+        UIUpdate(nameof(Assigned));
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <returns><returns>Returns homeless <see cref="Human"/>s</returns></returns>
+    public List<Human> GetUnassigned()
+    {
+        List<Human> unassigned = SceneRefs.humans.GetHumen();
+        unassigned.RemoveAll(q => Assigned.Contains(q) || q.home != null);
+        return unassigned;
+    }
+    #endregion
+
+    #region Saving
+    public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
+    {
+        if (clickable == null)
+            clickable = new AssignBSave();
+        (clickable as AssignBSave).assigned = Assigned.Select(q => q.id).ToList();
+        (clickable as AssignBSave).limit = assignLimit;
+        return base.Save(clickable);
+    }
+
+    public override void Load(ClickableObjectSave save)
+    {
+        assignLimit = (save as AssignBSave).limit;
+        base.Load(save);
+    }
+    #endregion;
+}

@@ -1,0 +1,38 @@
+.speed-button {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    width: 40px;
+    height: 40px;
+    align-self: auto;
+    align-content: center;
+    font-size: 30px;
+    transition-duration: 0.2s;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgb(121, 111, 44);
+    border-right-color: rgb(121, 111, 44);
+    border-top-color: rgb(121, 111, 44);
+    border-bottom-color: rgb(121, 111, 44);
+    background-color: rgb(60, 55, 22);
+    color: rgb(246, 236, 140);
+}
+
+.speed-button:hover {
+    scale: 1.1 1.1;
+    background-color: rgb(80, 74, 29);
+}
+
+.speed-button-selected {
+}

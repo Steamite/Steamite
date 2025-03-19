@@ -1,19 +1,31 @@
-using JetBrains.Annotations;
-using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Properties;
 using UnityEngine;
+
+
 
 [Serializable]
 public class JobSave
 {
+    /// <summary>Helps with finding the interest, by chosing the correct list to search in.</summary>
+    public enum InterestType
+    {
+        /// <summary>No interest.</summary>
+        Nothing,
+        /// <summary>Interest is a <see cref="Building"/></summary>
+        B,
+        /// <summary>Interest is a <see cref="Rock"/></summary>
+        R,
+        /// <summary>Interest is a <see cref="Chunk"/></summary>
+        C
+    }
     public JobState job;
     public List<GridPos> path;
-    public int objectId;
     public int destinationID;
-    public Type objectType = null; // -1 – unassigned; 0 – nothing; 1 – building; 2 – rock; 3 – chunk
+    public int interestID;
+    public InterestType interestType; // -1 – unassigned; 0 – nothing; 1 – building; 2 – rock; 3 – chunk
     public JobSave()
     {
 
@@ -27,22 +39,47 @@ public class JobSave
             jobData.interest.GetComponent<ClickableObject>().GetID(this);
         else
         {
-            objectId = -1;
+            interestID = -1;
         }
     }
 }
 ////////////////////////////////////////////////////////////
 //--------------------------Grid--------------------------//
 ////////////////////////////////////////////////////////////
+public class WorldSave
+{
+    public BuildsAndChunksSave objectsSave;
+    public GridSave[] gridSave;
+}
+
 [Serializable]
 public class GridSave
 {
     public int width;
     public int height;
-    public List<BSave> buildings;
-    public List<StorageObjectSave> chunks;
-    public ClickableObjectSave[,] gridItems;
+    public ClickableObjectSave[,] grid;
     public ClickableObjectSave[,] pipes;
+
+    public GridSave(int _width, int _height)
+    {
+        width = _width;
+        height = _height;
+        grid = new ClickableObjectSave[_width, _height];
+        pipes = new ClickableObjectSave[_width, _height];
+    }
+}
+
+[Serializable]
+public class BuildsAndChunksSave
+{
+    public BSave[] buildings;
+    public ChunkSave[] chunks;
+
+    public BuildsAndChunksSave(BSave[] _buildings, ChunkSave[] _chunks)
+    {
+        buildings = _buildings;
+        chunks = _chunks;
+    }
 }
 
 [Serializable]
@@ -53,7 +90,9 @@ public class ClickableObjectSave
 [Serializable]
 public class RockSave : ClickableObjectSave
 {
-    public int integrity;
+    public ResourceType res;
+    public int ammount;
+    public float integrity;
     public string oreName;
     public bool toBeDug;
 }
@@ -73,23 +112,30 @@ public class StorageObjectSave : ClickableObjectSave
 }
 
 [Serializable]
-internal class ChunkSave : StorageObjectSave
+public class ChunkSave : StorageObjectSave
 {
     public MyColor resColor;
 }
 [Serializable]
 public class BSave : StorageObjectSave
 {
-    public Build build;
+    ///public Build build;
     public string prefabName;
     public float rotationY;
+    
+    public BuildingGrid blueprint;
+    public Resource cost;
+    public bool constructed;
+    public bool deconstructing;
+    public float constructionProgress;
+    public int maximalProgress;
 }
 
 [Serializable]
 public class StorageBSave : BSave
 {
     public List<bool> canStore;
-    public bool main;
+    public bool isMain;
 }
 
 [Serializable]
@@ -103,8 +149,10 @@ public class AssignBSave : BSave
 public class ProductionBSave : AssignBSave
 {
     public StorageResSave inputRes;
-    public ProductionTime pTime;
-    public ProductionStates pStates;
+    public float prodTime = 20;
+    public float currentTime = 0;
+    public int modifier = 1;
+    public ProductionStates ProdStates;
 }
 
 public class PipeBSave : BSave
@@ -135,10 +183,9 @@ public class FluidWorkSave
 //////////////////////////////////////////////////////////////////
 //-----------------------------Humans---------------------------//
 //////////////////////////////////////////////////////////////////
-public class HumanSave
+public class HumanSave : ClickableObjectSave
 {
     // Data mainly for loading
-    public int id = -1;
     public string name;
     public MyColor color;
     public GridPos gridPos;
@@ -146,28 +193,11 @@ public class HumanSave
     public JobSave jobSave;
     public Resource inventory;
     // statuses
-    public int sleep;
-    public bool hasEaten;
+    public float sleep;
     // specializations
-    public Specs specs;
+    public Specializations specs;
     public int houseID;
     public int workplaceId;
-
-    public HumanSave(Human h)
-    {
-        id = h.id;
-        name = h.name;
-        color = new(h.transform.GetChild(1).GetComponent<MeshRenderer>().material.color); // saves color of hat
-        gridPos = new(h.transform.position);
-        jobSave = new(h.jData);
-        jobSave.destinationID = h.destination?h.destination.id:-1;
-        inventory = h.inventory;
-        sleep = h.sleep;
-        hasEaten = h.hasEaten;
-        specs = h.specialization;
-        houseID = h.home ? h.home.id : -1;
-        workplaceId = h.workplace ? h.workplace.id : -1;
-    }
     public HumanSave()
     {
 
@@ -194,12 +224,17 @@ public class StorageResSave
     }
 }
 [Serializable]
-public class PlayerSettings
+public class GameStateSave
 {
     public List<JobState> priorities;
+    public int dayTime;
+    public int numberOfDays;
+    public bool autoSave;
 }
+
 [Serializable]
-public class MyColor{
+public class MyColor
+{
     public float r;
     public float g;
     public float b;

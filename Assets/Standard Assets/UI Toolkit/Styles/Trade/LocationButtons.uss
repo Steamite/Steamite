@@ -1,0 +1,58 @@
+.location-button {
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    position: absolute;
+}
+
+.location-button-selected {
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    position: absolute;
+}
+
+.location-button > VisualElement {
+    background-image: url("project://database/Assets/Sprites/Textures/1filled%20cog@2x.png?fileID=2800000&guid=5a869fc421e59114e9ecac48c51af2ed&type=3#1filled cog@2x");
+    flex-grow: 1;
+    transition-property: scale, -unity-background-image-tint-color;
+    transition-duration: 0.2s, 0.2s;
+}
+
+.location-button:hover > VisualElement {
+    scale: 1.05 1.05;
+    transition-property: scale, -unity-background-image-tint-color;
+    transition-duration: 0.2s, 0.2s;
+    -unity-background-image-tint-color: rgb(181, 166, 66);
+}
+
+.location-button-selected > VisualElement {
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    -unity-background-image-tint-color: rgb(121, 111, 44);
+    transition-duration: 1ms, 0.2s, 0.2s;
+    transition-property: rotate, scale, -unity-background-image-tint-color;
+    rotate: 0;
+    transition-timing-function: linear, ease, ease;
+    background-image: url("project://database/Assets/Sprites/Textures/1filled%20cog@2x.png?fileID=2800000&guid=5a869fc421e59114e9ecac48c51af2ed&type=3#1filled cog@2x");
+    flex-grow: 1;
+    scale: 1.1 1.1;
+}
+
+.rotate > VisualElement {
+    rotate: 360deg;
+    transition-duration: 4s;
+    transition-property: rotate;
+    transition-timing-function: linear;
+}

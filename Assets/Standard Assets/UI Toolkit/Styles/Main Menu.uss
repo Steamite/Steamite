@@ -1,0 +1,46 @@
+.menu {
+    transition-duration: 2s;
+    transition-timing-function: ease-out;
+    translate: 0 0;
+    transition-property: translate;
+}
+
+.menu-new {
+    transition-duration: 2s;
+    transition-timing-function: ease-out;
+    translate: -100% 0;
+    transition-property: translate;
+}
+
+.menu-load {
+    transition-duration: 2s;
+    transition-timing-function: ease-out;
+    translate: 0 -100%;
+    transition-property: translate;
+}
+
+.window {
+    flex-grow: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    visibility: visible;
+    overflow: visible;
+    display: flex;
+    color: rgb(249, 233, 141);
+    translate: 105% 0;
+    transition-duration: 2s;
+    transition-timing-function: ease-out;
+    transition-property: translate;
+}
+
+_______________ {
+}
+
+.background {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
