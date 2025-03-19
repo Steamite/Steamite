@@ -29,7 +29,7 @@ public class GridTiles : MonoBehaviour
     /// <summary>Currently selected building for construction.</summary>
     [Header("Tilemaps")] public Building buildingPrefab;
     /// <summary>Current active control mode.</summary>
-    public ControlMode activeControl = ControlMode.nothing;
+    public ControlMode activeControl { get; private set; } = ControlMode.nothing;
 
     /// <summary>Last mouse position.</summary>
     public GridPos activePos;
@@ -579,7 +579,7 @@ public class GridTiles : MonoBehaviour
             }
             if (visible)
             {
-                Cursor.SetCursor(cur, vec, CursorMode.ForceSoftware);
+                Cursor.SetCursor(cur, vec, CursorMode.Auto);
             }
         }
     }

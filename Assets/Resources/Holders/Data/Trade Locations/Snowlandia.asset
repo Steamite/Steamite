@@ -10,19 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cad094dab82e60b4ca090c2de0aff2de, type: 3}
-  m_Name: Trade Data
+  m_Name: Snowlandia
   m_EditorClassIdentifier: 
-  startingLocations:
-  - name: Snowlandia
+  startingLocation:
+    name: Snowlandia
     pos:
-      x: 900
-      z: 1117
+      x: 1100
+      z: 1420
       y: 0
     passiveProductions: []
     stats:
-    - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
-    - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
-    - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
     - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
   tradeLocations:
   - name: Dean Forrest

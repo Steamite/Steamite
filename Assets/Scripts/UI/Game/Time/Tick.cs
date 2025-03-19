@@ -11,12 +11,17 @@ public class Tick : MonoBehaviour
     /// <summary>The tick counter, resets if it reaches uint capacity.</summary>
     public uint lastTick = 0;
     /// <summary>The most subscribed action in the whole project, Triggers each tick.</summary>
-    public event Action tickAction;
+    event Action tickAction;
     /// <summary>Handles user input for changing game speed.</summary>
     public DayTime timeController;
     #endregion
 
-    public void AwakeTicks(int clockSpeed)
+    public void SubscribeToTicks(Action action)
+        => tickAction += action;
+	public void UnsubscribeToTicks(Action action)
+		=> tickAction -= action;
+
+	public void AwakeTicks(int clockSpeed)
     {
         Time.timeScale = clockSpeed;
         StartCoroutine(DoTick());

@@ -15,7 +15,7 @@ public class SaveController : MonoBehaviour
     #region Init
     private void Start()
     {
-        SceneRefs.tick.timeController.dayStart += () => SaveGame("", true);
+        SceneRefs.tick.timeController.SubscribeToEvent(() => SaveGame("", true), DayTime.TimeEventType.Day);
         UIRefs.pauseMenu.Init((s) => SaveGame(s, false), ref saveUIAction);
         worldName = MyGrid.worldName;
     }

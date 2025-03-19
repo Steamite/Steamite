@@ -13,5 +13,13 @@ namespace TradeData.Locations
         [SerializeField] public List<ColonyStat> passiveProductions;
         /// <summary>Colony stats data.</summary>
         [SerializeField] public List<ColonyStat> stats;
-    }
+
+		public void DoProduction()
+		{
+			foreach(ColonyStat stat in stats)
+            {
+                stat.DoStat();
+            }
+		}
+	}
 }

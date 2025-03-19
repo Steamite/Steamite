@@ -10572,6 +10572,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7072378217534680773}
     - target: {fileID: 4186981223861399555, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: panAmmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4186981223861399555, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: maxRotationY
       value: 20
       objectReference: {fileID: 0}
@@ -10579,6 +10583,10 @@ PrefabInstance:
       propertyPath: mainShortcuts
       value: 
       objectReference: {fileID: 6086404398923934763}
+    - target: {fileID: 4186981223861399555, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: mouseThreshold
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 7690688619011433921, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_Enabled
       value: 0

@@ -69,10 +69,9 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
 
         moneyLabel = root.Q<Label>("Money-Value");
         DataBinding binding = BindingUtil.CreateBinding(nameof(Money));
-        binding.sourceToUiConverters.AddConverter((ref int _Money) => $"{Money} <color=#FFD700>£</color>");
+        binding.sourceToUiConverters.AddConverter((ref int _Money) => $"{Money} <color=#FFD700>"+(char)163+"</color>");
         moneyLabel.SetBinding("text", binding);
         moneyLabel.dataSource = this;
-
 
         resourceList = root.Q<ListView>("Resources") as IUIElement;
         resourceList.Open(this);

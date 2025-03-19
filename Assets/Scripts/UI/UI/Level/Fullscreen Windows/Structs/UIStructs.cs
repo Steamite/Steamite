@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using TradeData.Locations;
+using System.Linq;
 
 public struct Save
 {
@@ -11,21 +12,25 @@ public struct Save
     public ResearchSave research;
     public TradeSave trade;
 
-    public string worldName;
+    //public string worldName;
 }
 
 
 [Serializable]
 public class TradeSave
 {
-    public ColonyLocation colonyLocation;
+    public string colonyLocation;
+    public List<int> prodLevels;
+    public List<int> statLevels;
     public List<TradeLocation> tradeLocations;
     public List<TradeConvoy> convoys;
     //public List<Outpost> outposts;
     public int money;
     public TradeSave(Trading trading)
     {
-        colonyLocation = trading.colonyLocation;
+        colonyLocation = trading.colonyLocation.name;
+        prodLevels = trading.colonyLocation.passiveProductions.Select(q => q.CurrentState).ToList();
+        statLevels = trading.colonyLocation.stats.Select(q => q.CurrentState).ToList();
         tradeLocations = trading.tradeLocations;
         convoys = trading.GetConvoys();
         //outposts = trading.outposts;
