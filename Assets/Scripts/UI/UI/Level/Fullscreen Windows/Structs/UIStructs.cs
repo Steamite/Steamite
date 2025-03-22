@@ -29,8 +29,8 @@ public class TradeSave
     public TradeSave(Trading trading)
     {
         colonyLocation = trading.colonyLocation.name;
-        prodLevels = trading.colonyLocation.passiveProductions.Select(q => q.CurrentState).ToList();
-        statLevels = trading.colonyLocation.stats.Select(q => q.CurrentState).ToList();
+        prodLevels = trading.passiveProductions.Select(q => q.CurrentState).ToList();
+        statLevels = trading.stats.Select(q => q.CurrentState).ToList();
         tradeLocations = trading.tradeLocations;
         convoys = trading.GetConvoys();
         //outposts = trading.outposts;

@@ -77,7 +77,7 @@ namespace TradeWindowElements
 				el.ClearClassList();
 				el.AddToClassList("state-button");
 
-				if (stateLevel >= stat.maxState)
+				if (stateLevel >= stat.MaxState)
 				{
 					el.AddToClassList("locked");
 					continue;

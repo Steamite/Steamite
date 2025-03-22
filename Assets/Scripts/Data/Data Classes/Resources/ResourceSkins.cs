@@ -13,7 +13,7 @@ public class ResourceSkin
 }
 
 /// <summary>Contains all <see cref="ResourceSkin"/>s.</summary>
-[CreateAssetMenu(fileName = "Resource Skin", menuName = "Scriptable Objects/Resource Skin")]
+[CreateAssetMenu(fileName = "Resource Skin", menuName = "ScriptableObjects/Resource Skin")]
 public class ResourceSkins : ScriptableObject
 {
     [SerializeField] public ResourceSkin moneySkin;

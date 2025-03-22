@@ -10,16 +10,25 @@ namespace TradeData.Locations
     public class ColonyLocation : Location
     {
         /// <summary>Upgradable passive production data.</summary>
-        [SerializeField] public List<ColonyStat> passiveProductions;
+        [SerializeField] public List<StatData> passiveProductions;
         /// <summary>Colony stats data.</summary>
-        [SerializeField] public List<ColonyStat> stats;
+        [SerializeField] public List<StatData> stats;
+
 
 		public void DoProduction()
 		{
-			foreach(ColonyStat stat in stats)
+			/*foreach(ColonyStat stat in stats)
             {
                 stat.DoStat();
-            }
+            }*/
+		}
+
+		public void NewGame(List<ColonyStat> stats)
+		{
+            /*foreach (ColonyStat production in passiveProductions)
+                production.LoadState();
+			foreach (ColonyStat production in stats)
+				production.LoadState();*/
 		}
 	}
 }
