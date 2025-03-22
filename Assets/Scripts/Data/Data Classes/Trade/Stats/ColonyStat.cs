@@ -5,23 +5,33 @@ using UnityEngine;
 
 namespace TradeData.Stats
 {
+    [Serializable]
+    public struct StatData
+    {
+        [SerializeField] int currentState;
+        [SerializeField] int maxState;
+    }
     /// <summary>Base class that each type of state must inherit from.</summary>
     public abstract class ColonyStat : ScriptableObject
     {
-        public const int MAX_STAT_LEVEL = 5;
+		#region Variables
+		public const int MAX_STAT_LEVEL = 5;
 
+        [Header("Base")]
         /// <summary>Name of the stat in display.</summary>
         public string displayName;
         /// <summary>Current state, starting value set whe initializing a new game.</summary>
-        [HideInInspector] public int CurrentState { get; private set; }
+        public int CurrentState { get; private set; }
+        public int MaxState { get; private set; }
         /// <summary>Max possible state, set when initialining a new game.</summary>
-        public int maxState;
 
         /// <summary>Resources needed for upgrading to that level.</summary>
         [SerializeField]public List<Resource> resourceUpgradeCost = new() {};
+		#endregion
 
-        /// <summary>Provides production based on the <see cref="CurrentState"/>.</summary>
-        public abstract void DoStat();
+
+		/// <summary>Provides production based on the <see cref="CurrentState"/>.</summary>
+		public abstract void DoStat();
 
         /// <summary>Summary for one stat level.</summary>
         public abstract string GetText(int state);
@@ -38,7 +48,7 @@ namespace TradeData.Stats
 		/// <returns>If the next level is affordable</returns>
 		public bool CanAfford()
         {
-            if (CurrentState == maxState)
+            if (CurrentState == MaxState)
                 return false;
 
             return 
@@ -56,10 +66,13 @@ namespace TradeData.Stats
 		}
 
         /// <summary>
-        /// Used when loading a save.
+        /// Used when loading a save, or creating a new game.
         /// </summary>
-        /// <param name="loadedState">Loaded state.</param>
-		public void LoadState(int loadedState) =>
-            CurrentState = loadedState;
+        /// <param name="_currentState">Loaded state.</param>
+		public void LoadState(int _currentState, int _maxState)
+		{
+			CurrentState = _currentState;
+            MaxState = _maxState;
+		}
 	}
 }

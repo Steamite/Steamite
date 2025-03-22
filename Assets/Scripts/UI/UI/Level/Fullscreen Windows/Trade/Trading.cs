@@ -33,6 +33,7 @@ public class Trading : FullscreenWindow
     {
         TradeHolder tradeHolder = Resources.Load<TradeHolder>("Holders/Data/Trade Locations/Snowlandia");
         colonyLocation = tradeHolder.startingLocation;
+        colonyLocation.NewGame();
         tradeLocations = tradeHolder.tradeLocations;
 
         convoys = new();

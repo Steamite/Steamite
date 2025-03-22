@@ -18,7 +18,8 @@ MonoBehaviour:
       x: 1100
       z: 1420
       y: 0
-    passiveProductions: []
+    passiveProductions:
+    - {fileID: 11400000, guid: 428f9a814b3090d4aa60a87b758bb517, type: 2}
     stats:
     - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
   tradeLocations:
