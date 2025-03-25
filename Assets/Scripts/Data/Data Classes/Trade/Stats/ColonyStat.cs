@@ -5,12 +5,22 @@ using UnityEngine;
 
 namespace TradeData.Stats
 {
-    [Serializable]
-    public struct StatData
-    {
-        [SerializeField] int currentState;
-        [SerializeField] int maxState;
+    #region Saving
+    [Serializable] 
+    public class MinMax 
+    { 
+        public int min; 
+        public int max; 
     }
+
+    [Serializable]
+    public class StatData
+    {
+        [SerializeField] public List<MinMax> production;
+        [SerializeField] public List<MinMax> stats;
+    }
+    #endregion
+
     /// <summary>Base class that each type of state must inherit from.</summary>
     public abstract class ColonyStat : ScriptableObject
     {
@@ -20,10 +30,10 @@ namespace TradeData.Stats
         [Header("Base")]
         /// <summary>Name of the stat in display.</summary>
         public string displayName;
-        /// <summary>Current state, starting value set whe initializing a new game.</summary>
+        /// <summary>Current state, starting value set when initializing a new game.</summary>
         public int CurrentState { get; private set; }
+        /// <summary>Max possible state, set loading level.</summary>
         public int MaxState { get; private set; }
-        /// <summary>Max possible state, set when initialining a new game.</summary>
 
         /// <summary>Resources needed for upgrading to that level.</summary>
         [SerializeField]public List<Resource> resourceUpgradeCost = new() {};

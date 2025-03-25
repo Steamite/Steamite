@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: Passive Income
   m_EditorClassIdentifier: 
   displayName: Donations
-  maxState: 5
-  startingState: 2
   resourceUpgradeCost:
   - capacity: 200
     type: 01000000
@@ -23,11 +21,11 @@ MonoBehaviour:
     type: 02000000
     ammount: 0a000000
   - capacity: 600
-    type: 0000000001000000
-    ammount: 0a0000000f000000
+    type: 0000000000000000
+    ammount: 0a0000000a000000
   - capacity: 800
-    type: 0300000001000000
-    ammount: 0a00000032000000
+    type: 0300000003000000
+    ammount: 0a0000000a000000
   - capacity: 1000
     type: 03000000
     ammount: 1e000000

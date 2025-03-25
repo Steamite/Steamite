@@ -11,4 +11,5 @@ public class TradeHolder : ScriptableObject
     public ColonyLocation startingLocation;
     /// <summary>All trade locations.</summary>
     [Header("Locations")]public List<TradeLocation> tradeLocations = new();
+
 }

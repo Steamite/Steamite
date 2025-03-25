@@ -3,6 +3,6 @@
     <engine:VisualElement name="Menu" class="local-menu" style="flex-grow: 0; position: absolute; width: 400px; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; display: flex;">
         <engine:Label text="Label" name="Header" />
         <InfoWindowElements.DoubleResourceList cost="true" icon-size="45" style="font-size: 30px; max-width: 100%; width: 100%; min-width: 100%; flex-grow: 0; align-self: center; margin-top: 0;" />
-        <engine:Label text="Label" name="Summary" />
+        <engine:Label text="Label" name="Summary" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: upper-center;" />
     </engine:VisualElement>
 </engine:UXML>

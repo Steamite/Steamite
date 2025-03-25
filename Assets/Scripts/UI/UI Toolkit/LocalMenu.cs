@@ -25,12 +25,21 @@ public class LocalMenu : MonoBehaviour
                 menu.style.display = DisplayStyle.Flex;
                 menu.style.width = 300;
                 ((Label)menu.ElementAt(0)).text = stat.name;
-                ((DoubleResourceList)menu.ElementAt(1)).Open(stat.resourceUpgradeCost[element.parent.IndexOf(element)]);
-                ((Label)menu.ElementAt(2)).text = stat.GetText(element.parent.IndexOf(element) + 1);
+                if(element is Label)
+                {
+                    ((Label)menu.ElementAt(2)).text = stat.GetText(true);
+                    ((DoubleResourceList)menu.ElementAt(1)).style.display = DisplayStyle.None; 
+                }
+                else
+                {
+                    ((DoubleResourceList)menu.ElementAt(1)).style.display = DisplayStyle.Flex; 
+                    ((DoubleResourceList)menu.ElementAt(1)).Open(stat.resourceUpgradeCost[element.parent.IndexOf(element)]);
+                    ((Label)menu.ElementAt(2)).text = stat.GetText(element.parent.IndexOf(element) + 1);
+                }
                 
-                Vector2 vec = element.worldBound.position;
+                Rect vec = element.worldBound;
 
-                menu.style.left = vec.x + 75;
+                menu.style.left = vec.x + vec.width + 25;
                 menu.style.bottom = (ToolkitUtils.GetRoot(element).resolvedStyle.height - element.worldBound.y) - element.resolvedStyle.height / 2;
 				menu.style.opacity = 100;
                 break;

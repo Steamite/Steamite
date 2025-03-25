@@ -10,18 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cad094dab82e60b4ca090c2de0aff2de, type: 3}
-  m_Name: Snowlandia
+  m_Name: Highlands
   m_EditorClassIdentifier: 
   startingLocation:
-    name: Snowlandia
+    name: Highlands
     pos:
-      x: 1100
-      z: 1420
+      x: 800
+      z: 1000
       y: 0
-    passiveProductions:
-    - {fileID: 11400000, guid: 428f9a814b3090d4aa60a87b758bb517, type: 2}
+    config:
+      production:
+      - min: 2
+        max: 5
+      stats:
+      - min: 2
+        max: 4
     stats:
     - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
+    production: []
   tradeLocations:
   - name: Dean Forrest
     pos:
