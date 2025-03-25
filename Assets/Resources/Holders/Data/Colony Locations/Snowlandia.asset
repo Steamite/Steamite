@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cad094dab82e60b4ca090c2de0aff2de, type: 3}
+  m_Name: Snowlandia
+  m_EditorClassIdentifier: 
+  startingLocation:
+    name: Snowlandia
+    pos:
+      x: 1100
+      z: 1420
+      y: 0
+    config:
+      production:
+      - min: 2
+        max: 3
+      stats:
+      - min: 0
+        max: 4
+    production: []
+    stats:
+    - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
+  tradeLocations:
+  - name: Dean Forrest
+    pos:
+      x: 1127
+      z: 1702
+      y: 0
+    Buy:
+    - name: 
+      type: 1
+      cost: 3
+    - name: 
+      type: 2
+      cost: 5
+    Sell:
+    - name: 
+      type: 3
+      cost: 1
+    - name: 
+      type: 4
+      cost: 2
+  - name: Wye valley
+    pos:
+      x: 496
+      z: 987
+      y: 0
+    Buy:
+    - name: 
+      type: 1
+      cost: 3
+    - name: 
+      type: 2
+      cost: 5
+    Sell: []
+  - name: Scottish Highlands
+    pos:
+      x: 896
+      z: 448
+      y: 0
+    Buy: []
+    Sell:
+    - name: 
+      type: 1
+      cost: 3
+    - name: 
+      type: 2
+      cost: 5
+  - name: test1
+    pos:
+      x: 300
+      z: 1700
+      y: 0
+    Buy:
+    - name: 
+      type: 1
+      cost: 3
+    - name: 
+      type: 2
+      cost: 5
+    Sell: []
+  - name: test1
+    pos:
+      x: 1000
+      z: 800
+      y: 0
+    Buy: []
+    Sell:
+    - name: 
+      type: 1
+      cost: 3
+    - name: 
+      type: 2
+      cost: 5

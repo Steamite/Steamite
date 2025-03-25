@@ -23,7 +23,7 @@ namespace TradeWindowElements
 			for (int i = 0; i < 2; i++)
 			{
 				element = new();
-				label = new(i == 0 ? "Passive Production" : "Stats");
+				label = new(i == 1 ? "Passive Production" : "Stats");
 				label.name = "Header";
 				element.Add(label);
 				element.Add(new());
@@ -35,8 +35,8 @@ namespace TradeWindowElements
 
 		public void Init()
 		{
-			CreateStats(0, UIRefs.trading.colonyLocation.passiveProductions);
-			CreateStats(1, UIRefs.trading.colonyLocation.stats);
+			CreateStats(0, UIRefs.trading.colonyLocation.stats);
+			CreateStats(1, UIRefs.trading.colonyLocation.production);
 			style.display = DisplayStyle.None;
 		}
 
@@ -54,7 +54,12 @@ namespace TradeWindowElements
 				statElem = statElem.ElementAt(0);
 				((Label)statElem.ElementAt(0)).text = stat.GetText(false);
 				((Label)statElem.ElementAt(2)).text = stat.name;
-				statElem = statElem.ElementAt(1);
+				((Label)statElem.ElementAt(2)).
+					RegisterCallback<MouseEnterEvent>((eve) => ShowMenu(eve, stat));
+                ((Label)statElem.ElementAt(2)).
+                    RegisterCallback<MouseLeaveEvent>(HideMenu);
+
+                statElem = statElem.ElementAt(1);
 
 				statGroup.Add(statElem.parent.parent);
 			}
@@ -77,7 +82,7 @@ namespace TradeWindowElements
 				el.ClearClassList();
 				el.AddToClassList("state-button");
 
-				if (stateLevel >= stat.MaxState)
+				if (stateLevel > stat.MaxState)
 				{
 					el.AddToClassList("locked");
 					continue;
@@ -98,6 +103,7 @@ namespace TradeWindowElements
 			}
 			((Label)group.parent.ElementAt(0)).text = stat.GetText(false);
 		}
+
 		void ShowMenu(MouseEnterEvent eve, ColonyStat stat) =>
 			ToolkitUtils.localMenu.Open(stat, (VisualElement)eve.target);
 		void HideMenu(MouseLeaveEvent _) =>
@@ -108,7 +114,6 @@ namespace TradeWindowElements
 			stat.Upgrade();
 			RefreshStates();
 		}
-
 
 		public string Open()
 		{
@@ -125,12 +130,12 @@ namespace TradeWindowElements
 			VisualElement statGroup = ElementAt(0).ElementAt(1);
 
 			int i = 0;
-			location.passiveProductions.ForEach(q => RefreshStat(q, statGroup.ElementAt(i++).ElementAt(0).ElementAt(1), q.CanAfford()));
+            location.stats.ForEach(q => RefreshStat(q, statGroup.ElementAt(i++).ElementAt(0).ElementAt(1), q.CanAfford()));
 
 			statGroup = ElementAt(1).ElementAt(1);
 			i = 0;
-			location.stats.ForEach(q => RefreshStat(q, statGroup.ElementAt(i++).ElementAt(0).ElementAt(1), q.CanAfford()));
-		}
+            location.production.ForEach(q => RefreshStat(q, statGroup.ElementAt(i++).ElementAt(0).ElementAt(1), q.CanAfford()));
+        }
 
 		public void Hide()
 		{

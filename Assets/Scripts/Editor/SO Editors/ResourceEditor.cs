@@ -71,7 +71,6 @@ public class ResourceEditor : PropertyDrawer
         listView.itemTemplate = Resources.Load<VisualTreeAsset>("UI Toolkit\\ResElem");
         listView.itemsSource = ((Resource)property.boxedValue).type;
         listView.horizontalScrollingEnabled = false;
-
         #region Actions
         listView.bindItem = 
             (elem, i) => 
@@ -95,25 +94,6 @@ public class ResourceEditor : PropertyDrawer
                         serializedObject.ApplyModifiedProperties();
                     });
             };
-
-/*        listView.unbindItem =
-            (elem, i) =>
-            {
-                elem = elem.ElementAt(0);
-                ((EnumField)elem.ElementAt(0)).UnregisterValueChangedCallback(
-                    (enu) => 
-                    {
-                        ((Resource)property.boxedValue).type[i] = (ResourceType)enu.newValue;
-                        property.serializedObject.ApplyModifiedProperties();
-                    });
-
-                ((IntegerField)elem.ElementAt(1)).UnregisterValueChangedCallback(
-                    (val) =>
-                    {
-                        ((Resource)property.boxedValue).ammount[i] = val.newValue;
-                        property.serializedObject.ApplyModifiedProperties();
-                    });
-            };*/
 
         listView.onAdd =
             (view) =>

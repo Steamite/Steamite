@@ -102,7 +102,7 @@ namespace TradeWindowElements
         public void Open(object data)
         {
             //TODO: NEED TO MOVE TRADE SLIDERS
-            ((TradeLocationButton)ElementAt(0).ElementAt(1).ElementAt(1)).Select();
+            ((LocationButton)ElementAt(0).ElementAt(1).ElementAt(0)).Select();
             ((Label)parent.ElementAt(1).ElementAt(0)).text = $"{UIRefs.trading.AvailableConvoy}/{UIRefs.trading.maxConvoy} Convoyes";
 
             Slider slider;

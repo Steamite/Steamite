@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TradeData.Locations;
+using TradeData.Stats;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -20,6 +21,8 @@ public class Trading : FullscreenWindow
 
     public ColonyLocation colonyLocation;
     public List<TradeLocation> tradeLocations;
+
+    [SerializeField] string baseLocation = "Highlands";
     #endregion
 
     #region Properties
@@ -31,24 +34,19 @@ public class Trading : FullscreenWindow
 
     public void NewGame(int selectedColony)
     {
-        TradeHolder tradeHolder = Resources.Load<TradeHolder>("Holders/Data/Trade Locations/Snowlandia");
+        TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Colony Locations/{baseLocation}");
         colonyLocation = tradeHolder.startingLocation;
         colonyLocation.NewGame();
         tradeLocations = tradeHolder.tradeLocations;
-
         convoys = new();
         Init();
     }
 
     public void LoadGame(TradeSave tradeSave)
     {
-		TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Trade Locations/{tradeSave.colonyLocation}");
+		TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Colony Locations/{tradeSave.colonyLocation}");
 		colonyLocation = tradeHolder.startingLocation;
-
-        for (int i = 0; i < colonyLocation.passiveProductions.Count; i++)
-            colonyLocation.passiveProductions[i].LoadState(tradeSave.prodLevels[i]);
-        for (int i = 0; i < colonyLocation.stats.Count; i++)
-			colonyLocation.stats[i].LoadState(tradeSave.statLevels[i]);
+        colonyLocation.LoadGame(tradeSave.prodLevels, tradeSave.statLevels);
 
         tradeLocations = tradeSave.tradeLocations;
         convoys = tradeSave.convoys;
