@@ -3,8 +3,6 @@ using UnityEngine;
 using System;
 using UnityEngine.UIElements;
 using System.Linq;
-using Unity.Properties;
-using static UnityEngine.Analytics.IAnalytic;
 
 /// <summary>All groups of objects that can be inspected. For switching info window views.</summary>
 public enum InfoMode

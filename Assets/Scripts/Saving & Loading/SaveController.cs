@@ -15,7 +15,7 @@ public class SaveController : MonoBehaviour
     #region Init
     private void Start()
     {
-        SceneRefs.tick.timeController.SubscribeToEvent(() => SaveGame("", true), DayTime.TimeEventType.Day);
+        SceneRefs.tick.SubscribeToEvent(() => SaveGame("", true),Tick.TimeEventType.Day);
         UIRefs.pauseMenu.Init((s) => SaveGame(s, false), ref saveUIAction);
         worldName = MyGrid.worldName;
     }
@@ -206,7 +206,7 @@ public class SaveController : MonoBehaviour
     {
         GameStateSave gameState = new();
         gameState.priorities = SceneRefs.jobQueue.priority;
-        SceneRefs.tick.timeController.Save(gameState);
+        SceneRefs.tick.Save(gameState);
         gameState.autoSave = autoSave;
 
         JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/PlayerSettings.json"));

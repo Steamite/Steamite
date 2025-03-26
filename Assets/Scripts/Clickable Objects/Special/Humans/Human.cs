@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using TMPro;
 using Unity.Properties;
@@ -140,10 +141,9 @@ public class Human : ClickableObject
 #if UNITY_EDITOR
         transform.GetChild(0).gameObject.SetActive(true);
 #endif
-        SceneRefs.tick.SubscribeToTicks(DoRepetableAction);
-        DayTime dT = SceneRefs.tick.timeController;
-        dT.SubscribeToEvent(Day, DayTime.TimeEventType.Day);
-        dT.SubscribeToEvent(Night, DayTime.TimeEventType.Night);
+        SceneRefs.tick.SubscribeToEvent(DoRepetableAction, Tick.TimeEventType.Ticks);
+        SceneRefs.tick.SubscribeToEvent(Day, Tick.TimeEventType.Day);
+        SceneRefs.tick.SubscribeToEvent(Night, Tick.TimeEventType.Night);
 
         if (jData.job == JobState.Free)
             HumanActions.LookForNew(this);

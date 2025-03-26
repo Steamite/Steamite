@@ -36,3 +36,31 @@
 
 .speed-button-selected {
 }
+
+#Current > VisualElement {
+    width: 45px;
+    flex-grow: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgb(68, 44, 21);
+    border-right-color: rgb(68, 44, 21);
+    border-top-color: rgb(68, 44, 21);
+    border-bottom-color: rgb(68, 44, 21);
+    background-color: rgb(114, 73, 35);
+}
+
+#Current {
+    flex-direction: row;
+    justify-content: space-around;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    height: 50px;
+}

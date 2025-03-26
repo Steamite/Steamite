@@ -267,7 +267,7 @@ public class LoadingScreen : MonoBehaviour
     void FillGameState(IProgress<int> progress, GameStateSave gameState)
     {
         SceneRefs.jobQueue.priority = gameState.priorities;
-        SceneRefs.tick.timeController.Load(gameState);
+        SceneRefs.tick.Load(gameState);
     }
 
     /// <summary>
@@ -312,10 +312,9 @@ public class LoadingScreen : MonoBehaviour
 
 		MyRes.ActivateResources(newGame);
 		await SceneManager.UnloadSceneAsync("LoadingScreen");
-        SceneRefs.stats.GetChild(1).GetChild(0).GetComponent<TimeButtons>().SetStartSpeed(SceneRefs.tick);
+        SceneRefs.stats.GetChild(1).GetChild(0).GetComponent<TimeButtons>().SetStartSpeed(SceneRefs.tick, newGame);
         SceneRefs.stats.GetChild(0).GetComponent<LevelButtons>().Init();
         humanActivation?.Invoke();
         humanActivation = null;
-        SceneRefs.tick.timeController.Init(SceneRefs.tick, newGame);
     }
 }

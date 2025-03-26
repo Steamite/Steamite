@@ -64,13 +64,17 @@ public class Trading : FullscreenWindow
 
 
         //Moves all convoys each tick.
-        SceneRefs.tick.SubscribeToTicks( 
+        SceneRefs.tick.SubscribeToEvent( 
             () =>
             {
                 for (int i = convoys.Count - 1; i >= 0; i--)
                     convoys[i].Move(CONVOY_SPEED);
-            });
-        SceneRefs.tick.timeController.SubscribeToEvent(colonyLocation.DoProduction, DayTime.TimeEventType.Week);
+            },
+           Tick.TimeEventType.Ticks);
+
+        SceneRefs.tick.SubscribeToEvent(
+            colonyLocation.DoProduction,
+            Tick.TimeEventType.Week);
     }
 
 	#region Window
