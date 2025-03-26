@@ -9,10 +9,10 @@ public class TimeButtons : RadioButtons
 {
     public Tick tick;
 
-    public void SetStartSpeed(Tick _tick)
+    public void SetStartSpeed(Tick _tick, bool newGame)
     {
         tick = _tick;
-        tick.AwakeTicks(states[currentState]);
+        tick.AwakeTicks(states[currentState], newGame);
     }
 
     protected override void ButtonTrigger(Button button, int index)
