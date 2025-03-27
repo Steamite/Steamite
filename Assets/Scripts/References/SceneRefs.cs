@@ -7,6 +7,7 @@ using UnityEngine;
 public class SceneRefs : MonoBehaviour
 {
     #region Variables
+    public static bool isInit => instance != null;
     static SceneRefs instance;
     [Header("GridObjects")]
     [SerializeField] GridTiles _gridTiles;
@@ -34,7 +35,7 @@ public class SceneRefs : MonoBehaviour
     public static JobQueue jobQueue => instance._jobQueue;
     public static Tick tick => instance._tick;
 
-    public static Transform stats => instance._stats;
+    public static Transform BottomBar => instance._stats;
     public static Transform buildMenu => instance._buildMenu;
     public static Transform miscellaneous => instance._miscellaneous;
     public static InfoWindow infoWindow => instance._infoWindow;

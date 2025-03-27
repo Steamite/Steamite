@@ -36,10 +36,11 @@ public class Tick : MonoBehaviour
     [Header("Tick speed")][SerializeField] float ticksPerHour = 4;
     /// <summary>Progresses time by this(60/<see cref="ticksPerHour"/>).</summary>
     int minutesPerTick;
+
     /// <summary>Current time of the day(counts as hours when starting a new game).</summary>
-    [Header("Init Data")][SerializeField] int timeInMinutes = 4;
+    public int timeInMinutes = 4;
     /// <summary>Current number of days, increased each new day.<summary>
-    [SerializeField] int numberOfDays = 5;
+    public int numberOfDays = 5;
 
     /// <summary>The most subscribed action in the whole project, Triggers each tick.</summary>
     event Action tickAction;
@@ -58,6 +59,8 @@ public class Tick : MonoBehaviour
 
     /// <summary>The tick counter, resets if it reaches uint capacity.</summary>
     [HideInInspector]public uint lastTick = 0;
+
+    bool running = false;
     #endregion
 
     #region Events
@@ -93,13 +96,13 @@ public class Tick : MonoBehaviour
                 throw new NotImplementedException();
         }
     }
+
     /// <summary>
     /// Removes listeners for time events.
     /// </summary>
     /// <param name="subscriber">Listener to remove.</param>
     /// <param name="timeEvent">Which event to remove from.</param>
     /// <exception cref="NotImplementedException"></exception>
-
     public void UnsubscribeToEvent(Action subscriber, TimeEventType timeEvent)
     {
         switch (timeEvent)
@@ -135,47 +138,76 @@ public class Tick : MonoBehaviour
     {
         return (numberOfDays % 7 * 1440) + timeInMinutes;
     }
-    #endregion
+	#endregion
 
-    #region Init
-    public void AwakeTicks(int clockSpeed, bool newGame)
+	#region Init
+	public void InitTicks(bool newGame)
     {
         minutesPerTick = (int)(60f / ticksPerHour);
         if (newGame)
             timeInMinutes *= 60;
         if (timeInMinutes < 6 * 60 || timeInMinutes > 21 * 60)
             nightStart?.Invoke();
-        SubscribeToEvent(UpdateTime,Tick.TimeEventType.Ticks);
 
-        Time.timeScale = clockSpeed;
-        StartCoroutine(DoTick());
+        Time.timeScale = 1;
     }
     #endregion
 
     #region Speed Managing
-    public void ChangeGameSpeed(float _speed)
+    public void ChangeGameSpeed(float _speed = 0)
     {
-        StopAllCoroutines();
-        if (_speed > 0)
+        if (_speed == 0 && running == false)
+        {
+            StartTicks();
+        }
+        else if(_speed > 0)
         {
             Time.timeScale = _speed;
-            StartCoroutine(DoTick());
+            if (running == false)
+                StartTicks();
+        }
+        else
+        {
+            StopTicks();
         }
     }
+	#endregion
 
-    public void Unpause()
+	#region Starting and Ending ticks
+	public void StopTicks()
+	{
+        if(running == false)
+		{
+			Debug.LogError("Not ticking, cannot stop ticks.");
+		}
+        else
+		{
+			running = false;
+            StopAllCoroutines();
+		}
+	}
+    public void StartTicks()
     {
-        StopAllCoroutines();
-        StartCoroutine(DoTick());
-    }
-    #endregion
-
-    #region Tick
-    IEnumerator DoTick()
-    {
-        while (true)
+        if(running == true)
         {
+            Debug.LogError("Already ticking, cannot tick two times.");
+        }
+        else
+        {
+			running = true;
+            StartCoroutine(DoTick());
+		}
+    }
+	#endregion
+
+	#region Tick
+	IEnumerator DoTick()
+    {
+		while (true)
+        {
+            Debug.Log("All time:" + Time.time);
             yield return new WaitForSeconds(1);
+            UpdateTime();
             tickAction?.Invoke();
             if (lastTick == 4294967295)
                 lastTick = 0;
@@ -183,6 +215,7 @@ public class Tick : MonoBehaviour
                 lastTick++;
         }
     }
+ 
 
     void UpdateTime()
     {
@@ -190,9 +223,9 @@ public class Tick : MonoBehaviour
         switch (timeInMinutes)
         {
             case 1440:
+                numberOfDays++;
                 day?.Invoke();
                 timeInMinutes = 0;
-                numberOfDays++;
                 if (numberOfDays % 7 == 0)
                 {
                     weekStart?.Invoke();
@@ -202,13 +235,9 @@ public class Tick : MonoBehaviour
                         if (numberOfDays % 336 == 0)
                         {
                             yearStart?.Invoke();
-                            //transform.GetChild(4).GetComponent<TMP_Text>().text = $"Year: {(numberOfDays / 336) + 1}";
                         }
-                        //transform.GetChild(3).GetComponent<TMP_Text>().text = $"Month: {((numberOfDays % 336) / 28) + 1}";
                     }
-                    //transform.GetChild(2).GetComponent<TMP_Text>().text = $"Week: {((numberOfDays % 28) / 7) + 1}";
                 }
-                //transform.GetChild(1).GetComponent<TMP_Text>().text = $"Day: {(numberOfDays % 7) + 1}";
                 break;
             case 1320:
                 nightStart?.Invoke();
@@ -217,7 +246,6 @@ public class Tick : MonoBehaviour
                 dayStart?.Invoke();
                 break;
         }
-        //time.text = $"{(timeInMinutes / 60).ToString().PadLeft(2, '0')}:{(timeInMinutes % 60).ToString().PadLeft(2, '0')}";
     }
     #endregion
 
@@ -241,5 +269,5 @@ public class Tick : MonoBehaviour
         timeInMinutes = gameState.dayTime;
         numberOfDays = gameState.numberOfDays;
     }
-    #endregion
+	#endregion
 }

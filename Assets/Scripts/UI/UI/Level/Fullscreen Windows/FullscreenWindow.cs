@@ -9,7 +9,7 @@ public abstract class FullscreenWindow : MonoBehaviour
     public virtual void GetWindow()
     {
         window = gameObject.GetComponent<UIDocument>().rootVisualElement;
-        CloseWindow();
+        //CloseWindow();
     }
     public void ToggleWindow()
     {
@@ -30,7 +30,7 @@ public abstract class FullscreenWindow : MonoBehaviour
         MainShortcuts.DisableInput();
         SceneRefs.infoWindow.Close();
         window.style.display = DisplayStyle.Flex;
-        SceneRefs.tick.ChangeGameSpeed(0);
+        SceneRefs.tick.ChangeGameSpeed();
     }
 
     /// <summary>Closing the window, enables shortcuts.</summary>
@@ -38,6 +38,6 @@ public abstract class FullscreenWindow : MonoBehaviour
     {
         MainShortcuts.EnableInput();
         window.style.display = DisplayStyle.None;
-        SceneRefs.tick.Unpause();
+        SceneRefs.tick.ChangeGameSpeed();
     }
 }

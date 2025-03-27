@@ -43,7 +43,7 @@ public static class MyRes
         // Update text, or display error
         try
         {
-            resDisplay = SceneRefs.stats.GetComponent<ResourceDisplay>();
+            resDisplay = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
             Resource resource = resDisplay.InitializeResources(setupStorages);
             globalStorageSpace = 0;
 
@@ -60,7 +60,6 @@ public static class MyRes
                 globalStorageSpace += _s.LocalResources.stored.capacity - _s.LocalResources.stored.ammount.Sum();
                 ManageRes(resource, _s.LocalResources.stored, 1);
             }
-            Transform resourceInfo = GameObject.Find("Resource Info").gameObject.transform.transform;
             resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
             resDisplay.UIUpdate(nameof(ResourceDisplay.Money));
         }

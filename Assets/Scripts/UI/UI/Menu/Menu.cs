@@ -58,12 +58,12 @@ public class Menu : MonoBehaviour
             if (menuIsOn)
             {
                 MainShortcuts.EnableInput();
-                SceneRefs.tick.Unpause();
+                SceneRefs.tick.CancelInvoke();
             }
             else
             {
                 MainShortcuts.DisableInput(false);
-                SceneRefs.tick.ChangeGameSpeed(0);
+                SceneRefs.tick.ChangeGameSpeed();
             }
             UIRefs.levelCamera.enabled = menuIsOn;
             UIRefs.levelCamera.mainCamera.GetComponent<PhysicsRaycaster>().enabled = menuIsOn;

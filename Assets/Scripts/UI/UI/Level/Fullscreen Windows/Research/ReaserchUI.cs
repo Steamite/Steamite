@@ -59,7 +59,7 @@ public class ResearchUI : FullscreenWindow
 
     void Initialize(ResearchCategory[] researches, int _currentResearch = -1)
     {
-        GetWindow();
+        //GetWindow();
         //window.gameObject.SetActive(true);
         backend = gameObject.GetComponent<ResearchBackend>();
         backend.Init(this);

@@ -101,7 +101,7 @@ namespace InfoWindowElements
                         tab.UpdateCostView();
                         return ToUIRes(globalStorage);
                     });
-                    data = SceneRefs.stats.GetComponent<ResourceDisplay>();
+                    data = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
                     dataSource = data;
                     break;
 

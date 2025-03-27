@@ -60,16 +60,16 @@ public class LoadingScreen : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(true);
 
         await SceneManager.LoadSceneAsync(3, LoadSceneMode.Additive);
-        GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
-        if (seed != "")
-        {
+        BeforeLevelLoad();
+
+		if (seed != "")
             gameObject.GetComponent<MapGen>().Generate(seed, templateLevel);
-        }
         else
             MyGrid.CreateGrid(startLevel, mainLevel);
-        UIRefs.research.NewGame();
+
         UIRefs.trading.NewGame(0);
         SceneRefs.humans.NewGameInit(ref humanActivation);
+
         AfterLevelLoad(true);
     }
     #endregion
@@ -95,7 +95,9 @@ public class LoadingScreen : MonoBehaviour
            await SceneManager.UnloadSceneAsync("Main Menu");
         }
         await SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
-        await LoadWorldData(save);   
+
+        BeforeLevelLoad();
+		await LoadWorldData(save);   
         AfterLevelLoad(false);
     }
 
@@ -157,7 +159,6 @@ public class LoadingScreen : MonoBehaviour
         ResearchSave researchSave = save.research;
         TradeSave tradeSave = save.trade;
 
-        GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
         // create progress val for loading slider
         int maxprogress = 0;
         for(int i = 0; i < worldSave.gridSave.Length; i++)
@@ -294,6 +295,12 @@ public class LoadingScreen : MonoBehaviour
     #endregion UI loading
     #endregion Loading Game State
 
+    void BeforeLevelLoad()
+    {
+        GameObject.Find("Scene").GetComponent<SceneRefs>().Init();
+        GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
+    }
+
     /// <summary>
     /// Things that need to be after both loading and creating a new game.
     /// </summary>
@@ -312,9 +319,11 @@ public class LoadingScreen : MonoBehaviour
 
 		MyRes.ActivateResources(newGame);
 		await SceneManager.UnloadSceneAsync("LoadingScreen");
-        SceneRefs.stats.GetChild(1).GetChild(0).GetComponent<TimeButtons>().SetStartSpeed(SceneRefs.tick, newGame);
-        SceneRefs.stats.GetChild(0).GetComponent<LevelButtons>().Init();
+
         humanActivation?.Invoke();
         humanActivation = null;
+        SceneRefs.tick.InitTicks(newGame);
+		UIRefs.BottomBar.GetComponents<IToolkitController>().ToList().ForEach((q) => q.Init(UIRefs.BottomBar.rootVisualElement));
+        SceneRefs.BottomBar.GetComponent<LevelButtons>().Init();
     }
 }
