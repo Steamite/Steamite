@@ -50,7 +50,7 @@ public class Trading : FullscreenWindow
 
         tradeLocations = tradeSave.tradeLocations;
         convoys = tradeSave.convoys;
-        SceneRefs.stats.GetComponent<ResourceDisplay>().Money = tradeSave.money;
+        SceneRefs.BottomBar.GetComponent<ResourceDisplay>().Money = tradeSave.money;
         Init();
     }
 

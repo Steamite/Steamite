@@ -21,6 +21,7 @@ namespace AbstractControls
 
         public CustomRadioButton(string _styleClass, int i, bool _inGroup)
         {
+            ClearClassList();
             styleClass = _styleClass;
             AddToClassList(_styleClass);
             value = i;

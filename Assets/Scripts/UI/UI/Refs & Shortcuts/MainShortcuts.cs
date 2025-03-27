@@ -21,7 +21,6 @@ public class MainShortcuts : MonoBehaviour
 
     public static void DisableInput(bool win = true)
     {
-        SmallerShortcuts.DisableInput(win);
         handleGrid = false;
         handleWindows = win;
         UIRefs.levelCamera.enabled = false;
@@ -29,7 +28,6 @@ public class MainShortcuts : MonoBehaviour
     }
     public static void EnableInput()
     {
-        SmallerShortcuts.EnableInput();
         handleGrid = true;
         handleWindows = true;
         UIRefs.levelCamera.enabled = true;
@@ -117,10 +115,10 @@ public class MainShortcuts : MonoBehaviour
             }
             if (trade.triggered)
             {
-                if(UIRefs.research.window.style.display == DisplayStyle.Flex)
-                    UIRefs.research.CloseWindow();
-                UIRefs.trading.ToggleWindow();
-            }
+				/*if(UIRefs.research.window.style.display == DisplayStyle.Flex)
+                    UIRefs.research.CloseWindow();*/
+				UIRefs.trading.ToggleWindow();
+			}
         }
         // opens ingame menu
         if (menu.triggered)
