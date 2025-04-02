@@ -36,20 +36,23 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
 
     private void Update()
     {
-        if (shift.inProgress)
-        {
-            if (level.triggered)
-            {
-                //levelButtons.OutsideTrigger(Mathf.RoundToInt(level.ReadValue<float>()));
-            }
-        }
-        else
-        {
-            if (gameSpeed.triggered)
-            {
-                timeButtons.OutsideTrigger(Mathf.RoundToInt(gameSpeed.ReadValue<float>()));
-            }
-        }
+        if (MainShortcuts.handleGrid)
+		{
+			if (shift.inProgress)
+			{
+				if (level.triggered)
+				{
+					//levelButtons.OutsideTrigger(Mathf.RoundToInt(level.ReadValue<float>()));
+				}
+			}
+			else
+			{
+				if (gameSpeed.triggered)
+				{
+					timeButtons.OutsideTrigger(Mathf.RoundToInt(gameSpeed.ReadValue<float>()));
+				}
+			}
+		}
     }
 
 }

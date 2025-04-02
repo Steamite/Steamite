@@ -78,6 +78,9 @@ public class Tick : MonoBehaviour
                 tickAction += subscriber;
                 break;
             case TimeEventType.Day:
+                day += subscriber;
+                break;
+            case TimeEventType.DayStart:
                 dayStart += subscriber;
                 break;
             case TimeEventType.Night:
@@ -111,6 +114,9 @@ public class Tick : MonoBehaviour
                 tickAction -= subscriber;
                 break;
             case TimeEventType.Day:
+                day -= subscriber;
+                break;
+            case TimeEventType.DayStart:
                 dayStart -= subscriber;
                 break;
             case TimeEventType.Night:
@@ -158,11 +164,11 @@ public class Tick : MonoBehaviour
     {
         if (_speed == 0 && running == false)
         {
-            StartTicks();
+			StartTicks();
         }
         else if(_speed > 0)
         {
-            Time.timeScale = _speed;
+			Time.timeScale = _speed;
             if (running == false)
                 StartTicks();
         }
@@ -178,7 +184,7 @@ public class Tick : MonoBehaviour
 	{
         if(running == false)
 		{
-			Debug.LogError("Not ticking, cannot stop ticks.");
+			Debug.LogWarning("Not ticking, cannot stop ticks.");
 		}
         else
 		{
@@ -186,6 +192,7 @@ public class Tick : MonoBehaviour
             StopAllCoroutines();
 		}
 	}
+
     public void StartTicks()
     {
         if(running == true)
@@ -197,6 +204,15 @@ public class Tick : MonoBehaviour
 			running = true;
             StartCoroutine(DoTick());
 		}
+    }
+
+    public void UIWindowToggle(bool enable)
+    {
+        if (!enable)
+            StopAllCoroutines();
+        else if (running)
+            StartCoroutine(DoTick());
+            
     }
 	#endregion
 

@@ -325,5 +325,6 @@ public class LoadingScreen : MonoBehaviour
         SceneRefs.tick.InitTicks(newGame);
 		UIRefs.BottomBar.GetComponents<IToolkitController>().ToList().ForEach((q) => q.Init(UIRefs.BottomBar.rootVisualElement));
         SceneRefs.BottomBar.GetComponent<LevelButtons>().Init();
+        MainShortcuts.EnableInput();
     }
 }

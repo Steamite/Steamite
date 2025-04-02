@@ -59,6 +59,7 @@ public class ResearchUI : FullscreenWindow
 
     void Initialize(ResearchCategory[] researches, int _currentResearch = -1)
     {
+        return;
         //GetWindow();
         //window.gameObject.SetActive(true);
         backend = gameObject.GetComponent<ResearchBackend>();
@@ -82,6 +83,7 @@ public class ResearchUI : FullscreenWindow
     //Start Build Buttons
     void InitializeBuildButtons(BuildButtonHolder buildButtons)
     {
+        return;
         Transform buildMenuCategs = SceneRefs.buildMenu.GetChild(0);
         Transform buildMenuButtons = SceneRefs.buildMenu.GetChild(1);
 
