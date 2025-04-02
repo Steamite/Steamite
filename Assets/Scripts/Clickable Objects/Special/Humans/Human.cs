@@ -142,7 +142,7 @@ public class Human : ClickableObject
         transform.GetChild(0).gameObject.SetActive(true);
 #endif
         SceneRefs.tick.SubscribeToEvent(DoRepetableAction, Tick.TimeEventType.Ticks);
-        SceneRefs.tick.SubscribeToEvent(Day, Tick.TimeEventType.Day);
+        SceneRefs.tick.SubscribeToEvent(Day, Tick.TimeEventType.DayStart);
         SceneRefs.tick.SubscribeToEvent(Night, Tick.TimeEventType.Night);
 
         if (jData.job == JobState.Free)

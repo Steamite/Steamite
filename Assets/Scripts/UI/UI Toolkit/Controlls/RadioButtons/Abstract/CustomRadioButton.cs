@@ -44,11 +44,11 @@ namespace AbstractControls
             }
         }
 
-        /// <summary>
-        /// Sets <see cref="IsSelected"/> to true, styles the button and sends an event to the button group.
-        /// </summary>
-        /// <param name="UpdateGroup">Should the parent group be updated.</param>
-        public void SelectWithoutTransition(bool UpdateGroup)
+		/// <summary>
+		/// Sets <see cref="IsSelected"/> to true, styles the button and sends an event to the button group.
+		/// </summary>
+		/// <param name="UpdateGroup">Should the parent group be updated.</param>
+		public void SelectWithoutTransition(bool UpdateGroup)
         {
             SelectChange(UpdateGroup);
             ToolkitUtils.ChangeClassWithoutTransition(styleClass, styleClass + "-selected", this);

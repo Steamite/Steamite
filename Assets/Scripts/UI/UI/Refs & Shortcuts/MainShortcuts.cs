@@ -16,7 +16,7 @@ public class MainShortcuts : MonoBehaviour
     InputAction trade => bindingMap.FindAction("Trade");
 
     [SerializeField] public InputActionAsset inputAsset;
-    static bool handleGrid = true;
+    public static bool handleGrid = true;
     static bool handleWindows = true;
 
     public static void DisableInput(bool win = true)

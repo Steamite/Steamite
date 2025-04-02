@@ -13,18 +13,18 @@ public class Menu : MonoBehaviour
 
     [SerializeField] UIDocument uiDocument;
 
-    VisualElement menu;
+    VisualElement menuContainer;
 
     public void Init(Action<string> save, ref Action afterSave)
     {
         gameObject.SetActive(true);
         saveDialog.Init(save);
         ((IToolkitController)loadMenu).Init(uiDocument.rootVisualElement);
-        ((IToolkitController)confrimWindow).Init(uiDocument.rootVisualElement);
-        menu = uiDocument.rootVisualElement.Q<VisualElement>("Menu");
-        menu.Q<Button>("Close").RegisterCallback<ClickEvent>(Toggle);
-        menu.Q<Button>("Main-Menu").RegisterCallback<ClickEvent>(GoToMainMenu);
-        menu.Q<Button>("Quit").RegisterCallback<ClickEvent>(DoQuit);
+        confrimWindow.Init(uiDocument.rootVisualElement);
+        menuContainer = uiDocument.rootVisualElement.Q<VisualElement>("Container");
+        menuContainer.Q<Button>("Close").RegisterCallback<ClickEvent>(Toggle);
+        menuContainer.Q<Button>("Main-Menu").RegisterCallback<ClickEvent>(GoToMainMenu);
+        menuContainer.Q<Button>("Quit").RegisterCallback<ClickEvent>(DoQuit);
 
         afterSave += ((IGridMenu)loadMenu).UpdateButtonState;
         afterSave += () => ((IGridMenu)saveDialog).CloseWindow();
@@ -38,8 +38,8 @@ public class Menu : MonoBehaviour
             saveDialog.CloseWindow();
         else if (((IGridMenu)loadMenu).IsOpen())
             ((IGridMenu)loadMenu).CloseWindow();
-        else if (UIRefs.research.window.style.display == DisplayStyle.Flex)
-            UIRefs.research.CloseWindow();
+        /*else if (UIRefs.research.window.style.display == DisplayStyle.Flex)
+            UIRefs.research.CloseWindow();*/
         else if (UIRefs.trading.window.style.display == DisplayStyle.Flex)
             UIRefs.trading.CloseWindow();
         else if (SceneRefs.gridTiles.activeControl != ControlMode.nothing)
@@ -54,21 +54,21 @@ public class Menu : MonoBehaviour
     {
         if(Constrains())
         {
-            bool menuIsOn = menu.style.display == DisplayStyle.Flex;
+            bool menuIsOn = menuContainer.style.display == DisplayStyle.Flex;
             if (menuIsOn)
             {
                 MainShortcuts.EnableInput();
-                SceneRefs.tick.CancelInvoke();
-            }
+				SceneRefs.tick.UIWindowToggle(true);
+			}
             else
             {
                 MainShortcuts.DisableInput(false);
-                SceneRefs.tick.ChangeGameSpeed();
+                SceneRefs.tick.UIWindowToggle(false);
             }
             UIRefs.levelCamera.enabled = menuIsOn;
             UIRefs.levelCamera.mainCamera.GetComponent<PhysicsRaycaster>().enabled = menuIsOn;
             UIRefs.levelCamera.mainCamera.GetComponent<Physics2DRaycaster>().enabled = menuIsOn;
-            menu.style.display = menuIsOn ? DisplayStyle.None : DisplayStyle.Flex;
+            menuContainer.style.display = menuIsOn ? DisplayStyle.None : DisplayStyle.Flex;
         }
     }
 
