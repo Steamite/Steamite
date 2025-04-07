@@ -1,22 +1,47 @@
 using TMPro;
+using TradeData.Locations;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.UIElements;
 
-public class ResearchBackend : MonoBehaviour
+public class Research : FullscreenWindow
 {
-    ResearchUI UI;
-    public ResearchUIButton currentResearch;
+	IInitiableUI UI;
+    public ResearchNode currentResearch;
     public StorageResource researchResourceInput;
+    public ResearchData researchData;
 
-    public void Init(ResearchUI _UI)
+	public override void GetWindow()
+	{
+		base.GetWindow();
+		UI = window.Q<TabView>() as IInitiableUI;
+		UI.Init();
+	}
+	public async void NewGame()
+	{
+		researchData = await Addressables.LoadAssetAsync<ResearchData>("Assets/Game Data/Research && Building/Research Data.asset").Task;
+        Init();
+	}
+
+	public void LoadGame(ResearchSave researchSave)
+	{
+		//TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Colony Locations/{tradeSave.colonyLocation}");
+        
+		Init();
+	}
+
+
+	public void Init()
     {
-        UI = _UI;
+        GetWindow();
+        
         SceneRefs.researchAdapter.Init(DoResearch, DisplayInfoWindowDetails);
     }
 
     ResearchDispayData DisplayInfoWindowDetails()
     {
         ResearchDispayData data = new();
-        if (currentResearch)
+        /*if (currentResearch)
         {
             data.name = currentResearch.name;
             data.progress = $"{(currentResearch.node.currentTime/(float)currentResearch.node.researchTime):0%}  %";
@@ -26,9 +51,10 @@ public class ResearchBackend : MonoBehaviour
             data.name = "None";
             data.progress = "0 %";
         }
-        data.color = Random.ColorHSV();
+        data.color = Random.ColorHSV();*/
         return data;
     }
+/*
     //Start researching a research
     public void StartResearch(ResearchUIButton button)
     {
@@ -49,12 +75,12 @@ public class ResearchBackend : MonoBehaviour
         UI.StartCoroutine(UI.UpdateButtonFill());
         UI.openResearchAnimator.SetFloat("Speed", 0.5f);
         UI.openResearchAnimator.SetTrigger("selected");
-    }
+    }*/
 
     public void FinishResearch()
     {
-        currentResearch.Complete();
-        currentResearch = null;
+        /*currentResearch.Complete();
+        currentResearch = null;*/
     }
     
     /// <summary>
@@ -63,9 +89,9 @@ public class ResearchBackend : MonoBehaviour
     /// <param name="efficiecy">Ammount to add.</param>
     public void DoResearch(float efficiecy)
     {
-        if (currentResearch)
+        /*if (currentResearch)
         {
             currentResearch.node.currentTime += efficiecy * 1;
-        }
+        }*/
     }
 }

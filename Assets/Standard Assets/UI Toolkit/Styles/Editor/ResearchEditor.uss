@@ -1,0 +1,14 @@
+Tab #Button-Row {
+    min-height: 50px;
+}
+
+Tab #Row {
+    flex-direction: row;
+    justify-content: space-around;
+    height: 300px;
+    min-height: 300px;
+}
+
+#unity-tab-view__header-container {
+    flex-shrink: 0;
+}

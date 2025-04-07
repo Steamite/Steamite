@@ -12,10 +12,8 @@ public class ResearchNode
     public string name;
     /// <summary>ID of the research.</summary>
     public int id;
-    /// <summary>Position of the research</summary>
-    public GridPos gp;
-    /// <summary>Scaled position.</summary>
-    public float realX;
+    /// <summary>Level of the research</summary>
+    public int level;
 
     /// <summary>Was it already researched?</summary>
     public bool researched;
@@ -27,10 +25,12 @@ public class ResearchNode
     /// <summary>Cost to start research(WIP).</summary>
     public Resource reseachCost;
 
-    /// <summary>Category the button is from.</summary>
-    public int buttonCategory;
-    /// <summary>Build button to unlock.</summary>
-    public int buildButton;
+	/// <summary>If the button is unlocking a building, or something else.</summary>
+	public bool buildingNode;
+	/// <summary>Category the button is from.</summary>
+	public int nodeCategory;
+    /// <summary>Element id from the category.</summary>
+    public int nodeAssignee;
     /// <summary>Prequisite needed nodes.</summary>
     [SerializeField] public List<int> unlockedBy;
     /// <summary>Next nodes.</summary>
@@ -45,7 +45,7 @@ public class ResearchNode
         try
         {
             ResearchNode node = (ResearchNode)obj;
-            if (id == node.id)
+            if (id == node?.id)
                 return true;
         }
         catch
@@ -61,63 +61,63 @@ public class ResearchNode
     }
     #endregion
 
-    #region Constructors
     public ResearchNode()
     {
 
     }
-    /// <summary>
-    /// Used when creating.
-    /// </summary>
-    /// <param name="_gp"></param>
-    /// <param name="_data"></param>
-    /// <param name="level"></param>
-    /// <param name="lastID"></param>
-    public ResearchNode(GridPos _gp, string _data, int level, int lastID)
+
+	public ResearchNode(ResearchNode node)
+	{
+		id = node.id;
+		level = node.level;
+		name = node.name;
+		currentTime = node.currentTime;
+		researchTime = node.researchTime;
+		nodeCategory = node.nodeCategory;
+		nodeAssignee = node.nodeAssignee;
+		researched = node.researched;
+		unlockedBy = node.unlockedBy;
+		unlocks = node.unlocks;
+		reseachCost = new();
+		if (node.reseachCost != null)
+		{
+			reseachCost.type = node.reseachCost.type.ToList();
+			reseachCost.ammount = node.reseachCost.ammount.ToList();
+		}
+	}
+
+	#region Editor modifications
+#if UNITY_EDITOR
+
+	/// <summary>
+	/// Used when creating.
+	/// </summary>
+	/// <param name="_gp"></param>
+	/// <param name="_data"></param>
+	/// <param name="level"></param>
+	public ResearchNode(int _level, int _id)
     {
-        gp = _gp;
-        gp.y = level;
-        name = _data;
-        id = lastID+1;
-        researchTime = 100 * ((int)_gp.y + 1);
+        level = _level;
+        name = $"node {_level}";
+
+        id = _id;
+        researchTime = 100 * (_level + 1);
 
         currentTime = 0;
         researched = false;
-        buttonCategory = -1;
-        buildButton = -1;
+        nodeCategory = -1;
+        nodeAssignee = -1;
         unlockedBy = new();
         unlocks = new();
         reseachCost = new();
     }
 
-    public ResearchNode(ResearchNode node)
-    {
-        id = node.id;
-        gp = node.gp;
-        realX = node.realX;
-        name = node.name;
-        currentTime = node.currentTime;
-        researchTime = node.researchTime;
-        buttonCategory = node.buttonCategory;
-        buildButton = node.buildButton;
-        researched = node.researched;
-        unlockedBy = node.unlockedBy;
-        unlocks = node.unlocks;
-        reseachCost = new();
-        if(node.reseachCost != null)
-        {
-            reseachCost.type = node.reseachCost.type.ToList();
-            reseachCost.ammount = node.reseachCost.ammount.ToList();
-        }
-    }
-    #endregion
 
-    #region Editor modifications
-    /// <summary>
-    /// Connects this node as a prequisete to <paramref name="node"/>.
-    /// </summary>
-    /// <param name="node">Connecting node.</param>
-    public void ConnectNode(ResearchNode node)
+	/// <summary>
+	/// Connects this node as a prequisete to <paramref name="node"/>.
+	/// </summary>
+	/// <param name="node">Connecting node.</param>
+	public void ConnectNode(ResearchNode node)
     {
         if (!unlocks.Contains(node.id))
         {
@@ -158,8 +158,9 @@ public class ResearchNode
             category.Find(q => q.id == unlockedBy[index]).unlocks.Remove(id);
             unlockedBy.RemoveAt(index);
         }
-    }
-    #endregion
+	}
+#endif
+#endregion
 }
 
 /// <summary>Research Category groups nodes into logical pages.</summary>
@@ -168,10 +169,33 @@ public class ResearchCategory
 {
     /// <summary>Category name.</summary>
     [SerializeField] public string categName;
+	/// <summary>Category icon.</summary>
+	[SerializeField] public Texture2D icon;
     /// <summary>List of all nodes in the group.</summary>
     [SerializeField] public List<ResearchNode> nodes;
 
-    public ResearchCategory()
+#if UNITY_EDITOR_WIN
+	public void AddNode(int level)
+	{
+		ResearchNode node = new(level, UniqueId());
+
+		nodes.Add(node);
+        nodes = nodes.OrderBy(q => q.level).ToList();
+	}
+
+	int UniqueId()
+    {
+        int id;
+        do
+        {
+            id = UnityEngine.Random.Range(0, int.MaxValue);
+        }
+        while (nodes.Count(q => q.id == id) > 0);
+        return id;
+    }
+#endif
+
+	public ResearchCategory()
     {
 
     }
@@ -192,14 +216,18 @@ public class ResearchData : ScriptableObject
     public BuildButtonHolder buildButtons;
     /// <summary>All research categories.</summary>
     public List<ResearchCategory> categories = new();
-    /// <summary>Filled when opening and changing data.</summary>
-    [NonSerialized] Dictionary<int, List<string>> allBuildings;
+
+	#endregion
+
+	#region Editor
+#if UNITY_EDITOR_WIN
+
+	/// <summary>Filled when opening and changing data.</summary>
+	[NonSerialized] Dictionary<int, List<string>> allBuildings;
     /// <summary>Filled when opening and changing data.</summary>
     [NonSerialized] Dictionary<int, List<string>> unassignedBuildings;
-    #endregion
 
-#if UNITY_EDITOR_WIN
-    void OnValidate()
+	void OnValidate()
     {
         Init();
     }
@@ -209,31 +237,27 @@ public class ResearchData : ScriptableObject
     /// </summary>
     public void Init()
     {
-        if (buildButtons)
+        return;
+        if (buildButtons == null)
+            buildButtons = (BuildButtonHolder)Resources.Load("Holders/Models/BuildButton Data");
+		allBuildings = new();
+        unassignedBuildings = new();
+        for (int i = 0; i < buildButtons.buildingCategories.Count; i++)
         {
-            allBuildings = new();
-            unassignedBuildings = new();
-            for (int i = 0; i < buildButtons.buildingCategories.Count; i++)
+            allBuildings.Add(i, new());
+            unassignedBuildings.Add(i, new());
+            foreach (BuildingWrapper building in buildButtons.buildingCategories[i].buildings)
             {
-                allBuildings.Add(i, new());
-                unassignedBuildings.Add(i, new());
-                foreach (Building building in buildButtons.buildingCategories[i].buildings)
-                {
-                    allBuildings[i].Add(building.name);
-                    unassignedBuildings[i].Add(building.name);
-                }
+                allBuildings[i].Add(building.b.name);
+                unassignedBuildings[i].Add(building.b.name);
             }
-            foreach (ResearchNode node in categories.SelectMany(q => q.nodes))
-            {
-                if (node.buttonCategory != -1 && node.buildButton != -1)
-                    unassignedBuildings[node.buttonCategory].Remove(allBuildings[node.buttonCategory][node.buildButton]);
-            }
-            Debug.Log("Research init");
         }
-        else
+        foreach (ResearchNode node in categories.SelectMany(q => q.nodes))
         {
-            buildButtons = (BuildButtonHolder)Resources.Load("Holders/Data/BuildButtonData");
+            if (node.nodeCategory != -1 && node.nodeAssignee != -1)
+                unassignedBuildings[node.nodeCategory].Remove(allBuildings[node.nodeCategory][node.nodeAssignee]);
         }
+        Debug.Log("Research init");
     }
 
     /// <summary>
@@ -242,8 +266,8 @@ public class ResearchData : ScriptableObject
     /// <param name="node">Modified node.</param>
     public void SelectBuilding(ResearchNode node)
     {
-        if (node.buttonCategory > -1 && node.buildButton > -1)
-            unassignedBuildings[node.buttonCategory].Remove(allBuildings[node.buttonCategory][node.buildButton]);
+        if (node.nodeCategory > -1 && node.nodeAssignee > -1)
+            unassignedBuildings[node.nodeCategory].Remove(allBuildings[node.nodeCategory][node.nodeAssignee]);
     }
 
     /// <summary>
@@ -252,11 +276,11 @@ public class ResearchData : ScriptableObject
     /// <param name="node">Modified node.</param>
     public void DeselectBuilding(ResearchNode node)
     {
-        if (node.buttonCategory > -1 && node.buildButton > -1)
+        if (node.nodeCategory > -1 && node.nodeAssignee > -1)
         {
-            string s = allBuildings[node.buttonCategory][node.buildButton];
-            if (unassignedBuildings[node.buttonCategory].IndexOf(s) == -1)
-                unassignedBuildings[node.buttonCategory].Add(s);
+            string s = allBuildings[node.nodeCategory][node.nodeAssignee];
+            if (unassignedBuildings[node.nodeCategory].IndexOf(s) == -1)
+                unassignedBuildings[node.nodeCategory].Add(s);
         }
     }
 
@@ -269,7 +293,7 @@ public class ResearchData : ScriptableObject
     {
         try
         {
-            return allBuildings[node.buttonCategory][node.buildButton];
+            return allBuildings[node.nodeCategory][node.nodeAssignee];
         }
         catch
         {
@@ -286,9 +310,9 @@ public class ResearchData : ScriptableObject
     public List<string> GetUnassignedBuildings(ResearchNode node)
     {
         List<string> s = new();
-        if (node.buildButton != -1)
+        if (node.nodeAssignee != -1)
             s.Add(GetBuildName(node));
-        s.AddRange(unassignedBuildings[node.buttonCategory]);
+        s.AddRange(unassignedBuildings[node.nodeCategory]);
         return s;
     }
 
@@ -303,4 +327,5 @@ public class ResearchData : ScriptableObject
         return allBuildings[categ].IndexOf(buildingName);
     }
 #endif
+#endregion Editor
 }

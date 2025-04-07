@@ -5,7 +5,7 @@ using UnityEngine;
 public class Research_Production : Building, IProduction, IAssign
 {
     public List<Human> Assigned { get; set; }
-    public int assignLimit { get; set; }
+    public int AssignLimit { get; set; }
     public float ProdTime { get; set; }
     public float CurrentTime { get; set; }
     public int Modifier { get; set; }

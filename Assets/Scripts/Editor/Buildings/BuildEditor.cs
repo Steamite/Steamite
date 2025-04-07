@@ -24,6 +24,9 @@ class BuildEditor : EditorWindow
     static int height;
     /// <summary>Number of optiuons in <see cref="GridItemType"/><summary>
     static int maxItem = Enum.GetNames(typeof(GridItemType)).Length;
+
+    static Mesh mesh;
+    static Mesh newMesh;
     #endregion
 
     #region Opening
@@ -58,13 +61,12 @@ class BuildEditor : EditorWindow
             height = 0;
             gridItemTypes = null;
         }
-
-        var v = GetWindow(typeof(BuildEditor));
+		mesh = inspectedBuilding.GetComponent<MeshFilter>().sharedMesh;
+		var v = GetWindow(typeof(BuildEditor));
         v.maxSize = new(600, 600);
         v.minSize = new(200, 200);
     }
     #endregion
-
 
     void OnGUI()
     {
@@ -77,6 +79,14 @@ class BuildEditor : EditorWindow
         {
             titleContent = new($"Build Editor - {inspectedBuilding.name}");
             int item = 0;
+			newMesh = (Mesh)EditorGUILayout.ObjectField(new GUIContent(""), mesh, typeof(Mesh), false, new GUILayoutOption[] {});
+            if (newMesh != mesh)
+            {
+                mesh = newMesh;
+                inspectedBuilding.GetComponent<MeshFilter>().sharedMesh = mesh;
+                EditorUtility.SetDirty(inspectedBuilding);
+            }
+            
             width = EditorGUILayout.IntField(new GUIContent("size x: "), width);
             height = EditorGUILayout.IntField(new GUIContent("size y: "), height);
 

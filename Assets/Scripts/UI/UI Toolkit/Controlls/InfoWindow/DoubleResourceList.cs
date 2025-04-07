@@ -55,7 +55,7 @@ namespace InfoWindowElements
         protected override void BindItem(VisualElement el, int i)
         {
             base.BindItem(el, i);
-            if (resources[i].ammount < ((DoubleUIResource)resources[i]).secondAmmount)
+            if (cost && resources[i].ammount < ((DoubleUIResource)resources[i]).secondAmmount)
                 el.Q<Label>("Value").style.color = Color.red;
         }
         #endregion

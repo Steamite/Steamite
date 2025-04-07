@@ -8,14 +8,14 @@ public class UIRefs : MonoBehaviour
 
     [SerializeField] CameraMovement _levelCamera;
     [SerializeField] Trading _trading;
-    [SerializeField] ResearchUI _research;
+    [SerializeField] Research _research;
     [SerializeField] Menu _pauseMenu;
     [SerializeField] MonoBehaviour toolkitShotcuts;
     [SerializeField] UIDocument _bottomBar;
 
 	public static CameraMovement levelCamera => instance._levelCamera;
     public static Trading trading => instance._trading;
-    public static ResearchUI research => instance._research;
+    public static Research research => instance._research;
     public static Menu pauseMenu => instance._pauseMenu;
     public static UIDocument BottomBar => instance._bottomBar;
 

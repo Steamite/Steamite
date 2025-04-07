@@ -110,9 +110,9 @@ namespace InfoWindowViews
                 humans = SceneRefs.humans;
             }
 
-            label.text = $"Assigned {building.Assigned.Count}/{building.assignLimit}";
+            label.text = $"Assigned {building.Assigned.Count}/{building.AssignLimit}";
             DataBinding binding = BindingUtil.CreateBinding(nameof(IAssign.Assigned));
-            binding.sourceToUiConverters.AddConverter((ref List<Human> assig) => $"Assigned {assig.Count}/{building?.assignLimit}");
+            binding.sourceToUiConverters.AddConverter((ref List<Human> assig) => $"Assigned {assig.Count}/{building?.AssignLimit}");
             SceneRefs.infoWindow.RegisterTempBinding(new(label, "text"), binding, building);
 
             unassigned = building.GetUnassigned();

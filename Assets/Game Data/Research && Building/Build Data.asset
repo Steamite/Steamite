@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c28966b8feb9714cb5a597fbcd884bd, type: 3}
+  m_Name: Build Data
+  m_EditorClassIdentifier: 
+  buildingCategories:
+  - columnStates: 01010100010101010101
+    categName: Population
+    categIcon: {fileID: 2800000, guid: ebd657dbff7382b49ac208b65a2fc976, type: 3}
+    buildings:
+    - b: {fileID: -5750915001953968721, guid: ee9e7a14f264a9347b18aa26ab4bf3ae, type: 3}
+      id: 2010456838
+  - columnStates: 
+    categName: Production
+    categIcon: {fileID: 2800000, guid: 31a2fc60fcb027a45869f7484256409a, type: 3}
+    buildings:
+    - b: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      id: 350032166
+    - b: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
+      id: 1652013654

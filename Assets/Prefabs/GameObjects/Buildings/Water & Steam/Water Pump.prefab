@@ -377,6 +377,7 @@ MonoBehaviour:
     carriers: []
     mods: 
   myColor: []
+  buildName: 
   blueprint:
     size:
       x: 0
@@ -404,7 +405,7 @@ MonoBehaviour:
     buildings: []
     networkID: -1
     networkName: 
-  connectedBuilding: {fileID: 62586701505083539}
+  connectedBuilding: {fileID: 0}
 --- !u!210 &7408063851616091057
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -763,8 +764,6 @@ GameObject:
   - component: {fileID: 2894201756355976984}
   - component: {fileID: 7842307157348407047}
   - component: {fileID: -85555690278644832}
-  - component: {fileID: 62586701505083539}
-  - component: {fileID: 4084886823629516137}
   m_Layer: 2
   m_Name: Water Pump
   m_TagString: Untagged
@@ -876,118 +875,3 @@ SortingGroup:
   m_SortingLayer: 2
   m_SortingOrder: 10
   m_SortAtRoot: 0
---- !u!114 &62586701505083539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8473832138988228041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4469e9358e25689418ae97e799a791ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selected: 0
-  id: -1
-  localRes:
-    stored:
-      capacity: -1
-      type: 
-      ammount: 
-    requests: []
-    carriers: []
-    mods: 
-  myColor: []
-  blueprint:
-    size:
-      x: 1
-      z: 4
-      y: 0
-    moveBy:
-      x: 0
-      z: 0.5
-      y: 0
-    anchor:
-      x: 0
-      z: 2
-      y: 0
-    itemList:
-    - pos:
-        x: 0
-        z: -2
-        y: 0
-      itemType: 2
-    - pos:
-        x: 0
-        z: -1
-        y: 0
-      itemType: 1
-    - pos:
-        x: 0
-        z: 0
-        y: 0
-      itemType: 4
-    - pos:
-        x: 0
-        z: 1
-        y: 0
-      itemType: 3
-  cost:
-    capacity: -1
-    type: 
-    ammount: 
-  constructed: 0
-  deconstructing: 0
-  constructionProgress: 0
-  maximalProgress: 0
-  limit: 5
-  productionCost:
-    capacity: -1
-    type: 
-    ammount: 
-  production:
-    capacity: -1
-    type: 
-    ammount: 
-  prodTime: 20
-  modifier: 1
-  working: []
-  pStates:
-    supplied: 1
-    supply: 0
-    space: 1
-    stoped: 0
-    running: 0
-  networkAccess:
-    fluid:
-      type: 00000000
-      ammount: 00000000
-      capacity: 19000000
---- !u!54 &4084886823629516137
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8473832138988228041}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
