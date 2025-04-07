@@ -8,9 +8,8 @@ using UnityEngine.UIElements;
 
 /// <summary>
 /// The Base class for all objects in game.<br/>
-/// Requires a <see cref="Rigidbody"/> for registering mouse events.
 /// </summary>
-[RequireComponent(typeof(Rigidbody))]
+//[RequireComponent(typeof(Rigidbody))]
 public abstract class ClickableObject : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler,
     IPointerDownHandler, IPointerUpHandler, IUpdatable
@@ -23,6 +22,8 @@ public abstract class ClickableObject : MonoBehaviour,
     public bool selected = false;
     /// <summary>ID is a unique identifier for each group of objects.</summary>
     public int id = -1;
+    
+    public string objectName;
 
     #region Object Operations
     /// <summary>
@@ -142,7 +143,7 @@ public abstract class ClickableObject : MonoBehaviour,
         if (selected)
         {
             InfoWindow info = SceneRefs.infoWindow;
-            info.header.text = name;
+            info.header.text = objectName;
             return info;
         }
         throw new ArgumentException();

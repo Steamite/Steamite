@@ -6,7 +6,8 @@
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Trade/LocationButtons.uss?fileID=7433441132597879392&amp;guid=f55da17455af1544e8631d1cffe9df00&amp;type=3#LocationButtons" />
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Trade/MapSliders.uss?fileID=7433441132597879392&amp;guid=4bab7792dac3c2947a03cb7b1e10126b&amp;type=3#MapSliders" />
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Trade/ColonyView.uss?fileID=7433441132597879392&amp;guid=1ce140d3955f6004eb61469ffcbe8a93&amp;type=3#ColonyView" />
-    <engine:VisualElement name="Root" style="flex-grow: 0; bottom: 0; position: absolute; width: 100%; height: 92%; background-color: rgb(68, 44, 21); -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;); color: rgb(161, 148, 59); -unity-font-style: normal; font-size: 40px; flex-direction: row; display: none;">
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/FullscreenWindow.uss?fileID=7433441132597879392&amp;guid=a3688b27adecf6140830a84a444aaec7&amp;type=3#FullscreenWindow" />
+    <engine:VisualElement name="Root" class="window">
         <engine:VisualElement name="LeftBar" style="width: 35%; height: 100%; border-left-color: rgb(28, 28, 28); border-right-color: rgb(28, 28, 28); border-top-color: rgb(28, 28, 28); border-bottom-color: rgb(28, 28, 28); border-right-width: 2px; border-top-width: 2px;">
             <engine:VisualElement name="Header" style="height: 7%; width: 100%; background-color: rgb(46, 29, 14);">
                 <engine:Label text="PLACE NAME" name="Header" style="flex-grow: 1; -unity-text-align: middle-center; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; border-top-color: rgb(28, 28, 28); text-shadow: 2px 2px 0 rgb(80, 74, 29);" />

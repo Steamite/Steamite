@@ -9,6 +9,9 @@ using UnityEngine;
 [Serializable]
 public enum ResourceType
 {
+#if UNITY_EDITOR
+    None,
+#endif
     Coal,
     Metal,
     Stone,

@@ -27,7 +27,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
 
     #region Assign
     [CreateProperty] public List<Human> Assigned { get; set; } = new();
-    [CreateProperty] public int assignLimit { get; set; } = 3;
+    [CreateProperty] public int AssignLimit { get; set; } = 3;
     #endregion
 
     #region Resources
@@ -232,7 +232,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     public override List<string> GetInfoText()
     {
         List<string> strings = base.GetInfoText();
-        strings[0] = $"Can employ up to {assignLimit} workers";
+        strings[0] = $"Can employ up to {AssignLimit} workers";
         strings.Insert(1, $"<u>Produces</u>: \n{ProductionYield.GetDisplayText()}");
         if (ProductionCost.ammount.Sum() > 0)
             strings[1] += $", from: \n{ProductionCost.GetDisplayText()}";

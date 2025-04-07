@@ -1,0 +1,6 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Editor/ResearchEditor.uss?fileID=7433441132597879392&amp;guid=a53d2f3dd32ef22479f385641bd14a96&amp;type=3#ResearchEditor" />
+    <engine:TabView style="flex-grow: 1;">
+        <engine:Tab label="Tab" name="Tab" />
+    </engine:TabView>
+</engine:UXML>

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8729388223364564737}
   - component: {fileID: 2464263253761612878}
   - component: {fileID: 6402951971433127325}
-  - component: {fileID: 3475888310799177889}
+  - component: {fileID: 2201271979948965190}
   m_Layer: 2
   m_Name: Pipe connection
   m_TagString: Untagged
@@ -60,6 +60,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -100,8 +103,8 @@ MonoBehaviour:
   selected: 0
   id: -1
   connectedPipe: {fileID: 0}
---- !u!64 &3475888310799177889
-MeshCollider:
+--- !u!136 &2201271979948965190
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -115,10 +118,11 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Height: 2.13
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

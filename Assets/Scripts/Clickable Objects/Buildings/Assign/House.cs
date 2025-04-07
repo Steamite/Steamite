@@ -9,7 +9,8 @@ using UnityEngine.UIElements;
 public class House : Building, IAssign
 {
     [CreateProperty] public List<Human> Assigned { get; set; } = new();
-    public int assignLimit { get; set; } = 5;
+    [SerializeField] int assignLimit;
+    public int AssignLimit { get => assignLimit; set => assignLimit = value; }
 
     #region Deconstruction
     /// <summary>

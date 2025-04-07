@@ -89,7 +89,6 @@ public class Trading : FullscreenWindow
         base.CloseWindow();
     }
 	#endregion
- 
 
 	public void Trade(TradeConvoy convoy, Resource sellResource, int buyMoney)
     {

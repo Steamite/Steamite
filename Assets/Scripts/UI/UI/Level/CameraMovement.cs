@@ -99,7 +99,7 @@ public class CameraMovement : MonoBehaviour
     {
         Vector2 vec = move.ReadValue<Vector2>();
         Vector2 mouse = Mouse.current.position.value;
-        Debug.Log("Mouse:" + mouse);
+        //Debug.Log("Mouse:" + mouse);
         transform.Translate(
             GetSpeed(
                 ref currentMovementX, 

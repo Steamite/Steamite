@@ -13,9 +13,9 @@ using UnityEngine.UIElements;
 public class Building : StorageObject
 {
     #region Variables
-    /// <summary>Used for determening buildings.</summary>
+    /// <summary>Used for remembering color.</summary>
     [SerializeField] protected List<Color> myColor;
-    
+
     /// <summary>Building layout(entry points, anchor, ...).</summary>
     public BuildingGrid blueprint;
     /// <summary>Construction cost in resources.</summary>
@@ -368,5 +368,14 @@ public class Building : StorageObject
     /// Fills <see cref="myColor"/>.
     /// </summary>
     public void GetColors() => myColor = transform.GetComponentsInChildren<MeshRenderer>().Select(q => q.material.color).ToList(); // saves the original color
-    #endregion
+	#endregion
+
+#if UNITY_EDITOR
+	public void Clone(Building prev)
+	{
+        objectName = prev.objectName;
+        blueprint = prev.blueprint;
+        cost = prev.cost;
+	}
+#endif
 }

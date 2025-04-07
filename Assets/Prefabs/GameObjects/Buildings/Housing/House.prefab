@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 7842307157348407047}
   - component: {fileID: -85555690278644832}
   - component: {fileID: -5750915001953968721}
-  - component: {fileID: 4084886823629516137}
   m_Layer: 2
   m_Name: House
   m_TagString: Untagged
@@ -137,6 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selected: 0
   id: -1
+  objectName: House
   localRes:
     stored:
       capacity: -1
@@ -191,38 +191,11 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    capacity: -1
+    capacity: 150
     type: 01000000
     ammount: 0a000000
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 20
-  limit: 2
---- !u!54 &4084886823629516137
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8473832138988228041}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  assignLimit: 0

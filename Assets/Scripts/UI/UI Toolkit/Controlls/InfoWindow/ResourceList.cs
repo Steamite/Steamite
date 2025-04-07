@@ -61,7 +61,7 @@ namespace InfoWindowElements
 
         #region Variables
         /// <summary>If disabled hides resources with 0.</summary>
-        bool showEmpty = false;
+        protected bool showEmpty = false;
 
         public const int ICON_SIZE = 60;
         [UxmlAttribute] public int iconSize = 60;
@@ -82,7 +82,6 @@ namespace InfoWindowElements
             selectionType = SelectionType.None;
             reorderable = false;
             virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            focusable = false;
         }
         #endregion
 

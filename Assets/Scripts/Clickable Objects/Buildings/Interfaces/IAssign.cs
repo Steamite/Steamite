@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public interface IAssign
 {
     [CreateProperty] public List<Human> Assigned { get; set; }
-    public int assignLimit { get; set; }
+    public int AssignLimit { get; set; }
 
     #region Assigment
     /// <summary>

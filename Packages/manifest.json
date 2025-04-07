@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.needle.compilation-visualizer": "https://github.com/needle-tools/compilation-visualizer.git",
+    "com.unity.addressables": "2.2.2",
     "com.unity.feature.2d": "2.0.1",
     "com.unity.ide.visualstudio": "2.0.23",
     "com.unity.inputsystem": "1.13.1",
