@@ -12,5 +12,82 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9759bb5ca0e6b0e459c3e7b86df65b4f, type: 3}
   m_Name: Research Data
   m_EditorClassIdentifier: 
-  buildButtons: {fileID: 11400000, guid: 116323b1eb6a60342a1b0796e74ac72d, type: 2}
-  categories: []
+  Categories:
+  - Name: Population
+    Objects:
+    - name: node 0
+      id: 1616741493
+      level: 0
+      researched: 0
+      currentTime: 0
+      researchTime: 100
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buildingNode: 0
+      nodeCategory: -1
+      nodeAssignee: -1
+      unlockedBy: 
+      unlocks: 
+    - name: CONNECTOR
+      id: 178465213
+      level: 0
+      researched: 0
+      currentTime: 0
+      researchTime: 100
+      reseachCost:
+        capacity: 50
+        type: 05000000
+        ammount: 02000000
+      buildingNode: 1
+      nodeCategory: 0
+      nodeAssignee: 130036870
+      unlockedBy: 
+      unlocks: e9955c1a
+    - name: asd
+      id: 651504100
+      level: 0
+      researched: 0
+      currentTime: 0
+      researchTime: 999
+      reseachCost:
+        capacity: 10
+        type: 03000000
+        ammount: 32000000
+      buildingNode: 1
+      nodeCategory: 1
+      nodeAssignee: 1472558132
+      unlockedBy: 
+      unlocks: 
+    - name: Left
+      id: 1724255617
+      level: 1
+      researched: 0
+      currentTime: 0
+      researchTime: 200
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buildingNode: 0
+      nodeCategory: -1
+      nodeAssignee: -1
+      unlockedBy: 
+      unlocks: 
+    - name: Right
+      id: 442275305
+      level: 1
+      researched: 0
+      currentTime: 0
+      researchTime: 200
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      buildingNode: 0
+      nodeCategory: -1
+      nodeAssignee: -1
+      unlockedBy: bd29a30a
+      unlocks: 
+    Icon: {fileID: 2800000, guid: ebd657dbff7382b49ac208b65a2fc976, type: 3}

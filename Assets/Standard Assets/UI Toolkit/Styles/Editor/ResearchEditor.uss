@@ -2,13 +2,63 @@ Tab #Button-Row {
     min-height: 50px;
 }
 
-Tab #Row {
-    flex-direction: row;
-    justify-content: space-around;
-    height: 300px;
-    min-height: 300px;
-}
-
 #unity-tab-view__header-container {
     flex-shrink: 0;
+}
+
+.add-button {
+    width: 100px;
+    height: 100px;
+    flex-grow: 0;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    align-self: center;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+#Row {
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 300px;
+    min-height: 300px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+#Row > Label {
+    -unity-text-align: middle-center;
+    font-size: 50px;
+    -unity-font-style: bold;
+    border-right-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    width: 50px;
+}
+
+#Row > VisualElement {
+    flex-direction: row;
+    justify-content: space-around;
+    flex-grow: 1;
+}
+
+.line {
+    position: absolute;
+    background-color: rgb(255, 0, 0);
 }

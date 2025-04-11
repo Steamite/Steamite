@@ -630,6 +630,7 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 0
+  assignLimit: 0
   productionTime: 10
   productionModifier: 1
   productionCost:
