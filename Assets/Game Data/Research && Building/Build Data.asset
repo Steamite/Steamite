@@ -12,18 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c28966b8feb9714cb5a597fbcd884bd, type: 3}
   m_Name: Build Data
   m_EditorClassIdentifier: 
-  buildingCategories:
-  - columnStates: 01010100010101010101
-    categName: Population
-    categIcon: {fileID: 2800000, guid: ebd657dbff7382b49ac208b65a2fc976, type: 3}
-    buildings:
+  Categories:
+  - Name: Population
+    Objects:
     - b: {fileID: -5750915001953968721, guid: ee9e7a14f264a9347b18aa26ab4bf3ae, type: 3}
-      id: 2010456838
-  - columnStates: 
-    categName: Production
-    categIcon: {fileID: 2800000, guid: 31a2fc60fcb027a45869f7484256409a, type: 3}
-    buildings:
+      id: 130036870
+    Icon: {fileID: 2800000, guid: ebd657dbff7382b49ac208b65a2fc976, type: 3}
+    columnStates: 01010101010101010101
+    availableBuildings:
+    - b: {fileID: -5750915001953968721, guid: ee9e7a14f264a9347b18aa26ab4bf3ae, type: 3}
+      id: 130036870
+  - Name: Production
+    Objects:
     - b: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
-      id: 350032166
-    - b: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
-      id: 1652013654
+      id: 1472558132
+    - b: {fileID: 1010158601092458272, guid: 4476ebe517ab417498c78fe6b6cab983, type: 3}
+      id: 1559886711
+    Icon: {fileID: 2800000, guid: 31a2fc60fcb027a45869f7484256409a, type: 3}
+    columnStates: 01010101010101010101
+    availableBuildings:
+    - b: {fileID: 1010158601092458272, guid: 4476ebe517ab417498c78fe6b6cab983, type: 3}
+      id: 1559886711
+    - b: {fileID: 1010158601092458272, guid: 4476ebe517ab417498c78fe6b6cab983, type: 3}
+      id: 1559886711

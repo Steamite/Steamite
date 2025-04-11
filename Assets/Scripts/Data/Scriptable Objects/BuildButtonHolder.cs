@@ -16,52 +16,44 @@ public class BuildingWrapper
 }
 /// <summary>Helps serialize build categories.</summary>
 [Serializable]
-public class BuildCategWrapper
+public class BuildCategWrapper : DataCategory<BuildingWrapper>
 {
 #if UNITY_EDITOR
 	/// <summary>Hold editor data for showing columns.</summary>
 	[SerializeField] public List<bool> columnStates;
+	public List<BuildingWrapper> availableBuildings;
 #endif
-	/// <summary>Category name.</summary>
-	[SerializeField] public string categName;
-    /// <summary>Category icon for the category button.</summary>
-    [SerializeField] public Texture2D categIcon;
-    /// <summary>Buildings that belong in the category.</summary>
-    [SerializeField] public List<BuildingWrapper> buildings;
+
     public BuildCategWrapper() { }
 
     public BuildCategWrapper(string _name, Texture2D _categIcon)
     {
-        categName = _name;
-        categIcon = _categIcon;
-        buildings = new();
+		Name = _name;
+        Icon = _categIcon;
+        Objects = new();
     }
 
-    public int UniqueID 
+    public override int UniqueID()
     {
-        get
-        {
-            int i;
-            do
-            {
-                i = UnityEngine.Random.Range(0, int.MaxValue);
-            } while (buildings.Count(q => q.id == i) > 0);
-            return i;
-        }
-    }
+		int i;
+		do
+		{
+			i = UnityEngine.Random.Range(0, int.MaxValue);
+		} while (Objects.Count(q => q.id == i) > 0);
+		return i;
+	}
 }
 
 ///<summary>Holds all buildable building, creates builds buttons from this, and is linked to research.</summary>
 [CreateAssetMenu(fileName = "BuildButtonCategory", menuName = "UI Data/BuildButton Holder", order = 1)]
-public class BuildButtonHolder : ScriptableObject
+public class BuildButtonHolder : DataHolder<BuildCategWrapper>
 {
-    /// <summary>Takes filled prefabs and creates coresponding buttons.</summary>
-    [SerializeField] public List<BuildCategWrapper> buildingCategories = new List<BuildCategWrapper>();
+	public override List<string> Choices() => Categories.Select(q => q.Name).ToList();
 
 	public bool ContainsBuilding(Building newValue)
 	{
         if (newValue == null)
             return false;
-        return buildingCategories.SelectMany(q => q.buildings).Select(q => q.b).Contains(newValue);
+        return Categories.SelectMany(q => q.Objects).Select(q => q.b).Contains(newValue);
 	}
 }

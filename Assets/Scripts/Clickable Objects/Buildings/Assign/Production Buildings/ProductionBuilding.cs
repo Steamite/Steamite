@@ -9,6 +9,7 @@ using Unity.Properties;
 public class ProductionBuilding : Building, IAssign, IResourceProduction
 {
     #region Variables
+    [SerializeField] int assignLimit;
     [SerializeField][Header("Production")] float productionTime;
     [SerializeField] int productionModifier = 1;
     
@@ -27,7 +28,8 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
 
     #region Assign
     [CreateProperty] public List<Human> Assigned { get; set; } = new();
-    [CreateProperty] public int AssignLimit { get; set; } = 3;
+
+    [CreateProperty] public int AssignLimit { get => assignLimit; set => assignLimit = value; }
     #endregion
 
     #region Resources

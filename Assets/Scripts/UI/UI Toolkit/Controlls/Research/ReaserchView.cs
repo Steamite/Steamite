@@ -13,8 +13,9 @@ namespace Research
 		[UxmlAttribute] VisualTreeAsset button;
 		public void Init()
 		{
-			ResearchData data = UIRefs.research.researchData;
+			/*ResearchData data = UIRefs.research.researchData;
 			Vector2 categWindowSize = new(1920, 1080);
+			return;
 			for (int i = 0; i < data.categories.Count; i++)
 			{
 				ResearchCategory category = data.categories[i];
@@ -27,7 +28,7 @@ namespace Research
 					ResearchUIButton researchUIButton = new(node, category.nodes);
 				}
 				Add(tab);
-			}
+			}*/
 		}
 
 		public void Open(object data)

@@ -622,13 +622,14 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    capacity: -1
+    capacity: 25
     type: 0100000002000000
     ammount: 0a00000005000000
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 30
+  assignLimit: 3
   productionTime: 10
   productionModifier: 1
   productionCost:
@@ -636,6 +637,6 @@ MonoBehaviour:
     type: 0000000001000000
     ammount: 0200000001000000
   productionYield:
-    capacity: -1
+    capacity: 15
     type: 01000000
     ammount: 02000000

@@ -167,7 +167,7 @@ public class LoadingScreen : MonoBehaviour
         maxprogress += worldSave.objectsSave.buildings.Length * BUILD_WEIGHT; //scale number
         maxprogress += worldSave.objectsSave.chunks.Length * CHUNK_WEIGHT;
         maxprogress += humanSaves.Length * HUMAN_WEIGHT;
-        maxprogress += researchSave.categories.SelectMany(q => q.nodes).Count();
+        maxprogress += researchSave.categories.SelectMany(q => q.Objects).Count();
         loadingSlider.maxValue = maxprogress;
         IProgress<int> progress = new Progress<int>(value =>
         {

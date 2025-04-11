@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 [UxmlElement]
 public partial class ResourceCell : ResourceList
 {
 	Resource resource;
-	public Building inspectedBuilding;
+	public Object whatToSave;
 	IntegerField capacityField;
 	Label noneLabel;
 
@@ -24,7 +25,7 @@ public partial class ResourceCell : ResourceList
 				resource.type.Add(ResourceType.None);
 				resource.ammount.Add(0);
 				itemsSource = ToUIRes(resource);
-				EditorUtility.SetDirty(inspectedBuilding);
+				EditorUtility.SetDirty(whatToSave);
 			};
 		onRemove =
 			(el) =>
@@ -36,7 +37,7 @@ public partial class ResourceCell : ResourceList
 					resource.type.RemoveAt(el.selectedIndex);
 					resource.ammount.RemoveAt(el.selectedIndex);
 					itemsSource = ToUIRes(resource);
-					EditorUtility.SetDirty(inspectedBuilding);
+					EditorUtility.SetDirty(whatToSave);
 				}
 			};
 		allowAdd = true;
@@ -50,7 +51,7 @@ public partial class ResourceCell : ResourceList
 			(ev) => 
 			{
 				resource.capacity = ev.newValue;
-				EditorUtility.SetDirty(inspectedBuilding);
+				EditorUtility.SetDirty(whatToSave);
 			});
 		capacityField.style.width = new Length(50, LengthUnit.Percent);
 		capacityField.style.position = Position.Absolute;
@@ -137,20 +138,20 @@ public partial class ResourceCell : ResourceList
 		}
 		else
 			resource.type[i] = (ResourceType)evt.newValue;
-		EditorUtility.SetDirty(inspectedBuilding);
+		EditorUtility.SetDirty(whatToSave);
 	}
 	private void ChangeVal(ChangeEvent<int> evt)
 	{
 		int i = GetRowIndex((VisualElement)evt.target);
 		resource.ammount[i] = evt.newValue;
-		EditorUtility.SetDirty(inspectedBuilding);
+		EditorUtility.SetDirty(whatToSave);
 	}
 	#endregion
 
-	public void Open(Resource _resource, Building _inspectedBuilding, bool _cost)
+	public void Open(Resource _resource, Object _whatToSave, bool _cost)
 	{
 		resource = _resource;
-		inspectedBuilding = _inspectedBuilding;
+		whatToSave = _whatToSave;
 		if (resource != null)
 		{
 			showAddRemoveFooter = true;

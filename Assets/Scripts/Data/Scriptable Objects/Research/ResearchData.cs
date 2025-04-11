@@ -25,9 +25,9 @@ public class ResearchNode
     /// <summary>Cost to start research(WIP).</summary>
     public Resource reseachCost;
 
-	/// <summary>If the button is unlocking a building, or something else.</summary>
+	/// <summary>If the button is unlocking a building.</summary>
 	public bool buildingNode;
-	/// <summary>Category the button is from.</summary>
+	/// <summary>Category of foreing elements that is assigned to.</summary>
 	public int nodeCategory;
     /// <summary>Element id from the category.</summary>
     public int nodeAssignee;
@@ -35,7 +35,11 @@ public class ResearchNode
     [SerializeField] public List<int> unlockedBy;
     /// <summary>Next nodes.</summary>
     [SerializeField] public List<int> unlocks;
-    #endregion
+
+#if UNITY_EDITOR_WIN
+    [SerializeField] public Color lineColor = Color.red;
+#endif
+#endregion
 
     #region Overrides
     public override bool Equals(object obj)
@@ -129,17 +133,18 @@ public class ResearchNode
     /// <summary>
     /// Disconnects all connected nodes.
     /// </summary>
-    public void DisconnectNodes(List<ResearchNode> category)
+    public void DisconnectNodes(List<ResearchNode> category, bool justTop = false)
     {
-        for (int i = unlocks.Count-1; i >= 0; i--)
-        {
-            DisconnectNode(true, i, category);
-        }
-        for (int i = unlockedBy.Count -1; i >= 0; i--)
-        {
-            DisconnectNode(false, i, category);
-        }
-    }
+        
+        if(justTop == false)
+		{
+			for (int i = unlocks.Count - 1; i >= 0; i--)
+				DisconnectNode(true, i, category);
+		}
+
+		for (int i = unlockedBy.Count - 1; i >= 0; i--)
+			DisconnectNode(false, i, category);
+	}
 
     /// <summary>
     /// Disconnects one node.
@@ -165,33 +170,28 @@ public class ResearchNode
 
 /// <summary>Research Category groups nodes into logical pages.</summary>
 [Serializable]
-public class ResearchCategory
+public class ResearchCategory : DataCategory<ResearchNode>
 {
-    /// <summary>Category name.</summary>
-    [SerializeField] public string categName;
-	/// <summary>Category icon.</summary>
-	[SerializeField] public Texture2D icon;
-    /// <summary>List of all nodes in the group.</summary>
-    [SerializeField] public List<ResearchNode> nodes;
 
 #if UNITY_EDITOR_WIN
 	public void AddNode(int level)
 	{
-		ResearchNode node = new(level, UniqueId());
+		ResearchNode node = new(level, UniqueID());
 
-		nodes.Add(node);
-        nodes = nodes.OrderBy(q => q.level).ToList();
+		Objects.Add(node);
+		Objects = Objects.OrderBy(q => q.level).ToList();
 	}
 
-	int UniqueId()
-    {
-        int id;
-        do
-        {
-            id = UnityEngine.Random.Range(0, int.MaxValue);
-        }
-        while (nodes.Count(q => q.id == id) > 0);
-        return id;
+
+	public override int UniqueID()
+    { 
+		int id;
+		do
+		{
+			id = UnityEngine.Random.Range(0, int.MaxValue);
+		}
+		while (Objects.Count(q => q.id == id) > 0);
+		return id;
     }
 #endif
 
@@ -202,130 +202,16 @@ public class ResearchCategory
 
     public ResearchCategory(string _name)
     {
-        categName = _name;
-        nodes = new();
+        Name = _name;
+        Objects = new();
     }
 }
 
 /// <summary>Contains all research data, that can be edited.</summary>
 [CreateAssetMenu(fileName = "ResearchData", menuName = "UI Data/Research Holder", order = 2)]
-public class ResearchData : ScriptableObject
+public class ResearchData : DataHolder<ResearchCategory>
 {
-    #region Variables
-    /// <summary>Reference to Build button data, for editing what research unlocks.</summary>
-    public BuildButtonHolder buildButtons;
-    /// <summary>All research categories.</summary>
-    public List<ResearchCategory> categories = new();
-
-	#endregion
-
-	#region Editor
 #if UNITY_EDITOR_WIN
-
-	/// <summary>Filled when opening and changing data.</summary>
-	[NonSerialized] Dictionary<int, List<string>> allBuildings;
-    /// <summary>Filled when opening and changing data.</summary>
-    [NonSerialized] Dictionary<int, List<string>> unassignedBuildings;
-
-	void OnValidate()
-    {
-        Init();
-    }
-
-    /// <summary>
-    /// Fills <see cref="allBuildings"/> and <see cref="unassignedBuildings"/>.
-    /// </summary>
-    public void Init()
-    {
-        return;
-        if (buildButtons == null)
-            buildButtons = (BuildButtonHolder)Resources.Load("Holders/Models/BuildButton Data");
-		allBuildings = new();
-        unassignedBuildings = new();
-        for (int i = 0; i < buildButtons.buildingCategories.Count; i++)
-        {
-            allBuildings.Add(i, new());
-            unassignedBuildings.Add(i, new());
-            foreach (BuildingWrapper building in buildButtons.buildingCategories[i].buildings)
-            {
-                allBuildings[i].Add(building.b.name);
-                unassignedBuildings[i].Add(building.b.name);
-            }
-        }
-        foreach (ResearchNode node in categories.SelectMany(q => q.nodes))
-        {
-            if (node.nodeCategory != -1 && node.nodeAssignee != -1)
-                unassignedBuildings[node.nodeCategory].Remove(allBuildings[node.nodeCategory][node.nodeAssignee]);
-        }
-        Debug.Log("Research init");
-    }
-
-    /// <summary>
-    /// Triggered by selecting a building to be unlocked by a research node.
-    /// </summary>
-    /// <param name="node">Modified node.</param>
-    public void SelectBuilding(ResearchNode node)
-    {
-        if (node.nodeCategory > -1 && node.nodeAssignee > -1)
-            unassignedBuildings[node.nodeCategory].Remove(allBuildings[node.nodeCategory][node.nodeAssignee]);
-    }
-
-    /// <summary>
-    /// Triggered by unselecting a building from beeing unlocked by a research node.
-    /// </summary>
-    /// <param name="node">Modified node.</param>
-    public void DeselectBuilding(ResearchNode node)
-    {
-        if (node.nodeCategory > -1 && node.nodeAssignee > -1)
-        {
-            string s = allBuildings[node.nodeCategory][node.nodeAssignee];
-            if (unassignedBuildings[node.nodeCategory].IndexOf(s) == -1)
-                unassignedBuildings[node.nodeCategory].Add(s);
-        }
-    }
-
-    /// <summary>
-    /// Finds name of the assigned building.
-    /// </summary>
-    /// <param name="node">Asking node</param>
-    /// <returns>building name</returns>
-    string GetBuildName(ResearchNode node)
-    {
-        try
-        {
-            return allBuildings[node.nodeCategory][node.nodeAssignee];
-        }
-        catch
-        {
-            Debug.Log("fuck");
-            return "";
-        }
-    }
-
-    /// <summary>
-    /// Finds which buildings can be assigned to <paramref name="node"/>.
-    /// </summary>
-    /// <param name="node">Asking node.</param>
-    /// <returns></returns>
-    public List<string> GetUnassignedBuildings(ResearchNode node)
-    {
-        List<string> s = new();
-        if (node.nodeAssignee != -1)
-            s.Add(GetBuildName(node));
-        s.AddRange(unassignedBuildings[node.nodeCategory]);
-        return s;
-    }
-
-    /// <summary>
-    /// Gets absolute building index in a category.
-    /// </summary>
-    /// <param name="categ">Which category to look in.</param>
-    /// <param name="buildingName">Name of the building to look for.</param>
-    /// <returns></returns>
-    public int GetIndex(int categ, string buildingName)
-    {
-        return allBuildings[categ].IndexOf(buildingName);
-    }
+	public override List<string> Choices() => Categories.Select(q => q.Name).ToList();
 #endif
-#endregion Editor
 }
