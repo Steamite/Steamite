@@ -58,6 +58,30 @@ namespace Research
 			RegisterCallback<PointerLeaveEvent>(_ => ToolkitUtils.localMenu.Close());
 		}
 
+		protected override bool SelectChange(bool UpdateGroup)
+		{
+			if (!node.researched && MyRes.CanAfford(node.reseachCost))
+			{
+				if (UIRefs.research.currentResearch == null)
+				{
+					base.SelectChange(UpdateGroup);
+					return true;
+				}
+				else
+				{
+					ConfirmWindow.window.Open(
+						() =>
+						{
+							UIRefs.research.SetActive(null);
+							Select();
+						},
+						"Change Research",
+						"Do you want to change active Research?");
+				}
+			}
+			return false;
+		}
+
 		/*public void Initialize(ResearchNode researchNode, List<ResearchNode> nodes)
 		{
 			

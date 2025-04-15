@@ -96,5 +96,4 @@ public class Trading : FullscreenWindow
         MyRes.TakeFromGlobalStorage(sellResource);
         MyRes.UpdateMoney(buyMoney);
     }
-
 }

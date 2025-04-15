@@ -36,10 +36,11 @@ namespace RadioGroups
             this.Add(deleteButton);
         }
 
-        protected override void SelectChange(bool UpdateGroup)
+        protected override bool SelectChange(bool UpdateGroup)
         {
             base.SelectChange(UpdateGroup);
             deleteButton.style.display = DisplayStyle.Flex;
+            return true;
         }
         public override void Deselect(bool triggerTransition = true)
         {

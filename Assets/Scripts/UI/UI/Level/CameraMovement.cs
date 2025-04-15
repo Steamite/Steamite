@@ -99,29 +99,38 @@ public class CameraMovement : MonoBehaviour
     {
         Vector2 vec = move.ReadValue<Vector2>();
         Vector2 mouse = Mouse.current.position.value;
-        //Debug.Log("Mouse:" + mouse);
-        transform.Translate(
-            GetSpeed(
-                ref currentMovementX, 
-                addMovement, 
-                removeMovement, 
-                maxMovement, 
-                MergeMove(
-                    Edge(
-                        mouse.x, 
-                        Screen.width), 
-                    vec.x)),
-            0,
-            GetSpeed(
-                ref currentMovementY, 
-                addMovement, 
-                removeMovement, 
-                maxMovement, 
-                MergeMove(
-                    Edge(
-                        mouse.y, 
-                        Screen.height), 
-                    vec.y)));
+        if(currentMovementX != 0 || currentMovementY != 0)
+        {
+            if (UIRefs.trading.isOpen)
+            {
+                
+            }
+            else
+            {
+				transform.Translate(
+					GetSpeed(
+						ref currentMovementX,
+						addMovement,
+						removeMovement,
+						maxMovement,
+						MergeMove(
+							Edge(
+								mouse.x,
+								Screen.width),
+							vec.x)),
+					0,
+					GetSpeed(
+						ref currentMovementY,
+						addMovement,
+						removeMovement,
+						maxMovement,
+						MergeMove(
+							Edge(
+								mouse.y,
+								Screen.height),
+							vec.y)));
+			}
+		}
     }
 
     float MergeMove(float mouse, float key)

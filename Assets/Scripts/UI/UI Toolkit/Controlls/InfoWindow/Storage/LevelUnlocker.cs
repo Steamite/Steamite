@@ -34,10 +34,11 @@ namespace InfoWindowElements
         }
 
         /// <inheritdoc/>
-        protected override void SelectChange(bool UpdateGroup)
+        protected override bool SelectChange(bool UpdateGroup)
         {
             base.SelectChange(UpdateGroup);
             ToggleButtonStyle(LevelState.Selected);
+            return false;
         }
         #endregion
 

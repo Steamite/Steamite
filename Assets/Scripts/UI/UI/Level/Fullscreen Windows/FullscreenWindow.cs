@@ -6,29 +6,30 @@ using UnityEngine.UIElements;
 public abstract class FullscreenWindow : MonoBehaviour
 {
     public VisualElement window;
+    public bool isOpen = false;
     public virtual void GetWindow()
     {
         window = gameObject.GetComponent<UIDocument>().rootVisualElement;
         window.style.display = DisplayStyle.None;
         window[0].style.display = DisplayStyle.Flex;
-        //CloseWindow();
     }
     public void ToggleWindow()
     {
-        if (window.style.display == DisplayStyle.Flex)
+        if (isOpen)
         {
-            CloseWindow();
+			CloseWindow();
         }
         else
         {
-            OpenWindow();
+			OpenWindow();
         }
     }
 
     /// <summary>Opening the window, disables shortcuts and hides info window.</summary>
     public virtual void OpenWindow()
     {
-        SceneRefs.gridTiles.DeselectObjects();
+		isOpen = true;
+		SceneRefs.gridTiles.DeselectObjects();
         MainShortcuts.DisableInput();
         SceneRefs.infoWindow.Close();
         window.style.display = DisplayStyle.Flex; 
@@ -38,7 +39,8 @@ public abstract class FullscreenWindow : MonoBehaviour
 	/// <summary>Closing the window, enables shortcuts.</summary>
 	public virtual void CloseWindow()
     {
-        MainShortcuts.EnableInput();
+		isOpen = false;
+		MainShortcuts.EnableInput();
         window.style.display = DisplayStyle.None;
         SceneRefs.tick.UIWindowToggle(true);
     }
