@@ -24,18 +24,18 @@ public class BuildButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void Initialize(Building prefab)
     {
         buildPrefab = prefab;
-        name = prefab.name;
+        name = prefab.objectName;
         transform.GetChild(0).GetComponent<TMP_Text>().text = name;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Transform t = SceneRefs.miscellaneous;
-        t.GetChild(1).GetComponent<LocalInfoWindow>().DisplayInfo(buildPrefab, t.InverseTransformPoint(transform.GetComponent<RectTransform>().position));
+        /*Transform t = SceneRefs.miscellaneous;
+        t.GetChild(1).GetComponent<LocalInfoWindow>().DisplayInfo(buildPrefab, t.InverseTransformPoint(transform.GetComponent<RectTransform>().position));*/
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        SceneRefs.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().HideInfo();
+        /*SceneRefs.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().HideInfo();*/
     }
 }

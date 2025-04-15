@@ -22,17 +22,24 @@ namespace EditorWindows.Research
 
 		public ResearchNodeElem(ResearchNode _nodeData, ResearchEditor editor, ResearchData data)
 		{
-			Button connector;
+			Button topConnector = null;
+
 			if (_nodeData.level != 0) 
 			{
-				connector = new();
-				connector.RegisterCallback<ClickEvent>((ev) => TopConnect(ev, _nodeData, editor));
-				connector.name = "Top";
-				connector.AddToClassList("connector");
-				connector.style.bottom = StyleKeyword.Auto;
-				connector.style.top = -12;
-				Add(connector);
+				topConnector = new();
+				topConnector.RegisterCallback<ClickEvent>((ev) => TopConnect(ev, _nodeData, editor));
+				topConnector.name = "Top";
+				topConnector.AddToClassList("connector");
+				topConnector.style.bottom = StyleKeyword.Auto;
+				topConnector.style.top = -12;
+				Add(topConnector);
 			}
+
+			Button botConnector = new(() => BottomConnect(_nodeData, editor));
+			botConnector.name = "Bot";
+			botConnector.AddToClassList("connector");
+
+
 			VisualElement body = new();
 			
 			#region Buttons
@@ -117,10 +124,7 @@ namespace EditorWindows.Research
 			cell.Open(_nodeData.reseachCost, data, true);
 			body.Add(cell);
 
-
-			DropdownField stat = new(
-				new List<string> { "Stat", "Building" },
-				_nodeData.buildingNode ? 1 : 0);
+			EnumField stat = new(_nodeData.nodeType);
 			DropdownField category = new(
 				 editor.GetActiveCategories(_nodeData),
 				_nodeData.nodeCategory + 1);
@@ -131,14 +135,24 @@ namespace EditorWindows.Research
 			assignee.SetEnabled(_nodeData.nodeCategory != -1);
 
 			// Stat
-			stat.RegisterValueChangedCallback<string>(
+			stat.RegisterValueChangedCallback<Enum>(
 				(ev) =>
 				{
-					if (_nodeData.buildingNode != (stat.index == 1))
+					NodeType newVal = (NodeType)ev.newValue;
+					if(newVal != _nodeData.nodeType)
 					{
-						if (_nodeData.buildingNode && _nodeData.nodeAssignee > -1)
-							editor.RecalculateAvailableBuildings();
-						_nodeData.buildingNode = stat.index == 1;
+						ToggleElements(newVal, body, topConnector, botConnector);
+						switch (newVal)
+						{
+							case NodeType.Dummy:
+								break;
+							case NodeType.Stat:
+								break;
+							case NodeType.Building:
+								editor.RecalculateAvailableBuildings();
+								break;
+						}
+						_nodeData.nodeType = newVal;
 						_nodeData.nodeCategory = -1;
 						editor.SaveValues();
 						category.choices = editor.GetActiveCategories(_nodeData);
@@ -212,16 +226,45 @@ namespace EditorWindows.Research
 			body.Add(assignee);
 			#endregion
 
+
+			TextField field = new();
+			field.AddToClassList("description-field");
+			field.value = _nodeData.description;
+			field.multiline = true;
+			field.verticalScrollerVisibility = ScrollerVisibility.AlwaysVisible;
+			field.RegisterCallback<FocusOutEvent>(
+				(_) => 
+				{
+					_nodeData.description = field.value;
+					editor.SaveValues();
+				});
+
+			body.Add(field);
 			Add(body);
 
-			connector = new(() => BottomConnect(_nodeData, editor));
-			connector.name = "Bot";
-			connector.AddToClassList("connector");
-			Add(connector);
+
+			Add(botConnector);
 
 			style.flexGrow = 0;
 			style.height = 250;
 			AddToClassList("body");
+
+			ToggleElements(_nodeData.nodeType, body, topConnector, botConnector);
+		}
+		void ToggleElements(
+			NodeType type, 
+			VisualElement parent,
+			VisualElement topConnect,
+			VisualElement bottomConnect)
+		{
+			DisplayStyle style = type == NodeType.Building ? DisplayStyle.Flex : DisplayStyle.None;
+			if (topConnect != null)
+				topConnect.style.display = style;
+			for (int i = 0; i < parent.childCount; i++)
+			{
+				parent[i].style.display = parent[i] is EnumField ? DisplayStyle.Flex : style;
+			}
+			bottomConnect.style.display = style;
 		}
 
 		/// <summary>

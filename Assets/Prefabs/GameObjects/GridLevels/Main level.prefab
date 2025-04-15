@@ -14116,12 +14116,32 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      propertyPath: 'cost.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      propertyPath: 'cost.type.Array.data[1]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
       propertyPath: build.blueprint.moveBy.x
       value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
       propertyPath: build.blueprint.moveBy.z
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      propertyPath: 'productionCost.type.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      propertyPath: 'productionCost.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      propertyPath: 'productionYield.type.Array.data[0]'
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4374798361217592970, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
       propertyPath: m_LocalPosition.x

@@ -126,7 +126,7 @@ public class Human : ClickableObject
 
     #region Basic Operations
     /// <inheritdoc/>
-    public override GridPos GetPos() => new(transform.position.x, transform.localPosition.y / ClickabeObjectFactory.LEVEL_HEIGHT, transform.position.z);
+    public override GridPos GetPos() => new(transform.position.x, transform.localPosition.y / ClickableObjectFactory.LEVEL_HEIGHT, transform.position.z);
     
     /// <summary>
     /// Creates a list from <see cref="HumanUtil.humans"/>.
@@ -187,7 +187,6 @@ public class Human : ClickableObject
     {
         if (clickable == null)
             clickable = new HumanSave();
-        (clickable as HumanSave).name = name;
         (clickable as HumanSave).color = new(transform.GetChild(1).GetComponent<MeshRenderer>().material.color); // saves color of hat
         (clickable as HumanSave).gridPos = GetPos();
         (clickable as HumanSave).jobSave = new(jData);
@@ -201,8 +200,29 @@ public class Human : ClickableObject
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-        base.Load(save);
-    }
+        HumanSave s = (save as HumanSave);
+		transform.GetChild(1).GetComponent<MeshRenderer>().material.color = s.color.ConvertColor();
+		id = save.id;
+		objectName = save.objectName;
+		SetJob(new(s.jobSave, this));
+		MyRes.ManageRes(Inventory, s.inventory, 1);
+		specialization = s.specs;
+		if (Job.path.Count > 0)
+			ChangeAction(HumanActions.Move);
+		else
+			Decide();
+		// house assigment
+		if (s.houseID != -1)
+			MyGrid.buildings.Where(q => q.id == s.houseID).
+				SingleOrDefault().GetComponent<House>().ManageAssigned(this, true);
+
+		// workplace assigment
+		if (s.workplaceId != -1)
+			MyGrid.buildings.Where(q => q.id == s.workplaceId).
+				SingleOrDefault().GetComponent<ProductionBuilding>().ManageAssigned(this, true);
+
+		base.Load(save);
+	}
 
     #endregion
 

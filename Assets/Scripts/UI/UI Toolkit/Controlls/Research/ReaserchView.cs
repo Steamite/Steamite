@@ -10,30 +10,42 @@ namespace Research
 	[UxmlElement]
 	public partial class ResearchView : TabView, IInitiableUI, IUIElement
 	{
-		[UxmlAttribute] VisualTreeAsset button;
 		public void Init()
 		{
-			/*ResearchData data = UIRefs.research.researchData;
+			ResearchData data = UIRefs.research.researchData;
 			Vector2 categWindowSize = new(1920, 1080);
-			return;
-			for (int i = 0; i < data.categories.Count; i++)
+			for (int i = 0; i < data.Categories.Count; i++)
 			{
-				ResearchCategory category = data.categories[i];
-				Tab tab = new(category.categName, category.icon);
-				for (int j = 0; j < category.nodes[^1].level; j++)
-					tab.Add(new());
+				ResearchCategory category = data.Categories[i];
+				Tab tab = new(category.Name, category.Icon);
 
-				foreach(ResearchNode node in category.nodes)
-				{
-					ResearchUIButton researchUIButton = new(node, category.nodes);
-				}
+				ResearchRadioButtonGroup group = new ResearchRadioButtonGroup(category);
+				group.SetChangeCallback((nodeIndex) => OpenButton(category.Objects[nodeIndex]));
+
+				tab.Add(group);
 				Add(tab);
-			}*/
+			}
+			activeTabChanged += OnTabChange;
 		}
+
+		void OnTabChange(Tab prevTab, Tab arg2)
+		{
+			prevTab.Q<ResearchRadioButtonGroup>().Select(-1);
+		}
+
+		void OpenButton(ResearchNode node)
+		{
+			if(node.researched == false)
+			{
+				UIRefs.research.currentResearch = node;
+				SceneRefs.ShowMessage($"Research Changed {node.name}");
+			}
+		}
+
 
 		public void Open(object data)
 		{
-			throw new System.NotImplementedException();
+			Debug.Log("Opening research!");
 		}
 	}
 }

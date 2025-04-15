@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using TMPro;
 using TradeData.Locations;
 using UnityEngine;
@@ -6,20 +7,22 @@ using UnityEngine.UIElements;
 
 public class Research : FullscreenWindow
 {
-	IInitiableUI UI;
+	IUIElement UI;
     public ResearchNode currentResearch;
     public StorageResource researchResourceInput;
     public ResearchData researchData;
+    public BuildButtonHolder buildData;
 
 	public override void GetWindow()
 	{
 		base.GetWindow();
-		UI = window.Q<TabView>() as IInitiableUI;
-		UI.Init();
+        UI = window.Q<TabView>() as IUIElement;
+		((IInitiableUI)UI).Init();
 	}
 	public async void NewGame()
 	{
 		researchData = await Addressables.LoadAssetAsync<ResearchData>("Assets/Game Data/Research && Building/Research Data.asset").Task;
+        buildData = await Addressables.LoadAssetAsync<BuildButtonHolder>("Assets/Game Data/Research && Building/Build Data.asset").Task;
         Init();
 	}
 
@@ -38,7 +41,12 @@ public class Research : FullscreenWindow
         SceneRefs.researchAdapter.Init(DoResearch, DisplayInfoWindowDetails);
     }
 
-    ResearchDispayData DisplayInfoWindowDetails()
+	public override void OpenWindow()
+	{
+		base.OpenWindow();
+        UI.Open(researchData);
+	}
+	ResearchDispayData DisplayInfoWindowDetails()
     {
         ResearchDispayData data = new();
         /*if (currentResearch)

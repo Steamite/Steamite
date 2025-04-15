@@ -13,25 +13,36 @@ MonoBehaviour:
   m_Name: Build Data
   m_EditorClassIdentifier: 
   Categories:
+  - Name: Production
+    Objects:
+    - b: {fileID: 513291908897958086, guid: 1a2fb29f96c115e429c7655f7f5116b4, type: 3}
+      id: 1472558132
+      preview: {fileID: 21300000, guid: 0f33852b48a11b24e9995aef61ef7bbc, type: 3}
+    - b: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      id: 1541889363
+      preview: {fileID: 21300000, guid: a1053cdc4286d4647a6cc3a2c7c7349d, type: 3}
+    - b: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
+      id: 1197943099
+      preview: {fileID: 21300000, guid: d95ed9e9c84ceb548b6fe1e2dbc4e776, type: 3}
+    Icon: {fileID: 2800000, guid: 31a2fc60fcb027a45869f7484256409a, type: 3}
+    columnStates: 0101010101010101010101
+    availableBuildings:
+    - b: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      id: 1541889363
+      preview: {fileID: 21300000, guid: a1053cdc4286d4647a6cc3a2c7c7349d, type: 3}
   - Name: Population
     Objects:
     - b: {fileID: -5750915001953968721, guid: ee9e7a14f264a9347b18aa26ab4bf3ae, type: 3}
-      id: 130036870
+      id: 1580670160
+      preview: {fileID: 21300000, guid: 1d4c24b6e0dc9ac4d9e5f0e654a4fedf, type: 3}
     Icon: {fileID: 2800000, guid: ebd657dbff7382b49ac208b65a2fc976, type: 3}
-    columnStates: 01010101010101010101
-    availableBuildings:
-    - b: {fileID: -5750915001953968721, guid: ee9e7a14f264a9347b18aa26ab4bf3ae, type: 3}
-      id: 130036870
-  - Name: Production
+    columnStates: 0101010101010101010101
+    availableBuildings: []
+  - Name: ABCD
     Objects:
-    - b: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
-      id: 1472558132
-    - b: {fileID: 1010158601092458272, guid: 4476ebe517ab417498c78fe6b6cab983, type: 3}
-      id: 1559886711
-    Icon: {fileID: 2800000, guid: 31a2fc60fcb027a45869f7484256409a, type: 3}
-    columnStates: 01010101010101010101
-    availableBuildings:
-    - b: {fileID: 1010158601092458272, guid: 4476ebe517ab417498c78fe6b6cab983, type: 3}
-      id: 1559886711
-    - b: {fileID: 1010158601092458272, guid: 4476ebe517ab417498c78fe6b6cab983, type: 3}
-      id: 1559886711
+    - b: {fileID: 7372216245572014595, guid: 38e66c3c644545844bd77f56f3d88318, type: 3}
+      id: 1122905122
+      preview: {fileID: 21300000, guid: 6470b7abea0475e4fbf135f1c0c80485, type: 3}
+    Icon: {fileID: 2800000, guid: 7c4a7586033eca9449c85deef53778aa, type: 3}
+    columnStates: 0101010101010101010101
+    availableBuildings: []

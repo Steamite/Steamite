@@ -19,8 +19,6 @@ public enum InfoMode
     Chunk,
     /// <summary><see cref="global::Water"/> is selected.</summary>
     Water,
-    /// <summary><see cref="ResearchNode"/> is selected.</summary>
-    Research,
 }
 
 /// <summary>
@@ -120,7 +118,6 @@ public class InfoWindow : MonoBehaviour
         {
             case InfoMode.None:
             case InfoMode.Water:
-            case InfoMode.Research:
                 break;
             case InfoMode.Building:
                 ResetView(buildingElement);
@@ -186,7 +183,6 @@ public class InfoWindow : MonoBehaviour
         {
             case InfoMode.None:
             case InfoMode.Water:
-            case InfoMode.Research:
                 throw new NotImplementedException();
 
             case InfoMode.Building:
@@ -227,7 +223,7 @@ public class InfoWindow : MonoBehaviour
 
                 // Object Binding
                 binding = BindingUtil.CreateBinding(nameof(Human.Job));
-                binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{(jobData.interest ? jobData.interest.name : "None")}");
+                binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{(jobData.interest ? jobData.interest.objectName : "None")}");
                 RegisterTempBinding(new(humanElement.Q<Label>("Interest-Value"), "text"), binding, dataSource);
 
                 humanElement.style.display = DisplayStyle.Flex;
@@ -239,7 +235,7 @@ public class InfoWindow : MonoBehaviour
 
                 // Assigned Binding
                 binding = BindingUtil.CreateBinding(nameof(Rock.Assigned));
-                binding.sourceToUiConverters.AddConverter((ref Human human) => $"{(human ? human.name: "None")}");
+                binding.sourceToUiConverters.AddConverter((ref Human human) => $"{(human ? human.objectName: "None")}");
                 RegisterTempBinding(new(rockChunkElement.Q<Label>("Assigned-Value"), "text"), binding, dataSource);
 
                 // Integrity Binding
@@ -257,7 +253,7 @@ public class InfoWindow : MonoBehaviour
 
                 // Assigned Binding
                 binding = BindingUtil.CreateBinding(nameof(Chunk.LocalRes));
-                binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"{(res.carriers.Count > 0 ? res.carriers.First().name : "None")}");
+                binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"{(res.carriers.Count > 0 ? res.carriers.First().objectName : "None")}");
                 RegisterTempBinding(new(rockChunkElement.Q<Label>("Assigned-Value"), "text"), binding, dataSource);
 
                 rockChunkElement.style.display = DisplayStyle.Flex;

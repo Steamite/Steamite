@@ -8,6 +8,7 @@ public class BuildingWrapper
 {
 	[SerializeField] public Building b;
 	[SerializeField] public int id;
+	[SerializeField] public Sprite preview;
 
 	public BuildingWrapper(int _id)
 	{

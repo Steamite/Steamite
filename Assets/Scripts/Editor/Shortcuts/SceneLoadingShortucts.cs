@@ -49,6 +49,7 @@ public class SceneLoadingShortucts : MonoBehaviour
         {
             if(File.Exists($"{Application.persistentDataPath}/openScene.txt"))
                 EditorSceneManager.OpenScene($"{ scenePath }{File.ReadAllText($"{Application.persistentDataPath}/openScene.txt")}.unity");
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
     }
     

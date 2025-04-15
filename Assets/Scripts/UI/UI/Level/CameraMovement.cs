@@ -156,7 +156,7 @@ public class CameraMovement : MonoBehaviour
 	float Edge(float mouse, float axisSize)
     {
         float div = mouse / axisSize;
-        Debug.Log("Div:" + div);
+        //Debug.Log("Div:" + div);
         if (div < 0 || div > 1)
             return 0;
 		else if (div < mouseThreshold)

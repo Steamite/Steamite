@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -85555690278644832}
   - component: {fileID: -5750915001953968721}
   m_Layer: 2
-  m_Name: House
+  m_Name: building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,6 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6911121bd271374986e3b2de53b497b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: 
   selected: 0
   id: -1
   objectName: House

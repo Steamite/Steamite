@@ -59,7 +59,7 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
         if (fillMoney)
             Money = 2000;
         string[] names = Enum.GetNames(typeof(ResourceType));
-        for (int i = 0; i < names.Length; i++)
+        for (int i = 1; i < names.Length; i++)
         {
             resources.type.Add((ResourceType)i);
             resources.ammount.Add(0);

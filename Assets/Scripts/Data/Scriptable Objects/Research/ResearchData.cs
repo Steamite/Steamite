@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public enum NodeType
+{
+    Dummy,
+    Stat,
+    Building
+}
+
 /// <summary>Represents one thing to research, can have prequiseites and folowing ones.</summary>
 [Serializable]
 public class ResearchNode
@@ -26,7 +33,7 @@ public class ResearchNode
     public Resource reseachCost;
 
 	/// <summary>If the button is unlocking a building.</summary>
-	public bool buildingNode;
+	public NodeType nodeType;
 	/// <summary>Category of foreing elements that is assigned to.</summary>
 	public int nodeCategory;
     /// <summary>Element id from the category.</summary>
@@ -35,14 +42,15 @@ public class ResearchNode
     [SerializeField] public List<int> unlockedBy;
     /// <summary>Next nodes.</summary>
     [SerializeField] public List<int> unlocks;
+	public string description;
 
 #if UNITY_EDITOR_WIN
-    [SerializeField] public Color lineColor = Color.red;
+	[SerializeField] public Color lineColor = Color.red;
 #endif
-#endregion
+	#endregion
 
-    #region Overrides
-    public override bool Equals(object obj)
+	#region Overrides
+	public override bool Equals(object obj)
     {
         if (obj == null)
             return false;

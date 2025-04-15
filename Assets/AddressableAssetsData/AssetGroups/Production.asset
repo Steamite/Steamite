@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Production
+  m_EditorClassIdentifier: 
+  m_GroupName: Production
+  m_GUID: 5f20cd3b070d98d42a87789061be96a7
+  m_SerializeEntries:
+  - m_GUID: 1572f0825d8eae24fac3c0f7964abbf6
+    m_Address: Research
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c03d66f30ca84894faa805d58a6e1163
+    m_Address: DUM
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cce972b89a166654e913c88226ce58ba
+    m_Address: Foundry
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: be3c5711981cd504e9b3bc254a09f527, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 33d40b59b1d28bb4781714335e0da0a3, type: 2}
+    - {fileID: 11400000, guid: 53447fef8ea541e48bacc8e9471ff6eb, type: 2}

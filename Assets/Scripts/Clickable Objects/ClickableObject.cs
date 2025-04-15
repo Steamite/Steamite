@@ -14,8 +14,12 @@ public abstract class ClickableObject : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler,
     IPointerDownHandler, IPointerUpHandler, IUpdatable
 {
-    /// <summary>Bind event for updating.</summary>
-    [HideInInspector]
+	[HideInInspector]
+    [Obsolete("Use objectName not name", true)]
+	public new string name;
+
+	/// <summary>Bind event for updating.</summary>
+	[HideInInspector]
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
     /// <summary>Object is beeing currently inspected.</summary>
@@ -35,7 +39,7 @@ public abstract class ClickableObject : MonoBehaviour,
     {
         if (obj == null || GetType() != obj.GetType())
             return false;
-        else if (((ClickableObject)obj).id == id && ((ClickableObject)obj).name == name)
+        else if (((ClickableObject)obj).id == id && ((ClickableObject)obj).objectName == objectName)
             return true;
         return false;
     }
@@ -173,7 +177,9 @@ public abstract class ClickableObject : MonoBehaviour,
         if (clickable == null)
             clickable = new();
         clickable.id = id;
-        return clickable;
+        clickable.objectName = objectName;
+
+		return clickable;
     }
     /// <summary>
     /// Recursively calls down and loads data.
@@ -182,6 +188,7 @@ public abstract class ClickableObject : MonoBehaviour,
     public virtual void Load(ClickableObjectSave save)
     {
         id = save.id;
-    }
+		objectName = save.objectName;
+	}
     #endregion Saving
 }

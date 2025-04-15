@@ -1,0 +1,76 @@
+#unity-tab-view__header-container {
+    transform-origin: left top;
+    rotate: 90deg;
+    translate: 58px 0;
+    max-width: 994.25px;
+}
+
+#unity-tab__header-image {
+    width: 45px;
+    height: 45px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 10px;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+#unity-tab__header-label {
+    -unity-text-align: middle-left;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 4px;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 20px;
+}
+
+#unity-tab__header {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-left: 0;
+    flex-grow: 1;
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-left-color: rgb(137, 87, 42);
+    border-right-color: rgb(137, 87, 42);
+    border-top-color: rgb(137, 87, 42);
+    border-bottom-color: rgb(137, 87, 42);
+}
+
+#unity-tab-view__content-container {
+    position: relative;
+    left: 62px;
+    flex-grow: 1;
+    top: -62px;
+    height: 995px;
+}
+
+#unity-tab__content-container {
+    flex-grow: 1;
+}
+
+.unity-tab {
+    flex-grow: 1;
+    height: 995px;
+    min-height: 995px;
+    max-height: 995px;
+    width: 1855px;
+    min-width: 1855px;
+    max-width: 1855px;
+    background-color: rgb(68, 44, 21);
+}
+
+ResearchRadioButtonGroup {
+    flex-direction: column-reverse;
+}

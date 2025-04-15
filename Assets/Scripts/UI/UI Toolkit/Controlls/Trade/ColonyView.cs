@@ -30,7 +30,6 @@ namespace TradeWindowElements
 				element.ElementAt(1).name = "Stats";
 				Add(element);
 			}
-			Debug.Log("Constructing colony view");
 		}
 
 		public void Init()

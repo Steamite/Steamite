@@ -61,7 +61,7 @@ public class Rock : ClickableObject
     {
         return new GridPos(
             transform.position.x,
-            (transform.position.y - ClickabeObjectFactory.ROCK_OFFSET) / ClickabeObjectFactory.LEVEL_HEIGHT,
+            (transform.position.y - ClickableObjectFactory.ROCK_OFFSET) / ClickableObjectFactory.LEVEL_HEIGHT,
             transform.position.z);
     }
     #endregion Basic Operations
@@ -94,7 +94,6 @@ public class Rock : ClickableObject
         else
             (clickable as RockSave).ammount = -1;
         (clickable as RockSave).integrity = integrity;
-        (clickable as RockSave).oreName = name;
         (clickable as RockSave).toBeDug = toBeDug;
         return base.Save(clickable);
     }
@@ -104,7 +103,6 @@ public class Rock : ClickableObject
     {
         integrity = (save as RockSave).integrity;
         toBeDug = (save as RockSave).toBeDug;
-        name = (save as RockSave).oreName;
         if ((save as RockSave).ammount > -1)
         {
             rockYield.type[0] = (save as RockSave).res;

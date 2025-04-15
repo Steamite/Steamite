@@ -15,11 +15,12 @@ namespace EditorWindows
 		[SerializeField] VisualTreeAsset windowAsset;
 
 		protected DropdownField categorySelector;
-		TextField textField;
+		protected TextField categoryNameField;
 		Button createCategory;
 		Button categoryRemover;
+		VisualElement iconElement;
 
-
+		bool refresh;
 		protected virtual void CreateGUI()
 		{
 			VisualElement doc = windowAsset.CloneTree();
@@ -27,7 +28,7 @@ namespace EditorWindows
 
 			#region Category
 			categoryRemover = rootVisualElement.Q<Button>("Category-Remover");
-			categoryRemover.clicked += RemoveCateg;
+			categoryRemover.clicked += () => RemoveCateg();
 
 			categorySelector = doc.Q<DropdownField>("Category-Selctor");
 			categorySelector.choices = data.Choices();
@@ -39,12 +40,18 @@ namespace EditorWindows
 				(_) => LoadCategData(categorySelector.index));
 		}
 
+
+		private void OnFocus()
+		{
+			if(categorySelector != null && categorySelector.index < data.Categories.Count)
+				LoadCategData(categorySelector.index);
+		}
+
 		#region Category Switching
 		protected virtual bool LoadCategData(int index)
 		{
-			VisualElement iconElement;
 			ObjectField iconSelector;
-			TopBar(out iconElement, out iconSelector);
+			TopBar(out iconSelector);
 
 			bool categoryExists;
 			if (index < data.Categories.Count)
@@ -59,7 +66,7 @@ namespace EditorWindows
 
 				iconElement.style.backgroundImage = selectedCategory.Icon;
 				iconSelector.value = selectedCategory.Icon;
-				textField.value = selectedCategory.Name;
+				categoryNameField.value = selectedCategory.Name;
 			}
 			else
 			{
@@ -73,53 +80,62 @@ namespace EditorWindows
 
 				iconElement.style.backgroundImage = null;
 				iconSelector.value = null;
-				textField.value = "";
+				categoryNameField.value = "";
 			}
 
 			return categoryExists;
 		}
 
-		protected virtual void TopBar(out VisualElement iconElement, out ObjectField iconSelector)
+		protected virtual void TopBar(out ObjectField iconSelector)
 		{
 			createCategory = rootVisualElement.Q<Button>("Category-Create");
 			createCategory.SetEnabled(false);
 
 			iconElement = rootVisualElement.Q<VisualElement>("Icon-Image");
-			var iconElem = iconElement;
 			iconSelector = rootVisualElement.Q<ObjectField>("Icon-Changer");
-			iconSelector.RegisterValueChangedCallback(
-				(ev) =>
-				{
-					selectedCategory.Icon = (Texture2D)ev.newValue;
-					iconElem.style.backgroundImage = selectedCategory.Icon;
-					EditorUtility.SetDirty(data);
-				});
+			iconSelector.UnregisterValueChangedCallback<Object>(IconChange);
+			iconSelector.RegisterValueChangedCallback<Object>(IconChange);
 
-			textField = rootVisualElement.Q<TextField>("Category-Name");
-			textField.RegisterValueChangedCallback(
-				(ev) =>
-				{
-					createCategory.SetEnabled(
-						ev.newValue.Length > 0 &&
-						selectedCategory.Name != ev.newValue &&
-						data.Categories.Count(q => (q as DataCategory<TW>).Name == ev.newValue) == 0);
-				});
+			categoryNameField = rootVisualElement.Q<TextField>("Category-Name");
+			categoryNameField.UnregisterValueChangedCallback<string>(NameChange);
+			categoryNameField.RegisterValueChangedCallback<string>(NameChange);
+
+
+		}
+
+		void IconChange(ChangeEvent<Object> ev)
+		{
+			if (selectedCategory != null && selectedCategory.Icon != (Texture2D)ev.newValue)
+			{
+				refresh = false;
+				selectedCategory.Icon = (Texture2D)ev.newValue;
+				iconElement.style.backgroundImage = selectedCategory.Icon;
+				EditorUtility.SetDirty(data);
+			}
+		}
+
+		void NameChange(ChangeEvent<string> ev)
+		{
+			createCategory.SetEnabled(
+				ev.newValue.Length > 0 &&
+				selectedCategory.Name != ev.newValue &&
+				data.Categories.Count(q => (q as DataCategory<TW>).Name == ev.newValue) == 0);
 		}
 
 		#region Categ Buttons
-		void RenameCateg()
+		protected virtual void RenameCateg()
 		{
 			createCategory.SetEnabled(false);
-			selectedCategory.Name = textField.value;
-			categorySelector.choices[categorySelector.index] = textField.value;
-			categorySelector.SetValueWithoutNotify(textField.value);
+			selectedCategory.Name = categoryNameField.value;
+			categorySelector.choices[categorySelector.index] = categoryNameField.value;
+			categorySelector.SetValueWithoutNotify(categoryNameField.value);
 			EditorUtility.SetDirty(data);
 		}
 
-		void CreateCateg()
+		protected virtual void CreateCateg()
 		{
 			createCategory.SetEnabled(false);
-			selectedCategory.Name = textField.value;
+			selectedCategory.Name = categoryNameField.value;
 			selectedCategory.Objects = new();
 			data.Categories.Add((T)selectedCategory);
 			categorySelector.choices.Insert(data.Categories.Count - 1, selectedCategory.Name);
@@ -128,7 +144,7 @@ namespace EditorWindows
 			EditorUtility.SetDirty(data);
 		}
 
-		void RemoveCateg()
+		protected virtual bool RemoveCateg()
 		{
 			if (categoryRemover.enabledSelf && EditorUtility.DisplayDialog(
 				"Delete category",
@@ -139,7 +155,9 @@ namespace EditorWindows
 				categorySelector.choices.RemoveAt(categorySelector.index);
 				categorySelector.index = categorySelector.index - 1 > -1 ? categorySelector.index - 1 : 0;
 				EditorUtility.SetDirty(data);
+				return true;
 			}
+			return false;
 		}
 		#endregion
 
