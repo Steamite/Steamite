@@ -86,7 +86,9 @@ public class BuildsAndChunksSave
 public class ClickableObjectSave
 {
     public int id;
+    public string objectName;
 }
+
 [Serializable]
 public class RockSave : ClickableObjectSave
 {
@@ -186,7 +188,6 @@ public class FluidWorkSave
 public class HumanSave : ClickableObjectSave
 {
     // Data mainly for loading
-    public string name;
     public MyColor color;
     public GridPos gridPos;
     // Job use

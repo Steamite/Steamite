@@ -78,7 +78,7 @@ namespace InfoWindowViews
                 el.dataSource = human;
                 el.Q<Button>().clickable = new((_) => ManageHuman(((Human)listView.itemsSource[i]).id, boo));
 
-                el.Q<Label>("Name").text = human.name;
+                el.Q<Label>("Name").text = human.objectName;
                 el.Q<Label>("Spec").text = human.specialization.ToString();
 
                 DataBinding binding = BindingUtil.CreateBinding(nameof(Human.Job));

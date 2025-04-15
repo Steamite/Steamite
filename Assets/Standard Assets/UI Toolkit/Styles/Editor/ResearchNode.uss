@@ -31,7 +31,6 @@
 
 .body {
     flex-grow: 0;
-    width: 200px;
     background-color: rgb(50, 50, 50);
     top: 25px;
     padding-top: 15px;
@@ -50,6 +49,7 @@
     border-right-width: 1px;
     border-bottom-width: 1px;
     border-left-width: 1px;
+    width: 200px;
 }
 
 .top-buttons {
@@ -112,4 +112,9 @@
 
 .selected {
     background-color: rgb(233, 149, 0);
+}
+
+.description-field {
+    height: 70px;
+    -unity-text-align: upper-left;
 }

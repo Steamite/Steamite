@@ -1,21 +1,34 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.AssetImporters;
+using UnityEditor.IMGUI.Controls;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.XR;
 using Object = UnityEngine.Object;
 
 namespace EditorWindows.Windows
 {
 	public class BuildingRegister : CategoryWindow<BuildCategWrapper, BuildingWrapper>
 	{
+		const string BUILDING_PATH = "Assets/Game Data/Buildings/";
+		const string BUILD_NAME = "/building.prefab";
+		const string TEX_NAME = "/texture.png";
 		MultiColumnListView dataGrid;
 
 		List<Type> buildingTypes;
 
 		bool changedType;
+
+		AddressableAssetSettings settings;
+		AddressableAssetGroup group;
 
 		[MenuItem("Custom Editors/Building register %g", priority = 14)]
 		public static void Open()
@@ -25,6 +38,7 @@ namespace EditorWindows.Windows
 			wnd.minSize = new(800, 400);
 		}
 
+		#region Overrides
 		protected override void CreateGUI()
 		{
 			buildingTypes = TypeCache.GetTypesDerivedFrom(typeof(Building)).ToList();
@@ -33,34 +47,43 @@ namespace EditorWindows.Windows
 			#region Grid
 			base.CreateGUI();
 			dataGrid = rootVisualElement.Q<MultiColumnListView>("Data");
-			dataGrid.onAdd =
-				(_) =>
-				{
-					BuildingWrapper wrapper = new(selectedCategory.UniqueID());
-					if (EditorUtility.DisplayDialog("Register a new building",
-						"Do you want to fill the new entry or create an empty one?",
-						"Filled", "Empty"))
-					{
-						GameObject gameObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-						gameObj.AddComponent<Building>();
-						string s = AssetDatabase.GenerateUniqueAssetPath("Assets/Prefabs/GameObjects/Buildings/building.prefab");
-						PrefabUtility.SaveAsPrefabAsset(gameObj, s);
-						wrapper.b = AssetDatabase.LoadAssetAtPath<GameObject>(s).GetComponent<Building>();
-						DestroyImmediate(gameObj);
-					}
-					selectedCategory.Objects.Add(wrapper);
-					dataGrid.RefreshItems();
-					EditorUtility.SetDirty((BuildButtonHolder)data);
-				};
-			dataGrid.onRemove =
-				(_) =>
-				{
-					selectedCategory.Objects.Remove((BuildingWrapper)_.selectedItem);
-					dataGrid.RefreshItems();
-				};
+			dataGrid.onAdd = AddEntry;
+			dataGrid.onRemove = RemoveEntry;
 			CreateColumns();
 			#endregion
 			categorySelector.index = 0;
+		}
+		protected override void RenameCateg()
+		{
+			AssetDatabase.MoveAsset($"{BUILDING_PATH}{selectedCategory.Name}", $"{BUILDING_PATH}{categoryNameField.text}");
+			if(group != null)
+			{
+				group.Name = categoryNameField.text;
+				settings.SetDirty(AddressableAssetSettings.ModificationEvent.GroupRenamed, group, true, false);
+			}
+			base.RenameCateg();
+		}
+		protected override void CreateCateg()
+		{
+			base.CreateCateg();
+			AssetDatabase.CreateFolder($"Assets/Game Data/Buildings", selectedCategory.Name);
+			group = settings.CreateGroup(selectedCategory.Name, false, false, true, new() { }, new Type[0]);
+			settings.SetDirty(AddressableAssetSettings.ModificationEvent.GroupAdded, group, true, false);
+		}
+
+		protected override bool RemoveCateg()
+		{
+			if (base.RemoveCateg())
+			{
+				AssetDatabase.MoveAsset($"{BUILDING_PATH}{selectedCategory.Name}", $"{BUILDING_PATH}BCK/{selectedCategory.Name}");
+				settings.RemoveGroup(settings.FindGroup(selectedCategory.Name));
+				settings.SetDirty(AddressableAssetSettings.ModificationEvent.GroupRemoved, group, true, false);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		private void OnDestroy()
@@ -79,9 +102,11 @@ namespace EditorWindows.Windows
 		#region Category Switching
 		protected override bool LoadCategData(int index)
 		{
+			settings = AddressableAssetSettingsDefaultObject.Settings;
 			bool boo = base.LoadCategData(index);
 			if (boo)
 			{
+				group = settings.FindGroup(selectedCategory.Name);
 				dataGrid.style.display = DisplayStyle.Flex;
 
 				dataGrid.itemsSource = selectedCategory.Objects;
@@ -91,10 +116,59 @@ namespace EditorWindows.Windows
 			else
 			{
 				selectedCategory = new BuildCategWrapper();
+				dataGrid.style.display = DisplayStyle.None;
 			}
 			return boo;
 		}
 
+		#endregion
+		#endregion
+
+		#region
+		void AddEntry(BaseListView _)
+		{
+			BuildingWrapper wrapper = new(selectedCategory.UniqueID());
+			int choice = EditorUtility.DisplayDialogComplex("Register a new building",
+				"Do you want to fill the new entry or create an empty one?",
+				"Filled", "Cancel", "Empty");
+			if (choice == 0)
+			{
+				string s = AssetDatabase.GUIDToAssetPath(AssetDatabase.CreateFolder($"{BUILDING_PATH}{selectedCategory.Name}", "Dummy"));
+
+				GameObject gameObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+				gameObj.AddComponent<Building>();
+				PrefabUtility.SaveAsPrefabAsset(gameObj, $"{s}{BUILD_NAME}");
+				wrapper.b = AssetDatabase.LoadAssetAtPath<GameObject>($"{s}{BUILD_NAME}").GetComponent<Building>();
+				wrapper.b.objectName = s.Split('/')[^1];
+				wrapper.preview = GetPrefabPreview($"{s}");
+				DestroyImmediate(gameObj);
+
+				AddressableAssetEntry entry = settings.CreateOrMoveEntry(AssetDatabase.GUIDFromAssetPath(s).ToString(), group);
+				entry.SetAddress(wrapper.b.objectName);
+				settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryCreated, group, true);
+			}
+			else if (choice == 1)
+				return;
+			selectedCategory.Objects.Add(wrapper);
+			dataGrid.RefreshItems();
+			EditorUtility.SetDirty((BuildButtonHolder)data);
+		}
+
+		void RemoveEntry(BaseListView _) => RemoveEntry(_.selectedItem as BuildingWrapper, true);
+		void RemoveEntry(BuildingWrapper wrapper, bool removeFromGrid)
+		{
+			if (removeFromGrid)
+			{
+				selectedCategory.Objects.Remove(wrapper);
+				dataGrid.RefreshItems();
+			}
+			if (wrapper.b)
+			{
+				AssetDatabase.MoveAsset($"{BUILDING_PATH}{selectedCategory.Name}/{wrapper.b?.objectName}", $"{BUILDING_PATH}BCK/{wrapper.b?.objectName}");
+				settings.RemoveAssetEntry(AssetDatabase.GUIDFromAssetPath($"{BUILDING_PATH}BCK/{wrapper.b?.objectName}").ToString(), group);
+				settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryRemoved, group, true);
+			}
+		}
 		#endregion
 
 		#region Columns
@@ -152,7 +226,7 @@ namespace EditorWindows.Windows
 					if (((BuildingWrapper)dataGrid.itemsSource[i]).b != null)
 					{
 						field.value = ((BuildingWrapper)dataGrid.itemsSource[i]).b.objectName.ToString();
-						field.RegisterValueChangedCallback(NameChange);
+						field.RegisterCallback<FocusOutEvent>(NameChange);
 					}
 					else
 					{
@@ -163,7 +237,7 @@ namespace EditorWindows.Windows
 				(el, i) =>
 				{
 					TextField field = (TextField)el;
-					field.UnregisterValueChangedCallback(NameChange);
+					field.UnregisterCallback<FocusOutEvent>(NameChange);
 				};
 			#endregion
 
@@ -244,6 +318,36 @@ namespace EditorWindows.Windows
 					button.UnregisterCallback<ClickEvent>(BlueprintEvent);
 				};
 			#endregion
+
+			#region Preview
+			dataGrid.columns.Add(new()
+			{
+				title = "Preview",
+				makeCell = () => new VisualElement(),
+				bindCell = (el, i) =>
+				{
+					/*
+					BuildingWrapper wrapper = dataGrid.itemsSource[i] as BuildingWrapper;
+					if (wrapper.preview == null && wrapper.b != null)
+					{
+						wrapper.preview = GetPrefabPreview(AssetDatabase.GetAssetPath(wrapper.b));
+						EditorUtility.SetDirty((BuildButtonHolder)data);
+					}*/
+					el.RegisterCallback<ClickEvent>(PreviewClick);
+					el.style.backgroundImage = new StyleBackground(((BuildingWrapper)dataGrid.itemsSource[i]).preview);
+
+					el.style.width = 50;
+					el.style.height = 50;
+				},
+				unbindCell = (el, i) => 
+				{
+					el.UnregisterCallback<ClickEvent>(PreviewClick);
+				},
+				width = 50,
+				resizable = false
+			});
+			#endregion
+
 			#endregion
 
 			#region Assign Limit
@@ -357,6 +461,8 @@ namespace EditorWindows.Windows
 			#endregion
 
 			#endregion
+
+			
 		}
 
 		#region Base
@@ -365,8 +471,42 @@ namespace EditorWindows.Windows
 			int i = GetRowIndex((VisualElement)ev.target);
 			if (changedType || ((BuildButtonHolder)data).ContainsBuilding((Building)ev.newValue) == false)
 			{
+				Building b = ev.newValue as Building;
+				if (b != null && !changedType)
+				{
+					string path = $"{BUILDING_PATH}{selectedCategory.Name}";
+					if (!Directory.Exists(path + "/" + b.objectName))
+					{
+						string GUID = AssetDatabase.CreateFolder(path, $"{b.objectName}");
+						if ((path = AssetDatabase.GUIDToAssetPath(GUID)) != "")
+						{
+							string oldPath = AssetDatabase.GetAssetPath(ev.newValue);
+							AssetDatabase.MoveAsset(oldPath, $"{path}{BUILD_NAME}");
+							((BuildingWrapper)dataGrid.itemsSource[i]).preview = GetPrefabPreview(path);
+							AssetDatabase.Refresh();
+
+							AddressableAssetEntry entry = settings.CreateOrMoveEntry(GUID, group);
+							entry.SetAddress(b.objectName);
+							settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryCreated, group, true);
+						}
+						else
+							Debug.LogError($"Cannot create {BUILDING_PATH}{selectedCategory.Name}!");
+					}
+					else
+					{
+						Debug.LogError("Already exists!");
+					}
+				}
+				else if (b == null)
+				{
+					RemoveEntry(dataGrid.itemsSource[i] as BuildingWrapper, false);
+				}
+
+				//AssetDatabase.create
+
+
+				((BuildingWrapper)dataGrid.itemsSource[i]).b = b;
 				changedType = false;
-				((BuildingWrapper)dataGrid.itemsSource[i]).b = (Building)ev.newValue;
 				dataGrid.RefreshItem(i);
 				EditorUtility.SetDirty((BuildButtonHolder)data);
 			}
@@ -376,13 +516,85 @@ namespace EditorWindows.Windows
 			}
 		}
 
-		void NameChange(ChangeEvent<string> ev)
+		Sprite GetPrefabPreview(string folderPath)
 		{
-			int i = GetRowIndex((VisualElement)ev.target);
-			if (((BuildingWrapper)dataGrid.itemsSource[i]).b.objectName != ev.newValue)
+			Debug.Log("Generate preview for " + folderPath);
+			GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{folderPath}{BUILD_NAME}");
+			var editor = UnityEditor.Editor.CreateEditor(prefab);
+			Texture2D tex = editor.RenderStaticPreview($"{folderPath}{BUILD_NAME}", null, 200, 200);
+			
+			Color32 backgroundColor = new(82, 82, 82, 1);
+			Color32[] colors = tex.GetPixels32();
+			for (int i = 0; i < colors.Length; i++)
 			{
-				((BuildingWrapper)dataGrid.itemsSource[i]).b.objectName = ev.newValue;
+				if (colors[i].r == backgroundColor.r &&
+					colors[i].g == backgroundColor.g &&
+					colors[i].b == backgroundColor.b)
+					colors[i] = new(0, 255, 0, 0);
+			}
+			tex = new(200,200, UnityEngine.Experimental.Rendering.DefaultFormat.HDR, UnityEngine.Experimental.Rendering.TextureCreationFlags.None);
+			tex.SetPixels32(colors);
+			tex.Apply();
+			byte[] b = tex.EncodeToPNG();
+
+			File.WriteAllBytes($"{folderPath}{TEX_NAME}", b);
+			AssetDatabase.Refresh();
+
+			TextureImporter importer = TextureImporter.GetAtPath($"{folderPath}{TEX_NAME}") as TextureImporter;
+			importer.textureType = TextureImporterType.Sprite;
+			importer.alphaIsTransparency = true;
+			importer.spriteImportMode = SpriteImportMode.Single;
+			EditorUtility.SetDirty(importer);
+			importer.SaveAndReimport();
+
+			DestroyImmediate(editor);
+			DestroyImmediate(tex);
+			return AssetDatabase.LoadAssetAtPath<Sprite>(importer.assetPath);
+		}
+
+
+		void NameChange(FocusOutEvent ev)
+		{
+			string value;
+			if(ev.target is TextElement)
+			{
+				TextElement field = (TextElement)ev.target;
+				value = field.text.Trim(' ');
+				field.text = value;
+			}
+			else
+			{
+				TextField field = (TextField)ev.target;
+				value = field.value.Trim(' ');
+				field.value = value;
+			}
+
+				int i = GetRowIndex((VisualElement)ev.target);
+			if (((BuildingWrapper)dataGrid.itemsSource[i]).b.objectName != value)
+			{
+				string result = AssetDatabase.MoveAsset(
+						$"{BUILDING_PATH}{selectedCategory.Name}/{((BuildingWrapper)dataGrid.itemsSource[i]).b.objectName}",
+						$"{BUILDING_PATH}{selectedCategory.Name}/{value}");
+				if (result != "")
+				{
+					Debug.LogError(result);
+					if (ev.target is TextElement)
+					{
+						((TextElement)ev.target).text = ((BuildingWrapper)dataGrid.itemsSource[i]).b.objectName;
+					}
+					else
+					{
+						((TextField)ev.target).value = ((BuildingWrapper)dataGrid.itemsSource[i]).b.objectName;
+					}
+					return;
+				}
+				AddressableAssetEntry entry = group.GetAssetEntry(AssetDatabase.GUIDFromAssetPath($"{BUILDING_PATH}{selectedCategory.Name}/{value}").ToString());
+				entry.address = value;
+				settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryModified, value, true);
+				((BuildingWrapper)dataGrid.itemsSource[i]).b.objectName = value;
 				EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).b);
+
+
 			}
 		}
 
@@ -392,8 +604,8 @@ namespace EditorWindows.Windows
 			Building prev = ((BuildingWrapper)dataGrid.itemsSource[i]).b;
 			if (prev != null)
 			{
-				Type t = buildingTypes.First(q => q.Name == ev.newValue);
-				if (prev.GetType() != t)
+				Type t = buildingTypes.FirstOrDefault(q => q.Name == ev.newValue);
+				if (t != null && prev.GetType() != t)
 				{
 					Building building = (Building)
 						((BuildingWrapper)dataGrid.itemsSource[i]).b.gameObject
@@ -413,6 +625,22 @@ namespace EditorWindows.Windows
 		{
 			int i = GetRowIndex((VisualElement)ev.target);
 			BuildEditor.ShowWindow(((BuildingWrapper)dataGrid.itemsSource[i]).b);
+		}
+
+		void PreviewClick(ClickEvent ev)
+		{
+			if (ev.clickCount == 2)
+			{
+				int i = GetRowIndex((VisualElement)ev.target);
+				BuildingWrapper wrapper = dataGrid.itemsSource[i] as BuildingWrapper;
+				if (wrapper.b)
+				{
+					wrapper.preview = 
+						GetPrefabPreview(Path.GetDirectoryName(AssetDatabase.GetAssetPath(wrapper.b)));
+					EditorUtility.SetDirty(data);
+					dataGrid.RefreshItem(i);
+				}
+			}
 		}
 		#endregion
 

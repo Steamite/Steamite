@@ -121,6 +121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de1a1782b5c54044daf8a8c313fda744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: Road
   selected: 0
   id: 0
+  objectName: Road
   entryPoints: 

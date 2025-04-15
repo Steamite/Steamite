@@ -63,7 +63,7 @@ public class GridPos
     {
         return new(
             x, 
-            (y * ClickabeObjectFactory.LEVEL_HEIGHT) + Yoffset,
+            (y * ClickableObjectFactory.LEVEL_HEIGHT) + Yoffset,
             z);
     }
 

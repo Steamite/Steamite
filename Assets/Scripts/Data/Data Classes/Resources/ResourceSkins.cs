@@ -52,6 +52,8 @@ public class ResourceSkins : ScriptableObject
     {
         if (resourceType == null)
             return moneySkin.color;
+        else if ((ResourceType)resourceType == ResourceType.None)
+            Debug.LogError("None type!");
         return skins[(int)(ResourceType)resourceType].color;
     }
 }

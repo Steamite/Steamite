@@ -54,6 +54,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -142,15 +145,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 0
   m_isCullingEnabled: 0
@@ -432,7 +437,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8442510506162454399, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 7629ee13c529bc2409a0b78d63480dcf, type: 2}
     - target: {fileID: 8582293574316785276, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
@@ -513,24 +518,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd17c1b517b36944970177a23e7e11f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: 
   selected: 0
   id: 0
-  jData:
-    job: 0
-    path: []
-    interest: {fileID: 0}
-  inventory:
-    capacity: 20
-    type: 
-    ammount: 
+  objectName: Human
   specialization: 0
   nightTime: 0
-  sleep: 0
-  hasEaten: 1
   lookingForAJob: 0
   home: {fileID: 0}
   destination: {fileID: 0}
-  workplace: {fileID: 0}
 --- !u!1 &8616891365706748489 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5317621499353570459, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
@@ -544,9 +540,8 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8616891365706748489}
   m_Enabled: 0
-  serializedVersion: 10
+  serializedVersion: 11
   m_Type: 2
-  m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -596,5 +591,9 @@ Light:
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1

@@ -9,45 +9,71 @@ using UnityEngine.UIElements;
 public class LocalMenu : MonoBehaviour
 {
     VisualElement menu;
+    Label header;
+    Label secondHeader;
+	DoubleResourceList costList;
+    Label description;
     private void Awake()
     {
         menu = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Menu");
         ToolkitUtils.localMenu = this;
-    }
+        header = menu.ElementAt(0) as Label;
+		secondHeader = menu.ElementAt(1) as Label;
+		costList = menu.ElementAt(2) as DoubleResourceList;
+		description = menu.ElementAt(3) as Label;
+
+	}
 
     public void Open(object data, VisualElement element)
     {
-        switch (data)
+        Rect vec;
+		switch (data)
         {
             case ColonyStat:
-                ColonyStat stat = (ColonyStat)data;
-                menu.style.opacity = 0;
-                menu.style.display = DisplayStyle.Flex;
-                menu.style.width = 300;
-                ((Label)menu.ElementAt(0)).text = stat.name;
+                ColonyStat stat = data as ColonyStat;
+                header.text = stat.name;
+                secondHeader.style.display = DisplayStyle.None;
                 if(element is Label)
                 {
-                    ((Label)menu.ElementAt(2)).text = stat.GetText(true);
-                    ((DoubleResourceList)menu.ElementAt(1)).style.display = DisplayStyle.None; 
+                    description.text = stat.GetText(true);
+                    costList.style.display = DisplayStyle.None; 
                 }
                 else
                 {
-                    ((DoubleResourceList)menu.ElementAt(1)).style.display = DisplayStyle.Flex; 
-                    ((DoubleResourceList)menu.ElementAt(1)).Open(stat.resourceUpgradeCost[element.parent.IndexOf(element)]);
-                    ((Label)menu.ElementAt(2)).text = stat.GetText(element.parent.IndexOf(element) + 1);
+                    costList.style.display = DisplayStyle.Flex; 
+                    costList.Open(stat.resourceUpgradeCost[element.parent.IndexOf(element)]);
+                    description.text = stat.GetText(element.parent.IndexOf(element) + 1);
                 }
                 
-                Rect vec = element.worldBound;
+                vec = element.worldBound;
 
+                menu.style.width = 300;
                 menu.style.left = vec.x + vec.width + 25;
-                menu.style.bottom = (ToolkitUtils.GetRoot(element).resolvedStyle.height - element.worldBound.y) - element.resolvedStyle.height / 2;
-				menu.style.opacity = 100;
-                break;
+                menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
+                menu.AddToClassList("show");
+				break;
+            case ResearchNode:
+                ResearchNode node = data as ResearchNode;
+				header.text = node.name;
+				secondHeader.style.display = DisplayStyle.Flex;
+                secondHeader.text = $"({node.currentTime}/{node.researchTime})";
+				vec = element.worldBound;
+				costList.style.display = DisplayStyle.Flex;
+				costList.Open(node.reseachCost);
+
+				description.text = node.description;
+                
+
+				menu.style.width = 300;
+				menu.style.left = vec.x + vec.width + 25;
+				menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
+				menu.AddToClassList("show");
+				break;
         }
     }
 
     public void Close()
     {
-        menu.style.display = DisplayStyle.None;
-    }
+		menu.RemoveFromClassList("show");
+	}
 }

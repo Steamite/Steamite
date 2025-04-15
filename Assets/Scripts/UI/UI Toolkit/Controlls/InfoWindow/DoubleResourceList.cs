@@ -167,7 +167,7 @@ namespace InfoWindowElements
             if (cost)
                 return $"{resource.ammount}/{((DoubleUIResource)resource).secondAmmount}";
             else
-                return $"{((DoubleUIResource)resource).secondAmmount}({resource.ammount})";
+                return ((DoubleUIResource)resource).secondAmmount > 0 ? $"{((DoubleUIResource)resource).secondAmmount}({resource.ammount})" : "";
         }
         #endregion
     }

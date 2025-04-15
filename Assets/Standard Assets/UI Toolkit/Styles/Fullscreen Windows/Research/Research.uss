@@ -1,59 +1,138 @@
-#unity-tab-view__header-container {
-    transform-origin: left top;
-    rotate: 90deg;
-    translate: 58px 0;
-    max-width: 994.25px;
-}
-
-#unity-tab__header-image {
-    width: 45px;
-    height: 45px;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 10px;
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-}
-
-#unity-tab__header-label {
-    -unity-text-align: middle-left;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    padding-top: 4px;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 20px;
-}
-
-#unity-tab__header {
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    padding-bottom: 0;
-    padding-top: 0;
-    padding-right: 0;
-    padding-left: 0;
+#Row {
     flex-grow: 1;
-    border-left-width: 3px;
-    border-right-width: 3px;
-    border-left-color: rgb(137, 87, 42);
-    border-right-color: rgb(137, 87, 42);
-    border-top-color: rgb(137, 87, 42);
-    border-bottom-color: rgb(137, 87, 42);
+    flex-direction: row;
+    height: 200px;
 }
 
-#unity-tab-view__content-container {
+#Row > Label {
+    width: 60px;
+    height: 100%;
+    font-size: 50px;
+    -unity-text-align: middle-center;
+    padding-right: 0;
+    padding-left: 10px;
+    border-top-width: 0;
+    border-right-width: 2px;
+    border-bottom-width: 3px;
+    border-left-width: 0;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    background-color: rgb(46, 29, 14);
+}
+
+#Row > VisualElement {
+    flex-grow: 1;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.rotator {
+    background-image: url("project://database/Assets/Sprites/Textures/1filled%20cog@2x.png?fileID=2800000&guid=5a869fc421e59114e9ecac48c51af2ed&type=3#1filled cog@2x");
+    flex-grow: 1;
+    transition-duration: 0.2s;
+    width: 100%;
+    height: 100%;
+    -unity-background-image-tint-color: rgb(82, 82, 82);
+}
+
+.research-button {
+    width: 125px;
+    height: 125px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    min-width: 125px;
+    min-height: 125px;
+    max-height: 125px;
+    max-width: 125px;
+}
+
+.research-button:hover > .rotator {
+    transition-duration: 0.3s;
+    scale: 1.1 1.1;
+}
+
+.research-button:hover {
+    width: 100px;
+    height: 100px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+.research-button-selected > .rotator {
+    width: 100%;
+    height: 100%;
+    scale: 1.075 1.075;
+    transition-duration: 0.2s;
+    -unity-background-image-tint-color: rgb(121, 111, 44);
+}
+
+.research-button-selected {
+    width: 125px;
+    height: 125px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+#Lines {
+    width: 100%;
+    height: 100%;
     position: absolute;
-    left: 62px;
-    height: 993.6px;
+    top: 0;
+    left: 60px;
 }
 
-#unity-tab__content-container {
+.line {
+    position: absolute;
+    background-color: rgb(255, 0, 0);
+}
+
+.name-label {
+    position: absolute;
+    bottom: 10px;
+    -unity-text-align: middle-center;
     flex-grow: 1;
+    font-size: 20px;
+    background-color: rgb(35, 32, 2);
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    align-self: center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.rotator > VisualElement {
+    width: 87%;
+    height: 87%;
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-bottom-left-radius: 100px;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    top: 6.5%;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
 }

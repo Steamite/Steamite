@@ -18,16 +18,11 @@ namespace EditorWindows.Research
 		#region Variables
 		[SerializeField] Texture2D plus;
 
-		[SerializeField] private VisualTreeAsset nodeAsset = default;
-
 		public ScrollView tree;
 		bool showCreateButtons;
 
-
 		public BuildButtonHolder buildingData;
 		public ResearchNode activeNode;
-
-		List<Color> lineColors = new() { Color.red, Color.green, Color.blue, Color.magenta, Color.yellow, Color.cyan };
 		#endregion
 
 		public void SaveValues() => EditorUtility.SetDirty((ResearchData)data);
@@ -65,6 +60,7 @@ namespace EditorWindows.Research
 			categorySelector.index = 0;
 		}
 		#endregion
+
 		#region Category Switching
 		protected override bool LoadCategData(int index)
 		{
@@ -101,7 +97,7 @@ namespace EditorWindows.Research
 			{
 				BuildCategWrapper categ = buildingData.Categories[i];
 				categ.availableBuildings = new();
-				List<ResearchNode> categoryNodes = nodes.Where(q => q.buildingNode && q.nodeCategory == i).ToList();
+				List<ResearchNode> categoryNodes = nodes.Where(q => q.nodeType == NodeType.Building && q.nodeCategory == i).ToList();
 				for (int j = 0; j < categ.Objects.Count; j++)
 				{
 					if (categoryNodes.FindIndex(q => q.nodeAssignee == categ.Objects[j].id) == -1)
@@ -233,13 +229,20 @@ namespace EditorWindows.Research
 			if (node.nodeCategory <= -1)
 				return new() { "Select" };
 
-			List<string> list = buildingData.Categories[node.nodeCategory].availableBuildings.Select(q => q.b.objectName).Prepend("Select").ToList();
+			List<string> list = buildingData.Categories[node.nodeCategory].availableBuildings.Select(q => q.b?.objectName).Prepend("Select").ToList();
 			if (node.nodeAssignee > -1)
-				list.Insert(1, buildingData.Categories[node.nodeCategory].Objects.First(q => q.id == node.nodeAssignee).b.objectName);
+			{
+				BuildingWrapper wrapper = buildingData.Categories[node.nodeCategory].Objects.FirstOrDefault(q => q.id == node.nodeAssignee);
+				if (wrapper != null)
+					list.Insert(1, wrapper.b.objectName);
+				else
+					node.nodeAssignee = -1;
+			}
+				
 			return list;
 		}
 		public List<string> GetActiveCategories
-			(ResearchNode node) => node.buildingNode
+			(ResearchNode node) => node.nodeType == NodeType.Building
 				? buildingData.Categories.Select(q => q.Name).Prepend("Select").ToList()
 				: new List<string>() { "Select" };
 

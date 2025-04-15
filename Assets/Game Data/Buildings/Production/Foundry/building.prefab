@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: -85555690278644832}
   - component: {fileID: 62586701505083539}
   m_Layer: 2
-  m_Name: Foundry
+  m_Name: building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -565,6 +565,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2cf294d77aaf924fb1016a0f0a7d208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: 
   selected: 0
   id: -1
   objectName: Foundry

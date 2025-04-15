@@ -1,3 +1,4 @@
+using System;
 using UnityEngine.UIElements;
 
 namespace AbstractControls
@@ -59,14 +60,25 @@ namespace AbstractControls
             IsSelected = true;
             if (UpdateGroup)
             {
+
+                VisualElement el = this;
                 if (inGroup)
-                {
-                    ((CustomRadioButtonGroup)parent).Select(value);
-                }
+				{
+					do
+					{
+						el = el.parent;
+					} while (el.parent != null && el is not CustomRadioButtonGroup);
+					((CustomRadioButtonGroup)el).Select(value);
+				}
                 else
-                {
-                    parent.parent.parent.Q<CustomRadioButtonList>().Select(this);
-                }
+				{
+					do
+					{
+						el = el.parent;
+					} while (el.parent != null && el is not CustomRadioButtonList);
+					((CustomRadioButtonList)el).Select(this);
+
+				}
             }
 
         }

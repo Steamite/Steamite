@@ -135,9 +135,10 @@ public class LoadingScreen : MonoBehaviour
         save.humans = jsonSerializer.Deserialize<HumanSave[]>(jsonReader);
         jsonReader.Close();
         // for researchCategories
-        jsonReader = new(new StreamReader($"{_folderName}/Research.json"));
+        /*jsonReader = new(new StreamReader($"{_folderName}/Research.json"));
         save.research = jsonSerializer.Deserialize<ResearchSave>(jsonReader);
-        jsonReader.Close();
+        jsonReader.Close();*/
+        save.research = null;
         // for trading
         jsonReader = new(new StreamReader($"{_folderName}/Trade.json"));
         save.trade = jsonSerializer.Deserialize<TradeSave>(jsonReader);
@@ -167,7 +168,7 @@ public class LoadingScreen : MonoBehaviour
         maxprogress += worldSave.objectsSave.buildings.Length * BUILD_WEIGHT; //scale number
         maxprogress += worldSave.objectsSave.chunks.Length * CHUNK_WEIGHT;
         maxprogress += humanSaves.Length * HUMAN_WEIGHT;
-        maxprogress += researchSave.categories.SelectMany(q => q.Objects).Count();
+        //maxprogress += researchSave.categories.SelectMany(q => q.Objects).Count();
         loadingSlider.maxValue = maxprogress;
         IProgress<int> progress = new Progress<int>(value =>
         {
@@ -176,7 +177,7 @@ public class LoadingScreen : MonoBehaviour
         FillGrid(progress, worldSave);
         FillGameState(progress, gameState);
         FillHumans(progress, humanSaves);
-        FillResearches(progress, researchSave);
+        //FillResearches(progress, researchSave);
         FillTrade(progress, tradeSave);
         return Task.CompletedTask;
     }
@@ -308,8 +309,6 @@ public class LoadingScreen : MonoBehaviour
     /// <param name="newGame">Is it the new game(used for calling the same methods just with different paramaters).</param>
     async void AfterLevelLoad(bool newGame)
     {
-        //transform.parent.GetChild(1).GetComponent<AudioListener>().enabled = false;
-        SceneRefs.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().SetUp();
         MyGrid.worldName = worldName;
         MyGrid.Init();
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;

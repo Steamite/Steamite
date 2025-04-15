@@ -52,8 +52,8 @@ public class LocalInfoWindow : UIBehaviour
         {
             status = Status.buildings;
             gridPos = new(pos.x, pos.y);
-            print(prefab.name);
-            transform.GetChild(0).GetComponent<TMP_Text>().text = prefab.name;
+            print(prefab.objectName);
+            transform.GetChild(0).GetComponent<TMP_Text>().text = prefab.objectName;
             transform.GetChild(1).GetComponent<TMP_Text>().text = string.Join('\n', prefab.GetInfoText());
             transform.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 100);
             gameObject.SetActive(true);

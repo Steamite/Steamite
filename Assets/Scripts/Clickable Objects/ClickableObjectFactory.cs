@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>Instantiates and fills new Clickable Objects.</summary>
-public class ClickabeObjectFactory : MonoBehaviour
+public class ClickableObjectFactory : MonoBehaviour
 {
     #region Y grid offset
     /// <summary>Height of each level.</summary>
@@ -37,7 +37,7 @@ public class ClickabeObjectFactory : MonoBehaviour
             Quaternion.identity,
             MyGrid.FindLevelRoads(gp.y)).GetComponent<Road>(); // creates a road on the place of tiles
 
-        replacement.name = replacement.name.Replace("(Clone)", "");
+        replacement.objectName = replacement.objectName.Replace("(Clone)", "");
         if (doSet)
             MyGrid.SetGridItem(gp, replacement);
     }
@@ -60,7 +60,7 @@ public class ClickabeObjectFactory : MonoBehaviour
         r.GetComponent<Renderer>().material.color = color;
         r.rockYield = resource;
         r.Integrity = hardness;
-        r.name = _name;
+        r.objectName = _name;
         r.UniqueID();
         MyGrid.SetGridItem(gp, r);
     }
@@ -85,7 +85,7 @@ public class ClickabeObjectFactory : MonoBehaviour
         if (isMain)
             Elevator.main = el;
         el.isMain = isMain;
-        el.name = el.name.Replace("(Clone)", "");
+        el.objectName = el.objectName.Replace("(Clone)", "");
         MyGrid.SetBuilding(el, true);
 
         return el;
@@ -134,7 +134,7 @@ public class ClickabeObjectFactory : MonoBehaviour
         h.UniqueID();
         // color for debug
         h.transform.GetChild(1).GetComponent<MeshRenderer>().material = material;
-        h.gameObject.name = $"Human {(i == 0 ? "Red" : i == 1 ? "Yellow" : "White")}";
+        h.objectName = $"Human {(i == 0 ? "Red" : i == 1 ? "Yellow" : "White")}";
         return h;
     }
     #endregion
@@ -196,25 +196,7 @@ public class ClickabeObjectFactory : MonoBehaviour
             save.gridPos.ToVec(HUMAN_OFFSET),
             Quaternion.identity,
             SceneRefs.humans.transform.GetChild(parent)).GetComponent<Human>();
-        human.transform.GetChild(1).GetComponent<MeshRenderer>().material.color = save.color.ConvertColor();
-        human.id = save.id;
-        human.SetJob(new(save.jobSave, human));
-        human.name = save.name;
-        MyRes.ManageRes(human.Inventory, save.inventory, 1);
-        human.specialization = save.specs;
-        if (human.Job.path.Count > 0)
-            human.ChangeAction(HumanActions.Move);
-        else
-            human.Decide();
-        // house assigment
-        if (save.houseID != -1)
-            MyGrid.buildings.Where(q => q.id == save.houseID).
-                SingleOrDefault().GetComponent<House>().ManageAssigned(human, true);
-
-        // workplace assigment
-        if (save.workplaceId != -1)
-            MyGrid.buildings.Where(q => q.id == save.workplaceId).
-                SingleOrDefault().GetComponent<ProductionBuilding>().ManageAssigned(human, true);
+        human.Load(save);
         return human;
     }
     #endregion Loading Game

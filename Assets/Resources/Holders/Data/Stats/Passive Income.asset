@@ -21,10 +21,10 @@ MonoBehaviour:
     type: 02000000
     ammount: 0a000000
   - capacity: 600
-    type: 0000000000000000
+    type: 0100000003000000
     ammount: 0a0000000a000000
   - capacity: 800
-    type: 0300000003000000
+    type: 0300000005000000
     ammount: 0a0000000a000000
   - capacity: 1000
     type: 03000000

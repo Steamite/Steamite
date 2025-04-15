@@ -209,7 +209,7 @@ public class Pipe : Building
         string s = "";
         foreach (Building b in network.buildings)
         {
-            s += $"{b.name}: {b.id}\n";
+            s += $"{b.objectName}: {b.id}\n";
         }
         return s;
     }

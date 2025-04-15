@@ -144,7 +144,7 @@ public class GridTiles : MonoBehaviour
                 {
                     //Build __b = buildBlueprint.build;
                     GridPos grid = MyGrid.Rotate(buildBlueprint.blueprint.moveBy, buildBlueprint.transform.eulerAngles.y);
-                    grid = new(activePos.x + grid.x, (MyGrid.currentLevel * ClickabeObjectFactory.LEVEL_HEIGHT) + ClickabeObjectFactory.BUILD_OFFSET, activePos.z + grid.z);
+                    grid = new(activePos.x + grid.x, (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) + ClickableObjectFactory.BUILD_OFFSET, activePos.z + grid.z);
                     buildBlueprint.transform.position = new(grid.x, grid.y, grid.z);
                     c = buildBlueprint.CanPlace() ? Color.blue : Color.red;
                     HighLight(c, buildBlueprint.gameObject);
@@ -379,7 +379,7 @@ public class GridTiles : MonoBehaviour
         List<ClickableObject> rocks = new();
         float x = (Mathf.FloorToInt(startPos.x) - activePos.x) / 2f;
         float z = (Mathf.FloorToInt(startPos.z) - activePos.z) / 2f;
-        rocks.AddRange(Physics.OverlapBox(new Vector3(startPos.x - x, (startPos.y*2) + ClickabeObjectFactory.ROCK_OFFSET, startPos.z - z), new(Mathf.Abs(x), 0.5f, Mathf.Abs(z))).Where(q => q.GetComponent<Rock>() != null).Select(q => q.GetComponent<Rock>()).ToList());
+        rocks.AddRange(Physics.OverlapBox(new Vector3(startPos.x - x, (startPos.y*2) + ClickableObjectFactory.ROCK_OFFSET, startPos.z - z), new(Mathf.Abs(x), 0.5f, Mathf.Abs(z))).Where(q => q.GetComponent<Rock>() != null).Select(q => q.GetComponent<Rock>()).ToList());
         List<ClickableObject> filtered = rocks.ToList();
         List<Rock> toBeDug = SceneRefs.jobQueue.toBeDug;
         foreach (Rock g in rocks)
@@ -427,7 +427,7 @@ public class GridTiles : MonoBehaviour
                 {
                     HighLight(pipe.CanPlace() ? Color.blue : Color.red, pipe.gameObject);
                     MyGrid.SetGridItem(gridPos, pipe, true);
-                    pipe.name = pipe.name.Replace("(Clone)", " ");
+                    pipe.objectName = pipe.objectName.Replace("(Clone)", " ");
                     pipe.UniqueID();
                 }
                 else
@@ -514,7 +514,7 @@ public class GridTiles : MonoBehaviour
         {
             if (activeControl == ControlMode.build)
             {
-                if (buildingPrefab.name == buildBlueprint.name)
+                if (buildingPrefab.objectName == buildBlueprint.objectName)
                 {
                     ChangeSelMode(ControlMode.nothing);
                 }
@@ -595,11 +595,11 @@ public class GridTiles : MonoBehaviour
         if (buildBlueprint)
             q = new(buildBlueprint.transform.rotation.x, buildBlueprint.transform.rotation.y, buildBlueprint.transform.rotation.z, buildBlueprint.transform.rotation.w);
         GridPos gp = MyGrid.Rotate(buildingPrefab.blueprint.moveBy, buildingPrefab.transform.eulerAngles.y);
-        gp = new(activePos.x + gp.x, (MyGrid.currentLevel * ClickabeObjectFactory.LEVEL_HEIGHT) + ClickabeObjectFactory.BUILD_OFFSET, activePos.z + gp.z);
+        gp = new(activePos.x + gp.x, (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) + ClickableObjectFactory.BUILD_OFFSET, activePos.z + gp.z);
         buildBlueprint = Instantiate(buildingPrefab.gameObject, new Vector3(gp.x, gp.y, gp.z), Quaternion.identity, transform).GetComponent<Building>(); // creates the building prefab
         buildBlueprint.transform.rotation = q;
         buildBlueprint.transform.SetParent(buildBlueprint.GetComponent<Pipe>() ? GameObject.FindWithTag("Pipes").transform : GameObject.Find("Buildings").transform);
-        buildBlueprint.name = buildBlueprint.name.Replace("(Clone)", ""); // removes (Clone) from its name
+        buildBlueprint.objectName = buildBlueprint.objectName.Replace("(Clone)", ""); // removes (Clone) from its name
         buildBlueprint.ChangeRenderMode(true);
         HighLight(buildBlueprint.CanPlace() ? Color.blue : Color.red, buildBlueprint.gameObject);
     }

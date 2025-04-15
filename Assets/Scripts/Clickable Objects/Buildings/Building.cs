@@ -87,7 +87,7 @@ public class Building : StorageObject
     {
         if (clickable == null)
             clickable = new BSave();
-        (clickable as BSave).prefabName = name;
+        (clickable as BSave).prefabName = objectName;
         (clickable as BSave).rotationY = transform.rotation.eulerAngles.y;
         
         (clickable as BSave).blueprint = blueprint;
@@ -102,7 +102,7 @@ public class Building : StorageObject
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-        name = (save as BSave).prefabName;
+		objectName = (save as BSave).prefabName;
         blueprint = (save as BSave).blueprint;
         cost = (save as BSave).cost;
         constructed = (save as BSave).constructed;

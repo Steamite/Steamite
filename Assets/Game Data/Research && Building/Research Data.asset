@@ -25,11 +25,13 @@ MonoBehaviour:
         capacity: -1
         type: 
         ammount: 
-      buildingNode: 0
+      nodeType: 0
       nodeCategory: -1
       nodeAssignee: -1
       unlockedBy: 
       unlocks: 
+      description: 
+      lineColor: {r: 0, g: 0, b: 0, a: 0}
     - name: CONNECTOR
       id: 178465213
       level: 0
@@ -38,13 +40,17 @@ MonoBehaviour:
       researchTime: 100
       reseachCost:
         capacity: 50
-        type: 05000000
+        type: 04000000
         ammount: 02000000
-      buildingNode: 1
+      nodeType: 2
       nodeCategory: 0
-      nodeAssignee: 130036870
+      nodeAssignee: 1472558132
       unlockedBy: 
-      unlocks: e9955c1a
+      unlocks: e006623a
+      description: 'Random description
+
+        Lorem Ipsum Dolor et itsu'
+      lineColor: {r: 0, g: 0, b: 0, a: 0}
     - name: asd
       id: 651504100
       level: 0
@@ -55,11 +61,13 @@ MonoBehaviour:
         capacity: 10
         type: 03000000
         ammount: 32000000
-      buildingNode: 1
-      nodeCategory: 1
-      nodeAssignee: 1472558132
+      nodeType: 2
+      nodeCategory: 2
+      nodeAssignee: 1122905122
       unlockedBy: 
-      unlocks: 
+      unlocks: e006623a
+      description: 
+      lineColor: {r: 0, g: 0, b: 0, a: 0}
     - name: Left
       id: 1724255617
       level: 1
@@ -70,11 +78,13 @@ MonoBehaviour:
         capacity: -1
         type: 
         ammount: 
-      buildingNode: 0
+      nodeType: 0
       nodeCategory: -1
       nodeAssignee: -1
       unlockedBy: 
       unlocks: 
+      description: 
+      lineColor: {r: 0.9686275, g: 0.9215687, b: 0.5529412, a: 0.50980395}
     - name: Right
       id: 442275305
       level: 1
@@ -85,9 +95,99 @@ MonoBehaviour:
         capacity: -1
         type: 
         ammount: 
-      buildingNode: 0
+      nodeType: 0
       nodeCategory: -1
       nodeAssignee: -1
-      unlockedBy: bd29a30a
+      unlockedBy: 
       unlocks: 
+      description: 
+      lineColor: {r: 0.5372549, g: 0, b: 0, a: 0.7607843}
+    - name: node 2
+      id: 979502816
+      level: 2
+      researched: 0
+      currentTime: 0
+      researchTime: 300
+      reseachCost:
+        capacity: 75
+        type: 02000000
+        ammount: 0f000000
+      nodeType: 2
+      nodeCategory: 1
+      nodeAssignee: 1580670160
+      unlockedBy: bd29a30ae429d526
+      unlocks: 
+      description: 
+      lineColor: {r: 0.46246588, g: 1, b: 0, a: 1}
     Icon: {fileID: 2800000, guid: ebd657dbff7382b49ac208b65a2fc976, type: 3}
+  - Name: Production
+    Objects:
+    - name: node 0
+      id: 823126285
+      level: 0
+      researched: 0
+      currentTime: 0
+      researchTime: 100
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      nodeType: 2
+      nodeCategory: 0
+      nodeAssignee: 1197943099
+      unlockedBy: 
+      unlocks: 1b67a65bef39f217
+      description: 
+      lineColor: {r: 1, g: 0, b: 0, a: 1}
+    - name: node 1
+      id: 1537632027
+      level: 1
+      researched: 0
+      currentTime: 0
+      researchTime: 200
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      nodeType: 2
+      nodeCategory: -1
+      nodeAssignee: -1
+      unlockedBy: 0de90f31
+      unlocks: 
+      description: 
+      lineColor: {r: 1, g: 0, b: 0, a: 1}
+    - name: node 1
+      id: 401750511
+      level: 1
+      researched: 0
+      currentTime: 0
+      researchTime: 200
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      nodeType: 2
+      nodeCategory: -1
+      nodeAssignee: -1
+      unlockedBy: 0de90f31
+      unlocks: 
+      description: 
+      lineColor: {r: 0.6187502, g: 1, b: 0, a: 1}
+    - name: node 2
+      id: 1861908460
+      level: 2
+      researched: 0
+      currentTime: 0
+      researchTime: 300
+      reseachCost:
+        capacity: -1
+        type: 
+        ammount: 
+      nodeType: 2
+      nodeCategory: -1
+      nodeAssignee: -1
+      unlockedBy: 
+      unlocks: 
+      description: 
+      lineColor: {r: 1, g: 0, b: 0, a: 1}
+    Icon: {fileID: 2800000, guid: 31a2fc60fcb027a45869f7484256409a, type: 3}

@@ -19,7 +19,7 @@ public class ResourceHolder : ScriptableObject
     {
         for(int i = 0; i < prefabs.Count; i++)
         {
-            if (prefabs[i].name.ToUpper() == prefName.ToUpper())
+            if (prefabs[i].objectName.ToUpper() == prefName.ToUpper())
                 return prefabs[i];
         }
         Debug.LogError("Could not find Prefab!" + prefName);

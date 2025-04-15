@@ -17,8 +17,11 @@ MonoBehaviour:
     color: {r: 1, g: 0.8431373, b: 0, a: 1}
     icon: {fileID: 0}
   skins:
-  - name: Coal
+  - name: None
     color: {r: 0.10980392, g: 0.10980392, b: 0.10980392, a: 1}
+    icon: {fileID: 0}
+  - name: Coal
+    color: {r: 0.10980393, g: 0.10980393, b: 0.10980393, a: 1}
     icon: {fileID: 0}
   - name: Metal
     color: {r: 1, g: 0, b: 0, a: 1}
@@ -27,8 +30,8 @@ MonoBehaviour:
     color: {r: 0.54509807, g: 0.54901963, b: 0.5372549, a: 1}
     icon: {fileID: 0}
   - name: Food
-    color: {r: 0.28627452, g: 0.4745098, b: 0.41960785, a: 1}
+    color: {r: 0.28627452, g: 0.47450984, b: 0.41960788, a: 1}
     icon: {fileID: 0}
   - name: Wood
-    color: {r: 0.3647059, g: 0.2509804, b: 0.21568628, a: 1}
+    color: {r: 0.3647059, g: 0.2509804, b: 0.21568629, a: 1}
     icon: {fileID: 0}

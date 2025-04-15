@@ -121,8 +121,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a0c44de03a1be44b617e4a593afd9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: Metal
   selected: 0
   id: -1
+  objectName: Metal
   rockYield:
     capacity: -1
     type: 01000000

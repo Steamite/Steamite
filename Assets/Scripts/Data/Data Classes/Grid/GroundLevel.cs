@@ -312,7 +312,7 @@ public class GroundLevel : MonoBehaviour
             {
                 foreach (PipePart connection in pipe.transform.GetComponentsInChildren<PipePart>())
                 {
-                    if (connection.name == $"{i}")
+                    if (connection.objectName == $"{i}")
                     {
                         connection.connectedPipe.DisconnectPipe(i % 2 == 0 ? i + 1 : i - 1, false);
                     }

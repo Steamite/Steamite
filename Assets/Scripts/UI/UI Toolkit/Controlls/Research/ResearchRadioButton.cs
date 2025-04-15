@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace Research
 {
-	public class ResearchUIButton : CustomRadioButton
+	public class ResearchRadioButton : CustomRadioButton
 	{
 		enum ButtonState
 		{
@@ -19,45 +20,43 @@ namespace Research
 
 		//Variables
 		public ResearchNode node;
-		public List<Image> unlockedByLines;
-		public List<Image> unlocksLines;
-
-		private int unlockedPrevs;
-		private ResearchView backend;
-		[SerializeField] public Image borderFill;
+		public VisualElement lineDown;
+		public VisualElement lineUp;
 
 		ButtonState state;
-		bool decresing;
-		public ResearchUIButton(ResearchNode researchNode, List<ResearchNode> nodes) : base()
+
+		int categ;
+		int building;
+
+		public ResearchRadioButton(List<ResearchNode> nodes, int i) : base("research-button", i, true)
 		{
-			unlockedByLines = new();
-			unlocksLines = new();
-			name = researchNode.name;
-			node = researchNode;
+			name = nodes[i].name;
+			node = nodes[i];
 
-
-			// transform.GetChild(2).GetChild(0).GetComponent<TMP_Text>().text = name;
-
-			if (node.researched)
+			if (node.nodeType == NodeType.Dummy || node.nodeAssignee == -1)
 			{
-				//Complete(true);
+				style.visibility = Visibility.Hidden;
 				return;
 			}
-			else if (node.level == 0 || node.unlockedBy.All(q => nodes.Find(x => x.id == q).researched))
-			{
-				state = ButtonState.Available;
-				//Recolor();
-				if (node.researchTime == 0)
-					Debug.LogError($"researchTime not set: {node.level}, {name}");
-				borderFill.fillAmount = node.currentTime / node.researchTime;
-			}
-			else
-			{
-				state = ButtonState.Unavailable;
-			}
+			VisualElement background = new();
+			background.AddToClassList("rotator");
+			Add(background);
+
+			VisualElement preview = new();
+			BuildCategWrapper cat = UIRefs.research.buildData.Categories[node.nodeCategory];
+			building = cat.Objects.FindIndex(q => q.id == node.nodeAssignee);
+			if (building > -1)
+				preview.style.backgroundImage = new(cat.Objects[building].preview);
+			background.Add(preview);
+
+			Label nameLabel = new();
+			nameLabel.AddToClassList("name-label");
+			nameLabel.text = node.name;
+			background.Add(nameLabel);
+
+			RegisterCallback<PointerEnterEvent>(_ => ToolkitUtils.localMenu.Open(node, this));
+			RegisterCallback<PointerLeaveEvent>(_ => ToolkitUtils.localMenu.Close());
 		}
-
-
 
 		/*public void Initialize(ResearchNode researchNode, List<ResearchNode> nodes)
 		{
