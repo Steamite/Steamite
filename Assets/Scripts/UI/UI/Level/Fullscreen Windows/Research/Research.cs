@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using TMPro;
 using TradeData.Locations;
@@ -8,7 +9,7 @@ using UnityEngine.UIElements;
 public class Research : FullscreenWindow
 {
 	IUIElement UI;
-    public ResearchNode currentResearch;
+    public ResearchNode currentResearch { get; private set; }
     public StorageResource researchResourceInput;
     public ResearchData researchData;
     public BuildButtonHolder buildData;
@@ -102,4 +103,9 @@ public class Research : FullscreenWindow
             currentResearch.node.currentTime += efficiecy * 1;
         }*/
     }
+
+	public void SetActive(ResearchNode newResearch)
+	{
+        currentResearch = newResearch;
+	}
 }

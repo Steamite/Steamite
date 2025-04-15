@@ -37,7 +37,7 @@ namespace Research
 		{
 			if(node.researched == false)
 			{
-				UIRefs.research.currentResearch = node;
+				UIRefs.research.SetActive(node);
 				SceneRefs.ShowMessage($"Research Changed {node.name}");
 			}
 		}

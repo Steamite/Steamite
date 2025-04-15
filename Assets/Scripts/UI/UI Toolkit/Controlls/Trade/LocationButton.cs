@@ -37,11 +37,12 @@ namespace TradeWindowElements
             style.top = (pos.y * zoom) - (style.height.value.value / 2);
         }
 
-        protected override void SelectChange(bool UpdateGroup)
+        protected override bool SelectChange(bool UpdateGroup)
         {
             base.SelectChange(UpdateGroup);
             backgroundElem.RegisterCallback<TransitionEndEvent>((_) => ToggleInClassList("rotate"));
             AddToClassList("rotate");
+            return true;
         }
 
         public override void Deselect(bool triggerTransition = true)

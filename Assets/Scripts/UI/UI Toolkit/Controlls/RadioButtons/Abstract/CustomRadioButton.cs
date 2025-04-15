@@ -37,8 +37,7 @@ namespace AbstractControls
         {
             if (IsSelected)
                 return;
-            SelectChange(true);
-            if (styleClass != "")
+            if (SelectChange(true) && styleClass != "")
             {
                 RemoveFromClassList(styleClass);
                 AddToClassList(styleClass + "-selected");
@@ -55,7 +54,7 @@ namespace AbstractControls
             ToolkitUtils.ChangeClassWithoutTransition(styleClass, styleClass + "-selected", this);
         }
 
-        protected virtual void SelectChange(bool UpdateGroup)
+        protected virtual bool SelectChange(bool UpdateGroup)
         {
             IsSelected = true;
             if (UpdateGroup)
@@ -80,8 +79,9 @@ namespace AbstractControls
 
 				}
             }
-
+            return true;
         }
+
         /// <summary>
         /// Sets <see cref="IsSelected"/> to false and resets styling.
         /// </summary>

@@ -6,20 +6,32 @@ public class MainShortcuts : MonoBehaviour
 {
     InputActionMap bindingMap => inputAsset.actionMaps[1];
 
-    InputAction buildMenu => bindingMap.FindAction("Build Menu");
-    InputAction dig => bindingMap.FindAction("Dig");
-    InputAction deconstruction => bindingMap.FindAction("Deconstruct");
-    InputAction buildRotate => bindingMap.FindAction("Build Rotate");
-    InputAction menu => bindingMap.FindAction("Menu");
-    InputAction shift => bindingMap.FindAction("Shift");
-    InputAction research => bindingMap.FindAction("Research");
-    InputAction trade => bindingMap.FindAction("Trade");
+    InputAction buildMenu;
+    InputAction dig;
+    InputAction deconstruction;
+    InputAction buildRotate;
+    InputAction menu;
+    InputAction shift;
+    InputAction research;
+    InputAction trade;
 
     [SerializeField] public InputActionAsset inputAsset;
     public static bool handleGrid = true;
     static bool handleWindows = true;
 
-    public static void DisableInput(bool win = true)
+	public void Awake()
+	{
+        buildMenu = bindingMap.FindAction("Build Menu");
+        dig = bindingMap.FindAction("Dig");
+		deconstruction = bindingMap.FindAction("Deconstruct");
+		buildRotate = bindingMap.FindAction("Build Rotate");
+		menu = bindingMap.FindAction("Menu");
+		shift = bindingMap.FindAction("Shift");
+		research = bindingMap.FindAction("Research");
+		trade = bindingMap.FindAction("Trade");
+	}
+
+	public static void DisableInput(bool win = true)
     {
         handleGrid = false;
         handleWindows = win;
@@ -109,16 +121,20 @@ public class MainShortcuts : MonoBehaviour
         {
             if (research.triggered)
             {
-                if(UIRefs.trading.window.style.display == DisplayStyle.Flex)
+                if(UIRefs.trading.isOpen)
                     UIRefs.trading.CloseWindow();
                 UIRefs.research.ToggleWindow();
             }
-            if (trade.triggered)
+            else if (trade.triggered)
             {
-				/*if(UIRefs.research.window.style.display == DisplayStyle.Flex)
-                    UIRefs.research.CloseWindow();*/
-				UIRefs.trading.ToggleWindow();
+                if (UIRefs.research.isOpen)
+                    UIRefs.research.CloseWindow();
+                UIRefs.trading.ToggleWindow();
 			}
+            /*else if(UIRefs.trading.isOpen && )
+            {
+                
+            }*/
         }
         // opens ingame menu
         if (menu.triggered)

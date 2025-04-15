@@ -474,7 +474,7 @@ public static class MyRes
     /// <returns>If the cost can be afforded.</returns>
     public static bool CanAfford(Resource cost)
     {
-        return DiffRes(cost, resDisplay.GlobalResources).ammount.Sum() == 0;
+        return cost.capacity <= Money && DiffRes(cost, resDisplay.GlobalResources).ammount.Sum() == 0;
     }
     #endregion
 
