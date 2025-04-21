@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 /// <summary>Handles the game clock.</summary>
@@ -58,7 +56,7 @@ public class Tick : MonoBehaviour
     event Action yearStart;
 
     /// <summary>The tick counter, resets if it reaches uint capacity.</summary>
-    [HideInInspector]public uint lastTick = 0;
+    [HideInInspector] public uint lastTick = 0;
 
     bool running = false;
     #endregion
@@ -144,10 +142,10 @@ public class Tick : MonoBehaviour
     {
         return (numberOfDays % 7 * 1440) + timeInMinutes;
     }
-	#endregion
+    #endregion
 
-	#region Init
-	public void InitTicks(bool newGame)
+    #region Init
+    public void InitTicks(bool newGame)
     {
         minutesPerTick = (int)(60f / ticksPerHour);
         if (newGame)
@@ -164,11 +162,11 @@ public class Tick : MonoBehaviour
     {
         if (_speed == 0 && running == false)
         {
-			StartTicks();
+            StartTicks();
         }
-        else if(_speed > 0)
+        else if (_speed > 0)
         {
-			Time.timeScale = _speed;
+            Time.timeScale = _speed;
             if (running == false)
                 StartTicks();
         }
@@ -177,33 +175,33 @@ public class Tick : MonoBehaviour
             StopTicks();
         }
     }
-	#endregion
+    #endregion
 
-	#region Starting and Ending ticks
-	public void StopTicks()
-	{
-        if(running == false)
-		{
-			Debug.LogWarning("Not ticking, cannot stop ticks.");
-		}
+    #region Starting and Ending ticks
+    public void StopTicks()
+    {
+        if (running == false)
+        {
+            Debug.LogWarning("Not ticking, cannot stop ticks.");
+        }
         else
-		{
-			running = false;
+        {
+            running = false;
             StopAllCoroutines();
-		}
-	}
+        }
+    }
 
     public void StartTicks()
     {
-        if(running == true)
+        if (running == true)
         {
             Debug.LogError("Already ticking, cannot tick two times.");
         }
         else
         {
-			running = true;
+            running = true;
             StartCoroutine(DoTick());
-		}
+        }
     }
 
     public void UIWindowToggle(bool enable)
@@ -212,16 +210,16 @@ public class Tick : MonoBehaviour
             StopAllCoroutines();
         else if (running)
             StartCoroutine(DoTick());
-            
-    }
-	#endregion
 
-	#region Tick
-	IEnumerator DoTick()
+    }
+    #endregion
+
+    #region Tick
+    IEnumerator DoTick()
     {
-		while (true)
+        while (true)
         {
-            Debug.Log("All time:" + Time.time);
+            //Debug.Log("All time:" + Time.time);
             yield return new WaitForSeconds(1);
             UpdateTime();
             tickAction?.Invoke();
@@ -231,7 +229,7 @@ public class Tick : MonoBehaviour
                 lastTick++;
         }
     }
- 
+
 
     void UpdateTime()
     {
@@ -285,5 +283,5 @@ public class Tick : MonoBehaviour
         timeInMinutes = gameState.dayTime;
         numberOfDays = gameState.numberOfDays;
     }
-	#endregion
+    #endregion
 }

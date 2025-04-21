@@ -16,7 +16,7 @@ public class StatEditor : PropertyDrawer
         StatData config = ((StatData)property.boxedValue);
         Resize(stats.Count, config.stats, serializedObject);
         Resize(prods.Count, config.production, serializedObject);
-        
+
         #region Root
         VisualElement root = new();
         root.style.paddingTop = 5;
@@ -46,17 +46,17 @@ public class StatEditor : PropertyDrawer
         l.style.fontSize = 18;
         root.Add(l);
         #endregion
-                
+
         CreateList(
             root,
-            nameof(StatData.stats), 
+            nameof(StatData.stats),
             ((StatData)property.boxedValue).stats,
             stats,
             property);
         CreateList(
             root,
             nameof(StatData.production),
-            ((StatData)property.boxedValue).production, 
+            ((StatData)property.boxedValue).production,
             prods,
             property);
         return root;
@@ -76,7 +76,7 @@ public class StatEditor : PropertyDrawer
 
         list.itemTemplate = Resources.Load<VisualTreeAsset>("UI Toolkit/StatElem");
         list.itemsSource = config;
-        list.fixedItemHeight = 40; 
+        list.fixedItemHeight = 40;
         list.horizontalScrollingEnabled = false;
 
         list.bindItem =

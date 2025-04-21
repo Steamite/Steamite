@@ -1,11 +1,9 @@
 ﻿using AbstractControls;
-using System;
-using System.Collections.Generic;
 using UnityEngine.UIElements;
 
 namespace TradeWindowElements
 {
-    
+
     [UxmlElement]
     public partial class TradeButtonGroup : CustomRadioButtonGroup
     {
@@ -27,8 +25,8 @@ namespace TradeWindowElements
 
         public TradeButtonGroup(VisualElement elem) : base()
         {
-            leftBar = ToolkitUtils.GetRoot(elem).Q<VisualElement>("LeftBar");                                       
-            if(leftBar != null)
+            leftBar = ToolkitUtils.GetRoot(elem).Q<VisualElement>("LeftBar");
+            if (leftBar != null)
             {
                 colonyView = (ColonyView)leftBar.ElementAt(1);
                 tradeView = (TradeView)leftBar.ElementAt(2);
@@ -59,7 +57,7 @@ namespace TradeWindowElements
                     prevView = ViewType.Colony;
                     break;
                 case > 0:
-                    headerText = tradeView.Open(index-1);
+                    headerText = tradeView.Open(index - 1);
                     prevView = ViewType.Trade;
                     break;
                 case < 0:

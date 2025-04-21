@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
@@ -53,12 +52,12 @@ public class FluidNetwork
     /// <param name="_mergeWith">network to merge with</param>
     public void Merge(FluidNetwork _mergeWith)
     {
-        foreach(Pipe pipe in _mergeWith.pipes)
+        foreach (Pipe pipe in _mergeWith.pipes)
         {
             pipes.Add(pipe);
             pipe.network = this;
         }
-        foreach(Building building in _mergeWith.buildings)
+        foreach (Building building in _mergeWith.buildings)
         {
             buildings.Add(building);
             // TODO: call to building
@@ -77,7 +76,7 @@ public class FluidNetwork
             MyGrid.fluidNetworks.Remove(spliter.network);
             return;
         }
-        else if(spliter.transform.childCount > 1)
+        else if (spliter.transform.childCount > 1)
         {
             pipes.Remove(spliter);
             DoSplit(0, 1, spliter.transform);
@@ -98,7 +97,7 @@ public class FluidNetwork
         Pipe pipeB = pipeTransform.transform.GetChild(childB).GetComponent<PipePart>().connectedPipe;
         if (PathFinder.FindPath(pipeA.GetPos(), pipeB.GetPos(), typeof(Pipe)).Count == 0)
         {
-            if(childA == 0)
+            if (childA == 0)
             {
                 FluidNetwork fluidNetwork = new();
                 MyGrid.fluidNetworks.Add(fluidNetwork);
@@ -112,7 +111,7 @@ public class FluidNetwork
         }
         else
         {
-            DoSplit(childA, childB+1, pipeTransform);
+            DoSplit(childA, childB + 1, pipeTransform);
         }
     }
 
@@ -123,14 +122,14 @@ public class FluidNetwork
     void ChangeNetwork(Pipe pipe)
     {
         if (pipe.network.networkID == -1)
-            return;       
+            return;
         pipe.network.pipes.Remove(pipe);
         pipes.Add(pipe);
         if (pipe.GetComponent<BuildPipe>())
             buildings.Add(pipe.GetComponent<BuildPipe>().connectedBuilding);
         pipe.network = this;
 
-        foreach (Pipe connected in pipe.GetComponentsInChildren<PipePart>().Select(q => q.connectedPipe).Where(q=> q != null))
+        foreach (Pipe connected in pipe.GetComponentsInChildren<PipePart>().Select(q => q.connectedPipe).Where(q => q != null))
         {
             if (!connected)
                 continue;

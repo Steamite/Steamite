@@ -1,6 +1,6 @@
-﻿using AbstractControls;
+﻿using System;
+using AbstractControls;
 using RadioGroups;
-using System;
 using UnityEngine.UIElements;
 
 namespace InfoWindowElements
@@ -12,7 +12,7 @@ namespace InfoWindowElements
         #region Constructors
         public LevelUnlocker() : base()
         {
-            
+
         }
 
         public LevelUnlocker(int i, LevelState _state) : base("", i, true, i.ToString())

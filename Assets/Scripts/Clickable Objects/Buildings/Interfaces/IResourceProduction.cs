@@ -55,7 +55,7 @@ public interface IResourceProduction : IProduction
     {
         if (!Stoped)
         {
-            if (ProdStates.running || ManageInputRes()) 
+            if (ProdStates.running || ManageInputRes())
             {
                 CurrentTime += Modifier * progress;
                 ((Building)this).UIUpdate(nameof(CurrentTime));

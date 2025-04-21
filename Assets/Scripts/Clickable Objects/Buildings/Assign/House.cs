@@ -1,10 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using Unity.Properties;
 using UnityEngine;
-using UnityEngine.UIElements;
 /// <summary>Provides a place to sleep for <see cref="Human"/>s.</summary>
 public class House : Building, IAssign
 {
@@ -62,10 +59,12 @@ public class House : Building, IAssign
     /// </summary>
     /// <param name="human"><inheritdoc/></param>
     /// <param name="add"><inheritdoc/></param>
-    public void ManageAssigned(Human human, bool add)
+    public bool ManageAssigned(Human human, bool add)
     {
         if (add)
         {
+            if (Assigned.Count == assignLimit)
+                return false;
             Assigned.Add(human);
             human.home = this;
         }
@@ -75,6 +74,7 @@ public class House : Building, IAssign
             human.home = null;
         }
         UIUpdate(nameof(Assigned));
+        return true;
     }
 
     /// <summary>

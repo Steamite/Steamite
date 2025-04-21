@@ -7,7 +7,7 @@ using UnityEngine;
 public static class HumanActions
 {
     #region Variables
-    
+
     /// <summary>Max ammount of resources that can be transfered each tick.</summary>
     static int transferPerTick = 5;
 
@@ -33,7 +33,7 @@ public static class HumanActions
                 break;
             case JobState.FullTime:
                 productionSpeed += ammount;
-            break;
+                break;
             default:
                 Debug.LogError($"Undifined jobState, {toChange}");
                 break;
@@ -53,7 +53,7 @@ public static class HumanActions
             Rotate(h, job.path[0]);
             int y = Mathf.RoundToInt(h.transform.localPosition.y);
             h.transform.localPosition = job.path[0].ToVec();
-            if(Mathf.RoundToInt(h.transform.localPosition.y) != y)
+            if (Mathf.RoundToInt(h.transform.localPosition.y) != y)
             {
                 h.gameObject.SetActive(MyGrid.currentLevel == h.GetPos().y);
             }
@@ -76,9 +76,9 @@ public static class HumanActions
     static void Rotate(Human h, GridPos point)
     {
         GridPos humanPos = h.GetPos();
-        if(point.x > humanPos.x)
+        if (point.x > humanPos.x)
             h.transform.rotation = Quaternion.Euler(0, 180, 0);
-        else if(point.x < humanPos.x)
+        else if (point.x < humanPos.x)
             h.transform.rotation = Quaternion.Euler(0, 0, 0);
         else if (point.z > humanPos.z)
             h.transform.rotation = Quaternion.Euler(0, 90, 0);
@@ -94,7 +94,7 @@ public static class HumanActions
     /// <param name="h"><inheritdoc cref="Move(Human)"/></param>
     public static void Dig(Human h)
     {
-        if(h.Job.interest.GetComponent<Rock>().DamageRock(digSpeed * h.Efficiency))
+        if (h.Job.interest.GetComponent<Rock>().DamageRock(digSpeed * h.Efficiency))
         {
             h.transform.parent.parent.GetComponent<JobQueue>().CancelJob(JobState.Digging, h.Job.interest); // removes job order
         }
@@ -196,13 +196,13 @@ public static class HumanActions
             h.lookingForAJob = true;
 
             // go throuh the jobs according to priority
-            foreach(JobState j in jobQueue.priority)
+            foreach (JobState j in jobQueue.priority)
             {
                 if (!HandleCases(jobQueue, h, j))
                     return;
             }
         }
-        else if(h.lookingForAJob)
+        else if (h.lookingForAJob)
             Debug.LogError("SOMETHING IS WRONG, should not get here!");
 
         h.ChangeAction(null);
@@ -302,7 +302,7 @@ public static class HumanActions
 
     static bool FilterBuilds(IEnumerable<Building> constructions, Human h, JobState j)
     {
-        foreach(Building building in constructions)
+        foreach (Building building in constructions)
         {
             if (MyRes.FindResources(h, building, j))
                 return true;
@@ -319,7 +319,7 @@ public static class HumanActions
     /// <returns></returns>
     static bool FindInterests(IEnumerable<ClickableObject> interests, Human h, JobState jobs)
     {
-        if(interests.Count() > 0)
+        if (interests.Count() > 0)
         {
             JobData data = PathFinder.FindPath(interests.ToList(), h);
             if (data.interest)

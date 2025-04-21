@@ -381,37 +381,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 745012301}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e482ae2b561f0b4a9a7ef6f5a007bf3, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a24657491589b44b822a58fad2cfb3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentResearch:
-    name: 
-    id: 0
-    level: 0
-    researched: 0
-    currentTime: 0
-    researchTime: 0
-    reseachCost:
-      capacity: -1
-      type: 
-      ammount: 
-    nodeType: 0
-    nodeCategory: 0
-    nodeAssignee: 0
-    unlockedBy: 
-    unlocks: 
-    description: 
-    lineColor: {r: 1, g: 0, b: 0, a: 1}
-  researchResourceInput:
-    stored:
-      capacity: -1
-      type: 
-      ammount: 
-    requests: []
-    carriers: []
-    mods: 
+  isOpen: 0
   researchData: {fileID: 0}
-  buildData: {fileID: 0}
 --- !u!1 &777753790
 GameObject:
   m_ObjectHideFlags: 0
@@ -526,6 +500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c6b6f1f558a7443b6959ecea9214ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOpen: 0
   maxConvoy: 3
   convoys: []
   colonyLocation:
@@ -889,7 +864,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2033049697}
-  - component: {fileID: 2033049698}
   m_Layer: 0
   m_Name: Overlay
   m_TagString: Untagged
@@ -912,25 +886,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1524870990}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2033049698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2033049696}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_PanelSettings: {fileID: 11400000, guid: 446c439d435ab0e44afc4b03c126e64a, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 0}
-  m_SortingOrder: 0
-  m_WorldSpaceSizeMode: 1
-  m_WorldSpaceWidth: 1920
-  m_WorldSpaceHeight: 1080
 --- !u!4 &206732441787875933
 Transform:
   m_ObjectHideFlags: 0
@@ -1146,7 +1101,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2029702140026209828}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8691447f05ee48040b49b1586dc4e2a9, type: 3}
   m_Name: 
@@ -1185,6 +1140,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1010446617054400077, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_OcclusionCulling
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1010446617054400077, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_BackGroundColor.b
       value: 0
       objectReference: {fileID: 0}
@@ -1216,6 +1175,10 @@ PrefabInstance:
       propertyPath: asset
       value: 
       objectReference: {fileID: 6086404398923934763}
+    - target: {fileID: 4186981223861399555, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4186981223861399555, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: mainCamera
       value: 
@@ -1309,7 +1272,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 7072378217534680770}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73335a0c7ab68fa4eb56d270191828ce, type: 3}
   m_Name: 
@@ -1342,8 +1305,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
-  m_RequiresOpaqueTextureOption: 2
+  m_RequiresDepthTextureOption: 0
+  m_RequiresOpaqueTextureOption: 0
   m_CameraType: 0
   m_Cameras:
   - {fileID: 174733357}
@@ -1409,8 +1372,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
+  m_RenderShadows: 0
+  m_RequiresDepthTextureOption: 0
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 1
   m_Cameras: []
@@ -1425,7 +1388,7 @@ MonoBehaviour:
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
-  m_ClearDepth: 1
+  m_ClearDepth: 0
   m_AllowXRRendering: 1
   m_AllowHDROutput: 1
   m_UseScreenCoordOverride: 0
@@ -1528,6 +1491,12 @@ MonoBehaviour:
   _miscellaneous: {fileID: 1855733983}
   _infoWindow: {fileID: 225780445}
   _researchAdapter: {fileID: 8150810313726245686}
+  afterLoads:
+  - {fileID: 8150810313726245683}
+  - {fileID: 7072378217534680772}
+  - {fileID: 1855733984}
+  - {fileID: 225780445}
+  - {fileID: 6086404398923934763}
 --- !u!114 &8150810313726245686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1593,7 +1562,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2029702140026209828}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df6c315985f3a41439fd6a9a8d14625b, type: 3}
   m_Name: 

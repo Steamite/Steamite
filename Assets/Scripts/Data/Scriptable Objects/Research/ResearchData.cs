@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Properties;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum NodeType
 {
@@ -12,45 +14,67 @@ public enum NodeType
 
 /// <summary>Represents one thing to research, can have prequiseites and folowing ones.</summary>
 [Serializable]
-public class ResearchNode
+public class ResearchNode : IUpdatable
 {
     #region Variables
     /// <summary>Name of the research.</summary>
-    public string name;
+    [SerializeField] public string nodeName;
     /// <summary>ID of the research.</summary>
-    public int id;
+    [SerializeField] public int id;
     /// <summary>Level of the research</summary>
-    public int level;
+    [SerializeField] public int level;
 
     /// <summary>Was it already researched?</summary>
-    public bool researched;
+    [SerializeField] public bool researched;
+    public event Action onFinishResearch;
     /// <summary>Current progress time.</summary>
-    public float currentTime;
+    [SerializeField] float currentTime = -1;
+    /// <summary>Current progress time.</summary>
+    [CreateProperty]
+    public float CurrentTime
+    {
+        get => currentTime;
+        set
+        {
+            currentTime = value;
+            if (currentTime >= researchTime)
+            {
+                researched = true;
+                onFinishResearch?.Invoke();
+                onFinishResearch = null;
+            }
+            else
+                UIUpdate(nameof(CurrentTime));
+        }
+    }
     /// <summary>Target progress time.</summary>
-    public int researchTime;
+    [SerializeField] public int researchTime;
 
     /// <summary>Cost to start research(WIP).</summary>
-    public Resource reseachCost;
+    [SerializeField] public Resource reseachCost;
 
-	/// <summary>If the button is unlocking a building.</summary>
-	public NodeType nodeType;
-	/// <summary>Category of foreing elements that is assigned to.</summary>
-	public int nodeCategory;
+    /// <summary>If the button is unlocking a building.</summary>
+    [SerializeField] public NodeType nodeType;
+    /// <summary>Category of foreing elements that is assigned to.</summary>
+    [SerializeField] public int nodeCategory;
     /// <summary>Element id from the category.</summary>
-    public int nodeAssignee;
+    [SerializeField] public int nodeAssignee;
     /// <summary>Prequisite needed nodes.</summary>
     [SerializeField] public List<int> unlockedBy;
     /// <summary>Next nodes.</summary>
     [SerializeField] public List<int> unlocks;
-	public string description;
+    public string description;
 
-#if UNITY_EDITOR_WIN
-	[SerializeField] public Color lineColor = Color.red;
-#endif
-	#endregion
+    [NonSerialized] public Sprite preview;
 
-	#region Overrides
-	public override bool Equals(object obj)
+    [SerializeField] public Color lineColor = Color.red;
+
+
+    public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
+    #endregion
+
+    #region Overrides
+    public override bool Equals(object obj)
     {
         if (obj == null)
             return false;
@@ -78,39 +102,43 @@ public class ResearchNode
 
     }
 
-	public ResearchNode(ResearchNode node)
-	{
-		id = node.id;
-		level = node.level;
-		name = node.name;
-		currentTime = node.currentTime;
-		researchTime = node.researchTime;
-		nodeCategory = node.nodeCategory;
-		nodeAssignee = node.nodeAssignee;
-		researched = node.researched;
-		unlockedBy = node.unlockedBy;
-		unlocks = node.unlocks;
-		reseachCost = new();
-		if (node.reseachCost != null)
-		{
-			reseachCost.type = node.reseachCost.type.ToList();
-			reseachCost.ammount = node.reseachCost.ammount.ToList();
-		}
-	}
+    public ResearchNode(ResearchNode node)
+    {
+        id = node.id;
+        level = node.level;
+        nodeName = node.nodeName;
+        currentTime = node.currentTime;
+        researchTime = node.researchTime;
+        nodeCategory = node.nodeCategory;
+        nodeAssignee = node.nodeAssignee;
+        researched = node.researched;
+        unlockedBy = node.unlockedBy;
+        unlocks = node.unlocks;
+        reseachCost = new();
+        if (node.reseachCost != null)
+        {
+            reseachCost.type = node.reseachCost.type.ToList();
+            reseachCost.ammount = node.reseachCost.ammount.ToList();
+        }
+    }
+    public void UIUpdate(string property = "")
+    {
+        propertyChanged?.Invoke(this, new(property));
+    }
 
-	#region Editor modifications
+    #region Editor modifications
 #if UNITY_EDITOR
 
-	/// <summary>
-	/// Used when creating.
-	/// </summary>
-	/// <param name="_gp"></param>
-	/// <param name="_data"></param>
-	/// <param name="level"></param>
-	public ResearchNode(int _level, int _id)
+    /// <summary>
+    /// Used when creating.
+    /// </summary>
+    /// <param name="_gp"></param>
+    /// <param name="_data"></param>
+    /// <param name="level"></param>
+    public ResearchNode(int _level, int _id)
     {
         level = _level;
-        name = $"node {_level}";
+        nodeName = $"node {_level}";
 
         id = _id;
         researchTime = 100 * (_level + 1);
@@ -125,11 +153,11 @@ public class ResearchNode
     }
 
 
-	/// <summary>
-	/// Connects this node as a prequisete to <paramref name="node"/>.
-	/// </summary>
-	/// <param name="node">Connecting node.</param>
-	public void ConnectNode(ResearchNode node)
+    /// <summary>
+    /// Connects this node as a prequisete to <paramref name="node"/>.
+    /// </summary>
+    /// <param name="node">Connecting node.</param>
+    public void ConnectNode(ResearchNode node)
     {
         if (!unlocks.Contains(node.id))
         {
@@ -143,16 +171,16 @@ public class ResearchNode
     /// </summary>
     public void DisconnectNodes(List<ResearchNode> category, bool justTop = false)
     {
-        
-        if(justTop == false)
-		{
-			for (int i = unlocks.Count - 1; i >= 0; i--)
-				DisconnectNode(true, i, category);
-		}
 
-		for (int i = unlockedBy.Count - 1; i >= 0; i--)
-			DisconnectNode(false, i, category);
-	}
+        if (justTop == false)
+        {
+            for (int i = unlocks.Count - 1; i >= 0; i--)
+                DisconnectNode(true, i, category);
+        }
+
+        for (int i = unlockedBy.Count - 1; i >= 0; i--)
+            DisconnectNode(false, i, category);
+    }
 
     /// <summary>
     /// Disconnects one node.
@@ -163,7 +191,7 @@ public class ResearchNode
     {
         if (disconectUp)
         {
-            category.Find(q=> q.id == unlocks[index]).unlockedBy.Remove(id);
+            category.Find(q => q.id == unlocks[index]).unlockedBy.Remove(id);
             unlocks.RemoveAt(index);
         }
         else
@@ -171,47 +199,60 @@ public class ResearchNode
             category.Find(q => q.id == unlockedBy[index]).unlocks.Remove(id);
             unlockedBy.RemoveAt(index);
         }
-	}
+    }
 #endif
-#endregion
+    #endregion
 }
 
 /// <summary>Research Category groups nodes into logical pages.</summary>
 [Serializable]
 public class ResearchCategory : DataCategory<ResearchNode>
 {
+    #region Editor
+#if UNITY_EDITOR
+    public void AddNode(int level)
+    {
+        ResearchNode node = new(level, UniqueID());
 
-#if UNITY_EDITOR_WIN
-	public void AddNode(int level)
-	{
-		ResearchNode node = new(level, UniqueID());
-
-		Objects.Add(node);
-		Objects = Objects.OrderBy(q => q.level).ToList();
-	}
-
-
-	public override int UniqueID()
-    { 
-		int id;
-		do
-		{
-			id = UnityEngine.Random.Range(0, int.MaxValue);
-		}
-		while (Objects.Count(q => q.id == id) > 0);
-		return id;
+        Objects.Add(node);
+        Objects = Objects.OrderBy(q => q.level).ToList();
+    }
+    public override int UniqueID()
+    {
+        int id;
+        do
+        {
+            id = UnityEngine.Random.Range(0, int.MaxValue);
+        }
+        while (Objects.Count(q => q.id == id) > 0);
+        return id;
     }
 #endif
+    #endregion
+    public ResearchCategory() { }
 
-	public ResearchCategory()
+    public bool CheckPrequisite(ResearchNode node, Action unlockAction)
     {
-
-    }
-
-    public ResearchCategory(string _name)
-    {
-        Name = _name;
-        Objects = new();
+        bool result = true;
+        for (int i = node.unlockedBy.Count - 1; i > -1; i--)
+        {
+            ResearchNode n = Objects.Find(q => q.id == node.unlockedBy[i]);
+            if (n.researched)
+                node.unlockedBy.RemoveAt(i);
+            else
+            {
+                if (unlockAction != null)
+                {
+                    n.onFinishResearch += () =>
+                    {
+                        if (CheckPrequisite(node, null))
+                            unlockAction();
+                    };
+                }
+                result = false;
+            }
+        }
+        return result;
     }
 }
 
@@ -219,7 +260,7 @@ public class ResearchCategory : DataCategory<ResearchNode>
 [CreateAssetMenu(fileName = "ResearchData", menuName = "UI Data/Research Holder", order = 2)]
 public class ResearchData : DataHolder<ResearchCategory>
 {
-#if UNITY_EDITOR_WIN
-	public override List<string> Choices() => Categories.Select(q => q.Name).ToList();
+#if UNITY_EDITOR
+    public override List<string> Choices() => Categories.Select(q => q.Name).ToList();
 #endif
 }

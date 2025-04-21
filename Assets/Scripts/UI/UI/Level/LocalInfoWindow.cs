@@ -8,7 +8,8 @@ public class LocalInfoWindow : UIBehaviour
     Canvas c;
     GridPos gridPos = new();
     Status status = Status.notSet;
-    enum Status{
+    enum Status
+    {
         notSet,
         set,
         buildings,
@@ -30,13 +31,13 @@ public class LocalInfoWindow : UIBehaviour
             case Status.buildings:
                 canvasHeight = c.renderingDisplaySize.y;
                 rectTransform.anchoredPosition = new(
-                    gridPos.x, 
+                    gridPos.x,
                     (gridPos.z + ((canvasHeight / 13) + (rectTransform.rect.height / 2))) * c.scaleFactor);
                 break;
             case Status.expeditions:
                 canvasHeight = c.renderingDisplaySize.y;
                 rectTransform.anchoredPosition = new(
-                    gridPos.x + (rectTransform.rect.width / 2) + 13 * c.scaleFactor, 
+                    gridPos.x + (rectTransform.rect.width / 2) + 13 * c.scaleFactor,
                     gridPos.z + (rectTransform.rect.height / 2) + 13 * c.scaleFactor);
                 break;
             default:
@@ -48,7 +49,7 @@ public class LocalInfoWindow : UIBehaviour
     public void DisplayInfo(Building prefab, Vector3 pos)
     {
         // triggers on button enter, works after setingUp
-        if(status != Status.notSet)
+        if (status != Status.notSet)
         {
             status = Status.buildings;
             gridPos = new(pos.x, pos.y);

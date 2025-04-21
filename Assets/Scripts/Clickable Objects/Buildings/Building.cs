@@ -1,10 +1,9 @@
-using UnityEngine;
-using System.Linq;
-using UnityEngine.Rendering;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Properties;
-using UnityEngine.UIElements;
+using UnityEngine;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// Class for buildings, which can be constructed on free tiles. 
@@ -29,7 +28,9 @@ public class Building : StorageObject
     /// <summary>.</summary>
     public int maximalProgress;
 
-
+    [Header("Prefab info")]
+    public byte categoryID;
+    public int wrapperID;
     #endregion
 
     #region Basic Operations
@@ -62,8 +63,8 @@ public class Building : StorageObject
     {
         InfoWindow info = base.OpenWindow();
         info.Open(this, InfoMode.Building);
-        
-        if(constructed)
+
+        if (constructed)
             OpenWindowWithToggle(info, new());
         return info;
     }
@@ -87,22 +88,25 @@ public class Building : StorageObject
     {
         if (clickable == null)
             clickable = new BSave();
-        (clickable as BSave).prefabName = objectName;
-        (clickable as BSave).rotationY = transform.rotation.eulerAngles.y;
-        
-        (clickable as BSave).blueprint = blueprint;
-        (clickable as BSave).cost = cost;
-        (clickable as BSave).constructed = constructed;
-        (clickable as BSave).deconstructing = deconstructing;
-        (clickable as BSave).constructionProgress = constructionProgress;
-        (clickable as BSave).maximalProgress = maximalProgress;
+        BSave save = (clickable as BSave);
+        save.prefabName = objectName;
+        save.rotationY = transform.rotation.eulerAngles.y;
 
-        return base.Save(clickable);
+        save.blueprint = blueprint;
+        save.cost = cost;
+        save.constructed = constructed;
+        save.deconstructing = deconstructing;
+        save.constructionProgress = constructionProgress;
+        save.maximalProgress = maximalProgress;
+        save.categoryID = categoryID;
+        save.wrapperID = wrapperID;
+
+        return base.Save(save);
     }
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-		objectName = (save as BSave).prefabName;
+        objectName = (save as BSave).prefabName;
         blueprint = (save as BSave).blueprint;
         cost = (save as BSave).cost;
         constructed = (save as BSave).constructed;
@@ -228,7 +232,7 @@ public class Building : StorageObject
                 {
                     queue.AddJob(JobState.Constructing, this);
                     queue.CancelJob(JobState.Deconstructing, this);
-                    if(localRes.carriers.Count > 0)
+                    if (localRes.carriers.Count > 0)
                     {
                         localRes.carriers[0].SetJob(JobState.Constructing);
                         localRes.carriers[0].ChangeAction(HumanActions.Build);
@@ -368,14 +372,14 @@ public class Building : StorageObject
     /// Fills <see cref="myColor"/>.
     /// </summary>
     public void GetColors() => myColor = transform.GetComponentsInChildren<MeshRenderer>().Select(q => q.material.color).ToList(); // saves the original color
-	#endregion
+    #endregion
 
 #if UNITY_EDITOR
-	public void Clone(Building prev)
-	{
+    public void Clone(Building prev)
+    {
         objectName = prev.objectName;
         blueprint = prev.blueprint;
         cost = prev.cost;
-	}
+    }
 #endif
 }

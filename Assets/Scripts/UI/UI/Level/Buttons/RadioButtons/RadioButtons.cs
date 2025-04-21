@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
 abstract public class RadioButtons : MonoBehaviour
 {
-    [SerializeField] protected List<int> states = new() {};
+    [SerializeField] protected List<int> states = new() { };
     [SerializeField] protected int previusState = 0;
     [SerializeField] protected int currentState = 1;
 

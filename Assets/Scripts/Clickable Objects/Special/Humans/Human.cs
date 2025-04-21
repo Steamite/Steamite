@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using TMPro;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 /// <summary>Categorizes all jobs.</summary>
 public enum JobState
@@ -111,13 +109,14 @@ public class Human : ClickableObject
     /// <param name="interest">New interest.</param>
     /// <param name="path">New path.</param>
     public void SetJob(JobState state, ClickableObject interest = null, List<GridPos> path = null)
-    {   
+    {
         jData.job = state;
         if (interest)
             jData.interest = interest;
         if (path != null)
             jData.path = path;
         UIUpdate(nameof(Job));
+
 #if UNITY_EDITOR
         transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
 #endif
@@ -127,7 +126,7 @@ public class Human : ClickableObject
     #region Basic Operations
     /// <inheritdoc/>
     public override GridPos GetPos() => new(transform.position.x, transform.localPosition.y / ClickableObjectFactory.LEVEL_HEIGHT, transform.position.z);
-    
+
     /// <summary>
     /// Creates a list from <see cref="HumanUtil.humans"/>.
     /// </summary>
@@ -201,28 +200,28 @@ public class Human : ClickableObject
     public override void Load(ClickableObjectSave save)
     {
         HumanSave s = (save as HumanSave);
-		transform.GetChild(1).GetComponent<MeshRenderer>().material.color = s.color.ConvertColor();
-		id = save.id;
-		objectName = save.objectName;
-		SetJob(new(s.jobSave, this));
-		MyRes.ManageRes(Inventory, s.inventory, 1);
-		specialization = s.specs;
-		if (Job.path.Count > 0)
-			ChangeAction(HumanActions.Move);
-		else
-			Decide();
-		// house assigment
-		if (s.houseID != -1)
-			MyGrid.buildings.Where(q => q.id == s.houseID).
-				SingleOrDefault().GetComponent<House>().ManageAssigned(this, true);
+        transform.GetChild(1).GetComponent<MeshRenderer>().material.color = s.color.ConvertColor();
+        id = save.id;
+        objectName = save.objectName;
+        SetJob(new(s.jobSave, this));
+        MyRes.ManageRes(Inventory, s.inventory, 1);
+        specialization = s.specs;
+        if (Job.path.Count > 0)
+            ChangeAction(HumanActions.Move);
+        else
+            Decide();
+        // house assigment
+        if (s.houseID != -1)
+            MyGrid.buildings.Where(q => q.id == s.houseID).
+                SingleOrDefault().GetComponent<House>().ManageAssigned(this, true);
 
-		// workplace assigment
-		if (s.workplaceId != -1)
-			MyGrid.buildings.Where(q => q.id == s.workplaceId).
-				SingleOrDefault().GetComponent<ProductionBuilding>().ManageAssigned(this, true);
+        // workplace assigment
+        if (s.workplaceId != -1)
+            MyGrid.buildings.Where(q => q.id == s.workplaceId).
+                SingleOrDefault().GetComponent<IAssign>().ManageAssigned(this, true);
 
-		base.Load(save);
-	}
+        base.Load(save);
+    }
 
     #endregion
 
@@ -234,7 +233,7 @@ public class Human : ClickableObject
         {
             repetableAction(this);
         }
-        else if(!nightTime)
+        else if (!nightTime)
         {
             HumanActions.LookForNew(this);
         }

@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
-using UnityEngine;
 
 /// <summary>
 /// <inheritdoc cref="IStorage"/>
@@ -30,7 +28,7 @@ public class Elevator : Building, IStorage
         toEnable.Add("Storage");
         base.OpenWindowWithToggle(info, toEnable);
     }
-    
+
     /// <inheritdoc/>
     public override List<string> GetInfoText()
     {
@@ -107,7 +105,7 @@ public class Elevator : Building, IStorage
     #region Deconstruction
     public override void OrderDeconstruct()
     {
-        if(main)
+        if (main)
             print("can't order destroy");
     }
     public override Chunk Deconstruct(GridPos instantPos)

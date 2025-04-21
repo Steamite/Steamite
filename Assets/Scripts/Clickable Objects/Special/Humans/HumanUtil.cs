@@ -1,7 +1,7 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 /// <summary>"Util" class for managing humans.</summary>
 public class HumanUtil : MonoBehaviour
@@ -18,7 +18,7 @@ public class HumanUtil : MonoBehaviour
     #region Getters
     /// <returns>Humans without assigned fulltime job.</returns>
     public List<Human> GetPartTime() => humans.Where(q => q.workplace == null).ToList();
-    
+
     /// <returns>All Humans.</returns>
     public List<Human> GetHumen() => humans;
 
@@ -37,7 +37,7 @@ public class HumanUtil : MonoBehaviour
         humans = new();
         int i = MyGrid.gridSize;
         GridPos pos = new(i / 2, 0, i / 2);
-        for(i = 0; i < 3; i++)
+        for (i = 0; i < 3; i++)
         {
             AddHuman(SceneRefs.objectFactory.CreateAHuman(pos, hatMaterial[i], i), ref humanActivation);
         }

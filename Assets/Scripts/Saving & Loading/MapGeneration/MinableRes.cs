@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -19,7 +18,7 @@ public class VeinParameter
     /// <returns></returns>
     public int Value(int genParam) => UnityEngine.Random.Range(min[genParam], max[genParam]);
 
-    public VeinParameter() 
+    public VeinParameter()
     {
         min = new int[3];
         max = new int[3];

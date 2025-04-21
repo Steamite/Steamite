@@ -1,12 +1,11 @@
-using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using RadioGroups;
 using Unity.Properties;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using RadioGroups;
-using UnityEditor;
 
 namespace StartMenu
 {
@@ -37,7 +36,7 @@ namespace StartMenu
         {
             menu = _root.Q<VisualElement>("New-Menu");
             startButton = menu.Q<Button>("Start");
-            worlds = menu.Q<WorldRadioGroup>("Worlds"); 
+            worlds = menu.Q<WorldRadioGroup>("Worlds");
             worlds.SetChangeCallback(
                 (i) =>
                 {
@@ -121,9 +120,9 @@ namespace StartMenu
                         Directory.Delete(Application.persistentDataPath + "/saves/" + worldName, true);
                     Directory.CreateDirectory(Application.persistentDataPath + "/saves/" + worldName);
                     if (selectedOption == 0)
-                        GameObject.Find("Canvas").GetComponent<LoadingScreen>().NewGame(worldName);
+                        GameObject.Find("Canvas").GetComponent<LoadingScreen>().StartNewGame(worldName);
                     else
-                        GameObject.Find("Canvas").GetComponent<LoadingScreen>().NewGame(worldName, gameObject.GetComponent<MapGeneration>().Seed);
+                        GameObject.Find("Canvas").GetComponent<LoadingScreen>().StartNewGame(worldName, gameObject.GetComponent<MapGeneration>().Seed);
                 }
                 else
                 {

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine.UIElements;
 
 namespace AbstractControls
@@ -44,11 +43,11 @@ namespace AbstractControls
             }
         }
 
-		/// <summary>
-		/// Sets <see cref="IsSelected"/> to true, styles the button and sends an event to the button group.
-		/// </summary>
-		/// <param name="UpdateGroup">Should the parent group be updated.</param>
-		public void SelectWithoutTransition(bool UpdateGroup)
+        /// <summary>
+        /// Sets <see cref="IsSelected"/> to true, styles the button and sends an event to the button group.
+        /// </summary>
+        /// <param name="UpdateGroup">Should the parent group be updated.</param>
+        public void SelectWithoutTransition(bool UpdateGroup)
         {
             SelectChange(UpdateGroup);
             ToolkitUtils.ChangeClassWithoutTransition(styleClass, styleClass + "-selected", this);
@@ -62,22 +61,22 @@ namespace AbstractControls
 
                 VisualElement el = this;
                 if (inGroup)
-				{
-					do
-					{
-						el = el.parent;
-					} while (el.parent != null && el is not CustomRadioButtonGroup);
-					((CustomRadioButtonGroup)el).Select(value);
-				}
+                {
+                    do
+                    {
+                        el = el.parent;
+                    } while (el.parent != null && el is not CustomRadioButtonGroup);
+                    ((CustomRadioButtonGroup)el).Select(value);
+                }
                 else
-				{
-					do
-					{
-						el = el.parent;
-					} while (el.parent != null && el is not CustomRadioButtonList);
-					((CustomRadioButtonList)el).Select(this);
+                {
+                    do
+                    {
+                        el = el.parent;
+                    } while (el.parent != null && el is not CustomRadioButtonList);
+                    ((CustomRadioButtonList)el).Select(this);
 
-				}
+                }
             }
             return true;
         }

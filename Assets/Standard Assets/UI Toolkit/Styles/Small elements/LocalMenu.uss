@@ -67,4 +67,6 @@
     transition-duration: 0.3s;
     transition-property: opacity;
     opacity: 1;
+    transition-delay: 0s;
+    display: flex;
 }

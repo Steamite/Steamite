@@ -14,7 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Population
   m_GUID: 1b2a071d731a43443aa1795bb2533ec6
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: e07bc6bb40d70d14087632cefb5f45e7
+    m_Address: House
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: be3c5711981cd504e9b3bc254a09f527, type: 2}
   m_SchemaSet:

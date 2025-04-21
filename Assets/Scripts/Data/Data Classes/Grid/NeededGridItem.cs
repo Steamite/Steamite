@@ -24,7 +24,7 @@ public class NeededGridItem
     [SerializeField] public GridPos pos;
     /// <summary>Tile type.</summary>
     [SerializeField] public GridItemType itemType;
-    
+
     public NeededGridItem(GridPos _pos, GridItemType _itemType)
     {
         pos = _pos;

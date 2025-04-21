@@ -615,6 +615,8 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 20
+  categoryID: 1
+  wrapperID: 1197943099
   assignLimit: 1
 --- !u!210 &9080560569971430985
 SortingGroup:

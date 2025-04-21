@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 /// <summary>Class generating new maps.</summary>
 public class MapGen : MonoBehaviour
@@ -21,7 +20,7 @@ public class MapGen : MonoBehaviour
     [Header("NEG SPIRAL")][SerializeField] int minToRemove = 2;
     /// <summary>Maximal to remove chance.</summary>
     [SerializeField] int maxToRemove = 25;
-    
+
     /// <summary>Minimal to add chance.</summary>
     [Header("POS SPIRAL")][SerializeField] int minToAdd = 1;
     /// <summary>Maximal to add chance.</summary>
@@ -77,7 +76,7 @@ public class MapGen : MonoBehaviour
                 for (int y = 0; y < gridSize; y++)
                 {
                     if (map[x, y] != null)
-                        SceneRefs.objectFactory.CreateRock(new(x, level, y), map[x,y].color, map[x, y].resource, map[x, y].hardness, map[x, y].name);
+                        SceneRefs.objectFactory.CreateRock(new(x, level, y), map[x, y].color, map[x, y].resource, map[x, y].hardness, map[x, y].name);
                     else
                     {
                         SceneRefs.objectFactory.CreateRoad(new(x, level, y), true);
@@ -267,13 +266,13 @@ public class MapGen : MonoBehaviour
                         continue;
                 }
                 float f = CalculateRockIntegrity(
-                    level, 
+                    level,
                     Mathf.PerlinNoise(randomX + x / (float)gridSize, randomY + y / (float)gridSize));
-                
+
                 map[x, y].hardness += Mathf.RoundToInt(f);
-                
+
                 if (changeColor)
-                    map[x, y].color = new(dirt.color.r / f *2, dirt.color.g / f*2, dirt.color.b / f*2, 1);
+                    map[x, y].color = new(dirt.color.r / f * 2, dirt.color.g / f * 2, dirt.color.b / f * 2, 1);
             }
         }
     }

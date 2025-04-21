@@ -1,21 +1,21 @@
-using UnityEngine;
-using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Linq;
-using System;
-using System.Collections;
+using Newtonsoft.Json;
+using UnityEngine;
 
 /// <summary>Unities Saving.</summary>
-public class SaveController : MonoBehaviour
+public class SaveController : MonoBehaviour, IAfterLoad
 {
     /// <summary>Action trigger after a succesful saving(to update ui).</summary>
     Action saveUIAction;
     /// <summary>Name of the world.</summary>
     string worldName;
+
     #region Init
-    private void Start()
+    public void Init()
     {
-        SceneRefs.tick.SubscribeToEvent(() => SaveGame("", true),Tick.TimeEventType.Day);
+        SceneRefs.tick.SubscribeToEvent(() => SaveGame("", true), Tick.TimeEventType.Day);
         UIRefs.pauseMenu.Init((s) => SaveGame(s, false), ref saveUIAction);
         worldName = MyGrid.worldName;
     }
@@ -54,7 +54,7 @@ public class SaveController : MonoBehaviour
                 break;
             s += path[i];
         }
-        return string.Join("",s.Reverse().ToArray());
+        return string.Join("", s.Reverse().ToArray());
     }
 
     /// <summary>
@@ -90,7 +90,7 @@ public class SaveController : MonoBehaviour
     /// </summary>
     /// <param name="saveName">Name of the new save.</param>
     /// <param name="autoSave">Is it an auto save.</param>
-    void Save(string saveName, bool autoSave) 
+    void Save(string saveName, bool autoSave)
     {
         string tmpPath = $"{Application.persistentDataPath}/saves/_tmp";
         Directory.CreateDirectory($"{tmpPath}");
@@ -98,11 +98,36 @@ public class SaveController : MonoBehaviour
         JsonWriter jsonWriter = null;
         try
         {
-            SaveGrid(tmpPath, jsonSerializer);
-            SaveHumans(tmpPath, jsonSerializer);
-            SaveGameState(tmpPath, autoSave, jsonSerializer);
-            SaveResearch(tmpPath, jsonSerializer);
-            SaveTrade(tmpPath, jsonSerializer);
+            WriteSave(
+                $"{tmpPath}/Grid.json",
+                jsonSerializer,
+                new BuildsAndChunksSave(SaveBuildings(), SaveChunks()));
+
+            for (int i = 0; i < 5; i++)
+                WriteSave(
+                    $"{tmpPath}/Level{i}.json",
+                    jsonSerializer,
+                    MyGrid.Save(i));
+
+            WriteSave(
+                $"{tmpPath}/Humans.json",
+                jsonSerializer,
+                SceneRefs.humans.SaveHumans());
+
+            WriteSave(
+               $"{tmpPath}/Game State.json",
+               jsonSerializer,
+               SaveGameState(autoSave));
+
+            WriteSave(
+               $"{tmpPath}/Research.json",
+               jsonSerializer,
+               new ResearchSave(UIRefs.research));
+
+            WriteSave(
+               $"{tmpPath}/Trade.json",
+               jsonSerializer,
+               new TradeSave(UIRefs.trading));
 
             if (autoSave)
                 saveName = "autosave";
@@ -112,7 +137,7 @@ public class SaveController : MonoBehaviour
         {
             SceneRefs.ShowMessage("An error ocured when saving.");
             Debug.LogError("Saving error: " + e);
-            if(jsonWriter.WriteState == 0)
+            if (jsonWriter.WriteState == 0)
             {
                 jsonWriter.Close();
             }
@@ -156,26 +181,10 @@ public class SaveController : MonoBehaviour
 
 
     #region Save Parts
-    //-------Grid-------\\
-    void SaveGrid(string path, JsonSerializer jsonSerializer)
-    {
-        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Grid.json"));
-        BuildsAndChunksSave buildsAndChunksSave 
-            = new(SaveBuildings(), SaveChunks());
-        
-        jsonSerializer.Serialize(jsonTextWriter, buildsAndChunksSave);
-        jsonTextWriter.Close();
-        for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
-        {
-            jsonTextWriter = new(new StreamWriter($"{path}/Level{i}.json"));
-            jsonSerializer.Serialize(jsonTextWriter, MyGrid.Save(i));
-            jsonTextWriter.Close();
-        }
-    }
     BSave[] SaveBuildings()
     {
         BSave[] bSaves = new BSave[MyGrid.buildings.Count];
-        for(int i = 0; i < MyGrid.buildings.Count; i++)
+        for (int i = 0; i < MyGrid.buildings.Count; i++)
         {
             bSaves[i] = MyGrid.buildings[i].Save() as BSave;
         }
@@ -202,60 +211,19 @@ public class SaveController : MonoBehaviour
         return chunkSave;
     }
     //------Game State------\\
-    void SaveGameState(string path, bool autoSave, JsonSerializer jsonSerializer)
+    GameStateSave SaveGameState(bool autoSave)
     {
         GameStateSave gameState = new();
         gameState.priorities = SceneRefs.jobQueue.priority;
         SceneRefs.tick.Save(gameState);
         gameState.autoSave = autoSave;
-
-        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/PlayerSettings.json"));
-        jsonSerializer.Serialize(jsonTextWriter, gameState);
-        jsonTextWriter.Close();
+        return gameState;
     }
 
-    //------Humans------\\
-    void SaveHumans(string path, JsonSerializer jsonSerializer)
+    void WriteSave(string path, JsonSerializer jsonSerializer, object data)
     {
-        HumanSave[] humanSave = SceneRefs.humans.SaveHumans();
-        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Humans.json"));
-        jsonSerializer.Serialize(jsonTextWriter, humanSave);
-        jsonTextWriter.Close();
-    }
-    
-    //------Research------\\
-    void SaveResearch(string path, JsonSerializer jsonSerializer)
-    {
-        // takes nodes from all research buttons
-        Research research = UIRefs.research;
-		/*Transform categsTransform = research.categoriesTran;
-        ResearchSave categsData = new(categsTransform.childCount);
-        for (int i = 0; i < categsTransform.childCount; i++)
-        {
-            Transform categTransform = categsTransform.GetChild(i);
-            categsData.categories[i] = new(categTransform.name);
-            for (int j = 1; j < categTransform.childCount; j++)
-            {
-                Transform levelTransform = categTransform.GetChild(j);
-                for (int k = 0; k < levelTransform.childCount; k++)
-                {
-                    categsData.categories[i].nodes.Add(levelTransform.GetChild(k).GetComponent<ResearchUIButton>().node);
-                }
-            }
-        }
-        if (research.GetComponent<Research>().currentResearch)
-            categsData.currentResearch = research.GetComponent<Research>().currentResearch.node.id
-        //write saves
-        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Research.json"));
-        jsonSerializer.Serialize(jsonTextWriter, categsData);
-        jsonTextWriter.Close();;*/
-	}
-
-	//------Trade------\\
-	void SaveTrade(string path, JsonSerializer jsonSerializer)
-    {
-        JsonTextWriter jsonTextWriter = new(new StreamWriter($"{path}/Trade.json"));
-        jsonSerializer.Serialize(jsonTextWriter, new TradeSave(UIRefs.trading));
+        JsonTextWriter jsonTextWriter = new(new StreamWriter(path));
+        jsonSerializer.Serialize(jsonTextWriter, data);
         jsonTextWriter.Close();
     }
     #endregion

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
-
-public class Water : ClickableObject
+﻿public class Water : ClickableObject
 {
     public readonly int quality = 50;
     public int ammount = 50;

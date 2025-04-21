@@ -1,11 +1,9 @@
-using RadioGroups;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace AbstractControls
-{    
+{
     [UxmlElement]
     public partial class CustomRadioButtonList : ListView, IBindable
     {
@@ -63,7 +61,7 @@ namespace AbstractControls
         protected void RemoveItem(CustomRadioButton item)
         {
             _itemsSource.Remove(item);
-            if(item == _selectedButton)
+            if (item == _selectedButton)
             {
                 _selectedButton?.Deselect();
                 _selectedButton = null;
@@ -118,7 +116,7 @@ namespace AbstractControls
 
         public virtual void Select(CustomRadioButton customRadioButton)
         {
-            if(_selectedButton != customRadioButton)
+            if (_selectedButton != customRadioButton)
                 _selectedButton?.Deselect();
             _selectedButton = customRadioButton;
             SelectedId = _selectedButton.value;

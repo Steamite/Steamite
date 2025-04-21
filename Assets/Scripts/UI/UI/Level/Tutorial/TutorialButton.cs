@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,7 +13,7 @@ public class TutorialButton : MonoBehaviour
         char[] bodyWithLines = body.ToCharArray();
         char lastChar = ' ';
         char currentChar = ' ';
-        while(i < bodyWithLines.Length-1)
+        while (i < bodyWithLines.Length - 1)
         {
             lastChar = currentChar;
             currentChar = bodyWithLines[i];
@@ -46,7 +44,7 @@ public class TutorialButton : MonoBehaviour
         tutorialMenu.lastButton.interactable = false;
         tutorialMenu.gameObject.SetActive(true);
     }
-    public void CloseTutorialWindow(TutorialMenu tutorialMenu) 
+    public void CloseTutorialWindow(TutorialMenu tutorialMenu)
     {
         tutorialMenu.lastButton.interactable = true;
         tutorialMenu.lastButton = null;

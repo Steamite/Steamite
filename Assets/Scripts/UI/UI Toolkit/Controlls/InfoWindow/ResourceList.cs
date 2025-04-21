@@ -47,12 +47,14 @@ namespace InfoWindowElements
     {
         #region Properties
         /// <summary>Binding link(_itemSource)</summary>
-        [CreateProperty] protected List<UIResource> resources
+        [CreateProperty]
+        protected List<UIResource> resources
         {
             get { return (List<UIResource>)itemsSource; }
             set
             {
                 itemsSource = value;
+                Rebuild();
             }
         }
 
@@ -91,7 +93,7 @@ namespace InfoWindowElements
         /// <returns>The instantiated item.</returns>
         protected virtual VisualElement MakeItem()
         {
-            Debug.Log($"Making item{name}, {itemsSource.Count}, {parent.name}/{name}");
+            //Debug.Log($"Making item{name}, {itemsSource.Count}, {parent.name}/{name}");
             VisualElement element = itemTemplate.CloneTree();
             element.ElementAt(0).ElementAt(0).style.fontSize = 40 * iconSize / ICON_SIZE;
             element.ElementAt(0).ElementAt(0).style.paddingRight = 5 * iconSize / ICON_SIZE;
@@ -121,12 +123,11 @@ namespace InfoWindowElements
         /// <returns>Created none element.</returns>
         protected virtual VisualElement MakeNoneElement()
         {
-            Label l = new Label("Nothing");
+            Label l = new Label($"Free {(itemsSource != null ? itemsSource.Count : 0)}");
             l.style.marginBottom = 0;
             l.style.marginTop = 0;
             l.style.marginLeft = 0;
             l.style.marginRight = 0;
-
 
             l.style.paddingBottom = 0;
             l.style.paddingTop = 0;

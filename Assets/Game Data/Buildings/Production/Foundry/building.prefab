@@ -630,14 +630,16 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 30
+  categoryID: 1
+  wrapperID: 1472558132
   assignLimit: 3
   productionTime: 10
   productionModifier: 1
   productionCost:
     capacity: -1
-    type: 0000000001000000
+    type: 0100000002000000
     ammount: 0200000001000000
   productionYield:
     capacity: 15
-    type: 01000000
+    type: 02000000
     ammount: 02000000

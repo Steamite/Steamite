@@ -86,8 +86,8 @@ namespace AbstractControls
             arrowTop = CreateArrow(new(true, new Length(48, LengthUnit.Percent)), new(true, new Length(25, LengthUnit.Pixel)), 270);
             arrowBottom = CreateArrow(new(true, new Length(48, LengthUnit.Percent)), new(false, new Length(25, LengthUnit.Pixel)), 90);
             #endregion
-            
-			RegisterCallback<WheelEvent>((eve) => ZoomMap(eve));
+
+            RegisterCallback<WheelEvent>((eve) => ZoomMap(eve));
             RegisterCallback<MouseMoveEvent>(
                 (eve) =>
                 {

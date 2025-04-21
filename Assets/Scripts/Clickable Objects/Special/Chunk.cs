@@ -106,7 +106,7 @@ public class Chunk : StorageObject
         base.RequestRes(request, h, mod);
         UIUpdate(nameof(LocalRes));
     }
-    
+
     /// <summary>
     /// Finds storage that can store local resources.
     /// </summary>
@@ -129,9 +129,9 @@ public class Chunk : StorageObject
     {
         UniqueID();
         localRes.stored = res;
-        if(updateGlobalResource)
+        if (updateGlobalResource)
             MyRes.UpdateResource(localRes.stored, 1);
-		objectName = objectName.Replace("(Clone)", " ");
+        objectName = objectName.Replace("(Clone)", " ");
         MyGrid.chunks.Add(this);
     }
 }

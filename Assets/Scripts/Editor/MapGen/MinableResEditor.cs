@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEditor;
 
 /// <summary>Enforces all parameters to have the same length.</summary>
@@ -48,7 +47,7 @@ public class MinableResEditor : Editor
         }
         else
         {
-            for(int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 EnforceMinMax(veinParameter[i]);
             }
@@ -80,7 +79,7 @@ public class MinableResEditor : Editor
         veinParameter.min = EnforceListLength(veinParameter.min);
         veinParameter.max = EnforceListLength(veinParameter.max);
 
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             if (veinParameter.min[i] + i + 1 > veinParameter.max[i])
             {
@@ -92,4 +91,3 @@ public class MinableResEditor : Editor
 
     #endregion
 }
-#endif

@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using UnityEngine;
 
@@ -18,7 +17,7 @@ public class ClickableObjectFactory : MonoBehaviour
     #endregion
 
     #region Prefabs
-    public ResourceHolder buildPrefabs;
+    public BuildingData buildPrefabs;
     public ResourceHolder tilePrefabs;
     public ResourceHolder specialPrefabs;
     #endregion
@@ -53,9 +52,9 @@ public class ClickableObjectFactory : MonoBehaviour
     public void CreateRock(GridPos gp, Color color, Resource resource, int hardness, string _name)
     {
         Rock r = Instantiate(
-            tilePrefabs.GetPrefab("Dirt"), 
-            gp.ToVec(ROCK_OFFSET), 
-            Quaternion.identity, 
+            tilePrefabs.GetPrefab("Dirt"),
+            gp.ToVec(ROCK_OFFSET),
+            Quaternion.identity,
             MyGrid.FindLevelRocks(gp.y)).GetComponent<Rock>();
         r.GetComponent<Renderer>().material.color = color;
         r.rockYield = resource;
@@ -77,9 +76,9 @@ public class ClickableObjectFactory : MonoBehaviour
     public Elevator CreateElevator(GridPos gp, bool isMain = false)
     {
         Elevator el = Instantiate(
-            buildPrefabs.GetPrefab("Elevator"), 
-            gp.ToVec(BUILD_OFFSET), 
-            Quaternion.identity, 
+            buildPrefabs.GetBuilding("Elevator"),
+            gp.ToVec(BUILD_OFFSET),
+            Quaternion.identity,
             MyGrid.FindLevelBuildings(gp.y)).GetComponent<Elevator>();
         el.constructed = true;
         if (isMain)
@@ -100,23 +99,23 @@ public class ClickableObjectFactory : MonoBehaviour
     /// <returns></returns>
     public Chunk CreateAChunk(GridPos gp, Resource resources, bool updateGlobalResource)
     {
-        if(resources.ammount.Sum() > 0)
+        if (resources.ammount.Sum() > 0)
         {
             Building building = MyGrid.GetGridItem(gp) as Building;
             if (building)
                 gp = PathFinder.BuildingStep(gp, building.gameObject, -1);
 
             Chunk chunk = Instantiate(
-                specialPrefabs.GetPrefab("Chunk"), 
-                gp.ToVec(CHUNK_OFFSET), 
-                Quaternion.identity, 
+                specialPrefabs.GetPrefab("Chunk"),
+                gp.ToVec(CHUNK_OFFSET),
+                Quaternion.identity,
                 MyGrid.FindLevelChunks(gp.y)).GetComponent<Chunk>();
             chunk.Init(resources, updateGlobalResource);
             return chunk;
         }
         return null;
     }
-    
+
     /// <summary>
     /// Creates a Human, assigns a unique ID and hat color.
     /// </summary>
@@ -127,9 +126,9 @@ public class ClickableObjectFactory : MonoBehaviour
     public Human CreateAHuman(GridPos gp, Material material, int i)
     {
         Human h = (Human)Instantiate(
-            specialPrefabs.GetPrefab("Human"), 
-            gp.ToVec(HUMAN_OFFSET), 
-            Quaternion.identity, 
+            specialPrefabs.GetPrefab("Human"),
+            gp.ToVec(HUMAN_OFFSET),
+            Quaternion.identity,
             SceneRefs.humans.transform.GetChild(0).transform);
         h.UniqueID();
         // color for debug
@@ -143,10 +142,9 @@ public class ClickableObjectFactory : MonoBehaviour
     /// <summary>Loads a building.</summary>
     public Building CreateSavedBuilding(BSave save)
     {
-        Building _pref = buildPrefabs.GetPrefab(save.prefabName) as Building; // find the prefab
-
         GridPos rotate = MyGrid.Rotate(save.blueprint.moveBy, transform.rotation.eulerAngles.y);
-        Building b = Instantiate(_pref,
+        Building b = Instantiate(
+            buildPrefabs.GetBuilding(save.categoryID, save.wrapperID),
             new Vector3(save.gridPos.x + rotate.x, (save.gridPos.y * LEVEL_HEIGHT) + BUILD_OFFSET, save.gridPos.z + rotate.z),
             Quaternion.Euler(0, save.rotationY, 0),
             MyGrid.FindLevelBuildings(save.gridPos.y));
@@ -159,9 +157,9 @@ public class ClickableObjectFactory : MonoBehaviour
     public Rock CreateSavedRock(RockSave save, GridPos gp)
     {
         Rock rock = Instantiate(
-            tilePrefabs.GetPrefab(save.oreName), 
-            gp.ToVec(ROCK_OFFSET), 
-            Quaternion.identity, 
+            tilePrefabs.GetPrefab(save.objectName),
+            gp.ToVec(ROCK_OFFSET),
+            Quaternion.identity,
             MyGrid.FindLevelRocks(gp.y)).GetComponent<Rock>();
         rock.Load(save);
 

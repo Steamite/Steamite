@@ -1,8 +1,6 @@
-using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
@@ -101,8 +99,8 @@ public class Pipe : Building
         Transform pipePrefab;
         if ((pipePrefab = transform.GetComponentsInChildren<Transform>().FirstOrDefault(q => q.name == _case.ToString())) == null || !canNext)
         {
-            pipePrefab = Instantiate(SceneRefs.objectFactory.buildPrefabs.GetPrefab("Pipe connection"), transform).transform;
-            pipePrefab.GetComponent<MeshRenderer>().material = gameObject.GetComponent<MeshRenderer>().material;
+            pipePrefab = Instantiate(SceneRefs.objectFactory.specialPrefabs.GetPrefab("Pipe connection"), transform).transform;
+            pipePrefab.GetComponent<MeshRenderer>().sharedMaterial = gameObject.GetComponent<MeshRenderer>().sharedMaterial;
             pipePrefab.gameObject.name = _case.ToString();
         }
         pipePrefab.GetComponent<PipePart>().connectedPipe = connectedPipe;
@@ -234,7 +232,7 @@ public class Pipe : Building
     }
     public virtual void PlacePipe()
     {
-        if(id == -1)
+        if (id == -1)
             UniqueID();
         GridPos pos = new(transform.position);
         MyGrid.SetGridItem(pos, this, true);
@@ -245,7 +243,7 @@ public class Pipe : Building
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         // if constructed or ordered to be deconstructed save all data
-        if(!constructed || deconstructing)
+        if (!constructed || deconstructing)
         {
             if (clickable == null)
                 clickable = new PipeBSave();
@@ -264,7 +262,7 @@ public class Pipe : Building
     }
     public override void Load(ClickableObjectSave save)
     {
-        if(save is PipeBSave)
+        if (save is PipeBSave)
         {
             network.networkID = (save as PipeBSave).networkID;
             base.Load(save);

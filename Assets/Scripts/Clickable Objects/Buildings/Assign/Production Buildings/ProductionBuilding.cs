@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
-using UnityEngine.UIElements;
 using Unity.Properties;
+using UnityEngine;
 
 /// <summary>Adds Production Handling.</summary>
 public class ProductionBuilding : Building, IAssign, IResourceProduction
@@ -12,7 +10,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     [SerializeField] int assignLimit;
     [SerializeField][Header("Production")] float productionTime;
     [SerializeField] int productionModifier = 1;
-    
+
     [SerializeField] Resource productionCost;
     [SerializeField] Resource productionYield;
     #endregion
@@ -67,8 +65,8 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
-            clickable = new ProductionBSave();
-        (clickable as ProductionBSave).inputRes = new(InputResource);
+            clickable = new ResProductionBSave();
+        (clickable as ResProductionBSave).inputRes = new(InputResource);
         (clickable as ProductionBSave).prodTime = ProdTime;
         (clickable as ProductionBSave).currentTime = CurrentTime;
         (clickable as ProductionBSave).modifier = Modifier;
@@ -78,7 +76,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-        InputResource = new((save as ProductionBSave).inputRes);
+        InputResource = new((save as ResProductionBSave).inputRes);
 
         ProdTime = (save as ProductionBSave).prodTime;
         CurrentTime = (save as ProductionBSave).currentTime;
@@ -164,13 +162,13 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
                 foreach (Human h in Assigned)
                 {
                     h.workplace = null;
-                    if(h != human)
+                    if (h != human)
                         HumanActions.LookForNew(h);
                     StopAllCoroutines();
                 }
                 if (human)
                 {
-                    JobData data = PathFinder.FindPath(new() {this}, human);
+                    JobData data = PathFinder.FindPath(new() { this }, human);
                     data.job = JobState.Deconstructing;
                     human.SetJob(data);
                     human.ChangeAction(HumanActions.Demolish);
@@ -178,7 +176,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
             }
             else // has just been canceled
             {
-                foreach(Human h in Assigned)
+                foreach (Human h in Assigned)
                 {
 
                 }
@@ -196,7 +194,8 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     {
         SceneRefs.jobQueue.CancelJob(JobState.Supply, this);
         Chunk c = base.Deconstruct(instantPos);
-        if(InputResource.stored.ammount.Sum() > 0){
+        if (InputResource.stored.ammount.Sum() > 0)
+        {
             if (!c)
             {
                 c = SceneRefs.objectFactory.CreateAChunk(instantPos, InputResource.stored, true);
@@ -243,10 +242,12 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     #endregion
 
     #region Assign
-    public void ManageAssigned(Human human, bool add)
+    public bool ManageAssigned(Human human, bool add)
     {
         if (add)
         {
+            if (Assigned.Count == assignLimit)
+                return false;
             JobData job = PathFinder.FindPath(
                 new List<ClickableObject>() { this },
                 human);
@@ -264,11 +265,12 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
                     human.SetJob(JobState.FullTime, job.interest);
                 human.ChangeAction(HumanActions.Move);
                 human.lookingForAJob = false;
+
             }
             else
             {
                 Debug.LogError("cant find way here");
-                return;
+                return false;
             }
         }
         else
@@ -280,6 +282,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
             human.Idle();
         }
         UIUpdate(nameof(Assigned));
+        return true;
     }
 
     /// <summary>

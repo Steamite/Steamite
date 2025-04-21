@@ -1,24 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Research
 {
     [UxmlElement]
-    partial class ResearchLine : VisualElement
+    public partial class ResearchLine : VisualElement
     {
+        public const string FILLED_LINE_CLASS = "line-filled";
         public ResearchLine() { }
         public ResearchLine(Rect rect)
-		{
-			AddToClassList("line");
+        {
+            AddToClassList("line");
             style.left = rect.x;
             style.top = rect.y;
-			style.width = rect.width;
+            style.width = rect.width;
             style.height = rect.height;
+        }
+
+
+        public virtual void Fill()
+        {
+            RemoveFromClassList("line");
+            AddToClassList(FILLED_LINE_CLASS);
         }
     }
 }

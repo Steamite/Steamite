@@ -13,19 +13,20 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
     InputActionMap smallShortcuts => inputAsset.actionMaps[2];
     InputAction gameSpeed;
     InputAction level;
-    
-	public void Init(VisualElement bottomBar)
-	{
-		shift = inputAsset.actionMaps[1].FindAction("Shift");
 
-		gameSpeed = smallShortcuts.FindAction("Game Speed");
-		level = smallShortcuts.FindAction("Level");
+    public void Init(VisualElement bottomBar)
+    {
+        shift = inputAsset.actionMaps[1].FindAction("Shift");
 
-		timeButtons = bottomBar.Q<TimeButtons>();
+        gameSpeed = smallShortcuts.FindAction("Game Speed");
+        level = smallShortcuts.FindAction("Level");
+
+        timeButtons = bottomBar.Q<TimeButtons>();
         timeButtons.Start();
-	}
+        enabled = true;
+    }
 
-	private void OnEnable()
+    private void OnEnable()
     {
         smallShortcuts.Enable();
     }
@@ -37,22 +38,22 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
     private void Update()
     {
         if (MainShortcuts.handleGrid)
-		{
-			if (shift.inProgress)
-			{
-				if (level.triggered)
-				{
-					//levelButtons.OutsideTrigger(Mathf.RoundToInt(level.ReadValue<float>()));
-				}
-			}
-			else
-			{
-				if (gameSpeed.triggered)
-				{
-					timeButtons.OutsideTrigger(Mathf.RoundToInt(gameSpeed.ReadValue<float>()));
-				}
-			}
-		}
+        {
+            if (shift.inProgress)
+            {
+                if (level.triggered)
+                {
+                    //levelButtons.OutsideTrigger(Mathf.RoundToInt(level.ReadValue<float>()));
+                }
+            }
+            else
+            {
+                if (gameSpeed.triggered)
+                {
+                    timeButtons.OutsideTrigger(Mathf.RoundToInt(gameSpeed.ReadValue<float>()));
+                }
+            }
+        }
     }
 
 }

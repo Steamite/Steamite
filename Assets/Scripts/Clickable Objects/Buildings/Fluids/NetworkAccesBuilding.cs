@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 [Serializable]
 public class NetworkAccesBuilding
@@ -148,9 +147,9 @@ public class NetworkAccesBuilding
 
     internal void Load(Transform transform, List<ClickableObjectSave> pipeSaves)
     {
-        for(int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).GetComponent<BuildPipe>().Load(pipeSaves[i]); 
+            transform.GetChild(i).GetComponent<BuildPipe>().Load(pipeSaves[i]);
         }
     }
 }

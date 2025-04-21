@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,7 +16,7 @@ public static class ToolkitUtils
     /// <param name="element">Element that needs to change.</param>
     public static void ChangeClassWithoutTransition(string oldClass, string newClass, VisualElement element)
     {
-        if(oldClass != "" && newClass != "" && element != null)
+        if (oldClass != "" && newClass != "" && element != null)
         {
             element.style.transitionDuration = new List<TimeValue> { new TimeValue(0, TimeUnit.Second) };
             element.RemoveFromClassList(oldClass);

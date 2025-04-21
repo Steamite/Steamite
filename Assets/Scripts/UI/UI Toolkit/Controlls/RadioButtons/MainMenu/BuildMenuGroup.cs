@@ -1,6 +1,5 @@
-using AbstractControls;
 using System.Collections.Generic;
-using UnityEngine;
+using AbstractControls;
 using UnityEngine.UIElements;
 
 public class BuildMenuGroup : CustomRadioButtonList
@@ -9,6 +8,6 @@ public class BuildMenuGroup : CustomRadioButtonList
     protected override void DefaultBindItem(VisualElement element, int index)
     {
         base.DefaultBindItem(element, index);
-       // ((Button)element).iconImage = 
+        // ((Button)element).iconImage = 
     }
 }

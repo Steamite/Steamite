@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Properties;
 using UnityEngine;
@@ -19,7 +18,7 @@ namespace InfoWindowElements
         #region Variables
         float maxValue;
         protected float m_value = float.NaN;
-        
+
 
         #region Attributes
         [UxmlAttribute]
@@ -63,7 +62,7 @@ namespace InfoWindowElements
 
         #endregion
 
-        
+
         public FillDirection fillDirection { get; set; }
         private float m_overlayImageScale;
 
@@ -108,7 +107,7 @@ namespace InfoWindowElements
             overlayImage = new VisualElement() { name = "overlay-image" };
 
             style.height = new(new Length(100, LengthUnit.Percent));
-            style.width = new(new Length(100, LengthUnit.Percent)); 
+            style.width = new(new Length(100, LengthUnit.Percent));
             style.justifyContent = Justify.FlexEnd;
             style.alignSelf = Align.Stretch;
             style.flexGrow = 1;
@@ -127,13 +126,13 @@ namespace InfoWindowElements
 
             overlayImage.style.scale = new Scale(new Vector2(overlayImageScale, overlayImageScale));
             overlayImage.style.backgroundImage = null;
-            overlayImage.transform.rotation = Quaternion.Euler(0, 0, -angleOffset);      
+            overlayImage.transform.rotation = Quaternion.Euler(0, 0, -angleOffset);
 
             value = 0.5f;
             fillColor = new(1, 1, 1, 1);
         }
         #endregion
-        
+
         /// <inheritdoc/>
         public void Open(object data)
         {

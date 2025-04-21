@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
@@ -14,19 +13,19 @@ public abstract class ClickableObject : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler,
     IPointerDownHandler, IPointerUpHandler, IUpdatable
 {
-	[HideInInspector]
+    [HideInInspector]
     [Obsolete("Use objectName not name", true)]
-	public new string name;
+    public new string name;
 
-	/// <summary>Bind event for updating.</summary>
-	[HideInInspector]
+    /// <summary>Bind event for updating.</summary>
+    [HideInInspector]
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
     /// <summary>Object is beeing currently inspected.</summary>
     public bool selected = false;
     /// <summary>ID is a unique identifier for each group of objects.</summary>
     public int id = -1;
-    
+
     public string objectName;
 
     #region Object Operations
@@ -128,7 +127,7 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <param name="eventData">Mouse data</param>
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-        print(gameObject.name + $", {transform.position.x}, {transform.position.z}");
+        //print(gameObject.name + $", {transform.position.x}, {transform.position.z}");
         if (eventData.button == PointerEventData.InputButton.Left)
             SceneRefs.gridTiles.Up();
         else
@@ -179,7 +178,7 @@ public abstract class ClickableObject : MonoBehaviour,
         clickable.id = id;
         clickable.objectName = objectName;
 
-		return clickable;
+        return clickable;
     }
     /// <summary>
     /// Recursively calls down and loads data.
@@ -188,7 +187,7 @@ public abstract class ClickableObject : MonoBehaviour,
     public virtual void Load(ClickableObjectSave save)
     {
         id = save.id;
-		objectName = save.objectName;
-	}
+        objectName = save.objectName;
+    }
     #endregion Saving
 }

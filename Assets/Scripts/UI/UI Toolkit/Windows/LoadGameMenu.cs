@@ -1,9 +1,8 @@
-using Newtonsoft.Json;
-using RadioGroups;
-using StartMenu;
 using System;
 using System.IO;
 using System.Linq;
+using RadioGroups;
+using StartMenu;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -105,7 +104,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
         loadMenuButton.RegisterCallback<ClickEvent>(OpenWindow);
 
         menu.Q<Button>("Save-Close-Button").RegisterCallback<ClickEvent>(CloseWindow);
-        
+
         UpdateGrids();
         ToggleStyleButton(loadMenuButton, worlds != null && worlds.Length > 0);
     }
@@ -121,7 +120,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
     }
     public void OpenWindow(ClickEvent _ = null)
     {
-        if(isMainMenu)
+        if (isMainMenu)
             worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", true, true);
         if (worlds != null && worlds.Length > 0)
         {
@@ -145,7 +144,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
             ToggleStyleButton(loadMenuButton, false);
         }
     }
-    public void CloseWindow(ClickEvent _ = null) 
+    public void CloseWindow(ClickEvent _ = null)
     {
         if (isMainMenu)
             gameObject.GetComponent<MyMainMenu>().CloseWindow();
@@ -206,7 +205,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
     #region Loading Logic
     void Continue(ClickEvent _)
     {
-        if(worlds.Length > 0)
+        if (worlds.Length > 0)
         {
             selectedWorld = 0;
             saves = saveGroup.FillItemSource(worlds[selectedWorld].path, true, false);
@@ -239,7 +238,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
         {
         }
         GameObject.Find("Loading Screen").transform.GetChild(0)
-            .GetComponent<LoadingScreen>().StartLoading(saves[selectedSave].path, worlds[selectedWorld].ToString());
+            .GetComponent<LoadingScreen>().LoadGame(saves[selectedSave].path, worlds[selectedWorld].ToString());
     }
     #endregion
 
@@ -256,7 +255,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
             UpdateGrids();
             if (worlds.Length == 0)
             {
-                if(isMainMenu)
+                if (isMainMenu)
                     ToggleStyleButton(continueButton, false);
                 ToggleStyleButton(loadMenuButton, false);
                 CloseWindow();
@@ -282,7 +281,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
             else
                 DeleteWorld(selectedWorld);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Debug.LogError("Cannot delete save:\n" + ex);
         }

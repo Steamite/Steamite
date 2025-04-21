@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
-public class MainShortcuts : MonoBehaviour
+public class MainShortcuts : MonoBehaviour, IAfterLoad
 {
     InputActionMap bindingMap => inputAsset.actionMaps[1];
 
@@ -19,19 +18,21 @@ public class MainShortcuts : MonoBehaviour
     public static bool handleGrid = true;
     static bool handleWindows = true;
 
-	public void Awake()
-	{
+    public void Init()
+    {
         buildMenu = bindingMap.FindAction("Build Menu");
         dig = bindingMap.FindAction("Dig");
-		deconstruction = bindingMap.FindAction("Deconstruct");
-		buildRotate = bindingMap.FindAction("Build Rotate");
-		menu = bindingMap.FindAction("Menu");
-		shift = bindingMap.FindAction("Shift");
-		research = bindingMap.FindAction("Research");
-		trade = bindingMap.FindAction("Trade");
-	}
+        deconstruction = bindingMap.FindAction("Deconstruct");
+        buildRotate = bindingMap.FindAction("Build Rotate");
+        menu = bindingMap.FindAction("Menu");
+        shift = bindingMap.FindAction("Shift");
+        research = bindingMap.FindAction("Research");
+        trade = bindingMap.FindAction("Trade");
+        enabled = true;
+        EnableInput();
+    }
 
-	public static void DisableInput(bool win = true)
+    public static void DisableInput(bool win = true)
     {
         handleGrid = false;
         handleWindows = win;
@@ -111,7 +112,7 @@ public class MainShortcuts : MonoBehaviour
 
         if (shift.inProgress)
         {
-            if(gt.activeControl == ControlMode.deconstruct)
+            if (gt.activeControl == ControlMode.deconstruct)
             {
                 gt.Enter(gt.activeObject);
             }
@@ -121,7 +122,7 @@ public class MainShortcuts : MonoBehaviour
         {
             if (research.triggered)
             {
-                if(UIRefs.trading.isOpen)
+                if (UIRefs.trading.isOpen)
                     UIRefs.trading.CloseWindow();
                 UIRefs.research.ToggleWindow();
             }
@@ -130,7 +131,7 @@ public class MainShortcuts : MonoBehaviour
                 if (UIRefs.research.isOpen)
                     UIRefs.research.CloseWindow();
                 UIRefs.trading.ToggleWindow();
-			}
+            }
             /*else if(UIRefs.trading.isOpen && )
             {
                 

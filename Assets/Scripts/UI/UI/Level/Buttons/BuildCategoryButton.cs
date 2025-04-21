@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 
 public class BuildCategoryButton : MonoBehaviour
@@ -6,7 +5,7 @@ public class BuildCategoryButton : MonoBehaviour
     // selects category that is supposed to be opened
     public void ToggleCategory(int categoryIndex)
     {
-        if(categoryIndex > -1)
+        if (categoryIndex > -1)
         {
             Transform categories = transform.parent.GetChild(1);
             categories.gameObject.SetActive(true);
