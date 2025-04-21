@@ -6,7 +6,7 @@ public abstract class StorageObject : ClickableObject
 {
     /// <summary>Stored resouces, which also contain all requests.</summary>
     [SerializeField] protected StorageResource localRes = new();
-    
+
     /// <inheritdoc/>
     [CreateProperty] public StorageResource LocalRes => localRes;
     #region Saving

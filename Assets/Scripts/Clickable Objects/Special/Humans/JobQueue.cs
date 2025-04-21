@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Jobs;
 using UnityEngine;
 
 /// <summary>Handles and stores job requests.</summary>
@@ -82,9 +78,9 @@ public class JobQueue : MonoBehaviour
                 pickupNeeded.RemoveAll(q => q.id == interest.id);
                 break;
         }
-        foreach(Human h in assigned)
+        foreach (Human h in assigned)
         {
-            if(h)
+            if (h)
                 HumanActions.LookForNew(h);
         }
     }
@@ -109,7 +105,7 @@ public class JobQueue : MonoBehaviour
                 break;
             case JobState.Supply:
             case JobState.Pickup:
-                if(human.Job.interest != human.destination)
+                if (human.Job.interest != human.destination)
                     ((StorageObject)human.Job.interest).LocalRes.RemoveRequest(human);
                 if (human.destination)
                 {

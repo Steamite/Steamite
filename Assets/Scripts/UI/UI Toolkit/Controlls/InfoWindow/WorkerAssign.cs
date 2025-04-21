@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace InfoWindowViews
@@ -28,7 +27,7 @@ namespace InfoWindowViews
         [UxmlAttribute] VisualTreeAsset prefab;
 
         /// <summary>Header label.</summary>
-        Label label;
+        Label assignLabel;
         /// <summary>Tab view for managment.</summary>
         TabView view;
         #endregion
@@ -38,9 +37,9 @@ namespace InfoWindowViews
         {
             style.flexDirection = FlexDirection.Column;
 
-            label = new("Assigned 0/#");
-            label.style.alignSelf = Align.Center;
-            Add(label);
+            assignLabel = new("Assigned 0/#");
+            assignLabel.style.alignSelf = Align.Center;
+            Add(assignLabel);
 
             view = new();
             view.style.flexGrow = 1;
@@ -74,6 +73,7 @@ namespace InfoWindowViews
             var boo = tabName == FREE;
             listView.bindItem = (el, i) =>
             {
+                el.style.backgroundColor = new(StyleKeyword.None);
                 Human human = (Human)listView.itemsSource[i];
                 el.dataSource = human;
                 el.Q<Button>().clickable = new((_) => ManageHuman(((Human)listView.itemsSource[i]).id, boo));
@@ -89,7 +89,7 @@ namespace InfoWindowViews
             listView.unbindItem = (el, i) =>
             {
                 SceneRefs.infoWindow.ClearBinding(el.Q<Label>("Job"));
-                Debug.LogWarning($"Unassigned: {boo}, {el.Q<Label>("Name").text}");
+                //Debug.LogWarning($"Unassigned: {boo}, {el.Q<Label>("Name").text}");
             };
 
             Tab tab = new(tabName);
@@ -110,10 +110,10 @@ namespace InfoWindowViews
                 humans = SceneRefs.humans;
             }
 
-            label.text = $"Assigned {building.Assigned.Count}/{building.AssignLimit}";
+            assignLabel.text = $"Assigned {building.Assigned.Count}/{building.AssignLimit}";
             DataBinding binding = BindingUtil.CreateBinding(nameof(IAssign.Assigned));
             binding.sourceToUiConverters.AddConverter((ref List<Human> assig) => $"Assigned {assig.Count}/{building?.AssignLimit}");
-            SceneRefs.infoWindow.RegisterTempBinding(new(label, "text"), binding, building);
+            SceneRefs.infoWindow.RegisterTempBinding(new(assignLabel, "text"), binding, building);
 
             unassigned = building.GetUnassigned();
 
@@ -172,14 +172,15 @@ namespace InfoWindowViews
             if (add)
             {
                 Human h = unassigned.First(q => q.id == id);
-                unassigned.Remove(h);
-                building.ManageAssigned(h, true);
+                if (building.ManageAssigned(h, true))
+                    unassigned.Remove(h);
+
             }
             else
             {
                 Human h = building.Assigned.First(q => q.id == id);
-                building.ManageAssigned(h, false);
-                unassigned.Add(h);
+                if (building.ManageAssigned(h, false))
+                    unassigned.Add(h);
             }
 
             RenderItems(this.Q<ListView>(ASSIGN), building.Assigned);

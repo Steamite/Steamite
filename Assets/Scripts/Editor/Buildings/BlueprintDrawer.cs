@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
@@ -19,7 +18,8 @@ public class BlueprintDrawer : PropertyDrawer
         // Calculate rects
         var buttonReact = new Rect(position.x, position.y, position.width, position.height);
 
-        if ((Building)property.serializedObject.targetObject){
+        if ((Building)property.serializedObject.targetObject)
+        {
             // Draw fields - pass GUIContent.none to each so they are drawn without labels
             if (((Building)property.serializedObject.targetObject).blueprint.itemList == null || ((Building)property.serializedObject.targetObject).blueprint.itemList.Count == 0)
                 GUI.backgroundColor = Color.red;
@@ -33,4 +33,3 @@ public class BlueprintDrawer : PropertyDrawer
         EditorGUI.EndProperty();
     }
 }
-#endif

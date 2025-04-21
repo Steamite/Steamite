@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using TMPro;
 using Unity.Properties;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 /// <summary>
 /// Makes up most of the map, holds valuable resources. <br/>
@@ -55,7 +51,7 @@ public class Rock : ClickableObject
     #region Basic Operations
     /// <summary>Creates a list from all Rocks on the same level.</summary>
     public override void UniqueID() => CreateNewId(transform.parent.GetComponentsInChildren<Rock>().Select(q => q.id).ToList());
-    
+
     /// <inheritdoc/>
     public override GridPos GetPos()
     {
@@ -86,7 +82,7 @@ public class Rock : ClickableObject
     {
         if (clickable == null)
             clickable = new RockSave();
-        if(rockYield.type.Count > 0)
+        if (rockYield.type.Count > 0)
         {
             (clickable as RockSave).res = rockYield.type[0];
             (clickable as RockSave).ammount = rockYield.ammount[0];
@@ -154,7 +150,7 @@ public class Rock : ClickableObject
             case < 6:
                 f = 0.6f;
                 break;
-            case <11:
+            case < 11:
                 f = 0.4f;
                 break;
             default:

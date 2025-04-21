@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -66,7 +65,7 @@ public static class PathFinder
                 {
                     plan.path.RemoveAt(plan.path.Count - 1);
                 }
-                else if(MyGrid.GetGridItem(_start).id != b.id && plan.foundNormaly)
+                else if (MyGrid.GetGridItem(_start).id != b.id && plan.foundNormaly)
                     plan.path.Add(BuildingStep(plan.path.Count > 0 ? plan.path[^1] : _start, b.gameObject, 1));
             }
             else
@@ -103,7 +102,7 @@ public static class PathFinder
         for (int i = 0; i < objects.Count; i++)
         {
             Building building = null;
-            try 
+            try
             {
                 building = objects[i].GetComponent<Building>();
             }
@@ -121,8 +120,8 @@ public static class PathFinder
                     entryPoints.Add(i);
                     continue;
                 }*/
-                
-                foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q=> q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q=>q.transform))//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
+
+                foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q => q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
                 {
                     coordinates.entryPoints.Add(new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z)));
                     entryPoints.Add(i);
@@ -161,7 +160,7 @@ public static class PathFinder
         }
 
         await LookForPath(_start, part, coordinates, plan, typeof(Road));
-        if(plan.index > -1)
+        if (plan.index > -1)
         {
             if (!part)
             {
@@ -223,8 +222,8 @@ public static class PathFinder
                     PathNode checkNode = new(i, prevNode);
                     ClickableObject clickable = MyGrid.GetGridItem(checkNode.pos);
                     if (clickable)
-                    { 
-                        if(Check(checkNode, searchCoords, plan, queue))
+                    {
+                        if (Check(checkNode, searchCoords, plan, queue))
                         {
                             if (CanEnter(clickable, enterObjectType))
                             {
@@ -246,7 +245,7 @@ public static class PathFinder
         }
         return Task.CompletedTask;
     }
-    
+
     #endregion Looping
 
     #region Tile Checks

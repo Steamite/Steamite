@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 /// <summary>Helps with fulfiling resource orders and make logistics more efficient.</summary>
 [Serializable]
@@ -35,7 +35,7 @@ public class StorageResource
         carrierIDs = resSave.carriers;
     }
     #endregion
-    
+
     /// <summary>
     /// Adds a request for moving resources.<br/>
     /// </summary>

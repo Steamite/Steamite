@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -28,7 +27,7 @@ public class Menu : MonoBehaviour
 
         afterSave += ((IGridMenu)loadMenu).UpdateButtonState;
         afterSave += () => ((IGridMenu)saveDialog).CloseWindow();
-    } 
+    }
 
     public bool Constrains()
     {
@@ -38,9 +37,9 @@ public class Menu : MonoBehaviour
             saveDialog.CloseWindow();
         else if (((IGridMenu)loadMenu).IsOpen())
             ((IGridMenu)loadMenu).CloseWindow();
-        /*else if (UIRefs.research.window.style.display == DisplayStyle.Flex)
-            UIRefs.research.CloseWindow();*/
-        else if (UIRefs.trading.window.style.display == DisplayStyle.Flex)
+        else if (UIRefs.research.isOpen)
+            UIRefs.research.CloseWindow();
+        else if (UIRefs.trading.isOpen)
             UIRefs.trading.CloseWindow();
         else if (SceneRefs.gridTiles.activeControl != ControlMode.nothing)
             SceneRefs.gridTiles.ChangeSelMode(ControlMode.nothing);
@@ -52,14 +51,14 @@ public class Menu : MonoBehaviour
 
     public void Toggle(ClickEvent _ = null)
     {
-        if(Constrains())
+        if (Constrains())
         {
             bool menuIsOn = menuContainer.style.display == DisplayStyle.Flex;
             if (menuIsOn)
             {
                 MainShortcuts.EnableInput();
-				SceneRefs.tick.UIWindowToggle(true);
-			}
+                SceneRefs.tick.UIWindowToggle(true);
+            }
             else
             {
                 MainShortcuts.DisableInput(false);

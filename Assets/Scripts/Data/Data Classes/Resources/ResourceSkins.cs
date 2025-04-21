@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 /// <summary>Stores data about the resource visual.</summary>
@@ -19,15 +18,15 @@ public class ResourceSkins : ScriptableObject
     [SerializeField] public ResourceSkin moneySkin;
     /// <summary>List of all skins.</summary>
     [SerializeField] public List<ResourceSkin> skins = new();
-    
+
     /// <summary>
     /// Ensures each resource type has it's own <see cref="ResourceSkin"/>.
     /// </summary>
     private void OnValidate()
     {
         string[] resNames = Enum.GetNames(typeof(ResourceType));
-        
-        while(skins.Count > resNames.Length)
+
+        while (skins.Count > resNames.Length)
         {
             skins.RemoveAt(skins.Count - 1);
         }
@@ -52,8 +51,8 @@ public class ResourceSkins : ScriptableObject
     {
         if (resourceType == null)
             return moneySkin.color;
-        else if ((ResourceType)resourceType == ResourceType.None)
-            Debug.LogError("None type!");
+        /*else if ((ResourceType)resourceType == ResourceType.None)
+            Debug.LogError("None type!");*/
         return skins[(int)(ResourceType)resourceType].color;
     }
 }

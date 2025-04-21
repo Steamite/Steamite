@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using TMPro;
 using UnityEngine;
 
 /// <summary>All available resource types.</summary>
-[Serializable]
 public enum ResourceType
 {
-#if UNITY_EDITOR
     None,
-#endif
     Coal,
     Metal,
     Stone,
@@ -88,14 +83,7 @@ public static class MyRes
     #endregion
 
     #region Resource moving
-    /// <summary>
-    /// Changes the ammount of money.
-    /// </summary>
-    /// <param name="change">Ammount to add(if negative subtracts).</param>
-    public static void UpdateMoney(int change)
-    {
-        resDisplay.Money += change;
-    }
+
 
     /// <summary>
     /// Adds or removes resources in destination.
@@ -214,7 +202,7 @@ public static class MyRes
 
     }
     #endregion
-    
+
     #region Job finding
     /// <summary>
     /// Finds the closest stockpite with needed resources, if found some, orders to move to it.
@@ -454,7 +442,7 @@ public static class MyRes
         }
         return ret;
     }
-    
+
     /// <summary>
     /// Compares values and returns the difference between <paramref name="a"/> and <paramref name="b"/>.
     /// </summary>
@@ -521,13 +509,13 @@ public static class MyRes
     /// Paying for trade or outposts, takes resources from any storage.
     /// </summary>
     /// <param name="cost">Cost to pay.</param>
-    public static void TakeFromGlobalStorage(Resource cost)
+    static void RemoveFromStorageGlobal(Resource cost)
     {
         UpdateResource(cost, -1);
         for (int i = 0; i < storage.Length; i++)
         {
             Resource diff = DiffRes(cost, storage[i].LocalResources.Future(true));
-            for(int j = cost.type.Count-1; j >= 0; j--)
+            for (int j = cost.type.Count - 1; j >= 0; j--)
             {
                 int x = diff.type.IndexOf(cost.type[j]);
                 if (x == -1)
@@ -544,6 +532,43 @@ public static class MyRes
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Changes the ammount of money.
+    /// </summary>
+    /// <param name="change">Ammount to add(if negative subtracts).</param>
+    public static void ManageMoneyGlobal(int change)
+    {
+        resDisplay.Money += change;
+    }
+
+    /// <summary>
+    /// Removes resources from storages globaly.
+    /// And pays the money cost from <paramref name="cost"/>.capacity.
+    /// </summary>
+    /// <param name="cost">Resource and money cost.</param>
+    public static void PayCostGlobal(Resource cost)
+    {
+        RemoveFromStorageGlobal(cost);
+        ManageMoneyGlobal(-cost.capacity);
+    }
+
+    /// <summary>
+    /// Removes resources from storages globaly.
+    /// And pays the money cost from <paramref name="moneyCost"/>.
+    /// </summary>
+    /// <param name="cost">Resource cost.</param>
+    /// <param name="moneyCost">Money cost - needs to be positive.</param>
+    public static void PayCostGlobal(Resource cost, int moneyCost)
+    {
+        RemoveFromStorageGlobal(cost);
+        if (moneyCost < 0)
+        {
+            Debug.LogError("carefull the cost is negative, converting to positive");
+            moneyCost = -moneyCost;
+        }
+        ManageMoneyGlobal(-moneyCost);
     }
     #endregion
 }

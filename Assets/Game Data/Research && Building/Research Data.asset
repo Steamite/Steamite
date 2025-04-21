@@ -15,11 +15,11 @@ MonoBehaviour:
   Categories:
   - Name: Population
     Objects:
-    - name: node 0
+    - nodeName: 
       id: 1616741493
       level: 0
       researched: 0
-      currentTime: 0
+      currentTime: -1
       researchTime: 100
       reseachCost:
         capacity: -1
@@ -32,47 +32,47 @@ MonoBehaviour:
       unlocks: 
       description: 
       lineColor: {r: 0, g: 0, b: 0, a: 0}
-    - name: CONNECTOR
+    - nodeName: Research
       id: 178465213
       level: 0
       researched: 0
-      currentTime: 0
-      researchTime: 100
+      currentTime: -1
+      researchTime: 10
       reseachCost:
         capacity: 50
-        type: 04000000
+        type: 03000000
         ammount: 02000000
       nodeType: 2
-      nodeCategory: 0
-      nodeAssignee: 1472558132
+      nodeCategory: 1
+      nodeAssignee: 1197943099
       unlockedBy: 
       unlocks: e006623a
       description: 'Random description
 
         Lorem Ipsum Dolor et itsu'
       lineColor: {r: 0, g: 0, b: 0, a: 0}
-    - name: asd
+    - nodeName: House
       id: 651504100
       level: 0
       researched: 0
-      currentTime: 0
-      researchTime: 999
+      currentTime: -1
+      researchTime: 15
       reseachCost:
         capacity: 10
-        type: 03000000
+        type: 04000000
         ammount: 32000000
       nodeType: 2
       nodeCategory: 2
-      nodeAssignee: 1122905122
+      nodeAssignee: 1580670160
       unlockedBy: 
       unlocks: e006623a
       description: 
       lineColor: {r: 0, g: 0, b: 0, a: 0}
-    - name: Left
+    - nodeName: 
       id: 1724255617
       level: 1
       researched: 0
-      currentTime: 0
+      currentTime: -1
       researchTime: 200
       reseachCost:
         capacity: -1
@@ -85,11 +85,11 @@ MonoBehaviour:
       unlocks: 
       description: 
       lineColor: {r: 0.9686275, g: 0.9215687, b: 0.5529412, a: 0.50980395}
-    - name: Right
+    - nodeName: 
       id: 442275305
       level: 1
       researched: 0
-      currentTime: 0
+      currentTime: -1
       researchTime: 200
       reseachCost:
         capacity: -1
@@ -102,19 +102,19 @@ MonoBehaviour:
       unlocks: 
       description: 
       lineColor: {r: 0.5372549, g: 0, b: 0, a: 0.7607843}
-    - name: node 2
+    - nodeName: Foundry
       id: 979502816
       level: 2
       researched: 0
-      currentTime: 0
-      researchTime: 300
+      currentTime: -1
+      researchTime: 12
       reseachCost:
         capacity: 75
         type: 02000000
         ammount: 0f000000
       nodeType: 2
       nodeCategory: 1
-      nodeAssignee: 1580670160
+      nodeAssignee: 1472558132
       unlockedBy: bd29a30ae429d526
       unlocks: 
       description: 
@@ -122,11 +122,11 @@ MonoBehaviour:
     Icon: {fileID: 2800000, guid: ebd657dbff7382b49ac208b65a2fc976, type: 3}
   - Name: Production
     Objects:
-    - name: node 0
+    - nodeName: 
       id: 823126285
       level: 0
       researched: 0
-      currentTime: 0
+      currentTime: -1
       researchTime: 100
       reseachCost:
         capacity: -1
@@ -139,11 +139,11 @@ MonoBehaviour:
       unlocks: 1b67a65bef39f217
       description: 
       lineColor: {r: 1, g: 0, b: 0, a: 1}
-    - name: node 1
+    - nodeName: 
       id: 1537632027
       level: 1
       researched: 0
-      currentTime: 0
+      currentTime: -1
       researchTime: 200
       reseachCost:
         capacity: -1
@@ -156,11 +156,11 @@ MonoBehaviour:
       unlocks: 
       description: 
       lineColor: {r: 1, g: 0, b: 0, a: 1}
-    - name: node 1
+    - nodeName: 
       id: 401750511
       level: 1
       researched: 0
-      currentTime: 0
+      currentTime: -1
       researchTime: 200
       reseachCost:
         capacity: -1
@@ -173,11 +173,11 @@ MonoBehaviour:
       unlocks: 
       description: 
       lineColor: {r: 0.6187502, g: 1, b: 0, a: 1}
-    - name: node 2
+    - nodeName: 
       id: 1861908460
       level: 2
       researched: 0
-      currentTime: 0
+      currentTime: -1
       researchTime: 300
       reseachCost:
         capacity: -1

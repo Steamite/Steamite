@@ -1,5 +1,4 @@
-﻿using InfoWindowElements;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using TradeData.Locations;
@@ -245,7 +244,7 @@ namespace TradeWindowElements
                 ((Label)deal.ElementAt(2)).text = $"* {selectedLocation.Sell[dealIndex].cost} = {selectedLocation.Sell[dealIndex].cost * value} £";
             return deal;
         }
-        
+
         void UpdateConfirmButton()
         {
             ((Label)ElementAt(2).ElementAt(0).ElementAt(1)).text = $"{MyRes.Money + BuyMoney + SellMoney} £";
@@ -294,7 +293,7 @@ namespace TradeWindowElements
                         SellMoney,
                         selectedLocationIndex,
                         slider.highValue),
-                    GetTradeResources(selectedLocation.Sell, 1), 
+                    GetTradeResources(selectedLocation.Sell, 1),
                     BuyMoney);
                 Open(selectedLocationIndex);
 

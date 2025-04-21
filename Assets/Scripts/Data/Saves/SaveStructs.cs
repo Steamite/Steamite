@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Properties;
 using UnityEngine;
 
 
@@ -95,7 +94,6 @@ public class RockSave : ClickableObjectSave
     public ResourceType res;
     public int ammount;
     public float integrity;
-    public string oreName;
     public bool toBeDug;
 }
 [Serializable]
@@ -124,13 +122,16 @@ public class BSave : StorageObjectSave
     ///public Build build;
     public string prefabName;
     public float rotationY;
-    
+
     public BuildingGrid blueprint;
     public Resource cost;
     public bool constructed;
     public bool deconstructing;
     public float constructionProgress;
     public int maximalProgress;
+
+    public int categoryID;
+    public int wrapperID;
 }
 
 [Serializable]
@@ -148,9 +149,13 @@ public class AssignBSave : BSave
 }
 
 [Serializable]
-public class ProductionBSave : AssignBSave
+public class ResProductionBSave : ProductionBSave
 {
     public StorageResSave inputRes;
+}
+
+public class ProductionBSave : AssignBSave
+{
     public float prodTime = 20;
     public float currentTime = 0;
     public int modifier = 1;

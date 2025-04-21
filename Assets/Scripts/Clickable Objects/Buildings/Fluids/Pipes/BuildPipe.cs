@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -33,7 +30,7 @@ public class BuildPipe : Pipe
     public override void OrderDeconstruct()
     {
         Debug.LogError("Can't deconstructed!");
-       // connectedBuilding.OrderDeconstruct();
+        // connectedBuilding.OrderDeconstruct();
     }
     public override void FinishBuild()
     {

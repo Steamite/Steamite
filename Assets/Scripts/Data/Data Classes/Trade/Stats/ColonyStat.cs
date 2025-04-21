@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace TradeData.Stats
 {
     #region Saving
-    [Serializable] 
-    public class MinMax 
-    { 
-        public int min; 
-        public int max; 
+    [Serializable]
+    public class MinMax
+    {
+        public int min;
+        public int max;
     }
 
     [Serializable]
@@ -24,8 +23,8 @@ namespace TradeData.Stats
     /// <summary>Base class that each type of state must inherit from.</summary>
     public abstract class ColonyStat : ScriptableObject
     {
-		#region Variables
-		public const int MAX_STAT_LEVEL = 5;
+        #region Variables
+        public const int MAX_STAT_LEVEL = 5;
 
         [Header("Base")]
         /// <summary>Name of the stat in display.</summary>
@@ -36,12 +35,12 @@ namespace TradeData.Stats
         public int MaxState { get; private set; }
 
         /// <summary>Resources needed for upgrading to that level.</summary>
-        [SerializeField]public List<Resource> resourceUpgradeCost = new() {};
-		#endregion
+        [SerializeField] public List<Resource> resourceUpgradeCost = new() { };
+        #endregion
 
 
-		/// <summary>Provides production based on the <see cref="CurrentState"/>.</summary>
-		public abstract void DoStat();
+        /// <summary>Provides production based on the <see cref="CurrentState"/>.</summary>
+        public abstract void DoStat();
 
         /// <summary>Summary for one stat level.</summary>
         public abstract string GetText(int state);
@@ -52,37 +51,36 @@ namespace TradeData.Stats
         /// <param name="complete">If true, returns complete summary else only number and icon</param>
         public abstract string GetText(bool complete);
 
-		/// <summary>
-		/// If the next level is affordable.
-		/// </summary>
-		/// <returns>If the next level is affordable</returns>
-		public bool CanAfford()
+        /// <summary>
+        /// If the next level is affordable.
+        /// </summary>
+        /// <returns>If the next level is affordable</returns>
+        public bool CanAfford()
         {
             if (CurrentState == MaxState)
                 return false;
 
-            return 
+            return
                 resourceUpgradeCost[CurrentState].capacity <= MyRes.Money &&
                 MyRes.CanAfford(resourceUpgradeCost[CurrentState]);
-                 
-		}
 
-		public void Upgrade()
-		{
+        }
+
+        public void Upgrade()
+        {
             Debug.Assert(CanAfford(), "Cannot Afford");
-            MyRes.TakeFromGlobalStorage(resourceUpgradeCost[CurrentState]);
-            MyRes.UpdateMoney(-resourceUpgradeCost[CurrentState].capacity);
+            MyRes.PayCostGlobal(resourceUpgradeCost[CurrentState]);
             CurrentState++;
-		}
+        }
 
         /// <summary>
         /// Used when loading a save, or creating a new game.
         /// </summary>
         /// <param name="_currentState">Loaded state.</param>
 		public void LoadState(int _currentState, int _maxState)
-		{
-			CurrentState = _currentState;
+        {
+            CurrentState = _currentState;
             MaxState = _maxState;
-		}
-	}
+        }
+    }
 }

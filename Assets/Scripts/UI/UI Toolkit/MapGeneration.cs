@@ -1,8 +1,5 @@
-using Params;
-using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Security.Cryptography;
+using Params;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -155,7 +152,7 @@ namespace StartMenu
             for (int i = 0; i < 4 && i < s.Length; i++)
             {
                 changeSeed = false;
-                parameters[i].Change(MyMath.HexToDec($"{s[i]}")%3);
+                parameters[i].Change(MyMath.HexToDec($"{s[i]}") % 3);
                 changeSeed = true;
             }
         }

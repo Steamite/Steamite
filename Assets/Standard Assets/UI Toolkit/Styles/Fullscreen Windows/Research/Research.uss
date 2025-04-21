@@ -1,102 +1,3 @@
-#Row {
-    flex-grow: 1;
-    flex-direction: row;
-    height: 200px;
-}
-
-#Row > Label {
-    width: 60px;
-    height: 100%;
-    font-size: 50px;
-    -unity-text-align: middle-center;
-    padding-right: 0;
-    padding-left: 10px;
-    border-top-width: 0;
-    border-right-width: 2px;
-    border-bottom-width: 3px;
-    border-left-width: 0;
-    border-left-color: rgb(0, 0, 0);
-    border-right-color: rgb(0, 0, 0);
-    border-top-color: rgb(0, 0, 0);
-    border-bottom-color: rgb(0, 0, 0);
-    background-color: rgb(46, 29, 14);
-}
-
-#Row > VisualElement {
-    flex-grow: 1;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.rotator {
-    background-image: url("project://database/Assets/Sprites/Textures/1filled%20cog@2x.png?fileID=2800000&guid=5a869fc421e59114e9ecac48c51af2ed&type=3#1filled cog@2x");
-    flex-grow: 1;
-    transition-duration: 0.2s;
-    width: 100%;
-    height: 100%;
-    -unity-background-image-tint-color: rgb(82, 82, 82);
-}
-
-.research-button {
-    width: 125px;
-    height: 125px;
-    background-color: rgba(0, 0, 0, 0);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-    min-width: 125px;
-    min-height: 125px;
-    max-height: 125px;
-    max-width: 125px;
-}
-
-.research-button:hover > .rotator {
-    transition-duration: 0.3s;
-    scale: 1.1 1.1;
-}
-
-.research-button:hover {
-    width: 100px;
-    height: 100px;
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-}
-
-.research-button-selected > .rotator {
-    width: 100%;
-    height: 100%;
-    scale: 1.075 1.075;
-    transition-duration: 0.2s;
-    -unity-background-image-tint-color: rgb(121, 111, 44);
-}
-
-.research-button-selected {
-    width: 125px;
-    height: 125px;
-    background-color: rgba(0, 0, 0, 0);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-}
-
-#Lines {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 60px;
-}
-
-.line {
-    position: absolute;
-    background-color: rgb(255, 0, 0);
-}
-
 .name-label {
     position: absolute;
     bottom: 10px;
@@ -123,6 +24,47 @@
     border-bottom-color: rgb(0, 0, 0);
 }
 
+.rotator {
+    background-image: url("project://database/Assets/Sprites/Textures/1filled%20cog@2x.png?fileID=2800000&guid=5a869fc421e59114e9ecac48c51af2ed&type=3#1filled cog@2x");
+    flex-grow: 1;
+    transition-duration: 0.2s;
+    width: 100%;
+    height: 100%;
+    -unity-background-image-tint-color: rgb(140, 140, 140);
+}
+
+.research-button {
+    width: 125px;
+    height: 125px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    min-width: 125px;
+    min-height: 125px;
+    max-height: 125px;
+    max-width: 125px;
+}
+
+.research-button-selected > .rotator {
+    width: 100%;
+    height: 100%;
+    scale: 1.075 1.075;
+    transition-duration: 0.2s;
+    -unity-background-image-tint-color: rgb(121, 111, 44);
+}
+
+.research-button-selected {
+    width: 125px;
+    height: 125px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
 .rotator > VisualElement {
     width: 87%;
     height: 87%;
@@ -135,4 +77,18 @@
     justify-content: center;
     top: 6.5%;
     -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.available .rotator {
+    -unity-background-image-tint-color: rgb(200, 151, 59);
+}
+
+.available:hover > .rotator {
+    transition-duration: 0.3s;
+    scale: 1.1 1.1;
+    -unity-background-image-tint-color: rgb(226, 152, 18);
+}
+
+.researched > .rotator {
+    -unity-background-image-tint-color: rgb(27, 231, 161);
 }

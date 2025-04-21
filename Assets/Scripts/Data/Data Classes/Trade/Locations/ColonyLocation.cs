@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using System;
-using UnityEngine;
-using TradeData.Stats;
+using System.Collections.Generic;
 using System.Linq;
+using TradeData.Stats;
+using UnityEngine;
 
 namespace TradeData.Locations
 {
@@ -16,8 +16,8 @@ namespace TradeData.Locations
         [HideInInspector] public List<ColonyStat> stats;
         [HideInInspector] public List<ColonyStat> production;
 
-		public void DoProduction()
-		{
+        public void DoProduction()
+        {
             foreach (ColonyStat stat in stats)
             {
                 stat.DoStat();
@@ -36,7 +36,7 @@ namespace TradeData.Locations
         }
 
         public void NewGame()
-		{
+        {
             stats = Resources.LoadAll<ColonyStat>("Holders/Data/Stats").ToList();
             for (int i = 0; i < stats.Count; i++)
                 stats[i].LoadState(config.stats[i].min, config.stats[i].max);
@@ -45,5 +45,5 @@ namespace TradeData.Locations
             for (int i = 0; i < production.Count; i++)
                 production[i].LoadState(config.production[i].min, config.production[i].max);
         }
-	}
+    }
 }

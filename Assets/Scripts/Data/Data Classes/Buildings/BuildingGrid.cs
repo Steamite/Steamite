@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>A "Blueprint" containing the grid data of a building.</summary>

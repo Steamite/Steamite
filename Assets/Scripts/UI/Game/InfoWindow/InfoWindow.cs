@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using UnityEngine;
 using System;
-using UnityEngine.UIElements;
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 /// <summary>All groups of objects that can be inspected. For switching info window views.</summary>
 public enum InfoMode
@@ -48,7 +48,7 @@ public class BindingContext
 
 
 /// <summary>Inspection window for everithing in <see cref="InfoMode</summary>
-public class InfoWindow : MonoBehaviour
+public class InfoWindow : MonoBehaviour, IAfterLoad
 {
     #region Variables
     /// <summary>For styling resouces in UI elements.</summary>
@@ -77,11 +77,11 @@ public class InfoWindow : MonoBehaviour
     List<BindingContext> activeBindings;
 
     /// <summary>Stores last opened mode. To hide it and remove datasource.</summary>
-    InfoMode lastInfo;
+    public InfoMode lastInfo { get; private set; }
     #endregion
 
     /// <summary>Fills all control references.</summary>
-    void Awake()
+    public void Init()
     {
         activeBindings = new();
         lastInfo = InfoMode.None;
@@ -188,13 +188,13 @@ public class InfoWindow : MonoBehaviour
             case InfoMode.Building:
                 buildingElement.dataSource = dataSource;
                 buildingElement.style.display = DisplayStyle.Flex;
-                
+
                 Building building = (Building)dataSource;
                 ToggleChildElems(buildingElement, new() { building.constructed ? "Constructed" : "Construction-View" });
                 if (!building.constructed)
                 {
                     binding = BindingUtil.CreateBinding(nameof(building.constructionProgress));
-                    binding.sourceToUiConverters.AddConverter((ref float progress) => $"Construction progress: {(progress/building.maximalProgress)*100:0}%");
+                    binding.sourceToUiConverters.AddConverter((ref float progress) => $"Construction progress: {(progress / building.maximalProgress) * 100:0}%");
                     RegisterTempBinding(new(inConstructionElement.Q<Label>("Progress"), "text"), binding, building);
 
                     ((IUIElement)buildingElement.Q<VisualElement>("Resources")).Open(building);
@@ -235,7 +235,7 @@ public class InfoWindow : MonoBehaviour
 
                 // Assigned Binding
                 binding = BindingUtil.CreateBinding(nameof(Rock.Assigned));
-                binding.sourceToUiConverters.AddConverter((ref Human human) => $"{(human ? human.objectName: "None")}");
+                binding.sourceToUiConverters.AddConverter((ref Human human) => $"{(human ? human.objectName : "None")}");
                 RegisterTempBinding(new(rockChunkElement.Q<Label>("Assigned-Value"), "text"), binding, dataSource);
 
                 // Integrity Binding
@@ -257,7 +257,7 @@ public class InfoWindow : MonoBehaviour
                 RegisterTempBinding(new(rockChunkElement.Q<Label>("Assigned-Value"), "text"), binding, dataSource);
 
                 rockChunkElement.style.display = DisplayStyle.Flex;
-                ToggleChildElems(rockChunkElement.Q<VisualElement>("Text"), new() {"Assign"});
+                ToggleChildElems(rockChunkElement.Q<VisualElement>("Text"), new() { "Assign" });
                 break;
         }
     }
@@ -304,7 +304,7 @@ public class InfoWindow : MonoBehaviour
     /// <exception cref="NotSupportedException">Forgeting to unregister bindings.</exception>
     public void RegisterTempBinding(BindingContext context, DataBinding binding, object dataSource)
     {
-        if (activeBindings.FindIndex(q => q.context == context.context) > -1)
+        if (activeBindings.FindIndex(q => q.context == context.context && q.bindingId == context.bindingId) > -1)
             throw new NotSupportedException("This object already has a binding! Clear it first.");
         context.context.SetBinding(context.bindingId, binding);
         activeBindings.Add(context);

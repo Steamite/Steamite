@@ -44,7 +44,7 @@ public class ConfirmWindow : MonoBehaviour, IToolkitController
     public void Close(bool result)
     {
         opened = false;
-        if(result)
+        if (result)
             resultAction();
         visualElement.style.display = DisplayStyle.None;
     }

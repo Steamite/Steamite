@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -8,7 +6,7 @@ using UnityEngine;
 /// <summary>Holds all modifiers in game.</summary>
 [CreateAssetMenu(fileName = "Efficiency Modifiers", menuName = "ScriptableObjects/Efficiency Holder", order = 2)]
 public class EfficencyModifiers : ScriptableObject
-{ 
+{
     /// <summary><inheritdoc cref="EfficencyModifiers"/>.</summary>
     [SerializeField] List<EfficiencyMod> modifiers = new();
 
@@ -19,9 +17,9 @@ public class EfficencyModifiers : ScriptableObject
     /// <returns></returns>
     public EfficiencyMod GetModifier(ModType modType)
     {
-        foreach(EfficiencyMod mod in modifiers)
+        foreach (EfficiencyMod mod in modifiers)
         {
-            if(mod.modType == modType)
+            if (mod.modType == modType)
             {
                 return new(mod);
             }

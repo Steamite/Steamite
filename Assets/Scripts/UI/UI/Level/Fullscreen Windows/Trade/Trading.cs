@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TradeData.Locations;
-using TradeData.Stats;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -44,8 +42,8 @@ public class Trading : FullscreenWindow
 
     public void LoadGame(TradeSave tradeSave)
     {
-		TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Colony Locations/{tradeSave.colonyLocation}");
-		colonyLocation = tradeHolder.startingLocation;
+        TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Colony Locations/{tradeSave.colonyLocation}");
+        colonyLocation = tradeHolder.startingLocation;
         colonyLocation.LoadGame(tradeSave.prodLevels, tradeSave.statLevels);
 
         tradeLocations = tradeSave.tradeLocations;
@@ -64,7 +62,7 @@ public class Trading : FullscreenWindow
 
 
         //Moves all convoys each tick.
-        SceneRefs.tick.SubscribeToEvent( 
+        SceneRefs.tick.SubscribeToEvent(
             () =>
             {
                 for (int i = convoys.Count - 1; i >= 0; i--)
@@ -77,8 +75,8 @@ public class Trading : FullscreenWindow
             Tick.TimeEventType.Week);
     }
 
-	#region Window
-	public override void OpenWindow()
+    #region Window
+    public override void OpenWindow()
     {
         base.OpenWindow();
         map.Open(convoys);
@@ -88,12 +86,11 @@ public class Trading : FullscreenWindow
     {
         base.CloseWindow();
     }
-	#endregion
+    #endregion
 
-	public void Trade(TradeConvoy convoy, Resource sellResource, int buyMoney)
+    public void Trade(TradeConvoy convoy, Resource sellResource, int buyMoney)
     {
         convoys.Add(convoy);
-        MyRes.TakeFromGlobalStorage(sellResource);
-        MyRes.UpdateMoney(buyMoney);
+        MyRes.PayCostGlobal(sellResource, buyMoney);
     }
 }

@@ -15,7 +15,7 @@ public class BuildButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         sel.buildingPrefab = buildPrefab;
         sel.ChangeSelMode(ControlMode.build);
     }
-    
+
     public void ResearchUnlock()
     {
         gameObject.GetComponent<Button>().interactable = true;

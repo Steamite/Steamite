@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class OutpostInfo : MonoBehaviour
 {

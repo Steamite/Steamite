@@ -21,7 +21,7 @@ namespace RadioGroups
         public LevelUnlockerRadioGroup() : base()
         {
             states = new LevelState[5];
-            choices = new string[] { "1", "2", "3", "4", "5"};
+            choices = new string[] { "1", "2", "3", "4", "5" };
         }
 
         protected override TextRadioButton CreateButton(int i)
@@ -101,7 +101,7 @@ namespace RadioGroups
         /// <returns></returns>
         public bool SetStates(int i, LevelState state)
         {
-            if(states[i] != state)
+            if (states[i] != state)
             {
                 states[i] = state;
                 ((LevelUnlocker)ElementAt(i)).ToggleButtonStyle(state);

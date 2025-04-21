@@ -25,7 +25,7 @@ public class GridTiles : MonoBehaviour
     public LayerMask buildingMask;
     /// <summary>Default raycast mask for the rest of time.</summary>
     public LayerMask defaultMask;
-    
+
     /// <summary>Currently selected building for construction.</summary>
     [Header("Tilemaps")] public Building buildingPrefab;
     /// <summary>Current active control mode.</summary>
@@ -54,7 +54,7 @@ public class GridTiles : MonoBehaviour
     /// <summary>List of all usable cursors.</summary>
     [Tooltip("used to help determine control states")] public Texture2D[] cursors;
     /// <summary>Basic highlight color(for selection).</summary>
-    public Color highlight = Color.white/3;
+    public Color highlight = Color.white / 3;
     /// <summary>Color for selecting what do dig.</summary>
     public Color toBeDugColor = (Color.yellow + Color.red) / 2;
     #endregion
@@ -84,7 +84,7 @@ public class GridTiles : MonoBehaviour
         switch (activeControl)
         {
             case ControlMode.nothing:
-                
+
                 if (activeObject.selected)// if active
                     c = highlight * 3; // WHITE
                 else
@@ -96,7 +96,7 @@ public class GridTiles : MonoBehaviour
                 else
                 {
                     Building b = enterObject.GetComponent<Building>();
-                    if (b) 
+                    if (b)
                     {
                         if (b.deconstructing)
                             c += Color.red / 2;/*
@@ -127,7 +127,7 @@ public class GridTiles : MonoBehaviour
                     if (_r.toBeDug)
                     {
                         c = Color.red;
-                    } 
+                    }
                     else
                     {
                         c = Color.yellow;
@@ -163,7 +163,7 @@ public class GridTiles : MonoBehaviour
         if (exitObject == null)
             return;
         Color c = new();
-        Material[] m = exitObject.GetComponentsInChildren<MeshRenderer>().Select(q=> q.material).ToArray();
+        Material[] m = exitObject.GetComponentsInChildren<MeshRenderer>().Select(q => q.material).ToArray();
         switch (activeControl)
         {
             case ControlMode.nothing:
@@ -177,7 +177,7 @@ public class GridTiles : MonoBehaviour
                 if (r && r.toBeDug)
                     c += toBeDugColor;
                 else if (b && b.deconstructing)
-                    c += Color.red/2;
+                    c += Color.red / 2;
                 else if (pipe)
                 {
                     HighLight(c, pipe.gameObject);
@@ -217,7 +217,7 @@ public class GridTiles : MonoBehaviour
     {
         if (activeObject == null)
             return;
-        else if(activeObject == clickedObject)
+        else if (activeObject == clickedObject)
         {
             DeselectObjects();
             Enter(activeObject);
@@ -274,7 +274,7 @@ public class GridTiles : MonoBehaviour
                     if (buildBlueprint.GetComponent<Pipe>())
                     {
                         drag = true;
-                        markedTiles = new() { buildBlueprint};
+                        markedTiles = new() { buildBlueprint };
                         GridPos gridPos = activeObject.GetPos();
                         MyGrid.SetGridItem(gridPos, buildBlueprint, true);
                         buildBlueprint.UniqueID();
@@ -339,7 +339,7 @@ public class GridTiles : MonoBehaviour
                         ChangeSelMode(ControlMode.nothing);
                     }
                 }
-                else 
+                else
                 {
                     Debug.LogWarning("Can't place here!!");
                 }
@@ -379,7 +379,7 @@ public class GridTiles : MonoBehaviour
         List<ClickableObject> rocks = new();
         float x = (Mathf.FloorToInt(startPos.x) - activePos.x) / 2f;
         float z = (Mathf.FloorToInt(startPos.z) - activePos.z) / 2f;
-        rocks.AddRange(Physics.OverlapBox(new Vector3(startPos.x - x, (startPos.y*2) + ClickableObjectFactory.ROCK_OFFSET, startPos.z - z), new(Mathf.Abs(x), 0.5f, Mathf.Abs(z))).Where(q => q.GetComponent<Rock>() != null).Select(q => q.GetComponent<Rock>()).ToList());
+        rocks.AddRange(Physics.OverlapBox(new Vector3(startPos.x - x, (startPos.y * 2) + ClickableObjectFactory.ROCK_OFFSET, startPos.z - z), new(Mathf.Abs(x), 0.5f, Mathf.Abs(z))).Where(q => q.GetComponent<Rock>() != null).Select(q => q.GetComponent<Rock>()).ToList());
         List<ClickableObject> filtered = rocks.ToList();
         List<Rock> toBeDug = SceneRefs.jobQueue.toBeDug;
         foreach (Rock g in rocks)
@@ -388,22 +388,22 @@ public class GridTiles : MonoBehaviour
             {
                 filtered.Remove(g);
             }
-            HighLight(deselect ? (Color.red /2) : toBeDugColor , g.gameObject);
+            HighLight(deselect ? (Color.red / 2) : toBeDugColor, g.gameObject);
         }
         markedTiles = filtered;
     }
-    
+
     /// <summary>
     /// Creates/Deletes pipes to copy the shortest path from startPos to activePos
     /// </summary>
     void CalcPipes()
     {
         Transform pipes = GameObject.FindWithTag("Pipes").transform;
-        List<GridPos> path =  PathFinder.FindPath(startPos, activePos, null);
+        List<GridPos> path = PathFinder.FindPath(startPos, activePos, null);
         path.Add(startPos);
         List<ClickableObject> tempMarkedTiles = new();
         List<GridPos> objs = markedTiles.Select(q => new GridPos(q.transform.position)).ToList();
-        for (int i = path.Count-1; i >= 0; i--)
+        for (int i = path.Count - 1; i >= 0; i--)
         {
 
             ClickableObject _clickObject = null;
@@ -437,7 +437,7 @@ public class GridTiles : MonoBehaviour
             }
             tempMarkedTiles.Add(_clickObject);
         }
-        for(int i = markedTiles.Count-1; i >= 0; i--)
+        for (int i = markedTiles.Count - 1; i >= 0; i--)
         {
             markedTiles[i].GetComponent<Building>().DestoyBuilding();
             markedTiles.RemoveAt(i);

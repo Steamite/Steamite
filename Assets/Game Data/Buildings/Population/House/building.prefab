@@ -199,4 +199,6 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 20
+  categoryID: 2
+  wrapperID: 1580670160
   assignLimit: 0

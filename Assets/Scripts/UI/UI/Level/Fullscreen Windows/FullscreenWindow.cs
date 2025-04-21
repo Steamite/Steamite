@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,30 +15,30 @@ public abstract class FullscreenWindow : MonoBehaviour
     {
         if (isOpen)
         {
-			CloseWindow();
+            CloseWindow();
         }
         else
         {
-			OpenWindow();
+            OpenWindow();
         }
     }
 
     /// <summary>Opening the window, disables shortcuts and hides info window.</summary>
     public virtual void OpenWindow()
     {
-		isOpen = true;
-		SceneRefs.gridTiles.DeselectObjects();
+        isOpen = true;
+        SceneRefs.gridTiles.DeselectObjects();
         MainShortcuts.DisableInput();
         SceneRefs.infoWindow.Close();
-        window.style.display = DisplayStyle.Flex; 
+        window.style.display = DisplayStyle.Flex;
         SceneRefs.tick.UIWindowToggle(false);
-	}
+    }
 
-	/// <summary>Closing the window, enables shortcuts.</summary>
-	public virtual void CloseWindow()
+    /// <summary>Closing the window, enables shortcuts.</summary>
+    public virtual void CloseWindow()
     {
-		isOpen = false;
-		MainShortcuts.EnableInput();
+        isOpen = false;
+        MainShortcuts.EnableInput();
         window.style.display = DisplayStyle.None;
         SceneRefs.tick.UIWindowToggle(true);
     }

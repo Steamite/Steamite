@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -34,7 +32,7 @@ public class SaveDialog : MonoBehaviour, IGridMenu
         f.dataSource = this;
         saveButton = uiDoc.rootVisualElement.Q<Button>("Save-Game");
         closeButton = uiDoc.rootVisualElement.Q<Button>("Cancel-Save");
-        
+
         closeButton.RegisterCallback<ClickEvent>(CloseWindow);
 
         Button b = uiDoc.rootVisualElement.Q<Button>("Save");

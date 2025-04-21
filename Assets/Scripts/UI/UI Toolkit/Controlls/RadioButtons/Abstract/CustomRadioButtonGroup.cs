@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using UnityEngine.UIElements;
 
 namespace AbstractControls
@@ -21,7 +20,7 @@ namespace AbstractControls
         #region Constructors
         public CustomRadioButtonGroup()
         {
-			SelectedChoice = -1;
+            SelectedChoice = -1;
             style.flexGrow = 1;
             style.justifyContent = Justify.SpaceAround;
         }

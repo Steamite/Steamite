@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +9,7 @@ public class GroundLevel : MonoBehaviour
 {
     #region Variables
     /// <summary>grid witdth(x)</summary>
-    [Header("Grid")]public int width = 21;
+    [Header("Grid")] public int width = 21;
     /// <summary>grid height(y)</summary>
     public int height = 21;
 
@@ -106,7 +104,7 @@ public class GroundLevel : MonoBehaviour
     /// <param name="gridSize">Size for the new grid.</param>
     public void ClearGrid(int gridSize = -1)
     {
-        if(gridSize > -1)
+        if (gridSize > -1)
         {
             width = gridSize;
             height = gridSize;
@@ -126,7 +124,7 @@ public class GroundLevel : MonoBehaviour
     public void CreateGrid(int gridSize = -1)
     {
         ClearGrid(gridSize);
-        
+
         FillRoads(); // adds roads
         FillRocks(); // adds ores
         FillWater(); // adds water
@@ -145,7 +143,7 @@ public class GroundLevel : MonoBehaviour
             SetGridItem(vec, roads.GetChild(j).GetComponent<Road>());
         }
     }
-    
+
     /// <summary>Registers all instantiated rocks.</summary>
     void FillRocks()
     {

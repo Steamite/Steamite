@@ -1,10 +1,6 @@
-using AbstractControls;
-using RadioGroups;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using RadioGroups;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UIElements;
 
 namespace InfoWindowElements
@@ -62,7 +58,7 @@ namespace InfoWindowElements
                     SelectedLevel = i;
                 });
             Add(levelGroup);
-            
+
 
             VisualElement view = new();
             view.name = "Level-View";

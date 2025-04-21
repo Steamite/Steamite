@@ -1,79 +1,106 @@
 ﻿using InfoWindowElements;
-using System.Collections;
-using System.Collections.Generic;
 using TradeData.Stats;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class LocalMenu : MonoBehaviour
+public class LocalMenu : MonoBehaviour, IAfterLoad
 {
     VisualElement menu;
     Label header;
     Label secondHeader;
-	DoubleResourceList costList;
+    DoubleResourceList costList;
     Label description;
-    private void Awake()
+    bool isOpen;
+    public void Init()
     {
         menu = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Menu");
         ToolkitUtils.localMenu = this;
         header = menu.ElementAt(0) as Label;
-		secondHeader = menu.ElementAt(1) as Label;
-		costList = menu.ElementAt(2) as DoubleResourceList;
-		description = menu.ElementAt(3) as Label;
-
-	}
+        secondHeader = menu.ElementAt(1) as Label;
+        costList = menu.ElementAt(2) as DoubleResourceList;
+        description = menu.ElementAt(3) as Label;
+    }
 
     public void Open(object data, VisualElement element)
     {
         Rect vec;
-		switch (data)
+        switch (data)
         {
             case ColonyStat:
                 ColonyStat stat = data as ColonyStat;
                 header.text = stat.name;
                 secondHeader.style.display = DisplayStyle.None;
-                if(element is Label)
+                if (element is Label)
                 {
                     description.text = stat.GetText(true);
-                    costList.style.display = DisplayStyle.None; 
+                    costList.style.display = DisplayStyle.None;
                 }
                 else
                 {
-                    costList.style.display = DisplayStyle.Flex; 
+                    costList.style.display = DisplayStyle.Flex;
                     costList.Open(stat.resourceUpgradeCost[element.parent.IndexOf(element)]);
                     description.text = stat.GetText(element.parent.IndexOf(element) + 1);
                 }
-                
+
                 vec = element.worldBound;
 
                 menu.style.width = 300;
                 menu.style.left = vec.x + vec.width + 25;
                 menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
-                menu.AddToClassList("show");
-				break;
+                Show();
+                break;
             case ResearchNode:
                 ResearchNode node = data as ResearchNode;
-				header.text = node.name;
-				secondHeader.style.display = DisplayStyle.Flex;
-                secondHeader.text = $"({node.currentTime}/{node.researchTime})";
-				vec = element.worldBound;
-				costList.style.display = DisplayStyle.Flex;
-				costList.Open(node.reseachCost);
+                header.text = node.nodeName;
+                secondHeader.style.display = DisplayStyle.Flex;
+                if (node.researched)
+                {
+                    secondHeader.text = "researched";
+                    costList.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    if (node.CurrentTime < 0)
+                    {
+                        secondHeader.text = $"({0}/{node.researchTime})";
+                        costList.style.display = DisplayStyle.Flex;
+                        costList.Open(node.reseachCost);
+                    }
+                    else
+                    {
+                        costList.style.display = DisplayStyle.None;
+                        secondHeader.text =
+                            $"({node.CurrentTime}/{node.researchTime})\n" +
+                            $"paid";
+                    }
+                }
+                vec = element.worldBound;
 
-				description.text = node.description;
-                
+                description.text = node.description;
 
-				menu.style.width = 300;
-				menu.style.left = vec.x + vec.width + 25;
-				menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
-				menu.AddToClassList("show");
-				break;
+                menu.style.width = 300;
+                menu.style.left = vec.x + vec.width + 25;
+                menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
+                Show();
+                break;
         }
+    }
+
+    void Show()
+    {
+        isOpen = true;
+        menu.style.display = DisplayStyle.Flex;
+        menu.AddToClassList("show");
     }
 
     public void Close()
     {
-		menu.RemoveFromClassList("show");
-	}
+        isOpen = false;
+        menu.RegisterCallbackOnce<TransitionEndEvent>(
+            (q) =>
+            {
+                if (isOpen == false) menu.style.display = DisplayStyle.None;
+            });
+        menu.RemoveFromClassList("show");
+    }
 }

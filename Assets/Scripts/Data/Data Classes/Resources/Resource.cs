@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 /// <summary>Game resources.</summary>
 [Serializable]
@@ -99,7 +99,7 @@ public class Resource
     /// <summary>Removes empty resources.</summary>
     public void RemoveEmpty()
     {
-        for(int i = type.Count-1; i > -1 ; i--)
+        for (int i = type.Count - 1; i > -1; i--)
         {
             if (ammount[i] == 0)
             {

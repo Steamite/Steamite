@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TradeData.Locations;
 using UnityEngine;
@@ -10,6 +9,6 @@ public class TradeHolder : ScriptableObject
     /// <summary>Starting location.</summary>
     public ColonyLocation startingLocation;
     /// <summary>All trade locations.</summary>
-    [Header("Locations")]public List<TradeLocation> tradeLocations = new();
+    [Header("Locations")] public List<TradeLocation> tradeLocations = new();
 
 }

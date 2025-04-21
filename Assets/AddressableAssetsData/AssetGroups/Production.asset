@@ -15,18 +15,13 @@ MonoBehaviour:
   m_GroupName: Production
   m_GUID: 5f20cd3b070d98d42a87789061be96a7
   m_SerializeEntries:
-  - m_GUID: 1572f0825d8eae24fac3c0f7964abbf6
-    m_Address: Research
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c03d66f30ca84894faa805d58a6e1163
-    m_Address: DUM
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cce972b89a166654e913c88226ce58ba
+  - m_GUID: 6486df84b3358fd408e666b189e235a5
     m_Address: Foundry
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc14d2c3b93281a449f4e284e0261296
+    m_Address: Research
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

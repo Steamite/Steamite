@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UIElements;
 
 /// <summary>Holds references to the most important and frequented classes.</summary>
@@ -27,6 +29,8 @@ public class SceneRefs : MonoBehaviour
     [SerializeField] ResearchAdapter _researchAdapter;
 
     bool messageShown = false;
+
+    [SerializeReference] List<MonoBehaviour> afterLoads = new();
     #endregion
 
     #region Getters
@@ -45,9 +49,21 @@ public class SceneRefs : MonoBehaviour
     #endregion
 
     /// <summary>Registers the <see cref="instance"/></summary>
-    public void Init()
+    public IEnumerator BeforeLoad()
     {
         instance = this;
+        AsyncOperationHandle<BuildingData> buttons = Addressables.LoadAssetAsync<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
+        if (!buttons.IsDone)
+            yield return buttons;
+        objectFactory.buildPrefabs = buttons.Result;
+    }
+
+    public static void FinishLoad()
+    {
+        foreach (IAfterLoad afterLoad in instance.afterLoads.Cast<IAfterLoad>())
+            afterLoad.Init();
+        instance.afterLoads = null;
+        MyGrid.Init();
     }
 
     /// <summary>
@@ -72,7 +88,9 @@ public class SceneRefs : MonoBehaviour
         messageShown = true;
         ((Label)miscellaneous.rootVisualElement[1]).text = text;
         yield return new WaitForSecondsRealtime(2f);
-		((Label)miscellaneous.rootVisualElement[1]).text = "";
-		messageShown = false;
+        ((Label)miscellaneous.rootVisualElement[1]).text = "";
+        messageShown = false;
     }
+
+
 }

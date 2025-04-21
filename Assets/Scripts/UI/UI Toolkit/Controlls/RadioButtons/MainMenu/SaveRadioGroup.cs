@@ -1,10 +1,9 @@
 using System;
-using UnityEngine.UIElements;
-
-using AbstractControls;
 using System.IO;
 using System.Linq;
+using AbstractControls;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace RadioGroups
 {
@@ -28,7 +27,7 @@ namespace RadioGroups
         }
         protected override void DefaultBindItem(VisualElement element, int index)
         {
-            base.DefaultBindItem(element, index); 
+            base.DefaultBindItem(element, index);
             element.RemoveFromClassList("unity-text-element");
             element.RemoveFromClassList("unity-button");
             SaveRadioButton saveRadioButton = (element as SaveRadioButton);
@@ -95,11 +94,11 @@ namespace RadioGroups
                     folders = SortSavesByDate(path);
                 }
 
-                if(write)
+                if (write)
                     for (int i = 0; i < folders.Length; i++)
                         AddItem(new SaveRadioButton(SaveController.GetSaveName(folders[i].path), "save-radio-button", i, folders[i].date));
                 schedule.Execute(() => this.Q<VisualElement>("unity-content-container").style.height = (folders.Length * 113) + 30).ExecuteLater(5);
-                
+
                 return folders;
             }
             catch

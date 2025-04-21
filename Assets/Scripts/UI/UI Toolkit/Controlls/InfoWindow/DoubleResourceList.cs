@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using TradeData.Stats;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -110,7 +109,7 @@ namespace InfoWindowElements
 
                     if (cost)
                     {
-                        List<UIResource> temp = new List<UIResource>() { new DoubleUIResource(MyRes.Money, res.capacity)};
+                        List<UIResource> temp = new List<UIResource>() { new DoubleUIResource(MyRes.Money, res.capacity) };
                         for (int i = 0; i < res.type.Count; i++)
                         {
                             temp.Add(new DoubleUIResource(

@@ -40,7 +40,7 @@ public class ResourceEditor : PropertyDrawer
         string labelText = property.displayName.Contains("Element ")
             ? property.displayName.Replace("Element", property.propertyPath.Split('.')[^3])
             : property.displayName;
-        
+
         labelText = char.ToUpper(labelText[0]) + labelText.Substring(1);
 
         Label l = new Label(labelText);
@@ -72,13 +72,13 @@ public class ResourceEditor : PropertyDrawer
         listView.itemsSource = ((Resource)property.boxedValue).type;
         listView.horizontalScrollingEnabled = false;
         #region Actions
-        listView.bindItem = 
-            (elem, i) => 
+        listView.bindItem =
+            (elem, i) =>
             {
                 elem = elem.ElementAt(0);
                 ((EnumField)elem.ElementAt(0)).value = ((Resource)property.boxedValue).type[i];
                 ((EnumField)elem.ElementAt(0)).RegisterValueChangedCallback(
-                    (enu) => 
+                    (enu) =>
                     {
                         property.FindPropertyRelative(
                             nameof(Resource.type)).GetArrayElementAtIndex(i).enumValueIndex = (int)(ResourceType)enu.newValue;
@@ -87,7 +87,7 @@ public class ResourceEditor : PropertyDrawer
 
                 ((IntegerField)elem.ElementAt(1)).value = ((Resource)property.boxedValue).ammount[i];
                 ((IntegerField)elem.ElementAt(1)).RegisterValueChangedCallback(
-                    (val) => 
+                    (val) =>
                     {
                         property.FindPropertyRelative(
                             nameof(Resource.ammount)).GetArrayElementAtIndex(i).intValue = val.newValue;
