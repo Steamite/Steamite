@@ -9,6 +9,12 @@ public class TimeDisplay : MonoBehaviour, IToolkitController
     Label months;
     Label years;
 
+    /*readonly int[] daysInMonths = 
+        {
+            31, 31, 31, 31,
+        };*/
+
+
     public void Init(VisualElement root)
     {
         root = root.Q<VisualElement>("Time");
@@ -37,7 +43,7 @@ public class TimeDisplay : MonoBehaviour, IToolkitController
     }
 
     void UpdateDay() =>
-        days.text = ((SceneRefs.tick.numberOfDays % 7) + 1).ToString();
+        days.text = ((SceneRefs.tick.numberOfDays % 28) + 1).ToString();
 
     void UpdateMonth() =>
         months.text = (((SceneRefs.tick.numberOfDays % 336) / 28) + 1).ToString();

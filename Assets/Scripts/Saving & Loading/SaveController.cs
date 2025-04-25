@@ -95,7 +95,6 @@ public class SaveController : MonoBehaviour, IAfterLoad
         string tmpPath = $"{Application.persistentDataPath}/saves/_tmp";
         Directory.CreateDirectory($"{tmpPath}");
         JsonSerializer jsonSerializer = PrepSerializer();
-        JsonWriter jsonWriter = null;
         try
         {
             WriteSave(
@@ -136,11 +135,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
         catch (Exception e)
         {
             SceneRefs.ShowMessage("An error ocured when saving.");
-            Debug.LogError("Saving error: " + e);
-            if (jsonWriter.WriteState == 0)
-            {
-                jsonWriter.Close();
-            }
+            Debug.LogWarning("Saving error: " + e);
             foreach (string file in Directory.GetFiles(tmpPath))
             {
                 File.Delete(file);
@@ -222,9 +217,23 @@ public class SaveController : MonoBehaviour, IAfterLoad
 
     void WriteSave(string path, JsonSerializer jsonSerializer, object data)
     {
-        JsonTextWriter jsonTextWriter = new(new StreamWriter(path));
-        jsonSerializer.Serialize(jsonTextWriter, data);
-        jsonTextWriter.Close();
+        StreamWriter writer = null;
+        JsonTextWriter jsonWriter = null;
+        try
+        {
+            writer = new StreamWriter(path);
+            jsonWriter = new(writer);
+            jsonSerializer.Serialize(jsonWriter, data);
+            jsonWriter.Close();
+        }
+        catch (Exception e)
+        {
+            if (writer != null)
+                writer.Dispose();
+            if (jsonWriter != null)
+                jsonWriter.Close();
+            throw e;            
+        }
     }
     #endregion
 }

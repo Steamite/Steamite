@@ -10,10 +10,10 @@ using UnityEngine.UIElements;
 public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
 {
     VisualElement menu;
-    SaveRadioGroup worldGroup;
+    SaveRadioList worldGroup;
 
     VisualElement saveElement;
-    SaveRadioGroup saveGroup;
+    SaveRadioList saveGroup;
     Button loadButton;
 
     Button continueButton;
@@ -39,7 +39,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
         menu.Q<VisualElement>("Background").ClearClassList();
         if (isMainMenu)
         {
-            worldGroup = menu.Q<SaveRadioGroup>("World-List");
+            worldGroup = menu.Q<SaveRadioList>("World-List");
 
             worldGroup.deleteAction = (int i) =>
             {
@@ -77,7 +77,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
 
         #region Save List
         saveElement = menu.Q<VisualElement>("Saves");
-        saveGroup = menu.Q<SaveRadioGroup>("Save-List");
+        saveGroup = menu.Q<SaveRadioList>("Save-List");
         saveGroup.deleteAction = (int i) =>
         {
             ConfirmWindow.window.Open(

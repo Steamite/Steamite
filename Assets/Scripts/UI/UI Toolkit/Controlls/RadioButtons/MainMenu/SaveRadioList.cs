@@ -17,12 +17,23 @@ namespace RadioGroups
         }
     }
 
+
+    public class RadioSaveButtonData : RadioButtonData
+    {
+        public Folder folder;
+        public RadioSaveButtonData(string _text, Folder _folder) : base(_text)
+        {
+            folder = _folder;
+        }
+    }
+
+
     [UxmlElement]
-    public partial class SaveRadioGroup : CustomRadioButtonList
+    public partial class SaveRadioList : CustomRadioButtonList
     {
         public Action<int> deleteAction;
         #region List
-        public SaveRadioGroup() : base()
+        public SaveRadioList() : base()
         {
         }
         protected override void DefaultBindItem(VisualElement element, int index)
@@ -31,12 +42,12 @@ namespace RadioGroups
             element.RemoveFromClassList("unity-text-element");
             element.RemoveFromClassList("unity-button");
             SaveRadioButton saveRadioButton = (element as SaveRadioButton);
-            saveRadioButton.text = ((TextRadioButton)_itemsSource[index]).data;
-            saveRadioButton.saveDate.text = (_itemsSource[index] as SaveRadioButton).saveDate.text;
+            saveRadioButton.text = _itemsSource[index].text;
+            saveRadioButton.saveDate.text = (_itemsSource[index] as RadioSaveButtonData).folder.date.ToString();
             saveRadioButton.style.marginTop = 10;
 
             // clears styles if scrolling and selected
-            if (SelectedId == index)
+            if (SelectedChoice == index)
                 saveRadioButton.SelectWithoutTransition(false);
             else if (element.ClassListContains("save-radio-button-selected"))
                 saveRadioButton.Deselect(false);
@@ -60,14 +71,14 @@ namespace RadioGroups
         #region Saves
         public void DeleteSave()
         {
-            deleteAction(SelectedId);
+            deleteAction(SelectedChoice);
         }
 
         public Folder[] FillItemSource(string path, bool write, bool parentLevel)
         {
             try
             {
-                SelectedId = -1;
+                SelectedChoice = -1;
                 ClearItems();
                 Folder[] folders;
 
@@ -93,12 +104,11 @@ namespace RadioGroups
                 {
                     folders = SortSavesByDate(path);
                 }
-
-                if (write)
-                    for (int i = 0; i < folders.Length; i++)
-                        AddItem(new SaveRadioButton(SaveController.GetSaveName(folders[i].path), "save-radio-button", i, folders[i].date));
-                schedule.Execute(() => this.Q<VisualElement>("unity-content-container").style.height = (folders.Length * 113) + 30).ExecuteLater(5);
-
+                _itemsSource = folders.Select(q =>
+                    new RadioSaveButtonData(
+                        Path.GetDirectoryName(q.path), 
+                        q)
+                        as RadioButtonData).ToList();
                 return folders;
             }
             catch

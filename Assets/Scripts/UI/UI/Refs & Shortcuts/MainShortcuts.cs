@@ -63,8 +63,8 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
             // toggle build menu
             if (buildMenu.triggered)
             {
-                Transform buildMenu = SceneRefs.buildMenu.transform;
-                Transform categories = buildMenu.GetChild(1);
+                // buildMenu = UIRefs.buildBar;
+                /*Transform categories = buildMenu.GetChild(1);
                 buildMenu.gameObject.SetActive(!buildMenu.gameObject.activeSelf);
                 if (buildMenu.gameObject.activeSelf)
                 {
@@ -73,7 +73,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
                         categories.GetChild(i).gameObject.SetActive(false);
                     }
                     buildMenu.GetChild(1).gameObject.SetActive(false);
-                }
+                }*/
             }
             // toggle dig
             if (dig.triggered)

@@ -1,26 +1,38 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.UIElements;
 
 namespace AbstractControls
 {
+    public class RadioButtonData
+    {
+        public string text;
+
+        public RadioButtonData(string _text)
+        {
+            text = _text;
+        }
+    }
+
+    /// <summary>
+    /// List is for simple buttons under one parent. And have a lot of dynamic changes.
+    /// </summary>
     [UxmlElement]
     public partial class CustomRadioButtonList : ListView, IBindable
     {
-        protected List<CustomRadioButton> _itemsSource;
-        protected CustomRadioButton _selectedButton;
+        protected List<RadioButtonData> _itemsSource;
 
         protected ScrollView _scrollView;
 
         protected Action<int> changeEvent;
 
-
         int _selID;
-        protected int SelectedId
+        protected int SelectedChoice
         {
             get
             {
-                return _selID;//_selectedButton != null ? _selectedButton.value : -1; 
+                return _selID;
             }
             set
             {
@@ -30,11 +42,10 @@ namespace AbstractControls
         }
 
         #region List
-
         public CustomRadioButtonList()
         {
             // Initialize the internal item source
-            _itemsSource = new List<CustomRadioButton>();
+            _itemsSource = new List<RadioButtonData>();
             // Default settings (adjust as needed)
             fixedItemHeight = 30;
             makeItem = DefaultMakeItem;
@@ -45,40 +56,17 @@ namespace AbstractControls
         }
 
         /// <summary>
-        /// Adds an item to the list and refreshes the ListView
-        /// </summary>
-        /// <param name="item"></param>
-        protected void AddItem(CustomRadioButton item)
-        {
-            _itemsSource.Add(item);
-            makeItem();
-            Rebuild();
-        }
-        /// <summary>
-        /// Removes an item from the list and refreshes the ListView
-        /// </summary>
-        /// <param name="item"></param>
-        protected void RemoveItem(CustomRadioButton item)
-        {
-            _itemsSource.Remove(item);
-            if (item == _selectedButton)
-            {
-                _selectedButton?.Deselect();
-                _selectedButton = null;
-            }
-            Rebuild();
-        }
-        /// <summary>
         /// // Removes an item from the list and refreshes the ListView
         /// </summary>
         /// <param name="index"></param>
         public void RemoveItem(int index)
         {
             _itemsSource.RemoveAt(index);
-            if (index == SelectedId)
+            if (index == SelectedChoice)
             {
-                SelectedId = -1;
-                _selectedButton?.Deselect();
+                SelectedChoice = -1;
+
+                //_selectedButton?.Deselect();
             }
             Rebuild();
         }
@@ -101,7 +89,6 @@ namespace AbstractControls
             element.RemoveFromClassList("unity-list-view__item");
             (element as CustomRadioButton).value = index;
             (element as CustomRadioButton).text = _itemsSource[index].text;
-            //element.RegisterCallback<ClickEvent>((_) => (element as CustomRadioButton).Select());
             return;
         }
 
@@ -110,16 +97,27 @@ namespace AbstractControls
         public virtual void Init(Action<int> onChange)
         {
             itemsSource = _itemsSource;
-            SelectedId = -1;
+            SelectedChoice = -1;
             changeEvent = onChange;
         }
 
-        public virtual void Select(CustomRadioButton customRadioButton)
+        /// <summary>
+        /// Need to use with buttons instead of indexes for proper unbinding.
+        /// </summary>
+        /// <param name="customRadioButton">Button pressed.</param>
+        public virtual void Select(int index)
         {
-            if (_selectedButton != customRadioButton)
-                _selectedButton?.Deselect();
-            _selectedButton = customRadioButton;
-            SelectedId = _selectedButton.value;
+            if(SelectedChoice > -1)
+                ((CustomRadioButton)contentContainer.Children()
+                    .FirstOrDefault(q => ((CustomRadioButton)q)?.value == SelectedChoice))?.Deselect();
+            if(SelectedChoice == index)
+            {
+                SelectedChoice = -1;
+            }
+            else
+            {
+                SelectedChoice = index;
+            }
         }
     }
 }

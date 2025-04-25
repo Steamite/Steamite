@@ -6,6 +6,7 @@ namespace AbstractControls
     public partial class CustomRadioButton : Button
     {
         public bool IsSelected { get; protected set; }
+        bool toggle;
         public int value;
 
         public string styleClass;
@@ -16,16 +17,18 @@ namespace AbstractControls
             styleClass = "save-radio-button";
             AddToClassList("save-radio-button");
             value = -1;
+            toggle = false;
         }
 
 
-        public CustomRadioButton(string _styleClass, int i, bool _inGroup)
+        public CustomRadioButton(string _styleClass, int i, bool _inGroup, bool _toggle = false)
         {
             ClearClassList();
             styleClass = _styleClass;
             AddToClassList(_styleClass);
             value = i;
             inGroup = _inGroup;
+            toggle = _toggle;
             RegisterCallback<ClickEvent>((_) => Select());
         }
 
@@ -34,9 +37,10 @@ namespace AbstractControls
         /// </summary>
         public void Select()
         {
-            if (IsSelected)
+            if (IsSelected && !toggle)
                 return;
-            if (SelectChange(true) && styleClass != "")
+            IsSelected = SelectChange(true);
+            if (IsSelected && styleClass != "")
             {
                 RemoveFromClassList(styleClass);
                 AddToClassList(styleClass + "-selected");
@@ -50,12 +54,17 @@ namespace AbstractControls
         public void SelectWithoutTransition(bool UpdateGroup)
         {
             SelectChange(UpdateGroup);
+            IsSelected = true;
             ToolkitUtils.ChangeClassWithoutTransition(styleClass, styleClass + "-selected", this);
         }
 
+        /// <summary>
+        /// Returns if the change is valid or not. (not enough resources, ...)
+        /// </summary>
+        /// <param name="UpdateGroup"></param>
+        /// <returns></returns>
         protected virtual bool SelectChange(bool UpdateGroup)
         {
-            IsSelected = true;
             if (UpdateGroup)
             {
 
@@ -74,7 +83,7 @@ namespace AbstractControls
                     {
                         el = el.parent;
                     } while (el.parent != null && el is not CustomRadioButtonList);
-                    ((CustomRadioButtonList)el).Select(this);
+                    ((CustomRadioButtonList)el).Select(value);
 
                 }
             }

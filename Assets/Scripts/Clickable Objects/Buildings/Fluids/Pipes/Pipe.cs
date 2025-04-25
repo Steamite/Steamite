@@ -83,12 +83,12 @@ public class Pipe : Building
     {
         base.OnPointerEnter(eventData);
     }
-    public override void PlaceBuilding(GridTiles gT)
+    public override void PlaceBuilding(bool loading = false)
     {
         gameObject.layer = 7;
         GetComponent<SortingGroup>().sortingLayerName = "Pipes";
         maximalProgress = cost.ammount.Sum() * 2;
-        gT.HighLight(new(), gameObject);
+        SceneRefs.gridTiles.HighLight(new(), gameObject);
 
         HumanUtil humans = GameObject.FindWithTag("Humans").GetComponent<HumanUtil>();
         humans.GetComponent<JobQueue>().AddJob(JobState.Constructing, this); // creates a new job with the data above

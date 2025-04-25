@@ -1,23 +1,10 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/BuildingMenu.uss?fileID=7433441132597879392&amp;guid=15aef92f4e6dc334d96513202cce8a1a&amp;type=3#BuildingMenu" />
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/StatusBar.uss?fileID=7433441132597879392&amp;guid=b591f8d887031d24b933f7e2268f24d0&amp;type=3#StatusBar" />
-    <engine:VisualElement name="BuildMenu" style="flex-grow: 1; height: auto; max-height: 30%; align-self: center; justify-content: space-between; align-content: stretch; display: none; font-size: 22px; color: rgb(249, 233, 141); -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;); bottom: 0; position: absolute;">
-        <engine:VisualElement name="Buildings" class="bar" style="border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; margin-bottom: 10px; height: 120px;">
-            <engine:VisualElement name="Button" class="build-button">
-                <engine:VisualElement name="Background" class="ad" />
-                <engine:Label text="Research&#10;Tower" name="Label" enable-rich-text="true" />
-            </engine:VisualElement>
-        </engine:VisualElement>
-        <engine:VisualElement name="Categories" class="bar">
-            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/cogwheal@4x.png?fileID=2800000&amp;guid=31a2fc60fcb027a45869f7484256409a&amp;type=3#cogwheal@4x" class="category-button" />
-            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/humans@4x.png?fileID=2800000&amp;guid=ebd657dbff7382b49ac208b65a2fc976&amp;type=3#humans@4x" class="category-button" />
-            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/material@4x.png?fileID=2800000&amp;guid=523f332c4508d994e93b281eda38e8fc&amp;type=3#material@4x" class="category-button" style="padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px;" />
-            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/Research@4x.png?fileID=2800000&amp;guid=4bf8d3f377b98204dadd2b0fd5899576&amp;type=3#Research@4x" class="category-button" />
-        </engine:VisualElement>
-    </engine:VisualElement>
-    <engine:VisualElement name="Time" style="left: 0; bottom: 0; position: absolute; height: 150px; width: 200px; align-content: flex-end; background-color: rgb(121, 111, 44); flex-direction: column-reverse; border-top-right-radius: 5px; border-top-left-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-bottom: 5px; margin-left: 5px;">
-        <TimeButtons speed-states="0,1,2,5" current-state="2" name="Buttons" sprite="project://database/Assets/Resources/Icon/Pause.png?fileID=2800000&amp;guid=388d058ebff7c4844823b4c308f1488e&amp;type=3#Pause" />
-        <engine:VisualElement name="TimeDisplay" style="flex-grow: 1; height: 100px;">
+    <BuildMenu.BuildMenu class="build-menu" />
+    <engine:VisualElement name="Time" style="left: 0; bottom: 0; position: absolute; height: 170px; width: 220px; align-content: flex-end; background-color: rgb(121, 111, 44); flex-direction: column-reverse; border-top-right-radius: 5px; border-top-left-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-bottom: 5px; margin-left: 5px;">
+        <TimeButtons speed-states="0,1,2,5" current-state="2" name="Buttons" sprite="project://database/Assets/Resources/Icon/Pause.png?fileID=2800000&amp;guid=388d058ebff7c4844823b4c308f1488e&amp;type=3#Pause" style="height: 75px;" />
+        <engine:VisualElement name="TimeDisplay" style="flex-grow: 1; height: 125px;">
             <engine:VisualElement name="Current" style="flex-grow: 0; height: 50px; flex-direction: row; justify-content: space-around; padding-bottom: 2.5px;">
                 <engine:Label text="11" name="Hours" />
                 <engine:Label text="11" name="Minutes" />
@@ -27,6 +14,20 @@
                 <engine:Label text="11" name="Months" />
                 <engine:Label text="1856" name="Years" style="width: 85px;" />
             </engine:VisualElement>
+        </engine:VisualElement>
+    </engine:VisualElement>
+    <engine:VisualElement name="BuildMenu" class="build-menu" style="display: none;">
+        <engine:VisualElement name="Buildings" class="build-bar">
+            <engine:VisualElement name="Button" class="build-button">
+                <engine:VisualElement name="Background" class="ad" />
+                <engine:Label text="Research&#10;Tower" name="Label" enable-rich-text="true" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+        <engine:VisualElement name="Categories" class="bar categ-bar">
+            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/cogwheal@4x.png?fileID=2800000&amp;guid=31a2fc60fcb027a45869f7484256409a&amp;type=3#cogwheal@4x" class="category-button" />
+            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/humans@4x.png?fileID=2800000&amp;guid=ebd657dbff7382b49ac208b65a2fc976&amp;type=3#humans@4x" class="category-button" />
+            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/material@4x.png?fileID=2800000&amp;guid=523f332c4508d994e93b281eda38e8fc&amp;type=3#material@4x" class="category-button" style="padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px;" />
+            <engine:Button triple-click-selects-line="false" display-tooltip-when-elided="false" double-click-selects-word="false" icon-image="project://database/Assets/Sprites/Icons/Bottom%20bar/Research@4x.png?fileID=2800000&amp;guid=4bf8d3f377b98204dadd2b0fd5899576&amp;type=3#Research@4x" class="category-button" />
         </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>

@@ -1,4 +1,4 @@
-.category-button {
+.building-categ {
     width: 80px;
     height: 80px;
     padding-top: 4px;
@@ -25,7 +25,7 @@
     transition-duration: 0.2s;
 }
 
-.category-button:hover {
+.building-categ:hover {
     width: 80px;
     height: 80px;
     padding-top: 4px;
@@ -53,7 +53,35 @@
     transition-duration: 0.2s;
 }
 
-.bar {
+.building-categ-selected {
+    width: 80px;
+    height: 80px;
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    margin-top: 0;
+    margin-right: 5px;
+    margin-bottom: 0;
+    margin-left: 5px;
+    background-color: rgb(31, 29, 11);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-left-color: rgb(35, 32, 2);
+    border-right-color: rgb(35, 32, 2);
+    border-top-color: rgb(35, 32, 2);
+    border-bottom-color: rgb(35, 32, 2);
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    transition-duration: 0.2s;
+    scale: 1.1 1.1;
+}
+
+.categ-bar {
     flex-grow: 0;
     background-color: rgb(70, 49, 27);
     flex-direction: row;
@@ -75,6 +103,20 @@
     border-bottom-color: rgb(35, 32, 2);
 }
 
+.build-bar {
+    align-items: center;
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    background-color: rgb(70, 49, 27);
+    margin-bottom: 20px;
+    flex-grow: 0;
+    flex-direction: row;
+    justify-content: center;
+    align-self: center;
+}
+
 .build-button {
     flex-grow: 0;
     width: 100px;
@@ -94,6 +136,8 @@
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     transition-duration: 0.2s;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .build-button:hover {
@@ -134,7 +178,7 @@
     height: 30px;
 }
 
-.build-button > VisualElement {
+.building-background {
     flex-grow: 0;
     position: relative;
     height: 100%;
@@ -146,4 +190,19 @@
     border-bottom-left-radius: 2px;
     background-image: url("project://database/Assets/Standard%20Assets/SimpleFolderIcon/Icons/Buildings.png?fileID=2800000&guid=64f38df3738bf5344a22370b37df9b1d&type=3#Buildings");
     -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.build-menu {
+    flex-grow: 1;
+    height: auto;
+    max-height: 30%;
+    align-self: center;
+    justify-content: space-between;
+    align-content: stretch;
+    display: flex;
+    font-size: 22px;
+    color: rgb(249, 233, 141);
+    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
+    bottom: 0;
+    position: absolute;
 }

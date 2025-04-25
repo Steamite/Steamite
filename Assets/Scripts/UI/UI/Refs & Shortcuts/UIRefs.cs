@@ -16,7 +16,8 @@ public class UIRefs : MonoBehaviour
     public static Trading trading => instance._trading;
     public static ResearchWindow research => instance._research;
     public static Menu pauseMenu => instance._pauseMenu;
-    public static UIDocument BottomBar => instance._bottomBar;
+    public static VisualElement buildBar => instance._bottomBar.rootVisualElement[0];
+    public static UIDocument timeBar => instance._bottomBar;
 
     public void Init()
     {

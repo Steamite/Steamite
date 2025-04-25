@@ -332,7 +332,7 @@ public class LoadingScreen : MonoBehaviour
         humanActivation?.Invoke();
         humanActivation = null;
         SceneRefs.tick.InitTicks(newGame);
-        UIRefs.BottomBar.GetComponents<IToolkitController>().ToList().ForEach((q) => q.Init(UIRefs.BottomBar.rootVisualElement));
+        UIRefs.timeBar.GetComponent<IToolkitController>().Init(UIRefs.timeBar.rootVisualElement);
 
     }
 }

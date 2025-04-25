@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AbstractControls;
 using InfoWindowElements;
 using UnityEngine.UIElements;
@@ -6,7 +7,7 @@ namespace RadioGroups
 {
     /// <summary>Radio group for managing switchin between level unlockers.</summary>
     [UxmlElement]
-    public partial class LevelUnlockerRadioGroup : TextRadioButtonGroup
+    public partial class LevelUnlockerRadioList : CustomRadioButtonList
     {
         #region Variables
         LevelState[] states;
@@ -18,15 +19,10 @@ namespace RadioGroups
         #endregion
 
         #region Constructors
-        public LevelUnlockerRadioGroup() : base()
+        public LevelUnlockerRadioList() : base()
         {
             states = new LevelState[5];
-            choices = new string[] { "1", "2", "3", "4", "5" };
-        }
-
-        protected override TextRadioButton CreateButton(int i)
-        {
-            return new LevelUnlocker(i, states[i]);
+            _itemsSource = new List<RadioButtonData>{ new("1"), new("2"), new("3"), new("4"), new("5") };
         }
         #endregion
 
