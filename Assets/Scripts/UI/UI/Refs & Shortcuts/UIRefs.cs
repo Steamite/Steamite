@@ -19,6 +19,8 @@ public class UIRefs : MonoBehaviour
     public static VisualElement buildBar => instance._bottomBar.rootVisualElement[0];
     public static UIDocument timeBar => instance._bottomBar;
 
+    [RuntimeInitializeOnLoadMethod]
+    static void ReloadDomain() => instance = null;
     public void Init()
     {
         instance = this;

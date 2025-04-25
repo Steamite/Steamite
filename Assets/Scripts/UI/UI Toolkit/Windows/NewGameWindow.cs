@@ -5,6 +5,7 @@ using RadioGroups;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace StartMenu
@@ -51,6 +52,8 @@ namespace StartMenu
             _root.Q<Button>("New-Close-Button").RegisterCallback<ClickEvent>(CloseWindow);
             startButton.AddToClassList("disabled-button");
             startButton.RemoveFromClassList("main-button");
+            WorldName = "";
+            selectedOption = 0;
         }
 
         #region Window Logic
@@ -60,9 +63,7 @@ namespace StartMenu
         }
         public void OpenWindow(ClickEvent _ = null)
         {
-            selectedOption = -1;
-            WorldName = "";
-            worlds.Reset();
+            worlds.Open();
             gameObject.GetComponent<MyMainMenu>().OpenWindow("new");
         }
 

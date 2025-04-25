@@ -91,8 +91,9 @@ public class ClickableObjectSave
 [Serializable]
 public class RockSave : ClickableObjectSave
 {
-    public ResourceType res;
-    public int ammount;
+    public Resource yeild;
+    // use for loading correct integrity colors
+    public float originalIntegrity;
     public float integrity;
     public bool toBeDug;
 }

@@ -115,6 +115,8 @@
     flex-direction: row;
     justify-content: center;
     align-self: center;
+    height: 100px;
+    min-height: 100px;
 }
 
 .build-button {

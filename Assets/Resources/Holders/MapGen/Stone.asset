@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7722ad94548d554479222b9c47c9a556, type: 3}
-  m_Name: Wood
+  m_Name: Stone
   m_EditorClassIdentifier: 
-  resource: 2
+  resource: 3
   hardness: 1
+  color: {r: 0.66442686, g: 0.68974084, b: 0.745283, a: 1}
   richness:
   - min: 000000000000000000000000
     max: 010000000200000003000000
@@ -47,4 +48,3 @@ MonoBehaviour:
     max: 010000000200000003000000
   - min: 000000000000000000000000
     max: 010000000200000003000000
-  color: {r: 0.66442686, g: 0.68974084, b: 0.745283, a: 1}

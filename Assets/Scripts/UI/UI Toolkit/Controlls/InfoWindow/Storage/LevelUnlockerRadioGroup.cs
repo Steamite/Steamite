@@ -22,7 +22,7 @@ namespace RadioGroups
         public LevelUnlockerRadioList() : base()
         {
             states = new LevelState[5];
-            _itemsSource = new List<RadioButtonData>{ new("1"), new("2"), new("3"), new("4"), new("5") };
+            itemsSource = new List<RadioButtonData>{ new("1"), new("2"), new("3"), new("4"), new("5") };
         }
         #endregion
 
