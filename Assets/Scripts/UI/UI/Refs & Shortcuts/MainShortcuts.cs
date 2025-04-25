@@ -15,8 +15,8 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
     InputAction trade;
 
     [SerializeField] public InputActionAsset inputAsset;
-    public static bool handleGrid = true;
-    static bool handleWindows = true;
+    public static bool handleGrid;
+    static bool handleWindows;
 
     public void Init()
     {

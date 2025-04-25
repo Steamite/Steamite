@@ -46,6 +46,9 @@ public class SceneRefs : MonoBehaviour
     public static ResearchAdapter researchAdapter => instance._researchAdapter;
     #endregion
 
+    [RuntimeInitializeOnLoadMethod]
+    static void ReloadDomain() => instance = null;
+
     /// <summary>Registers the <see cref="instance"/></summary>
     public IEnumerator BeforeLoad()
     {

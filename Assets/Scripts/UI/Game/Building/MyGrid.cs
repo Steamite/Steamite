@@ -32,6 +32,9 @@ public static class MyGrid
     public static int gridSize { get { return levels[currentLevel].height; } }
     #endregion
 
+    [RuntimeInitializeOnLoadMethod]
+    static void ReloadDomain() => GridChange = null;
+
     /// <summary>
     /// Links <see cref="GridChange"/> events. And changes the active level.
     /// </summary>
@@ -251,7 +254,7 @@ public static class MyGrid
         return gridSave;
     }
 
-    public static void Load(GridSave gridSave, GroundLevel templateLevel, int i)
+    public static void Load(GridSave gridSave, GroundLevel templateLevel, int i, List<MinableRes> rockData)
     {
         GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickableObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.gridTiles.transform);
         levels[i] = groundLevel;
@@ -264,7 +267,7 @@ public static class MyGrid
                 switch (gridSave.grid[x, z])
                 {
                     case RockSave:
-                        SceneRefs.objectFactory.CreateSavedRock(gridSave.grid[x, z] as RockSave, new(x, i, z));
+                        SceneRefs.objectFactory.CreateSavedRock(gridSave.grid[x, z] as RockSave, new(x, i, z), rockData);
                         break;
                     case WaterSave:
                         SceneRefs.objectFactory.CreateSavedWater(gridSave.grid[x, z] as WaterSave, new(x, i, z));

@@ -37,7 +37,7 @@ public class MapGen : MonoBehaviour
     MapTile[,] map;
 
     /// <summary>List of resources that are posible to spawn./summary>
-    [Header("Resource data")][SerializeField] List<MinableRes> minableResources;
+    [Header("Resource data")][SerializeField] public List<MinableRes> minableResources;
     /// <summary>Material for dirt rocks./summary>
     [SerializeField] Material dirt;
 
@@ -272,7 +272,7 @@ public class MapGen : MonoBehaviour
                 map[x, y].hardness += Mathf.RoundToInt(f);
 
                 if (changeColor)
-                    map[x, y].color = new(dirt.color.r / f * 2, dirt.color.g / f * 2, dirt.color.b / f * 2, 1);
+                    map[x, y].color = new();
             }
         }
     }

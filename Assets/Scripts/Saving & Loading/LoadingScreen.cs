@@ -252,9 +252,10 @@ public class LoadingScreen : MonoBehaviour
         // Empties grid
         MyGrid.PrepGridLists();
         // creates an empty ground level
+
         for (int i = 0; i < gridSave.Length; i++)
         {
-            MyGrid.Load(gridSave[i], templateLevel, i);
+            MyGrid.Load(gridSave[i], templateLevel, i, gameObject.GetComponent<MapGen>().minableResources);
             progress.Report(progressGlobal += TILE_WEIGHT);
         }
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;

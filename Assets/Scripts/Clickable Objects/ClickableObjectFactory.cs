@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using UnityEngine;
 
 /// <summary>Instantiates and fills new Clickable Objects.</summary>
@@ -56,10 +58,14 @@ public class ClickableObjectFactory : MonoBehaviour
             gp.ToVec(ROCK_OFFSET),
             Quaternion.identity,
             MyGrid.FindLevelRocks(gp.y)).GetComponent<Rock>();
-        r.GetComponent<Renderer>().material.color = color;
         r.rockYield = resource;
         r.Integrity = hardness;
+        r.originalIntegrity = hardness;
         r.objectName = _name;
+        if (_name == "Dirt")
+            r.ColorWithIntegrity();
+        else
+            r.GetComponent<Renderer>().material.color = color;
         r.UniqueID();
         MyGrid.SetGridItem(gp, r);
     }
@@ -154,16 +160,20 @@ public class ClickableObjectFactory : MonoBehaviour
     }
 
     /// <summary>Loads a Rock.</summary>
-    public Rock CreateSavedRock(RockSave save, GridPos gp)
+    public Rock CreateSavedRock(RockSave save, GridPos gp, List<MinableRes> resData)
     {
         Rock rock = Instantiate(
-            tilePrefabs.GetPrefab(save.objectName),
+            tilePrefabs.GetPrefab("Dirt"),
             gp.ToVec(ROCK_OFFSET),
             Quaternion.identity,
             MyGrid.FindLevelRocks(gp.y)).GetComponent<Rock>();
         rock.Load(save);
+        if(rock.rockYield != null)
+            rock.GetComponent<MeshRenderer>().material.color = resData.FirstOrDefault(q => q.name == save.objectName).color;
+        else
+            rock.ColorWithIntegrity();
 
-        MyGrid.SetGridItem(gp, rock);
+    MyGrid.SetGridItem(gp, rock);
         if (rock.toBeDug)
         {
             SceneRefs.jobQueue.toBeDug.Add(rock);

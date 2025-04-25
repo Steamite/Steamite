@@ -9,20 +9,24 @@ public static class HumanActions
     #region Variables
 
     /// <summary>Max ammount of resources that can be transfered each tick.</summary>
-    static int transferPerTick = 5;
+    static readonly int transferPerTick = 5;
 
     //Efficiency modifiers
     /// <summary>Multiplies progress of <see cref="Dig(Human)"/> action.</summary>
-    static float digSpeed = 1f;
+    static readonly float digSpeed = 1f;
     /// <summary>Multiplies progress of <see cref="Build(Human)"/> action.</summary>
-    static float buildSpeed = 1f;
+    static readonly float buildSpeed = 1f;
     /// <summary>Multiplies progress of <see cref="DoProduction(Human)"/> action.</summary>
-    static float productionSpeed = 1f;
+    static readonly float productionSpeed = 1f;
     #endregion
+
+
+    
 
     public static void ChangeEfficiency(JobState toChange, int ammount)
     {
-        switch (toChange)
+        throw new NotImplementedException();
+        /*switch (toChange)
         {
             case JobState.Digging:
                 digSpeed += ammount;
@@ -37,7 +41,7 @@ public static class HumanActions
             default:
                 Debug.LogError($"Undifined jobState, {toChange}");
                 break;
-        }
+        }*/
     }
 
     #region Movement

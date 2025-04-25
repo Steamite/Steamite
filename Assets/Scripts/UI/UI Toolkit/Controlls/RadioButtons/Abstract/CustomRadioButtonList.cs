@@ -21,10 +21,7 @@ namespace AbstractControls
     [UxmlElement]
     public partial class CustomRadioButtonList : ListView, IBindable
     {
-        protected List<RadioButtonData> _itemsSource;
-
-        protected ScrollView _scrollView;
-
+        protected new VisualElement contentContainer;
         protected Action<int> changeEvent;
 
         int _selID;
@@ -44,10 +41,8 @@ namespace AbstractControls
         #region List
         public CustomRadioButtonList()
         {
-            // Initialize the internal item source
-            _itemsSource = new List<RadioButtonData>();
             // Default settings (adjust as needed)
-            fixedItemHeight = 30;
+            virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             makeItem = DefaultMakeItem;
             bindItem = DefaultBindItem;
             bindingSourceSelectionMode = BindingSourceSelectionMode.AutoAssign;
@@ -61,22 +56,21 @@ namespace AbstractControls
         /// <param name="index"></param>
         public void RemoveItem(int index)
         {
-            _itemsSource.RemoveAt(index);
+            itemsSource.RemoveAt(index);
             if (index == SelectedChoice)
             {
                 SelectedChoice = -1;
 
                 //_selectedButton?.Deselect();
             }
-            Rebuild();
+            RefreshItems();
         }
         /// <summary>
         /// Clears all items from the list
         /// </summary>
         protected void ClearItems()
         {
-            _itemsSource.Clear();
-            Rebuild();
+            itemsSource = null;
         }
 
         // Default method for creating an item (override in specific use cases)
@@ -88,7 +82,7 @@ namespace AbstractControls
             element.RemoveFromClassList("unity-collection-view__item");
             element.RemoveFromClassList("unity-list-view__item");
             (element as CustomRadioButton).value = index;
-            (element as CustomRadioButton).text = _itemsSource[index].text;
+            (element as CustomRadioButton).text = ((RadioButtonData)itemsSource[index]).text;
             return;
         }
 
@@ -96,9 +90,9 @@ namespace AbstractControls
 
         public virtual void Init(Action<int> onChange)
         {
-            itemsSource = _itemsSource;
             SelectedChoice = -1;
             changeEvent = onChange;
+            contentContainer = this.Q<VisualElement>("unity-content-container");
         }
 
         /// <summary>

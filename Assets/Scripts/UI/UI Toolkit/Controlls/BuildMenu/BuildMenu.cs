@@ -8,8 +8,8 @@ namespace BuildMenu
     public partial class BuildMenu : VisualElement, IInitiableUI
     {
         BuildingData buildingData;
-        BuildCategoryGroup categGroup;
         BuildButtonList buildingList;
+        BuildCategoryGroup categGroup;
         int prevOpen;
 
         public BuildMenu(){}
@@ -17,12 +17,14 @@ namespace BuildMenu
         public void Init()
         {
             buildingData = SceneRefs.objectFactory.buildPrefabs;
+            
+            buildingList = new(BlueprintChange);
+            Add(buildingList);
+            
             categGroup = new();
             categGroup.SetChangeCallback(CategChange);
             Add(categGroup);
 
-            buildingList = new(BlueprintChange);
-            Add(buildingList);
         }
 
         void CategChange(int i)

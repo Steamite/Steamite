@@ -123,7 +123,8 @@ namespace InfoWindowElements
         /// <returns>Created none element.</returns>
         protected virtual VisualElement MakeNoneElement()
         {
-            Label l = new Label($"Free {(itemsSource != null ? itemsSource.Count : 0)}");
+
+            Label l = new Label($"Empty"); // Free {(itemsSource != null ? itemsSource.Count : 0)}
             l.style.marginBottom = 0;
             l.style.marginTop = 0;
             l.style.marginLeft = 0;
@@ -151,9 +152,16 @@ namespace InfoWindowElements
                     SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Rock:
-                    binding = BindingUtil.CreateBinding(nameof(Rock.rockYield));
-                    binding.sourceToUiConverters.AddConverter((ref Resource yeild) => ToUIRes(yeild));
-                    SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    if(((Rock)data).rockYield != null)
+                    {
+                        binding = BindingUtil.CreateBinding(nameof(Rock.rockYield));
+                        binding.sourceToUiConverters.AddConverter((ref Resource yeild) => ToUIRes(yeild));
+                        SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    }
+                    else
+                    {
+                        resources = new();
+                    }
                     break;
                 case Human:
                     binding = BindingUtil.CreateBinding(nameof(Human.Inventory));

@@ -691,7 +691,7 @@ MonoBehaviour:
   minableResources:
   - {fileID: 11400000, guid: a8d8035b791c05943ba13e1333106fc9, type: 2}
   - {fileID: 11400000, guid: 1c3d32d887bb74046af6627885ac30b8, type: 2}
-  - {fileID: 11400000, guid: a5cd7623b991cc04783d946fb6f71da2, type: 2}
+  - {fileID: 11400000, guid: fd427511e764df5408494dc7e0e9b586, type: 2}
   dirt: {fileID: 2100000, guid: 0930df6ecc353d34d8d6511a134ceda6, type: 2}
 --- !u!1 &676738600
 GameObject:

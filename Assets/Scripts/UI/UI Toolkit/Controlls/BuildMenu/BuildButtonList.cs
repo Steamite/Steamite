@@ -23,6 +23,8 @@ namespace BuildMenu
         public BuildButtonList(Action<int> changeAction)
         {
             Init(changeAction);
+            contentContainer.AddToClassList("build-bar");
+            SetItemSource(null);
         }
 
         public void SetItemSource(List<BuildingWrapper> wrappers)
@@ -30,23 +32,25 @@ namespace BuildMenu
             if (wrappers == null)
                 style.display = DisplayStyle.None;
             else
+            {
                 style.display = DisplayStyle.Flex;
-            _itemsSource = 
-                wrappers.Select(
-                    q => new RadioBuildButtonData(
-                        q.building.objectName, 
-                        q.preview)
-                        as RadioButtonData).ToList();
+                itemsSource =
+                    wrappers.Select(
+                        q => new RadioBuildButtonData(
+                            q.building.objectName,
+                            q.preview)
+                            as RadioButtonData).ToList();
+            }
         }
 
         
 
         protected override CustomRadioButton DefaultMakeItem()
         {
-            CustomRadioButton button = new();
-            button.styleClass = "building-blueprint";
+            CustomRadioButton button = new("building-button", -1, false, true);
             button.Add(new());
             button[0].name = "img";
+            button[0].AddToClassList("building-background");
             button.Add(new Label());
             button[1].name = "label";
             return button;
@@ -55,8 +59,8 @@ namespace BuildMenu
         protected override void DefaultBindItem(VisualElement element, int index)
         {
             base.DefaultBindItem(element, index);
-            element.Q<VisualElement>("img").style.backgroundImage = new(((BuildingWrapper)itemsSource[index]).preview);
-            element.Q<Label>("label").text = ((BuildingWrapper)itemsSource[index]).building.objectName;
+            element.Q<VisualElement>("img").style.backgroundImage = new(((RadioBuildButtonData)itemsSource[index]).img);
+            element.Q<Label>("label").text = ((RadioBuildButtonData)itemsSource[index]).text;
         }
     }
 }

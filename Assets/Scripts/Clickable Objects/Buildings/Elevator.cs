@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
+using UnityEngine;
 
 /// <summary>
 /// <inheritdoc cref="IStorage"/>
@@ -11,10 +12,14 @@ public class Elevator : Building, IStorage
     public static Elevator main;
     public bool isMain = false;
 
+
     /// <inheritdoc/>
     [CreateProperty] public List<bool> CanStore { get; set; } = new();
     public StorageResource LocalResources => localRes;
     #endregion
+
+    [RuntimeInitializeOnLoadMethod]
+    static void ReloadDomain() => main = null;
     public override void UniqueID()
     {
         base.UniqueID();

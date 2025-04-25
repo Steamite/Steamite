@@ -35,6 +35,7 @@ namespace RadioGroups
         #region List
         public SaveRadioList() : base()
         {
+            virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
         }
         protected override void DefaultBindItem(VisualElement element, int index)
         {
@@ -42,8 +43,8 @@ namespace RadioGroups
             element.RemoveFromClassList("unity-text-element");
             element.RemoveFromClassList("unity-button");
             SaveRadioButton saveRadioButton = (element as SaveRadioButton);
-            saveRadioButton.text = _itemsSource[index].text;
-            saveRadioButton.saveDate.text = (_itemsSource[index] as RadioSaveButtonData).folder.date.ToString();
+            saveRadioButton.text = (itemsSource[index] as RadioButtonData).text;
+            saveRadioButton.saveDate.text = (itemsSource[index] as RadioSaveButtonData).folder.date.ToString();
             saveRadioButton.style.marginTop = 10;
 
             // clears styles if scrolling and selected
@@ -66,6 +67,21 @@ namespace RadioGroups
             VisualElement el = this.Q<VisualElement>("unity-slider");
             el.style.marginTop = 0;
             el.style.marginBottom = 0;
+            contentContainer.RegisterCallback<GeometryChangedEvent>(RecalculateSize);
+        }
+
+        void RecalculateSize(GeometryChangedEvent e)
+        {
+            VisualElement element = e.target as VisualElement;
+            if(element == contentContainer && itemsSource != null)
+            {
+                float height = itemsSource.Count * 108 + 108 * 0.1f + (SelectedChoice > -1 ? 108*0.2f : 0);
+                if (element.resolvedStyle.height != height)
+                {
+                    element.style.minHeight = height;
+                    element.style.maxHeight = height;
+                }
+            }
         }
 
         #region Saves
@@ -104,9 +120,9 @@ namespace RadioGroups
                 {
                     folders = SortSavesByDate(path);
                 }
-                _itemsSource = folders.Select(q =>
+                itemsSource = folders.Select(q =>
                     new RadioSaveButtonData(
-                        Path.GetDirectoryName(q.path), 
+                        Path.GetFileNameWithoutExtension(q.path), 
                         q)
                         as RadioButtonData).ToList();
                 return folders;

@@ -596,7 +596,7 @@ public class GridTiles : MonoBehaviour
             q = new(buildBlueprint.transform.rotation.x, buildBlueprint.transform.rotation.y, buildBlueprint.transform.rotation.z, buildBlueprint.transform.rotation.w);
         GridPos gp = MyGrid.Rotate(buildingPrefab.blueprint.moveBy, buildingPrefab.transform.eulerAngles.y);
         gp = new(activePos.x + gp.x, (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) + ClickableObjectFactory.BUILD_OFFSET, activePos.z + gp.z);
-        buildBlueprint = Instantiate(buildingPrefab.gameObject, new Vector3(gp.x, gp.y, gp.z), Quaternion.identity, transform).GetComponent<Building>(); // creates the building prefab
+        buildBlueprint = Instantiate(buildingPrefab, new Vector3(gp.x, gp.y, gp.z), Quaternion.identity, transform); // creates the building prefab
         buildBlueprint.transform.rotation = q;
         buildBlueprint.transform.SetParent(buildBlueprint.GetComponent<Pipe>() ? GameObject.FindWithTag("Pipes").transform : GameObject.Find("Buildings").transform);
         buildBlueprint.objectName = buildBlueprint.objectName.Replace("(Clone)", ""); // removes (Clone) from its name

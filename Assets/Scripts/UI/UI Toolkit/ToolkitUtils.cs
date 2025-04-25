@@ -7,7 +7,10 @@ public static class ToolkitUtils
 {
     public static LocalMenu localMenu;
     public static ResourceSkins resSkins;
-    public static Color textColor = new(0.6313726f, 0.5803922f, 0.2313726f, 1);
+    public static readonly Color textColor = new(0.6313726f, 0.5803922f, 0.2313726f, 1);
+
+    [RuntimeInitializeOnLoadMethod]
+    static void ReloadDomain() => localMenu = null;
 
     /// <summary>
     /// Switches classes on an element with no transition duration, the duration must be on the classes, else it will not be restored afterwards.
