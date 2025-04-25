@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -32,8 +33,15 @@ public static class ToolkitUtils
 
     public static VisualElement GetRoot(VisualElement element)
     {
-        if (element.parent != null)
-            return GetRoot(element.parent);
+        while (element.parent != null)
+            element = element.parent;
+        return element;
+    }
+    public static VisualElement GetParentOfType<T>(VisualElement element)
+    {
+        while(element is T && element.parent != null)
+            element = element.parent;
+
         return element;
     }
 }

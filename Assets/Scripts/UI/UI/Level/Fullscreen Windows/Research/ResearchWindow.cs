@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 public class ResearchWindow : FullscreenWindow
 {
     IUIElement UI;
+
     public ResearchNode currentResearch { get; private set; }
     [HideInInspector] public ResearchData researchData;
     public event Action<ResearchNode> researchCompletion;
@@ -45,11 +46,11 @@ public class ResearchWindow : FullscreenWindow
 
     }
 
-
     public void Init()
     {
         GetWindow();
         SceneRefs.researchAdapter.Init(DoResearch);
+        ((IInitiableUI)UIRefs.buildBar).Init();
     }
 
     public override void OpenWindow()

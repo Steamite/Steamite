@@ -129,7 +129,7 @@ public class Building : StorageObject
         }
         else
         {
-            PlaceBuilding(SceneRefs.gridTiles);
+            PlaceBuilding(true);
         }
         base.Load(save);
     }
@@ -348,10 +348,10 @@ public class Building : StorageObject
     }
 
     /// <summary>
-    /// Placing building by player.
+    /// Entry point to call for creating building that are stationary.
+    /// Do not call for moving blueprints.
     /// </summary>
-    /// <param name="gT"></param>
-    public virtual void PlaceBuilding(GridTiles gT)
+    public virtual void PlaceBuilding(bool loading = false)
     {
         foreach (Transform t in transform.GetComponentsInChildren<Transform>())
         {
@@ -359,13 +359,13 @@ public class Building : StorageObject
         }
         GetComponent<SortingGroup>().sortingLayerName = "Buildings";
         maximalProgress = cost.ammount.Sum() * 2;
-        gT.HighLight(new(), gameObject);
+        SceneRefs.gridTiles.HighLight(new(), gameObject);
 
         SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         MyRes.UpdateResource(cost, -1);
         UniqueID();
 
-        MyGrid.SetBuilding(this);
+        MyGrid.SetBuilding(this, loading);
     }
 
     /// <summary>

@@ -21,7 +21,6 @@ public class SceneRefs : MonoBehaviour
 
     [Header("Canvas")]
     [SerializeField] Transform _stats;
-    [SerializeField] Transform _buildMenu;
     [SerializeField] UIDocument _miscellaneous;
     [SerializeField] InfoWindow _infoWindow;
 
@@ -41,7 +40,6 @@ public class SceneRefs : MonoBehaviour
     public static Tick tick => instance._tick;
 
     public static Transform BottomBar => instance._stats;
-    public static Transform buildMenu => instance._buildMenu;
     public static UIDocument miscellaneous => instance._miscellaneous;
     public static InfoWindow infoWindow => instance._infoWindow;
 

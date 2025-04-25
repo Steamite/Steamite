@@ -31,7 +31,7 @@ namespace InfoWindowElements
         public int SelectedLevel { get; private set; }
 
         /// <summary>Control for level unlockers.</summary>
-        LevelUnlockerRadioGroup levelGroup;
+        LevelUnlockerRadioList levelGroup;
 
         Label headerLabel;
         Label stateLabel;
@@ -50,8 +50,8 @@ namespace InfoWindowElements
             contentContainer.style.flexDirection = FlexDirection.Row;
             name = "Levels";
 
-            levelGroup = new LevelUnlockerRadioGroup();
-            levelGroup.SetChangeCallback(
+            levelGroup = new LevelUnlockerRadioList();
+            levelGroup.Init(
                 (i) =>
                 {
                     ChangeActiveView(i);

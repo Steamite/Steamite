@@ -1487,7 +1487,6 @@ MonoBehaviour:
   _jobQueue: {fileID: 2023602334459014216}
   _tick: {fileID: 8150810313726245684}
   _stats: {fileID: 220867751}
-  _buildMenu: {fileID: 0}
   _miscellaneous: {fileID: 1855733983}
   _infoWindow: {fileID: 225780445}
   _researchAdapter: {fileID: 8150810313726245686}
