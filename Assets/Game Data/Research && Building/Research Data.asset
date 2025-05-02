@@ -59,7 +59,7 @@ MonoBehaviour:
       researchTime: 15
       reseachCost:
         capacity: 10
-        type: 04000000
+        type: 02000000
         ammount: 32000000
       nodeType: 2
       nodeCategory: 2

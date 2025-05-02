@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AbstractControls;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -79,15 +80,22 @@ namespace Research
             }
         }
 
-        public override void Select(int value)
+        public override bool Select(int value)
         {
-            if (SelectedChoice > -1 && SelectedChoice != value)
-            {
+            if (SelectedChoice > -1)
                 GetButtonByIndex(SelectedChoice).Deselect();
+            if (SelectedChoice == value)
+            {
+                SelectedChoice = -1;
+                changeEvent?.Invoke(-1);
+                return false;
             }
-            SelectedChoice = value;
-            if (value > -1)
+            else
+            {
+                SelectedChoice = value;
                 changeEvent?.Invoke(value);
+                return true;
+            }                
         }
 
         public ResearchRadioButton GetButtonByIndex(int i)

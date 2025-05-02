@@ -121,7 +121,8 @@ public static class PathFinder
                     continue;
                 }*/
 
-                foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q => q.name == building.id.ToString()).GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance)/*.Skip(1)*/)
+                foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q => q.name == building.id.ToString())
+                    .GetComponentsInChildren<Image>().Select(q => q.transform))
                 {
                     coordinates.entryPoints.Add(new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z)));
                     entryPoints.Add(i);

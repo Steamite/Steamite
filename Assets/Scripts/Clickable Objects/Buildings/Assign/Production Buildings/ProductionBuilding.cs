@@ -45,17 +45,17 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     /// If there's no other component in <see href="toEnable"/> adds "Production", and fills it.
     /// </summary>
     /// <inheritdoc/>
-    protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
+    protected override void ToggleInfoComponents(InfoWindow info, List<string> toEnable)
     {
         if (toEnable.Count == 0)
         {
             toEnable.Add("Production");
             toEnable.Add("Assign");
-            base.OpenWindowWithToggle(info, toEnable);
+            base.ToggleInfoComponents(info, toEnable);
         }
         else
         {
-            base.OpenWindowWithToggle(info, toEnable);
+            base.ToggleInfoComponents(info, toEnable);
         }
     }
     #endregion
@@ -152,34 +152,40 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     /// <inheritdoc/>
     public override void OrderDeconstruct()
     {
-        base.OrderDeconstruct();
-        if (constructed)
+        JobQueue queue = SceneRefs.jobQueue;
+        if (!constructed)
         {
-            if (deconstructing) // has just been ordered
+            base.OrderDeconstruct();
+        }
+        else 
+        {
+            if (!deconstructing) // start deconstruction now!
             {
-                InputResource.ReassignCarriers(false);
-                Human human = localRes.carriers.Count > 0 && Assigned.Count > 0 ? Assigned[0] : null;
-                foreach (Human h in Assigned)
+                Human human;
+                queue.CancelJob(JobState.Pickup, this);
+                queue.CancelJob(JobState.Supply, this);
+                while(localRes.carriers.Count > 0) 
                 {
-                    h.workplace = null;
-                    if (h != human)
-                        HumanActions.LookForNew(h);
-                    StopAllCoroutines();
+                    localRes.RemoveRequest(localRes.carriers[0]);
                 }
-                if (human)
+
+                if (InputResource.carriers.Count > 0)
                 {
+                    human = InputResource.carriers[0];
+                    localRes.AddRequest(new(), human, 0);
+                    InputResource.RemoveRequest(human);
+                    InputResource.ReassignCarriers(false);
                     JobData data = PathFinder.FindPath(new() { this }, human);
                     data.job = JobState.Deconstructing;
-                    human.SetJob(data);
-                    human.ChangeAction(HumanActions.Demolish);
+                    human.SetJob(data, true);
                 }
+                deconstructing = true;
+                queue.AddJob(JobState.Deconstructing, this);
             }
             else // has just been canceled
             {
-                foreach (Human h in Assigned)
-                {
-
-                }
+                base.OrderDeconstruct();
+                return;
             }
         }
     }
@@ -263,7 +269,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
                     human.SetJob(job);
                 else
                     human.SetJob(JobState.FullTime, job.interest);
-                human.ChangeAction(HumanActions.Move);
+                human.Decide();
                 human.lookingForAJob = false;
 
             }

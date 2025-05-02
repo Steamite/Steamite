@@ -41,7 +41,7 @@ namespace AbstractControls
         /// Deselects the previous button and triggers the <see cref="changeEvent"/>.
         /// </summary>
         /// <param name="value">Index of the new button</param>
-        public virtual void Select(int value)
+        public virtual bool Select(int value)
         {
             if (SelectedChoice > -1)
                 ((CustomRadioButton)ElementAt(SelectedChoice)).Deselect();
@@ -49,11 +49,13 @@ namespace AbstractControls
             {
                 SelectedChoice = -1;
                 changeEvent?.Invoke(-1);
+                return false;
             }
             else
             {
                 SelectedChoice = value;
                 changeEvent?.Invoke(value);
+                return true;
             }
         }
         #endregion

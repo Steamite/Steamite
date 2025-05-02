@@ -61,6 +61,7 @@
 
 #unity-tab-view__header-container {
     background-color: rgb(28, 28, 28);
+    flex-grow: 1;
 }
 
 .unity-tab__content-container {

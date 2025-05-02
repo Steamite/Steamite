@@ -18,7 +18,7 @@ namespace BuildMenu
 
         CustomRadioButton CreateCategButton(BuildCategWrapper categ, int i)
         {
-            CustomRadioButton button = new("building-categ", i, true);
+            CustomRadioButton button = new("building-categ", i, true, true);
 
             VisualElement img = new();
             img.style.backgroundImage = categ.Icon;

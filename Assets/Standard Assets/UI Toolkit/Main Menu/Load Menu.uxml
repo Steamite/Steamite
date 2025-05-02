@@ -13,7 +13,7 @@
             <ui:VisualElement name="Body" style="flex-direction: row; justify-content: space-around; max-height: 90%; min-height: 90%;">
                 <ui:VisualElement name="Worlds" style="flex-grow: 0; flex-shrink: 1; width: 50%; align-items: flex-start; height: 95%;">
                     <ui:Label text="Worlds" style="font-size: 40px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 5%; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
-                    <RadioGroups.SaveRadioList name="World-List" virtualization-method="DynamicHeight" allow-add="false" allow-remove="false" class="world-list" style="align-self: center;" />
+                    <RadioGroups.SaveRadioList name="World-List" allow-add="false" allow-remove="false" show-border="true" class="world-list" style="align-self: center;" />
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 1; position: absolute; left: 50%; top: 7.5%; height: 85%; width: 0.2%; background-color: rgb(181, 166, 66);" />
                 <ui:VisualElement name="Saves" style="justify-content: flex-start; background-color: rgba(28, 28, 28, 0); flex-grow: 0; max-height: 100%; width: 50%;">

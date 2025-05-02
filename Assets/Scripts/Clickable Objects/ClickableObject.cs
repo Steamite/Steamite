@@ -149,8 +149,10 @@ public abstract class ClickableObject : MonoBehaviour,
             info.header.text = objectName;
             return info;
         }
-        throw new ArgumentException();
+        Debug.LogWarning($"Object \"{objectName}\" not selected, why open window?");
+        return null;
     }
+    
 
     /// <summary>
     /// Must be called after updating a bindable parameter. <br/>
@@ -160,6 +162,8 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <param name="property">Name of the property, not field.</param>
     public void UIUpdate(string property = "")
     {
+        if (selected && propertyChanged == null)
+            Debug.LogWarning($"no bindings {property}");
         propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
 
@@ -189,5 +193,7 @@ public abstract class ClickableObject : MonoBehaviour,
         id = save.id;
         objectName = save.objectName;
     }
+
     #endregion Saving
+    public bool HasActiveBinding() => propertyChanged != null;
 }

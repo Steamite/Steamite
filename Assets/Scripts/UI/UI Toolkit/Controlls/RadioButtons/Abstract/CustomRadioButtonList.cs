@@ -21,10 +21,10 @@ namespace AbstractControls
     [UxmlElement]
     public partial class CustomRadioButtonList : ListView, IBindable
     {
-        protected new VisualElement contentContainer;
-        protected Action<int> changeEvent;
+        public new VisualElement contentContainer;
+        protected event Action<int> changeEvent;
 
-        int _selID;
+        protected int _selID;
         protected int SelectedChoice
         {
             get
@@ -48,6 +48,8 @@ namespace AbstractControls
             bindingSourceSelectionMode = BindingSourceSelectionMode.AutoAssign;
             reorderable = false;
             selectionType = SelectionType.None;
+            contentContainer = this.Q<VisualElement>("unity-content-container");
+            ((ScrollView)hierarchy[0]).horizontalScrollerVisibility = ScrollerVisibility.Hidden;
         }
 
         /// <summary>
@@ -92,14 +94,13 @@ namespace AbstractControls
         {
             SelectedChoice = -1;
             changeEvent = onChange;
-            contentContainer = this.Q<VisualElement>("unity-content-container");
         }
 
         /// <summary>
-        /// Need to use with buttons instead of indexes for proper unbinding.
+        /// Called from buttons;
         /// </summary>
         /// <param name="customRadioButton">Button pressed.</param>
-        public virtual void Select(int index)
+        public virtual bool Select(int index)
         {
             if(SelectedChoice > -1)
                 ((CustomRadioButton)contentContainer.Children()
@@ -107,10 +108,12 @@ namespace AbstractControls
             if(SelectedChoice == index)
             {
                 SelectedChoice = -1;
+                return false;
             }
             else
             {
                 SelectedChoice = index;
+                return true;
             }
         }
     }

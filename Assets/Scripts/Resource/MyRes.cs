@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -32,6 +33,11 @@ public static class MyRes
     #endregion
 
     #region Init
+
+    public static void PreLoad()
+    {
+        resDisplay = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
+    }
     /// <summary>
     /// Starting function for the resource system.
     /// </summary>
@@ -41,7 +47,6 @@ public static class MyRes
         // Update text, or display error
         try
         {
-            resDisplay = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
             Resource resource = resDisplay.InitializeResources(setupStorages);
             globalStorageSpace = 0;
 
@@ -225,7 +230,6 @@ public static class MyRes
                 {
                     human.destination = building;
                     job.job = JobState.Pickup;
-                    human.SetJob(job);
                     StorageObject sResource = job.interest.GetComponent<StorageObject>();
                     Resource resource = new();
                     resource.capacity = human.Inventory.capacity - human.Inventory.ammount.Sum();
@@ -234,7 +238,7 @@ public static class MyRes
                     MoveRes(resource, future, diff, -1);
                     sResource.RequestRes(resource, human, -1);
                     human.destination.RequestRes(resource.Clone(), human, 1);
-                    human.ChangeAction(HumanActions.Move);
+                    human.SetJob(job);
                     human.lookingForAJob = false;
                     if (diff.ammount.Sum() == 0)
                     {
@@ -270,20 +274,20 @@ public static class MyRes
     /// <param name="h"></param>
     public static void FindStorage(Human h)
     {
-        List<IStorage> storages = FilterStorages(h.Inventory, h, true);
-        JobData job = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h);
-        if (job.interest)
+        if(h.Inventory.ammount.Sum() > 0)
         {
-            job.interest.GetComponent<StorageObject>().RequestRes(h.Inventory, h, 1);
-            h.destination = (Building)job.interest;
-            job.job = JobState.Supply;
-            h.ChangeAction(HumanActions.Move);
-            h.SetJob(job);
+            List<IStorage> storages = FilterStorages(h.Inventory, h, true);
+            JobData job = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h);
+            if (job.interest)
+            {
+                job.interest.GetComponent<StorageObject>().RequestRes(h.Inventory, h, 1);
+                h.destination = (Building)job.interest;
+                job.job = JobState.Supply;
+                h.SetJob(job);
+                return;
+            }
         }
-        else
-        {
-            h.SetJob(JobState.Free, null, null);
-        }
+        h.SetJob(JobState.Free);
     }
 
     /// <summary>

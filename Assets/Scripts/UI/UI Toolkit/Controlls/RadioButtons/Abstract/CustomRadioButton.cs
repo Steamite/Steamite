@@ -75,7 +75,7 @@ namespace AbstractControls
                     {
                         el = el.parent;
                     } while (el.parent != null && el is not CustomRadioButtonGroup);
-                    ((CustomRadioButtonGroup)el).Select(value);
+                    return ((CustomRadioButtonGroup)el).Select(value);
                 }
                 else
                 {
@@ -83,7 +83,7 @@ namespace AbstractControls
                     {
                         el = el.parent;
                     } while (el.parent != null && el is not CustomRadioButtonList);
-                    ((CustomRadioButtonList)el).Select(value);
+                    return ((CustomRadioButtonList)el).Select(value);
 
                 }
             }

@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags:
   - Info
   - Humans
@@ -54,9 +54,14 @@ TagManager:
   - name: Blueprints
     uniqueID: 3843188519
     locked: 0
+  - name: Rocks
+    uniqueID: 3808103073
+    locked: 0
   - name: Pipes
     uniqueID: 3749803193
     locked: 0
   - name: Ignore
     uniqueID: 3667447625
     locked: 0
+  m_RenderingLayers:
+  - Default

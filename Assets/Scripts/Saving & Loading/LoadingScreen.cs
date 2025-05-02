@@ -66,7 +66,7 @@ public class LoadingScreen : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(true);
 
         yield return SceneManager.LoadSceneAsync(3, LoadSceneMode.Additive);
-        yield return BeforeLevelLoad();
+        yield return BeforeLevelLoad(true);
 
         if (seed != "")
             gameObject.GetComponent<MapGen>().Generate(seed, templateLevel);
@@ -107,7 +107,7 @@ public class LoadingScreen : MonoBehaviour
         }
         yield return SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
 
-        yield return BeforeLevelLoad();
+        yield return BeforeLevelLoad(false);
         yield return LoadWorldData(save);
 
         AfterLevelLoad(false);
@@ -310,11 +310,12 @@ public class LoadingScreen : MonoBehaviour
     #endregion UI loading
     #endregion Loading Game State
 
-    IEnumerator BeforeLevelLoad()
+    IEnumerator BeforeLevelLoad(bool newGame)
     {
         //UnityEngine.Rendering.DebugManager.instance.enableRuntimeUI = false;
         yield return GameObject.Find("Scene").GetComponent<SceneRefs>().BeforeLoad();
         GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
+        MyRes.PreLoad();
     }
 
     /// <summary>
@@ -327,7 +328,6 @@ public class LoadingScreen : MonoBehaviour
 
         MyRes.ActivateResources(newGame);
         await SceneManager.UnloadSceneAsync("LoadingScreen");
-
         SceneRefs.FinishLoad();
 
         humanActivation?.Invoke();

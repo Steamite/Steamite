@@ -577,7 +577,8 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
-  myColor: []
+  _materialColors: []
+  _meshRenderers: []
   blueprint:
     size:
       x: 2

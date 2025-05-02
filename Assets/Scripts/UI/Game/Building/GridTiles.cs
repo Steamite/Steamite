@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 /// <summary>Handles different control states for <see cref="GridTiles"/>.</summary>
 public enum ControlMode
@@ -26,10 +28,10 @@ public class GridTiles : MonoBehaviour
     /// <summary>Default raycast mask for the rest of time.</summary>
     public LayerMask defaultMask;
 
-    /// <summary>Currently selected building for construction.</summary>
-    [Header("Tilemaps")] public Building buildingPrefab;
+
     /// <summary>Current active control mode.</summary>
     public ControlMode activeControl { get; private set; } = ControlMode.nothing;
+    [SerializeField] InputAction shiftKey;
 
     /// <summary>Last mouse position.</summary>
     public GridPos activePos;
@@ -43,8 +45,41 @@ public class GridTiles : MonoBehaviour
 
     /// <summary>Tiles marked while dragging.</summary>
     public List<ClickableObject> markedTiles;
+    /// <summary>Currently selected building for construction.</summary>
+    [Header("Tilemaps")] Building blueprintPrefab;
+    /// <summary>
+    /// Changed from <see cref="BuildMenu"/>
+    /// </summary>
+    public Building BuildPrefab
+    {
+        get => blueprintPrefab;
+        set
+        {
+            blueprintPrefab = value;
+            if (value == null)
+                ChangeSelMode(ControlMode.nothing);
+            else
+                ChangeSelMode(ControlMode.build);
+        }
+    }
+
     /// <summary>Building that's currently beeing placed.</summary>
-    public Building buildBlueprint;
+    Building blueprintInstance;
+    public Building BlueprintInstance 
+    { 
+        get => blueprintInstance; 
+        set 
+        {
+            MyGrid.GetOverlay(MyGrid.currentLevel).DestroyBuilingTiles();
+            blueprintInstance = value;
+            if (value == null)
+            {
+                DeselectBuildingButton?.Invoke();
+            }
+        }
+    }
+    public Action DeselectBuildingButton;
+
 
     /// <summary>Clicked(selected) object.</summary>
     public ClickableObject clickedObject;
@@ -142,12 +177,11 @@ public class GridTiles : MonoBehaviour
                 }
                 else
                 {
-                    //Build __b = buildBlueprint.build;
-                    GridPos grid = MyGrid.Rotate(buildBlueprint.blueprint.moveBy, buildBlueprint.transform.eulerAngles.y);
+                    GridPos grid = MyGrid.Rotate(blueprintInstance.blueprint.moveBy, blueprintInstance.transform.eulerAngles.y);
                     grid = new(activePos.x + grid.x, (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) + ClickableObjectFactory.BUILD_OFFSET, activePos.z + grid.z);
-                    buildBlueprint.transform.position = new(grid.x, grid.y, grid.z);
-                    c = buildBlueprint.CanPlace() ? Color.blue : Color.red;
-                    HighLight(c, buildBlueprint.gameObject);
+                    blueprintInstance.transform.position = new(grid.x, grid.y, grid.z);
+                    c = blueprintInstance.CanPlace() ? Color.blue : Color.red;
+                    HighLight(c, blueprintInstance.gameObject);
                 }
                 return;
         }
@@ -269,16 +303,16 @@ public class GridTiles : MonoBehaviour
                 }
                 break;
             case ControlMode.build:
-                if (buildBlueprint.CanPlace())
+                if (blueprintInstance.CanPlace())
                 {
-                    if (buildBlueprint.GetComponent<Pipe>())
+                    if (blueprintInstance.GetComponent<Pipe>())
                     {
                         drag = true;
-                        markedTiles = new() { buildBlueprint };
+                        markedTiles = new() { blueprintInstance };
                         GridPos gridPos = activeObject.GetPos();
-                        MyGrid.SetGridItem(gridPos, buildBlueprint, true);
-                        buildBlueprint.UniqueID();
-                        buildBlueprint = null;
+                        MyGrid.SetGridItem(gridPos, blueprintInstance, true);
+                        blueprintInstance.UniqueID();
+                        BlueprintInstance = null;
                     }
                     startPos = activePos;
                 }
@@ -305,7 +339,7 @@ public class GridTiles : MonoBehaviour
                     {
                         if (b.id != -1)
                         {
-                            b.PlaceBuilding(this);
+                            b.PlaceBuilding();
                         }
                         else
                         {
@@ -315,27 +349,27 @@ public class GridTiles : MonoBehaviour
 
                     markedTiles = new();
                     drag = false;
-                    if (Input.GetButton("Shift"))
+                    if (shiftKey.IsPressed())
                     {
                         Blueprint();
                     }
                     else
                     {
                         ChangeSelMode(ControlMode.nothing);
-                        buildBlueprint = null;
+                        blueprintInstance = null;
                     }
                 }
-                else if (buildBlueprint.CanPlace())
+                else if (blueprintInstance.CanPlace())
                 {
-                    buildBlueprint.PlaceBuilding(this);
+                    blueprintInstance.PlaceBuilding();
 
-                    if (Input.GetButton("Shift"))
+                    if (shiftKey.IsInProgress())
                     {
                         Blueprint();
                     }
                     else
                     {
-                        buildBlueprint = null;
+                        BlueprintInstance = null;
                         ChangeSelMode(ControlMode.nothing);
                     }
                 }
@@ -418,7 +452,7 @@ public class GridTiles : MonoBehaviour
             }
             else
             {
-                _clickObject = Instantiate(buildingPrefab, new(path[i].x, 1.5f, path[i].z), Quaternion.identity, pipes);
+                _clickObject = Instantiate(blueprintPrefab, new(path[i].x, 1.5f, path[i].z), Quaternion.identity, pipes);
 
                 Pipe pipe = _clickObject.GetComponent<Pipe>();
                 GridPos gridPos = pipe.GetPos();
@@ -491,6 +525,7 @@ public class GridTiles : MonoBehaviour
         drag = false;
         ChangeSelMode(ControlMode.nothing);
     }
+
     /// <summary>
     /// Removes clickedObject from selection.
     /// </summary>
@@ -504,6 +539,7 @@ public class GridTiles : MonoBehaviour
             SceneRefs.infoWindow.Close();
         }
     }
+
     /// <summary>
     /// Changes the current tool mod, and manages transitions betwean them.
     /// </summary>
@@ -514,13 +550,13 @@ public class GridTiles : MonoBehaviour
         {
             if (activeControl == ControlMode.build)
             {
-                if (buildingPrefab.objectName == buildBlueprint.objectName)
+                if (blueprintPrefab.objectName == blueprintInstance.objectName)
                 {
                     ChangeSelMode(ControlMode.nothing);
                 }
                 else
                 {
-                    DestroyBlueprint();
+                    DestroyBlueprint(false);
                     Blueprint();
                     return;
                 }
@@ -546,8 +582,9 @@ public class GridTiles : MonoBehaviour
                     break;
                 case ControlMode.build:
                     Camera.main.GetComponent<PhysicsRaycaster>().eventMask = defaultMask;
-                    if (buildBlueprint)
-                        DestroyBlueprint();
+                    if (blueprintInstance)
+                        DestroyBlueprint(true);
+                    shiftKey.Disable();
                     break;
             }
             DeselectObjects();
@@ -575,6 +612,7 @@ public class GridTiles : MonoBehaviour
                     vec = Vector2.zero;
                     Camera.main.GetComponent<PhysicsRaycaster>().eventMask = buildingMask;
                     Blueprint();
+                    shiftKey.Enable();
                     break;
             }
             if (visible)
@@ -592,16 +630,19 @@ public class GridTiles : MonoBehaviour
     void Blueprint()
     {
         Quaternion q = new();
-        if (buildBlueprint)
-            q = new(buildBlueprint.transform.rotation.x, buildBlueprint.transform.rotation.y, buildBlueprint.transform.rotation.z, buildBlueprint.transform.rotation.w);
-        GridPos gp = MyGrid.Rotate(buildingPrefab.blueprint.moveBy, buildingPrefab.transform.eulerAngles.y);
+        if (blueprintInstance)
+            q = new(blueprintInstance.transform.rotation.x, blueprintInstance.transform.rotation.y, blueprintInstance.transform.rotation.z, blueprintInstance.transform.rotation.w);
+        GridPos gp = MyGrid.Rotate(blueprintPrefab.blueprint.moveBy, blueprintPrefab.transform.eulerAngles.y);
         gp = new(activePos.x + gp.x, (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) + ClickableObjectFactory.BUILD_OFFSET, activePos.z + gp.z);
-        buildBlueprint = Instantiate(buildingPrefab, new Vector3(gp.x, gp.y, gp.z), Quaternion.identity, transform); // creates the building prefab
-        buildBlueprint.transform.rotation = q;
-        buildBlueprint.transform.SetParent(buildBlueprint.GetComponent<Pipe>() ? GameObject.FindWithTag("Pipes").transform : GameObject.Find("Buildings").transform);
-        buildBlueprint.objectName = buildBlueprint.objectName.Replace("(Clone)", ""); // removes (Clone) from its name
-        buildBlueprint.ChangeRenderMode(true);
-        HighLight(buildBlueprint.CanPlace() ? Color.blue : Color.red, buildBlueprint.gameObject);
+        blueprintInstance = Instantiate(blueprintPrefab, new Vector3(gp.x, gp.y, gp.z), Quaternion.identity, transform); // creates the building prefab
+        blueprintInstance.transform.rotation = q;
+        blueprintInstance.transform.SetParent(
+            blueprintInstance.GetComponent<Pipe>() 
+                ? GameObject.FindWithTag("Pipes").transform 
+                : GameObject.Find("Buildings").transform);
+        blueprintInstance.objectName = blueprintInstance.objectName.Replace("(Clone)", ""); // removes (Clone) from its name
+        blueprintInstance.ChangeRenderMode(true);
+        HighLight(blueprintInstance.CanPlace() ? Color.blue : Color.red, blueprintInstance.gameObject);
     }
 
     /// <summary>
@@ -622,6 +663,7 @@ public class GridTiles : MonoBehaviour
                 markTile.toBeDug = false;
                 HighLight(new(), markTile.gameObject);
                 jobQueue.CancelJob(JobState.Digging, markTile);
+                markTile.Assigned?.SetJob(JobState.Free);
             }
         }
         else
@@ -635,14 +677,6 @@ public class GridTiles : MonoBehaviour
                 toBeDug.Add(tile); // add rock
                 tile.toBeDug = true;
                 humans.GetComponent<JobQueue>().AddJob(JobState.Digging, tile);
-            }
-            List<Human> workers = humans.transform.GetChild(0).GetComponentsInChildren<Human>().Where(h => h.Job.job == JobState.Free).ToList();
-            foreach (var worker in workers) // triggers on every free human
-            {
-                if (!worker.nightTime)
-                {
-                    HumanActions.LookForNew(worker);
-                }
             }
         }
         markedTiles.Clear();
@@ -668,9 +702,13 @@ public class GridTiles : MonoBehaviour
     /// <summary>
     /// Destroys the blueprint object and overlaygroup.
     /// </summary>
-    void DestroyBlueprint()
+    /// <param name="forgetInstance">If true removes the instance.</param>
+    void DestroyBlueprint(bool forgetInstance)
     {
-        MyGrid.GetOverlay().HideGlobalEntryPoints();
-        Destroy(buildBlueprint.gameObject);
+        Destroy(blueprintInstance.gameObject);
+        if(forgetInstance)
+            BlueprintInstance = null;
+        else
+            MyGrid.GetOverlay(MyGrid.currentLevel).DestroyBuilingTiles();
     }
 }

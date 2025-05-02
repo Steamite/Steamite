@@ -15,7 +15,7 @@ namespace InfoWindowElements
 
         }
 
-        public LevelUnlocker(int i, LevelState _state) : base("", i, true)
+        public LevelUnlocker(int i, LevelState _state) : base("", i, false)
         {
             ToggleButtonStyle(_state);
         }
@@ -49,7 +49,10 @@ namespace InfoWindowElements
         /// <param name="state">New state.</param>
         public void ToggleButtonStyle(LevelState state)
         {
+            bool active = ClassListContains("Level-Active");
             ClearClassList();
+            if (active)
+                AddToClassList("Level-Active");
             switch (state)
             {
                 case LevelState.Unavailable:

@@ -1,10 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 /// <summary>Instantiates and fills new Clickable Objects.</summary>
-public class ClickableObjectFactory : MonoBehaviour
+public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
 {
     #region Y grid offset
     /// <summary>Height of each level.</summary>
@@ -207,5 +211,13 @@ public class ClickableObjectFactory : MonoBehaviour
         human.Load(save);
         return human;
     }
+
     #endregion Loading Game
+    public IEnumerator Init()
+    {
+        AsyncOperationHandle<BuildingData> buttons = Addressables.LoadAssetAsync<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
+        if (!buttons.IsDone)
+            yield return buttons;
+        buildPrefabs = buttons.Result;
+    }
 }

@@ -51,11 +51,10 @@ public abstract class StorageObject : ClickableObject
             if (data.interest != null)
             {
                 data.job = JobState.Supply;
-                h.SetJob(data);
-                h.ChangeAction(HumanActions.Move);
+                h.SetJob(data, true);
                 return;
             }
-            HumanActions.LookForNew(h);
+            h.SetJob(JobState.Free);
         }
     }
 

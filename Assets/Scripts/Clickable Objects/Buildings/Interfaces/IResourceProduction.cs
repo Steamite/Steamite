@@ -1,4 +1,5 @@
 using System.Linq;
+using Unity.Properties;
 using UnityEngine;
 
 public interface IResourceProduction : IProduction
@@ -11,7 +12,7 @@ public interface IResourceProduction : IProduction
     StorageResource LocalResource { get; }
 
     /// <summary>The Storage for paying the production cost.</summary>
-    StorageResource InputResource { get; set; }
+    [CreateProperty] StorageResource InputResource { get; set; }
 
     /// <summary>Cost of one production cycle.</summary>
     Resource ProductionCost { get; }
@@ -44,7 +45,7 @@ public interface IResourceProduction : IProduction
             InputResource.RemoveRequest(human);
 
             human.destination = null;
-            HumanActions.LookForNew(human);
+            human.SetJob(JobState.Free);
             return;
         }
     }
@@ -117,9 +118,14 @@ public interface IResourceProduction : IProduction
     /// <summary>Toggles state indicators.</summary>
     public void RefreshStatus()
     {
-        ((MonoBehaviour)this).transform.GetChild(0).GetChild(0).gameObject.SetActive(Stoped);
-        ((MonoBehaviour)this).transform.GetChild(0).GetChild(1).gameObject.SetActive(!ProdStates.supplied);
-        ((MonoBehaviour)this).transform.GetChild(0).GetChild(2).gameObject.SetActive(!ProdStates.space);
+        Building building = this as Building;
+
+        if (building.constructed)
+        {
+            building.transform.GetChild(0).GetChild(0).gameObject.SetActive(Stoped);
+            building.transform.GetChild(0).GetChild(1).gameObject.SetActive(!ProdStates.supplied);
+            building.transform.GetChild(0).GetChild(2).gameObject.SetActive(!ProdStates.space);
+        }
     }
 
     /// <summary>

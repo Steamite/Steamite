@@ -1781,6 +1781,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
       propertyPath: m_Name
       value: Stone
@@ -2649,6 +2653,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -3145,6 +3157,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -4897,6 +4917,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
       propertyPath: m_Name
       value: Stone
@@ -5643,14 +5667,22 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: rockYield.type.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: rockYield.ammount.Array.size
-      value: 2
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -5659,6 +5691,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -6372,7 +6408,35 @@ PrefabInstance:
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -6437,6 +6501,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
       propertyPath: m_Name
       value: Stone
@@ -6685,6 +6753,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -7615,6 +7691,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -7987,6 +8071,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
       propertyPath: m_Name
       value: Stone
@@ -8297,6 +8385,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -9379,6 +9475,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
       propertyPath: m_Name
       value: Stone
@@ -10061,6 +10161,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -10558,7 +10666,35 @@ PrefabInstance:
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -10623,6 +10759,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -11429,6 +11573,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -13911,14 +14063,22 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: rockYield.type.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: rockYield.ammount.Array.size
-      value: 2
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -13927,6 +14087,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -14240,7 +14404,35 @@ PrefabInstance:
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -14429,6 +14621,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -15049,6 +15249,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -15111,6 +15319,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
       propertyPath: m_Name
       value: Stone
@@ -15236,7 +15448,35 @@ PrefabInstance:
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -15301,6 +15541,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -15363,6 +15611,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -15922,7 +16178,35 @@ PrefabInstance:
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -18096,7 +18380,35 @@ PrefabInstance:
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -18658,7 +18970,35 @@ PrefabInstance:
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -20647,14 +20987,22 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: rockYield.type.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: rockYield.ammount.Array.size
-      value: 2
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -20663,6 +21011,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -21037,6 +21389,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
       propertyPath: m_Name
       value: Stone
@@ -21163,14 +21519,22 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: rockYield.type.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: rockYield.ammount.Array.size
-      value: 2
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -21179,6 +21543,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -21615,6 +21983,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
       propertyPath: m_Name
       value: Stone
@@ -22174,7 +22546,35 @@ PrefabInstance:
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -22425,6 +22825,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -22797,6 +23205,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
       propertyPath: m_Name
       value: Stone
@@ -23045,6 +23457,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
       propertyPath: m_Name
       value: Stone
@@ -23483,6 +23899,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -24027,6 +24451,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 68fd42861d16b8f40837474160cc5aca, type: 3}
       propertyPath: m_Name
       value: Stone
@@ -24958,7 +25386,35 @@ PrefabInstance:
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -25892,7 +26348,35 @@ PrefabInstance:
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -26458,7 +26942,35 @@ PrefabInstance:
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.type.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: rockYield.ammount.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.type.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
       propertyPath: 'rockYield.ammount.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
+      propertyPath: 'rockYield.ammount.Array.data[2]'
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: aa6668b65d4076c4c88191efc279d72f, type: 3}
@@ -26709,6 +27221,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal
@@ -27577,6 +28097,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1910636158182974494}
     m_Modifications:
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: objectName
+      value: Metal
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
+      propertyPath: 'rockYield.type.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: c4bb56fbac868c540b1e897f4b9075ec, type: 3}
       propertyPath: m_Name
       value: Metal

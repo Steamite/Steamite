@@ -89,21 +89,21 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
                 gt.Exit(gt.activeObject);
                 gt.Enter(gt.activeObject);
             }
-            // rotates buildign
+            // rotates building
             else if (buildRotate.triggered)
             {
                 float axis = buildRotate.ReadValue<float>();
                 if (SceneRefs.gridTiles.activeControl == ControlMode.build)
                 {
-                    if (SceneRefs.gridTiles.buildBlueprint.GetComponent<Pipe>())
+                    if (SceneRefs.gridTiles.BlueprintInstance.GetComponent<Pipe>())
                         return;
                     if (axis < 0)
                     {
-                        SceneRefs.gridTiles.buildBlueprint.transform.Rotate(new Vector3(0, 90, 0));
+                        SceneRefs.gridTiles.BlueprintInstance.transform.Rotate(new Vector3(0, 90, 0));
                     }
                     else
                     {
-                        SceneRefs.gridTiles.buildBlueprint.transform.Rotate(new Vector3(0, -90, 0));
+                        SceneRefs.gridTiles.BlueprintInstance.transform.Rotate(new Vector3(0, -90, 0));
                     }
                     SceneRefs.gridTiles.Enter(SceneRefs.gridTiles.activeObject);
                 }

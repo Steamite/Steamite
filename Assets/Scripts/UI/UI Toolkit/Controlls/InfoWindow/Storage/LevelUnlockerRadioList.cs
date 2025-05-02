@@ -1,30 +1,67 @@
+using System;
 using System.Collections.Generic;
 using AbstractControls;
 using InfoWindowElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace RadioGroups
 {
+    class RadioLevelButtonData : RadioButtonData
+    {
+        public LevelState state;
+        public bool active;
+        public RadioLevelButtonData(string _text) : base(_text)
+        {
+            state = LevelState.Unavailable;
+        }
+    }
+
     /// <summary>Radio group for managing switchin between level unlockers.</summary>
     [UxmlElement]
     public partial class LevelUnlockerRadioList : CustomRadioButtonList
     {
         #region Variables
-        LevelState[] states;
-
         new public LevelState this[int i]
         {
-            get => states[i];
+            get
+            {
+                if (i < -1)
+                {
+                    Debug.LogWarning("index out of range");
+                    return LevelState.Unavailable;
+                }
+                return ((RadioLevelButtonData)itemsSource[i]).state;
+            }
         }
         #endregion
 
         #region Constructors
         public LevelUnlockerRadioList() : base()
         {
-            states = new LevelState[5];
-            itemsSource = new List<RadioButtonData>{ new("1"), new("2"), new("3"), new("4"), new("5") };
+            itemsSource = new List<RadioLevelButtonData> { new("1"), new("2"), new("3"), new("4"), new("5") };
+            contentContainer.AddToClassList("Level-Group");
+            contentContainer.parent.style.overflow = Overflow.Visible;
         }
+
+        protected override CustomRadioButton DefaultMakeItem()
+        {
+            return new LevelUnlocker(-1, LevelState.Unavailable);
+        }
+
+        protected override void DefaultBindItem(VisualElement element, int index)
+        {
+            base.DefaultBindItem(element, index);
+            (element as LevelUnlocker).ToggleButtonStyle(this[index]);
+            if (((RadioLevelButtonData)itemsSource[index]).active)
+                (element as LevelUnlocker).AddToClassList("Level-Active");
+            else
+                (element as LevelUnlocker).RemoveFromClassList("Level-Active");
+        }
+
         #endregion
+
+
 
         /// <summary>
         /// Resets the view and selects the current level.
@@ -32,18 +69,19 @@ namespace RadioGroups
         /// <param name="storage">Storage building that's being inspected.</param>
         /// <param name="levelData">Data containing costs for each of the button.</param>
         /// <returns>New level.</returns>
-        public int SelectUpdate(Elevator storage, LevelPresent levelData)
+        public int Open(Elevator storage, LevelPresent levelData)
         {
             GridPos gridPos = storage.GetPos();
 
             if (SelectedChoice > -1)
             {
-                ((LevelUnlocker)ElementAt(SelectedChoice)).Deselect();
+                ((LevelUnlocker)contentContainer[SelectedChoice]).Deselect();
+                _selID = -1;
             }
-            SelectedChoice = gridPos.y;
+            int level = gridPos.y;
             bool unlocked = true;
             // check up
-            for (int i = SelectedChoice - 1; i > -1; i--)
+            for (int i = level - 1; i > -1; i--)
             {
                 gridPos.y = i;
                 CheckLevel(gridPos, ref unlocked, levelData);
@@ -51,18 +89,18 @@ namespace RadioGroups
 
             // check down
             unlocked = true;
-            for (int i = SelectedChoice + 1; i < 5; i++)
+            for (int i = level + 1; i < 5; i++)
             {
                 gridPos.y = i;
                 CheckLevel(gridPos, ref unlocked, levelData);
             }
 
-            states[SelectedChoice] = LevelState.Selected;
-            ((LevelUnlocker)ElementAt(SelectedChoice)).Select();
-
+            ((RadioLevelButtonData)itemsSource[level]).active = true;
+            SetStates(level, LevelState.Selected);
+            ((LevelUnlocker)contentContainer[level]).SelectWithoutTransition(true);
+            RefreshItems();
             return SelectedChoice;
         }
-
 
         /// <summary>
         /// Checks level supplyied by for loop.
@@ -72,6 +110,7 @@ namespace RadioGroups
         /// <param name="unlocked">Is it contineous?</param>
         void CheckLevel(GridPos gridPos, ref bool unlocked, LevelPresent levelData)
         {
+            ((RadioLevelButtonData)itemsSource[gridPos.y]).active = false;
             if (unlocked)
             {
                 if (MyGrid.GetGridItem(gridPos) is Elevator)
@@ -97,10 +136,10 @@ namespace RadioGroups
         /// <returns></returns>
         public bool SetStates(int i, LevelState state)
         {
-            if (states[i] != state)
+            if (this[i] != state)
             {
-                states[i] = state;
-                ((LevelUnlocker)ElementAt(i)).ToggleButtonStyle(state);
+                ((RadioLevelButtonData)itemsSource[i]).state = state;
+                RefreshItem(i);
                 return true;
             }
             return false;
