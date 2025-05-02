@@ -146,7 +146,7 @@ public class Human : ClickableObject
 #endif
         SceneRefs.tick.SubscribeToEvent(DoRepetableAction, Tick.TimeEventType.Ticks);
         SceneRefs.tick.SubscribeToEvent(Day, Tick.TimeEventType.DayStart);
-        SceneRefs.tick.SubscribeToEvent(Night, Tick.TimeEventType.Night);
+        //SceneRefs.tick.SubscribeToEvent(Night, Tick.TimeEventType.Night);
     }
 
     /// <summary>
@@ -253,7 +253,7 @@ public class Human : ClickableObject
                 Debug.LogWarning("I'm sleeping, don't bother me!");
             return;
         }
-        if(jData.path.Count > 0)
+        if(jData.path?.Count > 0)
         {
             ChangeAction(HumanActions.Move);
             return;

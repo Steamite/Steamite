@@ -64,6 +64,8 @@ public class Building : StorageObject
     /// <returns><inheritdoc/></returns>
     public override InfoWindow OpenWindow()
     {
+        // DEBUG_Binding Common init
+        // Opens the info window (if selected) and switches what is displayed.
         InfoWindow info = base.OpenWindow();
         if (info)
         {
@@ -190,6 +192,10 @@ public class Building : StorageObject
     /// </summary>
     public virtual void FinishBuild()
     {
+        // DEBUG_Binding Problem entrypoint
+        // This happens when a building construction is finished.
+        // If the building is selected(and InfoWindow is open), the information should refresh and show a different view.
+        // The view is switched however, the bindings do not work.
         if (!constructed)
         {
             for (int i = 0; i < localRes.stored.ammount.Count; i++)

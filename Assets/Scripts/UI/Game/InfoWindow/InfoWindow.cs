@@ -201,6 +201,8 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
                 throw new NotImplementedException();
 
             case InfoMode.Building:
+                // DEBUG_Binding start of binding
+                // shows the element and assignes it a datasource(the selected object), which is used for all child elements.
                 buildingElement.style.display = DisplayStyle.Flex;
                 buildingElement.dataSource = dataSource;
                 buildingElement.dataSourceType = dataSource.GetType();
@@ -354,6 +356,8 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
     /// <param name="toEnable">List of child elements to enable.</param>
     public void ToggleChildElems(VisualElement element, List<string> toEnable, Building building)
     {
+        // DEBUG_Binding - toggling elements
+        // takes which elements are needed (toEnable) and shows + inits them.
         element.Children().ToList().ForEach(
             q => q.style.display = toEnable.Contains(q.name)
             ? DisplayStyle.Flex : DisplayStyle.None);
@@ -377,6 +381,8 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
     /// <exception cref="NotSupportedException">Forgeting to unregister bindings.</exception>
     public void RegisterTempBinding(BindingContext context, DataBinding binding, object dataObject)
     {
+        // DEBUG_Binding Binding register
+        // Creates the binding with passed paremeters.
         if (activeBindings.FindIndex(q => q.context == context.context && q.bindingId == context.bindingId) > -1)
             throw new NotSupportedException("This object already has a binding! Clear it first.");
         context.context.SetBinding(context.bindingId, binding);
@@ -384,6 +390,8 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
         {
             if (dataObject is ProductionBuilding && binding.dataSourcePath.ToString() == nameof(IResourceProduction.InputResource))
             {
+                // All Debug.Log() return same information(except {((IUpdatable)dataObject).HasActiveBinding()})
+                // even if the binding doesnt work
                 DataSourceContext con;
                 Debug.Log(
                     $"visual element: {context.context.name}\n" +
@@ -400,6 +408,9 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
                 Debug.Log(con);
             }
             activeBindings.Add(context);
+
+            // Uses the binding to update UI (look inside ClickableObject(163) for implementation)
+            // if changeEvent is null print a warning
             ((IUpdatable)dataObject).UIUpdate(binding.dataSourcePath.ToString());
         });
     }

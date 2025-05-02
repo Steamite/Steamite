@@ -76,6 +76,8 @@ namespace InfoWindowElements
                     Building b = (Building)data;
                     if (data is IResourceProduction)
                     {
+                        // DEBUG_Binding example binding
+                        // Creates a list that's used as itemSource, containg a static resouce and a dynamic binded resource.
                         if (cost)
                             binding = SetupResTypes(((IResourceProduction)b).ProductionCost, nameof(IResourceProduction.InputResource));
                         else
