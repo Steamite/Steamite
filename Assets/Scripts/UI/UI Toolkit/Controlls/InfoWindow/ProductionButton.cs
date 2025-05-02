@@ -90,6 +90,7 @@ namespace InfoWindowViews
         /// <inheritdoc/>
         public void Open(object data)
         {
+            // DEBUG_Binding
             building = (IResourceProduction)data;
             enable = building.Stoped;
             inputResource.Open(data);

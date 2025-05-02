@@ -276,6 +276,10 @@ public class GridTiles : MonoBehaviour
                 else
                     c = highlight * 3; // WHITE
                 HighLight(c, activeObject.gameObject);
+
+                // DEBUG_Binding Working entrypoint
+                // This happens when you click an object in the level.
+                // You need to have "nothing" selection mode (white highliting, If you dont press right mouse button to get there).
                 clickedObject = activeObject;
                 clickedObject.selected = true;
                 clickedObject.OpenWindow();
