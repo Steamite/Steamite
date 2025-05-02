@@ -54,15 +54,11 @@ public class JobQueue : MonoBehaviour
     /// <param name="interest">Job interest to remove.</param>
     public void CancelJob(JobState job, ClickableObject interest) // removes a logged object
     {
-        List<Human> assigned = new();
         switch (job)
         {
             case JobState.Digging:
                 toBeDug.RemoveAll(q => q.id == interest.id); // remove from the list
-
-                Rock rock = interest.GetComponent<Rock>();
-                assigned.Add(rock.Assigned);
-                rock.Assigned = null;
+                Rock rock = ((Rock)interest);
                 break;
             case JobState.Constructing:
                 constructions.RemoveAll(q => q.id == interest.id); // remove from the list
@@ -78,15 +74,11 @@ public class JobQueue : MonoBehaviour
                 pickupNeeded.RemoveAll(q => q.id == interest.id);
                 break;
         }
-        foreach (Human h in assigned)
-        {
-            if (h)
-                HumanActions.LookForNew(h);
-        }
     }
 
     /// <summary>
-    /// Takes a human away from a job, if you need to assign a new job but don't want to destroy the previous.
+    /// Takes a human away from a job, 
+    /// if you need to assign a new job but don't want to destroy the previous.
     /// </summary>
     /// <param name="human"></param>
     public void FreeHuman(Human human)

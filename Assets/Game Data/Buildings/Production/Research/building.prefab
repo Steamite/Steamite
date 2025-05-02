@@ -528,9 +528,6 @@ PrefabInstance:
       addedObject: {fileID: 9080560569971430985}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7cfb88f0b5913f14c89448de3948fa77, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6658061809421152745}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7cfb88f0b5913f14c89448de3948fa77, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 3370671720768905818}
   m_SourcePrefab: {fileID: 100100000, guid: 7cfb88f0b5913f14c89448de3948fa77, type: 3}
 --- !u!1 &2756975506193608850 stripped
@@ -562,7 +559,8 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
-  myColor: []
+  _materialColors: []
+  _meshRenderers: []
   blueprint:
     size:
       x: 2
@@ -630,28 +628,6 @@ SortingGroup:
   m_SortingLayer: 2
   m_SortingOrder: 10
   m_SortAtRoot: 0
---- !u!95 &6658061809421152745
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2756975506193608850}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: aab227a80d765044c99910e5606bb473, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!136 &3370671720768905818
 CapsuleCollider:
   m_ObjectHideFlags: 0

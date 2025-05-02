@@ -126,6 +126,7 @@ public class ResearchNode : IUpdatable
         propertyChanged?.Invoke(this, new(property));
     }
 
+    public bool HasActiveBinding() => propertyChanged != null;
     #region Editor modifications
 #if UNITY_EDITOR
 
@@ -200,6 +201,7 @@ public class ResearchNode : IUpdatable
             unlockedBy.RemoveAt(index);
         }
     }
+
 #endif
     #endregion
 }

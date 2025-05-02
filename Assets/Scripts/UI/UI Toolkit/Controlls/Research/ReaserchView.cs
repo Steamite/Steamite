@@ -6,6 +6,7 @@ namespace Research
     [UxmlElement]
     public partial class ResearchView : TabView, IInitiableUI, IUIElement
     {
+        ResearchRadioButtonGroup prevSetGroup;
         public void Init()
         {
             ResearchData data = UIRefs.research.researchData;
@@ -16,25 +17,26 @@ namespace Research
                 Tab tab = new(category.Name, category.Icon);
 
                 ResearchRadioButtonGroup group = new ResearchRadioButtonGroup(category);
-                group.SetChangeCallback((nodeIndex) => OpenButton(category.Objects[nodeIndex]));
+                group.SetChangeCallback(
+                    (nodeIndex) => 
+                    {
+                        if (nodeIndex > -1) 
+                            OpenButton(category.Objects[nodeIndex], group);
+                    });
 
                 tab.Add(group);
                 Add(tab);
             }
-            activeTabChanged += OnTabChange;
         }
 
-        void OnTabChange(Tab prevTab, Tab arg2)
+        void OpenButton(ResearchNode node, ResearchRadioButtonGroup group)
         {
-            prevTab.Q<ResearchRadioButtonGroup>().Select(-1);
-        }
-
-        void OpenButton(ResearchNode node)
-        {
-            if (node.researched == false)
+            if (node?.researched == false)
             {
+                prevSetGroup?.Select(-1);
                 UIRefs.research.SetActive(node);
                 SceneRefs.ShowMessage($"Research Changed {node.nodeName}");
+                prevSetGroup = group;
             }
         }
 

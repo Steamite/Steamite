@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// Class for buildings, which can be constructed on free tiles. 
@@ -13,7 +15,8 @@ public class Building : StorageObject
 {
     #region Variables
     /// <summary>Used for remembering color.</summary>
-    [SerializeField] protected List<Color> myColor;
+    [SerializeField] protected List<Color> _materialColors;
+    [SerializeField] protected List<Renderer> _meshRenderers;
 
     /// <summary>Building layout(entry points, anchor, ...).</summary>
     public BuildingGrid blueprint;
@@ -62,10 +65,12 @@ public class Building : StorageObject
     public override InfoWindow OpenWindow()
     {
         InfoWindow info = base.OpenWindow();
-        info.Open(this, InfoMode.Building);
-
-        if (constructed)
-            OpenWindowWithToggle(info, new());
+        if (info)
+        {
+            info.Open(this, InfoMode.Building);
+            if (constructed && !deconstructing)
+                ToggleInfoComponents(info, new());
+        }
         return info;
     }
 
@@ -74,7 +79,7 @@ public class Building : StorageObject
     /// </summary>
     /// <param name="info"><see cref="InfoWindow"/> supplied from <see cref="OpenWindow"/>.</param>
     /// <param name="toEnable">List of components to enable in the Visual Element.</param>
-    protected virtual void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
+    protected virtual void ToggleInfoComponents(InfoWindow info, List<string> toEnable)
     {
         info.ToggleChildElems(info.constructedElement, toEnable, this);
     }
@@ -151,12 +156,11 @@ public class Building : StorageObject
             if (!constructed && localRes.stored.Equals(cost))
             {
                 human.SetJob(JobState.Constructing);
-                human.ChangeAction(HumanActions.Build);
                 localRes.mods[index] = 0;
                 return;
             }
             localRes.RemoveRequest(human);
-            HumanActions.LookForNew(human);
+            human.SetJob(JobState.Free);
         }
     }
     #endregion Storing
@@ -175,18 +179,25 @@ public class Building : StorageObject
             FinishBuild();
             return true;
         }
+        UpdateConstructionProgressAlpha();
         UIUpdate(nameof(constructionProgress));
         return false;
     }
 
-    /// <summary>Sets constructed to true, clears resource for which it was built, and changes color to the original one.</summary>
+    /// <summary>
+    /// Sets constructed to true, clears resource for which it was built, 
+    /// and changes color to the original one.
+    /// </summary>
     public virtual void FinishBuild()
     {
-        constructed = true;
-        for (int i = 0; i < localRes.stored.ammount.Count; i++)
+        if (!constructed)
         {
-            localRes.stored.ammount[i] = 0;
+            for (int i = 0; i < localRes.stored.ammount.Count; i++)
+            {
+                localRes.stored.ammount[i] = 0;
+            }
         }
+        constructed = true;
         ChangeRenderMode(false);
         OpenWindow();
     }
@@ -204,7 +215,6 @@ public class Building : StorageObject
             {
                 // create a new order for deconstruction
                 localRes.ReassignCarriers();
-                deconstructing = true;
                 queue.AddJob(JobState.Deconstructing, this);
                 //Material m = GetComponent<MeshRenderer>().material;
                 //m.SetColor("_EmissionColor", m.GetColor("_EmissionColor") + Color.red);
@@ -212,10 +222,15 @@ public class Building : StorageObject
             }
             else
             {
-                // if there is cancel it
                 queue.CancelJob(JobState.Deconstructing, this);
-                deconstructing = false;
+                queue.AddJob(JobState.Constructing, this);
+                if (localRes.carriers.Count > 0)
+                {
+                    localRes.carriers[0].SetJob(JobState.Constructing);
+                }
+
             }
+            deconstructing = !deconstructing;
         }
         else
         {
@@ -235,7 +250,6 @@ public class Building : StorageObject
                     if (localRes.carriers.Count > 0)
                     {
                         localRes.carriers[0].SetJob(JobState.Constructing);
-                        localRes.carriers[0].ChangeAction(HumanActions.Build);
                     }
                 }
                 deconstructing = !deconstructing;
@@ -243,14 +257,31 @@ public class Building : StorageObject
             else
             {
                 queue.CancelJob(JobState.Constructing, this);
-                queue.AddJob(JobState.Deconstructing, this);
                 foreach (Human carrier in localRes.carriers)
                 {
+                    if(carrier.Job.interest != null && carrier.Job.interest != this)
+                    {
+                        ((Building)carrier.Job.interest).LocalRes.RemoveRequest(carrier);
+                    }
+                    carrier.destination = null;
                     MyRes.FindStorage(carrier);
                 }
                 Deconstruct(GetPos());
             }
         }
+    }
+
+    public virtual bool ProgressDeconstruction(float v, Human h)
+    {
+        constructionProgress -= v;
+        if (constructionProgress <= 0)
+        {
+            Deconstruct(h.GetPos());
+            return true;
+        }
+        UpdateConstructionProgressAlpha();
+        UIUpdate(nameof(constructionProgress));
+        return false;
     }
 
     /// <summary>
@@ -288,34 +319,35 @@ public class Building : StorageObject
             throw new NotImplementedException();
         }
     }
+    #endregion
+
+    #region Material change
     /// <summary>
     /// Changes building materials to transparent or opague.
     /// </summary>
     /// <param name="transparent">Requested render mode.</param>
     public virtual void ChangeRenderMode(bool transparent)
     {
-        foreach (Material material in transform.GetComponentsInChildren<MeshRenderer>().Select(q => q.material))
+        Material newMat = transparent 
+            ? MaterialChanger.Transparent 
+            : MaterialChanger.Opaque;
+        for (int i = 0; i < _meshRenderers.Count; i++)
         {
+            _meshRenderers[i].material = newMat;
             if (transparent)
-            {
-                // transparent
-                material.SetInt("_SrcBlend", (int)BlendMode.SrcAlpha);
-                material.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
-                material.SetInt("_ZWrite", 0);
-                material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-                material.renderQueue = 3000;
-                material.color = new(1, 1, 1, 0.5f);
-            }
+                _meshRenderers[i].material.color
+                    = new(_materialColors[i].r, _materialColors[i].g, _materialColors[i].b, 0.1f + (constructionProgress / maximalProgress) * 0.9f);
             else
-            {
-                // opaque
-                material.SetInt("_SrcBlend", (int)BlendMode.One);
-                material.SetInt("_DstBlend", (int)BlendMode.Zero);
-                material.SetInt("_ZWrite", 1);
-                material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                material.renderQueue = -1;
-                material.color = new(material.color.r, material.color.g, material.color.b, 1);
-            }
+                _meshRenderers[i].material.color = _materialColors[i];
+        }
+    }
+
+    public void UpdateConstructionProgressAlpha()
+    {
+        for (int i = 0; i < _meshRenderers.Count; i++)
+        {
+            _meshRenderers[i].material.color 
+                = new(_materialColors[i].r, _materialColors[i].g, _materialColors[i].b, 0.1f + (constructionProgress / maximalProgress)*0.9f);
         }
     }
     #endregion
@@ -358,20 +390,36 @@ public class Building : StorageObject
             t.gameObject.layer = 6;
         }
         GetComponent<SortingGroup>().sortingLayerName = "Buildings";
-        maximalProgress = cost.ammount.Sum() * 2;
+        maximalProgress = CalculateMaxProgress();
         SceneRefs.gridTiles.HighLight(new(), gameObject);
 
-        SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         MyRes.UpdateResource(cost, -1);
-        UniqueID();
+        if (loading)
+        {
+            ChangeRenderMode(true);
+        }
+        else
+        {
+            SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
+            UniqueID();
+            MyGrid.SetBuilding(this, loading);
+        }
 
-        MyGrid.SetBuilding(this, loading);
     }
 
     /// <summary>
     /// Fills <see cref="myColor"/>.
     /// </summary>
-    public void GetColors() => myColor = transform.GetComponentsInChildren<MeshRenderer>().Select(q => q.material.color).ToList(); // saves the original color
+    public void GetColors()
+    {
+        _meshRenderers = transform.GetComponentsInChildren<Renderer>().ToList();
+        _materialColors = _meshRenderers.Select(q => q.material.color).ToList();
+
+    } // saves the original color
+
+
+    public virtual int CalculateMaxProgress() => cost.ammount.Sum() * 2;
+    
     #endregion
 
 #if UNITY_EDITOR

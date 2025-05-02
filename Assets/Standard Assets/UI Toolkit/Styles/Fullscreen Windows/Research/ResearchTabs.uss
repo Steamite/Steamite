@@ -1,3 +1,12 @@
+RepeatButton {
+    display: none;
+    visibility: hidden;
+}
+
+.unity-tab-view__content-viewport {
+    overflow: visible;
+}
+
 #unity-tab-view__header-container {
     transform-origin: left top;
     rotate: 90deg;

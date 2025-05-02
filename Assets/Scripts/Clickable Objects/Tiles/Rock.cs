@@ -120,7 +120,7 @@ public class Rock : ClickableObject
         Integrity -= damage;
         if (Integrity <= 0)
         {
-            if (rockYield.ammount.Sum() > 0)
+            if (rockYield?.ammount.Sum() > 0)
                 SceneRefs.objectFactory.CreateAChunk(GetPos(), rockYield, true);
             SceneRefs.objectFactory.CreateRoad(GetPos(), true);
             MyGrid.UnsetRock(this);

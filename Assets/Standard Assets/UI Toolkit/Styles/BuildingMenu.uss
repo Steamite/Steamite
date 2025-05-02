@@ -1,3 +1,25 @@
+.categ-bar {
+    flex-grow: 0;
+    background-color: rgb(70, 49, 27);
+    flex-direction: row;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+    height: 100px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 0;
+    border-left-width: 2px;
+    border-left-color: rgb(35, 32, 2);
+    border-right-color: rgb(35, 32, 2);
+    border-top-color: rgb(35, 32, 2);
+    border-bottom-color: rgb(35, 32, 2);
+}
+
 .building-categ {
     width: 80px;
     height: 80px;
@@ -81,34 +103,12 @@
     scale: 1.1 1.1;
 }
 
-.categ-bar {
-    flex-grow: 0;
-    background-color: rgb(70, 49, 27);
-    flex-direction: row;
-    justify-content: center;
-    align-self: center;
-    align-items: center;
-    height: 100px;
-    padding-left: 50px;
-    padding-right: 50px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 0;
-    border-left-width: 2px;
-    border-left-color: rgb(35, 32, 2);
-    border-right-color: rgb(35, 32, 2);
-    border-top-color: rgb(35, 32, 2);
-    border-bottom-color: rgb(35, 32, 2);
-}
-
 .build-bar {
     align-items: center;
-    padding-top: 10px;
-    padding-right: 5px;
-    padding-bottom: 10px;
-    padding-left: 5px;
+    padding-top: 0;
+    padding-right: 10px;
+    padding-bottom: 0;
+    padding-left: 10px;
     background-color: rgb(70, 49, 27);
     margin-bottom: 20px;
     flex-grow: 0;
@@ -117,12 +117,12 @@
     align-self: center;
     height: 100px;
     min-height: 100px;
+    max-height: 100px;
 }
 
 .build-button {
     flex-grow: 0;
-    width: 100px;
-    height: 100px;
+    width: 80px;
     flex-shrink: 0;
     background-color: rgb(114, 73, 35);
     border-left-color: rgb(28, 28, 28);
@@ -140,14 +140,40 @@
     transition-duration: 0.2s;
     margin-left: 5px;
     margin-right: 5px;
+    height: 80px;
 }
 
 .build-button:hover {
-    scale: 1.1 1.1;
+    scale: 1.05 1.05;
     transition-duration: 0.2s;
+    background-color: rgb(68, 44, 21);
 }
 
-.build-button > Label {
+.build-button-selected {
+    flex-grow: 0;
+    width: 80px;
+    flex-shrink: 0;
+    background-color: rgb(46, 29, 14);
+    border-left-color: rgb(28, 28, 28);
+    border-right-color: rgb(28, 28, 28);
+    border-top-color: rgb(28, 28, 28);
+    border-bottom-color: rgb(28, 28, 28);
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transition-duration: 0.2s;
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 80px;
+    scale: 1.1 1.1;
+}
+
+.build-button-label {
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;

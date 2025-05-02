@@ -23,7 +23,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
 
     public void Open(object data, VisualElement element)
     {
-        Rect vec;
+        Rect vec = new();
         switch (data)
         {
             case ColonyStat:
@@ -41,13 +41,6 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                     costList.Open(stat.resourceUpgradeCost[element.parent.IndexOf(element)]);
                     description.text = stat.GetText(element.parent.IndexOf(element) + 1);
                 }
-
-                vec = element.worldBound;
-
-                menu.style.width = 300;
-                menu.style.left = vec.x + vec.width + 25;
-                menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
-                Show();
                 break;
             case ResearchNode:
                 ResearchNode node = data as ResearchNode;
@@ -74,16 +67,25 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                             $"paid";
                     }
                 }
-                vec = element.worldBound;
-
                 description.text = node.description;
+                break;
+            case Building:
+                Building building = data as Building;
+                header.text = building.objectName;
+                
+                secondHeader.style.display = DisplayStyle.None;
 
-                menu.style.width = 300;
-                menu.style.left = vec.x + vec.width + 25;
-                menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
-                Show();
+                costList.Open(building.cost);
+
+                description.text = "";
                 break;
         }
+
+        vec = element.worldBound;
+        menu.style.width = 300;
+        menu.style.left = vec.x + vec.width + 25;
+        menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
+        Show();
     }
 
     void Show()

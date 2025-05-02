@@ -19,23 +19,27 @@ namespace BuildMenu
     [UxmlElement]
     public partial class BuildButtonList : CustomRadioButtonList
     {
+        List<BuildingWrapper> wrappers;
         public BuildButtonList() { }
         public BuildButtonList(Action<int> changeAction)
         {
             Init(changeAction);
             contentContainer.AddToClassList("build-bar");
             SetItemSource(null);
+
+            unbindItem = DefaultUnBindItem;
         }
 
-        public void SetItemSource(List<BuildingWrapper> wrappers)
+        public void SetItemSource(List<BuildingWrapper> _wrappers)
         {
-            if (wrappers == null)
+            wrappers = _wrappers;
+            if (_wrappers == null)
                 style.display = DisplayStyle.None;
             else
             {
                 style.display = DisplayStyle.Flex;
                 itemsSource =
-                    wrappers.Select(
+                    _wrappers.Select(
                         q => new RadioBuildButtonData(
                             q.building.objectName,
                             q.preview)
@@ -47,12 +51,13 @@ namespace BuildMenu
 
         protected override CustomRadioButton DefaultMakeItem()
         {
-            CustomRadioButton button = new("building-button", -1, false, true);
+            CustomRadioButton button = new("build-button", -1, false, true);
             button.Add(new());
             button[0].name = "img";
             button[0].AddToClassList("building-background");
             button.Add(new Label());
             button[1].name = "label";
+            button[1].AddToClassList("build-button-label");
             return button;
         }
 
@@ -61,6 +66,26 @@ namespace BuildMenu
             base.DefaultBindItem(element, index);
             element.Q<VisualElement>("img").style.backgroundImage = new(((RadioBuildButtonData)itemsSource[index]).img);
             element.Q<Label>("label").text = ((RadioBuildButtonData)itemsSource[index]).text;
+            ((Button)element).text = "";
+            element.RegisterCallback<PointerEnterEvent>(Hover);
+            element.RegisterCallback<PointerLeaveEvent>(EndHove);
         }
+
+        protected void DefaultUnBindItem(VisualElement element, int index)
+        {
+            element.UnregisterCallback<PointerEnterEvent>(Hover); 
+            element.UnregisterCallback<PointerLeaveEvent>(EndHove);
+        }
+
+        private void Hover(PointerEnterEvent evt)
+        {
+            int i = ((CustomRadioButton)evt.target).value;
+            ToolkitUtils.localMenu.Open(wrappers[i].building, (CustomRadioButton)evt.target);
+        }
+        private void EndHove(PointerLeaveEvent evt)
+        {
+            ToolkitUtils.localMenu.Close();
+        }
+
     }
 }

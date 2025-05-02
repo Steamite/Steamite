@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using AbstractControls;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 namespace RadioGroups
@@ -29,7 +30,7 @@ namespace RadioGroups
 
 
     [UxmlElement]
-    public partial class SaveRadioList : CustomRadioButtonList
+    public partial class SaveRadioList : ScrollableRadioList
     {
         public Action<int> deleteAction;
         #region List
@@ -46,6 +47,7 @@ namespace RadioGroups
             saveRadioButton.text = (itemsSource[index] as RadioButtonData).text;
             saveRadioButton.saveDate.text = (itemsSource[index] as RadioSaveButtonData).folder.date.ToString();
             saveRadioButton.style.marginTop = 10;
+            saveRadioButton.style.height = 94;
 
             // clears styles if scrolling and selected
             if (SelectedChoice == index)
@@ -67,27 +69,16 @@ namespace RadioGroups
             VisualElement el = this.Q<VisualElement>("unity-slider");
             el.style.marginTop = 0;
             el.style.marginBottom = 0;
-            contentContainer.RegisterCallback<GeometryChangedEvent>(RecalculateSize);
-        }
-
-        void RecalculateSize(GeometryChangedEvent e)
-        {
-            VisualElement element = e.target as VisualElement;
-            if(element == contentContainer && itemsSource != null)
-            {
-                float height = itemsSource.Count * 108 + 108 * 0.1f + (SelectedChoice > -1 ? 108*0.2f : 0);
-                if (element.resolvedStyle.height != height)
-                {
-                    element.style.minHeight = height;
-                    element.style.maxHeight = height;
-                }
-            }
+            virtualizationMethod = CollectionVirtualizationMethod.FixedHeight;
+            fixedItemHeight = 110;
+            contentContainer.style.overflow = Overflow.Visible;
         }
 
         #region Saves
         public void DeleteSave()
         {
             deleteAction(SelectedChoice);
+            contentContainer.SendEvent(GeometryChangedEvent.GetPooled());
         }
 
         public Folder[] FillItemSource(string path, bool write, bool parentLevel)

@@ -28,7 +28,7 @@ namespace InfoWindowElements
         /// <summary>Data for unlocking and displaying info about each of the levels.</summary>
         public LevelPresent LevelData { get; private set; }
         /// <summary>Active level in the <see cref="levelGroup"/>.</summary>
-        public int SelectedLevel { get; private set; }
+        public int SelectedLevel { get; private set; } = -1;
 
         /// <summary>Control for level unlockers.</summary>
         LevelUnlockerRadioList levelGroup;
@@ -55,7 +55,6 @@ namespace InfoWindowElements
                 (i) =>
                 {
                     ChangeActiveView(i);
-                    SelectedLevel = i;
                 });
             Add(levelGroup);
 
@@ -91,8 +90,14 @@ namespace InfoWindowElements
         /// <param name="data">Elevator that is selected.</param>
         public void Open(object data)
         {
-            SelectedLevel = levelGroup.SelectUpdate((Elevator)data, LevelData);
-            ChangeActiveView(SelectedLevel);
+            if(SelectedLevel == -1)
+            {
+                levelGroup.Rebuild();
+                levelGroup.RegisterCallbackOnce<GeometryChangedEvent>(
+                    (_) => SelectedLevel = levelGroup.Open((Elevator)data, LevelData));
+            }
+            else
+                SelectedLevel = levelGroup.Open((Elevator)data, LevelData);
         }
 
         /// <summary>
@@ -101,10 +106,12 @@ namespace InfoWindowElements
         /// <param name="i"></param>
         void ChangeActiveView(int i)
         {
+            if (i == -1)
+                return;
             headerLabel.text = LevelData.headers[i];
             bodyLabel.text = LevelData.bodies[i];
 
-            if (levelGroup[SelectedLevel] != LevelState.Unlocked)
+            if (SelectedLevel > -1 && levelGroup[SelectedLevel] != LevelState.Unlocked)
                 SceneRefs.infoWindow.ClearBinding(costList);
 
             LevelState state = levelGroup[i];

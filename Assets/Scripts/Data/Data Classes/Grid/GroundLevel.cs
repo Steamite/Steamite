@@ -51,7 +51,7 @@ public class GroundLevel : MonoBehaviour
         int y = Mathf.RoundToInt(gp.z);
         if (x < 0 || x >= width || y < 0 || y >= height)
         {
-            Debug.LogError($"(Get)Index outside of grid bounds, x: {x}, y :{y}.");
+            Debug.LogWarning($"(Get)Index outside of grid bounds, x: {x}, y :{y}.");
             return null;
         }
 
@@ -176,6 +176,8 @@ public class GroundLevel : MonoBehaviour
         foreach (Building building in buildings.GetComponentsInChildren<Building>())
         {
             building.UniqueID();
+            if (building.constructed)
+                building.constructionProgress = building.CalculateMaxProgress();
             if (!building.GetComponent<BuildPipe>())
             {
                 PlaceBuild(building, load: true);
@@ -207,6 +209,8 @@ public class GroundLevel : MonoBehaviour
         if (gridPos == null)
             gridPos = building.GetPos();
         overlays.AddBuildingOverlay(gridPos, building.id);
+
+        List<Image> tiles = overlays.buildingOverlays[^1].GetComponentsInChildren<Image>().ToList();
         for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
         {
             NeededGridItem item = building.blueprint.itemList[i];
@@ -229,12 +233,12 @@ public class GroundLevel : MonoBehaviour
                     else
                         overlays.Add(new(itemPos.x, itemPos.z), i);
                     r?.entryPoints.Add(building.id);
-                    overlays.buildingOverlays[^1].GetComponentsInChildren<Image>().ToList()[^1].gameObject.SetActive(r != null);
+                    //[^1].gameObject.SetActive(r != null);
                     break;
             }
         }
         if (!load)
-            overlays.HideGlobalEntryPoints();
+            overlays.DestroyBuilingTiles();
     }
     #endregion Adding to Grid
 

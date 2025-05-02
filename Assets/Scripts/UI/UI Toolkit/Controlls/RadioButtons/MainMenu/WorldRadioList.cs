@@ -4,9 +4,13 @@ using UnityEngine.UIElements;
 
 namespace RadioGroups
 {
+    /// <summary>
+    /// Selecting world types at before starting the game
+    /// </summary>
     [UxmlElement]
     public partial class WorldRadioList : CustomRadioButtonList
     {
+
         public WorldRadioList() : base()
         {
         }

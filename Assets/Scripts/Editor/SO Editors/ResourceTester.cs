@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
@@ -6,14 +9,40 @@ using UnityEngine;
 class ResourceTester : IPreprocessBuildWithReport
 {
     public int callbackOrder { get { return 0; } }
+    
     public void OnPreprocessBuild(BuildReport report)
     {
         CheckBuildings();
         CheckReseach();
+        CheckMinables();
     }
 
-    
-    void CheckBuildings()
+    [MenuItem("Custom Editors/Check for none Resoucerces _F10")]
+    public static void RequestCheck()
+    {
+        CheckBuildings();
+        CheckReseach();
+        CheckMinables();
+    }
+
+
+    private static void CheckMinables()
+    {
+        bool succes = true;
+        MinableRes[] minableRes = AssetDatabase.LoadAllAssetsAtPath("Assets/Resources/Holders/MapGen").Cast<MinableRes>().ToArray();
+        foreach (var res in minableRes)
+        {
+            Resource resource = new();
+            resource.type.Add(res.resource);
+            if (CheckResource(resource, res.name, "Minable Res", "Minable Resouce yield"))
+                succes = false;
+        }
+
+        if (!succes)
+            throw new BuildFailedException($"Buildings have none resources assigned!");
+    }
+
+    static void CheckBuildings()
     {
         bool succes = true;
         BuildingData data = AssetDatabase.LoadAssetAtPath<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
@@ -43,7 +72,7 @@ class ResourceTester : IPreprocessBuildWithReport
             throw new BuildFailedException($"Buildings have none resources assigned!");
     }
 
-    void CheckReseach()
+    static void CheckReseach()
     {
         bool succes = true;
         ResearchData data = AssetDatabase.LoadAssetAtPath<ResearchData>("Assets/Game Data/Research && Building/Research Data.asset");
@@ -59,7 +88,7 @@ class ResourceTester : IPreprocessBuildWithReport
             throw new BuildFailedException($"Buildings have none resources assigned!");
     }
 
-    bool CheckResource(Resource testRes, string objectName, string categName, string problemName)
+    static bool CheckResource(Resource testRes, string objectName, string categName, string problemName)
     {
         if (testRes.type.Contains(ResourceType.None))
         {

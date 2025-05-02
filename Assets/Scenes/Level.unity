@@ -972,7 +972,23 @@ MonoBehaviour:
   defaultMask:
     serializedVersion: 2
     m_Bits: 2035
-  buildingPrefab: {fileID: 0}
+  shiftKey:
+    m_Name: Shift Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 8f7430d7-e35b-4d95-a394-52fcd885a11c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: ea9e443f-cf30-422a-a8ac-7b8a2f18ab68
+      m_Path: <Keyboard>/shift
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shift Key
+      m_Flags: 0
+    m_Flags: 0
   activePos:
     x: 0
     z: 0
@@ -984,7 +1000,6 @@ MonoBehaviour:
   drag: 0
   deselect: 0
   markedTiles: []
-  buildBlueprint: {fileID: 0}
   clickedObject: {fileID: 0}
   activeObject: {fileID: 0}
   cursors:
@@ -1039,6 +1054,7 @@ GameObject:
   - component: {fileID: 206732441787875933}
   - component: {fileID: 3114157475242612541}
   - component: {fileID: 4967022013944964016}
+  - component: {fileID: 4967022013944964017}
   m_Layer: 2
   m_Name: Grid
   m_TagString: Grid
@@ -1061,6 +1077,20 @@ MonoBehaviour:
   buildPrefabs: {fileID: 0}
   tilePrefabs: {fileID: 11400000, guid: 8df949a33652dbf41967796a41eace3e, type: 2}
   specialPrefabs: {fileID: 11400000, guid: 5e85ccb93c567d64cb0f47d2049664b8, type: 2}
+--- !u!114 &4967022013944964017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4967022013944964015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68c72c61a4c60a944a93ec8d010efa88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  opaqueMaterial: {fileID: 2100000, guid: 53b082ebb47dbf642aca567c53d62751, type: 2}
+  transparentMaterial: {fileID: 2100000, guid: 685d6310e1b21ce429d6d295230e1cfb, type: 2}
 --- !u!4 &5026351469592114601
 Transform:
   m_ObjectHideFlags: 0
@@ -1496,6 +1526,9 @@ MonoBehaviour:
   - {fileID: 1855733984}
   - {fileID: 225780445}
   - {fileID: 6086404398923934763}
+  beforeLoads:
+  - {fileID: 4967022013944964016}
+  - {fileID: 4967022013944964017}
 --- !u!114 &8150810313726245686
 MonoBehaviour:
   m_ObjectHideFlags: 0

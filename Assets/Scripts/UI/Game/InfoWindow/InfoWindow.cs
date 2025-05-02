@@ -70,6 +70,10 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
 
     /// <summary>View for buildings that are beeing constructed.</summary>
     public VisualElement inConstructionElement;
+    #region Construction View
+    Label constructionStateLabel;
+    Button deconstructButton;
+    #endregion
     /// <summary>View for buildings that are constructed.</summary>
     public VisualElement constructedElement;
 
@@ -99,6 +103,17 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
         rockChunkElement.style.display = DisplayStyle.None;
 
         inConstructionElement = buildingElement.Q<VisualElement>("Construction-View");
+        constructionStateLabel = buildingElement.Q<Label>("State-Label");
+        deconstructButton = buildingElement.Q<Button>("State-Change");
+        deconstructButton.clicked += 
+            () => 
+            {
+                Building b = (Building)buildingElement.dataSource;
+                b.OrderDeconstruct();
+                if(b != null)
+                    UpdateConstructionText(b);
+            };
+
         constructedElement = buildingElement.Q<VisualElement>("Constructed");
     }
 
@@ -186,19 +201,44 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
                 throw new NotImplementedException();
 
             case InfoMode.Building:
-                buildingElement.dataSource = dataSource;
                 buildingElement.style.display = DisplayStyle.Flex;
+                buildingElement.dataSource = dataSource;
+                buildingElement.dataSourceType = dataSource.GetType();
 
                 Building building = (Building)dataSource;
-                ToggleChildElems(buildingElement, new() { building.constructed ? "Constructed" : "Construction-View" });
-                if (!building.constructed)
+                if (!building.constructed || building.deconstructing)
                 {
+                    ToggleChildElems(buildingElement, new() { "Construction-View" });
                     binding = BindingUtil.CreateBinding(nameof(building.constructionProgress));
-                    binding.sourceToUiConverters.AddConverter((ref float progress) => $"Construction progress: {(progress / building.maximalProgress) * 100:0}%");
+                    binding.sourceToUiConverters.AddConverter((ref float progress) => $"Progress: {(progress / building.maximalProgress) * 100:0}%");
                     RegisterTempBinding(new(inConstructionElement.Q<Label>("Progress"), "text"), binding, building);
 
-                    ((IUIElement)buildingElement.Q<VisualElement>("Resources")).Open(building);
+
+                     
+                    if (building.deconstructing)
+                    {
+                        buildingElement.Q<VisualElement>("Resources").style.display = DisplayStyle.None;
+                        UpdateConstructionText(building);
+                    }
+                    else
+                    {
+                        buildingElement.Q<VisualElement>("Resources").style.display = DisplayStyle.Flex;
+                        UpdateConstructionText(building);
+                        ((IUIElement)buildingElement.Q<VisualElement>("Resources")).Open(new Tuple<Building, Action<bool>>(building,
+                                (resDone) =>
+                                {
+                                    if (!resDone)
+                                        constructionStateLabel.text = "waiting for resources";
+                                    else if (building.deconstructing)
+                                        constructionStateLabel.text = "deconstructing";
+                                    else
+                                        constructionStateLabel.text = "constructing";
+                                }));
+                    }
                 }
+                else 
+                    ToggleChildElems(buildingElement, new() { "Constructed" });
+
                 break;
 
             case InfoMode.Human:
@@ -262,6 +302,39 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
         }
     }
 
+    void UpdateConstructionText(Building building)
+    {
+        if (building.constructed)
+        {
+            if (building.deconstructing)
+            {
+                constructionStateLabel.text = "Deconstructing";
+                deconstructButton.text = "Cancel deconstruction";
+            }
+            else
+            {
+                constructionStateLabel.text = "Reconstructing";
+                deconstructButton.text = "Deconstruct";
+            }
+        }
+        else
+        {
+            if (building.deconstructing)
+            {
+                constructionStateLabel.text = "Removing construction";
+                deconstructButton.text = "Continue construction";
+            }
+            else
+            {
+                if (MyRes.DiffRes(building.cost, building.LocalRes.stored).ammount.Sum() > 0)
+                    constructionStateLabel.text = "Waiting for resources";
+                else
+                    constructionStateLabel.text = "Constructing";
+                deconstructButton.text = "Cancel construction";
+            }
+        }
+    }
+
     /// <summary>
     /// Enables selected elements and disables others.
     /// </summary>
@@ -300,15 +373,35 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
     /// </summary>
     /// <param name="context"></param>
     /// <param name="binding"></param>
-    /// <param name="dataSource"></param>
+    /// <param name="dataObject"></param>
     /// <exception cref="NotSupportedException">Forgeting to unregister bindings.</exception>
-    public void RegisterTempBinding(BindingContext context, DataBinding binding, object dataSource)
+    public void RegisterTempBinding(BindingContext context, DataBinding binding, object dataObject)
     {
         if (activeBindings.FindIndex(q => q.context == context.context && q.bindingId == context.bindingId) > -1)
             throw new NotSupportedException("This object already has a binding! Clear it first.");
         context.context.SetBinding(context.bindingId, binding);
-        activeBindings.Add(context);
-        ((IUpdatable)dataSource).UIUpdate(binding.dataSourcePath.ToString());
+        context.context.schedule.Execute(() =>
+        {
+            if (dataObject is ProductionBuilding && binding.dataSourcePath.ToString() == nameof(IResourceProduction.InputResource))
+            {
+                DataSourceContext con;
+                Debug.Log(
+                    $"visual element: {context.context.name}\n" +
+                    $"element panel: {context.context.panel}\n" +
+                    $"element prop: {context.bindingId}\n" +
+                    $"data source: {binding.dataSourcePath}\n" +
+                    $"{dataObject}\n" +
+                    $"{((IUpdatable)dataObject).HasActiveBinding()}\n" +
+                    $"{context.context.TryGetDataSourceContext(context.bindingId, out con)}");
+                foreach (var item in context.context.GetBindingInfos())
+                {
+                    Debug.Log(item);
+                }
+                Debug.Log(con);
+            }
+            activeBindings.Add(context);
+            ((IUpdatable)dataObject).UIUpdate(binding.dataSourcePath.ToString());
+        });
     }
 
     #endregion

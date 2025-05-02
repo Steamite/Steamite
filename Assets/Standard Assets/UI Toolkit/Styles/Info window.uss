@@ -34,7 +34,6 @@
 
 .deconstruct-button {
     margin-bottom: 5%;
-    background-color: rgb(130, 0, 0);
     border-left-color: rgb(0, 0, 0);
     border-right-color: rgb(0, 0, 0);
     border-top-color: rgb(0, 0, 0);

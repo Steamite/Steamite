@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -51,7 +52,7 @@ public class UIOverlay : MonoBehaviour
     }
 
     /// <summary>Clears all tiles from the <see cref="overlayParent"/>.</summary>
-    public void HideGlobalEntryPoints()
+    public void DestroyBuilingTiles()
     {
         for (int i = overlayParent.childCount - 1; i >= 0; i--)
         {
@@ -128,7 +129,15 @@ public class UIOverlay : MonoBehaviour
             foreach (int id in r.entryPoints)
             {
                 RectTransform rect = buildingOverlays.First(q => q.name == id.ToString());
-                rect.GetComponentsInChildren<Image>().FirstOrDefault(q => new GridPos(q.transform.position).Equals(new GridPos(r.transform.position))).gameObject.SetActive(false);
+                for (int i = 0; i < rect.transform.childCount; i++)
+                {
+                    GameObject tileObject = rect.GetChild(i).gameObject;
+                    if (r.GetPos().Equals(new GridPos(tileObject.transform.position)))
+                    {
+                        tileObject.SetActive(false);
+                        break;
+                    }
+                }
             }
     }
 }

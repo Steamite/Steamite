@@ -17,14 +17,14 @@ public class Research_Production : Building, IProduction, IAssign
     #region Window
     /// <summary>
     /// Adds "Research" to <paramref name="toEnable"/>. <br/>
-    /// <inheritdoc cref="Building.OpenWindowWithToggle(InfoWindow, List{string})"/>
+    /// <inheritdoc cref="Building.ToggleInfoComponents(InfoWindow, List{string})"/>
     /// </summary>
     /// <inheritdoc/>
-    protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
+    protected override void ToggleInfoComponents(InfoWindow info, List<string> toEnable)
     {
         toEnable.Add("Research");
         toEnable.Add("Assign");
-        base.OpenWindowWithToggle(info, toEnable);
+        base.ToggleInfoComponents(info, toEnable);
     }
     #endregion
 
@@ -57,10 +57,12 @@ public class Research_Production : Building, IProduction, IAssign
 
                 SceneRefs.jobQueue.FreeHuman(human);
                 if (!human.nightTime)
-                    human.SetJob(job);
+                    human.SetJob(job, true);
                 else
-                    human.SetJob(JobState.FullTime, job.interest);
-                human.ChangeAction(HumanActions.Move);
+                    human.SetJob(
+                        JobState.FullTime, 
+                        interest: job.interest, 
+                        shouldDecide: true);
                 human.lookingForAJob = false;
 
             }

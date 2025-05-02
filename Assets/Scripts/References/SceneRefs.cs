@@ -30,6 +30,7 @@ public class SceneRefs : MonoBehaviour
     bool messageShown = false;
 
     [SerializeReference] List<MonoBehaviour> afterLoads = new();
+    [SerializeReference] List<MonoBehaviour> beforeLoads = new();
     #endregion
 
     #region Getters
@@ -53,10 +54,10 @@ public class SceneRefs : MonoBehaviour
     public IEnumerator BeforeLoad()
     {
         instance = this;
-        AsyncOperationHandle<BuildingData> buttons = Addressables.LoadAssetAsync<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
-        if (!buttons.IsDone)
-            yield return buttons;
-        objectFactory.buildPrefabs = buttons.Result;
+        
+        foreach (IBeforeLoad beforeLoad in instance.beforeLoads)
+            yield return beforeLoad.Init();
+        beforeLoads = null;
     }
 
     public static void FinishLoad()

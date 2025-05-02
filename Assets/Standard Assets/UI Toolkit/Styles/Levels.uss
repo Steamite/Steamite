@@ -1,4 +1,4 @@
-LevelsTab GroupBox {
+.Level-Group {
     flex-grow: 1;
     justify-content: space-around;
     align-self: center;
@@ -6,16 +6,15 @@ LevelsTab GroupBox {
     align-content: auto;
     max-height: 100%;
     min-height: 100%;
-    min-width: 20%;
-    max-width: 20%;
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
-    margin-left: 5px;
+    margin-left: 10px;
     padding-top: 0;
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
+    overflow: visible;
 }
 
 LevelUnlockerRadioGroup {
@@ -31,15 +30,11 @@ LevelUnlockerRadioGroup {
 }
 
 LevelUnlocker {
-    max-width: 75px;
-    max-height: 75px;
     flex-grow: 0;
     align-self: center;
     align-items: auto;
     align-content: auto;
     justify-content: flex-start;
-    height: 75px;
-    width: 75px;
     flex-shrink: 0;
     border-left-color: rgb(28, 28, 28);
     border-right-color: rgb(28, 28, 28);
@@ -59,6 +54,10 @@ LevelUnlocker {
     opacity: 1;
     text-shadow: 1px 1px 0 rgb(35, 32, 2);
     color: rgb(101, 92, 37);
+    min-width: 80px;
+    min-height: 80px;
+    max-width: 80px;
+    max-height: 80px;
 }
 
 LevelUnlocker:disabled {
@@ -139,9 +138,16 @@ LevelUnlocker:disabled {
 
 .Level-Selected {
     background-color: rgb(141, 129, 51);
-    scale: 1.2 1.2;
+    scale: 1.15 1.15;
     color: rgb(35, 32, 2);
     text-shadow: 1px 1px 0 rgb(80, 74, 29);
+}
+
+.Level-Active {
+    border-left-color: rgb(255, 0, 0);
+    border-right-color: rgb(255, 0, 0);
+    border-top-color: rgb(255, 0, 0);
+    border-bottom-color: rgb(255, 0, 0);
 }
 
 ________________ {

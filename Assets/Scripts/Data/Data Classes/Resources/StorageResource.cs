@@ -72,12 +72,11 @@ public class StorageResource
             if (assign)
             {
                 carriers[0].SetJob(JobState.Deconstructing);
-                carriers[0].ChangeAction(HumanActions.Demolish);
             }
             for (int i = carriers.Count - 1; i > 0; i++)
             {
-                HumanActions.LookForNew(carriers[i]);
                 RemoveRequest(carriers[i]);
+                carriers[i].SetJob(JobState.Free);
             }
         }
     }

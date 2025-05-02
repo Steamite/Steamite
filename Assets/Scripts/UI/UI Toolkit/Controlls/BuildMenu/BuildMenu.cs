@@ -25,16 +25,25 @@ namespace BuildMenu
             categGroup.SetChangeCallback(CategChange);
             Add(categGroup);
 
+            SceneRefs.gridTiles.DeselectBuildingButton = () => buildingList.Select(-1);
         }
 
         void CategChange(int i)
         {
-            buildingList.SetItemSource(buildingData.Categories[i].Objects);
+            if(i == -1)
+                buildingList.SetItemSource(null);
+            else
+                buildingList.SetItemSource(buildingData.Categories[i].Objects);
         }
 
         void BlueprintChange(int i)
         {
-
+            if (i > -1)
+            {
+                SceneRefs.gridTiles.BuildPrefab = buildingData.Categories[categGroup.SelectedChoice].Objects[i].building;
+            }
+            else
+                SceneRefs.gridTiles.BuildPrefab = null;
         }
     }
 
