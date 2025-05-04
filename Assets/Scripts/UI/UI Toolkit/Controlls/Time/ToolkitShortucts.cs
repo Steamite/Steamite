@@ -1,3 +1,4 @@
+using BottomBar.Building;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -13,6 +14,7 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
     InputActionMap smallShortcuts => inputAsset.actionMaps[2];
     InputAction gameSpeed;
     InputAction level;
+    InputAction buildMenu;
 
     public void Init(VisualElement bottomBar)
     {
@@ -20,6 +22,7 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
 
         gameSpeed = smallShortcuts.FindAction("Game Speed");
         level = smallShortcuts.FindAction("Level");
+        buildMenu = smallShortcuts.FindAction("Build Menu");
 
         timeButtons = bottomBar.Q<TimeButtons>();
         timeButtons.Start();
@@ -52,6 +55,12 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
                 {
                     timeButtons.OutsideTrigger(Mathf.RoundToInt(gameSpeed.ReadValue<float>()));
                 }
+            }
+
+
+            if (buildMenu.triggered)
+            {
+                ((BuildMenu)UIRefs.bottomBar[0]).Toggle();
             }
         }
     }

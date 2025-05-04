@@ -1,7 +1,7 @@
 using AbstractControls;
 using UnityEngine.UIElements;
 
-namespace BuildMenu
+namespace BottomBar.Building
 {
     public partial class BuildCategoryGroup : CustomRadioButtonGroup
     {

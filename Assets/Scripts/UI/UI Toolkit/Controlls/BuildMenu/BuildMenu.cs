@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using AbstractControls;
 using UnityEngine.UIElements;
 
-namespace BuildMenu
+namespace BottomBar.Building
 {
     [UxmlElement]
     public partial class BuildMenu : VisualElement, IInitiableUI
@@ -10,9 +11,12 @@ namespace BuildMenu
         BuildingData buildingData;
         BuildButtonList buildingList;
         BuildCategoryGroup categGroup;
-        int prevOpen;
+        bool opened;
 
-        public BuildMenu(){}
+        public BuildMenu()
+        {
+            pickingMode = PickingMode.Ignore;
+        }
 
         public void Init()
         {
@@ -26,6 +30,8 @@ namespace BuildMenu
             Add(categGroup);
 
             SceneRefs.gridTiles.DeselectBuildingButton = () => buildingList.Select(-1);
+            style.display = DisplayStyle.None;
+            opened = false;
         }
 
         void CategChange(int i)
@@ -44,6 +50,30 @@ namespace BuildMenu
             }
             else
                 SceneRefs.gridTiles.BuildPrefab = null;
+        }
+
+        public void Open()
+        {
+            opened = true;
+            style.display = DisplayStyle.Flex;
+            UIRefs.bottomBar[1].style.display = DisplayStyle.None;
+        }
+
+        void Close()
+        {
+            opened = false;
+            style.display = DisplayStyle.None;
+            UIRefs.bottomBar[1].style.display = DisplayStyle.Flex;
+            categGroup.Select(-1);
+            BlueprintChange(-1);
+        }
+
+        public void Toggle()
+        {
+            if (opened)
+                Close();
+            else
+                Open();
         }
     }
 

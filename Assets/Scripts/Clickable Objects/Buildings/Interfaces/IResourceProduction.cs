@@ -32,7 +32,10 @@ public interface IResourceProduction : IProduction
         int index = InputResource.carriers.IndexOf(human);
         if (index == -1)
             Debug.Log("");
-        MyRes.MoveRes(InputResource.stored, human.Inventory, InputResource.requests[index], transferPerTick);
+        Resource resource = new();
+        MyRes.MoveRes(resource, human.Inventory, InputResource.requests[index], transferPerTick);
+        MyRes.UpdateResource(resource, -1);
+        MyRes.ManageRes(InputResource.stored, resource, 1);
         ((ClickableObject)this).UIUpdate(nameof(InputResource));
         if (MyRes.DiffRes(ProductionCost, InputResource.stored).ammount.Sum() == 0)
         {
@@ -102,7 +105,7 @@ public interface IResourceProduction : IProduction
         {
             MyRes.ManageRes(InputResource.stored, ProductionCost, -1);
             ((ClickableObject)this).UIUpdate("InputResource");
-            MyRes.UpdateResource(ProductionCost, -1);
+            //MyRes.UpdateResource(ProductionCost, -1);
             ProdStates.running = true;
             return true;
         }

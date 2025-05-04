@@ -5,7 +5,7 @@ using AbstractControls;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BuildMenu
+namespace BottomBar.Building
 {
     public class RadioBuildButtonData : RadioButtonData
     {
@@ -23,6 +23,11 @@ namespace BuildMenu
         public BuildButtonList() { }
         public BuildButtonList(Action<int> changeAction)
         {
+            pickingMode = PickingMode.Ignore;
+            hierarchy[0].pickingMode = PickingMode.Ignore;
+            contentContainer.parent.pickingMode = PickingMode.Ignore;
+            contentContainer.parent.parent.pickingMode = PickingMode.Ignore;
+
             Init(changeAction);
             contentContainer.AddToClassList("build-bar");
             SetItemSource(null);

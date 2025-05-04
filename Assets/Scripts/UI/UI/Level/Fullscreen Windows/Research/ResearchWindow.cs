@@ -50,7 +50,7 @@ public class ResearchWindow : FullscreenWindow
     {
         GetWindow();
         SceneRefs.researchAdapter.Init(DoResearch);
-        ((IInitiableUI)UIRefs.buildBar).Init();
+        ((IInitiableUI)UIRefs.bottomBar.Q<VisualElement>(className: "build-menu")).Init();
     }
 
     public override void OpenWindow()

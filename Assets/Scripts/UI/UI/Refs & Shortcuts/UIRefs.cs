@@ -12,12 +12,15 @@ public class UIRefs : MonoBehaviour
     [SerializeField] MonoBehaviour toolkitShotcuts;
     [SerializeField] UIDocument _bottomBar;
 
+
     public static CameraMovement levelCamera => instance._levelCamera;
     public static Trading trading => instance._trading;
     public static ResearchWindow research => instance._research;
     public static Menu pauseMenu => instance._pauseMenu;
-    public static VisualElement buildBar => instance._bottomBar.rootVisualElement[0];
+    public static VisualElement bottomBar => instance._bottomBar.rootVisualElement[0];
     public static UIDocument timeBar => instance._bottomBar;
+    
+
 
     [RuntimeInitializeOnLoadMethod]
     static void ReloadDomain() => instance = null;
@@ -25,5 +28,7 @@ public class UIRefs : MonoBehaviour
     {
         instance = this;
         toolkitShotcuts.GetComponent<IToolkitController>().Init(_bottomBar.rootVisualElement);
+
+        ((IInitiableUI)bottomBar).Init();
     }
 }
