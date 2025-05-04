@@ -334,6 +334,5 @@ public class LoadingScreen : MonoBehaviour
         humanActivation = null;
         SceneRefs.tick.InitTicks(newGame);
         UIRefs.timeBar.GetComponent<IToolkitController>().Init(UIRefs.timeBar.rootVisualElement);
-
     }
 }

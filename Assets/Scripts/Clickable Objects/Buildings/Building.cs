@@ -219,12 +219,11 @@ public class Building : StorageObject
             // if there isn't a deconstruction order yet
             if (!deconstructing)
             {
-                // create a new order for deconstruction
-                localRes.ReassignCarriers();
+                Human human = null;
+                queue.CancelJob(JobState.Constructing, this);
                 queue.AddJob(JobState.Deconstructing, this);
-                //Material m = GetComponent<MeshRenderer>().material;
-                //m.SetColor("_EmissionColor", m.GetColor("_EmissionColor") + Color.red);
-                //GetComponent<MeshRenderer>().material.EnableKeyword("_Emission");
+
+                human = localRes.ReassignCarriers();
             }
             else
             {
@@ -234,7 +233,6 @@ public class Building : StorageObject
                 {
                     localRes.carriers[0].SetJob(JobState.Constructing);
                 }
-
             }
             deconstructing = !deconstructing;
         }

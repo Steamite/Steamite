@@ -549,6 +549,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Build Menu",
+                    "type": "Button",
+                    "id": "34af08e4-9010-4c01-a5b9-c2d1bcf64e8c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -648,6 +657,17 @@
                     "processors": "Scale(factor=3)",
                     "groups": "",
                     "action": "Game Speed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1815e559-62b6-47cc-880e-6e4543c8aa06",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Build Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

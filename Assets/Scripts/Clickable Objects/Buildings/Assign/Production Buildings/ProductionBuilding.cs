@@ -161,15 +161,17 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
         {
             if (!deconstructing) // start deconstruction now!
             {
-                Human human;
+                Human human = null;
                 queue.CancelJob(JobState.Pickup, this);
                 queue.CancelJob(JobState.Supply, this);
-                while(localRes.carriers.Count > 0) 
-                {
-                    localRes.RemoveRequest(localRes.carriers[0]);
-                }
+                queue.CancelJob(JobState.Constructing, this);
+                queue.AddJob(JobState.Deconstructing, this);
+                deconstructing = true;
 
-                if (InputResource.carriers.Count > 0)
+                human = localRes.ReassignCarriers();
+                if (human)
+                    InputResource.ReassignCarriers(false);
+                else if(InputResource.carriers.Count > 0)
                 {
                     human = InputResource.carriers[0];
                     localRes.AddRequest(new(), human, 0);
@@ -179,8 +181,6 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
                     data.job = JobState.Deconstructing;
                     human.SetJob(data, true);
                 }
-                deconstructing = true;
-                queue.AddJob(JobState.Deconstructing, this);
             }
             else // has just been canceled
             {
