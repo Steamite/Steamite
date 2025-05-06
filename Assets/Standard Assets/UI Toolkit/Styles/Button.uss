@@ -119,7 +119,6 @@
     margin-bottom: 0;
     margin-left: 0;
     font-size: 90px;
-    min-width: 100%;
     background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=c23bbc337457b514697754b60fba36ea&type=3#Button");
     -unity-background-image-tint-color: rgb(60, 55, 22);
     background-color: rgba(0, 0, 0, 0);
@@ -138,6 +137,7 @@
     border-left-width: 0;
     transition-duration: 0.2s;
     max-width: none;
+    min-width: 100%;
 }
 
 .main-button:hover {

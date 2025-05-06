@@ -168,7 +168,6 @@ GameObject:
   - component: {fileID: 6079932396248880365}
   - component: {fileID: 452135987344867831}
   - component: {fileID: 7408063851616091057}
-  - component: {fileID: 2767296565719767434}
   m_Layer: 7
   m_Name: Pipe
   m_TagString: Untagged
@@ -288,6 +287,7 @@ MonoBehaviour:
     carriers: []
     mods: 
   myColor: []
+  buildName: 
   blueprint:
     size:
       x: 0
@@ -328,33 +328,6 @@ SortingGroup:
   m_SortingLayer: 2
   m_SortingOrder: 15
   m_SortAtRoot: 0
---- !u!54 &2767296565719767434
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4905127315233248697}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &5504513413172149640
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,7 +374,6 @@ GameObject:
   - component: {fileID: 7842307157348407047}
   - component: {fileID: -85555690278644832}
   - component: {fileID: 3407848389040264579}
-  - component: {fileID: 4084886823629516137}
   m_Layer: 2
   m_Name: Steam Tank
   m_TagString: Untagged
@@ -535,6 +507,7 @@ MonoBehaviour:
     carriers: []
     mods: 
   myColor: []
+  buildName: 
   blueprint:
     size:
       x: 2
@@ -593,30 +566,3 @@ MonoBehaviour:
       ammount: 00000000
       capacity: 32000000
   fillColor: {r: 0.4509804, g: 0.47843137, b: 0.5176471, a: 1}
---- !u!54 &4084886823629516137
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8473832138988228041}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0

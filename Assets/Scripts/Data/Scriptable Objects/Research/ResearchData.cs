@@ -1,40 +1,76 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Properties;
 using UnityEngine;
+using UnityEngine.UIElements;
+
+public enum NodeType
+{
+    Dummy,
+    Stat,
+    Building
+}
 
 /// <summary>Represents one thing to research, can have prequiseites and folowing ones.</summary>
 [Serializable]
-public class ResearchNode
+public class ResearchNode : IUpdatable
 {
     #region Variables
     /// <summary>Name of the research.</summary>
-    public string name;
+    [SerializeField] public string nodeName;
     /// <summary>ID of the research.</summary>
-    public int id;
-    /// <summary>Position of the research</summary>
-    public GridPos gp;
-    /// <summary>Scaled position.</summary>
-    public float realX;
+    [SerializeField] public int id;
+    /// <summary>Level of the research</summary>
+    [SerializeField] public int level;
 
     /// <summary>Was it already researched?</summary>
-    public bool researched;
+    [SerializeField] public bool researched;
+    public event Action onFinishResearch;
     /// <summary>Current progress time.</summary>
-    public float currentTime;
+    [SerializeField] float currentTime = -1;
+    /// <summary>Current progress time.</summary>
+    [CreateProperty]
+    public float CurrentTime
+    {
+        get => currentTime;
+        set
+        {
+            currentTime = value;
+            if (currentTime >= researchTime)
+            {
+                researched = true;
+                onFinishResearch?.Invoke();
+                onFinishResearch = null;
+            }
+            else
+                UIUpdate(nameof(CurrentTime));
+        }
+    }
     /// <summary>Target progress time.</summary>
-    public int researchTime;
+    [SerializeField] public int researchTime;
 
     /// <summary>Cost to start research(WIP).</summary>
-    public Resource reseachCost;
+    [SerializeField] public Resource reseachCost;
 
-    /// <summary>Category the button is from.</summary>
-    public int buttonCategory;
-    /// <summary>Build button to unlock.</summary>
-    public int buildButton;
+    /// <summary>If the button is unlocking a building.</summary>
+    [SerializeField] public NodeType nodeType;
+    /// <summary>Category of foreing elements that is assigned to.</summary>
+    [SerializeField] public int nodeCategory;
+    /// <summary>Element id from the category.</summary>
+    [SerializeField] public int nodeAssignee;
     /// <summary>Prequisite needed nodes.</summary>
     [SerializeField] public List<int> unlockedBy;
     /// <summary>Next nodes.</summary>
     [SerializeField] public List<int> unlocks;
+    public string description;
+
+    [NonSerialized] public Sprite preview;
+
+    [SerializeField] public Color lineColor = Color.red;
+
+
+    public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
     #endregion
 
     #region Overrides
@@ -45,7 +81,7 @@ public class ResearchNode
         try
         {
             ResearchNode node = (ResearchNode)obj;
-            if (id == node.id)
+            if (id == node?.id)
                 return true;
         }
         catch
@@ -61,58 +97,63 @@ public class ResearchNode
     }
     #endregion
 
-    #region Constructors
     public ResearchNode()
     {
 
     }
+
+    public ResearchNode(ResearchNode node)
+    {
+        id = node.id;
+        level = node.level;
+        nodeName = node.nodeName;
+        currentTime = node.currentTime;
+        researchTime = node.researchTime;
+        nodeCategory = node.nodeCategory;
+        nodeAssignee = node.nodeAssignee;
+        researched = node.researched;
+        unlockedBy = node.unlockedBy;
+        unlocks = node.unlocks;
+        reseachCost = new();
+        if (node.reseachCost != null)
+        {
+            reseachCost.type = node.reseachCost.type.ToList();
+            reseachCost.ammount = node.reseachCost.ammount.ToList();
+        }
+    }
+    public void UIUpdate(string property = "")
+    {
+        propertyChanged?.Invoke(this, new(property));
+    }
+
+    public bool HasActiveBinding() => propertyChanged != null;
+    #region Editor modifications
+#if UNITY_EDITOR
+
     /// <summary>
     /// Used when creating.
     /// </summary>
     /// <param name="_gp"></param>
     /// <param name="_data"></param>
     /// <param name="level"></param>
-    /// <param name="lastID"></param>
-    public ResearchNode(GridPos _gp, string _data, int level, int lastID)
+    public ResearchNode(int _level, int _id)
     {
-        gp = _gp;
-        gp.y = level;
-        name = _data;
-        id = lastID+1;
-        researchTime = 100 * ((int)_gp.y + 1);
+        level = _level;
+        nodeName = $"node {_level}";
+
+        id = _id;
+        researchTime = 100 * (_level + 1);
 
         currentTime = 0;
         researched = false;
-        buttonCategory = -1;
-        buildButton = -1;
+        nodeCategory = -1;
+        nodeAssignee = -1;
         unlockedBy = new();
         unlocks = new();
         reseachCost = new();
     }
 
-    public ResearchNode(ResearchNode node)
-    {
-        id = node.id;
-        gp = node.gp;
-        realX = node.realX;
-        name = node.name;
-        currentTime = node.currentTime;
-        researchTime = node.researchTime;
-        buttonCategory = node.buttonCategory;
-        buildButton = node.buildButton;
-        researched = node.researched;
-        unlockedBy = node.unlockedBy;
-        unlocks = node.unlocks;
-        reseachCost = new();
-        if(node.reseachCost != null)
-        {
-            reseachCost.type = node.reseachCost.type.ToList();
-            reseachCost.ammount = node.reseachCost.ammount.ToList();
-        }
-    }
-    #endregion
 
-    #region Editor modifications
     /// <summary>
     /// Connects this node as a prequisete to <paramref name="node"/>.
     /// </summary>
@@ -129,16 +170,17 @@ public class ResearchNode
     /// <summary>
     /// Disconnects all connected nodes.
     /// </summary>
-    public void DisconnectNodes(List<ResearchNode> category)
+    public void DisconnectNodes(List<ResearchNode> category, bool justTop = false)
     {
-        for (int i = unlocks.Count-1; i >= 0; i--)
+
+        if (justTop == false)
         {
-            DisconnectNode(true, i, category);
+            for (int i = unlocks.Count - 1; i >= 0; i--)
+                DisconnectNode(true, i, category);
         }
-        for (int i = unlockedBy.Count -1; i >= 0; i--)
-        {
+
+        for (int i = unlockedBy.Count - 1; i >= 0; i--)
             DisconnectNode(false, i, category);
-        }
     }
 
     /// <summary>
@@ -150,7 +192,7 @@ public class ResearchNode
     {
         if (disconectUp)
         {
-            category.Find(q=> q.id == unlocks[index]).unlockedBy.Remove(id);
+            category.Find(q => q.id == unlocks[index]).unlockedBy.Remove(id);
             unlocks.RemoveAt(index);
         }
         else
@@ -159,148 +201,70 @@ public class ResearchNode
             unlockedBy.RemoveAt(index);
         }
     }
+
+#endif
     #endregion
 }
 
 /// <summary>Research Category groups nodes into logical pages.</summary>
 [Serializable]
-public class ResearchCategory
+public class ResearchCategory : DataCategory<ResearchNode>
 {
-    /// <summary>Category name.</summary>
-    [SerializeField] public string categName;
-    /// <summary>List of all nodes in the group.</summary>
-    [SerializeField] public List<ResearchNode> nodes;
-
-    public ResearchCategory()
+    #region Editor
+#if UNITY_EDITOR
+    public void AddNode(int level, ResearchData data)
     {
+        ResearchNode node = new(level, data.UniqueID());
 
+        Objects.Add(node);
+        Objects = Objects.OrderBy(q => q.level).ToList();
+    }
+#endif
+    #endregion
+
+    public ResearchCategory() { }
+
+    public bool CheckPrequisite(ResearchNode node, Action unlockAction)
+    {
+        bool result = true;
+        for (int i = node.unlockedBy.Count - 1; i > -1; i--)
+        {
+            ResearchNode n = Objects.Find(q => q.id == node.unlockedBy[i]);
+            if (n.researched)
+                node.unlockedBy.RemoveAt(i);
+            else
+            {
+                if (unlockAction != null)
+                {
+                    n.onFinishResearch += () =>
+                    {
+                        if (CheckPrequisite(node, null))
+                            unlockAction();
+                    };
+                }
+                result = false;
+            }
+        }
+        return result;
     }
 
-    public ResearchCategory(string _name)
-    {
-        categName = _name;
-        nodes = new();
-    }
 }
 
 /// <summary>Contains all research data, that can be edited.</summary>
 [CreateAssetMenu(fileName = "ResearchData", menuName = "UI Data/Research Holder", order = 2)]
-public class ResearchData : ScriptableObject
+public class ResearchData : DataHolder<ResearchCategory>
 {
-    #region Variables
-    /// <summary>Reference to Build button data, for editing what research unlocks.</summary>
-    public BuildButtonHolder buildButtons;
-    /// <summary>All research categories.</summary>
-    public List<ResearchCategory> categories = new();
-    /// <summary>Filled when opening and changing data.</summary>
-    [NonSerialized] Dictionary<int, List<string>> allBuildings;
-    /// <summary>Filled when opening and changing data.</summary>
-    [NonSerialized] Dictionary<int, List<string>> unassignedBuildings;
-    #endregion
-
-#if UNITY_EDITOR_WIN
-    void OnValidate()
+#if UNITY_EDITOR
+    public override List<string> Choices() => Categories.Select(q => q.Name).ToList();
+    public override int UniqueID()
     {
-        Init();
-    }
-
-    /// <summary>
-    /// Fills <see cref="allBuildings"/> and <see cref="unassignedBuildings"/>.
-    /// </summary>
-    public void Init()
-    {
-        if (buildButtons)
+        int id;
+        do
         {
-            allBuildings = new();
-            unassignedBuildings = new();
-            for (int i = 0; i < buildButtons.buildingCategories.Count; i++)
-            {
-                allBuildings.Add(i, new());
-                unassignedBuildings.Add(i, new());
-                foreach (Building building in buildButtons.buildingCategories[i].buildings)
-                {
-                    allBuildings[i].Add(building.name);
-                    unassignedBuildings[i].Add(building.name);
-                }
-            }
-            foreach (ResearchNode node in categories.SelectMany(q => q.nodes))
-            {
-                if (node.buttonCategory != -1 && node.buildButton != -1)
-                    unassignedBuildings[node.buttonCategory].Remove(allBuildings[node.buttonCategory][node.buildButton]);
-            }
-            Debug.Log("Research init");
+            id = UnityEngine.Random.Range(0, int.MaxValue);
         }
-        else
-        {
-            buildButtons = (BuildButtonHolder)Resources.Load("Holders/Data/BuildButtonData");
-        }
-    }
-
-    /// <summary>
-    /// Triggered by selecting a building to be unlocked by a research node.
-    /// </summary>
-    /// <param name="node">Modified node.</param>
-    public void SelectBuilding(ResearchNode node)
-    {
-        if (node.buttonCategory > -1 && node.buildButton > -1)
-            unassignedBuildings[node.buttonCategory].Remove(allBuildings[node.buttonCategory][node.buildButton]);
-    }
-
-    /// <summary>
-    /// Triggered by unselecting a building from beeing unlocked by a research node.
-    /// </summary>
-    /// <param name="node">Modified node.</param>
-    public void DeselectBuilding(ResearchNode node)
-    {
-        if (node.buttonCategory > -1 && node.buildButton > -1)
-        {
-            string s = allBuildings[node.buttonCategory][node.buildButton];
-            if (unassignedBuildings[node.buttonCategory].IndexOf(s) == -1)
-                unassignedBuildings[node.buttonCategory].Add(s);
-        }
-    }
-
-    /// <summary>
-    /// Finds name of the assigned building.
-    /// </summary>
-    /// <param name="node">Asking node</param>
-    /// <returns>building name</returns>
-    string GetBuildName(ResearchNode node)
-    {
-        try
-        {
-            return allBuildings[node.buttonCategory][node.buildButton];
-        }
-        catch
-        {
-            Debug.Log("fuck");
-            return "";
-        }
-    }
-
-    /// <summary>
-    /// Finds which buildings can be assigned to <paramref name="node"/>.
-    /// </summary>
-    /// <param name="node">Asking node.</param>
-    /// <returns></returns>
-    public List<string> GetUnassignedBuildings(ResearchNode node)
-    {
-        List<string> s = new();
-        if (node.buildButton != -1)
-            s.Add(GetBuildName(node));
-        s.AddRange(unassignedBuildings[node.buttonCategory]);
-        return s;
-    }
-
-    /// <summary>
-    /// Gets absolute building index in a category.
-    /// </summary>
-    /// <param name="categ">Which category to look in.</param>
-    /// <param name="buildingName">Name of the building to look for.</param>
-    /// <returns></returns>
-    public int GetIndex(int categ, string buildingName)
-    {
-        return allBuildings[categ].IndexOf(buildingName);
+        while (Categories.SelectMany(q=> q.Objects).Count(q => q.id == id) > 0);
+        return id;
     }
 #endif
 }

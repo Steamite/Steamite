@@ -1,44 +1,119 @@
 ﻿using InfoWindowElements;
-using System.Collections;
-using System.Collections.Generic;
 using TradeData.Stats;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class LocalMenu : MonoBehaviour
+public class LocalMenu : MonoBehaviour, IAfterLoad
 {
     VisualElement menu;
-    private void Awake()
+    Label header;
+    Label secondHeader;
+    DoubleResourceList costList;
+    Label description;
+    bool isOpen;
+    public void Init()
     {
         menu = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Menu");
         ToolkitUtils.localMenu = this;
+        header = menu.ElementAt(0) as Label;
+        secondHeader = menu.ElementAt(1) as Label;
+        costList = menu.ElementAt(2) as DoubleResourceList;
+        description = menu.ElementAt(3) as Label;
     }
 
     public void Open(object data, VisualElement element)
     {
+        Rect vec = new();
         switch (data)
         {
             case ColonyStat:
-                ColonyStat stat = (ColonyStat)data;
-                menu.style.opacity = 0;
-                menu.style.display = DisplayStyle.Flex;
-                menu.style.width = 300;
-                ((Label)menu.ElementAt(0)).text = stat.name;
-                ((DoubleResourceList)menu.ElementAt(1)).Open(stat.resourceUpgradeCost[element.parent.IndexOf(element)]);
-                ((Label)menu.ElementAt(2)).text = stat.GetText(element.parent.IndexOf(element) + 1);
-                
-                Vector2 vec = element.worldBound.position;
+                ColonyStat stat = data as ColonyStat;
+                header.text = stat.name;
+                secondHeader.style.display = DisplayStyle.None;
+                if (element is Label)
+                {
+                    description.text = stat.GetText(true);
+                    costList.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    costList.style.display = DisplayStyle.Flex;
+                    costList.Open(stat.resourceUpgradeCost[element.parent.IndexOf(element)]);
+                    description.text = stat.GetText(element.parent.IndexOf(element) + 1);
+                }
+                break;
+            case ResearchNode:
+                ResearchNode node = data as ResearchNode;
+                header.text = node.nodeName;
+                secondHeader.style.display = DisplayStyle.Flex;
+                if (node.researched)
+                {
+                    secondHeader.text = "researched";
+                    costList.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    if (node.CurrentTime < 0)
+                    {
+                        secondHeader.text = $"({0}/{node.researchTime})";
+                        costList.style.display = DisplayStyle.Flex;
+                        costList.Open(node.reseachCost);
+                    }
+                    else
+                    {
+                        costList.style.display = DisplayStyle.None;
+                        secondHeader.text =
+                            $"({node.CurrentTime}/{node.researchTime})\n" +
+                            $"paid";
+                    }
+                }
+                description.text = node.description;
+                break;
+            case BuildingWrapper:
+                BuildingWrapper wrapper = data as BuildingWrapper;
+                Building building = wrapper.building;
+                header.text = building.objectName;
 
-                menu.style.left = vec.x + 75;
-                menu.style.bottom = (ToolkitUtils.GetRoot(element).resolvedStyle.height - element.worldBound.y) - element.resolvedStyle.height / 2;
-				menu.style.opacity = 100;
+                if (wrapper.unlocked)
+                {
+                    secondHeader.style.display = DisplayStyle.None;
+
+                    costList.style.display = DisplayStyle.Flex;
+                    costList.Open(building.cost);
+                }
+                else
+                {
+                    secondHeader.style.display = DisplayStyle.Flex;
+                    secondHeader.text = "needs to be researched";
+
+                    costList.style.display = DisplayStyle.None;
+                }
+                description.text = "";
                 break;
         }
+
+        vec = element.worldBound;
+        menu.style.width = 300;
+        menu.style.left = vec.x + vec.width + 25;
+        menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
+        Show();
+    }
+
+    void Show()
+    {
+        isOpen = true;
+        menu.style.display = DisplayStyle.Flex;
+        menu.AddToClassList("show");
     }
 
     public void Close()
     {
-        menu.style.display = DisplayStyle.None;
+        isOpen = false;
+        menu.RegisterCallbackOnce<TransitionEndEvent>(
+            (q) =>
+            {
+                if (isOpen == false) menu.style.display = DisplayStyle.None;
+            });
+        menu.RemoveFromClassList("show");
     }
 }

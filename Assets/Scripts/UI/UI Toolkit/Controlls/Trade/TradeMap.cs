@@ -1,5 +1,5 @@
-using AbstractControls;
 using System.Collections.Generic;
+using AbstractControls;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -46,7 +46,7 @@ namespace TradeWindowElements
                 slider.style.height = 50;
                 slider.focusable = false;
                 slider.fill = true;
-                int j = convoys.FindIndex(q=> q.tradeLocation == i);
+                int j = convoys.FindIndex(q => q.tradeLocation == i);
                 if (j > -1)
                 {
                     if (convoys[j].firstPhase)
@@ -84,8 +84,8 @@ namespace TradeWindowElements
                 }
                 else
                     locationButton = new TradeLocationButton(
-                        UIRefs.trading.tradeLocations[i].pos.ToVecUI(), 
-                        i+1, 
+                        UIRefs.trading.tradeLocations[i].pos.ToVecUI(),
+                        i + 1,
                         (Slider)sliderGroup.ElementAt(i).ElementAt(0),
                         UIRefs.trading.colonyLocation.pos.ToVecUI());
 
@@ -102,7 +102,7 @@ namespace TradeWindowElements
         public void Open(object data)
         {
             //TODO: NEED TO MOVE TRADE SLIDERS
-            ((TradeLocationButton)ElementAt(0).ElementAt(1).ElementAt(1)).Select();
+            ((LocationButton)ElementAt(0).ElementAt(1).ElementAt(0)).Select();
             ((Label)parent.ElementAt(1).ElementAt(0)).text = $"{UIRefs.trading.AvailableConvoy}/{UIRefs.trading.maxConvoy} Convoyes";
 
             Slider slider;

@@ -1,19 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public abstract class FullscreenWindow : MonoBehaviour
 {
     public VisualElement window;
+    public bool isOpen = false;
     public virtual void GetWindow()
     {
         window = gameObject.GetComponent<UIDocument>().rootVisualElement;
-        CloseWindow();
+        window.style.display = DisplayStyle.None;
+        window[0].style.display = DisplayStyle.Flex;
     }
     public void ToggleWindow()
     {
-        if (window.style.display == DisplayStyle.Flex)
+        if (isOpen)
         {
             CloseWindow();
         }
@@ -26,18 +26,20 @@ public abstract class FullscreenWindow : MonoBehaviour
     /// <summary>Opening the window, disables shortcuts and hides info window.</summary>
     public virtual void OpenWindow()
     {
+        isOpen = true;
         SceneRefs.gridTiles.DeselectObjects();
         MainShortcuts.DisableInput();
         SceneRefs.infoWindow.Close();
         window.style.display = DisplayStyle.Flex;
-        SceneRefs.tick.ChangeGameSpeed(0);
+        SceneRefs.tick.UIWindowToggle(false);
     }
 
     /// <summary>Closing the window, enables shortcuts.</summary>
     public virtual void CloseWindow()
     {
+        isOpen = false;
         MainShortcuts.EnableInput();
         window.style.display = DisplayStyle.None;
-        SceneRefs.tick.Unpause();
+        SceneRefs.tick.UIWindowToggle(true);
     }
 }

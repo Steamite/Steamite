@@ -1,5 +1,5 @@
-using StartMenu;
 using System;
+using StartMenu;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -41,7 +41,9 @@ namespace Params
         #endregion
 
         #region Properties
-        [UxmlAttribute][CreateProperty] public int IntValue
+        [UxmlAttribute]
+        [CreateProperty]
+        public int IntValue
         {
             get { return val; }
             set
@@ -50,7 +52,8 @@ namespace Params
             }
         }
 
-        [UxmlAttribute] public string labelText
+        [UxmlAttribute]
+        public string labelText
         {
             get { return _lText; }
             set
@@ -59,7 +62,8 @@ namespace Params
                 label.text = _lText;
             }
         }
-        [UxmlAttribute] public InputEnum input
+        [UxmlAttribute]
+        public InputEnum input
         {
             get { return inputEnum; }
             set
@@ -69,7 +73,7 @@ namespace Params
             }
         }
         #endregion
-        
+
         #region Constructor
         public EnumGenerationParameter()
         {

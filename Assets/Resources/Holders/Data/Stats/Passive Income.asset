@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dbad682dbe279b4fa19e8a96ec26666, type: 3}
+  m_Name: Passive Income
+  m_EditorClassIdentifier: 
+  displayName: Donations
+  resourceUpgradeCost:
+  - capacity: 200
+    type: 01000000
+    ammount: 0a000000
+  - capacity: 400
+    type: 02000000
+    ammount: 0a000000
+  - capacity: 600
+    type: 0100000003000000
+    ammount: 0a0000000a000000
+  - capacity: 800
+    type: 0300000005000000
+    ammount: 0a0000000a000000
+  - capacity: 1000
+    type: 03000000
+    ammount: 1e000000
+  moneyPerLevel: 100

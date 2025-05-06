@@ -5,7 +5,6 @@ using TMPro;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 /// <summary>Categorizes all jobs.</summary>
 public enum JobState
@@ -95,10 +94,12 @@ public class Human : ClickableObject
     /// Updates whole <see cref="jData"/> and updates UI.
     /// </summary>
     /// <param name="data">New <see cref="jData"/></param>
-    public void SetJob(JobData data)
+    public void SetJob(JobData data, bool shouldDecide = true)
     {
         jData = data;
         UIUpdate(nameof(Job));
+        if (shouldDecide)
+            Decide();
 #if UNITY_EDITOR
         transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
 #endif
@@ -109,14 +110,17 @@ public class Human : ClickableObject
     /// <param name="state">New job.</param>
     /// <param name="interest">New interest.</param>
     /// <param name="path">New path.</param>
-    public void SetJob(JobState state, ClickableObject interest = null, List<GridPos> path = null)
-    {   
+    public void SetJob(JobState state, ClickableObject interest = null, List<GridPos> path = null, bool shouldDecide = true)
+    {
         jData.job = state;
         if (interest)
             jData.interest = interest;
         if (path != null)
             jData.path = path;
         UIUpdate(nameof(Job));
+        if (shouldDecide)
+            Decide();
+
 #if UNITY_EDITOR
         transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
 #endif
@@ -125,8 +129,8 @@ public class Human : ClickableObject
 
     #region Basic Operations
     /// <inheritdoc/>
-    public override GridPos GetPos() => new(transform.position.x, transform.localPosition.y / ClickabeObjectFactory.LEVEL_HEIGHT, transform.position.z);
-    
+    public override GridPos GetPos() => new(transform.position.x, transform.localPosition.y / ClickableObjectFactory.LEVEL_HEIGHT, transform.position.z);
+
     /// <summary>
     /// Creates a list from <see cref="HumanUtil.humans"/>.
     /// </summary>
@@ -140,15 +144,9 @@ public class Human : ClickableObject
 #if UNITY_EDITOR
         transform.GetChild(0).gameObject.SetActive(true);
 #endif
-        SceneRefs.tick.SubscribeToTicks(DoRepetableAction);
-        DayTime dT = SceneRefs.tick.timeController;
-        dT.SubscribeToEvent(Day, DayTime.TimeEventType.Day);
-        dT.SubscribeToEvent(Night, DayTime.TimeEventType.Night);
-
-        if (jData.job == JobState.Free)
-            HumanActions.LookForNew(this);
-        else
-            ChangeAction(HumanActions.Move);
+        SceneRefs.tick.SubscribeToEvent(DoRepetableAction, Tick.TimeEventType.Ticks);
+        SceneRefs.tick.SubscribeToEvent(Day, Tick.TimeEventType.DayStart);
+        //SceneRefs.tick.SubscribeToEvent(Night, Tick.TimeEventType.Night);
     }
 
     /// <summary>
@@ -187,7 +185,6 @@ public class Human : ClickableObject
     {
         if (clickable == null)
             clickable = new HumanSave();
-        (clickable as HumanSave).name = name;
         (clickable as HumanSave).color = new(transform.GetChild(1).GetComponent<MeshRenderer>().material.color); // saves color of hat
         (clickable as HumanSave).gridPos = GetPos();
         (clickable as HumanSave).jobSave = new(jData);
@@ -201,6 +198,23 @@ public class Human : ClickableObject
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
+        HumanSave s = (save as HumanSave);
+        transform.GetChild(1).GetComponent<MeshRenderer>().material.color = s.color.ConvertColor();
+        id = save.id;
+        objectName = save.objectName;
+        SetJob(new JobData(s.jobSave, this));
+        MyRes.ManageRes(Inventory, s.inventory, 1);
+        specialization = s.specs;
+        // house assigment
+        if (s.houseID != -1)
+            MyGrid.buildings.Where(q => q.id == s.houseID).
+                SingleOrDefault().GetComponent<House>().ManageAssigned(this, true);
+
+        // workplace assigment
+        if (s.workplaceId != -1)
+            MyGrid.buildings.Where(q => q.id == s.workplaceId).
+                SingleOrDefault().GetComponent<IAssign>().ManageAssigned(this, true);
+
         base.Load(save);
     }
 
@@ -214,9 +228,11 @@ public class Human : ClickableObject
         {
             repetableAction(this);
         }
-        else if(!nightTime)
+        else if (!nightTime)
         {
             HumanActions.LookForNew(this);
+            if (repetableAction != null)
+                DoRepetableAction();
         }
     }
 
@@ -224,13 +240,25 @@ public class Human : ClickableObject
     /// Reassignes <see cref="repetableAction"/>.
     /// </summary>
     /// <param name="action">New <see cref="repetableAction"/>.</param>
-    public void ChangeAction(Action<Human> action) => repetableAction = action;
+    void ChangeAction(Action<Human> action) => repetableAction = action;
 
     /// <summary>Changes <see cref="repetableAction"/> according to <see cref="jData"/>.</summary>
     public void Decide()
     {
         if (nightTime)
+        {
+            if (GoHome().path.Count == 0) // should be called after arriving home
+                ChangeAction(null);
+            else // decided during the night
+                Debug.LogWarning("I'm sleeping, don't bother me!");
             return;
+        }
+        if(jData.path?.Count > 0)
+        {
+            ChangeAction(HumanActions.Move);
+            return;
+        }
+
         switch (jData.job)
         {
             case JobState.Free:
@@ -243,7 +271,7 @@ public class Human : ClickableObject
                 ChangeAction(HumanActions.Build);
                 break;
             case JobState.Deconstructing:
-                ChangeAction(HumanActions.Demolish);
+                ChangeAction(HumanActions.Deconstruct);
                 break;
             case JobState.Pickup:
                 ChangeAction(HumanActions.Take);
@@ -271,12 +299,14 @@ public class Human : ClickableObject
             data.job = JobState.Free;
             if (data.interest != null)
             {
+                data.interest = null;
                 SetJob(data);
-                ChangeAction(HumanActions.Move); //  go to the elevator and look for a new Job 
             }
         }
         else if (jData.job != JobState.Free)
             SetJob(JobState.Free);
+        else
+            ChangeAction(null);
     }
     #endregion
 
@@ -286,11 +316,10 @@ public class Human : ClickableObject
     {
         nightTime = false; // stop sleeping
         if (jData.job <= JobState.Free)
-            HumanActions.LookForNew(this);
+            SetJob(JobState.Free);
         else
         {
             SetJob(jData.job, path: PathFinder.FindPath(new() { jData.interest }, this).path);
-            ChangeAction(HumanActions.Move);
         }
     }
 
@@ -299,11 +328,10 @@ public class Human : ClickableObject
     {
         if (!nightTime)
         {
-            MyRes.EatFood(this);
             nightTime = true;
+            MyRes.EatFood(this);
         }
-
-        jData.path = GoHome();
+        jData.path = GoHome().path;
         ChangeAction(HumanActions.Move);
     }
 
@@ -311,7 +339,7 @@ public class Human : ClickableObject
     /// Tries to find way home, if there's no way home then atleast to the elevator.
     /// </summary>
     /// <returns>Found path.</returns>
-    public List<GridPos> GoHome()
+    public JobData GoHome()
     {
         JobData _jData;
         if (home)
@@ -320,14 +348,14 @@ public class Human : ClickableObject
             if (_jData.interest)
             {
                 ModifyEfficiency(ModType.House, true);
-                return _jData.path;
+                return _jData;
             }
         }
         _jData = PathFinder.FindPath(new() { Elevator.main }, this);
         ModifyEfficiency(ModType.House, false);
         if (_jData.interest)
         {
-            return _jData.path;
+            return _jData;
         }
         return new();
     }

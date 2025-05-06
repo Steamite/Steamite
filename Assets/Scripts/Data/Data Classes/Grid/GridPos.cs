@@ -62,8 +62,8 @@ public class GridPos
     public Vector3 ToVec(float Yoffset = 0)
     {
         return new(
-            x, 
-            (y * ClickabeObjectFactory.LEVEL_HEIGHT) + Yoffset,
+            x,
+            (y * ClickableObjectFactory.LEVEL_HEIGHT) + Yoffset,
             z);
     }
 

@@ -1,9 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>Basic highlight color(for selection).</summary>
 public static class MyGrid
@@ -25,9 +22,7 @@ public static class MyGrid
     static Action<int, int> GridChange;
     /// <summary>World name(for saving).</summary>
     public static string worldName;
-#if UNITY_EDITOR_WIN
     public static string startSceneName;
-#endif
     #endregion
 
     #region Getters
@@ -36,6 +31,9 @@ public static class MyGrid
     /// <summary>Get grid size.(from one of the levels)</summary>
     public static int gridSize { get { return levels[currentLevel].height; } }
     #endregion
+
+    [RuntimeInitializeOnLoadMethod]
+    static void ReloadDomain() => GridChange = null;
 
     /// <summary>
     /// Links <see cref="GridChange"/> events. And changes the active level.
@@ -71,7 +69,6 @@ public static class MyGrid
         chunks = new List<Chunk>();
         fluidNetworks = new();
         levels = new GroundLevel[5];
-        GameObject.Find("Scene").GetComponent<SceneRefs>().Init();
         currentLevel = 2;
     }
     #endregion Grid Access
@@ -86,17 +83,17 @@ public static class MyGrid
             GroundLevel _level;
             if (i == 0)
             {
-                _level = GameObject.Instantiate(mainLevel, 
-                    new Vector3(0, i * 2, 0), 
-                    Quaternion.identity, 
+                _level = GameObject.Instantiate(mainLevel,
+                    new Vector3(0, i * 2, 0),
+                    Quaternion.identity,
                     SceneRefs.gridTiles.transform);
                 _level.unlocked = true;
             }
             else
             {
-                _level = GameObject.Instantiate(level, 
-                    new Vector3(0, i * 2, 0), 
-                    Quaternion.identity, 
+                _level = GameObject.Instantiate(level,
+                    new Vector3(0, i * 2, 0),
+                    Quaternion.identity,
                     SceneRefs.gridTiles.transform);
                 _level.unlocked = false;
             }
@@ -109,7 +106,7 @@ public static class MyGrid
     {
         levels[i] = GameObject.Instantiate(templateLevel, new Vector3(0, i * 2, 0), Quaternion.identity, SceneRefs.gridTiles.transform);
         levels[i].CreateGrid(gridSize);
-        
+
         return levels[i];
     }
     #endregion Grid Creation
@@ -166,7 +163,7 @@ public static class MyGrid
     #region Checking
     public static bool CanPlace(Building building)
     {
-        if(building is Pipe)
+        if (building is Pipe)
         {
             GridPos pos = new(building.transform.position);
             return levels[pos.y].CanPlace(building as Pipe, pos);
@@ -243,10 +240,10 @@ public static class MyGrid
         GroundLevel level = levels[i];
         GridSave gridSave = new(level.height, level.width);
         GridPos gp = new();
-        for(int x = 0; x < gridSave.height; x++)
+        for (int x = 0; x < gridSave.height; x++)
         {
             gp.x = x;
-            for(int y = 0; y < gridSave.width; y++)
+            for (int y = 0; y < gridSave.width; y++)
             {
                 gp.z = y;
                 ClickableObject click = level.GetGridItem(gp, false);
@@ -257,25 +254,25 @@ public static class MyGrid
         return gridSave;
     }
 
-    public static void Load(GridSave gridSave, GroundLevel templateLevel, int i)
+    public static void Load(GridSave gridSave, GroundLevel templateLevel, int i, List<MinableRes> rockData)
     {
-        GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickabeObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.gridTiles.transform);
+        GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickableObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.gridTiles.transform);
         levels[i] = groundLevel;
         groundLevel.ClearGrid(gridSave.width);
         groundLevel.gameObject.SetActive(i == 2);
-        for(int x = 0; x < gridSave.width; x++)
+        for (int x = 0; x < gridSave.width; x++)
         {
             for (int z = 0; z < gridSave.width; z++)
             {
                 switch (gridSave.grid[x, z])
                 {
                     case RockSave:
-                        SceneRefs.objectFactory.CreateSavedRock(gridSave.grid[x, z] as RockSave, new (x, i, z));
+                        SceneRefs.objectFactory.CreateSavedRock(gridSave.grid[x, z] as RockSave, new(x, i, z), rockData);
                         break;
                     case WaterSave:
                         SceneRefs.objectFactory.CreateSavedWater(gridSave.grid[x, z] as WaterSave, new(x, i, z));
                         break;
-                    default :
+                    default:
                         SceneRefs.objectFactory.CreateRoad(new(x, i, z), true);
                         break;
                 }

@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 1351098271473920992}
   - component: {fileID: 4676457964629507834}
   - component: {fileID: 2337060514408432828}
-  - component: {fileID: -2771411528731853766}
   m_Layer: 7
   m_Name: Fluid Pipe base
   m_TagString: Untagged
@@ -62,6 +61,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -130,21 +132,30 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
-  build:
-    sizeX: 1
-    sizeZ: 1
-    blueprint:
-      width: 0
-      height: 0
-    heigth: 0
-    cost:
-      capacity: -1
-      type: 
-      ammount: 
-    constructed: 0
-    deconstructing: 0
-    constructionProgress: 0
-    maximalProgress: 0
+  myColor: []
+  buildName: 
+  blueprint:
+    size:
+      x: 0
+      z: 0
+      y: 0
+    moveBy:
+      x: 0
+      z: 0
+      y: 0
+    anchor:
+      x: 0
+      z: 0
+      y: 0
+    itemList: []
+  cost:
+    capacity: -1
+    type: 
+    ammount: 
+  constructed: 0
+  deconstructing: 0
+  constructionProgress: 0
+  maximalProgress: 0
   network:
     pipes: []
     buildings: []
@@ -162,30 +173,3 @@ SortingGroup:
   m_SortingLayer: 2
   m_SortingOrder: 15
   m_SortAtRoot: 0
---- !u!54 &-2771411528731853766
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 194448335516347060}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0

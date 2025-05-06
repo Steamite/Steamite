@@ -1,5 +1,4 @@
 using StartMenu;
-using System;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -25,7 +24,8 @@ namespace Params
         public string TextValue
         {
             get { return val; }
-            set { 
+            set
+            {
                 val = value;
                 Debug.Log(value);
             }
@@ -59,7 +59,7 @@ namespace Params
             textField.maxLength = 8;
             textField.style.flexGrow = 1;
             textField.style.maxWidth = 150;
-            textField.RegisterValueChangedCallback<string>((str) => 
+            textField.RegisterValueChangedCallback<string>((str) =>
             {
                 TextValue = str.newValue;
                 NotifyPropertyChanged(nameof(TextValue));
@@ -86,7 +86,7 @@ namespace Params
             for (int i = 0; i < 4; i++)
             {
                 int r = (UnityEngine.Random.Range(0, 5) * 3) + 1;
-                if(r > 9)
+                if (r > 9)
                 {
                     _seed += (char)(r + 55);
                 }

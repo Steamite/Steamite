@@ -156,8 +156,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4db535f45aa9b504e8bf4773aba0ca89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: 
   selected: 0
   id: 0
+  objectName: Chunk
   localRes:
     stored:
       capacity: -1

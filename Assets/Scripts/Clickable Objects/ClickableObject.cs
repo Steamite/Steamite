@@ -1,20 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 /// <summary>
 /// The Base class for all objects in game.<br/>
-/// Requires a <see cref="Rigidbody"/> for registering mouse events.
 /// </summary>
-[RequireComponent(typeof(Rigidbody))]
+//[RequireComponent(typeof(Rigidbody))]
 public abstract class ClickableObject : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler,
     IPointerDownHandler, IPointerUpHandler, IUpdatable
 {
+    [HideInInspector]
+    [Obsolete("Use objectName not name", true)]
+    public new string name;
+
     /// <summary>Bind event for updating.</summary>
     [HideInInspector]
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
@@ -23,6 +25,8 @@ public abstract class ClickableObject : MonoBehaviour,
     public bool selected = false;
     /// <summary>ID is a unique identifier for each group of objects.</summary>
     public int id = -1;
+
+    public string objectName;
 
     #region Object Operations
     /// <summary>
@@ -34,7 +38,7 @@ public abstract class ClickableObject : MonoBehaviour,
     {
         if (obj == null || GetType() != obj.GetType())
             return false;
-        else if (((ClickableObject)obj).id == id && ((ClickableObject)obj).name == name)
+        else if (((ClickableObject)obj).id == id && ((ClickableObject)obj).objectName == objectName)
             return true;
         return false;
     }
@@ -45,6 +49,11 @@ public abstract class ClickableObject : MonoBehaviour,
     #region Basic Operations
     /// <summary>Should create a unique id for a new object in a list.</summary>
     public virtual void UniqueID() => id = -1;
+
+    public override string ToString()
+    {
+        return $"{objectName}: {id}";
+    }
     /// <summary>
     /// Calculates position on the grid.
     /// </summary>
@@ -123,7 +132,7 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <param name="eventData">Mouse data</param>
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-        print(gameObject.name + $", {transform.position.x}, {transform.position.z}");
+        //print(gameObject.name + $", {transform.position.x}, {transform.position.z}");
         if (eventData.button == PointerEventData.InputButton.Left)
             SceneRefs.gridTiles.Up();
         else
@@ -142,11 +151,13 @@ public abstract class ClickableObject : MonoBehaviour,
         if (selected)
         {
             InfoWindow info = SceneRefs.infoWindow;
-            info.header.text = name;
+            info.header.text = objectName;
             return info;
         }
-        throw new ArgumentException();
+        Debug.LogWarning($"Object \"{this}\" not selected, why open window?");
+        return null;
     }
+    
 
     /// <summary>
     /// Must be called after updating a bindable parameter. <br/>
@@ -156,6 +167,8 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <param name="property">Name of the property, not field.</param>
     public void UIUpdate(string property = "")
     {
+        if (selected && propertyChanged == null)
+            Debug.LogWarning($"no bindings {property}");
         propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
 
@@ -172,6 +185,8 @@ public abstract class ClickableObject : MonoBehaviour,
         if (clickable == null)
             clickable = new();
         clickable.id = id;
+        clickable.objectName = objectName;
+
         return clickable;
     }
     /// <summary>
@@ -181,6 +196,9 @@ public abstract class ClickableObject : MonoBehaviour,
     public virtual void Load(ClickableObjectSave save)
     {
         id = save.id;
+        objectName = save.objectName;
     }
+
     #endregion Saving
+    public bool HasActiveBinding() => propertyChanged != null;
 }

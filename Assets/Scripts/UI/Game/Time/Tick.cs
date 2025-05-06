@@ -1,55 +1,227 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>Handles the game clock.</summary>
 public class Tick : MonoBehaviour
 {
-    #region Variables
-    /// <summary>The tick counter, resets if it reaches uint capacity.</summary>
-    public uint lastTick = 0;
-    /// <summary>The most subscribed action in the whole project, Triggers each tick.</summary>
-    event Action tickAction;
-    /// <summary>Handles user input for changing game speed.</summary>
-    public DayTime timeController;
-    #endregion
-
-    public void SubscribeToTicks(Action action)
-        => tickAction += action;
-	public void UnsubscribeToTicks(Action action)
-		=> tickAction -= action;
-
-	public void AwakeTicks(int clockSpeed)
+    /// <summary>Events used for event subscribing.</summary>
+    public enum TimeEventType
     {
-        Time.timeScale = clockSpeed;
-        StartCoroutine(DoTick());
+        /// <summary>Each tick</summary>
+        Ticks,
+        /// <inheritdoc cref="day"/>
+        Day,
+        /// <inheritdoc cref="dayStart"/>
+        DayStart,
+        /// <inheritdoc cref="nightStart"/>
+        Night,
+        /// <inheritdoc cref="weekStart"/>
+        Week,
+        /// <summary>WIP</summary>
+        Month,
+        /// <summary>WIP</summary>
+        Year
     }
 
-    #region Speed Managing
-    public void ChangeGameSpeed(float _speed)
+    #region Variables
+    /// <summary>
+    /// How long an ingame hour lasts.
+    /// </summary>
+    /// <seealso href="../../../Documentation/Time scale.xlsx">
+    /// Time scale table.
+    /// </seealso>
+    [Header("Tick speed")][SerializeField] float ticksPerHour = 4;
+    /// <summary>Progresses time by this(60/<see cref="ticksPerHour"/>).</summary>
+    int minutesPerTick;
+
+    /// <summary>Current time of the day(counts as hours when starting a new game).</summary>
+    public int timeInMinutes = 4;
+    /// <summary>Current number of days, increased each new day.<summary>
+    public int numberOfDays = 5;
+
+    /// <summary>The most subscribed action in the whole project, Triggers each tick.</summary>
+    event Action tickAction;
+    /// <summary>Subscribable event, triggered when starting Day(00:00).</summary>
+    event Action day;
+    /// <summary>Subscribable event, triggered when starting Day(06:00).</summary>
+    event Action dayStart;
+    /// <summary>Subscribable event, triggered when starting Night(21:00).</summary>
+    event Action nightStart;
+    /// <summary>Subscriable event, triggered when starting a Week.</summary>
+    event Action weekStart;
+    /// <summary>Subscriable event, triggered when starting a Month.</summary>
+    event Action monthStart;
+    /// <summary>Subscriable event, triggered when starting a Year.</summary>
+    event Action yearStart;
+
+    /// <summary>The tick counter, resets if it reaches uint capacity.</summary>
+    [HideInInspector] public uint lastTick = 0;
+
+    bool running = false;
+    #endregion
+
+    #region Events
+    /// <summary>
+    /// Allows other objects to listen to time events.
+    /// </summary>
+    /// <param name="subscriber">What to do when the event triggers.</param>
+    /// <param name="timeEvent">Which event to listen to.</param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void SubscribeToEvent(Action subscriber, TimeEventType timeEvent)
     {
-        StopAllCoroutines();
-        if (_speed > 0)
+        switch (timeEvent)
+        {
+            case TimeEventType.Ticks:
+                tickAction += subscriber;
+                break;
+            case TimeEventType.Day:
+                day += subscriber;
+                break;
+            case TimeEventType.DayStart:
+                dayStart += subscriber;
+                break;
+            case TimeEventType.Night:
+                nightStart += subscriber;
+                break;
+            case TimeEventType.Week:
+                weekStart += subscriber;
+                break;
+            case TimeEventType.Month:
+                monthStart += subscriber;
+                break;
+            case TimeEventType.Year:
+                yearStart += subscriber;
+                break;
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    /// <summary>
+    /// Removes listeners for time events.
+    /// </summary>
+    /// <param name="subscriber">Listener to remove.</param>
+    /// <param name="timeEvent">Which event to remove from.</param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void UnsubscribeToEvent(Action subscriber, TimeEventType timeEvent)
+    {
+        switch (timeEvent)
+        {
+            case TimeEventType.Ticks:
+                tickAction -= subscriber;
+                break;
+            case TimeEventType.Day:
+                day -= subscriber;
+                break;
+            case TimeEventType.DayStart:
+                dayStart -= subscriber;
+                break;
+            case TimeEventType.Night:
+                nightStart -= subscriber;
+                break;
+            case TimeEventType.Week:
+                weekStart -= subscriber;
+                break;
+            case TimeEventType.Month:
+                monthStart -= subscriber;
+                break;
+            case TimeEventType.Year:
+                yearStart -= subscriber;
+                break;
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    /// <summary>
+    /// Returns how much time has elepsed since the beging of the week.
+    /// </summary>
+    /// <returns>Time since the start of the week.</returns>
+    public int GetWeekTime()
+    {
+        return (numberOfDays % 7 * 1440) + timeInMinutes;
+    }
+    #endregion
+
+    #region Init
+    public void InitTicks(bool newGame)
+    {
+        minutesPerTick = (int)(60f / ticksPerHour);
+        if (newGame)
+            timeInMinutes *= 60;
+        if (timeInMinutes < 6 * 60 || timeInMinutes > 21 * 60)
+            nightStart?.Invoke();
+
+        Time.timeScale = 1;
+    }
+    #endregion
+
+    #region Speed Managing
+    public void ChangeGameSpeed(float _speed = 0)
+    {
+        if (_speed == 0 && running == false)
+        {
+            StartTicks();
+        }
+        else if (_speed > 0)
         {
             Time.timeScale = _speed;
+            if (running == false)
+                StartTicks();
+        }
+        else
+        {
+            StopTicks();
+        }
+    }
+    #endregion
+
+    #region Starting and Ending ticks
+    public void StopTicks()
+    {
+        if (running == false)
+        {
+            Debug.LogWarning("Not ticking, cannot stop ticks.");
+        }
+        else
+        {
+            running = false;
+            StopAllCoroutines();
+        }
+    }
+
+    public void StartTicks()
+    {
+        if (running == true)
+        {
+            Debug.LogError("Already ticking, cannot tick two times.");
+        }
+        else
+        {
+            running = true;
             StartCoroutine(DoTick());
         }
     }
 
-    public void Unpause()
+    public void UIWindowToggle(bool enable)
     {
-        StopAllCoroutines();
-        StartCoroutine(DoTick());
+        if (!enable)
+            StopAllCoroutines();
+        else if (running)
+            StartCoroutine(DoTick());
+
     }
     #endregion
 
+    #region Tick
     IEnumerator DoTick()
     {
         while (true)
         {
+            //Debug.Log("All time:" + Time.time);
             yield return new WaitForSeconds(1);
+            UpdateTime();
             tickAction?.Invoke();
             if (lastTick == 4294967295)
                 lastTick = 0;
@@ -57,4 +229,59 @@ public class Tick : MonoBehaviour
                 lastTick++;
         }
     }
+
+
+    void UpdateTime()
+    {
+        timeInMinutes += minutesPerTick;
+        switch (timeInMinutes)
+        {
+            case 1440:
+                numberOfDays++;
+                day?.Invoke();
+                timeInMinutes = 0;
+                if (numberOfDays % 7 == 0)
+                {
+                    weekStart?.Invoke();
+                    if (numberOfDays % 28 == 0)
+                    {
+                        monthStart?.Invoke();
+                        if (numberOfDays % 336 == 0)
+                        {
+                            yearStart?.Invoke();
+                        }
+                    }
+                }
+                break;
+            case 1320:
+                nightStart?.Invoke();
+                break;
+            case 360:
+                dayStart?.Invoke();
+                break;
+        }
+    }
+    #endregion
+
+    #region Saving
+    /// <summary>
+    /// Saves time.
+    /// </summary>
+    /// <param name="gameState">Where to save.</param>
+    public void Save(GameStateSave gameState)
+    {
+        gameState.dayTime = timeInMinutes;
+        gameState.numberOfDays = numberOfDays;
+    }
+
+    /// <summary>
+    /// Loads time.
+    /// </summary>
+    /// <param name="gameState">Where to load from.</param>
+    public void Load(GameStateSave gameState)
+    {
+        timeInMinutes = gameState.dayTime;
+        numberOfDays = gameState.numberOfDays;
+    }
+    #endregion
 }

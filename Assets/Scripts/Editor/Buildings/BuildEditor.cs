@@ -1,8 +1,6 @@
-#if UNITY_EDITOR
-using UnityEngine;
-using UnityEditor;
 using System;
-using static UnityEditor.Progress;
+using UnityEditor;
+using UnityEngine;
 
 /// <summary>The Blueprint editor window for mapping buildings to grid.</summary>
 class BuildEditor : EditorWindow
@@ -24,6 +22,9 @@ class BuildEditor : EditorWindow
     static int height;
     /// <summary>Number of optiuons in <see cref="GridItemType"/><summary>
     static int maxItem = Enum.GetNames(typeof(GridItemType)).Length;
+
+    static Mesh mesh;
+    static Mesh newMesh;
     #endregion
 
     #region Opening
@@ -42,7 +43,7 @@ class BuildEditor : EditorWindow
         {
             width = (int)actBuild.size.x;
             height = (int)actBuild.size.z;
-            if(width > 0 && height > 0)
+            if (width > 0 && height > 0)
                 gridItemTypes = new GridItemType[width, height];
             for (int i = 0; i < actBuild.itemList.Count; i++)
             {
@@ -58,13 +59,12 @@ class BuildEditor : EditorWindow
             height = 0;
             gridItemTypes = null;
         }
-
+        mesh = inspectedBuilding.GetComponent<MeshFilter>().sharedMesh;
         var v = GetWindow(typeof(BuildEditor));
         v.maxSize = new(600, 600);
         v.minSize = new(200, 200);
     }
     #endregion
-
 
     void OnGUI()
     {
@@ -75,12 +75,20 @@ class BuildEditor : EditorWindow
         }
         else
         {
-            titleContent = new($"Build Editor - {inspectedBuilding.name}");
+            titleContent = new($"Build Editor - {inspectedBuilding.objectName}");
             int item = 0;
+            newMesh = (Mesh)EditorGUILayout.ObjectField(new GUIContent(""), mesh, typeof(Mesh), false, new GUILayoutOption[] { });
+            if (newMesh != mesh)
+            {
+                mesh = newMesh;
+                inspectedBuilding.GetComponent<MeshFilter>().sharedMesh = mesh;
+                EditorUtility.SetDirty(inspectedBuilding);
+            }
+
             width = EditorGUILayout.IntField(new GUIContent("size x: "), width);
             height = EditorGUILayout.IntField(new GUIContent("size y: "), height);
 
-            if(width > 0 & height > 0)
+            if (width > 0 & height > 0)
             {
                 ManageGrid();
                 GUI.enabled = canSave;
@@ -265,4 +273,3 @@ class BuildEditor : EditorWindow
     }
     #endregion
 }
-#endif

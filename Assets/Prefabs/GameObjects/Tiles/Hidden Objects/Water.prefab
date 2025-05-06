@@ -61,6 +61,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -146,5 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3646364002e199f48ba0cd76e37ffd0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: 
   selected: 0
   id: 0
+  objectName: Water
+  ammount: 50

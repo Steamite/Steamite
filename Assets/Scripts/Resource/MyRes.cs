@@ -1,14 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using TMPro;
 using UnityEngine;
 
 /// <summary>All available resource types.</summary>
-[Serializable]
 public enum ResourceType
 {
+    None,
     Coal,
     Metal,
     Stone,
@@ -20,6 +19,7 @@ public enum ResourceType
 public static class MyRes
 {
     #region Variables
+    public static Resource resourceTemplate;
     /// <summary>Used for faster determening new jobs faster.</summary>
     public static int globalStorageSpace;
     /// <summary>All storage buildings.</summary>
@@ -34,6 +34,11 @@ public static class MyRes
     #endregion
 
     #region Init
+
+    public static void PreLoad()
+    {
+        resDisplay = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
+    }
     /// <summary>
     /// Starting function for the resource system.
     /// </summary>
@@ -43,8 +48,7 @@ public static class MyRes
         // Update text, or display error
         try
         {
-            resDisplay = SceneRefs.stats.GetComponent<ResourceDisplay>();
-            Resource resource = resDisplay.InitializeResources(setupStorages);
+            resourceTemplate = resDisplay.InitializeResources(setupStorages);
             globalStorageSpace = 0;
 
             storage = MyGrid.buildings.Select(q => q.GetComponent<IStorage>()).Where(q => q != null).ToArray();
@@ -53,14 +57,13 @@ public static class MyRes
             {
                 if (setupStorages)
                 {
-                    _s.SetupStorage(resource, jQ);
+                    _s.SetupStorage(jQ);
                 }
                 else
                     jQ.storages.Add(_s);
                 globalStorageSpace += _s.LocalResources.stored.capacity - _s.LocalResources.stored.ammount.Sum();
-                ManageRes(resource, _s.LocalResources.stored, 1);
+                ManageRes(resourceTemplate, _s.LocalResources.stored, 1);
             }
-            Transform resourceInfo = GameObject.Find("Resource Info").gameObject.transform.transform;
             resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
             resDisplay.UIUpdate(nameof(ResourceDisplay.Money));
         }
@@ -86,14 +89,7 @@ public static class MyRes
     #endregion
 
     #region Resource moving
-    /// <summary>
-    /// Changes the ammount of money.
-    /// </summary>
-    /// <param name="change">Ammount to add(if negative subtracts).</param>
-    public static void UpdateMoney(int change)
-    {
-        resDisplay.Money += change;
-    }
+
 
     /// <summary>
     /// Adds or removes resources in destination.
@@ -212,7 +208,7 @@ public static class MyRes
 
     }
     #endregion
-    
+
     #region Job finding
     /// <summary>
     /// Finds the closest stockpite with needed resources, if found some, orders to move to it.
@@ -235,7 +231,6 @@ public static class MyRes
                 {
                     human.destination = building;
                     job.job = JobState.Pickup;
-                    human.SetJob(job);
                     StorageObject sResource = job.interest.GetComponent<StorageObject>();
                     Resource resource = new();
                     resource.capacity = human.Inventory.capacity - human.Inventory.ammount.Sum();
@@ -244,7 +239,7 @@ public static class MyRes
                     MoveRes(resource, future, diff, -1);
                     sResource.RequestRes(resource, human, -1);
                     human.destination.RequestRes(resource.Clone(), human, 1);
-                    human.ChangeAction(HumanActions.Move);
+                    human.SetJob(job);
                     human.lookingForAJob = false;
                     if (diff.ammount.Sum() == 0)
                     {
@@ -280,20 +275,20 @@ public static class MyRes
     /// <param name="h"></param>
     public static void FindStorage(Human h)
     {
-        List<IStorage> storages = FilterStorages(h.Inventory, h, true);
-        JobData job = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h);
-        if (job.interest)
+        if(h.Inventory.ammount.Sum() > 0)
         {
-            job.interest.GetComponent<StorageObject>().RequestRes(h.Inventory, h, 1);
-            h.destination = (Building)job.interest;
-            job.job = JobState.Supply;
-            h.ChangeAction(HumanActions.Move);
-            h.SetJob(job);
+            List<IStorage> storages = FilterStorages(h.Inventory, h, true);
+            JobData job = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h);
+            if (job.interest)
+            {
+                job.interest.GetComponent<StorageObject>().RequestRes(h.Inventory, h, 1);
+                h.destination = (Building)job.interest;
+                job.job = JobState.Supply;
+                h.SetJob(job);
+                return;
+            }
         }
-        else
-        {
-            h.SetJob(JobState.Free, null, null);
-        }
+        h.SetJob(JobState.Free);
     }
 
     /// <summary>
@@ -452,7 +447,7 @@ public static class MyRes
         }
         return ret;
     }
-    
+
     /// <summary>
     /// Compares values and returns the difference between <paramref name="a"/> and <paramref name="b"/>.
     /// </summary>
@@ -472,7 +467,7 @@ public static class MyRes
     /// <returns>If the cost can be afforded.</returns>
     public static bool CanAfford(Resource cost)
     {
-        return DiffRes(cost, resDisplay.GlobalResources).ammount.Sum() == 0;
+        return cost.capacity <= Money && DiffRes(cost, resDisplay.GlobalResources).ammount.Sum() == 0;
     }
     #endregion
 
@@ -519,13 +514,13 @@ public static class MyRes
     /// Paying for trade or outposts, takes resources from any storage.
     /// </summary>
     /// <param name="cost">Cost to pay.</param>
-    public static void TakeFromGlobalStorage(Resource cost)
+    static void RemoveFromStorageGlobal(Resource cost)
     {
         UpdateResource(cost, -1);
         for (int i = 0; i < storage.Length; i++)
         {
             Resource diff = DiffRes(cost, storage[i].LocalResources.Future(true));
-            for(int j = cost.type.Count-1; j >= 0; j--)
+            for (int j = cost.type.Count - 1; j >= 0; j--)
             {
                 int x = diff.type.IndexOf(cost.type[j]);
                 if (x == -1)
@@ -542,6 +537,43 @@ public static class MyRes
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Changes the ammount of money.
+    /// </summary>
+    /// <param name="change">Ammount to add(if negative subtracts).</param>
+    public static void ManageMoneyGlobal(int change)
+    {
+        resDisplay.Money += change;
+    }
+
+    /// <summary>
+    /// Removes resources from storages globaly.
+    /// And pays the money cost from <paramref name="cost"/>.capacity.
+    /// </summary>
+    /// <param name="cost">Resource and money cost.</param>
+    public static void PayCostGlobal(Resource cost)
+    {
+        RemoveFromStorageGlobal(cost);
+        ManageMoneyGlobal(-cost.capacity);
+    }
+
+    /// <summary>
+    /// Removes resources from storages globaly.
+    /// And pays the money cost from <paramref name="moneyCost"/>.
+    /// </summary>
+    /// <param name="cost">Resource cost.</param>
+    /// <param name="moneyCost">Money cost - needs to be positive.</param>
+    public static void PayCostGlobal(Resource cost, int moneyCost)
+    {
+        RemoveFromStorageGlobal(cost);
+        if (moneyCost < 0)
+        {
+            Debug.LogError("carefull the cost is negative, converting to positive");
+            moneyCost = -moneyCost;
+        }
+        ManageMoneyGlobal(-moneyCost);
     }
     #endregion
 }

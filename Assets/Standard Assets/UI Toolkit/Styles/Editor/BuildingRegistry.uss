@@ -1,0 +1,66 @@
+TextField > Label {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    -unity-text-align: middle-left;
+    width: 50px;
+    max-width: 50px;
+    min-width: 120px;
+}
+
+.cell {
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+}
+
+.unity-multi-column-view__cell {
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-right-width: 1px;
+}
+
+.unity-multi-column-view__row-container {
+    border-bottom-width: 2px;
+    border-left-color: rgba(0, 0, 0, 0.33);
+    border-right-color: rgba(0, 0, 0, 0.33);
+    border-top-color: rgba(0, 0, 0, 0.33);
+    border-bottom-color: rgba(0, 0, 0, 0.33);
+}
+
+MultiColumnHeaderColumn Label {
+    -unity-text-align: upper-center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.unity-multi-column-header__column__content {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 5px;
+    padding-left: 0;
+}
+
+ScrollView .unity-scroll-view {
+    background-color: rgb(60, 60, 60);
+}
+
+IntegerField:disabled {
+    display: none;
+}

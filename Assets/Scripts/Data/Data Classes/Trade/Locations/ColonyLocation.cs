@@ -1,7 +1,8 @@
-using System.Collections.Generic;
 using System;
-using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 using TradeData.Stats;
+using UnityEngine;
 
 namespace TradeData.Locations
 {
@@ -10,16 +11,39 @@ namespace TradeData.Locations
     public class ColonyLocation : Location
     {
         /// <summary>Upgradable passive production data.</summary>
-        [SerializeField] public List<ColonyStat> passiveProductions;
-        /// <summary>Colony stats data.</summary>
-        [SerializeField] public List<ColonyStat> stats;
+        [SerializeField] public StatData config;
 
-		public void DoProduction()
-		{
-			foreach(ColonyStat stat in stats)
+        [HideInInspector] public List<ColonyStat> stats;
+        [HideInInspector] public List<ColonyStat> production;
+
+        public void DoProduction()
+        {
+            foreach (ColonyStat stat in stats)
             {
                 stat.DoStat();
             }
-		}
-	}
+        }
+
+        public void LoadGame(List<int> prodLevels, List<int> statLevels)
+        {
+            stats = Resources.LoadAll<ColonyStat>("Holders/Data/Stats").ToList();
+            for (int i = 0; i < stats.Count; i++)
+                stats[i].LoadState(prodLevels[i], config.stats[i].max);
+
+            production = Resources.LoadAll<ColonyStat>("Holders/Data/Prods").ToList();
+            for (int i = 0; i < production.Count; i++)
+                production[i].LoadState(prodLevels[i], config.production[i].max);
+        }
+
+        public void NewGame()
+        {
+            stats = Resources.LoadAll<ColonyStat>("Holders/Data/Stats").ToList();
+            for (int i = 0; i < stats.Count; i++)
+                stats[i].LoadState(config.stats[i].min, config.stats[i].max);
+
+            production = Resources.LoadAll<ColonyStat>("Holders/Data/Prods").ToList();
+            for (int i = 0; i < production.Count; i++)
+                production[i].LoadState(config.production[i].min, config.production[i].max);
+        }
+    }
 }

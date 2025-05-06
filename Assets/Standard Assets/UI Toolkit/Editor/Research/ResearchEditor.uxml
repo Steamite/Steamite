@@ -1,0 +1,20 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Editor/ResearchEditor.uss?fileID=7433441132597879392&amp;guid=a53d2f3dd32ef22479f385641bd14a96&amp;type=3#ResearchEditor" />
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Editor/ResearchNode.uss?fileID=7433441132597879392&amp;guid=8459a69cb8bb9374d9ea0bf782b026d5&amp;type=3#ResearchNode" />
+    <engine:VisualElement name="VisualElement" style="flex-grow: 0; flex-direction: row; flex-shrink: 0;">
+        <engine:Button text="Delete Category" name="Category-Remover" enabled="false" />
+        <engine:DropdownField name="Category-Selctor" style="flex-grow: 1; flex-direction: row-reverse;" />
+    </engine:VisualElement>
+    <engine:VisualElement name="Top" style="flex-grow: 0; flex-direction: row; margin-top: 10px; padding-left: 25px; padding-right: 25px; margin-bottom: 2px; flex-shrink: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 3px; border-left-width: 0; padding-bottom: 10px;">
+        <engine:VisualElement name="Icon-Image" style="flex-grow: 0; width: 100px; height: 100px; margin-right: 10px;" />
+        <engine:VisualElement style="flex-grow: 1;">
+            <engine:VisualElement name="Category-Settings" style="flex-grow: 1; flex-direction: row; height: 25px; align-self: flex-start; max-height: 25px;">
+                <editor:ObjectField label="Category Icon" name="Icon-Changer" type="UnityEngine.Texture2D, UnityEngine.CoreModule" style="-unity-text-align: middle-left; margin-right: 10px;" />
+                <engine:TextField label="Category Name" placeholder-text="filler text" name="Category-Name" style="flex-grow: 1; margin-right: 4px;" />
+            </engine:VisualElement>
+            <engine:Button text="Create category" name="Category-Create" />
+            <engine:Toggle label="Show Create Buttons" name="Show-Create" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+    <engine:ScrollView name="Tree" />
+</engine:UXML>

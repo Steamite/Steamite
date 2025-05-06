@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,7 +7,10 @@ public static class ToolkitUtils
 {
     public static LocalMenu localMenu;
     public static ResourceSkins resSkins;
-    public static Color textColor = new(0.6313726f, 0.5803922f, 0.2313726f, 1);
+    public static readonly Color textColor = new(0.6313726f, 0.5803922f, 0.2313726f, 1);
+
+    [RuntimeInitializeOnLoadMethod]
+    static void ReloadDomain() => localMenu = null;
 
     /// <summary>
     /// Switches classes on an element with no transition duration, the duration must be on the classes, else it will not be restored afterwards.
@@ -17,7 +20,7 @@ public static class ToolkitUtils
     /// <param name="element">Element that needs to change.</param>
     public static void ChangeClassWithoutTransition(string oldClass, string newClass, VisualElement element)
     {
-        if(oldClass != "" && newClass != "" && element != null)
+        if (oldClass != "" && newClass != "" && element != null)
         {
             element.style.transitionDuration = new List<TimeValue> { new TimeValue(0, TimeUnit.Second) };
             element.RemoveFromClassList(oldClass);
@@ -33,8 +36,15 @@ public static class ToolkitUtils
 
     public static VisualElement GetRoot(VisualElement element)
     {
-        if (element.parent != null)
-            return GetRoot(element.parent);
+        while (element.parent != null)
+            element = element.parent;
+        return element;
+    }
+    public static VisualElement GetParentOfType<T>(VisualElement element)
+    {
+        while(element is not T && element.parent != null)
+            element = element.parent;
+
         return element;
     }
 }

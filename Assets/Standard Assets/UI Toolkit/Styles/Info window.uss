@@ -34,7 +34,6 @@
 
 .deconstruct-button {
     margin-bottom: 5%;
-    background-color: rgb(130, 0, 0);
     border-left-color: rgb(0, 0, 0);
     border-right-color: rgb(0, 0, 0);
     border-top-color: rgb(0, 0, 0);
@@ -258,7 +257,7 @@
 .worker-button:hover {
     flex-grow: 1;
     height: 50px;
-    background-color: rgb(60, 60, 60);
+    background-color: rgb(38, 38, 38);
     margin-left: 1%;
     opacity: 1;
     margin-right: 1%;
@@ -373,4 +372,53 @@
     border-top-color: rgb(28, 28, 28);
     border-bottom-color: rgb(28, 28, 28);
     -unity-background-image-tint-color: rgb(0, 0, 0);
+}
+
+ResearchInfo {
+    flex-grow: 0;
+    flex-direction: column;
+    height: 40%;
+    align-content: stretch;
+    justify-content: space-between;
+    display: flex;
+    width: auto;
+    align-items: stretch;
+    align-self: center;
+}
+
+.res-title {
+    max-height: 40px;
+    margin-right: 0;
+    margin-left: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    margin-top: 5px;
+    -unity-text-align: upper-center;
+}
+
+.res-image {
+    flex-grow: 1;
+    background-image: url("project://database/Assets/Sprites/Textures/Button_Sprite.png?fileID=2800000&guid=ab06e4b2b595a5d439dc3408edb876d1&type=3#Button_Sprite");
+    max-width: 135px;
+    max-height: 135px;
+    align-self: center;
+    align-items: center;
+    min-width: 135px;
+    min-height: 135px;
+}
+
+.res-progress {
+    -unity-text-align: middle-center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    width: 300px;
 }

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using UnityEditor;
-using UnityEditor.Compilation;
 using UnityEngine;
 
 /// <summary>
@@ -21,8 +20,8 @@ public class EfficencyEditor : Editor
         path = GUILayout.TextField(path);
         string[] enumNames = Enum.GetNames(typeof(ModType));
         string[] strings = ((EfficencyModifiers)target).GetModifierNames();
-        
-        if(enumNames.Length == strings.Length)
+
+        if (enumNames.Length == strings.Length)
         {
             for (int i = 0; i < strings.Length; i++)
             {
@@ -61,7 +60,7 @@ public class EfficencyEditor : Editor
             streamWriter.Close();
             EditorUtility.RequestScriptReload();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Debug.LogError(e);
         }

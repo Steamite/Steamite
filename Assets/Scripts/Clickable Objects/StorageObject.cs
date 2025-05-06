@@ -6,7 +6,7 @@ public abstract class StorageObject : ClickableObject
 {
     /// <summary>Stored resouces, which also contain all requests.</summary>
     [SerializeField] protected StorageResource localRes = new();
-    
+
     /// <inheritdoc/>
     [CreateProperty] public StorageResource LocalRes => localRes;
     #region Saving
@@ -51,11 +51,10 @@ public abstract class StorageObject : ClickableObject
             if (data.interest != null)
             {
                 data.job = JobState.Supply;
-                h.SetJob(data);
-                h.ChangeAction(HumanActions.Move);
+                h.SetJob(data, true);
                 return;
             }
-            HumanActions.LookForNew(h);
+            h.SetJob(JobState.Free);
         }
     }
 

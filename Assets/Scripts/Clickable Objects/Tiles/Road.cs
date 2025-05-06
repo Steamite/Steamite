@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 public class Road : ClickableObject
 {
     /// <summary>Contains ids of buildings that have entry points on this tile</summary>
-    public List<int> entryPoints = new(); 
+    public List<int> entryPoints = new();
 
     #region Basic Operations
     /// <inheritdoc/>
@@ -36,7 +36,7 @@ public class Road : ClickableObject
         {
             base.OnPointerUp(eventData);
         }
-        else if(eventData.button != PointerEventData.InputButton.Left)
+        else if (eventData.button != PointerEventData.InputButton.Left)
         {
             SceneRefs.gridTiles.BreakAction();
         }

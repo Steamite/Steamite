@@ -84,7 +84,8 @@ ColonyView > VisualElement > Label {
     -unity-text-align: middle-left;
 }
 
-ColonyView > VisualElement > VisualElement {
+#Stats {
     height: 100%;
     flex-direction: row;
+    justify-content: center;
 }

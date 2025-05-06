@@ -47,13 +47,14 @@ namespace InfoWindowElements
     {
         #region Properties
         /// <summary>Binding link(_itemSource)</summary>
-        [CreateProperty] protected List<UIResource> resources
+        [CreateProperty]
+        protected List<UIResource> resources
         {
             get { return (List<UIResource>)itemsSource; }
             set
             {
                 itemsSource = value;
-                RefreshItems();
+                Rebuild();
             }
         }
 
@@ -61,7 +62,7 @@ namespace InfoWindowElements
 
         #region Variables
         /// <summary>If disabled hides resources with 0.</summary>
-        bool showEmpty = false;
+        protected bool showEmpty = false;
 
         public const int ICON_SIZE = 60;
         [UxmlAttribute] public int iconSize = 60;
@@ -82,7 +83,6 @@ namespace InfoWindowElements
             selectionType = SelectionType.None;
             reorderable = false;
             virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            focusable = false;
         }
         #endregion
 
@@ -93,9 +93,10 @@ namespace InfoWindowElements
         /// <returns>The instantiated item.</returns>
         protected virtual VisualElement MakeItem()
         {
-            Debug.Log($"Making item{name}, {itemsSource.Count}, {parent.name}/{name}");
+            //Debug.Log($"Making item{name}, {itemsSource.Count}, {parent.name}/{name}");
             VisualElement element = itemTemplate.CloneTree();
             element.ElementAt(0).ElementAt(0).style.fontSize = 40 * iconSize / ICON_SIZE;
+            element.ElementAt(0).ElementAt(0).style.paddingRight = 5 * iconSize / ICON_SIZE;
             element.ElementAt(0).ElementAt(1).style.width = iconSize;
             element.ElementAt(0).ElementAt(1).style.height = iconSize;
             return element;
@@ -122,12 +123,12 @@ namespace InfoWindowElements
         /// <returns>Created none element.</returns>
         protected virtual VisualElement MakeNoneElement()
         {
-            Label l = new Label("Nothing");
+
+            Label l = new Label($"Empty"); // Free {(itemsSource != null ? itemsSource.Count : 0)}
             l.style.marginBottom = 0;
             l.style.marginTop = 0;
             l.style.marginLeft = 0;
             l.style.marginRight = 0;
-
 
             l.style.paddingBottom = 0;
             l.style.paddingTop = 0;
@@ -151,9 +152,16 @@ namespace InfoWindowElements
                     SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Rock:
-                    binding = BindingUtil.CreateBinding(nameof(Rock.rockYield));
-                    binding.sourceToUiConverters.AddConverter((ref Resource yeild) => ToUIRes(yeild));
-                    SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    if(((Rock)data).rockYield != null)
+                    {
+                        binding = BindingUtil.CreateBinding(nameof(Rock.rockYield));
+                        binding.sourceToUiConverters.AddConverter((ref Resource yeild) => ToUIRes(yeild));
+                        SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    }
+                    else
+                    {
+                        resources = new();
+                    }
                     break;
                 case Human:
                     binding = BindingUtil.CreateBinding(nameof(Human.Inventory));

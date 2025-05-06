@@ -1,5 +1,6 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>Game resources.</summary>
 [Serializable]
@@ -76,8 +77,22 @@ public class Resource
 
     public int this[ResourceType _type]
     {
-        get => ammount[type.IndexOf(_type)];
-        set => ammount[type.IndexOf(_type)] = value;
+        get
+        {
+            int i = type.IndexOf(_type);
+            if (i > -1)
+                return ammount[i];
+            else
+                return -1;
+        }
+        set
+        {
+            int i = type.IndexOf(_type);
+            if (i > -1)
+                ammount[i] = value;
+            else
+                Debug.LogError("NO TYPE PRESENT, add type?");
+        }
     }
     #endregion
 
@@ -99,7 +114,7 @@ public class Resource
     /// <summary>Removes empty resources.</summary>
     public void RemoveEmpty()
     {
-        for(int i = type.Count-1; i > -1 ; i--)
+        for (int i = type.Count - 1; i > -1; i--)
         {
             if (ammount[i] == 0)
             {

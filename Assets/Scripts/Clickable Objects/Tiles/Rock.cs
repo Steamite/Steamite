@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using TMPro;
 using Unity.Properties;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 /// <summary>
 /// Makes up most of the map, holds valuable resources. <br/>
@@ -19,6 +15,8 @@ public class Rock : ClickableObject
 
     /// <summary>Remaining rock integrity.</summary>
     [SerializeField] float integrity;
+    public float originalIntegrity;
+
 
     /// <summary>Assigned <see cref="Human"/>.</summary>
     Human assigned;
@@ -36,7 +34,10 @@ public class Rock : ClickableObject
     public float Integrity
     {
         get { return integrity; }
-        set { integrity = value; }
+        set 
+        { 
+            integrity = value;
+        }
     }
 
     /// <inheritdoc cref="assigned"/>
@@ -55,13 +56,13 @@ public class Rock : ClickableObject
     #region Basic Operations
     /// <summary>Creates a list from all Rocks on the same level.</summary>
     public override void UniqueID() => CreateNewId(transform.parent.GetComponentsInChildren<Rock>().Select(q => q.id).ToList());
-    
+
     /// <inheritdoc/>
     public override GridPos GetPos()
     {
         return new GridPos(
             transform.position.x,
-            (transform.position.y - ClickabeObjectFactory.ROCK_OFFSET) / ClickabeObjectFactory.LEVEL_HEIGHT,
+            (transform.position.y - ClickableObjectFactory.ROCK_OFFSET) / ClickableObjectFactory.LEVEL_HEIGHT,
             transform.position.z);
     }
     #endregion Basic Operations
@@ -86,15 +87,12 @@ public class Rock : ClickableObject
     {
         if (clickable == null)
             clickable = new RockSave();
-        if(rockYield.type.Count > 0)
-        {
-            (clickable as RockSave).res = rockYield.type[0];
-            (clickable as RockSave).ammount = rockYield.ammount[0];
-        }
+        if (rockYield?.type.Count == 0)
+            (clickable as RockSave).yeild = null;
         else
-            (clickable as RockSave).ammount = -1;
+            (clickable as RockSave).yeild = rockYield;
         (clickable as RockSave).integrity = integrity;
-        (clickable as RockSave).oreName = name;
+        (clickable as RockSave).originalIntegrity = originalIntegrity;
         (clickable as RockSave).toBeDug = toBeDug;
         return base.Save(clickable);
     }
@@ -103,17 +101,9 @@ public class Rock : ClickableObject
     public override void Load(ClickableObjectSave save)
     {
         integrity = (save as RockSave).integrity;
+        originalIntegrity = (save as RockSave).originalIntegrity;
         toBeDug = (save as RockSave).toBeDug;
-        name = (save as RockSave).oreName;
-        if ((save as RockSave).ammount > -1)
-        {
-            rockYield.type[0] = (save as RockSave).res;
-            rockYield.ammount[0] = (save as RockSave).ammount;
-        }
-        else
-        {
-            ColorWithIntegrity();
-        }
+        rockYield = (save as RockSave).yeild;
         base.Load(save);
     }
     #endregion Saving
@@ -127,11 +117,15 @@ public class Rock : ClickableObject
     /// <returns>If the rock is destroyed.</returns>
     public bool DamageRock(float damage)
     {
-        integrity -= damage;
-        if (integrity <= 0)
+        Integrity -= damage;
+        if (Integrity <= 0)
         {
-            if (rockYield.ammount.Sum() > 0)
-                SceneRefs.objectFactory.CreateAChunk(GetPos(), rockYield, true);
+            if (rockYield?.ammount.Sum() > 0)
+            {
+                Chunk chunk = SceneRefs.objectFactory.CreateAChunk(GetPos(), rockYield, true);
+                chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material.color 
+                    = GetComponent<MeshRenderer>().material.color;
+            }
             SceneRefs.objectFactory.CreateRoad(GetPos(), true);
             MyGrid.UnsetRock(this);
             return true;
@@ -145,7 +139,7 @@ public class Rock : ClickableObject
     {
         float f = 1;
         Color c = gameObject.GetComponent<MeshRenderer>().material.color;
-        switch (integrity)
+        switch (originalIntegrity)
         {
             case < 2:
                 f = 1f;
@@ -156,7 +150,7 @@ public class Rock : ClickableObject
             case < 6:
                 f = 0.6f;
                 break;
-            case <11:
+            case < 11:
                 f = 0.4f;
                 break;
             default:

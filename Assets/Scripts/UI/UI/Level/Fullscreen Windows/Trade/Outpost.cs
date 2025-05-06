@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using UnityEngine;
-using UnityEngine.UI;
 
 [Serializable]
 public class Outpost
@@ -66,13 +63,13 @@ public class Outpost
         name = _name;
         level = 0;
         production = new(
-            new() { type }, 
+            new() { type },
             new() { 0 });
         StartUpgrade();
     }
     public Outpost()
     {
-        
+
     }
 
     /// <summary>
@@ -82,8 +79,7 @@ public class Outpost
     {
         constructed = false;
         timeToFinish = upgradeCosts[level].timeInTicks;
-        MyRes.TakeFromGlobalStorage(upgradeCosts[level].resource);
-        MyRes.UpdateMoney(-upgradeCosts[level].money);
+        MyRes.PayCostGlobal(upgradeCosts[level].resource, upgradeCosts[level].money);
         if (level == 0)
         {
             /*Trade trade = UIRefs.trade;
@@ -97,13 +93,13 @@ public class Outpost
     public void Upgrade()
     {
         constructed = true;
-        if(level == 0)
+        if (level == 0)
         {
             /*Trade trade = UIRefs.trade;
             trade.transform.GetChild(0).GetChild(2).GetChild(trade.outposts.Count-1).GetChild(0).GetComponent<Image>().color = trade.availableColor;*/
         }
         level++;
-        timeToFinish = SceneRefs.tick.timeController.GetWeekTime(); // marks the finished time
+        timeToFinish = SceneRefs.tick.GetWeekTime(); // marks the finished time
         production.ammount[0] += resourceAmmount[production.type[0]]; // upgrades the production
     }
 }
