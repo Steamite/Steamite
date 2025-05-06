@@ -249,3 +249,13 @@
 
 .bottom-button-group {
 }
+
+.button-blocker {
+    position: absolute;
+    min-width: 100%;
+    min-height: 100%;
+    background-image: url("project://database/Assets/Standard%20Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=5866165431930342980&guid=e9d58580ef70b7744addd1ff255f07aa&type=3#Remove@2x");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.7);
+}

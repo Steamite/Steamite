@@ -58,6 +58,26 @@ public class ResearchWindow : FullscreenWindow
         base.OpenWindow();
         UI.Open(researchData);
     }
+    
+    public void OpenWindow(BuildingWrapper wrapper)
+    {
+        base.OpenWindow();
+        int i = 0, j = 0;
+        foreach (var cat in researchData.Categories)
+        {
+            for (j = 0; j < cat.Objects.Count; j++)
+            {
+                if (cat.Objects[j].nodeType == NodeType.Building
+                    && cat.Objects[j].nodeAssignee == wrapper.id)
+                {
+                    int x = cat.Objects.FindIndex(q => q.level == cat.Objects[j].level);
+                    UI.Open((i, cat.Objects[j].level+1, j - x));
+                    return;
+                }
+            }
+            i++;
+        }
+    }
 
     public void FinishResearch()
     {

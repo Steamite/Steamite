@@ -212,25 +212,16 @@ public class ResearchCategory : DataCategory<ResearchNode>
 {
     #region Editor
 #if UNITY_EDITOR
-    public void AddNode(int level)
+    public void AddNode(int level, ResearchData data)
     {
-        ResearchNode node = new(level, UniqueID());
+        ResearchNode node = new(level, data.UniqueID());
 
         Objects.Add(node);
         Objects = Objects.OrderBy(q => q.level).ToList();
     }
-    public override int UniqueID()
-    {
-        int id;
-        do
-        {
-            id = UnityEngine.Random.Range(0, int.MaxValue);
-        }
-        while (Objects.Count(q => q.id == id) > 0);
-        return id;
-    }
 #endif
     #endregion
+
     public ResearchCategory() { }
 
     public bool CheckPrequisite(ResearchNode node, Action unlockAction)
@@ -256,6 +247,7 @@ public class ResearchCategory : DataCategory<ResearchNode>
         }
         return result;
     }
+
 }
 
 /// <summary>Contains all research data, that can be edited.</summary>
@@ -264,5 +256,15 @@ public class ResearchData : DataHolder<ResearchCategory>
 {
 #if UNITY_EDITOR
     public override List<string> Choices() => Categories.Select(q => q.Name).ToList();
+    public override int UniqueID()
+    {
+        int id;
+        do
+        {
+            id = UnityEngine.Random.Range(0, int.MaxValue);
+        }
+        while (Categories.SelectMany(q=> q.Objects).Count(q => q.id == id) > 0);
+        return id;
+    }
 #endif
 }

@@ -153,7 +153,7 @@ namespace EditorWindows.Windows
         #region Entry managment
         void AddEntry(BaseListView _)
         {
-            BuildingWrapper wrapper = new(selectedCategory.UniqueID());
+            BuildingWrapper wrapper = new(data.UniqueID());
             int choice = EditorUtility.DisplayDialogComplex("Register a new building",
                 "Do you want to fill the new entry or create an empty one?",
                 "Filled", "Cancel", "Empty");

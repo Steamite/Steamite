@@ -11,6 +11,8 @@ public class BuildingWrapper
     public Building building => b;//{ get => b; private set => b = value; }
     [SerializeField] public int id;
     [SerializeField] public Sprite preview;
+    [NonSerialized] public bool unlocked = true;
+
 
 #if UNITY_EDITOR
     public void SetBuilding(Building _b, byte categoryID, string name = null)
@@ -39,20 +41,6 @@ public class BuildCategWrapper : DataCategory<BuildingWrapper>
     /// <summary>Hold editor data for showing columns.</summary>
     [NonSerialized] public List<bool> columnStates;
     [NonSerialized] public List<BuildingWrapper> availableBuildings;
-#if UNITY_EDITOR
-
-
-    public override int UniqueID()
-    {
-        int i;
-        do
-        {
-            i = UnityEngine.Random.Range(0, int.MaxValue);
-        } while (Objects.Count(q => q.id == i) > 0);
-        return i;
-    }
-#endif
-
     public BuildCategWrapper() { }
 
     public BuildCategWrapper(string _name, Texture2D _categIcon)
@@ -77,6 +65,16 @@ public class BuildingData : DataHolder<BuildCategWrapper>
             return false;
         return Categories.SelectMany(q => q.Objects).Select(q => q.building).Contains(newValue);
     }
+    public override int UniqueID()
+    {
+        int i;
+        do
+        {
+            i = UnityEngine.Random.Range(0, int.MaxValue);
+        } while (Categories.SelectMany(q=> q.Objects).Count(q => q.id == i) > 0);
+        return i;
+    }
+
 #endif
     #endregion
 

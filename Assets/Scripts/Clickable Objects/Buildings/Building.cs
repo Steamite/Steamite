@@ -198,14 +198,12 @@ public class Building : StorageObject
         // The view is switched however, the bindings do not work.
         if (!constructed)
         {
-            for (int i = 0; i < localRes.stored.ammount.Count; i++)
-            {
-                localRes.stored.ammount[i] = 0;
-            }
+            localRes.stored = new();
         }
         constructed = true;
         ChangeRenderMode(false);
-        OpenWindow();
+        if(selected)
+            OpenWindow();
     }
     #endregion
 
@@ -337,7 +335,18 @@ public class Building : StorageObject
             : MaterialChanger.Opaque;
         for (int i = 0; i < _meshRenderers.Count; i++)
         {
+            Color c = new(-1,-1,-1);
+            if (selected || SceneRefs.gridTiles.activeObject == this)
+                c = _meshRenderers[i].material.GetColor("_EmissionColor");
+
             _meshRenderers[i].material = newMat;
+            if(c.r != -1)
+            {
+                _meshRenderers[i].material.EnableKeyword("_EMISSION");
+                _meshRenderers[i].material.SetColor("_EmissionColor", c);
+            }
+
+
             if (transparent)
                 _meshRenderers[i].material.color
                     = new(_materialColors[i].r, _materialColors[i].g, _materialColors[i].b, 0.1f + (constructionProgress / maximalProgress) * 0.9f);
@@ -394,12 +403,12 @@ public class Building : StorageObject
             t.gameObject.layer = 6;
         }
         GetComponent<SortingGroup>().sortingLayerName = "Buildings";
-        maximalProgress = CalculateMaxProgress();
         SceneRefs.gridTiles.HighLight(new(), gameObject);
 
         MyRes.UpdateResource(cost, -1);
         if (loading)
         {
+            maximalProgress = CalculateMaxProgress();
             ChangeRenderMode(true);
         }
         else

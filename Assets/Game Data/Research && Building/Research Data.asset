@@ -54,7 +54,7 @@ MonoBehaviour:
     - nodeName: House
       id: 651504100
       level: 0
-      researched: 0
+      researched: 1
       currentTime: -1
       researchTime: 15
       reseachCost:
@@ -133,8 +133,8 @@ MonoBehaviour:
         type: 
         ammount: 
       nodeType: 2
-      nodeCategory: 0
-      nodeAssignee: 1197943099
+      nodeCategory: -1
+      nodeAssignee: -1
       unlockedBy: 
       unlocks: 1b67a65bef39f217
       description: 

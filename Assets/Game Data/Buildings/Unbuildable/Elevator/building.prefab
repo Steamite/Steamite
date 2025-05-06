@@ -170,7 +170,7 @@ MonoBehaviour:
     stored:
       capacity: 1050
       type: 
-      ammount: 64000000f40100000000000000000000
+      ammount: 
     requests: []
     carriers: []
     mods: 

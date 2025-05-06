@@ -45,6 +45,7 @@
     min-height: 125px;
     max-height: 125px;
     max-width: 125px;
+    transition-duration: 0.5s;
 }
 
 .research-button-selected > .rotator {
@@ -65,7 +66,7 @@
     border-bottom-color: rgba(0, 0, 0, 0);
 }
 
-.rotator > VisualElement {
+.research-button-background {
     width: 87%;
     height: 87%;
     border-top-left-radius: 100px;
@@ -77,6 +78,7 @@
     justify-content: center;
     top: 6.5%;
     -unity-background-image-tint-color: rgb(255, 255, 255);
+    position: absolute;
 }
 
 .available .rotator {
@@ -85,10 +87,23 @@
 
 .available:hover > .rotator {
     transition-duration: 0.3s;
-    scale: 1.1 1.1;
     -unity-background-image-tint-color: rgb(226, 152, 18);
+}
+
+.available:hover {
+    transition-duration: 0.3s;
+    scale: 1.1 1.1;
 }
 
 .researched > .rotator {
     -unity-background-image-tint-color: rgb(27, 231, 161);
+}
+
+.found {
+    -unity-background-image-tint-color: rgb(156, 0, 0);
+    scale: 1.2 1.2;
+}
+
+.found > .rotator {
+    -unity-background-image-tint-color: rgb(156, 0, 0);
 }

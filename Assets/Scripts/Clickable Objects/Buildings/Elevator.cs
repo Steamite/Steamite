@@ -62,6 +62,12 @@ public class Elevator : Building, IStorage
     }
     #endregion
 
+    public override void FinishBuild()
+    {
+        ((IStorage)this).SetupStorage(SceneRefs.jobQueue, false);
+        base.FinishBuild();
+    }
+
     #region Storing
     public override void Store(Human human, int transferPerTick)
     {

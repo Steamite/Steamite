@@ -19,6 +19,7 @@ public enum ResourceType
 public static class MyRes
 {
     #region Variables
+    public static Resource resourceTemplate;
     /// <summary>Used for faster determening new jobs faster.</summary>
     public static int globalStorageSpace;
     /// <summary>All storage buildings.</summary>
@@ -47,7 +48,7 @@ public static class MyRes
         // Update text, or display error
         try
         {
-            Resource resource = resDisplay.InitializeResources(setupStorages);
+            resourceTemplate = resDisplay.InitializeResources(setupStorages);
             globalStorageSpace = 0;
 
             storage = MyGrid.buildings.Select(q => q.GetComponent<IStorage>()).Where(q => q != null).ToArray();
@@ -56,12 +57,12 @@ public static class MyRes
             {
                 if (setupStorages)
                 {
-                    _s.SetupStorage(resource, jQ);
+                    _s.SetupStorage(jQ);
                 }
                 else
                     jQ.storages.Add(_s);
                 globalStorageSpace += _s.LocalResources.stored.capacity - _s.LocalResources.stored.ammount.Sum();
-                ManageRes(resource, _s.LocalResources.stored, 1);
+                ManageRes(resourceTemplate, _s.LocalResources.stored, 1);
             }
             resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
             resDisplay.UIUpdate(nameof(ResourceDisplay.Money));
