@@ -3,11 +3,15 @@ using UnityEngine.UIElements;
 
 namespace AbstractControls
 {
+
+    /// <summary>
+    /// Group is for loose buttons with more layout needs. (eg. <see cref="Research.ResearchRadioButtonGroup"/>>)
+    /// </summary>
     [UxmlElement]
     public partial class CustomRadioButtonGroup : VisualElement
     {
         #region Variables
-        protected event Action<int> changeEvent;
+        protected Action<int> changeEvent;
 
         /// <summary>Index of the currently selected button.</summary>
         public int SelectedChoice
@@ -37,12 +41,22 @@ namespace AbstractControls
         /// Deselects the previous button and triggers the <see cref="changeEvent"/>.
         /// </summary>
         /// <param name="value">Index of the new button</param>
-        public void Select(int value)
+        public virtual bool Select(int value)
         {
-            if (SelectedChoice > -1 && SelectedChoice != value)
+            if (SelectedChoice > -1)
                 ((CustomRadioButton)ElementAt(SelectedChoice)).Deselect();
-            SelectedChoice = value;
-            changeEvent?.Invoke(value);
+            if(SelectedChoice == value)
+            {
+                SelectedChoice = -1;
+                changeEvent?.Invoke(-1);
+                return false;
+            }
+            else
+            {
+                SelectedChoice = value;
+                changeEvent?.Invoke(value);
+                return true;
+            }
         }
         #endregion
     }

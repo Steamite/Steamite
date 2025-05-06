@@ -14,6 +14,7 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
     {
         propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
+    public bool HasActiveBinding() => propertyChanged != null;
     #endregion
 
     #region Variables
@@ -59,7 +60,7 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
         if (fillMoney)
             Money = 2000;
         string[] names = Enum.GetNames(typeof(ResourceType));
-        for (int i = 0; i < names.Length; i++)
+        for (int i = 1; i < names.Length; i++)
         {
             resources.type.Add((ResourceType)i);
             resources.ammount.Add(0);
@@ -69,7 +70,7 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
 
         moneyLabel = root.Q<Label>("Money-Value");
         DataBinding binding = BindingUtil.CreateBinding(nameof(Money));
-        binding.sourceToUiConverters.AddConverter((ref int _Money) => $"{Money} <color=#FFD700>"+(char)163+"</color>");
+        binding.sourceToUiConverters.AddConverter((ref int _Money) => $"{Money} <color=#FFD700>" + (char)163 + "</color>");
         moneyLabel.SetBinding("text", binding);
         moneyLabel.dataSource = this;
 

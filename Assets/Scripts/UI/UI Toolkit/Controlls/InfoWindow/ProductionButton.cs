@@ -1,5 +1,5 @@
-using InfoWindowElements;
 using System.Linq;
+using InfoWindowElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,18 +11,20 @@ namespace InfoWindowViews
     {
         #region Variables
         bool enable;
-        [UxmlAttribute] bool Play 
+        [UxmlAttribute]
+        bool Play
         {
-            get => enable; 
-            set 
-            { 
+            get => enable;
+            set
+            {
                 enable = value;
                 UpdateButton();
-            } 
+            }
         }
         #region Styles
         Color fillColor;
-        [UxmlAttribute] Color FillColor
+        [UxmlAttribute]
+        Color FillColor
         {
             get => fillColor;
             set
@@ -88,6 +90,7 @@ namespace InfoWindowViews
         /// <inheritdoc/>
         public void Open(object data)
         {
+            // DEBUG_Binding
             building = (IResourceProduction)data;
             enable = building.Stoped;
             inputResource.Open(data);

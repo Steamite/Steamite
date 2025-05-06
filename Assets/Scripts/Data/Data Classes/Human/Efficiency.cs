@@ -39,7 +39,7 @@ public class Efficiency
                     mod.count--;
             }
 
-            if(mod.count == 0)
+            if (mod.count == 0)
             {
                 modifiers.Remove(mod);
             }
@@ -57,9 +57,9 @@ public class Efficiency
     void CalculateEfficiecy()
     {
         efficiency = baseEfficiecny;
-        foreach(EfficiencyMod mod in modifiers)
+        foreach (EfficiencyMod mod in modifiers)
         {
-            if(mod.count < 0)
+            if (mod.count < 0)
             {
                 efficiency += mod.negInfluence * mod.count / 100;
             }

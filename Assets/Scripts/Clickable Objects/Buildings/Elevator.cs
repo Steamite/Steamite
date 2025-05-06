@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
@@ -13,10 +12,14 @@ public class Elevator : Building, IStorage
     public static Elevator main;
     public bool isMain = false;
 
+
     /// <inheritdoc/>
     [CreateProperty] public List<bool> CanStore { get; set; } = new();
     public StorageResource LocalResources => localRes;
     #endregion
+
+    [RuntimeInitializeOnLoadMethod]
+    static void ReloadDomain() => main = null;
     public override void UniqueID()
     {
         base.UniqueID();
@@ -25,12 +28,12 @@ public class Elevator : Building, IStorage
     }
     #region Window
     /// <inheritdoc/>
-    protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
+    protected override void ToggleInfoComponents(InfoWindow info, List<string> toEnable)
     {
         toEnable.Add("Storage");
-        base.OpenWindowWithToggle(info, toEnable);
+        base.ToggleInfoComponents(info, toEnable);
     }
-    
+
     /// <inheritdoc/>
     public override List<string> GetInfoText()
     {
@@ -58,6 +61,12 @@ public class Elevator : Building, IStorage
         base.Load(save);
     }
     #endregion
+
+    public override void FinishBuild()
+    {
+        ((IStorage)this).SetupStorage(SceneRefs.jobQueue, false);
+        base.FinishBuild();
+    }
 
     #region Storing
     public override void Store(Human human, int transferPerTick)
@@ -107,7 +116,7 @@ public class Elevator : Building, IStorage
     #region Deconstruction
     public override void OrderDeconstruct()
     {
-        if(main)
+        if (main)
             print("can't order destroy");
     }
     public override Chunk Deconstruct(GridPos instantPos)

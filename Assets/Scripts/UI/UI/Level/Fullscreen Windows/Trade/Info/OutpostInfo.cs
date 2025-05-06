@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class OutpostInfo : MonoBehaviour
 {
@@ -16,10 +12,10 @@ public class OutpostInfo : MonoBehaviour
     [SerializeField] Color keepColor;
     [SerializeField] Color balanceColor;
 
-    [Header("")]
     //[SerializeField] Trade trade;
 
-    int activeOutpost = 0;
+    /*[Header("")]
+    int activeOutpost = 0;*/
     /*
     /// <summary>
     /// Creates the page for a outpost.

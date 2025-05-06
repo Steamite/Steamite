@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6706627358881609899}
   - component: {fileID: 5194983197857562361}
   - component: {fileID: 8243330467784709925}
-  - component: {fileID: -1379431330698973650}
   - component: {fileID: -5907503386569211095}
   m_Layer: 9
   m_Name: Road
@@ -61,6 +60,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -107,33 +109,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &-1379431330698973650
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 33366249774806201}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!114 &-5907503386569211095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,6 +121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de1a1782b5c54044daf8a8c313fda744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: Road
   selected: 0
   id: 0
+  objectName: Road
   entryPoints: 

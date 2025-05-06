@@ -1,28 +1,35 @@
-using RadioGroups;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 using UnityEngine.UIElements;
 
 namespace AbstractControls
-{    
+{
+    public class RadioButtonData
+    {
+        public string text;
+
+        public RadioButtonData(string _text)
+        {
+            text = _text;
+        }
+    }
+
+    /// <summary>
+    /// List is for simple buttons under one parent. And have a lot of dynamic changes.
+    /// </summary>
     [UxmlElement]
     public partial class CustomRadioButtonList : ListView, IBindable
     {
-        protected List<CustomRadioButton> _itemsSource;
-        protected CustomRadioButton _selectedButton;
+        public new VisualElement contentContainer;
+        protected event Action<int> changeEvent;
 
-        protected ScrollView _scrollView;
-
-        protected Action<int> changeEvent;
-
-
-        int _selID;
-        protected int SelectedId
+        protected int _selID;
+        protected int SelectedChoice
         {
             get
             {
-                return _selID;//_selectedButton != null ? _selectedButton.value : -1; 
+                return _selID;
             }
             set
             {
@@ -32,65 +39,40 @@ namespace AbstractControls
         }
 
         #region List
-
         public CustomRadioButtonList()
         {
-            // Initialize the internal item source
-            _itemsSource = new List<CustomRadioButton>();
             // Default settings (adjust as needed)
-            fixedItemHeight = 30;
+            virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             makeItem = DefaultMakeItem;
             bindItem = DefaultBindItem;
             bindingSourceSelectionMode = BindingSourceSelectionMode.AutoAssign;
             reorderable = false;
             selectionType = SelectionType.None;
+            contentContainer = this.Q<VisualElement>("unity-content-container");
+            ((ScrollView)hierarchy[0]).horizontalScrollerVisibility = ScrollerVisibility.Hidden;
         }
 
-        /// <summary>
-        /// Adds an item to the list and refreshes the ListView
-        /// </summary>
-        /// <param name="item"></param>
-        protected void AddItem(CustomRadioButton item)
-        {
-            _itemsSource.Add(item);
-            makeItem();
-            Rebuild();
-        }
-        /// <summary>
-        /// Removes an item from the list and refreshes the ListView
-        /// </summary>
-        /// <param name="item"></param>
-        protected void RemoveItem(CustomRadioButton item)
-        {
-            _itemsSource.Remove(item);
-            if(item == _selectedButton)
-            {
-                _selectedButton?.Deselect();
-                _selectedButton = null;
-            }
-            Rebuild();
-        }
         /// <summary>
         /// // Removes an item from the list and refreshes the ListView
         /// </summary>
         /// <param name="index"></param>
         public void RemoveItem(int index)
         {
-            _itemsSource.RemoveAt(index);
-            if (index == SelectedId)
+            itemsSource.RemoveAt(index);
+            if (index == SelectedChoice)
             {
-                SelectedId = -1;
-                _selectedButton?.Deselect();
+                SelectedChoice = -1;
+
+                //_selectedButton?.Deselect();
             }
-            Rebuild();
+            RefreshItems();
         }
         /// <summary>
         /// Clears all items from the list
         /// </summary>
         protected void ClearItems()
         {
-            _itemsSource.Clear();
-            Rebuild();
+            itemsSource = null;
         }
 
         // Default method for creating an item (override in specific use cases)
@@ -102,8 +84,7 @@ namespace AbstractControls
             element.RemoveFromClassList("unity-collection-view__item");
             element.RemoveFromClassList("unity-list-view__item");
             (element as CustomRadioButton).value = index;
-            (element as CustomRadioButton).text = _itemsSource[index].text;
-            //element.RegisterCallback<ClickEvent>((_) => (element as CustomRadioButton).Select());
+            (element as CustomRadioButton).text = ((RadioButtonData)itemsSource[index]).text;
             return;
         }
 
@@ -111,17 +92,29 @@ namespace AbstractControls
 
         public virtual void Init(Action<int> onChange)
         {
-            itemsSource = _itemsSource;
-            SelectedId = -1;
+            SelectedChoice = -1;
             changeEvent = onChange;
         }
 
-        public virtual void Select(CustomRadioButton customRadioButton)
+        /// <summary>
+        /// Called from buttons;
+        /// </summary>
+        /// <param name="customRadioButton">Button pressed.</param>
+        public virtual bool Select(int index)
         {
-            if(_selectedButton != customRadioButton)
-                _selectedButton?.Deselect();
-            _selectedButton = customRadioButton;
-            SelectedId = _selectedButton.value;
+            if(SelectedChoice > -1)
+                ((CustomRadioButton)contentContainer.Children()
+                    .FirstOrDefault(q => ((CustomRadioButton)q)?.value == SelectedChoice))?.Deselect();
+            if(SelectedChoice == index)
+            {
+                SelectedChoice = -1;
+                return false;
+            }
+            else
+            {
+                SelectedChoice = index;
+                return true;
+            }
         }
     }
 }

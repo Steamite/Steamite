@@ -1,12 +1,12 @@
-using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Unity.Properties;
-using UnityEngine;
-using UnityEngine.UIElements;
 using RadioGroups;
+using Unity.Properties;
 using UnityEditor;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 namespace StartMenu
 {
@@ -15,7 +15,7 @@ namespace StartMenu
         VisualElement menu;
 
         Button startButton;
-        WorldRadioGroup worlds;
+        WorldRadioList worlds;
 
         int selectedOption;
         string worldName;
@@ -37,8 +37,8 @@ namespace StartMenu
         {
             menu = _root.Q<VisualElement>("New-Menu");
             startButton = menu.Q<Button>("Start");
-            worlds = menu.Q<WorldRadioGroup>("Worlds"); 
-            worlds.SetChangeCallback(
+            worlds = menu.Q<WorldRadioList>("Worlds");
+            worlds.Init(
                 (i) =>
                 {
                     selectedOption = i;
@@ -52,6 +52,8 @@ namespace StartMenu
             _root.Q<Button>("New-Close-Button").RegisterCallback<ClickEvent>(CloseWindow);
             startButton.AddToClassList("disabled-button");
             startButton.RemoveFromClassList("main-button");
+            WorldName = "";
+            selectedOption = 0;
         }
 
         #region Window Logic
@@ -61,9 +63,7 @@ namespace StartMenu
         }
         public void OpenWindow(ClickEvent _ = null)
         {
-            selectedOption = -1;
-            WorldName = "";
-            worlds.Reset();
+            worlds.Open();
             gameObject.GetComponent<MyMainMenu>().OpenWindow("new");
         }
 
@@ -121,9 +121,9 @@ namespace StartMenu
                         Directory.Delete(Application.persistentDataPath + "/saves/" + worldName, true);
                     Directory.CreateDirectory(Application.persistentDataPath + "/saves/" + worldName);
                     if (selectedOption == 0)
-                        GameObject.Find("Canvas").GetComponent<LoadingScreen>().NewGame(worldName);
+                        GameObject.Find("Canvas").GetComponent<LoadingScreen>().StartNewGame(worldName);
                     else
-                        GameObject.Find("Canvas").GetComponent<LoadingScreen>().NewGame(worldName, gameObject.GetComponent<MapGeneration>().Seed);
+                        GameObject.Find("Canvas").GetComponent<LoadingScreen>().StartNewGame(worldName, gameObject.GetComponent<MapGeneration>().Seed);
                 }
                 else
                 {

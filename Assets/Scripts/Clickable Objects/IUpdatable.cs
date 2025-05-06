@@ -1,4 +1,5 @@
-﻿using UnityEngine.UIElements;
+﻿using UnityEngine.Experimental.GlobalIllumination;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// Interface for objects that can invoke a binding event.
@@ -10,4 +11,6 @@ public interface IUpdatable : INotifyBindablePropertyChanged
     /// </summary>
     /// <param name="property">Updated property</param>
     public void UIUpdate(string property = "");
+
+    public bool HasActiveBinding();
 }

@@ -1,0 +1,26 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Editor/ResearchNode.uss?fileID=7433441132597879392&amp;guid=8459a69cb8bb9374d9ea0bf782b026d5&amp;type=3#ResearchNode" />
+    <engine:VisualElement name="Root" style="flex-grow: 0;">
+        <engine:VisualElement name="Body" class="body">
+            <engine:Button name="Bottom-Conector" class="connector" style="bottom: auto; top: -12px;" />
+            <engine:VisualElement name="Universal" style="flex-grow: 1;">
+                <engine:VisualElement name="Top-Buttons" class="a top-buttons">
+                    <engine:Button icon-image="project://database/Assets/Standard%20Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-2236324273849735119&amp;guid=e9d58580ef70b7744addd1ff255f07aa&amp;type=3#arrow-left@2x" name="Move-Left" class="move-button" />
+                    <engine:VisualElement name="Right" style="flex-grow: 1; flex-direction: row-reverse;">
+                        <engine:Button icon-image="project://database/Assets/Standard%20Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-1087164816274819069&amp;guid=e9d58580ef70b7744addd1ff255f07aa&amp;type=3#arrow-right@2x" name="Move-Right" class="move-button" />
+                        <engine:Button icon-image="project://database/Assets/Sprites/Icons/Info%20window/Cancel.png?fileID=2800000&amp;guid=a038df6f8c235ab42ac4da953bbda40d&amp;type=3#Cancel" name="Delete" class="cancel-button" />
+                    </engine:VisualElement>
+                </engine:VisualElement>
+                <engine:VisualElement name="Top" class="name-elem">
+                    <engine:TextField placeholder-text="filler text" name="Name" class="name-text" />
+                    <engine:IntegerField value="42" name="Ammount" class="time-elem" />
+                </engine:VisualElement>
+                <ResourceCell name="Cost" show-add-remove-footer="true" />
+                <engine:DropdownField choices="Stat,Building" name="Type" class="dropdown" />
+            </engine:VisualElement>
+            <engine:DropdownField name="Categ" class="dropdown" />
+            <engine:DropdownField name="Assignee" class="dropdown" />
+            <engine:Button name="Bottom-Conector" class="connector" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

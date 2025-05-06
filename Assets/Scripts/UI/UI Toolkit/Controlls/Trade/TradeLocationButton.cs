@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace TradeWindowElements
@@ -12,7 +9,7 @@ namespace TradeWindowElements
         Vector2 basePosition;
         Slider slider;
 
-        public TradeLocationButton() : base(){}
+        public TradeLocationButton() : base() { }
 
         public TradeLocationButton(Vector2 _pos, int i, Slider _slider, Vector2 _basePosition) : base(_pos, i)
         {

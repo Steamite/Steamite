@@ -1,0 +1,35 @@
+.bottom-button-group {
+    flex-direction: row;
+    justify-content: space-around;
+    flex-grow: 1;
+}
+
+.bottom-button-group > Button {
+    background-color: rgb(114, 73, 35);
+    min-width: 90px;
+    min-height: 90px;
+    flex-grow: 0;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transition-duration: 0.2s;
+    max-width: 90px;
+    max-height: 90px;
+}
+
+.bottom-button-group > Button:hover {
+    background-color: rgb(68, 44, 21);
+    scale: 1.05 1.05;
+}
+
+.locked > buildingbackground {
+}

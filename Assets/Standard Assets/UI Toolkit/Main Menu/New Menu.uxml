@@ -13,7 +13,7 @@
             <ui:VisualElement name="Left-Bar" style="flex-grow: 0; width: 25%; height: 91%; margin-left: 2.5%; margin-right: 2.5%; margin-top: 1%; margin-bottom: 2%; flex-direction: row; flex-shrink: 0; overflow: visible;">
                 <ui:VisualElement style="flex-grow: 0; overflow: visible; align-self: flex-end; align-items: auto; height: 100%; align-content: auto; max-height: 100%;">
                     <ui:Label text="World Selection" style="font-size: 40px; -unity-text-align: upper-center; align-content: auto; align-items: flex-start; align-self: flex-start;" />
-                    <RadioGroups.WorldRadioGroup fixed-item-height="30" binding-source-selection-mode="AutoAssign" selection-type="None" allow-add="false" allow-remove="false" name="Worlds" style="flex-grow: 0; max-height: 700px; width: 100%; justify-content: flex-start; margin-top: 50px;" />
+                    <RadioGroups.WorldRadioList fixed-item-height="100" binding-source-selection-mode="AutoAssign" selection-type="None" allow-add="false" allow-remove="false" name="Worlds" virtualization-method="FixedHeight" style="flex-grow: 1; max-height: 700px; width: 100%; justify-content: flex-start; margin-top: 50px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="VisualElement" style="flex-grow: 0; width: 5px; height: 90%; background-color: rgb(141, 129, 51); position: relative; align-self: center; display: flex; margin-top: 0;" />

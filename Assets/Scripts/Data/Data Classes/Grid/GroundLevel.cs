@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +9,7 @@ public class GroundLevel : MonoBehaviour
 {
     #region Variables
     /// <summary>grid witdth(x)</summary>
-    [Header("Grid")]public int width = 21;
+    [Header("Grid")] public int width = 21;
     /// <summary>grid height(y)</summary>
     public int height = 21;
 
@@ -53,7 +51,7 @@ public class GroundLevel : MonoBehaviour
         int y = Mathf.RoundToInt(gp.z);
         if (x < 0 || x >= width || y < 0 || y >= height)
         {
-            Debug.LogError($"(Get)Index outside of grid bounds, x: {x}, y :{y}.");
+            Debug.LogWarning($"(Get)Index outside of grid bounds, x: {x}, y :{y}.");
             return null;
         }
 
@@ -106,7 +104,7 @@ public class GroundLevel : MonoBehaviour
     /// <param name="gridSize">Size for the new grid.</param>
     public void ClearGrid(int gridSize = -1)
     {
-        if(gridSize > -1)
+        if (gridSize > -1)
         {
             width = gridSize;
             height = gridSize;
@@ -126,7 +124,7 @@ public class GroundLevel : MonoBehaviour
     public void CreateGrid(int gridSize = -1)
     {
         ClearGrid(gridSize);
-        
+
         FillRoads(); // adds roads
         FillRocks(); // adds ores
         FillWater(); // adds water
@@ -145,7 +143,7 @@ public class GroundLevel : MonoBehaviour
             SetGridItem(vec, roads.GetChild(j).GetComponent<Road>());
         }
     }
-    
+
     /// <summary>Registers all instantiated rocks.</summary>
     void FillRocks()
     {
@@ -178,6 +176,8 @@ public class GroundLevel : MonoBehaviour
         foreach (Building building in buildings.GetComponentsInChildren<Building>())
         {
             building.UniqueID();
+            if (building.constructed)
+                building.constructionProgress = building.CalculateMaxProgress();
             if (!building.GetComponent<BuildPipe>())
             {
                 PlaceBuild(building, load: true);
@@ -209,6 +209,8 @@ public class GroundLevel : MonoBehaviour
         if (gridPos == null)
             gridPos = building.GetPos();
         overlays.AddBuildingOverlay(gridPos, building.id);
+
+        List<Image> tiles = overlays.buildingOverlays[^1].GetComponentsInChildren<Image>().ToList();
         for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
         {
             NeededGridItem item = building.blueprint.itemList[i];
@@ -231,12 +233,12 @@ public class GroundLevel : MonoBehaviour
                     else
                         overlays.Add(new(itemPos.x, itemPos.z), i);
                     r?.entryPoints.Add(building.id);
-                    overlays.buildingOverlays[^1].GetComponentsInChildren<Image>().ToList()[^1].gameObject.SetActive(r != null);
+                    //[^1].gameObject.SetActive(r != null);
                     break;
             }
         }
         if (!load)
-            overlays.HideGlobalEntryPoints();
+            overlays.DestroyBuilingTiles();
     }
     #endregion Adding to Grid
 
@@ -312,7 +314,7 @@ public class GroundLevel : MonoBehaviour
             {
                 foreach (PipePart connection in pipe.transform.GetComponentsInChildren<PipePart>())
                 {
-                    if (connection.name == $"{i}")
+                    if (connection.objectName == $"{i}")
                     {
                         connection.connectedPipe.DisconnectPipe(i % 2 == 0 ? i + 1 : i - 1, false);
                     }

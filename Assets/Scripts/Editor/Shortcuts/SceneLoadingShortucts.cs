@@ -1,8 +1,7 @@
-#if UNITY_EDITOR
+using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using System.IO;
 
 /// <summary>Editor shorcuts for quickly switching levels(only in edit mode).</summary>
 [InitializeOnLoad]
@@ -16,6 +15,7 @@ public class SceneLoadingShortucts : MonoBehaviour
     /// </summary>
     static SceneLoadingShortucts()
     {
+        EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
     }
 
@@ -45,13 +45,14 @@ public class SceneLoadingShortucts : MonoBehaviour
                 File.Delete($"{Application.persistentDataPath}/openScene.txt");
             }
         }
-        else if(state == PlayModeStateChange.EnteredEditMode)
+        else if (state == PlayModeStateChange.EnteredEditMode)
         {
-            if(File.Exists($"{Application.persistentDataPath}/openScene.txt"))
-                EditorSceneManager.OpenScene($"{ scenePath }{File.ReadAllText($"{Application.persistentDataPath}/openScene.txt")}.unity");
+            if (File.Exists($"{Application.persistentDataPath}/openScene.txt"))
+                EditorSceneManager.OpenScene($"{scenePath}{File.ReadAllText($"{Application.persistentDataPath}/openScene.txt")}.unity");
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
     }
-    
+
 
     [MenuItem("Custom Editors/Load/Splash Screen _F1", priority = 0)]
     static void LoadOpenScene()
@@ -74,7 +75,7 @@ public class SceneLoadingShortucts : MonoBehaviour
     [MenuItem("Custom Editors/Load/Level _F3", priority = 2)]
     static void LoadLevel()
     {
-        if(EditorSceneManager.GetActiveScene().name != "Level")
+        if (EditorSceneManager.GetActiveScene().name != "Level")
         {
             EditorSceneManager.SaveOpenScenes();
             EditorSceneManager.OpenScene($"{scenePath}Level.unity");
@@ -90,4 +91,3 @@ public class SceneLoadingShortucts : MonoBehaviour
         }
     }
 }
-#endif

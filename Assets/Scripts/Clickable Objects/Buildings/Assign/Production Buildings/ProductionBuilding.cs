@@ -1,17 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
-using UnityEngine.UIElements;
 using Unity.Properties;
+using UnityEngine;
 
 /// <summary>Adds Production Handling.</summary>
 public class ProductionBuilding : Building, IAssign, IResourceProduction
 {
     #region Variables
+    [SerializeField] int assignLimit;
     [SerializeField][Header("Production")] float productionTime;
     [SerializeField] int productionModifier = 1;
-    
+
     [SerializeField] Resource productionCost;
     [SerializeField] Resource productionYield;
     #endregion
@@ -27,7 +26,8 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
 
     #region Assign
     [CreateProperty] public List<Human> Assigned { get; set; } = new();
-    [CreateProperty] public int assignLimit { get; set; } = 3;
+
+    [CreateProperty] public int AssignLimit { get => assignLimit; set => assignLimit = value; }
     #endregion
 
     #region Resources
@@ -45,17 +45,17 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     /// If there's no other component in <see href="toEnable"/> adds "Production", and fills it.
     /// </summary>
     /// <inheritdoc/>
-    protected override void OpenWindowWithToggle(InfoWindow info, List<string> toEnable)
+    protected override void ToggleInfoComponents(InfoWindow info, List<string> toEnable)
     {
         if (toEnable.Count == 0)
         {
             toEnable.Add("Production");
             toEnable.Add("Assign");
-            base.OpenWindowWithToggle(info, toEnable);
+            base.ToggleInfoComponents(info, toEnable);
         }
         else
         {
-            base.OpenWindowWithToggle(info, toEnable);
+            base.ToggleInfoComponents(info, toEnable);
         }
     }
     #endregion
@@ -65,8 +65,8 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
-            clickable = new ProductionBSave();
-        (clickable as ProductionBSave).inputRes = new(InputResource);
+            clickable = new ResProductionBSave();
+        (clickable as ResProductionBSave).inputRes = new(InputResource);
         (clickable as ProductionBSave).prodTime = ProdTime;
         (clickable as ProductionBSave).currentTime = CurrentTime;
         (clickable as ProductionBSave).modifier = Modifier;
@@ -76,7 +76,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-        InputResource = new((save as ProductionBSave).inputRes);
+        InputResource = new((save as ResProductionBSave).inputRes);
 
         ProdTime = (save as ProductionBSave).prodTime;
         CurrentTime = (save as ProductionBSave).currentTime;
@@ -152,34 +152,40 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     /// <inheritdoc/>
     public override void OrderDeconstruct()
     {
-        base.OrderDeconstruct();
-        if (constructed)
+        JobQueue queue = SceneRefs.jobQueue;
+        if (!constructed)
         {
-            if (deconstructing) // has just been ordered
+            base.OrderDeconstruct();
+        }
+        else 
+        {
+            if (!deconstructing) // start deconstruction now!
             {
-                InputResource.ReassignCarriers(false);
-                Human human = localRes.carriers.Count > 0 && Assigned.Count > 0 ? Assigned[0] : null;
-                foreach (Human h in Assigned)
-                {
-                    h.workplace = null;
-                    if(h != human)
-                        HumanActions.LookForNew(h);
-                    StopAllCoroutines();
-                }
+                Human human = null;
+                queue.CancelJob(JobState.Pickup, this);
+                queue.CancelJob(JobState.Supply, this);
+                queue.CancelJob(JobState.Constructing, this);
+                queue.AddJob(JobState.Deconstructing, this);
+                deconstructing = true;
+
+                human = localRes.ReassignCarriers();
                 if (human)
+                    InputResource.ReassignCarriers(false);
+                else if(InputResource.carriers.Count > 0)
                 {
-                    JobData data = PathFinder.FindPath(new() {this}, human);
+                    human = InputResource.carriers[0];
+                    localRes.AddRequest(new(), human, 0);
+                    InputResource.RemoveRequest(human);
+                    InputResource.ReassignCarriers(false);
+                    JobData data = PathFinder.FindPath(new() { this }, human);
                     data.job = JobState.Deconstructing;
-                    human.SetJob(data);
-                    human.ChangeAction(HumanActions.Demolish);
+                    human.SetJob(data, true);
                 }
             }
             else // has just been canceled
             {
-                foreach(Human h in Assigned)
-                {
-
-                }
+                base.OrderDeconstruct();
+                return;
             }
         }
     }
@@ -194,7 +200,8 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     {
         SceneRefs.jobQueue.CancelJob(JobState.Supply, this);
         Chunk c = base.Deconstruct(instantPos);
-        if(InputResource.stored.ammount.Sum() > 0){
+        if (InputResource.stored.ammount.Sum() > 0)
+        {
             if (!c)
             {
                 c = SceneRefs.objectFactory.CreateAChunk(instantPos, InputResource.stored, true);
@@ -232,7 +239,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     public override List<string> GetInfoText()
     {
         List<string> strings = base.GetInfoText();
-        strings[0] = $"Can employ up to {assignLimit} workers";
+        strings[0] = $"Can employ up to {AssignLimit} workers";
         strings.Insert(1, $"<u>Produces</u>: \n{ProductionYield.GetDisplayText()}");
         if (ProductionCost.ammount.Sum() > 0)
             strings[1] += $", from: \n{ProductionCost.GetDisplayText()}";
@@ -241,10 +248,12 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     #endregion
 
     #region Assign
-    public void ManageAssigned(Human human, bool add)
+    public bool ManageAssigned(Human human, bool add)
     {
         if (add)
         {
+            if (Assigned.Count == assignLimit)
+                return false;
             JobData job = PathFinder.FindPath(
                 new List<ClickableObject>() { this },
                 human);
@@ -260,13 +269,14 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
                     human.SetJob(job);
                 else
                     human.SetJob(JobState.FullTime, job.interest);
-                human.ChangeAction(HumanActions.Move);
+                human.Decide();
                 human.lookingForAJob = false;
+
             }
             else
             {
                 Debug.LogError("cant find way here");
-                return;
+                return false;
             }
         }
         else
@@ -278,6 +288,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
             human.Idle();
         }
         UIUpdate(nameof(Assigned));
+        return true;
     }
 
     /// <summary>

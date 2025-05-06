@@ -1,8 +1,8 @@
-using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,6 +20,7 @@ public class LoadingScreen : MonoBehaviour
     const int CHUNK_WEIGHT = 1;
     const int TILE_WEIGHT = 2;
     const int HUMAN_WEIGHT = 2;
+    const int RES_WEIGHT = 2;
 
     /// <summary>Load progress for the load bar.</summary>
     int progressGlobal = 0;
@@ -47,41 +48,51 @@ public class LoadingScreen : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
     }
 
+
+    public void StartNewGame(string _folderName, string seed = "")
+    {
+        StartCoroutine(NewGame(_folderName, seed));
+    }
     /// <summary>
     /// Creates a new game save and Load it's scene.
     /// </summary>
     /// <param name="_folderName">Save name</param>
     /// <param name="seed">Generation seed</param>
-    public async void NewGame(string _folderName, string seed = ""/*, bool tutorial*/)
+    IEnumerator NewGame(string _folderName, string seed = ""/*, bool tutorial*/)
     {
         worldName = _folderName;
         if (worldName != "test - TopGun")
-            await SceneManager.UnloadSceneAsync("Main Menu");
+            yield return SceneManager.UnloadSceneAsync("Main Menu");
         transform.GetChild(0).gameObject.SetActive(true);
 
-        await SceneManager.LoadSceneAsync(3, LoadSceneMode.Additive);
-        GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
+        yield return SceneManager.LoadSceneAsync(3, LoadSceneMode.Additive);
+        yield return BeforeLevelLoad(true);
+
         if (seed != "")
-        {
             gameObject.GetComponent<MapGen>().Generate(seed, templateLevel);
-        }
         else
             MyGrid.CreateGrid(startLevel, mainLevel);
-        UIRefs.research.NewGame();
+
         UIRefs.trading.NewGame(0);
+        UIRefs.research.NewGame();
         SceneRefs.humans.NewGameInit(ref humanActivation);
+
         AfterLevelLoad(true);
     }
     #endregion
 
     #region Loading Game State
+    public void LoadGame(string _folderName, string _worldName)
+    {
+        StartCoroutine(StartLoading(_folderName, _worldName));
+    }
     /// <summary>
     /// Assigns parameters and shows loading screen.<br/>
     /// If called while on "Main Menu" scene unloads it.<br/>
     /// After that loads "Level" scene.
     /// </summary>
     /// <param name="_folderName">Current folder name.</param>
-    public async void StartLoading(string _folderName, string _worldName)
+    IEnumerator StartLoading(string _folderName, string _worldName)
     {
         Save save = LoadSavedData(_folderName);
         worldName = _worldName;
@@ -92,10 +103,13 @@ public class LoadingScreen : MonoBehaviour
 
         if (GameObject.Find("Main Menu"))
         {
-           await SceneManager.UnloadSceneAsync("Main Menu");
+            yield return SceneManager.UnloadSceneAsync("Main Menu");
         }
-        await SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
-        await LoadWorldData(save);   
+        yield return SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
+
+        yield return BeforeLevelLoad(false);
+        yield return LoadWorldData(save);
+
         AfterLevelLoad(false);
     }
 
@@ -124,7 +138,7 @@ public class LoadingScreen : MonoBehaviour
             jsonReader.Close();
         }
         // for playerSettings
-        jsonReader = new(new StreamReader($"{_folderName}/PlayerSettings.json"));
+        jsonReader = new(new StreamReader($"{_folderName}/Game State.json"));
         save.gameState = jsonSerializer.Deserialize<GameStateSave>(jsonReader);
         jsonReader.Close();
         // for humanSaves
@@ -148,7 +162,7 @@ public class LoadingScreen : MonoBehaviour
     /// Preps <see cref="SceneRefs"/>, <see cref="SceneRefs"/> and loads saved data.
     /// </summary>
     /// <param name="obj"></param>
-    Task LoadWorldData(Save save)
+    IEnumerator LoadWorldData(Save save)
     {
         MyGrid.worldName = worldName;
         WorldSave worldSave = save.world;
@@ -157,26 +171,28 @@ public class LoadingScreen : MonoBehaviour
         ResearchSave researchSave = save.research;
         TradeSave tradeSave = save.trade;
 
-        GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
         // create progress val for loading slider
         int maxprogress = 0;
-        for(int i = 0; i < worldSave.gridSave.Length; i++)
+        for (int i = 0; i < worldSave.gridSave.Length; i++)
             maxprogress += worldSave.gridSave[i].width * worldSave.gridSave[i].height * TILE_WEIGHT; // Tiles and pipes
         maxprogress += worldSave.objectsSave.buildings.Length * BUILD_WEIGHT; //scale number
         maxprogress += worldSave.objectsSave.chunks.Length * CHUNK_WEIGHT;
         maxprogress += humanSaves.Length * HUMAN_WEIGHT;
-        maxprogress += researchSave.categories.SelectMany(q => q.nodes).Count();
+        maxprogress += researchSave.count * RES_WEIGHT;
         loadingSlider.maxValue = maxprogress;
         IProgress<int> progress = new Progress<int>(value =>
         {
             loadingSlider.value = value;
         });
         FillGrid(progress, worldSave);
+        yield return new();
         FillGameState(progress, gameState);
+        yield return new();
         FillHumans(progress, humanSaves);
+        yield return new();
         FillResearches(progress, researchSave);
+        yield return new();
         FillTrade(progress, tradeSave);
-        return Task.CompletedTask;
     }
 
 
@@ -194,9 +210,8 @@ public class LoadingScreen : MonoBehaviour
         CreateChunks(progress, worldSave.objectsSave.chunks);
         actionText.text = "Constructing buildings";
         CreateBuildings(progress, worldSave.objectsSave.buildings);
-        
     }
-    
+
     /// <summary>
     /// Creates chunks.
     /// </summary>
@@ -237,9 +252,10 @@ public class LoadingScreen : MonoBehaviour
         // Empties grid
         MyGrid.PrepGridLists();
         // creates an empty ground level
-        for(int i = 0; i < gridSave.Length; i++)
+
+        for (int i = 0; i < gridSave.Length; i++)
         {
-            MyGrid.Load(gridSave[i], templateLevel, i);
+            MyGrid.Load(gridSave[i], templateLevel, i, gameObject.GetComponent<MapGen>().minableResources);
             progress.Report(progressGlobal += TILE_WEIGHT);
         }
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;
@@ -267,7 +283,7 @@ public class LoadingScreen : MonoBehaviour
     void FillGameState(IProgress<int> progress, GameStateSave gameState)
     {
         SceneRefs.jobQueue.priority = gameState.priorities;
-        SceneRefs.tick.timeController.Load(gameState);
+        SceneRefs.tick.Load(gameState);
     }
 
     /// <summary>
@@ -294,28 +310,29 @@ public class LoadingScreen : MonoBehaviour
     #endregion UI loading
     #endregion Loading Game State
 
+    IEnumerator BeforeLevelLoad(bool newGame)
+    {
+        //UnityEngine.Rendering.DebugManager.instance.enableRuntimeUI = false;
+        yield return GameObject.Find("Scene").GetComponent<SceneRefs>().BeforeLoad();
+        GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
+        MyRes.PreLoad();
+    }
+
     /// <summary>
     /// Things that need to be after both loading and creating a new game.
     /// </summary>
     /// <param name="newGame">Is it the new game(used for calling the same methods just with different paramaters).</param>
     async void AfterLevelLoad(bool newGame)
     {
-        //transform.parent.GetChild(1).GetComponent<AudioListener>().enabled = false;
-        SceneRefs.miscellaneous.GetChild(1).GetComponent<LocalInfoWindow>().SetUp();
         MyGrid.worldName = worldName;
-        MyGrid.Init();
-        Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;
-        Camera.main.GetComponent<PhysicsRaycaster>().enabled = true;
-        Camera.main.GetComponent<Physics2DRaycaster>().enabled = true;
-        Camera.main.GetComponent<AudioListener>().enabled = true;
 
+        MyRes.ActivateResources(newGame);
+        await SceneManager.UnloadSceneAsync("LoadingScreen");
+        SceneRefs.FinishLoad();
 
-		MyRes.ActivateResources(newGame);
-		await SceneManager.UnloadSceneAsync("LoadingScreen");
-        SceneRefs.stats.GetChild(1).GetChild(0).GetComponent<TimeButtons>().SetStartSpeed(SceneRefs.tick);
-        SceneRefs.stats.GetChild(0).GetComponent<LevelButtons>().Init();
         humanActivation?.Invoke();
         humanActivation = null;
-        SceneRefs.tick.timeController.Init(SceneRefs.tick, newGame);
+        SceneRefs.tick.InitTicks(newGame);
+        UIRefs.timeBar.GetComponent<IToolkitController>().Init(UIRefs.timeBar.rootVisualElement);
     }
 }

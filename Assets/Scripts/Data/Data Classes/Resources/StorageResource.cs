@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 /// <summary>Helps with fulfiling resource orders and make logistics more efficient.</summary>
 [Serializable]
@@ -35,7 +35,7 @@ public class StorageResource
         carrierIDs = resSave.carriers;
     }
     #endregion
-    
+
     /// <summary>
     /// Adds a request for moving resources.<br/>
     /// </summary>
@@ -65,21 +65,23 @@ public class StorageResource
     /// Reassign when setting a building to deconstruction.
     /// </summary>
     /// <param name="assign"></param>
-    public void ReassignCarriers(bool assign = true)
+    public Human ReassignCarriers(bool assign = true)
     {
+        Human human = null;
         if (carriers.Count > 0)
         {
             if (assign)
             {
                 carriers[0].SetJob(JobState.Deconstructing);
-                carriers[0].ChangeAction(HumanActions.Demolish);
+                human = carriers[0];
             }
             for (int i = carriers.Count - 1; i > 0; i++)
             {
-                HumanActions.LookForNew(carriers[i]);
                 RemoveRequest(carriers[i]);
+                carriers[i].SetJob(JobState.Free);
             }
         }
+        return human;
     }
     /// <summary>
     /// returns future resources

@@ -3,7 +3,42 @@ guid: 7cfb88f0b5913f14c89448de3948fa77
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "CIfern\xEDk"
+    second: {fileID: 2100000, guid: 4ebed416d4d2d18478ab8d07022a4a7d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Copper
+    second: {fileID: 2100000, guid: e7a8a864b409abf4bac685709df55be2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Dr\xE1t"
+    second: {fileID: 2100000, guid: a97a92b2b9c92d24ba756fb4043433ed, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Le\u0161en\xED"
+    second: {fileID: 2100000, guid: 3ef379afe9b86ac48a1ffffb11ee9f78, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Main material
+    second: {fileID: 2100000, guid: f105ea5142017504e812a513931f600c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: 48e8a021746cb2c4b800b28b1d8faf19, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Ru\u010Di\u010Dky"
+    second: {fileID: 2100000, guid: a71eee292cf7bf944ad201fac8d0819c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -16,8 +51,6 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -90,7 +123,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.002
+    globalScale: 0.2
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

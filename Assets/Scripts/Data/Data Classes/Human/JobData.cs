@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 /// <summary>Job for humans.</summary>
 [Serializable]

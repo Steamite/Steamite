@@ -1,8 +1,8 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
-public class CameraMovement : MonoBehaviour
+public class CameraMovement : MonoBehaviour, IAfterLoad
 {
     InputActionMap cameraMap;
     InputAction move;
@@ -43,22 +43,30 @@ public class CameraMovement : MonoBehaviour
 
     [Header("Pan")]
     [SerializeField] float panAmmount = 0.1f;
-    
+
     float mod;
 
-    private void Awake()
+    public void Init()
     {
         transform.GetChild(0).LookAt(transform);
-		cameraMap = mainShortcuts?.inputAsset.actionMaps[0];
-		move = cameraMap.FindAction("Move");
-		rotate = cameraMap.FindAction("Rotate");
-		zoom = cameraMap.FindAction("Zoom");
-		reset = cameraMap.FindAction("Reset");
+        cameraMap = mainShortcuts?.inputAsset.actionMaps[0];
+        move = cameraMap.FindAction("Move");
+        rotate = cameraMap.FindAction("Rotate");
+        zoom = cameraMap.FindAction("Zoom");
+        reset = cameraMap.FindAction("Reset");
 
-		panButton = cameraMap.FindAction("Drag - Down");
-		panMove = cameraMap.FindAction("Drag - Move");
-		isMod = mainShortcuts?.inputAsset.actionMaps[1].FindAction("Shift");
-	}
+        panButton = cameraMap.FindAction("Drag - Down");
+        panMove = cameraMap.FindAction("Drag - Move");
+        isMod = mainShortcuts?.inputAsset.actionMaps[1].FindAction("Shift");
+
+
+        mainCamera.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;
+        mainCamera.GetComponent<PhysicsRaycaster>().enabled = true;
+        mainCamera.GetComponent<Physics2DRaycaster>().enabled = true;
+        mainCamera.GetComponent<AudioListener>().enabled = true;
+
+        enabled = true;
+    }
 
     private void OnEnable()
     {
@@ -88,7 +96,7 @@ public class CameraMovement : MonoBehaviour
         if (reset.triggered)
         {
             transform.position = new(10, 1, 10);
-            transform.rotation = Quaternion.Euler(0,0,0);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
 
             transform.GetChild(0).localPosition = new(0, 20, -15);
             OnEnable();
@@ -99,36 +107,43 @@ public class CameraMovement : MonoBehaviour
     {
         Vector2 vec = move.ReadValue<Vector2>();
         Vector2 mouse = Mouse.current.position.value;
-        Debug.Log("Mouse:" + mouse);
-        transform.Translate(
-            GetSpeed(
-                ref currentMovementX, 
-                addMovement, 
-                removeMovement, 
-                maxMovement, 
-                MergeMove(
-                    Edge(
-                        mouse.x, 
-                        Screen.width), 
-                    vec.x)),
-            0,
-            GetSpeed(
-                ref currentMovementY, 
-                addMovement, 
-                removeMovement, 
-                maxMovement, 
-                MergeMove(
-                    Edge(
-                        mouse.y, 
-                        Screen.height), 
-                    vec.y)));
+        if (UIRefs.trading.isOpen)
+        {
+
+        }
+        else
+        {
+            transform.Translate(
+                GetSpeed(
+                    ref currentMovementX,
+                    addMovement,
+                    removeMovement,
+                    maxMovement,
+                    MergeMove(
+                        Edge(
+                            mouse.x,
+                            Screen.width),
+                        vec.x)),
+                0,
+                GetSpeed(
+                    ref currentMovementY,
+                    addMovement,
+                    removeMovement,
+                    maxMovement,
+                    MergeMove(
+                        Edge(
+                            mouse.y,
+                            Screen.height),
+                        vec.y)));
+        }
+
     }
 
     float MergeMove(float mouse, float key)
     {
-        if(Mathf.Abs(mouse) > 0)
+        if (Mathf.Abs(mouse) > 0)
         {
-            if(mouse > 0)
+            if (mouse > 0)
             {
                 if (key < 0)
                     return 0;
@@ -144,22 +159,22 @@ public class CameraMovement : MonoBehaviour
             }
         }
         return key;
-        
+
     }
 
-	/// <summary>
-	/// Handles movement on when mouse is on the edge of the screen.
-	/// </summary>
-	/// <param name="mouse">Mouse position</param>
-	/// <param name="axisSize">Edge threshold.</param>
-	/// <returns></returns>
-	float Edge(float mouse, float axisSize)
+    /// <summary>
+    /// Handles movement on when mouse is on the edge of the screen.
+    /// </summary>
+    /// <param name="mouse">Mouse position</param>
+    /// <param name="axisSize">Edge threshold.</param>
+    /// <returns></returns>
+    float Edge(float mouse, float axisSize)
     {
         float div = mouse / axisSize;
-        Debug.Log("Div:" + div);
+        //Debug.Log("Div:" + div);
         if (div < 0 || div > 1)
             return 0;
-		else if (div < mouseThreshold)
+        else if (div < mouseThreshold)
             return -div;
         else if (div > 1 - mouseThreshold)
             return div;
@@ -196,7 +211,7 @@ public class CameraMovement : MonoBehaviour
                 delta = -panAmmount;
             if (transform.GetChild(0).localRotation.eulerAngles.x < 10)
                 transform.GetChild(0).localRotation = Quaternion.Euler(10, 0, 0);
-            else if(transform.GetChild(0).localRotation.eulerAngles.x > 85)
+            else if (transform.GetChild(0).localRotation.eulerAngles.x > 85)
                 transform.GetChild(0).localRotation = Quaternion.Euler(85, 0, 0);
             transform.GetChild(0).Rotate(delta, 0, 0);
         }
@@ -263,7 +278,7 @@ public class CameraMovement : MonoBehaviour
                     currentMovement -= add * f;
                 else
                     currentMovement = -max;
-                    
+
                 break;
             case 0:
                 switch (currentMovement)
@@ -287,4 +302,5 @@ public class CameraMovement : MonoBehaviour
             currentMovement = 0;
         return 0;
     }
+
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TradeData.Locations;
@@ -20,6 +19,8 @@ public class Trading : FullscreenWindow
 
     public ColonyLocation colonyLocation;
     public List<TradeLocation> tradeLocations;
+
+    [SerializeField] string baseLocation = "Highlands";
     #endregion
 
     #region Properties
@@ -31,27 +32,23 @@ public class Trading : FullscreenWindow
 
     public void NewGame(int selectedColony)
     {
-        TradeHolder tradeHolder = Resources.Load<TradeHolder>("Holders/Data/Trade Locations/Snowlandia");
+        TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Colony Locations/{baseLocation}");
         colonyLocation = tradeHolder.startingLocation;
+        colonyLocation.NewGame();
         tradeLocations = tradeHolder.tradeLocations;
-
         convoys = new();
         Init();
     }
 
     public void LoadGame(TradeSave tradeSave)
     {
-		TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Trade Locations/{tradeSave.colonyLocation}");
-		colonyLocation = tradeHolder.startingLocation;
-
-        for (int i = 0; i < colonyLocation.passiveProductions.Count; i++)
-            colonyLocation.passiveProductions[i].LoadState(tradeSave.prodLevels[i]);
-        for (int i = 0; i < colonyLocation.stats.Count; i++)
-			colonyLocation.stats[i].LoadState(tradeSave.statLevels[i]);
+        TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Colony Locations/{tradeSave.colonyLocation}");
+        colonyLocation = tradeHolder.startingLocation;
+        colonyLocation.LoadGame(tradeSave.prodLevels, tradeSave.statLevels);
 
         tradeLocations = tradeSave.tradeLocations;
         convoys = tradeSave.convoys;
-        SceneRefs.stats.GetComponent<ResourceDisplay>().Money = tradeSave.money;
+        SceneRefs.BottomBar.GetComponent<ResourceDisplay>().Money = tradeSave.money;
         Init();
     }
 
@@ -65,17 +62,21 @@ public class Trading : FullscreenWindow
 
 
         //Moves all convoys each tick.
-        SceneRefs.tick.SubscribeToTicks( 
+        SceneRefs.tick.SubscribeToEvent(
             () =>
             {
                 for (int i = convoys.Count - 1; i >= 0; i--)
                     convoys[i].Move(CONVOY_SPEED);
-            });
-        SceneRefs.tick.timeController.SubscribeToEvent(colonyLocation.DoProduction, DayTime.TimeEventType.Week);
+            },
+           Tick.TimeEventType.Ticks);
+
+        SceneRefs.tick.SubscribeToEvent(
+            colonyLocation.DoProduction,
+            Tick.TimeEventType.Week);
     }
 
-	#region Window
-	public override void OpenWindow()
+    #region Window
+    public override void OpenWindow()
     {
         base.OpenWindow();
         map.Open(convoys);
@@ -85,14 +86,11 @@ public class Trading : FullscreenWindow
     {
         base.CloseWindow();
     }
-	#endregion
- 
+    #endregion
 
-	public void Trade(TradeConvoy convoy, Resource sellResource, int buyMoney)
+    public void Trade(TradeConvoy convoy, Resource sellResource, int buyMoney)
     {
         convoys.Add(convoy);
-        MyRes.TakeFromGlobalStorage(sellResource);
-        MyRes.UpdateMoney(buyMoney);
+        MyRes.PayCostGlobal(sellResource, buyMoney);
     }
-
 }

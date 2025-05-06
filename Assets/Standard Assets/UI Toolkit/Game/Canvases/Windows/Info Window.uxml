@@ -13,23 +13,20 @@
         </engine:VisualElement>
         <engine:VisualElement name="Body" style="flex-grow: 1; justify-content: flex-start; -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/fonts/OpenSans/OpenSans-Bold&apos;); display: flex;">
             <engine:VisualElement name="Building" style="flex-grow: 1; display: flex;">
-                <engine:VisualElement name="Construction-View" style="flex-grow: 1; max-width: 100%; max-height: 100%; flex-shrink: 0; height: auto; justify-content: flex-start; display: none;">
+                <engine:VisualElement name="Construction-View" style="flex-grow: 1; max-width: 100%; max-height: 100%; flex-shrink: 0; height: auto; justify-content: flex-start; display: flex;">
                     <engine:Label text="Construction progress: ###%" name="Progress" style="-unity-text-align: upper-center; margin-top: 15px; margin-bottom: 20px; font-size: 30px;" />
-                    <InfoWindowElements.DoubleResourceList name="Resources" cost="true" style="align-self: center; flex-grow: 1; width: 100%; min-width: 100%; max-width: 100%;" />
-                    <engine:Button text="Deconstruct" name="Deconstruct" class="deconstruct-button" />
+                    <engine:Label text="Waiting for resources" name="State-Label" style="-unity-text-align: upper-center; margin-top: 15px; margin-bottom: 20px; font-size: 30px;" />
+                    <InfoWindowElements.DoubleResourceListWithEvent name="Resources" cost="true" style="align-self: center; flex-grow: 1; width: 100%; min-width: 100%; max-width: 100%;" />
+                    <engine:Button text="Cancel construction" name="State-Change" class="main-button" style="font-size: 40px; padding-left: 5px; min-width: 90%; max-width: 90%; align-items: center; align-self: center; margin-bottom: 10px;" />
                 </engine:VisualElement>
-                <engine:VisualElement name="Constructed" style="flex-grow: 1; display: flex;">
-                    <engine:VisualElement name="Research" style="flex-grow: 0; flex-direction: column; height: 40%; align-content: stretch; justify-content: space-between; display: none; width: auto; align-items: stretch; align-self: center;">
-                        <engine:Label text="Research Name" name="Name" style="max-height: 40px; margin-right: 0; margin-left: 0; padding-left: 0; padding-right: 0; padding-bottom: 0; margin-bottom: 0; padding-top: 0; margin-top: 5px; -unity-text-align: upper-center;" />
-                        <engine:VisualElement name="Image" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Sprites/Textures/Button_Sprite.png?fileID=2800000&amp;guid=ab06e4b2b595a5d439dc3408edb876d1&amp;type=3#Button_Sprite&quot;); max-width: 135px; max-height: 135px; align-self: center; align-items: center; min-width: 135px; min-height: 135px;" />
-                        <engine:Label text="### %" name="progress" style="-unity-text-align: middle-center; margin-top: -10%; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
-                    </engine:VisualElement>
-                    <InfoWindowViews.ProductionButton name="Production" fill-color="#796F2CFF" pause-tex="project://database/Assets/Resources/Icon/Pause.png?fileID=2800000&amp;guid=388d058ebff7c4844823b4c308f1488e&amp;type=3#Pause" resume-tex="project://database/Assets/Sprites/Icons/Info%20window/Play.png?fileID=2800000&amp;guid=eb36bdcec37eb0b4baf394a5a6679c2c&amp;type=3#Play" resource-prefab="project://database/Assets/Resources/UI%20Toolkit/Storage-Element.uxml?fileID=9197481963319205126&amp;guid=3afc604fdd1fdb5469e1e2b3ce449c47&amp;type=3#Storage-Element" style="max-height: 30%; align-self: stretch; justify-content: space-between; align-content: center; align-items: center; flex-direction: row; flex-grow: 1; display: flex;" />
+                <engine:VisualElement name="Constructed" style="flex-grow: 1; display: none;">
+                    <ResearchInfo name="Research" style="display: none;" />
+                    <InfoWindowViews.ProductionButton name="Production" fill-color="#796F2CFF" pause-tex="project://database/Assets/Resources/Icon/Pause.png?fileID=2800000&amp;guid=388d058ebff7c4844823b4c308f1488e&amp;type=3#Pause" resume-tex="project://database/Assets/Sprites/Icons/Info%20window/Play.png?fileID=2800000&amp;guid=eb36bdcec37eb0b4baf394a5a6679c2c&amp;type=3#Play" resource-prefab="project://database/Assets/Resources/UI%20Toolkit/Storage%20Element.uxml?fileID=9197481963319205126&amp;guid=3afc604fdd1fdb5469e1e2b3ce449c47&amp;type=3#Storage Element" style="max-height: 30%; align-self: stretch; justify-content: space-between; align-content: center; align-items: center; flex-direction: row; flex-grow: 1; display: none;" />
                     <engine:VisualElement name="General" style="flex-grow: 0; flex-direction: row; height: 40%; align-content: stretch; justify-content: space-around; display: none;">
                         <engine:Label text="Label" style="width: 100%; height: 100%; -unity-text-align: upper-center; padding-top: 10%;" />
                     </engine:VisualElement>
-                    <InfoWindowViews.StorageView elem-pref="project://database/Assets/Resources/UI%20Toolkit/Storage-Element.uxml?fileID=9197481963319205126&amp;guid=3afc604fdd1fdb5469e1e2b3ce449c47&amp;type=3#Storage-Element" name="Storage" storage-tab-active="false" style="display: none;" />
-                    <InfoWindowViews.WorkerAssign name="Assign" prefab="project://database/Assets/Standard%20Assets/UI%20Toolkit/Game/Elements/Worker-Button.uxml?fileID=9197481963319205126&amp;guid=e76fd5099dd522240b3cbf7c60edcd25&amp;type=3#Worker-Button" style="flex-grow: 1; display: none;" />
+                    <InfoWindowViews.StorageView elem-pref="project://database/Assets/Resources/UI%20Toolkit/Storage%20Element.uxml?fileID=9197481963319205126&amp;guid=3afc604fdd1fdb5469e1e2b3ce449c47&amp;type=3#Storage Element" name="Storage" storage-tab-active="false" style="display: flex;" />
+                    <InfoWindowViews.WorkerAssign name="Assign" prefab="project://database/Assets/Standard%20Assets/UI%20Toolkit/Game/Elements/Worker%20Button.uxml?fileID=9197481963319205126&amp;guid=e76fd5099dd522240b3cbf7c60edcd25&amp;type=3#Worker Button" style="flex-grow: 1; display: none;" />
                 </engine:VisualElement>
             </engine:VisualElement>
             <engine:VisualElement name="Human" style="flex-grow: 1; display: none;">
@@ -60,7 +57,7 @@
                     </engine:VisualElement>
                 </engine:VisualElement>
                 <engine:Label text="Inventory" style="align-self: stretch; -unity-text-align: upper-center; -unity-font-style: bold;" />
-                <InfoWindowElements.ResourceList name="Inventory" item-template="project://database/Assets/Resources/UI%20Toolkit/Resource-Text-Icon.uxml?fileID=9197481963319205126&amp;guid=75f0b1c46d6ecae44a0c8d663c0e6930&amp;type=3#Resource-Text-Icon" />
+                <InfoWindowElements.ResourceList name="Inventory" item-template="project://database/Assets/Resources/UI%20Toolkit/Resource%20Text%20Icon.uxml?fileID=9197481963319205126&amp;guid=75f0b1c46d6ecae44a0c8d663c0e6930&amp;type=3#Resource Text Icon" />
             </engine:VisualElement>
             <engine:VisualElement name="Rock-Chunk" style="flex-grow: 1; display: none;">
                 <engine:VisualElement name="Text" style="flex-grow: 1; flex-direction: column; justify-content: space-between; max-height: 90px; margin-left: 5%; margin-top: 5%; margin-right: 5%;">
@@ -74,7 +71,7 @@
                     </engine:VisualElement>
                 </engine:VisualElement>
                 <engine:Label text="Contains" name="Contains" style="align-items: center; align-self: stretch; -unity-text-align: middle-center; font-size: 28px; -unity-font-style: bold;" />
-                <InfoWindowElements.ResourceList name="Yield" item-template="project://database/Assets/Resources/UI%20Toolkit/Resource-Text-Icon.uxml?fileID=9197481963319205126&amp;guid=75f0b1c46d6ecae44a0c8d663c0e6930&amp;type=3#Resource-Text-Icon" />
+                <InfoWindowElements.ResourceList name="Yield" item-template="project://database/Assets/Resources/UI%20Toolkit/Resource%20Text%20Icon.uxml?fileID=9197481963319205126&amp;guid=75f0b1c46d6ecae44a0c8d663c0e6930&amp;type=3#Resource Text Icon" />
             </engine:VisualElement>
         </engine:VisualElement>
     </engine:VisualElement>

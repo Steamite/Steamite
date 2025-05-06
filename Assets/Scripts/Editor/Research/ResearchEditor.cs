@@ -1,524 +1,267 @@
-#if UNITY_EDITOR
 using System.Collections.Generic;
-using UnityEditor;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
-using System;
+using UnityEngine.UIElements;
 
-/// <summary>Used for modifying <see cref="ResearchData"/>.</summary>
-public class ResearchEditor : EditorWindow
+namespace EditorWindows.Research
 {
-    #region Variables
-    /// <summary>Data source.</summary>
-    ResearchData researchData;
-    /// <summary>Last interacted node.</summary>
-    ResearchNode selectedNode;
-    /// <summary>Name of the opened category.</summary>
-    string categName = "";
-    /// <summary>Node depth to add to</summary>
-    string nodeLevel = "0";
-    
-    /// <summary>Node width</summary>
-    const float nodeWidth = 175;
-    /// <summary>Node height</summary>
-    const float nodeHeight = 195;
-    /// <summary><see cref="nodeWidth"/> + space around</summary>
-    const float nodeSpace = nodeWidth + 75;
-
-    /// <summary>If the last click was on the destroy button</summary>
-    static bool destroing;
-    /// <summary>If the last click was on the connect button</summary>
-    static bool connecting;
-    /// <summary>If the last click was on the disconnect button</summary>
-    static bool disconecting;
-    /// <summary>Scroll position.</summary>
-    static Vector2 scroll = new();
-    /// <summary>Selected category tab.</summary>
-    static int selTab = -1;
-    /// <summary>Texture for lines.</summary>
-    [SerializeField]Texture2D point;
-    /// <summary>Texture for connection buttons</summary>
-    [SerializeField] Texture2D circle;
-    /// <summary>Style for buttons</summary>
-    GUIStyle circleButtonStyle;
-
-    /// <summary>Instance of the window.</summary>
-    static EditorWindow open;
-    #endregion
-
-    #region Opening
-    /// <summary>Opens the window, if it's already opened close it.</summary>
-    [MenuItem("Custom Editors/Research Editor %t", priority = 15)]
-    public static void ShowWindow()
+    /// <summary>Used for modifying <see cref="ResearchData"/>.</summary>
+    public class ResearchEditor : CategoryWindow<ResearchCategory, ResearchNode>
     {
-        if (open == null)
+        #region Variables
+        [SerializeField] Texture2D plus;
+
+        public ScrollView tree;
+        bool showCreateButtons;
+
+        public BuildingData buildingData;
+        public ResearchNode activeNode;
+        #endregion
+
+        public void SaveValues() => EditorUtility.SetDirty((ResearchData)data);
+
+        #region Opening
+        /// <summary>Opens the window, if it's already opened close it.</summary>
+        [MenuItem("Custom Editors/Research Editor %t", priority = 15)]
+        public static void Open()
         {
-            open = GetWindow(typeof(ResearchEditor));
-            (open as ResearchEditor).Init();
+            ResearchEditor wnd = GetWindow<ResearchEditor>();
+            wnd.titleContent = new GUIContent("Research Editor");
         }
-        else
-            open.Close();
-    }
-    
-    /// <summary>Fills the button style and recalculates head placement</summary>
-    void Init()
-    {
-        titleContent = new("Research Editor");
-        researchData = (ResearchData)Resources.Load("Holders/Data/Research Data");
-        researchData.Init();
-        circleButtonStyle = new GUIStyle();
-        circleButtonStyle.normal.background = circle;
-        circleButtonStyle.padding = new RectOffset(0, 0, 0, 0);
-        maxSize = new(1234, 1440);
-        minSize = new(1234, 500);
-        maximized = false;
-        CalculateHeads();
-    }
-    #endregion
 
-    void OnGUI()
-    {
-        GUI.contentColor = Color.white;
-        if (!researchData)
+        /// <summary>Fills the button style and recalculates head placement</summary>
+        protected override void CreateGUI()
         {
-            Init();
+            activeNode = null;
+            showCreateButtons = false;
+            data = AssetDatabase.LoadAssetAtPath<ResearchData>("Assets/Game Data/Research && Building/Research Data.asset");
+            buildingData = AssetDatabase.LoadAssetAtPath<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
+            base.CreateGUI();
+
+            Toggle toggle = rootVisualElement.Q<Toggle>("Show-Create");
+            toggle.value = false;
+            toggle.RegisterValueChangedCallback(
+                (ev) =>
+                {
+                    showCreateButtons = !showCreateButtons;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        RepaintRow(i);
+                    }
+                });
+            tree = rootVisualElement.Q<ScrollView>();
+            categorySelector.index = 0;
         }
-        if (selTab == -1)
-            selTab = 0;
-        SwitchCategory();
-    }
-    /// <summary>Handles the top bar</summary>
-    void SwitchCategory()
-    {
-        string[] tabs = researchData.categories.Select(q => $"{q.categName} ({q.nodes.Count(q => q.buildButton > -1)})").Append("create new").ToArray();
-        selTab = EditorGUI.Popup(new(0, 0, 200, 20), selTab, tabs);
-        int i = Event.current.button;
-        if ((destroing || connecting) && (i == 1 || i == 2))
+        #endregion
+
+        #region Category Switching
+        protected override bool LoadCategData(int index)
         {
-            destroing = false;
-            connecting = false;
-            selectedNode = null;
-        }
-        if (selTab == researchData.categories.Count)
-        {
-            categName = GUI.TextField(new(210, 0, 150, 20), categName);
-            GUI.enabled = categName != "" && !researchData.categories.Select(q => q.categName).Contains(categName);
-            if (GUI.Button(new(370, 0, 100, 20), new GUIContent("create")))
+            bool categoryExists = base.LoadCategData(index);
+
+            if (categoryExists)
             {
-                researchData.categories.Add(new(categName));
-                categName = "";
-                EditorUtility.SetDirty(researchData);
+                RecalculateAvailableBuildings();
+                for (int i = 0; i < 5; i++)
+                {
+                    VisualElement row = new();
+                    row.name = "Row";
+                    row.Add(new Label(i.ToString()));
+                    row.Add(new());
+                    tree.Add(row);
+                    RepaintRow(i);
+                }
+            }
+            else
+            {
+                selectedCategory = new ResearchCategory();
+                for (int i = 0; i < tree.childCount; i++)
+                {
+                    tree[i][1].Clear();
+                }
+            }
+            return categoryExists;
+        }
+
+        public void RecalculateAvailableBuildings()
+        {
+            List<ResearchNode> nodes = data.Categories.SelectMany(q => q.Objects).ToList();
+            for (int i = 0; i < buildingData.Categories.Count; i++)
+            {
+                BuildCategWrapper categ = buildingData.Categories[i];
+                categ.availableBuildings = new();
+                List<ResearchNode> categoryNodes = nodes.Where(q => q.nodeType == NodeType.Building && q.nodeCategory == i).ToList();
+                for (int j = 0; j < categ.Objects.Count; j++)
+                {
+                    if (categoryNodes.FindIndex(q => q.nodeAssignee == categ.Objects[j].id) == -1)
+                    {
+                        categ.availableBuildings.Add(categ.Objects[j]);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region Buttons
+        public void RepaintRow(int i)
+        {
+            tree[i][1].Clear();
+            int levelIndex = 0, lineCount = 0;
+            foreach (ResearchNode node in selectedCategory.Objects.Where(q => q.level == i))
+            {
+                tree[node.level][1].Insert(levelIndex, new ResearchNodeElem(node, this, (ResearchData)data));
+                if (node.unlockedBy.Count > 0)
+                {
+                    for (int j = 0; j < node.unlockedBy.Count; j++)
+                    {
+                        var x = i;
+                        var y = j;
+                        var lvl = levelIndex;
+                        var ln = lineCount;
+                        tree[i][1][levelIndex].RegisterCallback<GeometryChangedEvent>((_) => RedoLines(node, x, y, lvl, ln));
+                    }
+                    lineCount++;
+                }
+                levelIndex++;
+            }
+            if (showCreateButtons)
+            {
+                Button addButton = new Button(plus,
+                            () =>
+                            {
+                                ((ResearchCategory)selectedCategory).AddNode(i, (ResearchData)data);
+                                RepaintRow(i);
+                            });
+                addButton.AddToClassList("add-button");
+                tree[i][1].Add(addButton);
+            }
+        }
+
+        #region Node events
+        void RedoLines(ResearchNode node, int i, int index, int lvl, int lnCount)
+        {
+            int prequiseteIndex = selectedCategory.Objects.FindIndex(q => q.id == node.unlockedBy[index]);
+            if (prequiseteIndex == -1)
                 return;
-            }
-        }
-        else
-        {
-            categName = GUI.TextField(new(210, 0, 150, 20), categName);
-            GUI.enabled = categName != "" && !researchData.categories.Select(q => q.categName).Contains(categName);
-            if (GUI.Button(new(370, 0, 100, 20), new GUIContent("rename")))
+            ResearchNode connectedNode = selectedCategory.Objects[prequiseteIndex];
+            Button prequiseteButton = tree
+                [connectedNode.level][1]
+                [prequiseteIndex].Q<Button>("Bot");
+
+            string lineName = $"{node.id}, {connectedNode.id}";
+            List<VisualElement> prevLines = tree[i][1].Children().Where(q => q.name == lineName).ToList();
+            foreach (VisualElement prevLine in prevLines)
+                tree[i][1].Remove(prevLine);
+
+
+            VisualElement line = new();
+            line.name = lineName;
+            line.AddToClassList("line");
+            int height = (node.level - connectedNode.level - 1) * 300 + 28;
+            float xPos = prequiseteButton.worldBound.x + prequiseteButton.worldBound.width / 2
+                - tree[connectedNode.level][0].resolvedStyle.width + (2 * lnCount - 1);
+            line.style.width = 2;
+            line.style.height = height;
+            line.style.left = xPos;
+            line.style.top = -height;
+            line.style.backgroundColor = node.lineColor;
+            tree[node.level][1].Add(line);
+
+            // Horizonal line
+            line = new();
+            line.name = lineName;
+            line.AddToClassList("line");
+            Button thisButton = tree[i][1][lvl].Q<Button>("Top");
+            float width = thisButton.worldBound.x - 50 + thisButton.worldBound.width / 2 - 1;
+            float tmp;
+            if (width < xPos)
             {
-                researchData.categories[selTab].categName = categName;
-                categName = "";
-                EditorUtility.SetDirty(researchData);
-                return;
+                tmp = xPos;
+                xPos = width;
+                width = tmp - width;
+                tmp = xPos;
             }
             else
             {
-                GUI.enabled = categName == researchData.categories[selTab].categName;
-                GUI.contentColor = GUI.enabled ? Color.red : Color.white;
-                if (GUI.Button(new(500, 0, 200, 20), new GUIContent("delete (enter category name)")))
-                {
-                    researchData.categories.RemoveAt(selTab);
-                    categName = "";
-                    selTab = -1;
-                    EditorUtility.SetDirty(researchData);
-                    Init();
-                    return;
-                }
+                tmp = width;
+                width = width - xPos;
+            }
+            line.style.width = width;
+            line.style.height = 2;
+            line.style.left = xPos;
+            line.style.top = (2 * lnCount);
+            line.style.backgroundColor = node.lineColor;
+            tree[node.level][1].Add(line);
+
+            // Down line
+            line = new();
+            line.name = lineName;
+            line.AddToClassList("line");
+            line.style.width = 2;
+            line.style.height = 20;
+            line.style.left = tmp;
+            line.style.top = 0;
+            line.style.backgroundColor = node.lineColor;
+            tree[node.level][1].Add(line);
+        }
+
+        public bool Exists(ResearchNode nodeData, int v)
+        {
+            if (v < 0)
+                return
+                    selectedCategory.Objects.IndexOf(nodeData) > 0 &&
+                    selectedCategory.Objects[selectedCategory.Objects.IndexOf(nodeData) - 1].level == nodeData.level;
+            else
+                return
+                    selectedCategory.Objects.IndexOf(nodeData) < selectedCategory.Objects.Count - 1 &&
+                    selectedCategory.Objects[selectedCategory.Objects.IndexOf(nodeData) + 1].level == nodeData.level;
+        }
+
+        public List<string> GetActiveBuildings(ResearchNode node)
+        {
+            if (node.nodeCategory <= -1)
+                return new() { "Select" };
+
+            List<string> list = buildingData.Categories[node.nodeCategory].availableBuildings.Select(q => q.building?.objectName).Prepend("Select").ToList();
+            if (node.nodeAssignee > -1)
+            {
+                BuildingWrapper wrapper = buildingData.Categories[node.nodeCategory].Objects.FirstOrDefault(q => q.id == node.nodeAssignee);
+                if (wrapper != null)
+                    list.Insert(1, wrapper.building.objectName);
                 else
-                {
-                    GUI.enabled = true;
-                    int level = -1;
-                    if (int.TryParse(nodeLevel, out level) && level > -1 && level < 5)
-                        GUI.contentColor = Color.white;
-                    else
-                    {
-                        GUI.contentColor = Color.red;
-                        level = -1;
-                    }
-                    GUI.Label(new(750, 0, 70, 20), "level (0-4)");
-                    nodeLevel = GUI.TextField(new(815, 0, 20, 20), nodeLevel);
-                    
-                    GUI.enabled = level > -1 && level < 5;
-                    GUI.contentColor = Color.white;
-                    if (GUI.Button(new(845, 0, 100, 20), new GUIContent("add node")) && level > -1 && level < 5)
-                    {
-                        int headCount = researchData.categories[selTab].nodes.Where(q=> q.gp.y == level).Count();
-                        if(headCount < 5)
-                        {
-                            if (researchData.categories[selTab].nodes.Count > 0)
-                                headCount = researchData.categories[selTab].nodes[^1].id;
-                            else
-                                headCount = 0;
-                            researchData.categories[selTab].nodes.Add(new(new(), $"node {headCount + 1}", level, headCount));
-                            CalculateHeads();
-                        }
-                    }
-                    GUI.enabled = true;
-
-                    if (GUI.Button(new(position.width - 100, 0, 100, 20), new GUIContent("Init")))
-                    {
-                        Init();
-                        return;
-                    }
-                    GUI.BeginGroup(new(5, 25, position.width - 10, position.height - 30));
-                    GUI.Box(new(0, 0, position.width, position.height - 30), "");
-                    scroll = GUI.BeginScrollView(new Rect(0, 0, position.width - 10, position.height - 30), scroll, new Rect(0, 0, 1000, 5*(nodeHeight+50)), false, true);
-                    RenderNodes(researchData.categories[selTab].nodes);
-                    GUI.EndScrollView();
-                    GUI.EndGroup();
-                }
-            }
-        }
-    }
-    void CalculateHeads()
-    {
-        if(selTab > -1 && selTab < researchData.categories.Count)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                List<ResearchNode> nodes = researchData.categories[selTab].nodes.Where(q => q.gp.y == i).ToList();
-                float startX = (position.width / 2) - nodeWidth / 2 - ((nodes.Count - 1) * (nodeSpace / 2));
-                if (startX > 0)
-                {
-                    foreach (ResearchNode node in nodes)
-                    {
-                        node.gp.x = startX;
-                        node.gp.z = 20 + ((nodeHeight + 50) * node.gp.y);
-                        node.realX = (node.gp.x + nodeWidth / 2f) * (1920f / 1234f);
-                        startX += nodeSpace;
-                    }
-                }
-            }
-            researchData.categories[selTab].nodes = researchData.categories[selTab].nodes.OrderBy(q => q.gp.y).ToList();
-            EditorUtility.SetDirty(researchData);
-        }
-    }
-
-    /// <summary>
-    /// Handles Rendering of nodes.
-    /// </summary>
-    /// <param name="researchNodes">The research category that is to be rendered.</param>
-    void RenderNodes(List<ResearchNode> researchNodes)
-    {
-        int i = 0;
-        foreach (ResearchNode node in researchNodes)
-        {
-            GUI.BeginGroup(new(node.gp.x, node.gp.z, nodeWidth, nodeHeight));
-            Color background = GUI.backgroundColor;
-            GUI.backgroundColor = Color.white;
-            if (node.buildButton > -1)
-                GUI.Box(new(0, 0, nodeWidth, nodeHeight - 10), GUIContent.none); 
-            else if (node.buttonCategory > -1)
-                GUI.Box(new(0, 0, nodeWidth, 100), GUIContent.none);
-            else
-                GUI.Box(new(0, 0, nodeWidth, 65), GUIContent.none);
-            GUIStyle style = new();
-            style.alignment = TextAnchor.MiddleCenter;
-            style.normal.textColor = Color.white;
-            GUI.Label(new(0, 20, nodeWidth, 20), node.name, style);
-            if (DestroyButton(node))
-            {
-                if (!destroing)
-                {
-                    node.DisconnectNodes(researchNodes);
-                    researchData.DeselectBuilding(node);
-                    researchNodes.RemoveAt(i);
-                    CalculateHeads();
-                }
-                GUI.EndGroup();
-                break;
-            }
-            else if (CategoryPopup(node) || BuildPopup(node))
-            {
-                EditorUtility.SetDirty(researchData);
-                GUI.EndGroup();
-                break;
-            }
-            else if(node.buildButton > -1)
-            {
-                if (ResearchCost(node) || InConnectionButton(node))
-                {
-                    EditorUtility.SetDirty(researchData);
-                    GUI.EndGroup();
-                    break;
-                }
-                if (int.TryParse(GUI.TextField(new(42, nodeHeight - 33, 30, 20), node.researchTime.ToString()), out int newResTime))
-                {
-                    node.researchTime = newResTime;
-                    GUI.contentColor = Color.white;
-                }
-                else
-                    GUI.contentColor = Color.red;
-
-                GUI.Label(new(5, nodeHeight - 35, 30, 20), "time:");
-                GUI.contentColor = Color.white;
-                OutConnectionButton(node);
-            }
-            GUI.EndGroup();
-            Vector2 start = new(node.gp.x + nodeWidth / 2, node.gp.z + 10);
-            foreach (ResearchNode rNode in researchNodes.Where(q => node.unlockedBy.Contains(q.id)))
-            {
-                Vector2 end = new(rNode.gp.x + nodeWidth / 2, rNode.gp.z + nodeHeight - 10);
-                GUI.color = new(0.1f, 0.1f, 0.55f);
-                DrawLine(start, new(start.x, start.y - 20));
-                DrawLine(new(start.x, start.y - 20), new(end.x, start.y - 20));
-                DrawLine(new(end.x, start.y - 20), end);
-                GUI.color = Color.white;
-            }
-            i++;
-        }
-    }
-    /// <summary>
-    /// Handles actions of the destroy button on node.
-    /// </summary>
-    /// <param name="node">Node that is beeing rendered.</param>
-    /// <returns>if clicked on the destoy button</returns>
-    bool DestroyButton(ResearchNode node)
-    {
-        if (destroing && selectedNode == node)
-        {
-            GUI.color = Color.red;
-            if (GUI.Button(new(5, 5, 15, 15), "X"))
-            {
-                destroing = false;
-                selectedNode = null;
-                if (Event.current.button == 0)
-                {
-                    return true;
-                }
-            }
-            GUI.color = Color.white;
-        }
-        else
-        {
-            if (GUI.Button(new(5, 5, 15, 15), "X") && Event.current.button == 0)
-            {
-                destroing = true;
-                selectedNode = node;
-                return true;
-            }
-        }
-        return false;
-    }
-    bool InConnectionButton(ResearchNode node)
-    {
-        if (connecting && selectedNode != node && !node.unlockedBy.Contains(selectedNode.id) && node.gp.y > selectedNode.gp.y)
-            GUI.backgroundColor = Color.green;
-        else
-            GUI.backgroundColor = Color.gray;
-        if (GUI.Button(new((nodeWidth - 15f) / 2, 5, 15, 15), new GUIContent(), circleButtonStyle))
-        {
-            if(connecting && selectedNode != node)
-            {
-                selectedNode.ConnectNode(node);
-                selectedNode = null;
-                connecting = false;
-                disconecting = false;
-                return true;
-            }
-            else
-            {
-                if (disconecting && selectedNode != null)
-                {
-                    for (int i = node.unlockedBy.Count - 1; i >= 0; i--)
-                    {
-                        node.DisconnectNode(false, i, researchData.categories[selTab].nodes);
-                    }
-                    disconecting = false;
-                    selectedNode = null;
-                }
-                else
-                {
-                    selectedNode = node;
-                    disconecting = true;
-                }
-            }
-        }
-        GUI.backgroundColor = Color.white;
-        GUI.enabled = true;
-        return false;
-    }
-    bool ResearchCost(ResearchNode node)
-    {
-        List<string> resourceTypes = Enum.GetNames(typeof(ResourceType)).ToList();
-
-        // filter options
-        List<string> resourceTypesFiltred = new() { "select" };
-        resourceTypesFiltred.AddRange(resourceTypes);
-        resourceTypesFiltred.RemoveAll(q => node.reseachCost.type.Contains((ResourceType)resourceTypes.IndexOf(q)));
-        GUI.Label(new(5, 80, nodeWidth, 20), "Cost");
-
-        for (int i = 0; i < 3 && i < node.reseachCost.type.Count + 1; i++)
-        {
-            int yPos = 100 + (i*20);
-            if (node.reseachCost.type.Count == i)
-            {
-                GUI.contentColor = Color.red;
-                int index = EditorGUI.Popup(new(5, yPos, nodeWidth/3, 20), 0, resourceTypesFiltred.ToArray());
-                index = resourceTypes.IndexOf(resourceTypesFiltred[index]);
-                if(index > -1)
-                {
-                    node.reseachCost.type.Add((ResourceType)index);
-                    node.reseachCost.ammount.Add(-1);
-                    return true;
-                }
-                break;
-            }
-            else
-            {
-                List<string> tempFiltred = resourceTypesFiltred.ToList();
-                int lastIndex = tempFiltred.IndexOf(node.reseachCost.type[i].ToString());
-                if(lastIndex == -1)
-                {
-                    GUI.contentColor = Color.white;
-                    tempFiltred.Insert(1, node.reseachCost.type[i].ToString());
-                    lastIndex = 1;
-                }
-                else
-                    GUI.contentColor = Color.red;
-                int index = EditorGUI.Popup(new(5, yPos, nodeWidth /3, 20), lastIndex, tempFiltred.ToArray());
-                if(index != lastIndex)
-                {
-                    index = resourceTypes.IndexOf(tempFiltred[index]);
-                    if(index > -1)
-                    {
-                        node.reseachCost.type[i] = (ResourceType)index;
-                    }
-                    else
-                    {
-                        node.reseachCost.type.RemoveAt(i);
-                        node.reseachCost.ammount.RemoveAt(i);
-                    }
-                    return true;
-                }
+                    node.nodeAssignee = -1;
             }
 
-            string ammount = GUI.TextField(new(nodeWidth/3 + 10, yPos, (2*nodeWidth/3)-15, 20), node.reseachCost.ammount[i].ToString());
-            int x = 0;
-            if (ammount == "")
-                node.reseachCost.ammount[i] = 0;
-            if(int.TryParse(ammount, out x))
-            {
-                node.reseachCost.ammount[i] = x;
-            }
+            return list;
+        }
+        public List<string> GetActiveCategories
+            (ResearchNode node) => node.nodeType == NodeType.Building
+                ? buildingData.Categories.Select(q => q.Name).Prepend("Select").ToList()
+                : new List<string>() { "Select" };
 
-            //int index = EditorGUI.Popup(new(5, 40, nodeWidth - 10, 20), node.reseachCost + 1, resourceTypesFiltred.ToArray()) - 1;
-        }
-        GUI.contentColor = Color.white;
-        return false;
-    }
-    /// <summary>
-    /// Renders the category popup.
-    /// </summary>
-    /// <param name="node"></param>
-    /// <returns>if the value changed</returns>
-    bool CategoryPopup(ResearchNode node)
-    {
-        List<string> tabs = new() { "Select" };
-        tabs.AddRange(researchData.buildButtons.buildingCategories.Select(q => $"{q.categName}"));
-        if (node.buttonCategory == -1)
-            GUI.contentColor = Color.red;
-        int index = EditorGUI.Popup(new(5, 40, nodeWidth - 10, 20), node.buttonCategory + 1, tabs.ToArray()) - 1;
-        GUI.contentColor = Color.white;
-        if (index != node.buttonCategory)
+        /// <summary>
+        /// Event callback for moving the node.
+        /// </summary>
+        /// <param name="moveBy">If -1 then left, if 1 then right.</param>
+        public void Move(ResearchNode nodeData, int moveBy)
         {
-            researchData.DeselectBuilding(node);
-            node.buttonCategory = index;
-            if (index > -1)
-                node.name = researchData.buildButtons.buildingCategories[node.buttonCategory].categName;
-            else
-                node.name = $"node {node.id}";
-            node.buildButton = -1;
-            return true;
+            int i = selectedCategory.Objects.IndexOf(nodeData);
+            selectedCategory.Objects[i] = selectedCategory.Objects[i + moveBy];
+            selectedCategory.Objects[i + moveBy] = nodeData;
+            for (int j = nodeData.level; j < 5; j++)
+                RepaintRow(j);
         }
-        return false;
-    }
-    /// <summary>
-    /// Renders the building selection popup.
-    /// </summary>
-    /// <param name="node">Node that is beeing rendered.</param>
-    /// <returns>if the selected build changed</returns>
-    bool BuildPopup(ResearchNode node)
-    {
-        if (node.buttonCategory > -1)
-        {
-            List<string> tabs = new() { "Select" };
-            tabs.AddRange(researchData.GetUnassignedBuildings(node));
-            int tmpIndex = node.buildButton == -1 ? 0 : 1;
-            if (tmpIndex == 0)
-                GUI.contentColor = Color.red;
-            int index = EditorGUI.Popup(new(5, 60, nodeWidth - 10, 20), tmpIndex, tabs.ToArray());
-            GUI.contentColor = Color.white;
-            if (index != tmpIndex)
-            {
-                researchData.DeselectBuilding(node);
-                node.buildButton = researchData.GetIndex(node.buttonCategory, tabs[index]);
-                if (node.buildButton > -1)
-                {
-                    researchData.SelectBuilding(node);
-                    node.name = tabs[index];
-                }
-                else
-                {
-                    node.name = researchData.buildButtons.buildingCategories[node.buttonCategory].categName;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-    void OutConnectionButton(ResearchNode node)
-    {
-        if (connecting && selectedNode == node)
-            GUI.backgroundColor = Color.yellow;
-        else
-            GUI.backgroundColor = new(0.1f, 0.1f, 0.75f);
 
-        if (GUI.Button(new(nodeWidth / 2 - 10, nodeHeight - 25, 20, 20), new GUIContent(), circleButtonStyle))
+        public void Delete(ResearchNode node)
         {
-            if(selectedNode == node)
-            {
-                selectedNode = null;
-                connecting = false;
-            }
-            else
-            {
-                selectedNode = node;
-                connecting = true;
-            }
+            node.DisconnectNodes(selectedCategory.Objects);
+            selectedCategory.Objects.Remove(node);
+            RepaintRow(node.level);
+            SaveValues();
         }
-        GUI.backgroundColor = Color.white;
-    }
-    private void DrawLine(Vector2 start, Vector2 end)
-    {
-        int width = 4;
-        if(start.x > end.x)
-        {
-            Vector2 tmp = new(start.x, start.y);
-            start = new(end.x, end.y);
-            end = new(tmp.x, tmp.y);
-        }
-        Vector2 d = end - start;
-        float a = Mathf.Rad2Deg * Mathf.Atan2(d.y, d.x);
-        if (d.x < 0)
-            a += 180;
+        #endregion
 
-        int width2 = (int)Mathf.Ceil(width / 2);
-
-        GUIUtility.RotateAroundPivot(a, start);
-        GUI.DrawTexture(new Rect(start.x, start.y - width2, d.magnitude, width), point);
-        GUIUtility.RotateAroundPivot(-a, start);
+        #endregion
     }
 }
-#endif

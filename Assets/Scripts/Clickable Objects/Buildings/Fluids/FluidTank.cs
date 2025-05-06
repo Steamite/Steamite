@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class FluidTank : Building
 {
@@ -14,9 +11,9 @@ public class FluidTank : Building
         base.UniqueID();
         networkAccess.ID(transform.GetChild(1));
     }
-    public override void PlaceBuilding(GridTiles gT)
+    public override void PlaceBuilding(bool loading = false)
     {
-        base.PlaceBuilding(gT);
+        base.PlaceBuilding(loading);
         networkAccess.PlacePipes(transform.GetChild(2));
     }
     public override bool CanPlace()

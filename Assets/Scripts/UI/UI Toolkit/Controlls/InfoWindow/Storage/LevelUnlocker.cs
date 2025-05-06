@@ -1,21 +1,21 @@
-﻿using AbstractControls;
+﻿using System;
+using AbstractControls;
 using RadioGroups;
-using System;
 using UnityEngine.UIElements;
 
 namespace InfoWindowElements
 {
     /// <summary>Represents each level in <see cref="LevelsTab"/>.</summary>
     [UxmlElement]
-    public partial class LevelUnlocker : TextRadioButton
+    public partial class LevelUnlocker : CustomRadioButton
     {
         #region Constructors
         public LevelUnlocker() : base()
         {
-            
+
         }
 
-        public LevelUnlocker(int i, LevelState _state) : base("", i, true, i.ToString())
+        public LevelUnlocker(int i, LevelState _state) : base("", i, false)
         {
             ToggleButtonStyle(_state);
         }
@@ -26,7 +26,7 @@ namespace InfoWindowElements
         public override void Deselect(bool triggerTransition = true)
         {
             base.Deselect();
-            LevelState state = ((LevelUnlockerRadioGroup)parent)[value];
+            LevelState state = ((LevelUnlockerRadioList)ToolkitUtils.GetParentOfType<LevelUnlockerRadioList>(this))[value];
             if (state == LevelState.Selected)
                 ToggleButtonStyle(LevelState.Unlocked);
             else
@@ -34,10 +34,11 @@ namespace InfoWindowElements
         }
 
         /// <inheritdoc/>
-        protected override void SelectChange(bool UpdateGroup)
+        protected override bool SelectChange(bool UpdateGroup)
         {
             base.SelectChange(UpdateGroup);
             ToggleButtonStyle(LevelState.Selected);
+            return false;
         }
         #endregion
 
@@ -48,7 +49,10 @@ namespace InfoWindowElements
         /// <param name="state">New state.</param>
         public void ToggleButtonStyle(LevelState state)
         {
+            bool active = ClassListContains("Level-Active");
             ClearClassList();
+            if (active)
+                AddToClassList("Level-Active");
             switch (state)
             {
                 case LevelState.Unavailable:

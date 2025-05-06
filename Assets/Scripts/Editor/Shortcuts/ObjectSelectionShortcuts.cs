@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -38,7 +37,7 @@ public class ObjectSelectionShortcuts
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = SceneRefs.stats.GetChild(0).gameObject;
+        GameObject gameObject = SceneRefs.BottomBar.GetChild(0).gameObject;
         Selection.activeGameObject = gameObject;
     }
 
@@ -47,9 +46,7 @@ public class ObjectSelectionShortcuts
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = SceneRefs.stats.GetChild(1).GetChild(0).gameObject;
+        GameObject gameObject = SceneRefs.BottomBar.GetChild(1).GetChild(0).gameObject;
         Selection.activeGameObject = gameObject;
     }
 }
-
-#endif

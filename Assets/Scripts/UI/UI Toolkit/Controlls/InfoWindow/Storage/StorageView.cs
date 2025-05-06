@@ -1,5 +1,5 @@
-using InfoWindowElements;
 using System;
+using InfoWindowElements;
 using UnityEngine.UIElements;
 
 namespace InfoWindowViews
@@ -12,7 +12,7 @@ namespace InfoWindowViews
     public partial class StorageView : TabView, IUIElement
     {
         #region Variables
-#if UNITY_EDITOR
+
         bool active;
         [UxmlAttribute]
         bool storageTabActive
@@ -27,8 +27,7 @@ namespace InfoWindowViews
                     activeTab = levelTab;
             }
         }
-#endif
-        
+
         [UxmlAttribute] public VisualTreeAsset ElemPref { get => storageTab.elemPref; set => storageTab.elemPref = value; }
 
         StorageTab storageTab;

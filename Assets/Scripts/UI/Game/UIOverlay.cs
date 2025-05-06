@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -21,7 +22,7 @@ public class UIOverlay : MonoBehaviour
     /// <summary>Asks if there's a need to create a new overlay group.</summary>
     bool buildGridFilled = false;
     #endregion
-    
+
     /// <summary>
     /// Moves placing grid and if needed fill it.
     /// </summary>
@@ -33,7 +34,7 @@ public class UIOverlay : MonoBehaviour
             GridPos gp = MyGrid.Rotate(building.blueprint.moveBy, building.transform.rotation.eulerAngles.y);
             overlayParent.anchoredPosition = new(building.transform.position.x - gp.x, building.transform.position.z - gp.z);
             overlayParent.localRotation = Quaternion.Euler(180, 0, building.transform.rotation.eulerAngles.y);
-            if(buildGridFilled == false)
+            if (buildGridFilled == false)
             {
                 foreach (NeededGridItem item in building.blueprint.itemList)
                 {
@@ -51,9 +52,9 @@ public class UIOverlay : MonoBehaviour
     }
 
     /// <summary>Clears all tiles from the <see cref="overlayParent"/>.</summary>
-    public void HideGlobalEntryPoints()
+    public void DestroyBuilingTiles()
     {
-        for (int i = overlayParent.childCount-1; i >= 0; i--)
+        for (int i = overlayParent.childCount - 1; i >= 0; i--)
         {
             Destroy(overlayParent.GetChild(i).gameObject);
         }
@@ -106,7 +107,7 @@ public class UIOverlay : MonoBehaviour
         if (i > -1)
         {
             Destroy(buildingOverlays[i].gameObject);
-            foreach(GridPos gp in buildingOverlays[i].GetComponentsInChildren<Transform>().Skip(1).Select(q=> new GridPos(q.transform.position)))
+            foreach (GridPos gp in buildingOverlays[i].GetComponentsInChildren<Transform>().Skip(1).Select(q => new GridPos(q.transform.position)))
             {
                 ClickableObject clickable = MyGrid.GetGridItem(new(gp.x, y, gp.z));
                 if (clickable is Road)
@@ -125,10 +126,18 @@ public class UIOverlay : MonoBehaviour
     public void ToggleEntryPoints(Road r)
     {
         if (r)
-            foreach(int id in r.entryPoints)
+            foreach (int id in r.entryPoints)
             {
                 RectTransform rect = buildingOverlays.First(q => q.name == id.ToString());
-                rect.GetComponentsInChildren<Image>().FirstOrDefault(q => new GridPos(q.transform.position).Equals(new GridPos(r.transform.position))).gameObject.SetActive(false);
+                for (int i = 0; i < rect.transform.childCount; i++)
+                {
+                    GameObject tileObject = rect.GetChild(i).gameObject;
+                    if (r.GetPos().Equals(new GridPos(tileObject.transform.position)))
+                    {
+                        tileObject.SetActive(false);
+                        break;
+                    }
+                }
             }
     }
 }

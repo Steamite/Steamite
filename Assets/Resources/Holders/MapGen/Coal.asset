@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7722ad94548d554479222b9c47c9a556, type: 3}
   m_Name: Coal
   m_EditorClassIdentifier: 
-  resource: 0
+  resource: 1
   hardness: 2
+  color: {r: 0, g: 0, b: 0, a: 1}
   richness:
   - min: 080000000c0000000f000000
     max: 0c0000001100000015000000
@@ -47,4 +48,3 @@ MonoBehaviour:
     max: 060000000d00000010000000
   - min: 04000000080000000c000000
     max: 070000000c00000010000000
-  color: {r: 0, g: 0, b: 0, a: 1}
