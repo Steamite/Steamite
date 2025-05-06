@@ -30,3 +30,6 @@
     background-color: rgb(68, 44, 21);
     scale: 1.05 1.05;
 }
+
+.locked > buildingbackground {
+}

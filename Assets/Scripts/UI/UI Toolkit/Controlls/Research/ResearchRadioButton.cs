@@ -56,6 +56,7 @@ namespace Research
             }
 
             VisualElement preview = new();
+            preview.AddToClassList("research-button-background");
             BuildCategWrapper cat = SceneRefs.objectFactory.buildPrefabs.Categories[node.nodeCategory];
             building = cat.Objects.FindIndex(q => q.id == node.nodeAssignee);
             if (building > -1)
@@ -63,12 +64,12 @@ namespace Research
                 node.preview = cat.Objects[building].preview;
                 preview.style.backgroundImage = new(cat.Objects[building].preview);
             }
-            background.Add(preview);
+            Add(preview);
 
             Label nameLabel = new();
             nameLabel.AddToClassList("name-label");
             nameLabel.text = node.nodeName;
-            background.Add(nameLabel);
+            Add(nameLabel);
 
             RegisterCallback<PointerEnterEvent>(_ => ToolkitUtils.localMenu.Open(node, this));
             RegisterCallback<PointerLeaveEvent>(_ => ToolkitUtils.localMenu.Close());

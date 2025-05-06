@@ -130,7 +130,7 @@ namespace EditorWindows.Research
                 Button addButton = new Button(plus,
                             () =>
                             {
-                                ((ResearchCategory)selectedCategory).AddNode(i);
+                                ((ResearchCategory)selectedCategory).AddNode(i, (ResearchData)data);
                                 RepaintRow(i);
                             });
                 addButton.AddToClassList("add-button");

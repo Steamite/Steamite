@@ -69,14 +69,25 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 }
                 description.text = node.description;
                 break;
-            case Building:
-                Building building = data as Building;
+            case BuildingWrapper:
+                BuildingWrapper wrapper = data as BuildingWrapper;
+                Building building = wrapper.building;
                 header.text = building.objectName;
-                
-                secondHeader.style.display = DisplayStyle.None;
 
-                costList.Open(building.cost);
+                if (wrapper.unlocked)
+                {
+                    secondHeader.style.display = DisplayStyle.None;
 
+                    costList.style.display = DisplayStyle.Flex;
+                    costList.Open(building.cost);
+                }
+                else
+                {
+                    secondHeader.style.display = DisplayStyle.Flex;
+                    secondHeader.text = "needs to be researched";
+
+                    costList.style.display = DisplayStyle.None;
+                }
                 description.text = "";
                 break;
         }

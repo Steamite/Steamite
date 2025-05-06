@@ -114,6 +114,8 @@ public class GridTiles : MonoBehaviour
         if (enterObject == null)
             return;
         Color c = new();
+        if (activeControl == ControlMode.nothing && activeObject != null)
+            Exit(activeObject);
         activeObject = enterObject;
         activePos = enterObject.GetPos();
         switch (activeControl)
@@ -218,6 +220,8 @@ public class GridTiles : MonoBehaviour
                     return;
                 }
 
+                if (exitObject == activeObject)
+                    activeObject = null;
                 break;
             case ControlMode.deconstruct:
                 Building _b = exitObject.GetComponent<Building>();
@@ -645,6 +649,7 @@ public class GridTiles : MonoBehaviour
                 ? GameObject.FindWithTag("Pipes").transform 
                 : GameObject.Find("Buildings").transform);
         blueprintInstance.objectName = blueprintInstance.objectName.Replace("(Clone)", ""); // removes (Clone) from its name
+        blueprintInstance.maximalProgress = blueprintInstance.CalculateMaxProgress();
         blueprintInstance.ChangeRenderMode(true);
         HighLight(blueprintInstance.CanPlace() ? Color.blue : Color.red, blueprintInstance.gameObject);
     }

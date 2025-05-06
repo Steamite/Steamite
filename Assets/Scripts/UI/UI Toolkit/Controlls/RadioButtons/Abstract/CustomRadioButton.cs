@@ -67,7 +67,6 @@ namespace AbstractControls
         {
             if (UpdateGroup)
             {
-
                 VisualElement el = this;
                 if (inGroup)
                 {
@@ -84,7 +83,6 @@ namespace AbstractControls
                         el = el.parent;
                     } while (el.parent != null && el is not CustomRadioButtonList);
                     return ((CustomRadioButtonList)el).Select(value);
-
                 }
             }
             return true;

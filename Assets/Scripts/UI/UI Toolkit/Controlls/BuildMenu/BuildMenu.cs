@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AbstractControls;
 using UnityEngine.UIElements;
 
@@ -21,7 +22,41 @@ namespace BottomBar.Building
         public void Init()
         {
             buildingData = SceneRefs.objectFactory.buildPrefabs;
+            foreach (var item in buildingData.Categories)
+            {
+                foreach (var wrapper in item.Objects)
+                {
+                    wrapper.unlocked = true;
+                }
+            }
             
+            
+            ResearchData researchData = UIRefs.research.researchData;
+            foreach (var categ in researchData.Categories)
+            {
+                foreach (var node in categ.Objects)
+                {
+                    if(node.nodeType == NodeType.Building && node.nodeAssignee > -1 && node.researched == false)
+                    {
+                        int i = buildingData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
+                        BuildingWrapper wrapper = buildingData.Categories[node.nodeCategory].Objects[i];
+                        if (wrapper != null)
+                        {
+                            node.onFinishResearch += () => 
+                            {
+                                wrapper.unlocked = true;
+                                if (categGroup.SelectedChoice == node.nodeCategory)
+                                {
+                                    buildingList.UnlockActiveButton(i);
+                                }
+                            };
+                            wrapper.unlocked = false;
+                        }
+                    }
+                }
+            }
+
+
             buildingList = new(BlueprintChange);
             Add(buildingList);
             
@@ -46,7 +81,8 @@ namespace BottomBar.Building
         {
             if (i > -1)
             {
-                SceneRefs.gridTiles.BuildPrefab = buildingData.Categories[categGroup.SelectedChoice].Objects[i].building;
+                if (buildingData.Categories[categGroup.SelectedChoice].Objects[i].unlocked)
+                    SceneRefs.gridTiles.BuildPrefab = buildingData.Categories[categGroup.SelectedChoice].Objects[i].building;
             }
             else
                 SceneRefs.gridTiles.BuildPrefab = null;

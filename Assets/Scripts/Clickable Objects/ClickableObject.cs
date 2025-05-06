@@ -49,6 +49,11 @@ public abstract class ClickableObject : MonoBehaviour,
     #region Basic Operations
     /// <summary>Should create a unique id for a new object in a list.</summary>
     public virtual void UniqueID() => id = -1;
+
+    public override string ToString()
+    {
+        return $"{objectName}: {id}";
+    }
     /// <summary>
     /// Calculates position on the grid.
     /// </summary>
@@ -149,7 +154,7 @@ public abstract class ClickableObject : MonoBehaviour,
             info.header.text = objectName;
             return info;
         }
-        Debug.LogWarning($"Object \"{objectName}\" not selected, why open window?");
+        Debug.LogWarning($"Object \"{this}\" not selected, why open window?");
         return null;
     }
     
