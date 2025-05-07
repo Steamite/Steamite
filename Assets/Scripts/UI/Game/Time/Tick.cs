@@ -33,7 +33,7 @@ public class Tick : MonoBehaviour
     /// </seealso>
     [Header("Tick speed")][SerializeField] float ticksPerHour = 4;
     /// <summary>Progresses time by this(60/<see cref="ticksPerHour"/>).</summary>
-    int minutesPerTick;
+    int minutesPerTick = 0;
 
     /// <summary>Current time of the day(counts as hours when starting a new game).</summary>
     public int timeInMinutes = 4;
@@ -282,6 +282,7 @@ public class Tick : MonoBehaviour
     {
         timeInMinutes = gameState.dayTime;
         numberOfDays = gameState.numberOfDays;
+        UpdateTime();
     }
     #endregion
 }
