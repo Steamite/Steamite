@@ -3,7 +3,7 @@ using Unity.Properties;
 using UnityEngine;
 
 /// <summary>Building that doesn't produce resources but creates research.</summary>
-public class Research_Production : Building, IProduction, IAssign
+public class ResearchProduction : Building, IProduction, IAssign
 {
     [CreateProperty]
     public List<Human> Assigned { get; set; } = new();
@@ -11,7 +11,8 @@ public class Research_Production : Building, IProduction, IAssign
     [SerializeField] int assignLimit;
     public float ProdTime { get; set; }
     public float CurrentTime { get; set; }
-    public int Modifier { get; set; }
+    [SerializeField] int modifier;
+    public int Modifier { get => modifier; set => modifier = value; }
     public bool Stoped { get; set; }
 
     #region Window

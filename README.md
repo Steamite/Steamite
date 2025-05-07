@@ -17,5 +17,4 @@
 <ul>
   <li>Programing - Richard Kopp</li>
   <li>Models - Vojta Liebich</li>
-  <li>2D art - Lucka Olivová</li>
 </ul>

@@ -1,128 +1,121 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Building">
-    <Position X="22.25" Y="10" Width="1.5" />
+    <Position X="20" Y="11" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>IIEIwIAAAEAAAAAAAEQAgAgEBAQQgADABAQAESQAAEA=</HashCode>
+      <HashCode>IAEIwIAAAEAAAgAgQEQAkAgEBAQRgEDABAUAEQUAAFA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Building.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pipe">
-    <Position X="9" Y="17" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AEAAgIAAAAAAAAAACEEAAgAEAAAAgABABAwAEQAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\Pipes\Pipe.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="House">
-    <Position X="16.25" Y="17.75" Width="1.75" />
+    <Position X="19" Y="19.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AIAAwIAAAAAIAAAAAAAABBAAAAAAAABAAAAAAAAAAgA=</HashCode>
+      <HashCode>AAAAwJAAAAAIAAAAAAAABBAAAAAAAABAAAEAAAAAAgA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\House.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.169" />
   </Class>
   <Class Name="ProductionBuilding">
-    <Position X="22" Y="19.75" Width="2" />
+    <Position X="26.5" Y="19.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AYAIxIAQAAEIAIAQAAAAhFAEAAAEIIBAAABAkQAAAgA=</HashCode>
+      <HashCode>AQAIxJARAAEIAAAQAAAAlFAEAAAEIABAAAFAkQAAAhA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\Production Buildings\ProductionBuilding.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Elevator">
-    <Position X="25.25" Y="17" Width="1.75" />
+    <Position X="24" Y="19.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AIAAwIAAAAEAAAAAAAAAgAAAAQACAABAAAAAAQAAAAQ=</HashCode>
+      <HashCode>AAAAwIAAAAEAAAAAAAQAgAAEAQACAABAAAEAAQEAAAQ=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Elevator.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="StorageObject">
-    <Position X="21" Y="6.5" Width="1.5" />
+    <Position X="19.5" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAgIAQAAEAAAAAAAQAAAAEAAAAAAAAAAEAAQAAAAA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\StorageObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Chunk">
-    <Position X="12" Y="10" Width="1.5" />
+    <Position X="12" Y="11" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAAAgIAAAAEAAAAABAQAAAgAAAAAAAAAAAECAQAAAAA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Special\Chunk.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ClickableObject">
-    <Position X="20" Y="1.25" Width="1.5" />
+    <Position X="18.25" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAiAgIAAAAAIAAAAgAQAgAgAAAAgAIAAAAAAAwAEAgA=</HashCode>
+      <HashCode>IAiAgIAAAAAIAAAEgAQAgAgAAAAkAIAAgAAAIwAEAgA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\ClickableObject.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Road">
-    <Position X="32.25" Y="6.5" Width="1.5" />
+    <Position X="29.25" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AACAAIAAAAAIAAAAAAAAAAgAAAAAAAAAAAAAAACAAAA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Tiles\Road.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Rock">
-    <Position X="9.75" Y="6.5" Width="1.5" />
+    <Position X="9.75" Y="7" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IEAAgIAAAAIAAAAAAAQAAAgAAAQAAAABABgCAQAAAgA=</HashCode>
+      <HashCode>IEAAgIAAAAIAAAAAAAQAAAgAAAQAAAABABgGAQAAAgA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Tiles\Rock.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Human">
-    <Position X="5.25" Y="6.5" Width="1.5" />
+    <Position X="5.25" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAAEhIBAIAggAEAAABwAADgAAAAiIABGAAAABhQAAQI=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Special\Humans\Human.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="HumanUtil" Collapsed="true">
-    <Position X="37" Y="0.75" Width="1.5" />
+    <Position X="34" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BAAAAAAAEAAAAAAAAAAgACAAAAAEAAAAAAAAAAjEAAQ=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Special\Humans\HumanUtil.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Water">
-    <Position X="7.5" Y="6.5" Width="1.5" />
+    <Position X="7.5" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAgIAAAEAAAAAAAAAAAAgAAQAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Tiles\Water.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PipePart">
-    <Position X="34.5" Y="6.5" Width="1.5" />
+    <Position X="31.5" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\Pipes\PipePart.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Research_Production">
-    <Position X="18.75" Y="19.25" Width="1.75" />
+  <Class Name="ResearchProduction">
+    <Position X="21.5" Y="19.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AIACBAAAAAAIAAAAAAAABFABAAAAAAAAAABAgAAAAgA=</HashCode>
-      <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\Production Buildings\Research_Production.cs</FileName>
+      <HashCode>AAACBBAAAAAIAAAAAAAABFABAAAAAAAAAAFAgAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\Production Buildings\ResearchProduction.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="1.34" />
   </Class>
-  <Class Name="FluidTank">
-    <Position X="11.75" Y="16.75" Width="1.5" />
+  <Interface Name="IAssign">
+    <Position X="23" Y="16" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgIAAAAAAAAAAAEQAAAAEAAAAAABACAQAEAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\FluidTank.cs</FileName>
+      <HashCode>AAAAABAAAAAIAAAAAAAABAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Interfaces\IAssign.cs</FileName>
     </TypeIdentifier>
-  </Class>
-  <Class Name="BuildPipe">
-    <Position X="9" Y="22.5" Width="1.75" />
+  </Interface>
+  <Interface Name="IProduction" Collapsed="true">
+    <Position X="1.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AACAgQAAAAAIAAAAAAAAAAAEAAEgAABAAAgAAQAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Clickable Objects\Buildings\Fluids\Pipes\BuildPipe.cs</FileName>
+      <HashCode>AAACBAAAAAAAAAAAAAAAAEABAAAAAAAAAABAgAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Clickable Objects\Buildings\Interfaces\IProduction.cs</FileName>
     </TypeIdentifier>
-  </Class>
+  </Interface>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

@@ -146,7 +146,8 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
-  myColor: []
+  _materialColors: []
+  _meshRenderers: []
   blueprint:
     size:
       x: 2
@@ -201,4 +202,4 @@ MonoBehaviour:
   maximalProgress: 20
   categoryID: 2
   wrapperID: 1580670160
-  assignLimit: 0
+  assignLimit: 3
