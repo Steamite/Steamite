@@ -4,7 +4,7 @@ using AbstractControls;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Research
+namespace ResearchUI
 {
     class ResearchRadioButtonGroup : CustomRadioButtonGroup
     {

@@ -1,4 +1,5 @@
 ﻿using InfoWindowElements;
+using ResearchUI;
 using TradeData.Stats;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -44,7 +45,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 break;
             case ResearchNode:
                 ResearchNode node = data as ResearchNode;
-                header.text = node.nodeName;
+                header.text = node.Name;
                 secondHeader.style.display = DisplayStyle.Flex;
                 if (node.researched)
                 {

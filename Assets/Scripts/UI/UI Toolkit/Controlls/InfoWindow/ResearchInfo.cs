@@ -1,3 +1,4 @@
+using ResearchUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -43,19 +44,24 @@ public partial class ResearchInfo : VisualElement, IUIElement
     {
         if (wasOpened == false)
         {
+            // Research completion can be assigned only once.
             UIRefs.research.researchCompletion += RefillData;
             wasOpened = true;
         }
         RefillData(UIRefs.research.currentResearch);
     }
 
+    /// <summary>
+    /// Refils the data to the view.
+    /// </summary>
+    /// <param name="node">Active node to get the data from.</param>
     void RefillData(ResearchNode node)
     {
         dataSource = node;
         if (node != null)
         {
             image.style.backgroundImage = new(node.preview);
-            title.text = node.nodeName;
+            title.text = node.Name;
             progress.highValue = node.researchTime;
 
             DataBinding binding = BindingUtil.CreateBinding(nameof(ResearchNode.CurrentTime));

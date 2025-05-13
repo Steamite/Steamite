@@ -178,10 +178,10 @@ public class SaveController : MonoBehaviour, IAfterLoad
     #region Save Parts
     BSave[] SaveBuildings()
     {
-        BSave[] bSaves = new BSave[MyGrid.buildings.Count];
-        for (int i = 0; i < MyGrid.buildings.Count; i++)
+        BSave[] bSaves = new BSave[MyGrid.Buildings.Count];
+        for (int i = 0; i < bSaves.Length; i++)
         {
-            bSaves[i] = MyGrid.buildings[i].Save() as BSave;
+            bSaves[i] = MyGrid.Buildings[i].Save() as BSave;
         }
         return bSaves;
     }

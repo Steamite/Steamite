@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>Basic highlight color(for selection).</summary>
@@ -8,8 +9,10 @@ public static class MyGrid
     #region Variables
     /// <summary>Number of Levels in game.</summary>
     public const int NUMBER_OF_LEVELS = 5;
+    /// <inheritdoc cref="buildings"/>
+    public static List<Building> Buildings => buildings;
     /// <summary>List of all buildings on all levels.</summary>
-    public static List<Building> buildings = new();
+    static List<Building> buildings = new();
     /// <summary>List of all chunks on all levels.</summary>
     public static List<Chunk> chunks = new();
     /// <summary>List of all fluid networks on all levels.</summary>
@@ -57,6 +60,9 @@ public static class MyGrid
         levels[gp.y].SetGridItem(gp, clickable, isPipe);
     }
 
+    public static List<Building> GetBuildings(Func<Building, bool> predicate) => Buildings.Where(predicate).ToList();
+    public static List<T> GetBuildings<T>(Func<T, bool> predicate) => Buildings.Where(q => q is T).Cast<T>().Where(predicate).ToList();
+    public static Building GetBuilding(Func<Building, bool> predicate) => Buildings.FirstOrDefault(predicate);
     public static UIOverlay GetOverlay(int lIndex = -1)
     {
         if (lIndex == -1)

@@ -23,7 +23,7 @@ public static class MyRes
     /// <summary>Used for faster determening new jobs faster.</summary>
     public static int globalStorageSpace;
     /// <summary>All storage buildings.</summary>
-    static IStorage[] storage;
+    static List<IStorage> storage;
     /// <summary>Reference to global resource storage counter.</summary>
     public static ResourceDisplay resDisplay;
     #endregion
@@ -51,7 +51,7 @@ public static class MyRes
             resourceTemplate = resDisplay.InitializeResources(setupStorages);
             globalStorageSpace = 0;
 
-            storage = MyGrid.buildings.Select(q => q.GetComponent<IStorage>()).Where(q => q != null).ToArray();
+            storage = MyGrid.GetBuildings<IStorage>(q => q != null);
             JobQueue jQ = SceneRefs.jobQueue;
             foreach (IStorage _s in storage)
             {
@@ -517,7 +517,7 @@ public static class MyRes
     static void RemoveFromStorageGlobal(Resource cost)
     {
         UpdateResource(cost, -1);
-        for (int i = 0; i < storage.Length; i++)
+        for (int i = 0; i < storage.Count; i++)
         {
             Resource diff = DiffRes(cost, storage[i].LocalResources.Future(true));
             for (int j = cost.type.Count - 1; j >= 0; j--)
