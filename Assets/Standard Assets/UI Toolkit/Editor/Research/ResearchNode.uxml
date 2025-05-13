@@ -9,6 +9,7 @@
                     <engine:VisualElement name="Right" style="flex-grow: 1; flex-direction: row-reverse;">
                         <engine:Button icon-image="project://database/Assets/Standard%20Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-1087164816274819069&amp;guid=e9d58580ef70b7744addd1ff255f07aa&amp;type=3#arrow-right@2x" name="Move-Right" class="move-button" />
                         <engine:Button icon-image="project://database/Assets/Sprites/Icons/Info%20window/Cancel.png?fileID=2800000&amp;guid=a038df6f8c235ab42ac4da953bbda40d&amp;type=3#Cancel" name="Delete" class="cancel-button" />
+                        <engine:Toggle text="researched" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; background-color: rgb(94, 94, 94); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; padding-left: 5px; border-left-color: rgb(50, 50, 50); border-right-color: rgb(50, 50, 50); border-top-color: rgb(50, 50, 50); border-bottom-color: rgb(36, 36, 36); border-bottom-width: 1px; border-right-width: 1px; height: 90%; align-items: stretch; align-self: flex-end;" />
                     </engine:VisualElement>
                 </engine:VisualElement>
                 <engine:VisualElement name="Top" class="name-elem">

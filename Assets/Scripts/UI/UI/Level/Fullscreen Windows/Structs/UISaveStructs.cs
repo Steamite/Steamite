@@ -65,7 +65,7 @@ public class ResearchSave
             {
                 saves.Add(window.researchData.Categories[i].Objects[j].CurrentTime);
                 if (window.researchData.Categories[i].Objects[j].Equals(window.currentResearch) &&
-                    window.researchData.Categories[i].Objects[j].nodeName == window.currentResearch.nodeName)
+                    window.researchData.Categories[i].Objects[j].Name == window.currentResearch.Name)
                     queue.Add(new(i, j));
             }
             saveData.Add(saves);

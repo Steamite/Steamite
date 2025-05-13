@@ -1,3 +1,4 @@
+using ResearchUI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,12 +13,12 @@ using Object = UnityEngine.Object;
 
 namespace EditorWindows.Windows
 {
-    public class BuildingRegister : CategoryWindow<BuildCategWrapper, BuildingWrapper>
+    public class BuildingRegister : DataGridWindow<BuildCategWrapper, BuildingWrapper>
     {
         const string BUILDING_PATH = "Assets/Game Data/Buildings/";
         const string BUILD_NAME = "/building.prefab";
         const string TEX_NAME = "/texture.png";
-        MultiColumnListView dataGrid;
+        
         Button rebindButton;
 
         List<Type> buildingTypes;
@@ -43,10 +44,6 @@ namespace EditorWindows.Windows
 
             #region Grid
             base.CreateGUI();
-            dataGrid = rootVisualElement.Q<MultiColumnListView>("Data");
-            dataGrid.onAdd = AddEntry;
-            dataGrid.onRemove = RemoveEntry;
-            CreateColumns();
             #endregion
             rebindButton = rootVisualElement.Q<Button>("Rebind-Buildings");
             rebindButton.enabledSelf = false;
@@ -131,9 +128,6 @@ namespace EditorWindows.Windows
             if (boo)
             {
                 group = settings.FindGroup(selectedCategory.Name);
-                dataGrid.style.display = DisplayStyle.Flex;
-
-                dataGrid.itemsSource = selectedCategory.Objects;
                 for (int i = 0; i < ((BuildCategWrapper)selectedCategory).columnStates?.Count; i++)
                     dataGrid.columns[i].visible = ((BuildCategWrapper)selectedCategory).columnStates[i];
                 rebindButton.enabledSelf = true;
@@ -141,7 +135,7 @@ namespace EditorWindows.Windows
             else
             {
                 selectedCategory = new BuildCategWrapper();
-                dataGrid.style.display = DisplayStyle.None;
+                selectedCategory.Objects = new();
                 rebindButton.enabledSelf = false;
             }
             return boo;
@@ -150,8 +144,9 @@ namespace EditorWindows.Windows
         #endregion
         #endregion
 
+
         #region Entry managment
-        void AddEntry(BaseListView _)
+        protected override void AddEntry(BaseListView _)
         {
             BuildingWrapper wrapper = new(data.UniqueID());
             int choice = EditorUtility.DisplayDialogComplex("Register a new building",
@@ -178,18 +173,12 @@ namespace EditorWindows.Windows
             else if (choice == 1)
                 return;
             selectedCategory.Objects.Add(wrapper);
-            dataGrid.RefreshItems();
-            EditorUtility.SetDirty((BuildingData)data);
+            base.AddEntry(_);
         }
 
-        void RemoveEntry(BaseListView _) => RemoveEntry(_.selectedItem as BuildingWrapper, true);
-        void RemoveEntry(BuildingWrapper wrapper, bool removeFromGrid)
+        protected override void RemoveEntry(BuildingWrapper wrapper, bool removeFromGrid)
         {
-            if (removeFromGrid)
-            {
-                selectedCategory.Objects.Remove(wrapper);
-                dataGrid.RefreshItems();
-            }
+            base.RemoveEntry(wrapper, removeFromGrid);
             if (wrapper.building)
             {
                 AssetDatabase.MoveAsset($"{BUILDING_PATH}{selectedCategory.Name}/{wrapper.building?.objectName}", $"{BUILDING_PATH}BCK/{wrapper.building?.objectName}");
@@ -199,31 +188,12 @@ namespace EditorWindows.Windows
         }
         #endregion
 
-        #region Columns
-        int GetRowIndex(VisualElement element)
-        {
-            while (element.name != "unity-multi-column-view__row-container")
-            {
-                element = element.parent;
-            }
-            return element.parent.IndexOf(element);
-        }
 
-        private void CreateColumns()
+        #region Columns
+        protected override void CreateColumns()
         {
             #region Base
-            #region ID
-            dataGrid.columns["id"].makeCell =
-                () =>
-                {
-                    Label l = new Label();
-                    l.AddToClassList("cell");
-                    return l;
-                };
-            dataGrid.columns["id"].bindCell =
-                (el, i) => ((Label)el).text = selectedCategory.Objects[i].id.ToString();
-            #endregion
-
+            base.CreateColumns();
             #region Asset
             dataGrid.columns["asset"].makeCell =
                 () => new ObjectField();
@@ -241,31 +211,6 @@ namespace EditorWindows.Windows
                 {
                     ObjectField field = (ObjectField)el;
                     field.UnregisterValueChangedCallback(AssetChange);
-                };
-            #endregion
-
-            #region Name
-            dataGrid.columns["name"].makeCell =
-                () => new TextField();
-            dataGrid.columns["name"].bindCell =
-                (el, i) =>
-                {
-                    TextField field = (TextField)el;
-                    if (((BuildingWrapper)dataGrid.itemsSource[i]).building != null)
-                    {
-                        field.value = ((BuildingWrapper)dataGrid.itemsSource[i]).building.objectName.ToString();
-                        field.RegisterCallback<FocusOutEvent>(NameChange);
-                    }
-                    else
-                    {
-                        field.value = "";
-                    }
-                };
-            dataGrid.columns["name"].unbindCell =
-                (el, i) =>
-                {
-                    TextField field = (TextField)el;
-                    field.UnregisterCallback<FocusOutEvent>(NameChange);
                 };
             #endregion
 
@@ -585,8 +530,7 @@ namespace EditorWindows.Windows
             return AssetDatabase.LoadAssetAtPath<Sprite>(importer.assetPath);
         }
 
-
-        void NameChange(FocusOutEvent ev)
+        protected override void NameChange(FocusOutEvent ev)
         {
             string value;
             if (ev.target is TextElement)
@@ -626,8 +570,6 @@ namespace EditorWindows.Windows
                 settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryModified, value, true);
                 ((BuildingWrapper)dataGrid.itemsSource[i]).building.objectName = value;
                 EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
-
-
             }
         }
 
@@ -691,8 +633,6 @@ namespace EditorWindows.Windows
             ((IProduction)((BuildingWrapper)dataGrid.itemsSource[i]).building).ProdTime = ev.newValue;
             EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
         }
-
-
         #endregion
 
         #endregion

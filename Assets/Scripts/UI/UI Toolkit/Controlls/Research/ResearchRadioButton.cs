@@ -1,7 +1,7 @@
 using AbstractControls;
 using UnityEngine.UIElements;
 
-namespace Research
+namespace ResearchUI
 {
     public class ResearchRadioButton : CustomRadioButton
     {
@@ -19,21 +19,29 @@ namespace Research
         }
 
         //Variables
+        /// <summary>Node of the button.</summary>
         public ResearchNode node;
+        /// <summary>Line from the button down.</summary>
         public ResearchDownLine lineDown;
+        /// <summary>Line from the button up.</summary>
         public ResearchLine lineUp;
 
+        /// <summary>Background image.</summary>
         VisualElement background;
 
+        /// <summary>Research state of the button.</summary>
         ButtonState state;
 
-        int categ;
+        /// <summary>Building Index.</summary>
         int building;
 
+        /// <summary>Creates the button using the <paramref name="categ"/>.</summary>
+        /// <param name="categ">Research category to find the node.</param>
+        /// <param name="i">Index of the node in category.</param>
         public ResearchRadioButton(ResearchCategory categ, int i) : base("research-button", i, true)
         {
             node = categ.Objects[i];
-            name = node.nodeName;
+            name = node.Name;
 
             if (node.nodeType == NodeType.Dummy || node.nodeAssignee == -1)
             {
@@ -52,7 +60,7 @@ namespace Research
             }
             else
             {
-                node.onFinishResearch += FinishResearch;
+                node.RegisterFinishCallback(FinishResearch);
             }
 
             VisualElement preview = new();
@@ -68,13 +76,17 @@ namespace Research
 
             Label nameLabel = new();
             nameLabel.AddToClassList("name-label");
-            nameLabel.text = node.nodeName;
+            nameLabel.text = node.Name;
             Add(nameLabel);
 
             RegisterCallback<PointerEnterEvent>(_ => ToolkitUtils.localMenu.Open(node, this));
             RegisterCallback<PointerLeaveEvent>(_ => ToolkitUtils.localMenu.Close());
         }
 
+        /// <summary>
+        /// Marks lines and updates the <see cref="state"/>.
+        /// </summary>
+        /// <param name="categ">Category to check prequisite nodes.</param>
         public void AfterLines(ResearchCategory categ)
         {
             if (node.researched)
@@ -121,6 +133,7 @@ namespace Research
             return false;
         }
 
+        /// <summary>Called when finishing research.</summary>
         void FinishResearch()
         {
             AddToClassList(RESEARCH_CLASS);

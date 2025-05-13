@@ -5,7 +5,7 @@ namespace AbstractControls
 {
 
     /// <summary>
-    /// Group is for loose buttons with more layout needs. (eg. <see cref="Research.ResearchRadioButtonGroup"/>>)
+    /// Group is for loose buttons with more layout needs. (eg. <see cref="ResearchUI.ResearchRadioButtonGroup"/>>)
     /// </summary>
     [UxmlElement]
     public partial class CustomRadioButtonGroup : VisualElement

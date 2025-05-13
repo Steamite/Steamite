@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using Cursor = UnityEngine.Cursor;
-
-namespace Research
+namespace ResearchUI
 {
     [UxmlElement]
     public partial class ResearchView : TabView, IInitiableUI, IUIElement
@@ -42,7 +39,7 @@ namespace Research
                 if(prevGroup > -1)
                     groups[prevGroup].Select(-1);
                 UIRefs.research.SetActive(node);
-                SceneRefs.ShowMessage($"Research Changed {node.nodeName}");
+                SceneRefs.ShowMessage($"Research Changed {node.Name}");
                 prevGroup = groups.IndexOf(group);
             }
         }

@@ -142,7 +142,7 @@ public static class PathFinder
         }
 
         // prep for elevators
-        foreach (Building el in MyGrid.buildings.Where(q => q is Elevator))
+        foreach (Building el in MyGrid.GetBuildings(q => q is Elevator))
         {
             GridPos gp = el.GetPos();
             foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q => q.name == el.id.ToString()).GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance).Skip(1))

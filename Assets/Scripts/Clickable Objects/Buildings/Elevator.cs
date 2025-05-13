@@ -64,6 +64,7 @@ public class Elevator : Building, IStorage
 
     public override void FinishBuild()
     {
+        localRes.stored.ammount = new();
         ((IStorage)this).SetupStorage(SceneRefs.jobQueue, false);
         base.FinishBuild();
     }

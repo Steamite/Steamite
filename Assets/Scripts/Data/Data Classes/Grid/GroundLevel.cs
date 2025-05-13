@@ -205,7 +205,7 @@ public class GroundLevel : MonoBehaviour
     /// <param name="load">If load is true creates, creates new roads and doesn't recycle entrypoints.</param>
     public void PlaceBuild(Building building, GridPos gridPos = null, bool load = false)
     {
-        MyGrid.buildings.Add(building);
+        MyGrid.Buildings.Add(building);
         if (gridPos == null)
             gridPos = building.GetPos();
         overlays.AddBuildingOverlay(gridPos, building.id);

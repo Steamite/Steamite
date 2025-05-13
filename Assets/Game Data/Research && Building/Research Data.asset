@@ -15,7 +15,7 @@ MonoBehaviour:
   Categories:
   - Name: Population
     Objects:
-    - nodeName: 
+    - Name: 
       id: 1616741493
       level: 0
       researched: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
       unlocks: 
       description: 
       lineColor: {r: 0, g: 0, b: 0, a: 0}
-    - nodeName: Research
+    - Name: Research
       id: 178465213
       level: 0
       researched: 0
@@ -51,10 +51,10 @@ MonoBehaviour:
 
         Lorem Ipsum Dolor et itsu'
       lineColor: {r: 0, g: 0, b: 0, a: 0}
-    - nodeName: House
+    - Name: House
       id: 651504100
       level: 0
-      researched: 1
+      researched: 0
       currentTime: -1
       researchTime: 15
       reseachCost:
@@ -68,41 +68,41 @@ MonoBehaviour:
       unlocks: e006623a
       description: 
       lineColor: {r: 0, g: 0, b: 0, a: 0}
-    - nodeName: 
-      id: 1724255617
+    - Name: node 1
+      id: 1408289332
       level: 1
       researched: 0
-      currentTime: -1
+      currentTime: 0
       researchTime: 200
       reseachCost:
         capacity: -1
         type: 
         ammount: 
-      nodeType: 0
-      nodeCategory: -1
-      nodeAssignee: -1
+      nodeType: 1
+      nodeCategory: 0
+      nodeAssignee: 2090065767
       unlockedBy: 
       unlocks: 
       description: 
-      lineColor: {r: 0.9686275, g: 0.9215687, b: 0.5529412, a: 0.50980395}
-    - nodeName: 
+      lineColor: {r: 1, g: 0, b: 0, a: 1}
+    - Name: Extension
       id: 442275305
       level: 1
       researched: 0
       currentTime: -1
-      researchTime: 200
+      researchTime: 15
       reseachCost:
-        capacity: -1
+        capacity: 15
         type: 
         ammount: 
-      nodeType: 0
-      nodeCategory: -1
-      nodeAssignee: -1
+      nodeType: 1
+      nodeCategory: 0
+      nodeAssignee: 1873593032
       unlockedBy: 
-      unlocks: 
+      unlocks: e006623a
       description: 
-      lineColor: {r: 0.5372549, g: 0, b: 0, a: 0.7607843}
-    - nodeName: Foundry
+      lineColor: {r: 0.8113208, g: 0.62379855, b: 0.62379855, a: 0.7607843}
+    - Name: Foundry
       id: 979502816
       level: 2
       researched: 0
@@ -115,14 +115,14 @@ MonoBehaviour:
       nodeType: 2
       nodeCategory: 1
       nodeAssignee: 1472558132
-      unlockedBy: bd29a30ae429d526
+      unlockedBy: bd29a30ae9955c1ae429d526
       unlocks: 
       description: 
-      lineColor: {r: 0.46246588, g: 1, b: 0, a: 1}
+      lineColor: {r: 0.1870589, g: 0.6698113, b: 0.27058825, a: 0.49019608}
     Icon: {fileID: 2800000, guid: ebd657dbff7382b49ac208b65a2fc976, type: 3}
   - Name: Production
     Objects:
-    - nodeName: 
+    - Name: 
       id: 823126285
       level: 0
       researched: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
       unlocks: 1b67a65bef39f217
       description: 
       lineColor: {r: 1, g: 0, b: 0, a: 1}
-    - nodeName: 
+    - Name: 
       id: 1537632027
       level: 1
       researched: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
       unlocks: 
       description: 
       lineColor: {r: 1, g: 0, b: 0, a: 1}
-    - nodeName: 
+    - Name: 
       id: 401750511
       level: 1
       researched: 0
@@ -173,7 +173,7 @@ MonoBehaviour:
       unlocks: 
       description: 
       lineColor: {r: 0.6187502, g: 1, b: 0, a: 1}
-    - nodeName: 
+    - Name: 
       id: 1861908460
       level: 2
       researched: 0

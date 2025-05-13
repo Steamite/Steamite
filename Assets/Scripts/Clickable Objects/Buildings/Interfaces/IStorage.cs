@@ -17,12 +17,12 @@ public interface IStorage
     public void SetupStorage(JobQueue jQ, bool fill = true)
     {
         LocalResources.stored.type = MyRes.resourceTemplate.type;
-        if (fill)
+        while (LocalResources.stored.ammount.Count < MyRes.resourceTemplate.type.Count)
         {
-            while (LocalResources.stored.ammount.Count < MyRes.resourceTemplate.type.Count)
-            {
-                LocalResources.stored.ammount.Add(400);
-            }
+            if (fill)
+                LocalResources.stored.ammount.Add(100);
+            else
+                LocalResources.stored.ammount.Add(0);
         }
         CanStore = new();
         for (int i = 0; i < LocalResources.stored.ammount.Count; i++)
@@ -30,7 +30,7 @@ public interface IStorage
             CanStore.Add(true);
         }
         jQ.storages.Add(this);
-        LocalResources.stored.capacity = 5000;
+        LocalResources.stored.capacity = 1000;
     }
 
     /// <summary>

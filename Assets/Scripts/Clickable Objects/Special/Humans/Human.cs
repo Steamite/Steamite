@@ -207,12 +207,12 @@ public class Human : ClickableObject
         specialization = s.specs;
         // house assigment
         if (s.houseID != -1)
-            MyGrid.buildings.Where(q => q.id == s.houseID).
+            MyGrid.Buildings.Where(q => q.id == s.houseID).
                 SingleOrDefault().GetComponent<House>().ManageAssigned(this, true);
 
         // workplace assigment
         if (s.workplaceId != -1)
-            MyGrid.buildings.Where(q => q.id == s.workplaceId).
+            MyGrid.Buildings.Where(q => q.id == s.workplaceId).
                 SingleOrDefault().GetComponent<IAssign>().ManageAssigned(this, true);
 
         base.Load(save);

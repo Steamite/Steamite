@@ -165,7 +165,7 @@ MonoBehaviour:
   name: 
   selected: 0
   id: -1
-  objectName: Elevator
+  objectName: Eleva
   localRes:
     stored:
       capacity: 1050

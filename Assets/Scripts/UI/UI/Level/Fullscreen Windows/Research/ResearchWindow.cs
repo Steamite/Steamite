@@ -1,5 +1,8 @@
+using BuildingStats;
+using ResearchUI;
 using System;
 using System.Collections.Generic;
+using TradeData.Stats;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
@@ -10,6 +13,7 @@ public class ResearchWindow : FullscreenWindow
 
     public ResearchNode currentResearch { get; private set; }
     [HideInInspector] public ResearchData researchData;
+    [HideInInspector] public BuildingStats.StatData statData;
     public event Action<ResearchNode> researchCompletion;
 
     public override void GetWindow()
@@ -18,6 +22,7 @@ public class ResearchWindow : FullscreenWindow
         UI = window.Q<TabView>() as IUIElement;
         ((IInitiableUI)UI).Init();
     }
+
     public async void NewGame()
     {
         researchData = Instantiate<ResearchData>(await Addressables.LoadAssetAsync<ResearchData>("Assets/Game Data/Research && Building/Research Data.asset").Task);
@@ -46,8 +51,9 @@ public class ResearchWindow : FullscreenWindow
 
     }
 
-    public void Init()
+    public async void Init()
     {
+        statData = Instantiate<BuildingStats.StatData>(await Addressables.LoadAssetAsync<BuildingStats.StatData>("Assets/Game Data/Research && Building/Stats.asset").Task);
         GetWindow();
         SceneRefs.researchAdapter.Init(DoResearch);
         ((IInitiableUI)UIRefs.bottomBar.Q<VisualElement>(className: "build-menu")).Init();
@@ -81,7 +87,7 @@ public class ResearchWindow : FullscreenWindow
 
     public void FinishResearch()
     {
-        SceneRefs.ShowMessage($"Research Finished {currentResearch.nodeName}");
+        SceneRefs.ShowMessage($"Research Finished {currentResearch.Name}");
         currentResearch = null;
         // TODO: Assign new one
         researchCompletion?.Invoke(currentResearch);

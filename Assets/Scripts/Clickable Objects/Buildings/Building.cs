@@ -7,6 +7,13 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
+public enum BuildingCategType
+{
+    Population,
+    Production,
+    Research
+}
+
 /// <summary>
 /// Class for buildings, which can be constructed on free tiles. 
 /// Each building needs atleast one free access point.
@@ -17,6 +24,11 @@ public class Building : StorageObject
     /// <summary>Used for remembering color.</summary>
     [SerializeField] protected List<Color> _materialColors;
     [SerializeField] protected List<Renderer> _meshRenderers;
+
+    /// <summary>
+    /// Mask saying which categories this building belongs to.
+    /// </summary>
+    public int BuildingCateg { get; protected set; }
 
     /// <summary>Building layout(entry points, anchor, ...).</summary>
     public BuildingGrid blueprint;
@@ -41,7 +53,7 @@ public class Building : StorageObject
     protected virtual void Awake() => GetColors();
 
     /// <summary>Creates a list from <see cref="MyGrid.buildings"/></summary>
-    public override void UniqueID() => CreateNewId(MyGrid.buildings.Select(q => q.id).ToList());
+    public override void UniqueID() => CreateNewId(MyGrid.Buildings.Select(q => q.id).ToList());
     /// <summary>
     /// Calculates positio using the anchor from <see cref="blueprint"/>.
     /// </summary>
@@ -196,7 +208,7 @@ public class Building : StorageObject
         // This happens when a building construction is finished.
         // If the building is selected(and InfoWindow is open), the information should refresh and show a different view.
         // The view is switched however, the bindings do not work.
-        if (!constructed)
+        if (!constructed && this is not IStorage)
         {
             localRes.stored = new();
         }
@@ -432,9 +444,10 @@ public class Building : StorageObject
 
 
     public virtual int CalculateMaxProgress() => cost.ammount.Sum() * 2;
-    
+
     #endregion
 
+    #region Editor
 #if UNITY_EDITOR
     public void Clone(Building prev)
     {
@@ -443,4 +456,5 @@ public class Building : StorageObject
         cost = prev.cost;
     }
 #endif
+    #endregion
 }

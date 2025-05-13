@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AbstractControls;
+using BuildingStats;
+using ResearchUI;
 using UnityEngine.UIElements;
 
 namespace BottomBar.Building
@@ -19,9 +21,13 @@ namespace BottomBar.Building
             pickingMode = PickingMode.Ignore;
         }
 
+        /// <summary>
+        /// Inits the
+        /// </summary>
         public void Init()
         {
             buildingData = SceneRefs.objectFactory.buildPrefabs;
+            StatData statData = UIRefs.research.statData;
             foreach (var item in buildingData.Categories)
             {
                 foreach (var wrapper in item.Objects)
@@ -30,27 +36,41 @@ namespace BottomBar.Building
                 }
             }
             
-            
             ResearchData researchData = UIRefs.research.researchData;
             foreach (var categ in researchData.Categories)
             {
                 foreach (var node in categ.Objects)
                 {
-                    if(node.nodeType == NodeType.Building && node.nodeAssignee > -1 && node.researched == false)
+                    if(node.nodeAssignee > -1)
                     {
-                        int i = buildingData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
-                        BuildingWrapper wrapper = buildingData.Categories[node.nodeCategory].Objects[i];
-                        if (wrapper != null)
+                        if (node.nodeType == NodeType.Building && node.researched == false)
                         {
-                            node.onFinishResearch += () => 
+                            int i = buildingData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
+                            if(i == -1)
                             {
-                                wrapper.unlocked = true;
-                                if (categGroup.SelectedChoice == node.nodeCategory)
+                                BuildingWrapper wrapper = buildingData.Categories[node.nodeCategory].Objects[i];
+                                if (wrapper != null)
                                 {
-                                    buildingList.UnlockActiveButton(i);
+                                    node.RegisterFinishCallback(() =>
+                                    {
+                                        wrapper.unlocked = true;
+                                        if (categGroup.SelectedChoice == node.nodeCategory)
+                                        {
+                                            buildingList.UnlockActiveButton(i);
+                                        }
+                                    });
+                                    wrapper.unlocked = false;
                                 }
-                            };
-                            wrapper.unlocked = false;
+                            }
+                        }
+                        else if (node.nodeType == NodeType.Stat && node.researched == true)
+                        {
+                            int i = statData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
+                            if(i == -1)
+                            {
+                                Stat stat = statData.Categories[node.nodeCategory].Objects[i];
+                                node.RegisterFinishCallback(stat.AddEffect);
+                            }
                         }
                     }
                 }
