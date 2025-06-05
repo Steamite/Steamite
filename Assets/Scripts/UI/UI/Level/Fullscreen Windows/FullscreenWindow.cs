@@ -29,7 +29,7 @@ public abstract class FullscreenWindow : MonoBehaviour
         isOpen = true;
         SceneRefs.gridTiles.DeselectObjects();
         MainShortcuts.DisableInput();
-        SceneRefs.infoWindow.Close();
+        SceneRefs.infoWindow?.Close();
         window.style.display = DisplayStyle.Flex;
         SceneRefs.tick.UIWindowToggle(false);
     }

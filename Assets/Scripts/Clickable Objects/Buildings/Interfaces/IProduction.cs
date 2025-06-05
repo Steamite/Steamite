@@ -6,7 +6,7 @@ public interface IProduction
     /// <summary>Current progress.</summary>
     public float CurrentTime { get; set; }
     /// <summary>Multiplies the weight of progress additions.</summary>
-    public int Modifier { get; set; }
+    public float Modifier { get; set; }
     /// <summary>Manual stop.</summary>
     public bool Stoped { get; set; }
     #endregion

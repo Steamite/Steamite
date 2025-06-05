@@ -243,7 +243,7 @@ namespace EditorWindows.Windows
                 {
                     el.parent.focusable = true;
                     ResourceCell cell = el.Q<ResourceCell>();
-                    cell.Open(((BuildingWrapper)dataGrid.itemsSource[i]).building?.cost, ((BuildingWrapper)dataGrid.itemsSource[i]).building, true);
+                    cell.Open(((BuildingWrapper)dataGrid.itemsSource[i]).building?.cost.EditorResource, ((BuildingWrapper)dataGrid.itemsSource[i]).building, true);
                 };
             #endregion
 
@@ -400,7 +400,7 @@ namespace EditorWindows.Windows
                     Building b = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
                     if (b is IResourceProduction)
                         cell.Open(
-                            ((IResourceProduction)b)?.ProductionCost,
+                            ((IResourceProduction)b)?.ProductionCost.EditorResource,
                             ((BuildingWrapper)dataGrid.itemsSource[i]).building, false);
                     else
                         cell.Open(null, null, false);
@@ -425,7 +425,7 @@ namespace EditorWindows.Windows
                     Building b = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
                     if (b is IResourceProduction)
                         cell.Open(
-                            ((IResourceProduction)b)?.ProductionYield,
+                            ((IResourceProduction)b)?.ProductionYield.EditorResource,
                             ((BuildingWrapper)dataGrid.itemsSource[i]).building, false);
                     else
                         cell.Open(null, null, false);
@@ -435,6 +435,30 @@ namespace EditorWindows.Windows
 
             #endregion
 
+            #region Mask
+            dataGrid.columns.Add(new()
+            {
+                name = "CategMask",
+                title = "Category Mask",
+                resizable = true,
+                width = 150,
+                makeCell = () => new MaskField(),
+                bindCell = (el, i) =>
+                {
+                    MaskField field = (MaskField)el;
+                    field.choices = Enum.GetNames(typeof(BuildingCategType)).ToList();
+                    field.value = ((BuildingWrapper)dataGrid.itemsSource[i]).building
+                        ? ((BuildingWrapper)dataGrid.itemsSource[i]).building.BuildingCateg
+                        : 0;
+                    field.RegisterValueChangedCallback(CategoryChange);
+                },
+                unbindCell = (el, i) =>
+                {
+                    MaskField field = (MaskField)el;
+                    field.UnregisterValueChangedCallback(CategoryChange);
+                },
+            });
+            #endregion
 
         }
 
@@ -614,6 +638,20 @@ namespace EditorWindows.Windows
                         GetPrefabPreview(Path.GetDirectoryName(AssetDatabase.GetAssetPath(wrapper.building)));
                     EditorUtility.SetDirty(data);
                     dataGrid.RefreshItem(i);
+                }
+            }
+        }
+
+        void CategoryChange(ChangeEvent<int> ev)
+        {
+            int i = GetRowIndex((VisualElement)ev.target);
+            Building prev = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
+            if (prev != null)
+            {
+                int categ = prev.BuildingCateg;
+                if(categ != ev.newValue)
+                {
+                    prev.BuildingCateg = ev.newValue;
                 }
             }
         }

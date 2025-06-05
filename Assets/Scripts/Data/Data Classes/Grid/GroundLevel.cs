@@ -180,11 +180,11 @@ public class GroundLevel : MonoBehaviour
                 building.constructionProgress = building.CalculateMaxProgress();
             if (!building.GetComponent<BuildPipe>())
             {
+                building.cost.Modifier = 1;
                 PlaceBuild(building, load: true);
-                if (building.GetComponent<IResourceProduction>() != null && building.constructed)
+                if (building is IResourceProduction)
                 {
-                    building.GetComponent<IResourceProduction>().RefreshStatus();
-                    building.GetComponent<IResourceProduction>().RequestRestock();
+                    ((IResourceProduction)building).Init(building.constructed);
                 }
             }
             else

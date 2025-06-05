@@ -28,12 +28,14 @@ public class Building : StorageObject
     /// <summary>
     /// Mask saying which categories this building belongs to.
     /// </summary>
-    public int BuildingCateg { get; protected set; }
+    [SerializeField] int buildingCategories;
+    /// <inheritdoc cref="buildingCategories"/>
+    public int BuildingCateg { get => buildingCategories; set => buildingCategories = value; }
 
     /// <summary>Building layout(entry points, anchor, ...).</summary>
     public BuildingGrid blueprint;
     /// <summary>Construction cost in resources.</summary>
-    public Resource cost;
+    [SerializeField] public ModifiableResource cost = new();
     /// <summary>Is constructed.</summary>
     public bool constructed;
     /// <summary>Is being deconstructed.</summary>
@@ -112,7 +114,6 @@ public class Building : StorageObject
         save.rotationY = transform.rotation.eulerAngles.y;
 
         save.blueprint = blueprint;
-        save.cost = cost;
         save.constructed = constructed;
         save.deconstructing = deconstructing;
         save.constructionProgress = constructionProgress;
@@ -122,12 +123,13 @@ public class Building : StorageObject
 
         return base.Save(save);
     }
+    
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
         objectName = (save as BSave).prefabName;
         blueprint = (save as BSave).blueprint;
-        cost = (save as BSave).cost;
+        cost.Init();
         constructed = (save as BSave).constructed;
         deconstructing = (save as BSave).deconstructing;
         constructionProgress = (save as BSave).constructionProgress;
@@ -348,16 +350,15 @@ public class Building : StorageObject
         for (int i = 0; i < _meshRenderers.Count; i++)
         {
             Color c = new(-1,-1,-1);
-            if (selected || SceneRefs.gridTiles.activeObject == this)
+            if (selected || SceneRefs.gridTiles.activeObject == this) { 
                 c = _meshRenderers[i].material.GetColor("_EmissionColor");
-
-            _meshRenderers[i].material = newMat;
-            if(c.r != -1)
-            {
+                
+                _meshRenderers[i].material = newMat;
                 _meshRenderers[i].material.EnableKeyword("_EMISSION");
                 _meshRenderers[i].material.SetColor("_EmissionColor", c);
             }
-
+            else
+                _meshRenderers[i].material = newMat;
 
             if (transparent)
                 _meshRenderers[i].material.color
@@ -443,7 +444,13 @@ public class Building : StorageObject
     } // saves the original color
 
 
-    public virtual int CalculateMaxProgress() => cost.ammount.Sum() * 2;
+    public virtual int CalculateMaxProgress() 
+    {
+        int result = cost.ammount.Sum() * 2;
+        if (result == 0)
+            result = 1;
+        return result;
+    } 
 
     #endregion
 

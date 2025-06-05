@@ -386,6 +386,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOpen: 0
   researchData: {fileID: 0}
+  statData: {fileID: 0}
 --- !u!1 &777753790
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,11 +1525,11 @@ MonoBehaviour:
   - {fileID: 8150810313726245683}
   - {fileID: 7072378217534680772}
   - {fileID: 1855733984}
-  - {fileID: 225780445}
   - {fileID: 6086404398923934763}
   beforeLoads:
   - {fileID: 4967022013944964016}
   - {fileID: 4967022013944964017}
+  - {fileID: 225780445}
 --- !u!114 &8150810313726245686
 MonoBehaviour:
   m_ObjectHideFlags: 0

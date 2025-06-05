@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
@@ -9,10 +10,10 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     #region Variables
     [SerializeField] int assignLimit;
     [SerializeField][Header("Production")] float productionTime;
-    [SerializeField] int productionModifier = 1;
+    [SerializeField] float productionModifier = 1;
 
-    [SerializeField] Resource productionCost;
-    [SerializeField] Resource productionYield;
+    [SerializeField] ModifiableResource productionCost = new();
+    [SerializeField] ModifiableResource productionYield = new();
     #endregion
 
     #region Properties
@@ -21,7 +22,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     [CreateProperty] public float CurrentTime { get; set; } = 0;
     [CreateProperty] public bool Stoped { get; set; } = false;
     public float ProdTime { get => productionTime; set => productionTime = value; }
-    public int Modifier { get => productionModifier; set => productionModifier = value; }
+    public float Modifier { get => productionModifier; set => productionModifier = value; }
     #endregion
 
     #region Assign
@@ -34,8 +35,8 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     [CreateProperty] public ProductionStates ProdStates { get; set; } = new();
     [CreateProperty] public StorageResource LocalResource { get => LocalRes; }
     [CreateProperty] public StorageResource InputResource { get; set; } = new();
-    public Resource ProductionCost { get => productionCost; }
-    public Resource ProductionYield { get => productionYield; }
+    public ModifiableResource ProductionCost { get => productionCost; }
+    public ModifiableResource ProductionYield { get => productionYield; }
     #endregion
 
     #endregion
@@ -90,7 +91,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
         {
             SceneRefs.jobQueue.AddJob(JobState.Pickup, this);
         }
-        ((IResourceProduction)this).RefreshStatus();
+        ((IResourceProduction)this).Init(constructed);
         base.Load(save);
     }
     #endregion

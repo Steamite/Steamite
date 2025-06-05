@@ -561,6 +561,7 @@ MonoBehaviour:
     mods: 
   _materialColors: []
   _meshRenderers: []
+  buildingCategories: 0
   blueprint:
     size:
       x: 2
@@ -607,8 +608,12 @@ MonoBehaviour:
       itemType: 3
   cost:
     capacity: -1
-    type: 01000000
-    ammount: 0a000000
+    type: 
+    ammount: 
+    baseResource:
+      capacity: 20
+      type: 02000000
+      ammount: 05000000
   constructed: 0
   deconstructing: 0
   constructionProgress: 0

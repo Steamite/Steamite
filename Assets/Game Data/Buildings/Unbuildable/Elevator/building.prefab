@@ -163,9 +163,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: 
-  selected: 0
   id: -1
-  objectName: Eleva
+  objectName: Elevator
   localRes:
     stored:
       capacity: 1050
@@ -176,6 +175,7 @@ MonoBehaviour:
     mods: 
   _materialColors: []
   _meshRenderers: []
+  buildingCategories: 0
   blueprint:
     size:
       x: 1
@@ -202,8 +202,12 @@ MonoBehaviour:
       itemType: 3
   cost:
     capacity: -1
-    type: 02000000
-    ammount: 05000000
+    type: 
+    ammount: 
+    baseResource:
+      capacity: -1
+      type: 01000000
+      ammount: 05000000
   constructed: 0
   deconstructing: 0
   constructionProgress: 0

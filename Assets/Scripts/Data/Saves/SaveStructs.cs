@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
-
 [Serializable]
 public class JobSave
 {
@@ -125,7 +123,6 @@ public class BSave : StorageObjectSave
     public float rotationY;
 
     public BuildingGrid blueprint;
-    public Resource cost;
     public bool constructed;
     public bool deconstructing;
     public float constructionProgress;
@@ -159,7 +156,7 @@ public class ProductionBSave : AssignBSave
 {
     public float prodTime = 20;
     public float currentTime = 0;
-    public int modifier = 1;
+    public float modifier = 1;
     public ProductionStates ProdStates;
 }
 

@@ -68,16 +68,16 @@ MonoBehaviour:
       unlocks: e006623a
       description: 
       lineColor: {r: 0, g: 0, b: 0, a: 0}
-    - Name: node 1
+    - Name: Yeild
       id: 1408289332
       level: 1
       researched: 0
       currentTime: 0
-      researchTime: 200
+      researchTime: 5
       reseachCost:
         capacity: -1
-        type: 
-        ammount: 
+        type: 01000000
+        ammount: 05000000
       nodeType: 1
       nodeCategory: 0
       nodeAssignee: 2090065767
@@ -133,7 +133,7 @@ MonoBehaviour:
         type: 
         ammount: 
       nodeType: 2
-      nodeCategory: -1
+      nodeCategory: 1
       nodeAssignee: -1
       unlockedBy: 
       unlocks: 1b67a65bef39f217

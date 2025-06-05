@@ -102,7 +102,7 @@ namespace RadioGroups
                         }
                         catch
                         {
-                            Debug.LogWarning($"wrong folder format in {paths[i]}");
+                            //Debug.LogWarning($"wrong folder format in {paths[i]}");
                         }
                     }
                     folders = folders.Where(q => q.path != null).OrderByDescending(q => q.date).ToArray();

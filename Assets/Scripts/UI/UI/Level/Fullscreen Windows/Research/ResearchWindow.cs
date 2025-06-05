@@ -2,6 +2,7 @@ using BuildingStats;
 using ResearchUI;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TradeData.Stats;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -21,6 +22,8 @@ public class ResearchWindow : FullscreenWindow
         base.GetWindow();
         UI = window.Q<TabView>() as IUIElement;
         ((IInitiableUI)UI).Init();
+        window.style.display = DisplayStyle.Flex;
+        window.schedule.Execute(() => window.style.display = DisplayStyle.None).ExecuteLater(15);
     }
 
     public async void NewGame()
@@ -41,14 +44,13 @@ public class ResearchWindow : FullscreenWindow
                 node.CurrentTime = researchSave.saveData[i][j];
             }
         }
-        foreach ((int cat, int index) queueItem in researchSave.queue)
+        foreach ((int cat, int id) queueItem in researchSave.queue)
         {
-            queue.Add(researchData.Categories[queueItem.cat].Objects[queueItem.index]);
+            queue.Add(researchData.Categories[queueItem.cat].Objects.Find(q=> q.id == queueItem.id));
         }
         if (queue.Count > 0)
             currentResearch = queue[0];
         Init();
-
     }
 
     public async void Init()
@@ -57,6 +59,30 @@ public class ResearchWindow : FullscreenWindow
         GetWindow();
         SceneRefs.researchAdapter.Init(DoResearch);
         ((IInitiableUI)UIRefs.bottomBar.Q<VisualElement>(className: "build-menu")).Init();
+        InitResearchStats();
+    }
+
+    void InitResearchStats()
+    {
+        foreach (var categ in researchData.Categories)
+        {
+            foreach (var node in categ.Objects)
+            {
+                if(node.nodeType == NodeType.Stat)
+                {
+                    int i = statData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
+                    Stat stat = statData.Categories[node.nodeCategory].Objects[i];
+                    if (node.researched)
+                    {
+                        stat.AddEffect();
+                    }
+                    else
+                    {
+                        node.RegisterFinishCallback(stat.AddEffect);
+                    }
+                }
+            }
+        }
     }
 
     public override void OpenWindow()

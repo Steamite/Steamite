@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BuildingStats
 {
@@ -59,12 +60,30 @@ namespace BuildingStats
                     // loop though the mask and do the effect
                     for (int i = 0; i < j; i++)
                     {
-                        if ((newMask & 1) == 1)
+                        if ((newMask & 1) == 1 || newMask == -1)
                         {
                             StatPair pair = pairs.First(q => q.type == (BuildingCategType)i);
-                            switch (pair.type)
+                            switch (pair.mod)
                             {
-
+                                case StatModifiers.Cost:
+                                    //_building.cost ;
+                                    break;
+                                case StatModifiers.AssignLimit:
+                                    ((IAssign)_building).AssignLimit += Convert.ToInt32(pair.modAmmount);
+                                    _building.UIUpdate(nameof(IAssign.AssignLimit));
+                                    break;
+                                case StatModifiers.ProdSpeed:
+                                    ((IProduction)_building).Modifier += pair.modAmmount * 0.01f;
+                                    _building.UIUpdate(nameof(IProduction.Modifier));
+                                    break;
+                                case StatModifiers.InputResource:
+                                    ((IResourceProduction)_building).ProductionCost.Modifier += pair.modAmmount * 0.01f;
+                                    _building.UIUpdate(nameof(IResourceProduction.ProductionCost));
+                                    break;
+                                case StatModifiers.ProductionYield:
+                                    ((IResourceProduction)_building).ProductionYield.Modifier += pair.modAmmount * 0.01f;
+                                    _building.UIUpdate(nameof(IProduction.Modifier));
+                                    break;
                             }
                             Debug.Log(pair.type);
                         }

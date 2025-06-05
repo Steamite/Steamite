@@ -579,6 +579,7 @@ MonoBehaviour:
     mods: 
   _materialColors: []
   _meshRenderers: []
+  buildingCategories: 2
   blueprint:
     size:
       x: 2
@@ -624,9 +625,13 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    capacity: 25
-    type: 0100000002000000
-    ammount: 0a00000005000000
+    capacity: -1
+    type: 
+    ammount: 
+    baseResource:
+      capacity: 5
+      type: 03000000
+      ammount: 0f000000
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
@@ -638,9 +643,17 @@ MonoBehaviour:
   productionModifier: 1
   productionCost:
     capacity: -1
-    type: 0100000002000000
-    ammount: 0200000001000000
+    type: 
+    ammount: 
+    baseResource:
+      capacity: -1
+      type: 0200000001000000
+      ammount: 0200000002000000
   productionYield:
-    capacity: 15
-    type: 02000000
-    ammount: 02000000
+    capacity: -1
+    type: 
+    ammount: 
+    baseResource:
+      capacity: -1
+      type: 02000000
+      ammount: 05000000
