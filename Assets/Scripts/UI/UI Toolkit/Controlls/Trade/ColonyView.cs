@@ -102,7 +102,7 @@ namespace TradeWindowElements
         }
 
         void ShowMenu(MouseEnterEvent eve, ColonyStat stat) =>
-            ToolkitUtils.localMenu.Open(stat, (VisualElement)eve.target);
+            ToolkitUtils.localMenu.UpdateContent(stat, (VisualElement)eve.target);
         void HideMenu(MouseLeaveEvent _) =>
             ToolkitUtils.localMenu.Close();
         void UpgradeStat(MouseDownEvent _, ColonyStat stat)

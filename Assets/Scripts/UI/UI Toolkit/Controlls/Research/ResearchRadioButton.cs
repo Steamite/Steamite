@@ -1,4 +1,5 @@
 using AbstractControls;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace ResearchUI
@@ -79,7 +80,7 @@ namespace ResearchUI
             nameLabel.text = node.Name;
             Add(nameLabel);
 
-            RegisterCallback<PointerEnterEvent>(_ => ToolkitUtils.localMenu.Open(node, this));
+            RegisterCallback<PointerEnterEvent>(_ => ToolkitUtils.localMenu.UpdateContent(node, this));
             RegisterCallback<PointerLeaveEvent>(_ => ToolkitUtils.localMenu.Close());
         }
 
@@ -91,40 +92,57 @@ namespace ResearchUI
         {
             if (node.researched)
                 return;
-            if (categ.CheckPrequisite(node, UnlockResearch))
+            if (categ.CheckPrequisite(node, () => UnlockResearch(false)))
             {
-                UnlockResearch();
                 if (node == UIRefs.research.currentResearch)
-                    Select();
+                {
+                    UnlockResearch(true);
+                    SelectWithoutTransition(false); // updates the group but without checks
+                    ToolkitUtils.GetParentOfType<ResearchRadioButtonGroup>(this).SetSelection(value);
+                }
+                else
+                    UnlockResearch(false);
+                    
             }
             else
                 state = ButtonState.Unavailable;
         }
-
         protected override bool SelectChange(bool UpdateGroup)
         {
-            if (state == ButtonState.Available && MyRes.CanAfford(node.reseachCost))
+            if(UpdateGroup == false)
             {
-                if (UIRefs.research.currentResearch == null || UIRefs.research.currentResearch.id == node.id)
+                base.SelectChange(UpdateGroup);
+                return true;
+            }
+            else if (state == ButtonState.Available && MyRes.CanAfford(node.reseachCost))
+            {
+                if (UIRefs.research.currentResearch == null || UpdateGroup == false)
                 {
                     if (node.CurrentTime < 0)
                     {
                         node.CurrentTime = 0;
                         MyRes.PayCostGlobal(node.reseachCost);
                     }
-                    if (UIRefs.research.currentResearch == null)
-                        ToolkitUtils.localMenu.Open(node, this);
+                    ToolkitUtils.localMenu.UpdateContent(node, this, true);
                     base.SelectChange(UpdateGroup);
                     RemoveFromClassList(AVAILABLE_CLASS);
                     return true;
                 }
                 else
                 {
+                    ToolkitUtils.ChangeClassWithoutTransition(AVAILABLE_CLASS, "forceHover", this);
                     ConfirmWindow.window.Open(
                         () =>
                         {
-                            UIRefs.research.SetActive(node);
+                            // Clear research(queue[WIP]) and select this button.
+                            UIRefs.research.SetActive(null);
+                            ToolkitUtils.RemoveClassWithoutTransition("forceHover", this);
                             Select();
+                        },
+                        () =>
+                        {
+                            RemoveFromClassList("forceHover");
+                            AddToClassList(AVAILABLE_CLASS);
                         },
                         "Change Research",
                         "Do you want to change active Research?");
@@ -144,10 +162,11 @@ namespace ResearchUI
                 lineUp.Fill();
         }
 
-        void UnlockResearch()
+        void UnlockResearch(bool init)
         {
             state = ButtonState.Available;
-            AddToClassList(AVAILABLE_CLASS);
+            if (init == false)
+                AddToClassList(AVAILABLE_CLASS);
             if (lineDown != null)
                 lineDown.Fill();
         }

@@ -53,7 +53,9 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
             {
                 if (gameSpeed.triggered)
                 {
-                    timeButtons.OutsideTrigger(Mathf.RoundToInt(gameSpeed.ReadValue<float>()));
+                    int i = Mathf.RoundToInt(gameSpeed.ReadValue<float>());
+                    Debug.Log("New: " + i);
+                    timeButtons.OutsideTrigger(i);
                 }
             }
 

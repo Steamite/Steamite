@@ -32,15 +32,14 @@ public class Resource
     #endregion
 
     #region Overrides
-    // override object.Equals
-    public override bool Equals(object resource)
+    public override bool Equals(object _resource)
     {
-        if (resource == null || GetType() != resource.GetType())
+        if (_resource == null || _resource is not Resource)
         {
             return false;
         }
 
-        Resource cmpRes = (Resource)resource;
+        Resource cmpRes = _resource as Resource;
         if (cmpRes.type.Count != type.Count)
             return false;
         for (int i = 0; i < type.Count; i++)

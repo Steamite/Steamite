@@ -28,6 +28,32 @@ public static class ToolkitUtils
             element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
         }
     }
+    public static void RemoveClassWithoutTransition(string oldClass, VisualElement element)
+    {
+        if (oldClass != "" && element != null)
+        {
+            element.style.transitionDuration = new List<TimeValue> { new TimeValue(0, TimeUnit.Second) };
+            element.RemoveFromClassList(oldClass);
+            element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
+        }
+    }
+    public static void AddClassWithoutTransition(string newClass, VisualElement element)
+    {
+        if (newClass != "" && element != null)
+        {
+            element.style.transitionDuration = new List<TimeValue> { new TimeValue(0, TimeUnit.Second) };
+            element.AddToClassList(newClass);
+            element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
+        }
+    }
+
+
+    public static void ChangeWithoutTransitions(VisualElement element, Action action)
+    {
+        element.style.transitionDuration = new List<TimeValue> { new TimeValue(0, TimeUnit.Second) };
+        action();
+        element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
+    }
 
     public static void Init()
     {

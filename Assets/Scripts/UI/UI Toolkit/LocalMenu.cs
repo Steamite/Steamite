@@ -22,7 +22,14 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
         description = menu.ElementAt(3) as Label;
     }
 
-    public void Open(object data, VisualElement element)
+    /// <summary>
+    /// Fills the local menu using <paramref name="data"/> positions it near the <paramref name="element"/>.
+    /// If <paramref name="onlyUpdate"/> is false then also opens it.
+    /// </summary>
+    /// <param name="data">Data object.</param>
+    /// <param name="element">positioning element</param>
+    /// <param name="onlyUpdate">If true then don't open the window(only update if it was already visible).</param>
+    public void UpdateContent(object data, VisualElement element, bool onlyUpdate = false)
     {
         Rect vec = new();
         switch (data)
@@ -97,7 +104,8 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
         menu.style.width = 300;
         menu.style.left = vec.x + vec.width + 25;
         menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
-        Show();
+        if(onlyUpdate == false)
+            Show();
     }
 
     void Show()

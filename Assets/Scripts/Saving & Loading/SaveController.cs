@@ -32,8 +32,9 @@ public class SaveController : MonoBehaviour, IAfterLoad
     public static JsonSerializer PrepSerializer()
     {
         JsonSerializer jsonSerializer = new();
-        jsonSerializer.TypeNameHandling = TypeNameHandling.Auto;
+        jsonSerializer.TypeNameHandling = TypeNameHandling.All;
         jsonSerializer.Formatting = Formatting.Indented;
+        jsonSerializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
         return jsonSerializer;
     }
     #endregion
@@ -228,11 +229,11 @@ public class SaveController : MonoBehaviour, IAfterLoad
         }
         catch (Exception e)
         {
+            Debug.LogError(e);
             if (writer != null)
                 writer.Dispose();
-            if (jsonWriter != null)
-                jsonWriter.Close();
-            throw e;            
+            if (jsonWriter != null && jsonWriter.WriteState != WriteState.Closed)
+                jsonWriter.Close();  
         }
     }
     #endregion

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -48,7 +49,7 @@ public class BindingContext
 
 
 /// <summary>Inspection window for everithing in <see cref="InfoMode</summary>
-public class InfoWindow : MonoBehaviour, IAfterLoad
+public class InfoWindow : MonoBehaviour, IBeforeLoad
 {
     #region Variables
     /// <summary>For styling resouces in UI elements.</summary>
@@ -85,7 +86,7 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
     #endregion
 
     /// <summary>Fills all control references.</summary>
-    public void Init()
+    public IEnumerator Init()
     {
         activeBindings = new();
         lastInfo = InfoMode.None;
@@ -115,6 +116,7 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
             };
 
         constructedElement = buildingElement.Q<VisualElement>("Constructed");
+        yield return null;
     }
 
     #region Reseting Bindings
@@ -388,25 +390,6 @@ public class InfoWindow : MonoBehaviour, IAfterLoad
         context.context.SetBinding(context.bindingId, binding);
         context.context.schedule.Execute(() =>
         {
-            if (dataObject is ProductionBuilding && binding.dataSourcePath.ToString() == nameof(IResourceProduction.InputResource))
-            {
-                // All Debug.Log() return same information(except {((IUpdatable)dataObject).HasActiveBinding()})
-                // even if the binding doesnt work
-                DataSourceContext con;
-                Debug.Log(
-                    $"visual element: {context.context.name}\n" +
-                    $"element panel: {context.context.panel}\n" +
-                    $"element prop: {context.bindingId}\n" +
-                    $"data source: {binding.dataSourcePath}\n" +
-                    $"{dataObject}\n" +
-                    $"{((IUpdatable)dataObject).HasActiveBinding()}\n" +
-                    $"{context.context.TryGetDataSourceContext(context.bindingId, out con)}");
-                foreach (var item in context.context.GetBindingInfos())
-                {
-                    Debug.Log(item);
-                }
-                Debug.Log(con);
-            }
             activeBindings.Add(context);
 
             // Uses the binding to update UI (look inside ClickableObject(163) for implementation)

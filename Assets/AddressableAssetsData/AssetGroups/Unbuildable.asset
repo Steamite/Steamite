@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: fa8b07218e3cbdb43a8ce56bea5e7713
   m_SerializeEntries:
   - m_GUID: d5e9d374952f75f419dccb4131d61884
-    m_Address: Eleva
+    m_Address: Elevator
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

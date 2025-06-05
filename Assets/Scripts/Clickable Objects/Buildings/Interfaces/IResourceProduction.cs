@@ -15,10 +15,10 @@ public interface IResourceProduction : IProduction
     [CreateProperty] StorageResource InputResource { get; set; }
 
     /// <summary>Cost of one production cycle.</summary>
-    Resource ProductionCost { get; }
+    ModifiableResource ProductionCost { get; }
 
     /// <summary>Production cycle yeild.</summary>
-    Resource ProductionYield { get; }
+    ModifiableResource ProductionYield { get; }
     #endregion
 
     #region Storing
@@ -156,6 +156,17 @@ public interface IResourceProduction : IProduction
     {
         if (LocalResource.carriers.Count == 0 && !SceneRefs.jobQueue.pickupNeeded.Contains((StorageObject)this))
             SceneRefs.jobQueue.AddJob(JobState.Pickup, (ClickableObject)this);
+    }
+
+    void Init(bool constructed)
+    {
+        ProductionCost.Init();
+        ProductionYield.Init();
+        if (constructed)
+        {
+            RequestRestock();
+            RequestPickup();
+        }
     }
     #endregion
 }

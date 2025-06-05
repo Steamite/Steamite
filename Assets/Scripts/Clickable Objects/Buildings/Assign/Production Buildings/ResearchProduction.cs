@@ -11,8 +11,8 @@ public class ResearchProduction : Building, IProduction, IAssign
     [SerializeField] int assignLimit;
     public float ProdTime { get; set; }
     public float CurrentTime { get; set; }
-    [SerializeField] int modifier;
-    public int Modifier { get => modifier; set => modifier = value; }
+    [SerializeField] float modifier;
+    public float Modifier { get => modifier; set => modifier = value; }
     public bool Stoped { get; set; }
 
     #region Window

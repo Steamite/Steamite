@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -327,6 +329,13 @@ public class LoadingScreen : MonoBehaviour
         MyGrid.worldName = worldName;
 
         MyRes.ActivateResources(newGame);
+
+        actionText.text = "Press any button";
+        InputSystem.onAnyButtonPress.CallOnce((action) => EnableLevelContollers(newGame));
+    }
+    
+    async void EnableLevelContollers(bool newGame)
+    {
         await SceneManager.UnloadSceneAsync("LoadingScreen");
         SceneRefs.FinishLoad();
 
@@ -334,5 +343,6 @@ public class LoadingScreen : MonoBehaviour
         humanActivation = null;
         SceneRefs.tick.InitTicks(newGame);
         UIRefs.timeBar.GetComponent<IToolkitController>().Init(UIRefs.timeBar.rootVisualElement);
+        // stating controlls
     }
 }

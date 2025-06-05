@@ -60,6 +60,7 @@ namespace EditorWindows.Research
                     }
                 });
             tree = rootVisualElement.Q<ScrollView>();
+
             categorySelector.index = 0;
         }
         #endregion
@@ -73,6 +74,7 @@ namespace EditorWindows.Research
             {
                 RecalculateAvailable(true);
                 RecalculateAvailable(false);
+                tree.Clear();
                 for (int i = 0; i < 5; i++)
                 {
                     VisualElement row = new();

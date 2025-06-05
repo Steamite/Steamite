@@ -26,5 +26,8 @@ MonoBehaviour:
         modAmmount: 2
     - Name: ABCD
       id: 2090065767
-      pairs: []
+      pairs:
+      - type: 1
+        mod: 3
+        modAmmount: -50
     Icon: {fileID: 2800000, guid: abf13685b7e55ff4e960d786dde4c5ba, type: 3}

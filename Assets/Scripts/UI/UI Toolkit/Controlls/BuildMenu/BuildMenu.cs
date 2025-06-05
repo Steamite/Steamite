@@ -27,7 +27,6 @@ namespace BottomBar.Building
         public void Init()
         {
             buildingData = SceneRefs.objectFactory.buildPrefabs;
-            StatData statData = UIRefs.research.statData;
             foreach (var item in buildingData.Categories)
             {
                 foreach (var wrapper in item.Objects)
@@ -41,35 +40,23 @@ namespace BottomBar.Building
             {
                 foreach (var node in categ.Objects)
                 {
-                    if(node.nodeAssignee > -1)
+                    if(node.nodeType == NodeType.Building && node.nodeAssignee > -1 && node.researched == false)
                     {
-                        if (node.nodeType == NodeType.Building && node.researched == false)
+                        int i = buildingData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
+                        if (i != -1)
                         {
-                            int i = buildingData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
-                            if(i == -1)
+                            BuildingWrapper wrapper = buildingData.Categories[node.nodeCategory].Objects[i];
+                            if (wrapper != null)
                             {
-                                BuildingWrapper wrapper = buildingData.Categories[node.nodeCategory].Objects[i];
-                                if (wrapper != null)
+                                node.RegisterFinishCallback(() =>
                                 {
-                                    node.RegisterFinishCallback(() =>
+                                    wrapper.unlocked = true;
+                                    if (categGroup.SelectedChoice == node.nodeCategory)
                                     {
-                                        wrapper.unlocked = true;
-                                        if (categGroup.SelectedChoice == node.nodeCategory)
-                                        {
-                                            buildingList.UnlockActiveButton(i);
-                                        }
-                                    });
-                                    wrapper.unlocked = false;
-                                }
-                            }
-                        }
-                        else if (node.nodeType == NodeType.Stat && node.researched == true)
-                        {
-                            int i = statData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
-                            if(i == -1)
-                            {
-                                Stat stat = statData.Categories[node.nodeCategory].Objects[i];
-                                node.RegisterFinishCallback(stat.AddEffect);
+                                        buildingList.UnlockActiveButton(i);
+                                    }
+                                });
+                                wrapper.unlocked = false;
                             }
                         }
                     }
