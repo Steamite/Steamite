@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,6 +91,4 @@ public class SceneRefs : MonoBehaviour
         yield return new WaitForSecondsRealtime(2f);
         ((Label)miscellaneous.rootVisualElement[1]).text = "";
     }
-
-
 }
