@@ -331,7 +331,19 @@ public class LoadingScreen : MonoBehaviour
         MyRes.ActivateResources(newGame);
 
         actionText.text = "Press any button";
-        InputSystem.onAnyButtonPress.CallOnce((action) => EnableLevelContollers(newGame));
+        InputSystem.onAnyButtonPress.CallOnce(
+            (action) => StartCoroutine(CancelInput(newGame)));
+    }
+    
+    /// <summary>
+    /// Wait one frame to forget the pressed value.
+    /// </summary>
+    /// <param name="newGame"></param>
+    /// <returns></returns>
+    IEnumerator CancelInput(bool newGame)
+    {
+        yield return new();
+        EnableLevelContollers(newGame);
     }
     
     /// <summary>
@@ -341,19 +353,18 @@ public class LoadingScreen : MonoBehaviour
     /// <param name="newGame">Information for ticks</param>
     async void EnableLevelContollers(bool newGame)
     {
-        try
+        StopCoroutine(CancelInput(newGame));
+        for (int i = SceneManager.sceneCount - 1; i > -1; i--)
         {
-            await SceneManager.UnloadSceneAsync("LoadingScreen");
-            SceneRefs.FinishLoad();
+            if (SceneManager.GetSceneAt(i).name == "LoadingScreen" && SceneManager.GetSceneAt(i).isLoaded)
+                await SceneManager.UnloadSceneAsync("LoadingScreen");
+        }
 
-            humanActivation?.Invoke();
-            humanActivation = null;
-            SceneRefs.tick.InitTicks(newGame);
-            UIRefs.timeBar.GetComponent<IToolkitController>().Init(UIRefs.timeBar.rootVisualElement);
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning("Failed to Load the scene:" + e);
-        }
+        SceneRefs.FinishLoad();
+
+        humanActivation?.Invoke();
+        humanActivation = null;
+        SceneRefs.tick.InitTicks(newGame);
+        UIRefs.toolkitShortcuts.GetComponent<IToolkitController>().Init(UIRefs.toolkitShortcuts.rootVisualElement);
     }
 }

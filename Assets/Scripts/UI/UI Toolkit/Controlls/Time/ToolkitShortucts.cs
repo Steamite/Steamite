@@ -51,7 +51,8 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
             }
             else
             {
-                if (gameSpeed.triggered)
+                // 
+                if (gameSpeed.triggered && gameSpeed.phase == InputActionPhase.Performed)
                 {
                     int i = Mathf.RoundToInt(gameSpeed.ReadValue<float>());
                     Debug.Log("New: " + i);
