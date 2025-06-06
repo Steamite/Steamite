@@ -83,7 +83,12 @@ MonoBehaviour:
       nodeAssignee: 2090065767
       unlockedBy: 
       unlocks: 
-      description: 
+      description: 'dsadmasdjpasjdpassdsa
+
+        $
+
+        Production: InputResource
+        40%'
       lineColor: {r: 1, g: 0, b: 0, a: 1}
     - Name: Extension
       id: 442275305
@@ -100,7 +105,14 @@ MonoBehaviour:
       nodeAssignee: 1873593032
       unlockedBy: 
       unlocks: e006623a
-      description: 
+      description: 'dsadasdasdas
+
+        dsadasdasd
+
+        $
+
+        Population,
+        Research: ProdSpeed 10%'
       lineColor: {r: 0.8113208, g: 0.62379855, b: 0.62379855, a: 0.7607843}
     - Name: Foundry
       id: 979502816

@@ -7,9 +7,10 @@ using UnityEngine.UIElements;
 using UnityEngine;
 using System;
 using System.Linq;
-using static UnityEditor.Progress;
 using System.Collections.Generic;
 using BottomBar.Building;
+using UnityEditor.UIElements;
+using Params;
 
 public class BuildingStatEditor : DataGridWindow<BuildingStatCateg, Stat>
 {
@@ -60,8 +61,9 @@ public class BuildingStatEditor : DataGridWindow<BuildingStatCateg, Stat>
         {
             name = "Mask",
             title = "Mask",
-            stretchable = true,
-            resizable = true,
+            stretchable = false,
+            resizable = false,
+            width = 600,
             makeCell = () => new ListView(),
             bindCell = (el, i) =>
             {
@@ -82,19 +84,25 @@ public class BuildingStatEditor : DataGridWindow<BuildingStatCateg, Stat>
                     {
                         VisualElement element = new();
                         element.style.flexDirection = FlexDirection.Row;
-                        element.Add(new EnumField(BuildingCategType.Population));
-                        element.Add(new EnumField(StatModifiers.AssignLimit));
-                        element.Add(new FloatField() {});
+                        MaskField field = new MaskField(Enum.GetNames(typeof(BuildingCategType)).ToList(), 0);
+                        field.style.width = 400;
+                        element.Add(field);
+                        EnumField enumField = new EnumField(StatModifiers.Cost);
+                        enumField.style.width = 100;
+                        element.Add(enumField);
+                        FloatField floatField = new FloatField();
+                        floatField.style.width = 50;
+                        element.Add(floatField);
                         return element;
                     };
                 listView.bindItem = 
                     (el, j) => 
                     {
-                        EnumField enumField = el[0] as EnumField;
-                        enumField.value = ((Stat)dataGrid.itemsSource[i]).pairs[j].type;
-                        enumField.RegisterValueChangedCallback<Enum>(PairTypeChange);
+                        MaskField maskField = el[0] as MaskField;
+                        maskField.value = ((Stat)dataGrid.itemsSource[i]).pairs[j].mask;
+                        maskField.RegisterValueChangedCallback<int>(PairTypeChange);
 
-                        enumField = el[1] as EnumField;
+                        EnumField enumField = el[1] as EnumField;
                         enumField.value = ((Stat)dataGrid.itemsSource[i]).pairs[j].mod;
                         enumField.RegisterValueChangedCallback<Enum>(ModChange);
 
@@ -105,7 +113,7 @@ public class BuildingStatEditor : DataGridWindow<BuildingStatCateg, Stat>
                 listView.unbindItem =
                     (el, j) =>
                     {
-                        ((EnumField)el[0]).UnregisterValueChangedCallback<Enum>(PairTypeChange);
+                        ((MaskField)el[0]).UnregisterValueChangedCallback<int>(PairTypeChange);
                         ((EnumField)el[1]).UnregisterValueChangedCallback<Enum>(ModChange);
                         ((FloatField)el[2]).UnregisterValueChangedCallback<float>(FloatChange);
                     };
@@ -119,7 +127,7 @@ public class BuildingStatEditor : DataGridWindow<BuildingStatCateg, Stat>
         #endregion
     }
 
-    void PairTypeChange(ChangeEvent<Enum> ev)
+    void PairTypeChange(ChangeEvent<int> ev)
     {
         VisualElement el = (VisualElement)ev.target;
         int i = el.parent.parent.IndexOf(el.parent);
@@ -128,14 +136,15 @@ public class BuildingStatEditor : DataGridWindow<BuildingStatCateg, Stat>
         int j = GetRowIndex(view);
 
         List<StatPair> pairs = ((Stat)dataGrid.itemsSource[j]).pairs;
-        pairs[i].type = (BuildingCategType)ev.newValue;
+        pairs[i].mask = ev.newValue;
+        /*
         for (int x = pairs.Count -1; x > -1; x--)
         {
             if(pairs.Count(q=> q.type == pairs[x].type) > 1)
             {
                 pairs.RemoveAt(x);
             }
-        }
+        }*/
         ((Stat)dataGrid.itemsSource[j]).pairs = pairs;
         dataGrid.RefreshItem(j);
         EditorUtility.SetDirty(data);

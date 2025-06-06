@@ -308,9 +308,9 @@ public class Building : StorageObject
     public virtual Chunk Deconstruct(GridPos instantPos)
     {
         Resource r = new();
+        MyRes.ManageRes(r, cost, 1);
         if (constructed)
         {
-            MyRes.ManageRes(r, cost, 1);
             for (int i = 0; i < r.ammount.Count; i++)
             {
                 r.ammount[i] /= 2;
@@ -444,7 +444,7 @@ public class Building : StorageObject
     } // saves the original color
 
 
-    public virtual int CalculateMaxProgress() 
+    public virtual int CalculateMaxProgress()
     {
         int result = cost.ammount.Sum() * 2;
         if (result == 0)
