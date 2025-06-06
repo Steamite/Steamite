@@ -19,7 +19,7 @@ namespace BuildingStats
     public class StatPair
     {
         /// <summary>Which buildings does this effect.</summary>
-        public BuildingCategType type;
+        public int mask;
         /// <summary>Which properies does this effect.</summary>
         public StatModifiers mod;
         /// <summary>How much much it effects it.</summary>
@@ -44,25 +44,20 @@ namespace BuildingStats
         {
             // create a mask with the affected categories
             int mask = 0;
-            for (int i = 0; i < pairs.Count; i++)
-            {
-                mask = 1 << ((int)pairs[i].type) | mask;
-            }
-
             List<Building> buildings = MyGrid.Buildings;
             int j = Enum.GetNames(typeof(BuildingCategType)).Length;
-            foreach (var _building in buildings)
+            foreach (var pair in pairs)
             {
-                // filter buildings using the mask 
-                int newMask = _building.BuildingCateg & mask;
-                if (newMask > 0)
+                mask = pair.mask;
+                foreach (var _building in buildings)
                 {
+                    // filter buildings using the mask 
+                    int newMask = _building.BuildingCateg & mask;
                     // loop though the mask and do the effect
-                    for (int i = 0; i < j; i++)
+                    while(newMask > 0)
                     {
                         if ((newMask & 1) == 1 || newMask == -1)
                         {
-                            StatPair pair = pairs.First(q => q.type == (BuildingCategType)i);
                             switch (pair.mod)
                             {
                                 case StatModifiers.Cost:
@@ -85,14 +80,16 @@ namespace BuildingStats
                                     _building.UIUpdate(nameof(IProduction.Modifier));
                                     break;
                             }
-                            Debug.Log(pair.type);
+                            Debug.Log(pair.mask);
                         }
                         newMask = newMask >> 1;
                         if (newMask == 0)
                             break;
                     }
+                    
                 }
             }
+            
         }
 
         public void AddEffect()

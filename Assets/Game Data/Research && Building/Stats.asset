@@ -18,16 +18,13 @@ MonoBehaviour:
     - Name: Extension
       id: 1873593032
       pairs:
-      - type: 0
+      - mask: -1
         mod: 2
         modAmmount: 10
-      - type: 1
-        mod: 1
-        modAmmount: 2
     - Name: ABCD
       id: 2090065767
       pairs:
-      - type: 1
+      - mask: 2
         mod: 3
-        modAmmount: -50
+        modAmmount: 40
     Icon: {fileID: 2800000, guid: abf13685b7e55ff4e960d786dde4c5ba, type: 3}

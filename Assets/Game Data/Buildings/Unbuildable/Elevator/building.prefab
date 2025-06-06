@@ -202,8 +202,8 @@ MonoBehaviour:
       itemType: 3
   cost:
     capacity: -1
-    type: 
-    ammount: 
+    type: 01000000
+    ammount: 05000000
     baseResource:
       capacity: -1
       type: 01000000

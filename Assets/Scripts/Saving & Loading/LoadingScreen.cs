@@ -324,7 +324,7 @@ public class LoadingScreen : MonoBehaviour
     /// Things that need to be after both loading and creating a new game.
     /// </summary>
     /// <param name="newGame">Is it the new game(used for calling the same methods just with different paramaters).</param>
-    async void AfterLevelLoad(bool newGame)
+    void AfterLevelLoad(bool newGame)
     {
         MyGrid.worldName = worldName;
 
@@ -334,15 +334,26 @@ public class LoadingScreen : MonoBehaviour
         InputSystem.onAnyButtonPress.CallOnce((action) => EnableLevelContollers(newGame));
     }
     
+    /// <summary>
+    /// Unloads the loading screen. 
+    /// And enables user input.
+    /// </summary>
+    /// <param name="newGame">Information for ticks</param>
     async void EnableLevelContollers(bool newGame)
     {
-        await SceneManager.UnloadSceneAsync("LoadingScreen");
-        SceneRefs.FinishLoad();
+        try
+        {
+            await SceneManager.UnloadSceneAsync("LoadingScreen");
+            SceneRefs.FinishLoad();
 
-        humanActivation?.Invoke();
-        humanActivation = null;
-        SceneRefs.tick.InitTicks(newGame);
-        UIRefs.timeBar.GetComponent<IToolkitController>().Init(UIRefs.timeBar.rootVisualElement);
-        // stating controlls
+            humanActivation?.Invoke();
+            humanActivation = null;
+            SceneRefs.tick.InitTicks(newGame);
+            UIRefs.timeBar.GetComponent<IToolkitController>().Init(UIRefs.timeBar.rootVisualElement);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("Failed to Load the scene:" + e);
+        }
     }
 }

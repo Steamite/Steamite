@@ -1,9 +1,10 @@
-﻿using ResearchUI;
+﻿using BuildingStats;
+using ResearchUI;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEditorInternal.VR;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -93,7 +94,7 @@ namespace EditorWindows.Research
             {
                 ColorField colorF = new();
                 colorF.value = _nodeData.lineColor;
-                Debug.Log("bbbbbb");
+                //Debug.Log("bbbbbb");
                 colorF.RegisterValueChangedCallback<Color>(
                     (ev) =>
                     {
@@ -234,6 +235,7 @@ namespace EditorWindows.Research
             TextField field = new();
             field.AddToClassList("description-field");
             field.value = _nodeData.description;
+            field.style.height = 100;
             field.multiline = true;
             field.verticalScrollerVisibility = ScrollerVisibility.AlwaysVisible;
             field.RegisterCallback<FocusOutEvent>(
@@ -244,6 +246,10 @@ namespace EditorWindows.Research
                 });
 
             body.Add(field);
+
+            var a = _nodeData;
+            Button button = new(() => GetDescr(a, editor)) { name= "descr", text = "Get descr" };
+            body.Add(button);
             #endregion
 
             Add(body);
@@ -269,12 +275,58 @@ namespace EditorWindows.Research
                         .availableObjects.FirstOrDefault(q => q.GetName() == newVal).id;
                     break;
                 case NodeType.Stat:
-                    _nodeData.nodeAssignee = 
-                        editor.statData.Categories[_nodeData.nodeCategory]
-                        .availableObjects.FirstOrDefault(q => q.GetName() == newVal).id;
+                    BuildingStats.Stat stat = editor.statData.Categories[_nodeData.nodeCategory]
+                        .availableObjects.FirstOrDefault(q => q.GetName() == newVal);
+                    _nodeData.nodeAssignee = stat.id;
+                    GetDescr(_nodeData, editor);
                     break;
             }
             editor.RecalculateAvailableByNode(_nodeData);
+        }
+
+        void GetDescr(ResearchNode _nodeData, ResearchEditor editor)
+        {
+            if(_nodeData.nodeAssignee > -1)
+            {
+                BuildingStats.Stat stat = editor.statData.Categories[_nodeData.nodeCategory]
+                    .Objects.FirstOrDefault(q => q.id == _nodeData.nodeAssignee);
+                if (stat == null)
+                    return;
+                string statDescription = "";
+                string[] strings = Enum.GetNames(typeof(BuildingCategType));
+                foreach (var pair in stat.pairs)
+                {
+                    statDescription += "\n";
+                    int mask = pair.mask;
+                    bool prev = false;
+                    if(mask == -1)
+                    {
+                        statDescription += "Everything";
+                    }
+                    else
+                    {
+                        for (int i = 0; i < strings.Length; i++)
+                        {
+                            if ((mask & 1) == 1)
+                            {
+                                if (prev)
+                                    statDescription += ", ";
+                                else
+                                    prev = true;
+                                statDescription += strings[i];
+                            }
+                            mask = mask >> 1;
+                            if (mask == 0)
+                                break;
+                        }
+                    }
+                    statDescription += $": {pair.mod} {pair.modAmmount}%";
+                }
+                strings = _nodeData.description.Split('$');
+                _nodeData.description = $"{strings[0]}${statDescription}";
+                //this.Q
+                editor.SaveChanges();
+            }
         }
 
         /// <summary>Toggles the elements <see cref="NodeType.Dummy"/>.</summary>
@@ -295,6 +347,7 @@ namespace EditorWindows.Research
             {
                 body[i].style.display = body[i] is EnumField ? DisplayStyle.Flex : style;
             }
+            body.Q<Button>("descr").style.display = type == NodeType.Stat ? DisplayStyle.Flex : DisplayStyle.None;
             bottomConnect.style.display = style;
         }
 

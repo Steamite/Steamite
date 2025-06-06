@@ -31,6 +31,7 @@ namespace BottomBar.Building
             {
                 foreach (var wrapper in item.Objects)
                 {
+                    wrapper.building.cost.Init();
                     wrapper.unlocked = true;
                 }
             }

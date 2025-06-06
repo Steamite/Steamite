@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>Unities Saving.</summary>
 public class SaveController : MonoBehaviour, IAfterLoad
@@ -22,7 +23,19 @@ public class SaveController : MonoBehaviour, IAfterLoad
 
     void OnApplicationQuit()
     {
-        SaveGame("", true);
+        bool level = true;
+        bool loaded = false;
+        string s;
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            s = SceneManager.GetSceneAt(i).name;
+            if (s == "Level")
+                level = true;
+            else if (s == "LoadingScreen")
+                loaded = false;
+        }
+        if(level && loaded)
+            SaveGame("", true);
     }
 
     /// <summary>
