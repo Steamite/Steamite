@@ -1,7 +1,9 @@
+using BuildingStats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -201,6 +203,47 @@ namespace ResearchUI
             }
         }
 
+        public string GetDescr(BuildingStats.Stat stat)
+        {
+            if (stat == null)
+                return description;
+            string statDescription = "";
+            string[] strings = Enum.GetNames(typeof(BuildingCategType));
+            foreach (var pair in stat.pairs)
+            {
+                statDescription += "\n";
+                int mask = pair.mask;
+                bool prev = false;
+                if (mask == -1)
+                {
+                    statDescription += "Everything";
+                }
+                else
+                {
+                    for (int i = 0; i < strings.Length; i++)
+                    {
+                        if ((mask & 1) == 1)
+                        {
+                            if (prev)
+                                statDescription += ", ";
+                            else
+                                prev = true;
+                            statDescription += strings[i];
+                        }
+                        mask = mask >> 1;
+                        if (mask == 0)
+                            break;
+                    }
+                }
+                if (pair.percent)
+                    statDescription += $": {pair.mod} {pair.modAmmount}%";
+                else
+                    statDescription += $": {pair.mod} by {pair.modAmmount}";
+            }
+            strings = description.Split('$');
+            description = $"{strings[0]}${statDescription}";
+            return description;
+        }
 #endif
         #endregion
     }

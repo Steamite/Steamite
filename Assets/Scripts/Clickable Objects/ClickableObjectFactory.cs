@@ -219,5 +219,6 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         if (!buttons.IsDone)
             yield return buttons;
         buildPrefabs = buttons.Result;
+        buildPrefabs.Categories.SelectMany(q => q.Objects).Select(q => q.building).ToList().ForEach(q => q.InitModifiers());
     }
 }

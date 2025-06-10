@@ -129,7 +129,6 @@ public class Building : StorageObject
     {
         objectName = (save as BSave).prefabName;
         blueprint = (save as BSave).blueprint;
-        cost.Init();
         constructed = (save as BSave).constructed;
         deconstructing = (save as BSave).deconstructing;
         constructionProgress = (save as BSave).constructionProgress;
@@ -147,6 +146,7 @@ public class Building : StorageObject
             {
                 SceneRefs.jobQueue.AddJob(JobState.Deconstructing, this);
             }
+            InitModifiers();
         }
         else
         {
@@ -406,7 +406,7 @@ public class Building : StorageObject
     }
 
     /// <summary>
-    /// Entry point to call for creating building that are stationary.
+    /// Entry point to call for creating building that are stationary. (loading and placing)
     /// Do not call for moving blueprints.
     /// </summary>
     public virtual void PlaceBuilding(bool loading = false)
@@ -421,6 +421,7 @@ public class Building : StorageObject
         MyRes.UpdateResource(cost, -1);
         if (loading)
         {
+            InitModifiers();
             maximalProgress = CalculateMaxProgress();
             ChangeRenderMode(true);
         }
@@ -432,6 +433,13 @@ public class Building : StorageObject
         }
 
     }
+
+    public virtual void InitModifiers()
+    {
+        cost.Init();
+        ((IModifiable)localRes).Init();
+    }
+
 
     /// <summary>
     /// Fills <see cref="myColor"/>.

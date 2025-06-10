@@ -166,8 +166,9 @@ MonoBehaviour:
   id: -1
   objectName: Elevator
   localRes:
+    baseCapacity: 750
     stored:
-      capacity: 1050
+      capacity: 500
       type: 
       ammount: 
     requests: []

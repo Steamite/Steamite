@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>Helps with fulfiling resource orders and make logistics more efficient.</summary>
 [Serializable]
-public class StorageResource
+public class StorageResource : IModifiable
 {
     #region Variables
+    
+    public ModValue Modifier { get; set; }
+
+    public int baseCapacity;
     /// <summary>Stored resources that are realy there.</summary>
     public Resource stored;
     /// <summary>All resources that were requested(store && take).</summary>
@@ -36,6 +41,7 @@ public class StorageResource
     }
     #endregion
 
+    #region Requests
     /// <summary>
     /// Adds a request for moving resources.<br/>
     /// </summary>
@@ -83,6 +89,7 @@ public class StorageResource
         }
         return human;
     }
+
     /// <summary>
     /// returns future resources
     /// </summary>
@@ -112,6 +119,7 @@ public class StorageResource
         }
         return futureRes;
     }
+
     /// <summary>
     /// Links the <paramref name="h"/> using <see cref="carrierIDs"/>, which is assigned when loading.
     /// </summary>
@@ -134,4 +142,13 @@ public class StorageResource
             }
         }
     }
+#endregion
+
+    #region Modifications
+    public void RecalculateMod()
+    {
+        stored.capacity = Mathf.RoundToInt(baseCapacity * Modifier.percentMod);
+        stored.capacity += Modifier.absoluteMod;
+    }
+    #endregion
 }

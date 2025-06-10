@@ -135,7 +135,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: 
-  selected: 0
   id: -1
   objectName: House
   localRes:
@@ -148,6 +147,7 @@ MonoBehaviour:
     mods: 
   _materialColors: []
   _meshRenderers: []
+  buildingCategories: 1
   blueprint:
     size:
       x: 2
@@ -196,6 +196,10 @@ MonoBehaviour:
     capacity: 150
     type: 01000000
     ammount: 0a000000
+    baseResource:
+      capacity: -1
+      type: 
+      ammount: 
   constructed: 0
   deconstructing: 0
   constructionProgress: 0

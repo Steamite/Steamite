@@ -335,9 +335,15 @@ namespace EditorWindows.Windows
                 bindCell = (el, i) =>
                 {
                     IntegerField field = el.Q<IntegerField>();
-                    if (((BuildingWrapper)dataGrid.itemsSource[i]).building is IAssign)
+                    Building buildingWrapper = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
+                    if (buildingWrapper is IAssign)
                     {
-                        field.value = ((IAssign)((BuildingWrapper)dataGrid.itemsSource[i]).building).AssignLimit;
+                        if (((IAssign)buildingWrapper).AssignLimit == null)
+                        {
+                            ((IAssign)buildingWrapper).AssignLimit = new();
+                            EditorUtility.SetDirty(buildingWrapper);
+                        }
+                        field.value = ((IAssign)buildingWrapper).AssignLimit.BaseValue;
                         field.SetEnabled(true);
                         field.RegisterValueChangedCallback(AssignChange);
                     }
@@ -460,7 +466,29 @@ namespace EditorWindows.Windows
             });
             #endregion
 
+            dataGrid.columns.Add(new()
+            {
+                name = "Capacity",
+                title = "Capacity",
+                resizable = true,
+                width = 75,
+                makeCell = () => new IntegerField(),
+                bindCell = (el, i) =>
+                {
+                    IntegerField field = (IntegerField)el;
+                    field.value = ((BuildingWrapper)dataGrid.itemsSource[i]).building
+                        ? ((BuildingWrapper)dataGrid.itemsSource[i]).building.LocalRes.baseCapacity
+                        : 0;
+                    field.RegisterValueChangedCallback(StorageCapacityChanged);
+                },
+                unbindCell = (el, i) =>
+                {
+                    IntegerField field = (IntegerField)el;
+                    field.UnregisterValueChangedCallback(StorageCapacityChanged);
+                },
+            });
         }
+
 
         #region Base
         void AssetChange(ChangeEvent<Object> ev)
@@ -655,13 +683,19 @@ namespace EditorWindows.Windows
                 }
             }
         }
+        void StorageCapacityChanged(ChangeEvent<int> ev)
+        {
+            int i = GetRowIndex((VisualElement)ev.target);
+            ((BuildingWrapper)dataGrid.itemsSource[i]).building.LocalRes.baseCapacity = ev.newValue;
+            EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
+        }
         #endregion
 
         #region Special
         void AssignChange(ChangeEvent<int> ev)
         {
             int i = GetRowIndex((VisualElement)ev.target);
-            ((IAssign)((BuildingWrapper)dataGrid.itemsSource[i]).building).AssignLimit = ev.newValue;
+            ((IAssign)((BuildingWrapper)dataGrid.itemsSource[i]).building).AssignLimit.BaseValue = ev.newValue;
             EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
         }
 

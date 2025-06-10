@@ -8,22 +8,27 @@ namespace BuildingStats
 {
     public enum StatModifiers
     {
+        Nothing,
         Cost,
         AssignLimit,
         ProdSpeed,
         InputResource,
-        ProductionYield
+        ProductionYield,
+        Capacity
     }
 
     [Serializable]
     public class StatPair
     {
-        /// <summary>Which buildings does this effect.</summary>
+        /// <summary>Which buildings are effected.</summary>
         public int mask;
-        /// <summary>Which properies does this effect.</summary>
+        public int underProp = 0;
+        /// <summary>Which properies are effected.</summary>
         public StatModifiers mod;
         /// <summary>How much much it effects it.</summary>
         public float modAmmount;
+        /// <summary>If the modification is absolute or by a percentage;</summary>
+        public bool percent;
     }
 
     [Serializable]
@@ -44,7 +49,10 @@ namespace BuildingStats
         {
             // create a mask with the affected categories
             int mask = 0;
-            List<Building> buildings = MyGrid.Buildings;
+            List<Building> buildings = MyGrid.Buildings
+                .Union(SceneRefs.objectFactory.buildPrefabs.Categories
+                    .SelectMany(q => q.Objects)
+                        .Select(w => w.building)).ToList();
             int j = Enum.GetNames(typeof(BuildingCategType)).Length;
             foreach (var pair in pairs)
             {
@@ -58,29 +66,7 @@ namespace BuildingStats
                     {
                         if ((newMask & 1) == 1 || newMask == -1)
                         {
-                            switch (pair.mod)
-                            {
-                                case StatModifiers.Cost:
-                                    //_building.cost ;
-                                    break;
-                                case StatModifiers.AssignLimit:
-                                    ((IAssign)_building).AssignLimit += Convert.ToInt32(pair.modAmmount);
-                                    _building.UIUpdate(nameof(IAssign.AssignLimit));
-                                    break;
-                                case StatModifiers.ProdSpeed:
-                                    ((IProduction)_building).Modifier += pair.modAmmount * 0.01f;
-                                    _building.UIUpdate(nameof(IProduction.Modifier));
-                                    break;
-                                case StatModifiers.InputResource:
-                                    ((IResourceProduction)_building).ProductionCost.Modifier += pair.modAmmount * 0.01f;
-                                    _building.UIUpdate(nameof(IResourceProduction.ProductionCost));
-                                    break;
-                                case StatModifiers.ProductionYield:
-                                    ((IResourceProduction)_building).ProductionYield.Modifier += pair.modAmmount * 0.01f;
-                                    _building.UIUpdate(nameof(IProduction.Modifier));
-                                    break;
-                            }
-                            Debug.Log(pair.mask);
+                            HandleCases(_building, pair);
                         }
                         newMask = newMask >> 1;
                         if (newMask == 0)
@@ -92,6 +78,36 @@ namespace BuildingStats
             
         }
 
+        void HandleCases(Building building, StatPair pair)
+        {
+            switch (pair.mod)
+            {
+                case StatModifiers.Cost:
+                    //_building.cost ;
+                    break;
+                case StatModifiers.AssignLimit:
+                    ((IModifiable)((IAssign)building).AssignLimit).AddMod(pair);
+                    building.UIUpdate(nameof(IAssign.AssignLimit));
+                    break;
+                case StatModifiers.ProdSpeed:
+                    //((IModifiable)((IProduction)building).ProductionCost).AddMod(pair);
+                    //((IProduction)building).Modifier += pair.modAmmount * 0.01f;
+                    building.UIUpdate(nameof(IProduction.Modifier));
+                    break;
+                case StatModifiers.InputResource:
+                    ((IModifiable)((IResourceProduction)building).ProductionCost).AddMod(pair);
+                    building.UIUpdate(nameof(IResourceProduction.ProductionCost));
+                    break;
+                case StatModifiers.ProductionYield:
+                    ((IModifiable)((IResourceProduction)building).ProductionYield).AddMod(pair);
+                    building.UIUpdate(nameof(IResourceProduction.ProductionYield));
+                    break;
+                case StatModifiers.Capacity:
+                    //building.LocalRes.stored.capacity = 
+                    break;
+            }
+            Debug.Log(pair.mask);
+        }
         public void AddEffect()
         {
             Mask(true);
@@ -110,6 +126,6 @@ namespace BuildingStats
     [CreateAssetMenu(fileName = "Stats", menuName = "UI Data/Stats", order = 2)]
     public class StatData : DataHolder<BuildingStatCateg, Stat>
     {
-
+        
     }
 }

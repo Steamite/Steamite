@@ -6,7 +6,7 @@ public interface IAssign
 {
     [CreateProperty] public List<Human> Assigned { get; set; }
     /// <summary>Needs to have a field in the class, so it can be serialized.</summary>
-    public int AssignLimit { get; set; }
+    [CreateProperty] public ModifiableInteger AssignLimit { get; set; }
 
     #region Assigment
     /// <summary>

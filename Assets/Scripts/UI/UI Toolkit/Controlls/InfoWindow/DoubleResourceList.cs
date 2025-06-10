@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -26,6 +27,7 @@ namespace InfoWindowElements
     [UxmlElement]
     public partial class DoubleResourceList : ResourceList
     {
+        [CreateProperty]List<UIResource> secondResource;
         /// <summary>Display as x/y or x (y).</summary>
         [UxmlAttribute] protected bool cost;
 
@@ -69,7 +71,7 @@ namespace InfoWindowElements
         /// <inheritdoc/>
         public override void Open(object data)
         {
-            DataBinding binding = null;
+            DataBinding mainBinding = null;
             switch (data)
             {
                 case Building:
@@ -79,13 +81,21 @@ namespace InfoWindowElements
                         // DEBUG_Binding example binding
                         // Creates a list that's used as itemSource, containg a static resouce and a dynamic binded resource.
                         if (cost)
-                            binding = SetupResTypes(((IResourceProduction)b).ProductionCost, nameof(IResourceProduction.InputResource));
+                            mainBinding = SetupResTypes(
+                                ((IResourceProduction)b).ProductionCost,
+                                nameof(IResourceProduction.ProductionCost), 
+                                nameof(IResourceProduction.InputResource),
+                                data);
                         else
-                            binding = SetupResTypes(((IResourceProduction)b).ProductionYield, nameof(Building.LocalRes));
+                            mainBinding = SetupResTypes(
+                                ((IResourceProduction)b).ProductionYield,
+                                nameof(IResourceProduction.ProductionYield),
+                                nameof(Building.LocalRes),
+                                data);
                     }
                     else
                         break;
-                    binding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage.stored));
+                    mainBinding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage.stored));
                     break;
 
                 case LevelsTab:
@@ -93,12 +103,12 @@ namespace InfoWindowElements
                     Resource resource = tab.LevelData.costs[tab.SelectedLevel];
 
                     if (cost)
-                        binding = SetupResTypes(resource, nameof(ResourceDisplay.GlobalResources));
+                        mainBinding = SetupResTypes(resource, nameof(ResourceDisplay.GlobalResources));
                     else
                         throw new NotImplementedException();
 
 
-                    binding.sourceToUiConverters.AddConverter((ref Resource globalStorage) =>
+                    mainBinding.sourceToUiConverters.AddConverter((ref Resource globalStorage) =>
                     {
                         tab.UpdateCostView();
                         return ToUIRes(globalStorage);
@@ -118,7 +128,7 @@ namespace InfoWindowElements
                 default:
                     throw new NotImplementedException(data.ToString());
             }
-            SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+            SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), mainBinding, data);
         }
 
 
@@ -149,7 +159,28 @@ namespace InfoWindowElements
                         0,
                         resource.ammount[i],
                         resource.type[i]));
+
             return BindingUtil.CreateBinding(propName);
+        }
+
+        protected DataBinding SetupResTypes(Resource resource, string secondPropName, string propName, object data)
+        {
+            DataBinding mainBind = SetupResTypes(resource, propName);
+            DataBinding dataBinding = BindingUtil.CreateBinding(secondPropName);
+            dataBinding.sourceToUiConverters.AddConverter((ref ModifiableResource secRes) => UpdateSecondResource(secRes));
+            SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(secondResource)), dataBinding, data);
+            return mainBind;
+        }
+
+        protected virtual List<UIResource> UpdateSecondResource(Resource resource)
+        {
+            Debug.Log(resource);
+            for (int i = 0; i < resource.type.Count; i++)
+            {
+                ((DoubleUIResource)resources[i]).secondAmmount = resource.ammount[i];
+            }
+            resources = resources;
+            return resources;
         }
         #endregion
 

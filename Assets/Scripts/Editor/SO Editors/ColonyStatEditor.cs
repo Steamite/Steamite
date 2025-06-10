@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [CustomPropertyDrawer(typeof(StatData))]
-public class StatEditor : PropertyDrawer
+public class ColonyStatEditor : PropertyDrawer
 {
     public override VisualElement CreatePropertyGUI(SerializedProperty property)
     {

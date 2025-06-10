@@ -126,7 +126,7 @@ public static class MyGrid
     public static void SetBuilding(Building building, bool load = false)
     {
         GridPos gridPos = building.GetPos();
-        levels[gridPos.y].PlaceBuild(building, gridPos, load);
+        levels[gridPos.y].RegisterBuilding(building, gridPos, load);
     }
 
     public static void UnsetRock(Rock rock)

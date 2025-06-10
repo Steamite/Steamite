@@ -216,8 +216,6 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                     binding = BindingUtil.CreateBinding(nameof(building.constructionProgress));
                     binding.sourceToUiConverters.AddConverter((ref float progress) => $"Progress: {(progress / building.maximalProgress) * 100:0}%");
                     RegisterTempBinding(new(inConstructionElement.Q<Label>("Progress"), "text"), binding, building);
-
-
                      
                     if (building.deconstructing)
                     {

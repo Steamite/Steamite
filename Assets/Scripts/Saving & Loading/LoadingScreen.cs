@@ -342,7 +342,7 @@ public class LoadingScreen : MonoBehaviour
     /// <returns></returns>
     IEnumerator CancelInput(bool newGame)
     {
-        yield return new();
+        yield return new WaitForSeconds(0.1f);
         EnableLevelContollers(newGame);
     }
     
