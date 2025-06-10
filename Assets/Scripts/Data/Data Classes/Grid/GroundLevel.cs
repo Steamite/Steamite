@@ -180,8 +180,8 @@ public class GroundLevel : MonoBehaviour
                 building.constructionProgress = building.CalculateMaxProgress();
             if (!building.GetComponent<BuildPipe>())
             {
-                building.cost.Modifier = 1;
-                PlaceBuild(building, load: true);
+                building.InitModifiers();
+                RegisterBuilding(building, load: true);
                 if (building is IResourceProduction)
                 {
                     ((IResourceProduction)building).Init(building.constructed);
@@ -203,7 +203,7 @@ public class GroundLevel : MonoBehaviour
     /// <param name="building">Building thats being placed.</param>
     /// <param name="gridPos">building anchor position.</param>
     /// <param name="load">If load is true creates, creates new roads and doesn't recycle entrypoints.</param>
-    public void PlaceBuild(Building building, GridPos gridPos = null, bool load = false)
+    public void RegisterBuilding(Building building, GridPos gridPos = null, bool load = false)
     {
         MyGrid.Buildings.Add(building);
         if (gridPos == null)

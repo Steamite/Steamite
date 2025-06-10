@@ -569,8 +569,9 @@ MonoBehaviour:
   id: -1
   objectName: Foundry
   localRes:
+    baseCapacity: 50
     stored:
-      capacity: 20
+      capacity: 50
       type: 
       ammount: 
     requests: []
@@ -625,34 +626,36 @@ MonoBehaviour:
       itemType: 3
   cost:
     capacity: -1
-    type: 
-    ammount: 
+    type: 03000000
+    ammount: 05000000
     baseResource:
       capacity: 5
       type: 03000000
-      ammount: 0f000000
+      ammount: 05000000
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 30
   categoryID: 1
   wrapperID: 1472558132
-  assignLimit: 3
+  assignLimit:
+    baseValue: 5
+    currentValue: 5
   productionTime: 10
   productionModifier: 1
   productionCost:
     capacity: -1
-    type: 
-    ammount: 
+    type: 0200000001000000
+    ammount: 0500000005000000
     baseResource:
       capacity: -1
       type: 0200000001000000
-      ammount: 0200000002000000
+      ammount: 0500000005000000
   productionYield:
     capacity: -1
-    type: 
-    ammount: 
+    type: 02000000
+    ammount: 0a000000
     baseResource:
-      capacity: -1
+      capacity: 50
       type: 02000000
-      ammount: 05000000
+      ammount: 0a000000

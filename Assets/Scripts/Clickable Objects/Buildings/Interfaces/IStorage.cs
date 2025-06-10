@@ -12,7 +12,6 @@ public interface IStorage
     /// <summary>
     /// Assigns all resource types and setups base storage resources.
     /// </summary>
-    /// <param name="templateRes">Clones resource types.</param>
     /// <param name="jQ">Reference to register this object to global storage list.</param>
     public void SetupStorage(JobQueue jQ, bool fill = true)
     {
@@ -30,7 +29,6 @@ public interface IStorage
             CanStore.Add(true);
         }
         jQ.storages.Add(this);
-        LocalResources.stored.capacity = 1000;
     }
 
     /// <summary>

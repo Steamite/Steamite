@@ -125,6 +125,11 @@ public partial class ResourceCell : ResourceList
         }
         return element.parent.IndexOf(element);
     }
+
+    /// <summary>
+    /// Changes the ammount of a given type (<paramref name="evt"/>).
+    /// </summary>
+    /// <param name="evt">Event with the new value and changed element.</param>
     private void ChangeType(ChangeEvent<Enum> evt)
     {
         int i = GetRowIndex((VisualElement)evt.target);
@@ -140,6 +145,11 @@ public partial class ResourceCell : ResourceList
             resource.type[i] = (ResourceType)evt.newValue;
         EditorUtility.SetDirty(whatToSave);
     }
+
+    /// <summary>
+    /// Changes the ammount of a given type (<paramref name="evt"/>).
+    /// </summary>
+    /// <param name="evt">Event with the new value and changed element.</param>
     private void ChangeVal(ChangeEvent<int> evt)
     {
         int i = GetRowIndex((VisualElement)evt.target);
@@ -148,6 +158,12 @@ public partial class ResourceCell : ResourceList
     }
     #endregion
 
+    /// <summary>
+    /// Preps the resource List using <paramref name="_resource"/>.
+    /// </summary>
+    /// <param name="_resource">Editing resource.</param>
+    /// <param name="_whatToSave">Object containing the resource.</param>
+    /// <param name="_cost">Is it a cost resource?</param>
     public void Open(Resource _resource, Object _whatToSave, bool _cost)
     {
         resource = _resource;

@@ -8,7 +8,7 @@ using UnityEngine;
 public class ProductionBuilding : Building, IAssign, IResourceProduction
 {
     #region Variables
-    [SerializeField] int assignLimit;
+    [SerializeField] ModifiableInteger assignLimit;
     [SerializeField][Header("Production")] float productionTime;
     [SerializeField] float productionModifier = 1;
 
@@ -28,15 +28,15 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     #region Assign
     [CreateProperty] public List<Human> Assigned { get; set; } = new();
 
-    [CreateProperty] public int AssignLimit { get => assignLimit; set => assignLimit = value; }
+    [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
     #endregion
 
     #region Resources
     [CreateProperty] public ProductionStates ProdStates { get; set; } = new();
     [CreateProperty] public StorageResource LocalResource { get => LocalRes; }
     [CreateProperty] public StorageResource InputResource { get; set; } = new();
-    public ModifiableResource ProductionCost { get => productionCost; }
-    public ModifiableResource ProductionYield { get => productionYield; }
+    [CreateProperty] public ModifiableResource ProductionCost { get => productionCost; set => productionCost = value; }
+    [CreateProperty] public ModifiableResource ProductionYield { get => productionYield; set => productionYield = value; }
     #endregion
 
     #endregion
@@ -134,6 +134,14 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     #endregion
 
     #region Construction & Deconstruction
+
+    public override void InitModifiers()
+    {
+        base.InitModifiers();
+        ((IModifiable)AssignLimit).Init();
+        productionCost.Init();
+        productionYield.Init();
+    }
     /// <summary>
     /// <inheritdoc/>
     /// And requests resources for production.
@@ -253,7 +261,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     {
         if (add)
         {
-            if (Assigned.Count == assignLimit)
+            if (Assigned.Count == assignLimit.currentValue)
                 return false;
             JobData job = PathFinder.FindPath(
                 new List<ClickableObject>() { this },

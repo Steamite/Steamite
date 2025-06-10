@@ -551,8 +551,9 @@ MonoBehaviour:
   id: -1
   objectName: Research
   localRes:
+    baseCapacity: 10
     stored:
-      capacity: -1
+      capacity: 10
       type: 
       ammount: 
     requests: []
@@ -607,8 +608,8 @@ MonoBehaviour:
       itemType: 3
   cost:
     capacity: -1
-    type: 
-    ammount: 
+    type: 02000000
+    ammount: 05000000
     baseResource:
       capacity: 20
       type: 02000000
@@ -619,7 +620,9 @@ MonoBehaviour:
   maximalProgress: 20
   categoryID: 1
   wrapperID: 1197943099
-  assignLimit: 1
+  assignLimit:
+    baseValue: 1
+    currentValue: 1
   modifier: 0
 --- !u!210 &9080560569971430985
 SortingGroup:

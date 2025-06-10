@@ -246,10 +246,6 @@ namespace EditorWindows.Research
                 });
 
             body.Add(field);
-
-            var a = _nodeData;
-            Button button = new(() => GetDescr(a, editor)) { name= "descr", text = "Get descr" };
-            body.Add(button);
             #endregion
 
             Add(body);
@@ -286,46 +282,11 @@ namespace EditorWindows.Research
 
         void GetDescr(ResearchNode _nodeData, ResearchEditor editor)
         {
-            if(_nodeData.nodeAssignee > -1)
+            if (_nodeData.nodeAssignee > -1)
             {
-                BuildingStats.Stat stat = editor.statData.Categories[_nodeData.nodeCategory]
-                    .Objects.FirstOrDefault(q => q.id == _nodeData.nodeAssignee);
-                if (stat == null)
-                    return;
-                string statDescription = "";
-                string[] strings = Enum.GetNames(typeof(BuildingCategType));
-                foreach (var pair in stat.pairs)
-                {
-                    statDescription += "\n";
-                    int mask = pair.mask;
-                    bool prev = false;
-                    if(mask == -1)
-                    {
-                        statDescription += "Everything";
-                    }
-                    else
-                    {
-                        for (int i = 0; i < strings.Length; i++)
-                        {
-                            if ((mask & 1) == 1)
-                            {
-                                if (prev)
-                                    statDescription += ", ";
-                                else
-                                    prev = true;
-                                statDescription += strings[i];
-                            }
-                            mask = mask >> 1;
-                            if (mask == 0)
-                                break;
-                        }
-                    }
-                    statDescription += $": {pair.mod} {pair.modAmmount}%";
-                }
-                strings = _nodeData.description.Split('$');
-                _nodeData.description = $"{strings[0]}${statDescription}";
-                //this.Q
-                editor.SaveChanges();
+                string descr = _nodeData.GetDescr(editor.statData.Categories[_nodeData.nodeCategory]
+                    .Objects.FirstOrDefault(q => q.id == _nodeData.nodeAssignee));
+                this.Q<TextField>(className:"description-field").value = descr;
             }
         }
 
@@ -347,7 +308,6 @@ namespace EditorWindows.Research
             {
                 body[i].style.display = body[i] is EnumField ? DisplayStyle.Flex : style;
             }
-            body.Q<Button>("descr").style.display = type == NodeType.Stat ? DisplayStyle.Flex : DisplayStyle.None;
             bottomConnect.style.display = style;
         }
 

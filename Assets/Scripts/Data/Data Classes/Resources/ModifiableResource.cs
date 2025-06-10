@@ -1,56 +1,44 @@
 using Mono.Cecil;
 using System;
+using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Used with <see cref="Building"/>s for resources that can be modified using stats.
+/// Has a base resource that stores the base from which the resource is actualy calculated.
+/// </summary>
 [Serializable]
-public class ModifiableResource : Resource
+public class ModifiableResource : Resource, IModifiable
 {
-    [SerializeField] public Resource baseResource = new Resource();
+    /// <summary>Template resource</summary>
+    [SerializeField] Resource baseResource = new Resource();
+
 #if UNITY_EDITOR
+    /// <inheritdoc cref="baseResource"/>
     public Resource EditorResource => baseResource;
 #endif
-    [NonSerialized] float modifier = 1;
-    [NonSerialized] bool init = false;
-    public float Modifier 
-    { 
-        get => modifier; 
-        set 
-        { 
-            modifier = value;
-            RecalculateCurrentResource();
-        }
-    }
 
-    public ModifiableResource()
+    /// <summary>Current resource modifier(multiplier)</summary>
+    public ModValue Modifier { get; set; }
+
+
+    public ModifiableResource(){}
+
+    /// <summary>Cycles though the base resource and recalculates the current resource.</summary>
+    public void RecalculateMod()
     {
-
-    }
-
-    void RecalculateCurrentResource()
-    {
-        if(init == false)
-        {
-            type = baseResource.type;
-            ammount = baseResource.ammount;
-        }
-
         for (int x = 0; x < baseResource.ammount.Count; x++)
         {
-            ammount[x] = Mathf.RoundToInt(baseResource.ammount[x] * modifier);
+            ammount[x] = Mathf.RoundToInt(baseResource.ammount[x] * Modifier.percentMod) + Modifier.absoluteMod;
         }
     }
 
+    /// <summary>Sets the <see cref="resourceModifier"/> to 1 and copies <see cref="baseResource"/>to the current one</summary>
     public void Init()
     {
-        modifier = 1;
-        init = false;
-        RecalculateCurrentResource();
-    }
-    public void SetBaseRes(Resource _baseResouce)
-    {
-        baseResource = _baseResouce;
-        modifier = 1;
-        init = false;
-        RecalculateCurrentResource();
+        type = baseResource.type.ToList();
+        ammount = baseResource.ammount.ToList();
+        Modifier = new();
+        RecalculateMod();
     }
 }

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Properties;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -30,6 +32,18 @@ namespace InfoWindowViews
         Label assignLabel;
         /// <summary>Tab view for managment.</summary>
         TabView view;
+
+        string temp;
+        [CreateProperty]
+        string assignTextCap
+        {
+            get => temp;
+            set
+            {
+                temp = value;
+                assignLabel.text = value;
+            }
+        }
         #endregion
 
         #region Builder init
@@ -114,6 +128,10 @@ namespace InfoWindowViews
             DataBinding binding = BindingUtil.CreateBinding(nameof(IAssign.Assigned));
             binding.sourceToUiConverters.AddConverter((ref List<Human> assig) => $"Assigned {assig.Count}/{building?.AssignLimit}");
             SceneRefs.infoWindow.RegisterTempBinding(new(assignLabel, "text"), binding, building);
+
+            binding = BindingUtil.CreateBinding(nameof(IAssign.AssignLimit));
+            binding.sourceToUiConverters.AddConverter((ref ModifiableInteger assig) => $"Assigned {building.Assigned.Count}/{assig.currentValue}");
+            SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(assignTextCap)), binding, building);
 
             unassigned = building.GetUnassigned();
 

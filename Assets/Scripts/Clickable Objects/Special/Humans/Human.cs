@@ -302,9 +302,12 @@ public class Human : ClickableObject
                 data.interest = null;
                 SetJob(data);
             }
+            return;
         }
-        else if (jData.job != JobState.Free)
-            SetJob(JobState.Free);
+        if (jData.job != JobState.Free)
+        {
+            SetJob(JobState.Free, path: new());
+        }
         else
             ChangeAction(null);
     }
