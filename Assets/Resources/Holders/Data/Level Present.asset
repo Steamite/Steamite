@@ -25,18 +25,43 @@ MonoBehaviour:
   - ddddddd
   - eeeeeee
   costs:
-  - capacity: -1
-    type: 0100000002000000
-    ammount: 0500000003000000
-  - capacity: -1
-    type: 0100000004000000
-    ammount: 0f00000005000000
-  - capacity: -1
-    type: 010000000200000004000000
-    ammount: 19000000230000000a000000
-  - capacity: -1
-    type: 01000000
-    ammount: 5f000000
-  - capacity: -1
-    type: 01000000
-    ammount: c8000000
+  - type: 030000000100000003000000
+    ammount: 000000000000000000000000
+    baseResource:
+      type: 
+      ammount: 
+    money:
+      baseValue: 0
+      currentValue: 0
+  - type: 
+    ammount: 
+    baseResource:
+      type: 
+      ammount: 
+    money:
+      baseValue: 0
+      currentValue: 0
+  - type: 
+    ammount: 
+    baseResource:
+      type: 
+      ammount: 
+    money:
+      baseValue: 0
+      currentValue: 0
+  - type: 
+    ammount: 
+    baseResource:
+      type: 
+      ammount: 
+    money:
+      baseValue: 0
+      currentValue: 0
+  - type: 
+    ammount: 
+    baseResource:
+      type: 
+      ammount: 
+    money:
+      baseValue: 0
+      currentValue: 0

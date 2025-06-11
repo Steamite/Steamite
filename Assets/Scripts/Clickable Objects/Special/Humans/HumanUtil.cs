@@ -39,7 +39,7 @@ public class HumanUtil : MonoBehaviour
         GridPos pos = new(i / 2, 0, i / 2);
         for (i = 0; i < 3; i++)
         {
-            AddHuman(SceneRefs.objectFactory.CreateAHuman(pos, hatMaterial[i], i), ref humanActivation);
+            AddHuman(SceneRefs.objectFactory.CreateHuman(pos, hatMaterial[i], i), ref humanActivation);
         }
     }
 
@@ -74,7 +74,7 @@ public class HumanUtil : MonoBehaviour
     public void AddHuman()
     {
         int i = UnityEngine.Random.Range(0, 2);
-        Human human = SceneRefs.objectFactory.CreateAHuman(Elevator.main.GetPos(), hatMaterial[i], i);
+        Human human = SceneRefs.objectFactory.CreateHuman(Elevator.main.GetPos(), hatMaterial[i], i);
         humans.Add(human);
         human.ActivateHuman();
     }

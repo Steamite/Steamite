@@ -107,7 +107,7 @@ public class JobQueue : MonoBehaviour
                         human.destination.LocalRes.RemoveRequest(human);
                 }
 
-                SceneRefs.objectFactory.CreateAChunk(human.GetPos(), human.Inventory, false);
+                SceneRefs.objectFactory.CreateChunk(human.GetPos(), human.Inventory, false);
                 break;
         }
     }

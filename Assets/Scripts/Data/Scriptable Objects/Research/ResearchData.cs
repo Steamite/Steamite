@@ -55,7 +55,7 @@ namespace ResearchUI
         [SerializeField] public int researchTime;
 
         /// <summary>Cost to start research(WIP).</summary>
-        [SerializeField] public Resource reseachCost;
+        [SerializeField] public MoneyResource reseachCost;
 
         /// <summary>If the button is unlocking a building.</summary>
         [SerializeField] public NodeType nodeType;

@@ -166,11 +166,11 @@ MonoBehaviour:
   id: -1
   objectName: Elevator
   localRes:
-    baseCapacity: 750
-    stored:
-      capacity: 500
-      type: 
-      ammount: 
+    type: 
+    ammount: 
+    capacity:
+      baseValue: 2000
+      currentValue: 2000
     requests: []
     carriers: []
     mods: 
@@ -202,13 +202,14 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    capacity: -1
     type: 01000000
     ammount: 05000000
     baseResource:
-      capacity: -1
       type: 01000000
       ammount: 05000000
+    money:
+      baseValue: 520
+      currentValue: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0

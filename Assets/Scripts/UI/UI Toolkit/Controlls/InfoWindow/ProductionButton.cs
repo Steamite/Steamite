@@ -98,7 +98,7 @@ namespace InfoWindowViews
             radialElement.Open(data);
 
             DataBinding binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
-            binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"Space\n{res.stored.ammount.Sum()}/{res.stored.capacity}");
+            binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"Space\n{res.Sum()}/{res.capacity}");
             SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
             UpdateButton();
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>Game resources.</summary>
@@ -7,8 +8,6 @@ using UnityEngine;
 public class Resource
 {
     #region Variables
-    /// <summary>Capacity in this resource (-1 means there's no limit)</summary>
-    public int capacity = -1;
     /// <summary>Resource types here, coresponds to the <see cref="ammount"/>.</summary>
     public List<ResourceType> type = new();
     /// <summary>Resource ammounts here, coresponds to the <see cref="type"/>.</summary>
@@ -21,10 +20,7 @@ public class Resource
         type = _type;
         ammount = _ammount;
     }
-    public Resource(int _capacity)
-    {
-        capacity = _capacity;
-    }
+
     public Resource()
     {
 
@@ -147,4 +143,6 @@ public class Resource
         type.Add(_type);
         ammount.Add(_ammount);
     }
+
+    public int Sum() => ammount.Sum();
 }

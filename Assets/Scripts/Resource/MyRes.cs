@@ -61,8 +61,8 @@ public static class MyRes
                 }
                 else
                     jQ.storages.Add(_s);
-                globalStorageSpace += _s.LocalResources.stored.capacity - _s.LocalResources.stored.ammount.Sum();
-                ManageRes(resourceTemplate, _s.LocalResources.stored, 1);
+                globalStorageSpace += _s.LocalResources.capacity - _s.LocalResources.Sum();
+                ManageRes(resourceTemplate, _s.LocalResources, 1);
             }
             resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
             resDisplay.UIUpdate(nameof(ResourceDisplay.Money));
@@ -101,7 +101,7 @@ public static class MyRes
     {
         try
         {
-            if (destination.ammount.Sum() == 0 && mod == 1)
+            if (destination.Sum() == 0 && mod == 1)
             {
                 destination.type = source.type.ToList();
                 destination.ammount = source.ammount.ToList();
@@ -144,7 +144,7 @@ public static class MyRes
     /// <param name="diff">resource to exchange</param>
     /// <param name="ammountToTransfer">ammount to transfer(how many resources to be moved this tick)</param>
     /// <returns>true = continue exchange, false = stop exchange</returns>
-    public static bool MoveRes(Resource destination, Resource source, Resource diff, int ammountToTransfer)
+    public static bool MoveRes(CapacityResource destination, Resource source, Resource diff, int ammountToTransfer)
     {
         try
         {
@@ -172,11 +172,10 @@ public static class MyRes
                 // can Transfer setting
                 int canTransfer = source.ammount[sIndex] > diff.ammount[i]
                     ? diff.ammount[i] : source.ammount[sIndex];
-                if (destination.capacity > -1)
-                {
-                    canTransfer = canTransfer > destination.capacity - destination.ammount.Sum()
-                        ? destination.capacity - destination.ammount.Sum() : canTransfer;
-                }
+
+                canTransfer = canTransfer > destination.FreeSpace
+                    ? destination.FreeSpace
+                    : canTransfer;
                 if (ammountToTransfer > -1)
                 {
                     canTransfer = canTransfer > ammountToTransfer
@@ -193,7 +192,7 @@ public static class MyRes
                     if (ammountToTransfer == 0)
                         return true; // max transfer this tick reached wait for the next one
                 }
-                if (destination.capacity > 0 && destination.ammount.Sum() == destination.capacity)
+                if (destination.FreeSpace < 1)
                 {
                     return false; // leave this storage and find another one
                 }
@@ -218,12 +217,12 @@ public static class MyRes
     /// <param name="j">job to cancel if all requested resource have been requested</param>
     public static bool FindResources(Human human, Building building, JobState j)
     {
-        JobQueue jQ = GameObject.FindWithTag("Humans").GetComponent<JobQueue>();
+        JobQueue jQ = SceneRefs.jobQueue;
         Resource diff = building.GetDiff(human.Inventory);
         List<StorageObject> stores = MyGrid.chunks.Union(jQ.pickupNeeded.Union(jQ.storages.Cast<Building>())).ToList();
         if (stores.Count > 0)
         {
-            List<ClickableObject> filtered = ResCmp(diff, stores, true, human.Inventory.capacity - human.Inventory.ammount.Sum());
+            List<ClickableObject> filtered = ResCmp(diff, stores, true, human.Inventory.capacity - human.Inventory.Sum());
             if (filtered.Count > 0)
             {
                 JobData job = PathFinder.FindPath(filtered, human);
@@ -231,9 +230,8 @@ public static class MyRes
                 {
                     human.destination = building;
                     job.job = JobState.Pickup;
-                    StorageObject sResource = job.interest.GetComponent<StorageObject>();
-                    Resource resource = new();
-                    resource.capacity = human.Inventory.capacity - human.Inventory.ammount.Sum();
+                    StorageObject sResource = job.interest as StorageObject;
+                    CapacityResource resource = new(human.Inventory.capacity - human.Inventory.Sum());
                     Resource future = sResource.LocalRes.Future(true);
 
                     MoveRes(resource, future, diff, -1);
@@ -241,7 +239,7 @@ public static class MyRes
                     human.destination.RequestRes(resource.Clone(), human, 1);
                     human.SetJob(job);
                     human.lookingForAJob = false;
-                    if (diff.ammount.Sum() == 0)
+                    if (diff.Sum() == 0)
                     {
                         //diff = diff;
                         //human.transform.parent.parent.GetComponent<JobQueue>().CancelJob(j, human.jData.interest);
@@ -275,7 +273,7 @@ public static class MyRes
     /// <param name="h"></param>
     public static void FindStorage(Human h)
     {
-        if(h.Inventory.ammount.Sum() > 0)
+        if(h.Inventory.Sum() > 0)
         {
             List<IStorage> storages = FilterStorages(h.Inventory, h, true);
             JobData job = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h);
@@ -302,10 +300,10 @@ public static class MyRes
     {
         JobQueue jQ = h.transform.parent.parent.GetComponent<JobQueue>();
         List<IStorage> storages = jQ.storages.ToList();
-        int wantToStore = r.ammount.Sum();
+        int wantToStore = r.Sum();
         for (int i = storages.Count - 1; i >= 0; i--)
         {
-            int spaceToStore = storages[i].LocalResources.stored.capacity - storages[i].LocalResources.Future().ammount.Sum();
+            int spaceToStore = storages[i].LocalResources.capacity - storages[i].LocalResources.Future().Sum();
             if (spaceToStore <= 0)
                 continue;
             for (int j = 0; j < r.type.Count; j++)
@@ -465,9 +463,9 @@ public static class MyRes
     /// </summary>
     /// <param name="cost">Asking cost.</param>
     /// <returns>If the cost can be afforded.</returns>
-    public static bool CanAfford(Resource cost)
+    public static bool CanAfford(MoneyResource cost)
     {
-        return cost.capacity <= Money && DiffRes(cost, resDisplay.GlobalResources).ammount.Sum() == 0;
+        return cost.Money <= Money && DiffRes(cost, resDisplay.GlobalResources).Sum() == 0;
     }
     #endregion
 
@@ -478,7 +476,7 @@ public static class MyRes
     /// <param name="human">Human that is effected by result.</param>
     public static void EatFood(Human human)
     {
-        IStorage store = storage.FirstOrDefault(q => q.LocalResources.stored.ammount[q.LocalResources.Future(true).type.IndexOf(ResourceType.Food)] > 0);
+        IStorage store = storage.FirstOrDefault(q => q.LocalResources.ammount[q.LocalResources.Future(true).type.IndexOf(ResourceType.Food)] > 0);
         if (store != null)
         {
             store.DestroyResource(ResourceType.Food, 1);
@@ -501,7 +499,7 @@ public static class MyRes
         IStorage store = Elevator.main;
         if (store != null)
         {
-            MoveRes(store.LocalResources.stored, resource, resource, resource.ammount.Sum());
+            MoveRes(store.LocalResources, resource, resource, resource.Sum());
             UpdateResource(resource, 1);
         }
         else
@@ -525,14 +523,14 @@ public static class MyRes
                 int x = diff.type.IndexOf(cost.type[j]);
                 if (x == -1)
                 {
-                    storage[i].LocalResources.stored[cost.type[j]] -= cost.ammount[j];
+                    storage[i].LocalResources[cost.type[j]] -= cost.ammount[j];
                     cost.ammount.RemoveAt(j);
                     cost.type.RemoveAt(j);
                 }
                 else
                 {
                     int change = cost.ammount[j] - diff.ammount[x];
-                    storage[i].LocalResources.stored[cost.type[j]] -= change;
+                    storage[i].LocalResources[cost.type[j]] -= change;
                     cost.ammount[j] -= change;
                 }
             }
@@ -553,10 +551,10 @@ public static class MyRes
     /// And pays the money cost from <paramref name="cost"/>.capacity.
     /// </summary>
     /// <param name="cost">Resource and money cost.</param>
-    public static void PayCostGlobal(Resource cost)
+    public static void PayCostGlobal(MoneyResource cost)
     {
         RemoveFromStorageGlobal(cost);
-        ManageMoneyGlobal(-cost.capacity);
+        ManageMoneyGlobal(-cost.Money);
     }
 
     /// <summary>

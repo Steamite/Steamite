@@ -208,16 +208,16 @@ public class HumanSave : ClickableObjectSave
     }
 }
 [Serializable]
-public class StorageResSave
+public class StorageResSave : Resource
 {
-    public Resource stored;
     public List<Resource> requests;
     public List<int> carriers;
     public List<int> mod;
 
     public StorageResSave(StorageResource storageResource)
     {
-        stored = storageResource.stored;
+        type = storageResource.type.ToList();
+        ammount = storageResource.ammount.ToList();
         requests = storageResource.requests;
         carriers = storageResource.carriers.Select(q => q.id).ToList();
         mod = storageResource.mods;

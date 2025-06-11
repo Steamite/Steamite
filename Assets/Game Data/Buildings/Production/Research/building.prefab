@@ -551,11 +551,11 @@ MonoBehaviour:
   id: -1
   objectName: Research
   localRes:
-    baseCapacity: 10
-    stored:
-      capacity: 10
-      type: 
-      ammount: 
+    type: 
+    ammount: 
+    capacity:
+      baseValue: 10
+      currentValue: 10
     requests: []
     carriers: []
     mods: 
@@ -607,13 +607,14 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    capacity: -1
     type: 02000000
     ammount: 05000000
     baseResource:
-      capacity: 20
       type: 02000000
       ammount: 05000000
+    money:
+      baseValue: 16
+      currentValue: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0

@@ -15,16 +15,16 @@ public interface IStorage
     /// <param name="jQ">Reference to register this object to global storage list.</param>
     public void SetupStorage(JobQueue jQ, bool fill = true)
     {
-        LocalResources.stored.type = MyRes.resourceTemplate.type;
-        while (LocalResources.stored.ammount.Count < MyRes.resourceTemplate.type.Count)
+        LocalResources.type = MyRes.resourceTemplate.type;
+        while (LocalResources.ammount.Count < MyRes.resourceTemplate.type.Count)
         {
             if (fill)
-                LocalResources.stored.ammount.Add(100);
+                LocalResources.ammount.Add(100);
             else
-                LocalResources.stored.ammount.Add(0);
+                LocalResources.ammount.Add(0);
         }
         CanStore = new();
-        for (int i = 0; i < LocalResources.stored.ammount.Count; i++)
+        for (int i = 0; i < LocalResources.ammount.Count; i++)
         {
             CanStore.Add(true);
         }
@@ -38,7 +38,7 @@ public interface IStorage
     /// <param name="ammountToDestroy">Ammount of resources.</param>
     public void DestroyResource(ResourceType type, int ammountToDestroy)
     {
-        LocalResources.stored[type] -= ammountToDestroy;
+        LocalResources[type] -= ammountToDestroy;
         ((Building)this).UIUpdate(nameof(Building.LocalRes));
     }
 }

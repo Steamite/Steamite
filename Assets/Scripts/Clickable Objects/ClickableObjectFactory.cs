@@ -107,9 +107,9 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <param name="resources">Resource fill.</param>
     /// <param name="updateGlobalResource">Do you want to add the resources to the global resource counter?</param>
     /// <returns></returns>
-    public Chunk CreateAChunk(GridPos gp, Resource resources, bool updateGlobalResource)
+    public Chunk CreateChunk(GridPos gp, Resource resources, bool updateGlobalResource)
     {
-        if (resources.ammount.Sum() > 0)
+        if (resources.Sum() > 0)
         {
             Building building = MyGrid.GetGridItem(gp) as Building;
             if (building)
@@ -133,7 +133,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <param name="material">Hat material.</param>
     /// <param name="i">Int for name.</param>
     /// <returns></returns>
-    public Human CreateAHuman(GridPos gp, Material material, int i)
+    public Human CreateHuman(GridPos gp, Material material, int i)
     {
         Human h = (Human)Instantiate(
             specialPrefabs.GetPrefab("Human"),

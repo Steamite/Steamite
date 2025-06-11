@@ -38,7 +38,7 @@ public class Elevator : Building, IStorage
     public override List<string> GetInfoText()
     {
         List<string> s = base.GetInfoText();
-        s.Insert(0, $"Can store up to: {localRes.stored.capacity} resources");
+        s.Insert(0, $"Can store up to: {localRes.capacity} resources");
         return s;
     }
     #endregion
@@ -64,7 +64,7 @@ public class Elevator : Building, IStorage
 
     public override void FinishBuild()
     {
-        localRes.stored.ammount = new();
+        localRes.ammount = new();
         ((IStorage)this).SetupStorage(SceneRefs.jobQueue, false);
         base.FinishBuild();
     }
@@ -86,7 +86,7 @@ public class Elevator : Building, IStorage
     {
         if (constructed && mod == 1)
         {
-            int spaceToStore = localRes.stored.capacity - localRes.Future().ammount.Sum();
+            int spaceToStore = localRes.capacity.currentValue - localRes.Future().Sum();
             Resource transferRes = new();
             for (int i = 0; i < request.type.Count && spaceToStore > 0; i++)
             {

@@ -569,11 +569,11 @@ MonoBehaviour:
   id: -1
   objectName: Foundry
   localRes:
-    baseCapacity: 50
-    stored:
-      capacity: 50
-      type: 
-      ammount: 
+    type: 
+    ammount: 
+    capacity:
+      baseValue: 50
+      currentValue: 50
     requests: []
     carriers: []
     mods: 
@@ -625,13 +625,14 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    capacity: -1
     type: 03000000
     ammount: 05000000
     baseResource:
-      capacity: 5
       type: 03000000
       ammount: 05000000
+    money:
+      baseValue: 50
+      currentValue: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
@@ -644,18 +645,14 @@ MonoBehaviour:
   productionTime: 10
   productionModifier: 1
   productionCost:
-    capacity: -1
     type: 0200000001000000
     ammount: 0500000005000000
     baseResource:
-      capacity: -1
       type: 0200000001000000
       ammount: 0500000005000000
   productionYield:
-    capacity: -1
     type: 02000000
     ammount: 0a000000
     baseResource:
-      capacity: 50
       type: 02000000
       ammount: 0a000000

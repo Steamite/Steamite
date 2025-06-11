@@ -65,13 +65,13 @@ public class Human : ClickableObject
     /// <summary>Action to execute next tick.</summary>
     Action<Human> repetableAction;
     /// <summary>Resources that are being carried.</summary>
-    Resource inventory = new();
+    [SerializeField]CapacityResource inventory = new();
 
     #endregion
 
     #region Properties
     /// <inheritdoc cref="inventory"/>
-    [CreateProperty] public Resource Inventory => inventory;
+    [CreateProperty] public CapacityResource Inventory { get => inventory; set => inventory = value; }
 
 
     /// <inheritdoc cref="efficiency"/>
@@ -146,6 +146,8 @@ public class Human : ClickableObject
 #endif
         SceneRefs.tick.SubscribeToEvent(DoRepetableAction, Tick.TimeEventType.Ticks);
         SceneRefs.tick.SubscribeToEvent(Day, Tick.TimeEventType.DayStart);
+        Inventory = new(20);
+        ((IModifiable)Inventory.capacity).Init();
         //SceneRefs.tick.SubscribeToEvent(Night, Tick.TimeEventType.Night);
     }
 

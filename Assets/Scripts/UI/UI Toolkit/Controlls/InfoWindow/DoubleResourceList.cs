@@ -95,7 +95,7 @@ namespace InfoWindowElements
                     }
                     else
                         break;
-                    mainBinding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage.stored));
+                    mainBinding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage));
                     break;
 
                 case LevelsTab:
@@ -135,8 +135,8 @@ namespace InfoWindowElements
         protected void SetResWithoutBinding(Resource res)
         {
             List<UIResource> temp = new List<UIResource>();
-            if (res.capacity > -1)
-                temp.Add(new DoubleUIResource(MyRes.Money, res.capacity));
+            if (res is MoneyResource && ((MoneyResource)res).Money > -1)
+                temp.Add(new DoubleUIResource(MyRes.Money, +((MoneyResource)res).Money));
             for (int i = 0; i < res.type.Count; i++)
             {
                 temp.Add(new DoubleUIResource(

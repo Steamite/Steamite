@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 /// <summary>Helps with fulfiling resource orders and make logistics more efficient.</summary>
 [Serializable]
-public class StorageResource : IModifiable
+public class StorageResource : CapacityResource
 {
     #region Variables
-    
-    public ModValue Modifier { get; set; }
-
-    public int baseCapacity;
-    /// <summary>Stored resources that are realy there.</summary>
-    public Resource stored;
+    Resource futureCashe;
+    bool casheValid = false;
     /// <summary>All resources that were requested(store && take).</summary>
     public List<Resource> requests;
     /// <summary>All carriers for resouces.</summary>
@@ -26,18 +25,18 @@ public class StorageResource : IModifiable
     #region Constructors
     public StorageResource()
     {
-        stored = new();
         requests = new();
         carriers = new();
         mods = new();
     }
-    public StorageResource(StorageResSave resSave)
+
+    public StorageResource(Resource res)
     {
-        stored = resSave.stored;
-        requests = resSave.requests;
-        mods = resSave.mod;
+        type = res.type.ToList();
+        ammount = res.ammount.ToList();
+        requests = new();
         carriers = new();
-        carrierIDs = resSave.carriers;
+        mods = new();
     }
     #endregion
 
@@ -50,6 +49,8 @@ public class StorageResource : IModifiable
     /// <param name="mod">add(1) or remove(-1)</param>
     public void AddRequest(Resource resource, Human human, int mod)
     {
+        if (resource.Sum() > 0)
+            casheValid = false;
         requests.Add(resource);
         carriers.Add(human);
         mods.Add(mod);
@@ -62,6 +63,8 @@ public class StorageResource : IModifiable
     public void RemoveRequest(Human human)
     {
         int index = carriers.IndexOf(human);
+        if (requests[index].Sum() > 0)
+            casheValid = false;
         requests.RemoveAt(index);
         carriers.RemoveAt(index);
         mods.RemoveAt(index);
@@ -97,27 +100,32 @@ public class StorageResource : IModifiable
     /// <returns></returns>
     public Resource Future(bool _stored = false)
     {
-        Resource futureRes = stored.Clone();
-        for (int i = 0; i < requests.Count; i++)
+        if (!casheValid)
         {
-            int mod = mods[i];
-            Resource r = requests[i];
-            for (int j = 0; j < r.type.Count; j++)
+            futureCashe = Clone();
+            for (int i = 0; i < requests.Count; i++)
             {
-                int index;
-                int toAdd = _stored ? (mods[i] == 1 ? 0 : r.ammount[j] * mod) : r.ammount[j] * mod;
-                if ((index = futureRes.type.IndexOf(r.type[j])) == -1)
+                int mod = mods[i];
+                Resource r = requests[i];
+                for (int j = 0; j < r.type.Count; j++)
                 {
-                    futureRes.type.Add(r.type[j]);
-                    futureRes.ammount.Add(toAdd);
-                }
-                else
-                {
-                    futureRes.ammount[index] += toAdd;
+                    int index;
+                    int toAdd = _stored ? (mods[i] == 1 ? 0 : r.ammount[j] * mod) : r.ammount[j] * mod;
+                    if ((index = futureCashe.type.IndexOf(r.type[j])) == -1)
+                    {
+                        futureCashe.type.Add(r.type[j]);
+                        futureCashe.ammount.Add(toAdd);
+                    }
+                    else
+                    {
+                        futureCashe.ammount[index] += toAdd;
+                    }
                 }
             }
+
         }
-        return futureRes;
+        
+        return futureCashe;
     }
 
     /// <summary>
@@ -142,13 +150,15 @@ public class StorageResource : IModifiable
             }
         }
     }
-#endregion
 
-    #region Modifications
-    public void RecalculateMod()
+    public void Load(StorageResSave resSave)
     {
-        stored.capacity = Mathf.RoundToInt(baseCapacity * Modifier.percentMod);
-        stored.capacity += Modifier.absoluteMod;
+        type = resSave.type.ToList();
+        ammount = resSave.ammount.ToList();
+        requests = resSave.requests;
+        mods = resSave.mod;
+        carriers = new();
+        carrierIDs = resSave.carriers;
     }
     #endregion
 }

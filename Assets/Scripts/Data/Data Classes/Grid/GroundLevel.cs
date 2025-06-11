@@ -153,7 +153,7 @@ public class GroundLevel : MonoBehaviour
             Rock rock = rocks.GetChild(j).GetComponent<Rock>();
             SetGridItem(vec, rock);
             rock.UniqueID();
-            if (rock.rockYield.ammount.Sum() == 0)
+            if (rock.rockYield.Sum() == 0)
             {
                 rock.ColorWithIntegrity();
             }

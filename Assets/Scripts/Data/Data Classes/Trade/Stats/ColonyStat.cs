@@ -35,7 +35,7 @@ namespace TradeData.Stats
         public int MaxState { get; private set; }
 
         /// <summary>Resources needed for upgrading to that level.</summary>
-        [SerializeField] public List<Resource> resourceUpgradeCost = new() { };
+        [SerializeField] public List<MoneyResource> resourceUpgradeCost = new() { };
         #endregion
 
 
@@ -61,7 +61,7 @@ namespace TradeData.Stats
                 return false;
 
             return
-                resourceUpgradeCost[CurrentState].capacity <= MyRes.Money &&
+                resourceUpgradeCost[CurrentState].Money <= MyRes.Money &&
                 MyRes.CanAfford(resourceUpgradeCost[CurrentState]);
 
         }

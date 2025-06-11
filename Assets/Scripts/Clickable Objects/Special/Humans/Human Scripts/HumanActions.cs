@@ -269,15 +269,20 @@ public static class HumanActions
             case JobState.Pickup:
                 // if there's any space for it
                 if (MyRes.globalStorageSpace > 0)
-                    if (FindInterests(jobQueue.pickupNeeded.Where(q => q.LocalRes.Future().ammount.Sum() > 0), h, j))
+                    if (FindInterests(jobQueue.pickupNeeded.Where(q => q.LocalRes.Future().Sum() > 0), h, j))
                     {
                         h.destination = h.Job.interest.GetComponent<Building>();
                         Resource toMove = h.destination.LocalRes.Future();
-                        Resource r = new();
-                        MyRes.MoveRes(r, toMove.Clone(), toMove, h.Inventory.capacity < MyRes.globalStorageSpace ? h.Inventory.capacity : MyRes.globalStorageSpace);
+                        CapacityResource r = new(-1);
+                        MyRes.MoveRes(r, 
+                            toMove.Clone(), 
+                            toMove, 
+                            h.Inventory.capacity < MyRes.globalStorageSpace 
+                                ? h.Inventory.capacity.currentValue 
+                                : MyRes.globalStorageSpace);
                         h.destination.RequestRes(r, h, -1);
                         MyRes.FindStorage(r, h);
-                        if (toMove.ammount.Sum() == 0)
+                        if (toMove.Sum() == 0)
                         {
                             jobQueue.CancelJob(JobState.Pickup, h.Job.interest);
                         }
@@ -294,14 +299,14 @@ public static class HumanActions
                 if (MyRes.globalStorageSpace == 0)
                     return true;
                 IEnumerable<ClickableObject> chunks;
-                if ((chunks = MyGrid.chunks.Where(q => q.LocalRes.Future().ammount.Sum() > 0)).Count() > 0)
+                if ((chunks = MyGrid.chunks.Where(q => q.LocalRes.Future().Sum() > 0)).Count() > 0)
                 {
                     if (FindInterests(chunks, h, JobState.Pickup))
                     {
-                        Resource toMove = new();
+                        CapacityResource toMove = new(-1);
                         Chunk chunk = (Chunk)h.Job.interest;
                         Resource chunkStorage = chunk.LocalRes.Future();
-                        MyRes.MoveRes(toMove, chunkStorage, chunkStorage, h.Inventory.capacity - h.Inventory.ammount.Sum());
+                        MyRes.MoveRes(toMove, chunkStorage, chunkStorage, h.Inventory.capacity - h.Inventory.Sum());
                         chunk.RequestRes(toMove, h, -1);
                         return false;
                     }
