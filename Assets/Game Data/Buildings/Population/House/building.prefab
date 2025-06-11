@@ -138,10 +138,11 @@ MonoBehaviour:
   id: -1
   objectName: House
   localRes:
-    stored:
-      capacity: -1
-      type: 
-      ammount: 
+    type: 
+    ammount: 
+    capacity:
+      baseValue: 0
+      currentValue: 0
     requests: []
     carriers: []
     mods: 
@@ -193,17 +194,17 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    capacity: 150
-    type: 01000000
-    ammount: 0a000000
+    type: 
+    ammount: 
     baseResource:
-      capacity: -1
       type: 
       ammount: 
+    money:
+      baseValue: 0
+      currentValue: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 20
   categoryID: 2
   wrapperID: 1580670160
-  assignLimit: 3

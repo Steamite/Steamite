@@ -35,7 +35,7 @@ public class Building : StorageObject
     /// <summary>Building layout(entry points, anchor, ...).</summary>
     public BuildingGrid blueprint;
     /// <summary>Construction cost in resources.</summary>
-    [SerializeField] public ModifiableResource cost = new();
+    [SerializeField] public MoneyResource cost = new();
     /// <summary>Is constructed.</summary>
     public bool constructed;
     /// <summary>Is being deconstructed.</summary>
@@ -133,6 +133,7 @@ public class Building : StorageObject
         deconstructing = (save as BSave).deconstructing;
         constructionProgress = (save as BSave).constructionProgress;
         maximalProgress = (save as BSave).maximalProgress;
+        localRes.Load((save as BSave).resSave);
         GetColors();
 
         if (constructed)
@@ -165,11 +166,11 @@ public class Building : StorageObject
     public override void Store(Human human, int transferPerTick)
     {
         int index = localRes.carriers.IndexOf(human);
-        MyRes.MoveRes(localRes.stored, human.Inventory, localRes.requests[index], transferPerTick);
+        MyRes.MoveRes(localRes, human.Inventory, localRes.requests[index], transferPerTick);
         UIUpdate(nameof(LocalRes));
-        if (localRes.requests[index].ammount.Sum() == 0)
+        if (localRes.requests[index].Sum() == 0)
         {
-            if (!constructed && localRes.stored.Equals(cost))
+            if (!constructed && localRes.Equals(cost))
             {
                 human.SetJob(JobState.Constructing);
                 localRes.mods[index] = 0;
@@ -212,7 +213,7 @@ public class Building : StorageObject
         // The view is switched however, the bindings do not work.
         if (!constructed && this is not IStorage)
         {
-            localRes.stored = new();
+            localRes = new();
         }
         constructed = true;
         ChangeRenderMode(false);
@@ -301,7 +302,7 @@ public class Building : StorageObject
     }
 
     /// <summary>
-    /// Creates a <see cref="Chunk"/> containing half of construction cost and <see cref="localRes.stored"/>.
+    /// Creates a <see cref="Chunk"/> containing half of construction cost and <see cref="localRes"/>.
     /// </summary>
     /// <param name="instantPos">Where to create the <see cref="Chunk"/>.</param>
     /// <returns>Created <see cref="Chunk"/>.</returns>
@@ -316,9 +317,9 @@ public class Building : StorageObject
                 r.ammount[i] /= 2;
             }
         }
-        MyRes.ManageRes(r, localRes.stored, 1);
+        MyRes.ManageRes(r, localRes, 1);
         DestoyBuilding(); // destroy self
-        return SceneRefs.objectFactory.CreateAChunk(instantPos, r, true);
+        return SceneRefs.objectFactory.CreateChunk(instantPos, r, true);
     }
     /// <summary>
     /// Removes the building from 
@@ -437,7 +438,7 @@ public class Building : StorageObject
     public virtual void InitModifiers()
     {
         cost.Init();
-        ((IModifiable)localRes).Init();
+        ((IModifiable)LocalRes.capacity).Init();
     }
 
 
@@ -454,7 +455,7 @@ public class Building : StorageObject
 
     public virtual int CalculateMaxProgress()
     {
-        int result = cost.ammount.Sum() * 2;
+        int result = cost.Sum() * 2;
         if (result == 0)
             result = 1;
         return result;

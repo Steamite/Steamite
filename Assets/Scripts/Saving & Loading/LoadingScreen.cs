@@ -224,7 +224,7 @@ public class LoadingScreen : MonoBehaviour
         foreach (ChunkSave chunkSave in chunks)
         {
             SceneRefs.objectFactory
-                .CreateAChunk(chunkSave.gridPos, chunkSave.resSave.stored, true)
+                .CreateChunk(chunkSave.gridPos, chunkSave.resSave, true)
                 .Load(chunkSave);
             progress.Report(progressGlobal += CHUNK_WEIGHT);
         }
@@ -342,7 +342,10 @@ public class LoadingScreen : MonoBehaviour
     /// <returns></returns>
     IEnumerator CancelInput(bool newGame)
     {
-        yield return new WaitForSeconds(0.1f);
+        for (int i = 0; i < 5; i++)
+        {
+            yield return null;
+        }
         EnableLevelContollers(newGame);
     }
     

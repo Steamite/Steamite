@@ -328,7 +328,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
             }
             else
             {
-                if (MyRes.DiffRes(building.cost, building.LocalRes.stored).ammount.Sum() > 0)
+                if (MyRes.DiffRes(building.cost, building.LocalRes).Sum() > 0)
                     constructionStateLabel.text = "Waiting for resources";
                 else
                     constructionStateLabel.text = "Constructing";

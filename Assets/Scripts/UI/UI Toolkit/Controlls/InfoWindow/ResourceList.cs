@@ -148,7 +148,7 @@ namespace InfoWindowElements
             {
                 case StorageObject:
                     binding = BindingUtil.CreateBinding(nameof(StorageObject.LocalRes));
-                    binding.sourceToUiConverters.AddConverter((ref StorageResource stored) => ToUIRes(stored.stored));
+                    binding.sourceToUiConverters.AddConverter((ref StorageResource stored) => ToUIRes(stored));
                     SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Rock:
@@ -165,7 +165,7 @@ namespace InfoWindowElements
                     break;
                 case Human:
                     binding = BindingUtil.CreateBinding(nameof(Human.Inventory));
-                    binding.sourceToUiConverters.AddConverter((ref Resource inventory) => ToUIRes(inventory));
+                    binding.sourceToUiConverters.AddConverter((ref CapacityResource inventory) => ToUIRes(inventory));
                     SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case ResourceDisplay:

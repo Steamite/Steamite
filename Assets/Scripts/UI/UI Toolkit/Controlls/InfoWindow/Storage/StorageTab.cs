@@ -86,7 +86,7 @@ namespace InfoWindowElements
             SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, storage);
 
             binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
-            binding.sourceToUiConverters.AddConverter((ref StorageResource store) => $"Capacity: {store.stored.ammount.Sum()}/{store.stored.capacity}");
+            binding.sourceToUiConverters.AddConverter((ref StorageResource store) => $"Capacity: {store.Sum()}/{store.capacity}");
             SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, storage);
 
             if (storageElems.Count > 0)
@@ -106,7 +106,7 @@ namespace InfoWindowElements
         /// <returns></returns>
         List<UIResource> ToUIRes(StorageResource storage)
         {
-            for (int i = 0; i < storage.stored.type.Count; i++)
+            for (int i = 0; i < storage.type.Count; i++)
             {
                 if (i >= resources.Count)
                 {
@@ -116,11 +116,11 @@ namespace InfoWindowElements
                         lastRow.AddToClassList("storage-row");
                         storageScroll.Add(lastRow);
                     }
-                    AddNewElem(new(storage.stored.ammount[i], storage.stored.type[i]));
+                    AddNewElem(new(storage.ammount[i], storage.type[i]));
                 }
-                else if (resources[i].ammount != storage.stored.ammount[i])
+                else if (resources[i].ammount != storage.ammount[i])
                 {
-                    resources[i].ammount = storage.stored.ammount[i];
+                    resources[i].ammount = storage.ammount[i];
                     storageElems[i].label.text = resources[i].ammount.ToString();
                 }
             }

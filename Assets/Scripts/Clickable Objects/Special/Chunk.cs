@@ -45,6 +45,7 @@ public class Chunk : StorageObject
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
+        localRes.Load((save as StorageObjectSave).resSave);
         transform.GetChild(1).GetComponent<MeshRenderer>().material.color = (save as ChunkSave).resColor.ConvertColor();
         base.Load(save);
     }
@@ -71,11 +72,11 @@ public class Chunk : StorageObject
         else
         {
             int index = localRes.carriers.IndexOf(h);
-            MyRes.MoveRes(h.Inventory, localRes.stored, localRes.requests[index], transferPerTick);
+            MyRes.MoveRes(h.Inventory, localRes, localRes.requests[index], transferPerTick);
             UIUpdate(nameof(LocalRes));
-            if (localRes.requests[index].ammount.Sum() == 0)
+            if (localRes.requests[index].Sum() == 0)
             {
-                if (h.Inventory.capacity - h.Inventory.ammount.Sum() == 0)
+                if (h.Inventory.capacity.currentValue - h.Inventory.Sum() == 0)
                 {
                     FindS(h);
                 }
@@ -86,7 +87,7 @@ public class Chunk : StorageObject
                 }
             }
         }
-        if (localRes.stored.ammount.Sum() == 0)
+        if (localRes.Sum() == 0)
         {
             SceneRefs.gridTiles.DestroyUnselect(this);
             MyGrid.chunks.Remove(this);
@@ -128,9 +129,9 @@ public class Chunk : StorageObject
     public void Init(Resource res, bool updateGlobalResource)
     {
         UniqueID();
-        localRes.stored = res;
+        localRes = new(res);
         if (updateGlobalResource)
-            MyRes.UpdateResource(localRes.stored, 1);
+            MyRes.UpdateResource(localRes, 1);
         objectName = objectName.Replace("(Clone)", " ");
         MyGrid.chunks.Add(this);
     }

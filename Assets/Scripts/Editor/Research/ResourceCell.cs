@@ -9,7 +9,9 @@ using Object = UnityEngine.Object;
 [UxmlElement]
 public partial class ResourceCell : ResourceList
 {
+    
     Resource resource;
+    Resource moneyResource;
     public Object whatToSave;
     IntegerField capacityField;
     Label noneLabel;
@@ -50,15 +52,14 @@ public partial class ResourceCell : ResourceList
         capacityField.RegisterValueChangedCallback<int>(
             (ev) =>
             {
-                resource.capacity = ev.newValue;
+                if (moneyResource != null)
+                    ((MoneyResource)moneyResource).Money = new(ev.newValue);
                 EditorUtility.SetDirty(whatToSave);
             });
         capacityField.style.width = new Length(50, LengthUnit.Percent);
         capacityField.style.position = Position.Absolute;
         capacityField.style.left = 0;
         capacityField.style.bottom = 0;
-
-
         hierarchy.Add(capacityField);
         #endregion
     }
@@ -172,7 +173,14 @@ public partial class ResourceCell : ResourceList
         {
             showAddRemoveFooter = true;
             capacityField.labelElement.text = _cost ? "Cost" : "Capacity";
-            capacityField.value = _resource.capacity;
+            if (resource is MoneyResource)
+            {
+                capacityField.value = +((MoneyResource)_resource).Money.BaseValue;
+                moneyResource = _resource;
+                resource = ((MoneyResource)_resource).EditorResource;
+            }
+            else
+                capacityField.visible = false;
             itemsSource = ToUIRes(resource);
             noneLabel.text = "Empty";
             style.display = DisplayStyle.Flex;

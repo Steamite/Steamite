@@ -243,7 +243,7 @@ namespace EditorWindows.Windows
                 {
                     el.parent.focusable = true;
                     ResourceCell cell = el.Q<ResourceCell>();
-                    cell.Open(((BuildingWrapper)dataGrid.itemsSource[i]).building?.cost.EditorResource, ((BuildingWrapper)dataGrid.itemsSource[i]).building, true);
+                    cell.Open(((BuildingWrapper)dataGrid.itemsSource[i]).building?.cost, ((BuildingWrapper)dataGrid.itemsSource[i]).building, true);
                 };
             #endregion
 
@@ -477,7 +477,7 @@ namespace EditorWindows.Windows
                 {
                     IntegerField field = (IntegerField)el;
                     field.value = ((BuildingWrapper)dataGrid.itemsSource[i]).building
-                        ? ((BuildingWrapper)dataGrid.itemsSource[i]).building.LocalRes.baseCapacity
+                        ? ((BuildingWrapper)dataGrid.itemsSource[i]).building.LocalRes.capacity.BaseValue
                         : 0;
                     field.RegisterValueChangedCallback(StorageCapacityChanged);
                 },
@@ -686,7 +686,7 @@ namespace EditorWindows.Windows
         void StorageCapacityChanged(ChangeEvent<int> ev)
         {
             int i = GetRowIndex((VisualElement)ev.target);
-            ((BuildingWrapper)dataGrid.itemsSource[i]).building.LocalRes.baseCapacity = ev.newValue;
+            ((BuildingWrapper)dataGrid.itemsSource[i]).building.LocalRes.capacity.BaseValue = ev.newValue;
             EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
         }
         #endregion

@@ -87,7 +87,7 @@ public class Pipe : Building
     {
         gameObject.layer = 7;
         GetComponent<SortingGroup>().sortingLayerName = "Pipes";
-        maximalProgress = cost.ammount.Sum() * 2;
+        maximalProgress = cost.Sum() * 2;
         SceneRefs.gridTiles.HighLight(new(), gameObject);
 
         HumanUtil humans = GameObject.FindWithTag("Humans").GetComponent<HumanUtil>();
@@ -218,10 +218,10 @@ public class Pipe : Building
         int steam = 0;
         foreach (Building b in network.buildings)
         {
-            /*int i = b.localRes.stored.type.IndexOf(resourceType.water);
+            /*int i = b.localRes.type.IndexOf(resourceType.water);
             if (i > -1)
-                water += b.localRes.stored.ammount[i];
-            i = b.localRes.stored.type.IndexOf(resourceType.steam);*/
+                water += b.localRes.ammount[i];
+            i = b.localRes.type.IndexOf(resourceType.steam);*/
 
         }
         if (water > 0)

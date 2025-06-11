@@ -103,7 +103,7 @@ namespace BuildingStats
                     building.UIUpdate(nameof(IResourceProduction.ProductionYield));
                     break;
                 case StatModifiers.Capacity:
-                    //building.LocalRes.stored.capacity = 
+                    //building.LocalRes.capacity = 
                     break;
             }
             Debug.Log(pair.mask);

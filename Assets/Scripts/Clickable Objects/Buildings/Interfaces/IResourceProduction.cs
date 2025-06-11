@@ -32,18 +32,20 @@ public interface IResourceProduction : IProduction
         int index = InputResource.carriers.IndexOf(human);
         if (index == -1)
             Debug.Log("");
-        Resource resource = new();
+        CapacityResource resource = new(-1);
+        // TODO: IMPROVE
         MyRes.MoveRes(resource, human.Inventory, InputResource.requests[index], transferPerTick);
         MyRes.UpdateResource(resource, -1);
-        MyRes.ManageRes(InputResource.stored, resource, 1);
+        MyRes.ManageRes(InputResource, resource, 1);
+        // TODO END
         ((ClickableObject)this).UIUpdate(nameof(InputResource));
-        if (MyRes.DiffRes(ProductionCost, InputResource.stored).ammount.Sum() == 0)
+        if (MyRes.DiffRes(ProductionCost, InputResource).Sum() == 0)
         {
             human.transform.parent.parent.GetComponent<JobQueue>().CancelJob(JobState.Supply, (ClickableObject)this);
             ProdStates.supplied = true;
             RefreshStatus();
         }
-        if (InputResource.requests[index].ammount.Sum() == 0)
+        if (InputResource.requests[index].Sum() == 0)
         {
             InputResource.RemoveRequest(human);
 
@@ -77,12 +79,14 @@ public interface IResourceProduction : IProduction
 
     void IProduction.Product()
     {
-        while (CurrentTime >= ProdTime && (LocalResource.stored.capacity == -1 || LocalResource.stored.ammount.Sum() < LocalResource.stored.capacity))
+        while (CurrentTime >= ProdTime && 
+            (LocalResource.capacity.currentValue == -1 || 
+                LocalResource.Sum() < LocalResource.capacity.currentValue))
         {
             CurrentTime -= ProdTime;
-            MyRes.ManageRes(LocalResource.stored, ProductionYield, 1);
+            MyRes.ManageRes(LocalResource, ProductionYield, 1);
             MyRes.UpdateResource(ProductionYield, 1);
-            ProdStates.supplied = MyRes.DiffRes(ProductionCost, InputResource.stored).ammount.Sum() == 0;
+            ProdStates.supplied = MyRes.DiffRes(ProductionCost, InputResource).Sum() == 0;
             if (!ManageInputRes())
                 return;
         }
@@ -103,7 +107,7 @@ public interface IResourceProduction : IProduction
         }
         else
         {
-            MyRes.ManageRes(InputResource.stored, ProductionCost, -1);
+            MyRes.ManageRes(InputResource, ProductionCost, -1);
             ((ClickableObject)this).UIUpdate("InputResource");
             //MyRes.UpdateResource(ProductionCost, -1);
             ProdStates.running = true;

@@ -77,7 +77,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-        InputResource = new((save as ResProductionBSave).inputRes);
+        InputResource.Load((save as ResProductionBSave).inputRes);
 
         ProdTime = (save as ProductionBSave).prodTime;
         CurrentTime = (save as ProductionBSave).currentTime;
@@ -87,7 +87,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
         {
             SceneRefs.jobQueue.AddJob(JobState.Supply, this);
         }
-        if (constructed && GetDiff(new()).ammount.Sum() > 0)
+        if (constructed && GetDiff(new()).Sum() > 0)
         {
             SceneRefs.jobQueue.AddJob(JobState.Pickup, this);
         }
@@ -139,6 +139,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     {
         base.InitModifiers();
         ((IModifiable)AssignLimit).Init();
+        InputResource.capacity = new(-1);
         productionCost.Init();
         productionYield.Init();
     }
@@ -149,7 +150,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     public override void FinishBuild()
     {
         base.FinishBuild();
-        if (ProductionCost.ammount.Sum() == 0)
+        if (ProductionCost.Sum() == 0)
         {
             ProdStates.supplied = true;
             return;
@@ -209,14 +210,14 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     {
         SceneRefs.jobQueue.CancelJob(JobState.Supply, this);
         Chunk c = base.Deconstruct(instantPos);
-        if (InputResource.stored.ammount.Sum() > 0)
+        if (InputResource.Sum() > 0)
         {
             if (!c)
             {
-                c = SceneRefs.objectFactory.CreateAChunk(instantPos, InputResource.stored, true);
+                c = SceneRefs.objectFactory.CreateChunk(instantPos, InputResource, true);
             }
             else
-                MyRes.ManageRes(c.LocalRes.stored, InputResource.stored, 1);
+                MyRes.ManageRes(c.LocalRes, InputResource, 1);
         }
         return c;
     }
@@ -250,7 +251,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
         List<string> strings = base.GetInfoText();
         strings[0] = $"Can employ up to {AssignLimit} workers";
         strings.Insert(1, $"<u>Produces</u>: \n{ProductionYield.GetDisplayText()}");
-        if (ProductionCost.ammount.Sum() > 0)
+        if (ProductionCost.Sum() > 0)
             strings[1] += $", from: \n{ProductionCost.GetDisplayText()}";
         return strings;
     }
