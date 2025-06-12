@@ -83,31 +83,60 @@ namespace BuildingStats
             switch (pair.mod)
             {
                 case StatModifiers.Cost:
-                    //_building.cost ;
+                    if(building.id == -1)
+                    {
+                        DoMod(
+                            building.cost,
+                            pair,
+                            nameof(Building.cost),
+                            building);
+                    }
                     break;
                 case StatModifiers.AssignLimit:
-                    ((IModifiable)((IAssign)building).AssignLimit).AddMod(pair);
-                    building.UIUpdate(nameof(IAssign.AssignLimit));
+                    DoMod(
+                        ((IAssign)building).AssignLimit,
+                        pair,
+                        nameof(IAssign.AssignLimit),
+                        building);
                     break;
                 case StatModifiers.ProdSpeed:
-                    //((IModifiable)((IProduction)building).ProductionCost).AddMod(pair);
-                    //((IProduction)building).Modifier += pair.modAmmount * 0.01f;
-                    building.UIUpdate(nameof(IProduction.Modifier));
+                    DoMod(
+                        ((IProduction)building).ProdSpeed,
+                        pair,
+                        nameof(IProduction.ProdSpeed),
+                        building);
                     break;
                 case StatModifiers.InputResource:
-                    ((IModifiable)((IResourceProduction)building).ProductionCost).AddMod(pair);
-                    building.UIUpdate(nameof(IResourceProduction.ProductionCost));
+                    DoMod(
+                        ((IResourceProduction)building).ProductionCost, 
+                        pair, 
+                        nameof(IResourceProduction.ProductionCost), 
+                        building);
                     break;
                 case StatModifiers.ProductionYield:
-                    ((IModifiable)((IResourceProduction)building).ProductionYield).AddMod(pair);
-                    building.UIUpdate(nameof(IResourceProduction.ProductionYield));
+                    DoMod(
+                        ((IResourceProduction)building).ProductionYield,
+                        pair,
+                        nameof(IResourceProduction.ProductionYield),
+                        building);
                     break;
                 case StatModifiers.Capacity:
-                    //building.LocalRes.capacity = 
+                    DoMod(
+                        building.LocalRes.capacity,
+                        pair,
+                        nameof(building.LocalRes.capacity),
+                        building);
                     break;
             }
             Debug.Log(pair.mask);
         }
+
+        void DoMod(IModifiable obj, StatPair pair, string propName, Building building)
+        {
+            obj.AddMod(pair);
+            building.UIUpdate(propName);
+        }
+
         public void AddEffect()
         {
             Mask(true);

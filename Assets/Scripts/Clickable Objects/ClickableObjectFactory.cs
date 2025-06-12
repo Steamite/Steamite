@@ -141,6 +141,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             Quaternion.identity,
             SceneRefs.humans.transform.GetChild(0).transform);
         h.UniqueID();
+        h.Inventory = new(20);
         // color for debug
         h.transform.GetChild(1).GetComponent<MeshRenderer>().material = material;
         h.objectName = $"Human {(i == 0 ? "Red" : i == 1 ? "Yellow" : "White")}";

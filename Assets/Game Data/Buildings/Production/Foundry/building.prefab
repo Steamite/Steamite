@@ -632,7 +632,7 @@ MonoBehaviour:
       ammount: 05000000
     money:
       baseValue: 50
-      currentValue: 0
+      currentValue: 50
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
@@ -643,7 +643,6 @@ MonoBehaviour:
     baseValue: 5
     currentValue: 5
   productionTime: 10
-  productionModifier: 1
   productionCost:
     type: 0200000001000000
     ammount: 0500000005000000

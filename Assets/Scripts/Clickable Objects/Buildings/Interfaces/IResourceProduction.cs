@@ -63,7 +63,7 @@ public interface IResourceProduction : IProduction
         {
             if (ProdStates.running || ManageInputRes())
             {
-                CurrentTime += Modifier * progress;
+                CurrentTime += ProdSpeed * progress;
                 ((Building)this).UIUpdate(nameof(CurrentTime));
                 if (CurrentTime >= ProdTime && ProdStates.space)
                 {

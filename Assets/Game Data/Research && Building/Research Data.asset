@@ -22,9 +22,14 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 100
       reseachCost:
-        capacity: -1
         type: 
         ammount: 
+        baseResource:
+          type: 
+          ammount: 
+        money:
+          baseValue: 0
+          currentValue: 0
       nodeType: 0
       nodeCategory: -1
       nodeAssignee: -1
@@ -32,19 +37,24 @@ MonoBehaviour:
       unlocks: 
       description: 
       lineColor: {r: 0, g: 0, b: 0, a: 0}
-    - Name: Research
+    - Name: Housing
       id: 178465213
       level: 0
       researched: 0
       currentTime: -1
       researchTime: 10
       reseachCost:
-        capacity: 50
         type: 03000000
         ammount: 02000000
+        baseResource:
+          type: 
+          ammount: 
+        money:
+          baseValue: 50
+          currentValue: 50
       nodeType: 2
-      nodeCategory: 1
-      nodeAssignee: 1197943099
+      nodeCategory: 2
+      nodeAssignee: 1580670160
       unlockedBy: 
       unlocks: e006623a
       description: 'Random description
@@ -54,16 +64,21 @@ MonoBehaviour:
     - Name: House
       id: 651504100
       level: 0
-      researched: 0
+      researched: 1
       currentTime: -1
       researchTime: 15
       reseachCost:
-        capacity: 10
         type: 02000000
         ammount: 32000000
+        baseResource:
+          type: 
+          ammount: 
+        money:
+          baseValue: 0
+          currentValue: 0
       nodeType: 2
-      nodeCategory: 2
-      nodeAssignee: 1580670160
+      nodeCategory: 1
+      nodeAssignee: 1197943099
       unlockedBy: 
       unlocks: e006623a
       description: 
@@ -75,9 +90,14 @@ MonoBehaviour:
       currentTime: 0
       researchTime: 5
       reseachCost:
-        capacity: -1
         type: 01000000
         ammount: 05000000
+        baseResource:
+          type: 
+          ammount: 
+        money:
+          baseValue: 0
+          currentValue: 0
       nodeType: 1
       nodeCategory: 0
       nodeAssignee: 2090065767
@@ -104,9 +124,14 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 15
       reseachCost:
-        capacity: 15
         type: 
         ammount: 
+        baseResource:
+          type: 
+          ammount: 
+        money:
+          baseValue: 0
+          currentValue: 0
       nodeType: 1
       nodeCategory: 0
       nodeAssignee: 1873593032
@@ -125,9 +150,14 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 12
       reseachCost:
-        capacity: 75
         type: 02000000
         ammount: 0f000000
+        baseResource:
+          type: 
+          ammount: 
+        money:
+          baseValue: 0
+          currentValue: 0
       nodeType: 2
       nodeCategory: 1
       nodeAssignee: 1472558132
@@ -145,9 +175,14 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 100
       reseachCost:
-        capacity: -1
         type: 
         ammount: 
+        baseResource:
+          type: 
+          ammount: 
+        money:
+          baseValue: 0
+          currentValue: 0
       nodeType: 2
       nodeCategory: 1
       nodeAssignee: -1
@@ -162,9 +197,14 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 200
       reseachCost:
-        capacity: -1
         type: 
         ammount: 
+        baseResource:
+          type: 
+          ammount: 
+        money:
+          baseValue: 0
+          currentValue: 0
       nodeType: 2
       nodeCategory: -1
       nodeAssignee: -1
@@ -179,9 +219,14 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 200
       reseachCost:
-        capacity: -1
         type: 
         ammount: 
+        baseResource:
+          type: 
+          ammount: 
+        money:
+          baseValue: 0
+          currentValue: 0
       nodeType: 2
       nodeCategory: -1
       nodeAssignee: -1
@@ -196,9 +241,14 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 300
       reseachCost:
-        capacity: -1
         type: 
         ammount: 
+        baseResource:
+          type: 
+          ammount: 
+        money:
+          baseValue: 0
+          currentValue: 0
       nodeType: 2
       nodeCategory: -1
       nodeAssignee: -1
