@@ -10,7 +10,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     #region Variables
     [SerializeField] ModifiableInteger assignLimit;
     [SerializeField][Header("Production")] float productionTime;
-    [SerializeField] float productionModifier = 1;
+    [SerializeField] ModifiableFloat prodSpeed;
 
     [SerializeField] ModifiableResource productionCost = new();
     [SerializeField] ModifiableResource productionYield = new();
@@ -22,7 +22,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     [CreateProperty] public float CurrentTime { get; set; } = 0;
     [CreateProperty] public bool Stoped { get; set; } = false;
     public float ProdTime { get => productionTime; set => productionTime = value; }
-    public float Modifier { get => productionModifier; set => productionModifier = value; }
+    [CreateProperty] public ModifiableFloat ProdSpeed { get => prodSpeed; set => prodSpeed = value; }
     #endregion
 
     #region Assign
@@ -70,7 +70,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
         (clickable as ResProductionBSave).inputRes = new(InputResource);
         (clickable as ProductionBSave).prodTime = ProdTime;
         (clickable as ProductionBSave).currentTime = CurrentTime;
-        (clickable as ProductionBSave).modifier = Modifier;
+        (clickable as ProductionBSave).modifier = +ProdSpeed;
         (clickable as ProductionBSave).ProdStates = ProdStates;
         return base.Save(clickable);
     }
@@ -81,7 +81,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
 
         ProdTime = (save as ProductionBSave).prodTime;
         CurrentTime = (save as ProductionBSave).currentTime;
-        Modifier = (save as ProductionBSave).modifier;
+        ProdSpeed = new((save as ProductionBSave).modifier);
         ProdStates = (save as ProductionBSave).ProdStates;
         if (!ProdStates.supplied)
         {
@@ -139,6 +139,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     {
         base.InitModifiers();
         ((IModifiable)AssignLimit).Init();
+        prodSpeed = new(1);
         InputResource.capacity = new(-1);
         productionCost.Init();
         productionYield.Init();

@@ -12,8 +12,8 @@ public class ResearchProduction : Building, IProduction, IAssign
     [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
     public float ProdTime { get; set; }
     public float CurrentTime { get; set; }
-    [SerializeField] float modifier;
-    public float Modifier { get => modifier; set => modifier = value; }
+    [SerializeField] ModifiableFloat modifier;
+    [CreateProperty]public ModifiableFloat ProdSpeed { get => modifier; set => modifier = value; }
     public bool Stoped { get; set; }
 
     #region Window

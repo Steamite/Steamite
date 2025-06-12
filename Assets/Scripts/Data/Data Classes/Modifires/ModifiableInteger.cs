@@ -1,12 +1,13 @@
 using System;
 using UnityEngine;
 
+// cannot use generics, unity doesnt support number restraint
 [Serializable] public class ModifiableInteger : IModifiable
 {
 #if UNITY_EDITOR
     public int BaseValue { get => baseValue; set => baseValue = value; }
 #endif
-    [SerializeField] int baseValue;
+    [SerializeField] protected int baseValue;
 
     public int currentValue;
     public ModValue Modifier { get; set; }

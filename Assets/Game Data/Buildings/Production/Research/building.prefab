@@ -561,7 +561,7 @@ MonoBehaviour:
     mods: 
   _materialColors: []
   _meshRenderers: []
-  buildingCategories: 0
+  buildingCategories: 4
   blueprint:
     size:
       x: 2
@@ -613,8 +613,8 @@ MonoBehaviour:
       type: 02000000
       ammount: 05000000
     money:
-      baseValue: 16
-      currentValue: 0
+      baseValue: 45
+      currentValue: 45
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
@@ -624,7 +624,6 @@ MonoBehaviour:
   assignLimit:
     baseValue: 1
     currentValue: 1
-  modifier: 0
 --- !u!210 &9080560569971430985
 SortingGroup:
   m_ObjectHideFlags: 0
