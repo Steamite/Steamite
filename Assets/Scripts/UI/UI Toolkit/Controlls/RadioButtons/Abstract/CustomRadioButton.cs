@@ -21,19 +21,19 @@ namespace AbstractControls
         }
 
 
-        public CustomRadioButton(string _styleClass, int i, bool _inGroup, bool _toggle = false)
+        public CustomRadioButton(string _styleClass, int _value, bool _inGroup, bool _toggle = false)
         {
             ClearClassList();
             styleClass = _styleClass;
             AddToClassList(_styleClass);
-            value = i;
+            value = _value;
             inGroup = _inGroup;
             toggle = _toggle;
             RegisterCallback<ClickEvent>((_) => Select());
         }
 
         /// <summary>
-        /// Sets <see cref="IsSelected"/> to true, styles the button and sends an event to the button group.
+        /// Click event, conveyes logic to <see cref="SelectChange(bool)"/>.
         /// </summary>
         public void Select()
         {
@@ -51,7 +51,7 @@ namespace AbstractControls
         /// Sets <see cref="IsSelected"/> to true, styles the button and sends an event to the button group.
         /// </summary>
         /// <param name="UpdateGroup">Should the parent group be updated.</param>
-        public void SelectWithoutTransition(bool UpdateGroup)
+        public virtual void SelectWithoutTransition(bool UpdateGroup)
         {
             SelectChange(UpdateGroup);
             IsSelected = true;

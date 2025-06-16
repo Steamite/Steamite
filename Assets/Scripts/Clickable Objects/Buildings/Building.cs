@@ -7,6 +7,13 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
+public enum BuildingCategType
+{
+    Population,
+    Production,
+    Research
+}
+
 /// <summary>
 /// Class for buildings, which can be constructed on free tiles. 
 /// Each building needs atleast one free access point.
@@ -18,10 +25,18 @@ public class Building : StorageObject
     [SerializeField] protected List<Color> _materialColors;
     [SerializeField] protected List<Renderer> _meshRenderers;
 
+    /// <summary>
+    /// Mask saying which categories this building belongs to.
+    /// </summary>
+    [SerializeField] int buildingCategories;
+    /// <inheritdoc cref="buildingCategories"/>
+    public int BuildingCateg { get => buildingCategories; set => buildingCategories = value; }
+
     /// <summary>Building layout(entry points, anchor, ...).</summary>
     public BuildingGrid blueprint;
     /// <summary>Construction cost in resources.</summary>
-    public Resource cost;
+    [SerializeField] protected MoneyResource cost = new();
+    [CreateProperty] public MoneyResource Cost { get => cost; set => cost = value; }
     /// <summary>Is constructed.</summary>
     public bool constructed;
     /// <summary>Is being deconstructed.</summary>
@@ -41,7 +56,7 @@ public class Building : StorageObject
     protected virtual void Awake() => GetColors();
 
     /// <summary>Creates a list from <see cref="MyGrid.buildings"/></summary>
-    public override void UniqueID() => CreateNewId(MyGrid.buildings.Select(q => q.id).ToList());
+    public override void UniqueID() => CreateNewId(MyGrid.Buildings.Select(q => q.id).ToList());
     /// <summary>
     /// Calculates positio using the anchor from <see cref="blueprint"/>.
     /// </summary>
@@ -100,7 +115,6 @@ public class Building : StorageObject
         save.rotationY = transform.rotation.eulerAngles.y;
 
         save.blueprint = blueprint;
-        save.cost = cost;
         save.constructed = constructed;
         save.deconstructing = deconstructing;
         save.constructionProgress = constructionProgress;
@@ -110,33 +124,30 @@ public class Building : StorageObject
 
         return base.Save(save);
     }
+    
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
         objectName = (save as BSave).prefabName;
         blueprint = (save as BSave).blueprint;
-        cost = (save as BSave).cost;
         constructed = (save as BSave).constructed;
         deconstructing = (save as BSave).deconstructing;
         constructionProgress = (save as BSave).constructionProgress;
         maximalProgress = (save as BSave).maximalProgress;
+        localRes.Load((save as BSave).resSave);
         GetColors();
 
-        if (constructed)
+        InitModifiers();
+
+        gameObject.layer = 6;
+        for (int i = 0; i < transform.childCount; i++)
+            transform.GetChild(i).gameObject.layer = 6;
+        GetComponent<SortingGroup>().sortingLayerName = "Buildings";
+
+        if (!constructed)
         {
-            foreach (GameObject g in transform.GetComponentsInChildren<Transform>().Select(q => q.gameObject))
-            {
-                g.layer = 6;
-            }
-            GetComponent<SortingGroup>().sortingLayerName = "Buildings";
-            if (deconstructing)
-            {
-                SceneRefs.jobQueue.AddJob(JobState.Deconstructing, this);
-            }
-        }
-        else
-        {
-            PlaceBuilding(true);
+            SceneRefs.jobQueue.AddJob(JobState.Constructing, this);
+            ChangeRenderMode(true); 
         }
         base.Load(save);
     }
@@ -151,11 +162,11 @@ public class Building : StorageObject
     public override void Store(Human human, int transferPerTick)
     {
         int index = localRes.carriers.IndexOf(human);
-        MyRes.MoveRes(localRes.stored, human.Inventory, localRes.requests[index], transferPerTick);
+        MyRes.MoveRes(localRes, human.Inventory, localRes.requests[index], transferPerTick);
         UIUpdate(nameof(LocalRes));
-        if (localRes.requests[index].ammount.Sum() == 0)
+        if (localRes.requests[index].Sum() == 0)
         {
-            if (!constructed && localRes.stored.Equals(cost))
+            if (!constructed && localRes.Equals(cost))
             {
                 human.SetJob(JobState.Constructing);
                 localRes.mods[index] = 0;
@@ -192,13 +203,9 @@ public class Building : StorageObject
     /// </summary>
     public virtual void FinishBuild()
     {
-        // DEBUG_Binding Problem entrypoint
-        // This happens when a building construction is finished.
-        // If the building is selected(and InfoWindow is open), the information should refresh and show a different view.
-        // The view is switched however, the bindings do not work.
-        if (!constructed)
+        if (!constructed && this is not IStorage)
         {
-            localRes.stored = new();
+            localRes.Dump();
         }
         constructed = true;
         ChangeRenderMode(false);
@@ -287,24 +294,24 @@ public class Building : StorageObject
     }
 
     /// <summary>
-    /// Creates a <see cref="Chunk"/> containing half of construction cost and <see cref="localRes.stored"/>.
+    /// Creates a <see cref="Chunk"/> containing half of construction cost and <see cref="localRes"/>.
     /// </summary>
     /// <param name="instantPos">Where to create the <see cref="Chunk"/>.</param>
     /// <returns>Created <see cref="Chunk"/>.</returns>
     public virtual Chunk Deconstruct(GridPos instantPos)
     {
         Resource r = new();
+        MyRes.ManageRes(r, cost, 1);
         if (constructed)
         {
-            MyRes.ManageRes(r, cost, 1);
             for (int i = 0; i < r.ammount.Count; i++)
             {
                 r.ammount[i] /= 2;
             }
         }
-        MyRes.ManageRes(r, localRes.stored, 1);
+        MyRes.ManageRes(r, localRes, 1);
         DestoyBuilding(); // destroy self
-        return SceneRefs.objectFactory.CreateAChunk(instantPos, r, true);
+        return SceneRefs.objectFactory.CreateChunk(instantPos, r, true);
     }
     /// <summary>
     /// Removes the building from 
@@ -336,16 +343,15 @@ public class Building : StorageObject
         for (int i = 0; i < _meshRenderers.Count; i++)
         {
             Color c = new(-1,-1,-1);
-            if (selected || SceneRefs.gridTiles.activeObject == this)
+            if (selected || SceneRefs.gridTiles.activeObject == this) { 
                 c = _meshRenderers[i].material.GetColor("_EmissionColor");
-
-            _meshRenderers[i].material = newMat;
-            if(c.r != -1)
-            {
+                
+                _meshRenderers[i].material = newMat;
                 _meshRenderers[i].material.EnableKeyword("_EMISSION");
                 _meshRenderers[i].material.SetColor("_EmissionColor", c);
             }
-
+            else
+                _meshRenderers[i].material = newMat;
 
             if (transparent)
                 _meshRenderers[i].material.color
@@ -393,32 +399,28 @@ public class Building : StorageObject
     }
 
     /// <summary>
-    /// Entry point to call for creating building that are stationary.
-    /// Do not call for moving blueprints.
+    /// Sets the layer, updates global resources and creates a construction job.
     /// </summary>
-    public virtual void PlaceBuilding(bool loading = false)
+    public virtual void PlaceBuilding()
     {
-        foreach (Transform t in transform.GetComponentsInChildren<Transform>())
-        {
-            t.gameObject.layer = 6;
-        }
+        gameObject.layer = 6;
+        for (int i = 0; i < transform.childCount; i++)
+            transform.GetChild(i).gameObject.layer = 6;
         GetComponent<SortingGroup>().sortingLayerName = "Buildings";
+
         SceneRefs.gridTiles.HighLight(new(), gameObject);
-
         MyRes.UpdateResource(cost, -1);
-        if (loading)
-        {
-            maximalProgress = CalculateMaxProgress();
-            ChangeRenderMode(true);
-        }
-        else
-        {
-            SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
-            UniqueID();
-            MyGrid.SetBuilding(this, loading);
-        }
-
+        SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
+        UniqueID();
+        MyGrid.SetBuilding(this);
     }
+
+    public virtual void InitModifiers()
+    {
+        cost.Init();
+        ((IModifiable)LocalRes.capacity).Init();
+    }
+
 
     /// <summary>
     /// Fills <see cref="myColor"/>.
@@ -431,10 +433,17 @@ public class Building : StorageObject
     } // saves the original color
 
 
-    public virtual int CalculateMaxProgress() => cost.ammount.Sum() * 2;
-    
+    public virtual int CalculateMaxProgress()
+    {
+        int result = cost.Sum() * 2;
+        if (result == 0)
+            result = 1;
+        return result;
+    } 
+
     #endregion
 
+    #region Editor
 #if UNITY_EDITOR
     public void Clone(Building prev)
     {
@@ -443,4 +452,5 @@ public class Building : StorageObject
         cost = prev.cost;
     }
 #endif
+    #endregion
 }

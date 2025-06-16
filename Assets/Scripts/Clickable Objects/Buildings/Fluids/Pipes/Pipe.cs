@@ -83,15 +83,14 @@ public class Pipe : Building
     {
         base.OnPointerEnter(eventData);
     }
-    public override void PlaceBuilding(bool loading = false)
+    public override void PlaceBuilding()
     {
         gameObject.layer = 7;
         GetComponent<SortingGroup>().sortingLayerName = "Pipes";
-        maximalProgress = cost.ammount.Sum() * 2;
+        maximalProgress = cost.Sum() * 2;
         SceneRefs.gridTiles.HighLight(new(), gameObject);
 
-        HumanUtil humans = GameObject.FindWithTag("Humans").GetComponent<HumanUtil>();
-        humans.GetComponent<JobQueue>().AddJob(JobState.Constructing, this); // creates a new job with the data above
+        SceneRefs.humans.GetComponent<JobQueue>().AddJob(JobState.Constructing, this); // creates a new job with the data above
         MyRes.UpdateResource(cost, -1);
     }
     public void ConnectPipe(int _case, Pipe connectedPipe, bool canNext)
@@ -218,10 +217,10 @@ public class Pipe : Building
         int steam = 0;
         foreach (Building b in network.buildings)
         {
-            /*int i = b.localRes.stored.type.IndexOf(resourceType.water);
+            /*int i = b.localRes.type.IndexOf(resourceType.water);
             if (i > -1)
-                water += b.localRes.stored.ammount[i];
-            i = b.localRes.stored.type.IndexOf(resourceType.steam);*/
+                water += b.localRes.ammount[i];
+            i = b.localRes.type.IndexOf(resourceType.steam);*/
 
         }
         if (water > 0)

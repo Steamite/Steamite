@@ -46,6 +46,8 @@ namespace InfoWindowElements
         public LevelsTab() : base("Levels")
         {
             LevelData = Resources.Load<LevelPresent>("Holders/Data/Level Present");
+            foreach (var item in LevelData.costs)
+                item?.Init();
             style.flexGrow = 1;
             contentContainer.style.flexDirection = FlexDirection.Row;
             name = "Levels";

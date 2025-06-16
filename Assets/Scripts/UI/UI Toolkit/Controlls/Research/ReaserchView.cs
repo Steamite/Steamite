@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using Cursor = UnityEngine.Cursor;
-
-namespace Research
+namespace ResearchUI
 {
     [UxmlElement]
     public partial class ResearchView : TabView, IInitiableUI, IUIElement
@@ -35,14 +32,17 @@ namespace Research
             }
         }
 
+        /// <summary>
+        /// Sets the node as active reseach and shows a message.
+        /// </summary>
+        /// <param name="node">New active node</param>
+        /// <param name="group">Group used to get find the category index.</param>
         void OpenButton(ResearchNode node, ResearchRadioButtonGroup group)
         {
             if (node?.researched == false)
             {
-                if(prevGroup > -1)
-                    groups[prevGroup].Select(-1);
                 UIRefs.research.SetActive(node);
-                SceneRefs.ShowMessage($"Research Changed {node.nodeName}");
+                SceneRefs.ShowMessage($"Research Changed {node.Name}");
                 prevGroup = groups.IndexOf(group);
             }
         }

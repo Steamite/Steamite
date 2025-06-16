@@ -1,3 +1,4 @@
+using ResearchUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +54,7 @@ class ResourceTester : IPreprocessBuildWithReport
                 Building building = data.Categories[i].Objects[j].building;
                 if (building != null)
                 {
-                    if (CheckResource(building.cost, building.objectName, data.Categories[i].Name, "Production cost"))
+                    if (CheckResource(building.Cost, building.objectName, data.Categories[i].Name, "Production cost"))
                         succes = false;
 
                     IResourceProduction res = building as IResourceProduction;
@@ -80,7 +81,7 @@ class ResourceTester : IPreprocessBuildWithReport
         {
             for (int j = 0; j < data.Categories[i].Objects.Count; j++)
             {
-                if (CheckResource(data.Categories[i].Objects[j].reseachCost, data.Categories[i].Objects[j].nodeName, data.Categories[i].Name, "Research cost"))
+                if (CheckResource(data.Categories[i].Objects[j].reseachCost, data.Categories[i].Objects[j].Name, data.Categories[i].Name, "Research cost"))
                     succes = false;
             }
         }

@@ -468,7 +468,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f410b6b76bd2ba741a664041fe516c9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputField: {fileID: 0}
 --- !u!1 &8720792179796701350
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,8 +571,9 @@ MonoBehaviour:
   height: 21
   rocks: {fileID: 4110801998864547646}
   roads: {fileID: 3648922814593868028}
-  water: {fileID: 1739259922143558596}
+  waters: {fileID: 1739259922143558596}
   chunks: {fileID: 2572323033166613145}
   buildings: {fileID: 5844745823362512448}
   pipes: {fileID: 4897319285753657160}
   overlays: {fileID: 2016009571760947615}
+  unlocked: 0

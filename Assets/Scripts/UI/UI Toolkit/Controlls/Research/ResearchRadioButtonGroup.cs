@@ -4,7 +4,7 @@ using AbstractControls;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Research
+namespace ResearchUI
 {
     class ResearchRadioButtonGroup : CustomRadioButtonGroup
     {
@@ -18,6 +18,7 @@ namespace Research
             for (int j = 1; j < 5; j++)
             {
                 VisualElement l = new();
+                l.name = j.ToString();
                 l.style.top = j * 196;
                 l.style.backgroundColor = Color.black;
                 l.style.width = new Length(100, LengthUnit.Percent);
@@ -79,7 +80,8 @@ namespace Research
                     });
             }
         }
-
+        public void SetSelection(int value)
+            => SelectedChoice = value;
         public override bool Select(int value)
         {
             if (SelectedChoice > -1)

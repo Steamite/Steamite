@@ -7,18 +7,20 @@ using Object = UnityEngine.Object;
 
 namespace EditorWindows
 {
-    public class CategoryWindow<T, TW> : EditorWindow where T : DataCategory<TW>
+    public class CategoryWindow<CATEG_TYPE, DATA_TYPE> : EditorWindow where CATEG_TYPE : DataCategory<DATA_TYPE> where DATA_TYPE : DataObject
     {
-        public DataCategory<TW> selectedCategory;
-        protected DataHolder<T> data;
+        public DataCategory<DATA_TYPE> selectedCategory;
+        protected DataHolder<CATEG_TYPE, DATA_TYPE> data;
         [SerializeField] VisualTreeAsset windowAsset;
 
         protected DropdownField categorySelector;
+        public int categIndex => categorySelector.choices.IndexOf(categorySelector.value);
         protected TextField categoryNameField;
         Button createCategory;
         Button categoryRemover;
         VisualElement iconElement;
 
+        public void SaveValues() => EditorUtility.SetDirty(data);
         protected virtual void CreateGUI()
         {
             VisualElement doc = windowAsset.CloneTree();
@@ -116,7 +118,7 @@ namespace EditorWindows
             createCategory.SetEnabled(
                 ev.newValue.Length > 0 &&
                 selectedCategory.Name != ev.newValue &&
-                data.Categories.Count(q => (q as DataCategory<TW>).Name == ev.newValue) == 0);
+                data.Categories.Count(q => (q as DataCategory<DATA_TYPE>).Name == ev.newValue) == 0);
         }
 
         #region Categ Buttons
@@ -134,7 +136,7 @@ namespace EditorWindows
             createCategory.SetEnabled(false);
             selectedCategory.Name = categoryNameField.value;
             selectedCategory.Objects = new();
-            data.Categories.Add((T)selectedCategory);
+            data.Categories.Add((CATEG_TYPE)selectedCategory);
             categorySelector.choices.Insert(data.Categories.Count - 1, selectedCategory.Name);
             categorySelector.value = selectedCategory.Name;
             categorySelector.MarkDirtyRepaint();

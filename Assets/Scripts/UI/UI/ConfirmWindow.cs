@@ -12,6 +12,7 @@ public class ConfirmWindow : MonoBehaviour, IToolkitController
     Label head, body;
     Button confirm, cancel;
     Action resultAction;
+    Action noAction;
 
     public void Init(VisualElement root)
     {
@@ -33,6 +34,7 @@ public class ConfirmWindow : MonoBehaviour, IToolkitController
     public void Open(Action _resultAction, string _head, string _body, string _confirm = "confirm", string _cancel = "cancel")
     {
         resultAction = _resultAction;
+        noAction = null;
         head.text = _head;
         body.text = _body;
         confirm.text = _confirm;
@@ -40,12 +42,24 @@ public class ConfirmWindow : MonoBehaviour, IToolkitController
         visualElement.style.display = DisplayStyle.Flex;
         opened = true;
     }
-
+    public void Open(Action _resultAction, Action _noAction,  string _head, string _body, string _confirm = "confirm", string _cancel = "cancel")
+    {
+        resultAction = _resultAction;
+        noAction = _noAction;
+        head.text = _head;
+        body.text = _body;
+        confirm.text = _confirm;
+        cancel.text = _cancel;
+        visualElement.style.display = DisplayStyle.Flex;
+        opened = true;
+    }
     public void Close(bool result)
     {
         opened = false;
         if (result)
             resultAction();
+        else if (noAction != null)
+            noAction();
         visualElement.style.display = DisplayStyle.None;
     }
 }

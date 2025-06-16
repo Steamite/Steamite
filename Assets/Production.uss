@@ -20,7 +20,7 @@ DoubleResourceList Scroller {
 }
 
 #Production > #Input .unity-scroll-view__content-container {
-    padding-left: 35px;
+    padding-left: 0;
 }
 
 #Production > #Output .unity-scroll-view__content-container {

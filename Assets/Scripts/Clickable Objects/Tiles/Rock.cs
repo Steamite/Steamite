@@ -120,9 +120,9 @@ public class Rock : ClickableObject
         Integrity -= damage;
         if (Integrity <= 0)
         {
-            if (rockYield?.ammount.Sum() > 0)
+            if (rockYield?.Sum() > 0)
             {
-                Chunk chunk = SceneRefs.objectFactory.CreateAChunk(GetPos(), rockYield, true);
+                Chunk chunk = SceneRefs.objectFactory.CreateChunk(GetPos(), rockYield, true);
                 chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material.color 
                     = GetComponent<MeshRenderer>().material.color;
             }

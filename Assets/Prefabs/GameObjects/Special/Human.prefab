@@ -468,6 +468,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -5317621499353570459, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2852740110440792222}
+    - targetCorrespondingSourceObject: {fileID: -5317621499353570459, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8895055429004639018}
   m_SourcePrefab: {fileID: 100100000, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
 --- !u!4 &5056384716566255303 stripped
 Transform:
@@ -486,10 +489,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5575513171907906685}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -519,7 +522,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: 
-  selected: 0
   id: 0
   objectName: Human
   specialization: 0
@@ -597,3 +599,26 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &8895055429004639018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616891365706748489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0

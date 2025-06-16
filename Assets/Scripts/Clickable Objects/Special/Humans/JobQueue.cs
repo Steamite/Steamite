@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>Handles and stores job requests.</summary>
@@ -17,6 +19,7 @@ public class JobQueue : MonoBehaviour
 
     /// <summary>Storages</summary>
     [Header("")] public List<IStorage> storages = new();
+    [ReadOnly(true)] public List<MonoBehaviour> Storages => storages.Cast<MonoBehaviour>().ToList();
     /// <summary>Job priority</summary>
     public List<JobState> priority;
 
@@ -107,7 +110,7 @@ public class JobQueue : MonoBehaviour
                         human.destination.LocalRes.RemoveRequest(human);
                 }
 
-                SceneRefs.objectFactory.CreateAChunk(human.GetPos(), human.Inventory, false);
+                SceneRefs.objectFactory.CreateChunk(human.GetPos(), human.Inventory, false);
                 break;
         }
     }

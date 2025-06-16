@@ -65,13 +65,13 @@ public class Human : ClickableObject
     /// <summary>Action to execute next tick.</summary>
     Action<Human> repetableAction;
     /// <summary>Resources that are being carried.</summary>
-    Resource inventory = new();
+    [SerializeField]CapacityResource inventory = new();
 
     #endregion
 
     #region Properties
     /// <inheritdoc cref="inventory"/>
-    [CreateProperty] public Resource Inventory => inventory;
+    [CreateProperty] public CapacityResource Inventory { get => inventory; set => inventory = value; }
 
 
     /// <inheritdoc cref="efficiency"/>
@@ -146,6 +146,7 @@ public class Human : ClickableObject
 #endif
         SceneRefs.tick.SubscribeToEvent(DoRepetableAction, Tick.TimeEventType.Ticks);
         SceneRefs.tick.SubscribeToEvent(Day, Tick.TimeEventType.DayStart);
+        ((IModifiable)Inventory.capacity).Init();
         //SceneRefs.tick.SubscribeToEvent(Night, Tick.TimeEventType.Night);
     }
 
@@ -195,24 +196,26 @@ public class Human : ClickableObject
         (clickable as HumanSave).workplaceId = workplace != null ? ((ClickableObject)workplace).id : -1;
         return base.Save(clickable);
     }
+
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-        HumanSave s = (save as HumanSave);
+        HumanSave s = save as HumanSave;
         transform.GetChild(1).GetComponent<MeshRenderer>().material.color = s.color.ConvertColor();
         id = save.id;
         objectName = save.objectName;
         SetJob(new JobData(s.jobSave, this));
+        Inventory = new(20);
         MyRes.ManageRes(Inventory, s.inventory, 1);
         specialization = s.specs;
         // house assigment
         if (s.houseID != -1)
-            MyGrid.buildings.Where(q => q.id == s.houseID).
+            MyGrid.Buildings.Where(q => q.id == s.houseID).
                 SingleOrDefault().GetComponent<House>().ManageAssigned(this, true);
 
         // workplace assigment
         if (s.workplaceId != -1)
-            MyGrid.buildings.Where(q => q.id == s.workplaceId).
+            MyGrid.Buildings.Where(q => q.id == s.workplaceId).
                 SingleOrDefault().GetComponent<IAssign>().ManageAssigned(this, true);
 
         base.Load(save);
@@ -302,9 +305,12 @@ public class Human : ClickableObject
                 data.interest = null;
                 SetJob(data);
             }
+            return;
         }
-        else if (jData.job != JobState.Free)
-            SetJob(JobState.Free);
+        if (jData.job != JobState.Free)
+        {
+            SetJob(JobState.Free, path: new());
+        }
         else
             ChangeAction(null);
     }

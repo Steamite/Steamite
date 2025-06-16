@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 /// <summary>
 /// Serves as a store house for the colony.<br/>
 /// Each storage should have all resource types in the <see cref="StorageObject.localRes"/>
@@ -12,25 +14,30 @@ public interface IStorage
     /// <summary>
     /// Assigns all resource types and setups base storage resources.
     /// </summary>
-    /// <param name="templateRes">Clones resource types.</param>
     /// <param name="jQ">Reference to register this object to global storage list.</param>
-    public void SetupStorage(JobQueue jQ, bool fill = true)
+    public void SetupStorage()
     {
-        LocalResources.stored.type = MyRes.resourceTemplate.type;
-        if (fill)
-        {
-            while (LocalResources.stored.ammount.Count < MyRes.resourceTemplate.type.Count)
-            {
-                LocalResources.stored.ammount.Add(400);
-            }
-        }
+        int i = 1;
+        LocalResources.type = new();
+        LocalResources.ammount = new();
         CanStore = new();
-        for (int i = 0; i < LocalResources.stored.ammount.Count; i++)
+        foreach (var item in Enum.GetNames(typeof(ResourceType)).Skip(1))
         {
+            LocalResources.type.Add((ResourceType)i);
+            LocalResources.ammount.Add(100);
             CanStore.Add(true);
+            i++;
         }
-        jQ.storages.Add(this);
-        LocalResources.stored.capacity = 5000;
+    }
+
+    public void FinishStorageConstruction()
+    {
+        LocalResources.type = MyRes.resourceTemplate.type;
+        while (LocalResources.ammount.Count < MyRes.resourceTemplate.type.Count)
+            LocalResources.ammount.Add(0);
+        for (int i = 0; i < LocalResources.ammount.Count; i++)
+            CanStore.Add(true);
+        SceneRefs.jobQueue.storages.Add(this);
     }
 
     /// <summary>
@@ -40,7 +47,7 @@ public interface IStorage
     /// <param name="ammountToDestroy">Ammount of resources.</param>
     public void DestroyResource(ResourceType type, int ammountToDestroy)
     {
-        LocalResources.stored[type] -= ammountToDestroy;
+        LocalResources[type] -= ammountToDestroy;
         ((Building)this).UIUpdate(nameof(Building.LocalRes));
     }
 }

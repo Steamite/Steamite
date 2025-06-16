@@ -3,7 +3,7 @@
   <Class Name="Building">
     <Position X="20" Y="11" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>IAEIwIAAAEAAAgAgQEQAkAgEBAQRgEDABAUAEQUAAFA=</HashCode>
+      <HashCode>YAEowIAAAEAAAgAgQEQAkAgEBAQRgEDABAUAEQUAAFA=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Building.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -98,10 +98,24 @@
   <Class Name="ResearchProduction">
     <Position X="21.5" Y="19.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAACBBAAAAAIAAAAAAAABFABAAAAAAAAAAFAgAAAAgA=</HashCode>
+      <HashCode>AAACBBAAAAAIAAAAAAAABFABAAAAAAAAAAFAgAAAAgQ=</HashCode>
       <FileName>Assets\Scripts\Clickable Objects\Buildings\Assign\Production Buildings\ResearchProduction.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="1.34" />
+  </Class>
+  <Class Name="Resource" Collapsed="true">
+    <Position X="8" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAEiQIBAAAAAQABAIgAAAAAAAAAABA=</HashCode>
+      <FileName>Assets\Scripts\Data\Data Classes\Resources\Resource.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ModifiableResource" Collapsed="true">
+    <Position X="7" Y="2.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAiCAAAAAAAAAAAAAAAgAIAAAACAAAAAAQ=</HashCode>
+      <FileName>Assets\Scripts\Data\Data Classes\Resources\ModifiableResource.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Interface Name="IAssign">
     <Position X="23" Y="16" Width="1.5" />

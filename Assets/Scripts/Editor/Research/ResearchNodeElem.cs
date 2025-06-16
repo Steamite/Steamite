@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BuildingStats;
+using ResearchUI;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -17,6 +20,7 @@ namespace EditorWindows.Research
 
         public ResearchNodeElem(ResearchNode _nodeData, ResearchEditor editor, ResearchData data)
         {
+            #region Top Connector
             Button topConnector = null;
 
             if (_nodeData.level != 0)
@@ -29,11 +33,13 @@ namespace EditorWindows.Research
                 topConnector.style.top = -12;
                 Add(topConnector);
             }
+            #endregion
 
+            #region BottomConnector
             Button botConnector = new(() => BottomConnect(_nodeData, editor));
             botConnector.name = "Bot";
             botConnector.AddToClassList("connector");
-
+            #endregion
 
             VisualElement body = new();
 
@@ -44,7 +50,7 @@ namespace EditorWindows.Research
             Button moveButton = new Button(null, () => editor.Move(_nodeData, -1));
             moveButton.AddToClassList("move-button");
             moveButton.iconImage = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Sprites/Icons/Info window/arrow-left@2x.texture2D");
-            moveButton.SetEnabled(editor.Exists(_nodeData, -1));
+            moveButton.SetEnabled(editor.Exists(_nodeData, false));
             moveButtons.Add(moveButton);
             moveButtons.Add(new());
             moveButtons[1].style.flexDirection = FlexDirection.RowReverse;
@@ -54,7 +60,7 @@ namespace EditorWindows.Research
             moveButton = new Button(null, () => editor.Move(_nodeData, 1));
             moveButton.AddToClassList("move-button");
             moveButton.iconImage = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Sprites/Icons/Info window/arrow-right@2x.texture2D");
-            moveButton.SetEnabled(editor.Exists(_nodeData, 1));
+            moveButton.SetEnabled(editor.Exists(_nodeData, true));
             moveButtons[1].Add(moveButton);
 
             // delete button
@@ -70,16 +76,31 @@ namespace EditorWindows.Research
             });
             moveButtons[1].Add(moveButton);
 
+            Toggle toggle = new Toggle();
+            toggle.AddToClassList("toggle");
+            toggle.text = "";
+            toggle.value = _nodeData.researched;
+            toggle.RegisterValueChangedCallback<bool>(
+                (ev) => 
+                {
+                    _nodeData.researched = ev.newValue;
+                    editor.SaveValues();
+                });
+            moveButtons[1].Add(toggle);
+            #endregion
+
+            #region Color
             if (_nodeData.level != 0)
             {
                 ColorField colorF = new();
                 colorF.value = _nodeData.lineColor;
+                //Debug.Log("bbbbbb");
                 colorF.RegisterValueChangedCallback<Color>(
                     (ev) =>
                     {
-                        _nodeData.lineColor = ev.newValue;
+                        Debug.Log("adsadsd");
+                        _nodeData.lineColor = colorF.value;
                         editor.SaveValues();
-                        editor.RepaintRow(_nodeData.level);
                     });
                 colorF.AddToClassList("color");
                 colorF.style.width = 50;
@@ -94,11 +115,11 @@ namespace EditorWindows.Research
             body[1].style.flexDirection = FlexDirection.Row;
             TextField nameField = new TextField();
             nameField.AddToClassList("name-text");
-            nameField.value = _nodeData.nodeName;
+            nameField.value = _nodeData.Name;
             nameField.RegisterValueChangedCallback<string>(
                 (ev) =>
                 {
-                    _nodeData.nodeName = ev.newValue;
+                    _nodeData.Name = ev.newValue;
                     editor.SaveValues();
                 });
             body[1].Add(nameField);
@@ -125,7 +146,7 @@ namespace EditorWindows.Research
                 _nodeData.nodeCategory + 1);
 
             DropdownField assignee = new(
-                editor.GetActiveBuildings(_nodeData),
+                editor.GetAvailable(_nodeData),
                 _nodeData.nodeAssignee == -1 ? 0 : 1);
             assignee.SetEnabled(_nodeData.nodeCategory != -1);
 
@@ -137,16 +158,7 @@ namespace EditorWindows.Research
                     if (newVal != _nodeData.nodeType)
                     {
                         ToggleElements(newVal, body, topConnector, botConnector);
-                        switch (newVal)
-                        {
-                            case NodeType.Dummy:
-                                break;
-                            case NodeType.Stat:
-                                break;
-                            case NodeType.Building:
-                                editor.RecalculateAvailableBuildings();
-                                break;
-                        }
+                        editor.RecalculateAvailableByNode(_nodeData);
                         _nodeData.nodeType = newVal;
                         _nodeData.nodeCategory = -1;
                         editor.SaveValues();
@@ -169,11 +181,11 @@ namespace EditorWindows.Research
                         else
                         {
                             _nodeData.nodeCategory = category.index - 1;
-                            assignee.choices = editor.GetActiveBuildings(_nodeData);
+                            assignee.choices = editor.GetAvailable(_nodeData);
                         }
                         _nodeData.nodeAssignee = -1;
                         editor.SaveValues();
-                        editor.RecalculateAvailableBuildings();
+                        editor.RecalculateAvailableByNode(_nodeData);
                         assignee.SetEnabled(_nodeData.nodeCategory != -1);
                     }
                 });
@@ -183,7 +195,7 @@ namespace EditorWindows.Research
             assignee.RegisterCallback<PointerDownEvent>(
                 (ev) =>
                 {
-                    assignee.choices = editor.GetActiveBuildings(_nodeData);
+                    assignee.choices = editor.GetAvailable(_nodeData);
                     assignee.SetValueWithoutNotify(assignee.choices[_nodeData.nodeAssignee == -1 ? 0 : 1]);
                 });
             body.Add(assignee);
@@ -196,7 +208,7 @@ namespace EditorWindows.Research
                         if (_nodeData.nodeAssignee != -1)
                         {
                             _nodeData.nodeAssignee = -1;
-                            editor.RecalculateAvailableBuildings();
+                            editor.RecalculateAvailableByNode(_nodeData);
                         }
                         _nodeData.nodeAssignee = -1;
                     }
@@ -204,17 +216,14 @@ namespace EditorWindows.Research
                     {
                         if (_nodeData.nodeAssignee == -1)
                         {
-                            _nodeData.nodeAssignee = editor.buildingData.Categories[_nodeData.nodeCategory]
-                                .availableBuildings.FirstOrDefault(q => q.building.objectName == ev.newValue).id;
-                            editor.RecalculateAvailableBuildings();
+                            SetAssigne(_nodeData, ev.newValue, editor);
                         }
                         else
                             return;
                     }
                     else
                     {
-                        _nodeData.nodeAssignee = editor.buildingData.Categories[_nodeData.nodeCategory].availableBuildings.FirstOrDefault(q => q.building.objectName == ev.newValue).id;
-                        editor.RecalculateAvailableBuildings();
+                        SetAssigne(_nodeData, ev.newValue, editor);
                     }
                     editor.SaveValues();
                 });
@@ -222,9 +231,11 @@ namespace EditorWindows.Research
             #endregion
 
 
+            #region Description
             TextField field = new();
             field.AddToClassList("description-field");
             field.value = _nodeData.description;
+            field.style.height = 100;
             field.multiline = true;
             field.verticalScrollerVisibility = ScrollerVisibility.AlwaysVisible;
             field.RegisterCallback<FocusOutEvent>(
@@ -235,36 +246,73 @@ namespace EditorWindows.Research
                 });
 
             body.Add(field);
-            Add(body);
+            #endregion
 
+            Add(body);
 
             Add(botConnector);
 
             style.flexGrow = 0;
-            style.height = 250;
+            style.height = 300;
             AddToClassList("body");
 
             ToggleElements(_nodeData.nodeType, body, topConnector, botConnector);
         }
+
+        void SetAssigne(ResearchNode _nodeData, string newVal, ResearchEditor editor)
+        {
+            switch (_nodeData.nodeType)
+            {
+                case NodeType.Dummy:
+                    return;
+                case NodeType.Building:
+                    _nodeData.nodeAssignee = 
+                        editor.buildingData.Categories[_nodeData.nodeCategory]
+                        .availableObjects.FirstOrDefault(q => q.GetName() == newVal).id;
+                    break;
+                case NodeType.Stat:
+                    BuildingStats.Stat stat = editor.statData.Categories[_nodeData.nodeCategory]
+                        .availableObjects.FirstOrDefault(q => q.GetName() == newVal);
+                    _nodeData.nodeAssignee = stat.id;
+                    GetDescr(_nodeData, editor);
+                    break;
+            }
+            editor.RecalculateAvailableByNode(_nodeData);
+        }
+
+        void GetDescr(ResearchNode _nodeData, ResearchEditor editor)
+        {
+            if (_nodeData.nodeAssignee > -1)
+            {
+                string descr = _nodeData.GetDescr(editor.statData.Categories[_nodeData.nodeCategory]
+                    .Objects.FirstOrDefault(q => q.id == _nodeData.nodeAssignee));
+                this.Q<TextField>(className:"description-field").value = descr;
+            }
+        }
+
+        /// <summary>Toggles the elements <see cref="NodeType.Dummy"/>.</summary>
+        /// <param name="type">Type of the node.</param>
+        /// <param name="body">Body component.</param>
+        /// <param name="topConnect">Top button.</param>
+        /// <param name="bottomConnect">Bot button.</param>
         void ToggleElements(
             NodeType type,
-            VisualElement parent,
+            VisualElement body,
             VisualElement topConnect,
             VisualElement bottomConnect)
         {
-            DisplayStyle style = type == NodeType.Building ? DisplayStyle.Flex : DisplayStyle.None;
+            DisplayStyle style = type == NodeType.Dummy ? DisplayStyle.None : DisplayStyle.Flex;
             if (topConnect != null)
                 topConnect.style.display = style;
-            for (int i = 0; i < parent.childCount; i++)
+            for (int i = 0; i < body.childCount; i++)
             {
-                parent[i].style.display = parent[i] is EnumField ? DisplayStyle.Flex : style;
+                body[i].style.display = body[i] is EnumField ? DisplayStyle.Flex : style;
             }
             bottomConnect.style.display = style;
         }
 
-        /// <summary>
-        /// Needs to have a previously selected node.
-        /// </summary>
+        #region Connections
+        /// <summary>Needs to have a previously selected node.</summary>
         /// <param name="nodeData">This node.</param>
         /// <param name="editor">Editor reference for getting the last selected and updating lines.</param>
         void TopConnect(ClickEvent ev, ResearchNode nodeData, ResearchEditor editor)
@@ -272,7 +320,9 @@ namespace EditorWindows.Research
             Debug.Log("Top - clicked");
             if (editor.activeNode != null)
             {
-                editor.tree[editor.activeNode.level][1][editor.selectedCategory.Objects.FindIndex(q => q.id == editor.activeNode.id)].Q<Button>("Bot").RemoveFromClassList("selected");
+                int i = editor.GetIndexInRow(editor.activeNode);
+                editor.tree[editor.activeNode.level][1][i]
+                    .Q<Button>("Bot").RemoveFromClassList("selected");
                 editor.activeNode.ConnectNode(nodeData);
                 editor.SaveValues();
                 editor.RepaintRow(nodeData.level);
@@ -286,6 +336,9 @@ namespace EditorWindows.Research
             editor.activeNode = null;
         }
 
+        /// <summary>Marks the node for connecting.</summary>
+        /// <param name="nodeData"></param>
+        /// <param name="editor"></param>
         void BottomConnect(ResearchNode nodeData, ResearchEditor editor)
         {
             Debug.Log("Bot - clicked");
@@ -295,5 +348,6 @@ namespace EditorWindows.Research
                 editor.activeNode = null;
             this.Q<Button>("Bot").ToggleInClassList("selected");
         }
+        #endregion
     }
 }

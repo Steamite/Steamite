@@ -3,6 +3,6 @@
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/Research/ResearchTabs.uss?fileID=7433441132597879392&amp;guid=62082d53ffa4331479e4c3201d8a0876&amp;type=3#ResearchTabs" />
     <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/Research/Research.uss?fileID=7433441132597879392&amp;guid=02ca74604d5363e409f10c7d7747e32a&amp;type=3#Research" />
     <engine:VisualElement name="Root" class="window" style="flex-grow: 1; display: flex;">
-        <Research.ResearchView name="ResearchView" style="flex-grow: 1;" />
+        <ResearchUI.ResearchView name="ResearchView" style="flex-grow: 1;" />
     </engine:VisualElement>
 </engine:UXML>

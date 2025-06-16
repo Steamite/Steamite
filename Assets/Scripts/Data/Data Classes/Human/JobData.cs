@@ -23,14 +23,14 @@ public struct JobData
         interest = null;
         if (jobSave.destinationID > -1)
         {
-            human.destination = MyGrid.buildings.Single(q => q.id == jobSave.destinationID);
+            human.destination = MyGrid.GetBuilding(q => q.id == jobSave.destinationID);
             human.destination.TryLink(human);
         }
 
         switch (jobSave.interestType)
         {
             case JobSave.InterestType.B:
-                interest = MyGrid.buildings.Single(q => q.id == jobSave.interestID);
+                interest = MyGrid.GetBuilding(q => q.id == jobSave.interestID);
                 break;
             case JobSave.InterestType.R:
                 interest = SceneRefs.jobQueue.toBeDug.FirstOrDefault(q => q.id == jobSave.interestID);

@@ -11,9 +11,9 @@ public class FluidTank : Building
         base.UniqueID();
         networkAccess.ID(transform.GetChild(1));
     }
-    public override void PlaceBuilding(bool loading = false)
+    public override void PlaceBuilding()
     {
-        base.PlaceBuilding(loading);
+        base.PlaceBuilding();
         networkAccess.PlacePipes(transform.GetChild(2));
     }
     public override bool CanPlace()

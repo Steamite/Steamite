@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>Unities Saving.</summary>
 public class SaveController : MonoBehaviour, IAfterLoad
@@ -22,7 +23,19 @@ public class SaveController : MonoBehaviour, IAfterLoad
 
     void OnApplicationQuit()
     {
-        SaveGame("", true);
+        bool level = true;
+        bool loaded = false;
+        string s;
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            s = SceneManager.GetSceneAt(i).name;
+            if (s == "Level")
+                level = true;
+            else if (s == "LoadingScreen")
+                loaded = false;
+        }
+        if(level && loaded)
+            SaveGame("", true);
     }
 
     /// <summary>
@@ -32,8 +45,9 @@ public class SaveController : MonoBehaviour, IAfterLoad
     public static JsonSerializer PrepSerializer()
     {
         JsonSerializer jsonSerializer = new();
-        jsonSerializer.TypeNameHandling = TypeNameHandling.Auto;
+        jsonSerializer.TypeNameHandling = TypeNameHandling.All;
         jsonSerializer.Formatting = Formatting.Indented;
+        jsonSerializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
         return jsonSerializer;
     }
     #endregion
@@ -178,10 +192,10 @@ public class SaveController : MonoBehaviour, IAfterLoad
     #region Save Parts
     BSave[] SaveBuildings()
     {
-        BSave[] bSaves = new BSave[MyGrid.buildings.Count];
-        for (int i = 0; i < MyGrid.buildings.Count; i++)
+        BSave[] bSaves = new BSave[MyGrid.Buildings.Count];
+        for (int i = 0; i < bSaves.Length; i++)
         {
-            bSaves[i] = MyGrid.buildings[i].Save() as BSave;
+            bSaves[i] = MyGrid.Buildings[i].Save() as BSave;
         }
         return bSaves;
     }
@@ -228,11 +242,67 @@ public class SaveController : MonoBehaviour, IAfterLoad
         }
         catch (Exception e)
         {
+            Debug.LogError(e);
             if (writer != null)
                 writer.Dispose();
-            if (jsonWriter != null)
-                jsonWriter.Close();
-            throw e;            
+            if (jsonWriter != null && jsonWriter.WriteState != WriteState.Closed)
+                jsonWriter.Close();  
+        }
+    }
+
+    // TODO
+    void NewGameSave(string saveName, bool autoSave, WorldSave world)
+    {
+        string tmpPath = $"{Application.persistentDataPath}/saves/_tmp";
+        Directory.CreateDirectory($"{tmpPath}");
+        JsonSerializer jsonSerializer = PrepSerializer();
+        try
+        {
+            WriteSave(
+                $"{tmpPath}/Grid.json",
+                jsonSerializer,
+                world.objectsSave);
+
+            for (int i = 0; i < 5; i++)
+                WriteSave(
+                    $"{tmpPath}/Level{i}.json",
+                    jsonSerializer,
+                    world.gridSave[i]);
+
+            WriteSave(
+                $"{tmpPath}/Humans.json",
+                jsonSerializer,
+                SceneRefs.humans.SaveHumans());
+
+            WriteSave(
+               $"{tmpPath}/Game State.json",
+               jsonSerializer,
+               SaveGameState(autoSave));
+
+            WriteSave(
+               $"{tmpPath}/Research.json",
+               jsonSerializer,
+               new ResearchSave(UIRefs.research));
+
+            WriteSave(
+               $"{tmpPath}/Trade.json",
+               jsonSerializer,
+               new TradeSave(UIRefs.trading));
+
+            if (autoSave)
+                saveName = "autosave";
+            AfterSave(tmpPath, saveName, autoSave);
+        }
+        catch (Exception e)
+        {
+            SceneRefs.ShowMessage("An error ocured when saving.");
+            Debug.LogWarning("Saving error: " + e);
+            foreach (string file in Directory.GetFiles(tmpPath))
+            {
+                File.Delete(file);
+            }
+            Directory.Delete($"{tmpPath}");
+            return;
         }
     }
     #endregion

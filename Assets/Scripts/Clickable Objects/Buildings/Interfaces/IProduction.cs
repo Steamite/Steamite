@@ -3,12 +3,15 @@ public interface IProduction
     #region Properties
     /// <summary>Time it takes to finish one production cycle.</summary>
     public float ProdTime { get; set; }
+
     /// <summary>Current progress.</summary>
     public float CurrentTime { get; set; }
-    /// <summary>Multiplies the weight of progress additions.</summary>
-    public int Modifier { get; set; }
+
     /// <summary>Manual stop.</summary>
     public bool Stoped { get; set; }
+
+    /// <summary>Multiplies the weight of progress additions.</summary>
+    ModifiableFloat ProdSpeed { get; set; }
     #endregion
 
 

@@ -51,9 +51,12 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
             }
             else
             {
-                if (gameSpeed.triggered)
+                // 
+                if (gameSpeed.triggered && gameSpeed.phase == InputActionPhase.Performed)
                 {
-                    timeButtons.OutsideTrigger(Mathf.RoundToInt(gameSpeed.ReadValue<float>()));
+                    int i = Mathf.RoundToInt(gameSpeed.ReadValue<float>());
+                    Debug.Log("New: " + i);
+                    timeButtons.OutsideTrigger(i);
                 }
             }
 

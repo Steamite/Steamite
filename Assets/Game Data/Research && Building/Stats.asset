@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d20261503438a6348856bb57ab17172d, type: 3}
+  m_Name: Stats
+  m_EditorClassIdentifier: 
+  Categories:
+  - Name: Stats
+    Objects:
+    - Name: Extension
+      id: 1873593032
+      pairs:
+      - mask: 1
+        underProp: 0
+        mod: 0
+        modAmmount: 5
+        percent: 0
+    - Name: ABCD
+      id: 2090065767
+      pairs:
+      - mask: 4
+        underProp: 0
+        mod: 1
+        modAmmount: 25
+        percent: 1
+      - mask: 2
+        underProp: 0
+        mod: 2
+        modAmmount: 3
+        percent: 0
+      - mask: 3
+        underProp: 0
+        mod: 6
+        modAmmount: 5
+        percent: 0
+      - mask: 2
+        underProp: 0
+        mod: 4
+        modAmmount: -50
+        percent: 1
+      - mask: 2
+        underProp: 0
+        mod: 3
+        modAmmount: 2
+        percent: 0
+      - mask: 2
+        underProp: 0
+        mod: 5
+        modAmmount: 10
+        percent: 1
+      - mask: 0
+        underProp: 0
+        mod: 3
+        modAmmount: -100
+        percent: 0
+    Icon: {fileID: 2800000, guid: abf13685b7e55ff4e960d786dde4c5ba, type: 3}

@@ -107,9 +107,9 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <param name="resources">Resource fill.</param>
     /// <param name="updateGlobalResource">Do you want to add the resources to the global resource counter?</param>
     /// <returns></returns>
-    public Chunk CreateAChunk(GridPos gp, Resource resources, bool updateGlobalResource)
+    public Chunk CreateChunk(GridPos gp, Resource resources, bool updateGlobalResource)
     {
-        if (resources.ammount.Sum() > 0)
+        if (resources.Sum() > 0)
         {
             Building building = MyGrid.GetGridItem(gp) as Building;
             if (building)
@@ -133,7 +133,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <param name="material">Hat material.</param>
     /// <param name="i">Int for name.</param>
     /// <returns></returns>
-    public Human CreateAHuman(GridPos gp, Material material, int i)
+    public Human CreateHuman(GridPos gp, Material material, int i)
     {
         Human h = (Human)Instantiate(
             specialPrefabs.GetPrefab("Human"),
@@ -141,6 +141,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             Quaternion.identity,
             SceneRefs.humans.transform.GetChild(0).transform);
         h.UniqueID();
+        h.Inventory = new(20);
         // color for debug
         h.transform.GetChild(1).GetComponent<MeshRenderer>().material = material;
         h.objectName = $"Human {(i == 0 ? "Red" : i == 1 ? "Yellow" : "White")}";
@@ -152,7 +153,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <summary>Loads a building.</summary>
     public Building CreateSavedBuilding(BSave save)
     {
-        GridPos rotate = MyGrid.Rotate(save.blueprint.moveBy, transform.rotation.eulerAngles.y);
+        GridPos rotate = MyGrid.Rotate(save.blueprint.moveBy, save.rotationY);
         Building b = Instantiate(
             buildPrefabs.GetBuilding(save.categoryID, save.wrapperID),
             new Vector3(save.gridPos.x + rotate.x, (save.gridPos.y * LEVEL_HEIGHT) + BUILD_OFFSET, save.gridPos.z + rotate.z),
@@ -219,5 +220,6 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         if (!buttons.IsDone)
             yield return buttons;
         buildPrefabs = buttons.Result;
+        buildPrefabs.Categories.SelectMany(q => q.Objects).Select(q => q.building).ToList().ForEach(q => q.InitModifiers());
     }
 }

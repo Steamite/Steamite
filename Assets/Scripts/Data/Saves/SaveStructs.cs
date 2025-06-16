@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
-
 [Serializable]
 public class JobSave
 {
@@ -96,6 +94,16 @@ public class RockSave : ClickableObjectSave
     public float originalIntegrity;
     public float integrity;
     public bool toBeDug;
+
+    public RockSave(){}
+
+    public RockSave(Resource yeild, float originalIntegrity, float integrity, bool toBeDug)
+    {
+        this.yeild = yeild;
+        this.originalIntegrity = originalIntegrity;
+        this.integrity = integrity;
+        this.toBeDug = toBeDug;
+    }
 }
 [Serializable]
 public class WaterSave : ClickableObjectSave
@@ -125,7 +133,6 @@ public class BSave : StorageObjectSave
     public float rotationY;
 
     public BuildingGrid blueprint;
-    public Resource cost;
     public bool constructed;
     public bool deconstructing;
     public float constructionProgress;
@@ -159,7 +166,7 @@ public class ProductionBSave : AssignBSave
 {
     public float prodTime = 20;
     public float currentTime = 0;
-    public int modifier = 1;
+    public float modifier = 1;
     public ProductionStates ProdStates;
 }
 
@@ -211,16 +218,16 @@ public class HumanSave : ClickableObjectSave
     }
 }
 [Serializable]
-public class StorageResSave
+public class StorageResSave : Resource
 {
-    public Resource stored;
     public List<Resource> requests;
     public List<int> carriers;
     public List<int> mod;
 
     public StorageResSave(StorageResource storageResource)
     {
-        stored = storageResource.stored;
+        type = storageResource.type.ToList();
+        ammount = storageResource.ammount.ToList();
         requests = storageResource.requests;
         carriers = storageResource.carriers.Select(q => q.id).ToList();
         mod = storageResource.mods;

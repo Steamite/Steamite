@@ -107,3 +107,13 @@
 .found > .rotator {
     -unity-background-image-tint-color: rgb(156, 0, 0);
 }
+
+.forceHover {
+    transition-duration: 0.3s;
+    scale: 1.1 1.1;
+}
+
+.forceHover > .rotator {
+    transition-duration: 0.3s;
+    -unity-background-image-tint-color: rgb(226, 152, 18);
+}

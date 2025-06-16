@@ -1,7 +1,8 @@
 using AbstractControls;
+using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Research
+namespace ResearchUI
 {
     public class ResearchRadioButton : CustomRadioButton
     {
@@ -19,21 +20,29 @@ namespace Research
         }
 
         //Variables
+        /// <summary>Node of the button.</summary>
         public ResearchNode node;
+        /// <summary>Line from the button down.</summary>
         public ResearchDownLine lineDown;
+        /// <summary>Line from the button up.</summary>
         public ResearchLine lineUp;
 
+        /// <summary>Background image.</summary>
         VisualElement background;
 
+        /// <summary>Research state of the button.</summary>
         ButtonState state;
 
-        int categ;
+        /// <summary>Building Index.</summary>
         int building;
 
+        /// <summary>Creates the button using the <paramref name="categ"/>.</summary>
+        /// <param name="categ">Research category to find the node.</param>
+        /// <param name="i">Index of the node in category.</param>
         public ResearchRadioButton(ResearchCategory categ, int i) : base("research-button", i, true)
         {
             node = categ.Objects[i];
-            name = node.nodeName;
+            name = node.Name;
 
             if (node.nodeType == NodeType.Dummy || node.nodeAssignee == -1)
             {
@@ -52,7 +61,7 @@ namespace Research
             }
             else
             {
-                node.onFinishResearch += FinishResearch;
+                node.RegisterFinishCallback(FinishResearch);
             }
 
             VisualElement preview = new();
@@ -68,51 +77,72 @@ namespace Research
 
             Label nameLabel = new();
             nameLabel.AddToClassList("name-label");
-            nameLabel.text = node.nodeName;
+            nameLabel.text = node.Name;
             Add(nameLabel);
 
-            RegisterCallback<PointerEnterEvent>(_ => ToolkitUtils.localMenu.Open(node, this));
+            RegisterCallback<PointerEnterEvent>(_ => ToolkitUtils.localMenu.UpdateContent(node, this));
             RegisterCallback<PointerLeaveEvent>(_ => ToolkitUtils.localMenu.Close());
         }
 
+        /// <summary>
+        /// Marks lines and updates the <see cref="state"/>.
+        /// </summary>
+        /// <param name="categ">Category to check prequisite nodes.</param>
         public void AfterLines(ResearchCategory categ)
         {
             if (node.researched)
                 return;
-            if (categ.CheckPrequisite(node, UnlockResearch))
+            if (categ.CheckPrequisite(node, () => UnlockResearch(false)))
             {
-                UnlockResearch();
                 if (node == UIRefs.research.currentResearch)
-                    Select();
+                {
+                    UnlockResearch(true);
+                    SelectWithoutTransition(false); // updates the group but without checks
+                    ToolkitUtils.GetParentOfType<ResearchRadioButtonGroup>(this).SetSelection(value);
+                }
+                else
+                    UnlockResearch(false);
+                    
             }
             else
                 state = ButtonState.Unavailable;
         }
-
         protected override bool SelectChange(bool UpdateGroup)
         {
-            if (state == ButtonState.Available && MyRes.CanAfford(node.reseachCost))
+            if(UpdateGroup == false)
             {
-                if (UIRefs.research.currentResearch == null || UIRefs.research.currentResearch.id == node.id)
+                base.SelectChange(UpdateGroup);
+                return true;
+            }
+            else if (state == ButtonState.Available && MyRes.CanAfford(node.reseachCost))
+            {
+                if (UIRefs.research.currentResearch == null || UpdateGroup == false)
                 {
                     if (node.CurrentTime < 0)
                     {
                         node.CurrentTime = 0;
                         MyRes.PayCostGlobal(node.reseachCost);
                     }
-                    if (UIRefs.research.currentResearch == null)
-                        ToolkitUtils.localMenu.Open(node, this);
+                    ToolkitUtils.localMenu.UpdateContent(node, this, true);
                     base.SelectChange(UpdateGroup);
                     RemoveFromClassList(AVAILABLE_CLASS);
                     return true;
                 }
                 else
                 {
+                    ToolkitUtils.ChangeClassWithoutTransition(AVAILABLE_CLASS, "forceHover", this);
                     ConfirmWindow.window.Open(
                         () =>
                         {
-                            UIRefs.research.SetActive(node);
+                            // Clear research(queue[WIP]) and select this button.
+                            UIRefs.research.SetActive(null);
+                            ToolkitUtils.RemoveClassWithoutTransition("forceHover", this);
                             Select();
+                        },
+                        () =>
+                        {
+                            RemoveFromClassList("forceHover");
+                            AddToClassList(AVAILABLE_CLASS);
                         },
                         "Change Research",
                         "Do you want to change active Research?");
@@ -121,6 +151,7 @@ namespace Research
             return false;
         }
 
+        /// <summary>Called when finishing research.</summary>
         void FinishResearch()
         {
             AddToClassList(RESEARCH_CLASS);
@@ -131,10 +162,11 @@ namespace Research
                 lineUp.Fill();
         }
 
-        void UnlockResearch()
+        void UnlockResearch(bool init)
         {
             state = ButtonState.Available;
-            AddToClassList(AVAILABLE_CLASS);
+            if (init == false)
+                AddToClassList(AVAILABLE_CLASS);
             if (lineDown != null)
                 lineDown.Fill();
         }

@@ -28,6 +28,32 @@ public static class ToolkitUtils
             element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
         }
     }
+    public static void RemoveClassWithoutTransition(string oldClass, VisualElement element)
+    {
+        if (oldClass != "" && element != null)
+        {
+            element.style.transitionDuration = new List<TimeValue> { new TimeValue(0, TimeUnit.Second) };
+            element.RemoveFromClassList(oldClass);
+            element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
+        }
+    }
+    public static void AddClassWithoutTransition(string newClass, VisualElement element)
+    {
+        if (newClass != "" && element != null)
+        {
+            element.style.transitionDuration = new List<TimeValue> { new TimeValue(0, TimeUnit.Second) };
+            element.AddToClassList(newClass);
+            element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
+        }
+    }
+
+
+    public static void ChangeWithoutTransitions(VisualElement element, Action action)
+    {
+        element.style.transitionDuration = new List<TimeValue> { new TimeValue(0, TimeUnit.Second) };
+        action();
+        element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
+    }
 
     public static void Init()
     {
@@ -40,11 +66,11 @@ public static class ToolkitUtils
             element = element.parent;
         return element;
     }
-    public static VisualElement GetParentOfType<T>(VisualElement element)
+    public static T GetParentOfType<T>(VisualElement element) where T : VisualElement
     {
         while(element is not T && element.parent != null)
             element = element.parent;
 
-        return element;
+        return element as T;
     }
 }

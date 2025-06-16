@@ -566,19 +566,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: 
-  selected: 0
   id: -1
   objectName: Foundry
   localRes:
-    stored:
-      capacity: 20
-      type: 
-      ammount: 
+    type: 
+    ammount: 
+    capacity:
+      baseValue: 50
+      currentValue: 50
     requests: []
     carriers: []
     mods: 
   _materialColors: []
   _meshRenderers: []
+  buildingCategories: 2
   blueprint:
     size:
       x: 2
@@ -624,23 +625,33 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    capacity: 25
-    type: 0100000002000000
-    ammount: 0a00000005000000
+    type: 03000000
+    ammount: 05000000
+    baseResource:
+      type: 03000000
+      ammount: 05000000
+    money:
+      baseValue: 50
+      currentValue: 50
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 30
   categoryID: 1
   wrapperID: 1472558132
-  assignLimit: 3
+  assignLimit:
+    baseValue: 5
+    currentValue: 5
   productionTime: 10
-  productionModifier: 1
   productionCost:
-    capacity: -1
-    type: 0100000002000000
-    ammount: 0200000001000000
+    type: 0200000001000000
+    ammount: 0500000005000000
+    baseResource:
+      type: 0200000001000000
+      ammount: 0500000005000000
   productionYield:
-    capacity: 15
     type: 02000000
-    ammount: 02000000
+    ammount: 0a000000
+    baseResource:
+      type: 02000000
+      ammount: 0a000000

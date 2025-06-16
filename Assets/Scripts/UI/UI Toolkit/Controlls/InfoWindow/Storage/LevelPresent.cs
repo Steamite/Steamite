@@ -11,5 +11,5 @@ public class LevelPresent : ScriptableObject
     /// <summary>Descriptions of all levels.</summary>
     public string[] bodies = { "aaaaaaaaa", "bbbbbbb", "cccccc", "ddddddd", "eeeeeee" };
     /// <summary>Cost of all levels.</summary>
-    public Resource[] costs = new Resource[5];
+    public MoneyResource[] costs = new MoneyResource[5];
 }
