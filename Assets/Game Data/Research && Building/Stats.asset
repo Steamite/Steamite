@@ -48,7 +48,17 @@ MonoBehaviour:
         percent: 1
       - mask: 2
         underProp: 0
+        mod: 3
+        modAmmount: 2
+        percent: 0
+      - mask: 2
+        underProp: 0
         mod: 5
         modAmmount: 10
         percent: 1
+      - mask: 0
+        underProp: 0
+        mod: 3
+        modAmmount: -100
+        percent: 0
     Icon: {fileID: 2800000, guid: abf13685b7e55ff4e960d786dde4c5ba, type: 3}
