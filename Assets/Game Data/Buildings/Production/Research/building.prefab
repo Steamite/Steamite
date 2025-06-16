@@ -548,19 +548,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: 
-  selected: 0
   id: -1
   objectName: Research
   localRes:
-    stored:
-      capacity: -1
-      type: 
-      ammount: 
+    type: 
+    ammount: 
+    capacity:
+      baseValue: 10
+      currentValue: 10
     requests: []
     carriers: []
     mods: 
   _materialColors: []
   _meshRenderers: []
+  buildingCategories: 4
   blueprint:
     size:
       x: 2
@@ -606,16 +607,23 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    capacity: -1
-    type: 01000000
-    ammount: 0a000000
+    type: 02000000
+    ammount: 05000000
+    baseResource:
+      type: 02000000
+      ammount: 05000000
+    money:
+      baseValue: 45
+      currentValue: 45
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 20
   categoryID: 1
   wrapperID: 1197943099
-  assignLimit: 1
+  assignLimit:
+    baseValue: 1
+    currentValue: 1
 --- !u!210 &9080560569971430985
 SortingGroup:
   m_ObjectHideFlags: 0

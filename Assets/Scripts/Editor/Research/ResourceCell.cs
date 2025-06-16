@@ -9,7 +9,9 @@ using Object = UnityEngine.Object;
 [UxmlElement]
 public partial class ResourceCell : ResourceList
 {
+    
     Resource resource;
+    Resource moneyResource;
     public Object whatToSave;
     IntegerField capacityField;
     Label noneLabel;
@@ -50,15 +52,14 @@ public partial class ResourceCell : ResourceList
         capacityField.RegisterValueChangedCallback<int>(
             (ev) =>
             {
-                resource.capacity = ev.newValue;
+                if (moneyResource != null)
+                    ((MoneyResource)moneyResource).Money = new(ev.newValue);
                 EditorUtility.SetDirty(whatToSave);
             });
         capacityField.style.width = new Length(50, LengthUnit.Percent);
         capacityField.style.position = Position.Absolute;
         capacityField.style.left = 0;
         capacityField.style.bottom = 0;
-
-
         hierarchy.Add(capacityField);
         #endregion
     }
@@ -125,6 +126,11 @@ public partial class ResourceCell : ResourceList
         }
         return element.parent.IndexOf(element);
     }
+
+    /// <summary>
+    /// Changes the ammount of a given type (<paramref name="evt"/>).
+    /// </summary>
+    /// <param name="evt">Event with the new value and changed element.</param>
     private void ChangeType(ChangeEvent<Enum> evt)
     {
         int i = GetRowIndex((VisualElement)evt.target);
@@ -140,6 +146,11 @@ public partial class ResourceCell : ResourceList
             resource.type[i] = (ResourceType)evt.newValue;
         EditorUtility.SetDirty(whatToSave);
     }
+
+    /// <summary>
+    /// Changes the ammount of a given type (<paramref name="evt"/>).
+    /// </summary>
+    /// <param name="evt">Event with the new value and changed element.</param>
     private void ChangeVal(ChangeEvent<int> evt)
     {
         int i = GetRowIndex((VisualElement)evt.target);
@@ -148,6 +159,12 @@ public partial class ResourceCell : ResourceList
     }
     #endregion
 
+    /// <summary>
+    /// Preps the resource List using <paramref name="_resource"/>.
+    /// </summary>
+    /// <param name="_resource">Editing resource.</param>
+    /// <param name="_whatToSave">Object containing the resource.</param>
+    /// <param name="_cost">Is it a cost resource?</param>
     public void Open(Resource _resource, Object _whatToSave, bool _cost)
     {
         resource = _resource;
@@ -156,7 +173,14 @@ public partial class ResourceCell : ResourceList
         {
             showAddRemoveFooter = true;
             capacityField.labelElement.text = _cost ? "Cost" : "Capacity";
-            capacityField.value = _resource.capacity;
+            if (resource is MoneyResource)
+            {
+                capacityField.value = +((MoneyResource)_resource).Money.BaseValue;
+                moneyResource = _resource;
+                resource = ((MoneyResource)_resource).EditorResource;
+            }
+            else
+                capacityField.visible = false;
             itemsSource = ToUIRes(resource);
             noneLabel.text = "Empty";
             style.display = DisplayStyle.Flex;

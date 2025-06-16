@@ -8,7 +8,7 @@ public abstract class StorageObject : ClickableObject
     [SerializeField] protected StorageResource localRes = new();
 
     /// <inheritdoc/>
-    [CreateProperty] public StorageResource LocalRes => localRes;
+    [CreateProperty] public StorageResource LocalRes { get => localRes; set => localRes = value; }
     #region Saving
     /// <inheritdoc/>
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
@@ -22,7 +22,6 @@ public abstract class StorageObject : ClickableObject
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-        localRes = new((save as StorageObjectSave).resSave);
         base.Load(save);
     }
     #endregion Saving
@@ -42,9 +41,9 @@ public abstract class StorageObject : ClickableObject
     /// <param name="transferPerTick">Max resources that can be transfered.</param>
     public virtual void Take(Human h, int transferPerTick)
     {
-        MyRes.MoveRes(h.Inventory, localRes.stored, localRes.requests[localRes.carriers.IndexOf(h)], transferPerTick);
+        MyRes.MoveRes(h.Inventory, localRes, localRes.requests[localRes.carriers.IndexOf(h)], transferPerTick);
         UIUpdate(nameof(LocalRes));
-        if (localRes.requests[localRes.carriers.IndexOf(h)].ammount.Sum() == 0)
+        if (localRes.requests[localRes.carriers.IndexOf(h)].Sum() == 0)
         {
             localRes.RemoveRequest(h);
             JobData data = PathFinder.FindPath(new() { h.destination }, h);

@@ -1,5 +1,10 @@
+using BuildingStats;
+using ResearchUI;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using TradeData.Stats;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
@@ -10,6 +15,7 @@ public class ResearchWindow : FullscreenWindow
 
     public ResearchNode currentResearch { get; private set; }
     [HideInInspector] public ResearchData researchData;
+    [HideInInspector] public BuildingStats.StatData statData;
     public event Action<ResearchNode> researchCompletion;
 
     public override void GetWindow()
@@ -17,11 +23,8 @@ public class ResearchWindow : FullscreenWindow
         base.GetWindow();
         UI = window.Q<TabView>() as IUIElement;
         ((IInitiableUI)UI).Init();
-    }
-    public async void NewGame()
-    {
-        researchData = Instantiate<ResearchData>(await Addressables.LoadAssetAsync<ResearchData>("Assets/Game Data/Research && Building/Research Data.asset").Task);
-        Init();
+        window.style.display = DisplayStyle.Flex;
+        window.schedule.Execute(() => window.style.display = DisplayStyle.None).ExecuteLater(15);
     }
 
     public async void LoadGame(ResearchSave researchSave)
@@ -36,21 +39,45 @@ public class ResearchWindow : FullscreenWindow
                 node.CurrentTime = researchSave.saveData[i][j];
             }
         }
-        foreach ((int cat, int index) queueItem in researchSave.queue)
+        foreach ((int cat, int id) queueItem in researchSave.queue)
         {
-            queue.Add(researchData.Categories[queueItem.cat].Objects[queueItem.index]);
+            queue.Add(researchData.Categories[queueItem.cat].Objects.Find(q=> q.id == queueItem.id));
         }
         if (queue.Count > 0)
             currentResearch = queue[0];
         Init();
-
     }
 
-    public void Init()
+    public async void Init()
     {
+        statData = Instantiate<BuildingStats.StatData>(await Addressables.LoadAssetAsync<BuildingStats.StatData>("Assets/Game Data/Research && Building/Stats.asset").Task);
         GetWindow();
         SceneRefs.researchAdapter.Init(DoResearch);
         ((IInitiableUI)UIRefs.bottomBar.Q<VisualElement>(className: "build-menu")).Init();
+        InitResearchStats();
+    }
+
+    void InitResearchStats()
+    {
+        foreach (var categ in researchData.Categories)
+        {
+            foreach (var node in categ.Objects)
+            {
+                if(node.nodeType == NodeType.Stat)
+                {
+                    int i = statData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
+                    Stat stat = statData.Categories[node.nodeCategory].Objects[i];
+                    if (node.researched)
+                    {
+                        stat.AddEffect();
+                    }
+                    else
+                    {
+                        node.RegisterFinishCallback(stat.AddEffect);
+                    }
+                }
+            }
+        }
     }
 
     public override void OpenWindow()
@@ -81,7 +108,7 @@ public class ResearchWindow : FullscreenWindow
 
     public void FinishResearch()
     {
-        SceneRefs.ShowMessage($"Research Finished {currentResearch.nodeName}");
+        SceneRefs.ShowMessage($"Research Finished {currentResearch.Name}");
         currentResearch = null;
         // TODO: Assign new one
         researchCompletion?.Invoke(currentResearch);

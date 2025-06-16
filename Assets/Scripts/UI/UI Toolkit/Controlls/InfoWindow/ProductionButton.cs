@@ -47,6 +47,7 @@ namespace InfoWindowViews
         Label capacityLabel;
         RadialFillElement radialElement;
         Button button;
+        Label prodSpeedLabel;
         #endregion
 
         IResourceProduction building;
@@ -55,7 +56,7 @@ namespace InfoWindowViews
         #region Constructors
         public ProductionButton()
         {
-            inputResource = new(true, "Input");
+            inputResource = new(true, "Input", true);
             Add(inputResource);
 
             VisualElement visualElement = new();
@@ -81,7 +82,13 @@ namespace InfoWindowViews
             radialElement.ElementAt(0).Add(button);
             #endregion
 
-            outputResource = new(false, "Output");
+            prodSpeedLabel = new("Speed:\n##x");
+            prodSpeedLabel.style.unityTextAlign = TextAnchor.UpperCenter;
+            prodSpeedLabel.style.fontSize = 15;
+            prodSpeedLabel.AddToClassList("no-space-around");
+            visualElement.Add(prodSpeedLabel);
+
+            outputResource = new(false, "Output", true);
             Add(outputResource);
             UpdateButton();
         }
@@ -98,8 +105,12 @@ namespace InfoWindowViews
             radialElement.Open(data);
 
             DataBinding binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
-            binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"Space\n{res.stored.ammount.Sum()}/{res.stored.capacity}");
+            binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"Space\n{res.Sum()}/{res.capacity}");
             SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
+            
+            binding = BindingUtil.CreateBinding(nameof(IProduction.ProdSpeed));
+            binding.sourceToUiConverters.AddConverter((ref ModifiableFloat speed) => $"Speed\n{speed}x");
+            SceneRefs.infoWindow.RegisterTempBinding(new(prodSpeedLabel, "text"), binding, data);
             UpdateButton();
         }
 

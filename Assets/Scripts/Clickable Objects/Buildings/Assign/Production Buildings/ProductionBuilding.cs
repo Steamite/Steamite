@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
@@ -7,12 +8,12 @@ using UnityEngine;
 public class ProductionBuilding : Building, IAssign, IResourceProduction
 {
     #region Variables
-    [SerializeField] int assignLimit;
+    [SerializeField] ModifiableInteger assignLimit;
     [SerializeField][Header("Production")] float productionTime;
-    [SerializeField] int productionModifier = 1;
+    [SerializeField] ModifiableFloat prodSpeed;
 
-    [SerializeField] Resource productionCost;
-    [SerializeField] Resource productionYield;
+    [SerializeField] ModifiableResource productionCost = new();
+    [SerializeField] ModifiableResource productionYield = new();
     #endregion
 
     #region Properties
@@ -21,21 +22,21 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     [CreateProperty] public float CurrentTime { get; set; } = 0;
     [CreateProperty] public bool Stoped { get; set; } = false;
     public float ProdTime { get => productionTime; set => productionTime = value; }
-    public int Modifier { get => productionModifier; set => productionModifier = value; }
+    [CreateProperty] public ModifiableFloat ProdSpeed { get => prodSpeed; set => prodSpeed = value; }
     #endregion
 
     #region Assign
     [CreateProperty] public List<Human> Assigned { get; set; } = new();
 
-    [CreateProperty] public int AssignLimit { get => assignLimit; set => assignLimit = value; }
+    [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
     #endregion
 
     #region Resources
     [CreateProperty] public ProductionStates ProdStates { get; set; } = new();
     [CreateProperty] public StorageResource LocalResource { get => LocalRes; }
     [CreateProperty] public StorageResource InputResource { get; set; } = new();
-    public Resource ProductionCost { get => productionCost; }
-    public Resource ProductionYield { get => productionYield; }
+    [CreateProperty] public ModifiableResource ProductionCost { get => productionCost; set => productionCost = value; }
+    [CreateProperty] public ModifiableResource ProductionYield { get => productionYield; set => productionYield = value; }
     #endregion
 
     #endregion
@@ -69,28 +70,26 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
         (clickable as ResProductionBSave).inputRes = new(InputResource);
         (clickable as ProductionBSave).prodTime = ProdTime;
         (clickable as ProductionBSave).currentTime = CurrentTime;
-        (clickable as ProductionBSave).modifier = Modifier;
         (clickable as ProductionBSave).ProdStates = ProdStates;
         return base.Save(clickable);
     }
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-        InputResource = new((save as ResProductionBSave).inputRes);
+        InputResource.Load((save as ResProductionBSave).inputRes);
 
         ProdTime = (save as ProductionBSave).prodTime;
         CurrentTime = (save as ProductionBSave).currentTime;
-        Modifier = (save as ProductionBSave).modifier;
         ProdStates = (save as ProductionBSave).ProdStates;
         if (!ProdStates.supplied)
         {
             SceneRefs.jobQueue.AddJob(JobState.Supply, this);
         }
-        if (constructed && GetDiff(new()).ammount.Sum() > 0)
+        if (constructed && GetDiff(new()).Sum() > 0)
         {
             SceneRefs.jobQueue.AddJob(JobState.Pickup, this);
         }
-        ((IResourceProduction)this).RefreshStatus();
+        ((IResourceProduction)this).Init(constructed);
         base.Load(save);
     }
     #endregion
@@ -133,6 +132,16 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     #endregion
 
     #region Construction & Deconstruction
+
+    public override void InitModifiers()
+    {
+        base.InitModifiers();
+        ((IModifiable)AssignLimit).Init();
+        prodSpeed = new(1);
+        InputResource.capacity = new(-1);
+        productionCost.Init();
+        productionYield.Init();
+    }
     /// <summary>
     /// <inheritdoc/>
     /// And requests resources for production.
@@ -140,7 +149,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     public override void FinishBuild()
     {
         base.FinishBuild();
-        if (ProductionCost.ammount.Sum() == 0)
+        if (ProductionCost.Sum() == 0)
         {
             ProdStates.supplied = true;
             return;
@@ -200,14 +209,14 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     {
         SceneRefs.jobQueue.CancelJob(JobState.Supply, this);
         Chunk c = base.Deconstruct(instantPos);
-        if (InputResource.stored.ammount.Sum() > 0)
+        if (InputResource.Sum() > 0)
         {
             if (!c)
             {
-                c = SceneRefs.objectFactory.CreateAChunk(instantPos, InputResource.stored, true);
+                c = SceneRefs.objectFactory.CreateChunk(instantPos, InputResource, true);
             }
             else
-                MyRes.ManageRes(c.LocalRes.stored, InputResource.stored, 1);
+                MyRes.ManageRes(c.LocalRes, InputResource, 1);
         }
         return c;
     }
@@ -241,7 +250,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
         List<string> strings = base.GetInfoText();
         strings[0] = $"Can employ up to {AssignLimit} workers";
         strings.Insert(1, $"<u>Produces</u>: \n{ProductionYield.GetDisplayText()}");
-        if (ProductionCost.ammount.Sum() > 0)
+        if (ProductionCost.Sum() > 0)
             strings[1] += $", from: \n{ProductionCost.GetDisplayText()}";
         return strings;
     }
@@ -252,7 +261,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     {
         if (add)
         {
-            if (Assigned.Count == assignLimit)
+            if (Assigned.Count == assignLimit.currentValue)
                 return false;
             JobData job = PathFinder.FindPath(
                 new List<ClickableObject>() { this },

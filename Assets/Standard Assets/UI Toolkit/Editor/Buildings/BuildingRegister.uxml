@@ -17,7 +17,7 @@
     </engine:VisualElement>
     <engine:MultiColumnListView show-foldout-header="false" show-add-remove-footer="true" name="Data" reorderable="true" sorting-mode="Custom" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None">
         <engine:Columns resize-preview="false" reorderable="false">
-            <engine:Column name="id" title="ID" stretchable="false" resizable="false" width="100px" />
+            <engine:Column name="id" title="ID" stretchable="false" resizable="true" width="20px" sortable="false" />
             <engine:Column name="asset" title="Asset" stretchable="true" max-width="200px" />
             <engine:Column name="name" title="Name" stretchable="true" max-width="200px" />
             <engine:Column name="type" title="Type" stretchable="true" max-width="150px" min-width="100px" />

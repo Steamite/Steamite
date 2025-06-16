@@ -5,11 +5,14 @@ using UnityEditor;
 using UnityEngine;
 
 [Serializable]
-public class BuildingWrapper
+public class BuildingWrapper : DataObject
 {
+    public Building building => b;
     [SerializeField] Building b;
-    public Building building => b;//{ get => b; private set => b = value; }
-    [SerializeField] public int id;
+
+    public override string GetName() => b.objectName;
+
+
     [SerializeField] public Sprite preview;
     [NonSerialized] public bool unlocked = true;
 
@@ -29,10 +32,11 @@ public class BuildingWrapper
     }
 #endif
 
-    public BuildingWrapper(int _id)
+    public BuildingWrapper(int _id) : base(_id)
     {
-        id = _id;
     }
+
+    public BuildingWrapper(){}
 }
 /// <summary>Helps serialize build categories.</summary>
 [Serializable]
@@ -40,7 +44,6 @@ public class BuildCategWrapper : DataCategory<BuildingWrapper>
 {
     /// <summary>Hold editor data for showing columns.</summary>
     [NonSerialized] public List<bool> columnStates;
-    [NonSerialized] public List<BuildingWrapper> availableBuildings;
     public BuildCategWrapper() { }
 
     public BuildCategWrapper(string _name, Texture2D _categIcon)
@@ -53,26 +56,16 @@ public class BuildCategWrapper : DataCategory<BuildingWrapper>
 
 ///<summary>Holds all buildable building, creates builds buttons from this, and is linked to research.</summary>
 [CreateAssetMenu(fileName = "BuildButtonCategory", menuName = "UI Data/BuildButton Holder", order = 1)]
-public class BuildingData : DataHolder<BuildCategWrapper>
+public class BuildingData : DataHolder<BuildCategWrapper, BuildingWrapper>
 {
     #region Editor
 #if UNITY_EDITOR
-    public override List<string> Choices() => Categories.Select(q => q.Name).ToList();
 
     public bool ContainsBuilding(Building newValue)
     {
         if (newValue == null)
             return false;
         return Categories.SelectMany(q => q.Objects).Select(q => q.building).Contains(newValue);
-    }
-    public override int UniqueID()
-    {
-        int i;
-        do
-        {
-            i = UnityEngine.Random.Range(0, int.MaxValue);
-        } while (Categories.SelectMany(q=> q.Objects).Count(q => q.id == i) > 0);
-        return i;
     }
 
 #endif

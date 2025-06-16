@@ -163,19 +163,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: 
-  selected: 0
   id: -1
   objectName: Elevator
   localRes:
-    stored:
-      capacity: 1050
-      type: 
-      ammount: 
+    type: 
+    ammount: 
+    capacity:
+      baseValue: 2000
+      currentValue: 2000
     requests: []
     carriers: []
     mods: 
   _materialColors: []
   _meshRenderers: []
+  buildingCategories: 0
   blueprint:
     size:
       x: 1
@@ -201,9 +202,14 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    capacity: -1
-    type: 02000000
+    type: 01000000
     ammount: 05000000
+    baseResource:
+      type: 01000000
+      ammount: 05000000
+    money:
+      baseValue: 520
+      currentValue: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0

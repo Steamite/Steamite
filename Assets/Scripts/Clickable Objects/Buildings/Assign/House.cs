@@ -6,8 +6,7 @@ using UnityEngine;
 public class House : Building, IAssign
 {
     [CreateProperty] public List<Human> Assigned { get; set; } = new();
-    [SerializeField] int assignLimit;
-    public int AssignLimit { get => assignLimit; set => assignLimit = value; }
+    public ModifiableInteger AssignLimit { get; set; }
 
     #region Deconstruction
     /// <summary>
@@ -47,7 +46,7 @@ public class House : Building, IAssign
     public override List<string> GetInfoText()
     {
         List<string> strings = base.GetInfoText();
-        strings[0] = $"Can house up to {assignLimit} workers";
+        strings[0] = $"Can house up to {AssignLimit.currentValue} workers";
         return strings;
     }
     #endregion
@@ -63,7 +62,7 @@ public class House : Building, IAssign
     {
         if (add)
         {
-            if (Assigned.Count == assignLimit)
+            if (Assigned.Count == AssignLimit.currentValue)
                 return false;
             Assigned.Add(human);
             human.home = this;
@@ -95,13 +94,11 @@ public class House : Building, IAssign
         if (clickable == null)
             clickable = new AssignBSave();
         (clickable as AssignBSave).assigned = Assigned.Select(q => q.id).ToList();
-        (clickable as AssignBSave).limit = assignLimit;
         return base.Save(clickable);
     }
 
     public override void Load(ClickableObjectSave save)
     {
-        assignLimit = (save as AssignBSave).limit;
         base.Load(save);
     }
     #endregion;

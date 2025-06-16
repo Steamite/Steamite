@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[CustomPropertyDrawer(typeof(Resource))]
+[CustomPropertyDrawer(typeof(Resource), true)]
 public class ResourceEditor : PropertyDrawer
 {
     public override VisualElement CreatePropertyGUI(SerializedProperty property)
@@ -49,16 +49,27 @@ public class ResourceEditor : PropertyDrawer
         #endregion
 
         #region Capacity
-        IntegerField integerField = new IntegerField(labelText.Contains("Cost") ? "Cost" : "Capacity");
-        integerField.style.marginBottom = 5;
-        integerField.style.width = new Length(98, LengthUnit.Percent);
-        integerField.value = property.FindPropertyRelative(nameof(Resource.capacity)).intValue;
-        integerField.RegisterValueChangedCallback((i) =>
+#pragma warning disable CS0184 // 'is' expression's given expression is never of the provided type
+        /*if (property.boxedValue is CapacityResource || property.boxedValue is MoneyResource)
         {
-            property.FindPropertyRelative(nameof(Resource.capacity)).intValue = i.newValue;
-            serializedObject.ApplyModifiedProperties();
-        });
-        root.Add(integerField);
+            Resource resource = property.boxedValue as Resource;
+            bool money = resource is MoneyResource;
+            IntegerField integerField = new IntegerField(money ? "Cost" : "Capacity");
+            integerField.value = money ? +(resource as MoneyResource).Money : + (resource as CapacityResource).capacity;
+            integerField.style.marginBottom = 5;
+            integerField.style.width = new Length(98, LengthUnit.Percent);
+            integerField.RegisterValueChangedCallback((i) =>
+            {
+                if (money)
+                    ((MoneyResource)property.boxedValue).Money.BaseValue = i.newValue;
+                else
+                    ((CapacityResource)property.boxedValue).capacity.BaseValue = i.newValue;
+                EditorUtility.SetDirty(property.serializedObject.targetObject);
+            });
+            root.Add(integerField);
+        }*/
+#pragma warning restore CS0184 // 'is' expression's given expression is never of the provided type
+
         #endregion
 
         #region ListView

@@ -7,12 +7,13 @@ public class ResearchProduction : Building, IProduction, IAssign
 {
     [CreateProperty]
     public List<Human> Assigned { get; set; } = new();
-    public int AssignLimit { get => assignLimit; set => assignLimit = value; }
-    [SerializeField] int assignLimit;
+
+    [SerializeField] ModifiableInteger assignLimit;
+    [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
     public float ProdTime { get; set; }
     public float CurrentTime { get; set; }
-    [SerializeField] int modifier;
-    public int Modifier { get => modifier; set => modifier = value; }
+    [SerializeField] ModifiableFloat modifier;
+    [CreateProperty]public ModifiableFloat ProdSpeed { get => modifier; set => modifier = value; }
     public bool Stoped { get; set; }
 
     #region Window
@@ -44,7 +45,7 @@ public class ResearchProduction : Building, IProduction, IAssign
     {
         if (add)
         {
-            if (Assigned.Count == assignLimit)
+            if (Assigned.Count == AssignLimit.currentValue)
                 return false;
             JobData job = PathFinder.FindPath(
                 new List<ClickableObject>() { this },
@@ -78,7 +79,6 @@ public class ResearchProduction : Building, IProduction, IAssign
             Assigned.Remove(human);
             human.workplace = null;
             human.transform.SetParent(SceneRefs.humans.transform.GetChild(0).transform);
-            human.SetJob(JobState.Free);
             human.Idle();
         }
         UIUpdate(nameof(Assigned));
@@ -96,4 +96,10 @@ public class ResearchProduction : Building, IProduction, IAssign
     }
 
     #endregion
+
+    public override void InitModifiers()
+    {
+        base.InitModifiers();
+        ((IModifiable)AssignLimit).Init();
+    }
 }

@@ -113,7 +113,7 @@ namespace BottomBar.Building
         private void Hover(PointerEnterEvent evt)
         {
             int i = ((CustomRadioButton)evt.target).value;
-            ToolkitUtils.localMenu.Open(wrappers[i], (CustomRadioButton)evt.target);
+            ToolkitUtils.localMenu.UpdateContent(wrappers[i], (CustomRadioButton)evt.target);
         }
         private void EndHove(PointerLeaveEvent evt)
         {

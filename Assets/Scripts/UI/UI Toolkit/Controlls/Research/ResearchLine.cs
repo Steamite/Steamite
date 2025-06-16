@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Research
+namespace ResearchUI
 {
     [UxmlElement]
     public partial class ResearchLine : VisualElement

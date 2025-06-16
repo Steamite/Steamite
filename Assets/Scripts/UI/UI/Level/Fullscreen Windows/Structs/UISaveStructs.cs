@@ -1,7 +1,9 @@
+using ResearchUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TradeData.Locations;
+using UnityEditor.PackageManager.UI;
 
 public struct Save
 {
@@ -46,7 +48,7 @@ public class ResearchSave
 {
     public int count;
     public List<List<float>> saveData;
-    public List<(int cat, int index)> queue;
+    public List<(int cat, int id)> queue;
 
     public ResearchSave()
     {
@@ -65,8 +67,25 @@ public class ResearchSave
             {
                 saves.Add(window.researchData.Categories[i].Objects[j].CurrentTime);
                 if (window.researchData.Categories[i].Objects[j].Equals(window.currentResearch) &&
-                    window.researchData.Categories[i].Objects[j].nodeName == window.currentResearch.nodeName)
-                    queue.Add(new(i, j));
+                    window.researchData.Categories[i].Objects[j].Name == window.currentResearch.Name)
+                    queue.Add(new(i, window.researchData.Categories[i].Objects[j].id));
+            }
+            saveData.Add(saves);
+        }
+    }
+
+    public ResearchSave(ResearchData data)
+    {
+        saveData = new();
+        queue = new();
+
+        count = 0;
+        for (int i = 0; i < data.Categories.Count; i++)
+        {
+            List<float> saves = new();
+            for (int j = 0; j < data.Categories[i].Objects.Count; j++)
+            {
+                saves.Add(data.Categories[i].Objects[j].CurrentTime);
             }
             saveData.Add(saves);
         }

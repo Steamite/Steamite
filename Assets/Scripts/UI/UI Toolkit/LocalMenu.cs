@@ -1,16 +1,22 @@
 ﻿using InfoWindowElements;
+using ResearchUI;
 using TradeData.Stats;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class LocalMenu : MonoBehaviour, IAfterLoad
 {
+    VisualElement anchor;
+    object activeObject;
+    
     VisualElement menu;
     Label header;
     Label secondHeader;
     DoubleResourceList costList;
     Label description;
     bool isOpen;
+
+
     public void Init()
     {
         menu = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Menu");
@@ -19,10 +25,34 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
         secondHeader = menu.ElementAt(1) as Label;
         costList = menu.ElementAt(2) as DoubleResourceList;
         description = menu.ElementAt(3) as Label;
+        SceneRefs.infoWindow.buildingCostChange = (building) => 
+        {
+            if (activeObject == null)
+                return;
+            if(building.Equals(((BuildingWrapper)activeObject).building))
+                UpdateContent(activeObject, onlyUpdate: true);
+        };
     }
 
-    public void Open(object data, VisualElement element)
+    /// <summary>
+    /// Fills the local menu using <paramref name="data"/> positions it near the <paramref name="element"/>.
+    /// If <paramref name="onlyUpdate"/> is false then also opens it.
+    /// </summary>
+    /// <param name="data">Data object.</param>
+    /// <param name="element">positioning element</param>
+    /// <param name="onlyUpdate">If true then don't open the window(only update if it was already visible).</param>
+    public void UpdateContent(object data, VisualElement element = null, bool onlyUpdate = false)
     {
+        activeObject = data;
+        if (element == null)
+        {
+            element = anchor;
+            if (anchor == null)
+                Debug.LogWarning("No anchor to attach to.");
+        }
+        else
+            anchor = element;
+
         Rect vec = new();
         switch (data)
         {
@@ -44,7 +74,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 break;
             case ResearchNode:
                 ResearchNode node = data as ResearchNode;
-                header.text = node.nodeName;
+                header.text = node.Name;
                 secondHeader.style.display = DisplayStyle.Flex;
                 if (node.researched)
                 {
@@ -79,7 +109,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                     secondHeader.style.display = DisplayStyle.None;
 
                     costList.style.display = DisplayStyle.Flex;
-                    costList.Open(building.cost);
+                    costList.Open(building);
                 }
                 else
                 {
@@ -91,12 +121,16 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 description.text = "";
                 break;
         }
+        if (onlyUpdate == false)
+        {
+            vec = element.worldBound;
+            menu.style.width = 300;
+            menu.style.left = vec.x + vec.width + 25;
+            menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
 
-        vec = element.worldBound;
-        menu.style.width = 300;
-        menu.style.left = vec.x + vec.width + 25;
-        menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
-        Show();
+            Show();
+        }
+            
     }
 
     void Show()
@@ -108,6 +142,9 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
 
     public void Close()
     {
+        activeObject = null;
+        anchor = null;
+        costList.ClearBindings();
         isOpen = false;
         menu.RegisterCallbackOnce<TransitionEndEvent>(
             (q) =>

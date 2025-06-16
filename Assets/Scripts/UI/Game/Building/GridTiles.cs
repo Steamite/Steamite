@@ -499,9 +499,9 @@ public class GridTiles : MonoBehaviour
     {
         foreach (Material material in
             toBeChanged.GetComponentsInChildren<MeshRenderer>()
-            .Where(q => q).Select(q => q.material)
+            .Where(q => q).SelectMany(q => q.materials)
             .Union(toBeChanged.GetComponentsInChildren<SkinnedMeshRenderer>()
-            .Where(q => q).Select(q => q.material)))
+            .Where(q => q).SelectMany(q => q.materials)))
         {
             LightUp(c, material);
         }
@@ -642,13 +642,15 @@ public class GridTiles : MonoBehaviour
             q = new(blueprintInstance.transform.rotation.x, blueprintInstance.transform.rotation.y, blueprintInstance.transform.rotation.z, blueprintInstance.transform.rotation.w);
         GridPos gp = MyGrid.Rotate(blueprintPrefab.blueprint.moveBy, blueprintPrefab.transform.eulerAngles.y);
         gp = new(activePos.x + gp.x, (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) + ClickableObjectFactory.BUILD_OFFSET, activePos.z + gp.z);
-        blueprintInstance = Instantiate(blueprintPrefab, new Vector3(gp.x, gp.y, gp.z), Quaternion.identity, transform); // creates the building prefab
-        blueprintInstance.transform.rotation = q;
-        blueprintInstance.transform.SetParent(
-            blueprintInstance.GetComponent<Pipe>() 
-                ? GameObject.FindWithTag("Pipes").transform 
+
+        blueprintInstance = Instantiate(
+            blueprintPrefab, 
+            new Vector3(gp.x, gp.y, gp.z),
+            q,
+            blueprintPrefab.GetComponent<Pipe>()
+                ? GameObject.FindWithTag("Pipes").transform
                 : GameObject.Find("Buildings").transform);
-        blueprintInstance.objectName = blueprintInstance.objectName.Replace("(Clone)", ""); // removes (Clone) from its name
+
         blueprintInstance.maximalProgress = blueprintInstance.CalculateMaxProgress();
         blueprintInstance.ChangeRenderMode(true);
         HighLight(blueprintInstance.CanPlace() ? Color.blue : Color.red, blueprintInstance.gameObject);

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AbstractControls;
+using BuildingStats;
+using ResearchUI;
 using UnityEngine.UIElements;
 
 namespace BottomBar.Building
@@ -19,6 +21,9 @@ namespace BottomBar.Building
             pickingMode = PickingMode.Ignore;
         }
 
+        /// <summary>
+        /// Inits the
+        /// </summary>
         public void Init()
         {
             buildingData = SceneRefs.objectFactory.buildPrefabs;
@@ -26,10 +31,10 @@ namespace BottomBar.Building
             {
                 foreach (var wrapper in item.Objects)
                 {
+                    wrapper.building.Cost.Init();
                     wrapper.unlocked = true;
                 }
             }
-            
             
             ResearchData researchData = UIRefs.research.researchData;
             foreach (var categ in researchData.Categories)
@@ -39,18 +44,21 @@ namespace BottomBar.Building
                     if(node.nodeType == NodeType.Building && node.nodeAssignee > -1 && node.researched == false)
                     {
                         int i = buildingData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
-                        BuildingWrapper wrapper = buildingData.Categories[node.nodeCategory].Objects[i];
-                        if (wrapper != null)
+                        if (i != -1)
                         {
-                            node.onFinishResearch += () => 
+                            BuildingWrapper wrapper = buildingData.Categories[node.nodeCategory].Objects[i];
+                            if (wrapper != null)
                             {
-                                wrapper.unlocked = true;
-                                if (categGroup.SelectedChoice == node.nodeCategory)
+                                node.RegisterFinishCallback(() =>
                                 {
-                                    buildingList.UnlockActiveButton(i);
-                                }
-                            };
-                            wrapper.unlocked = false;
+                                    wrapper.unlocked = true;
+                                    if (categGroup.SelectedChoice == node.nodeCategory)
+                                    {
+                                        buildingList.UnlockActiveButton(i);
+                                    }
+                                });
+                                wrapper.unlocked = false;
+                            }
                         }
                     }
                 }

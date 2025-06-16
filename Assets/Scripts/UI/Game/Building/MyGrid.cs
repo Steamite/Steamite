@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>Basic highlight color(for selection).</summary>
@@ -8,8 +9,10 @@ public static class MyGrid
     #region Variables
     /// <summary>Number of Levels in game.</summary>
     public const int NUMBER_OF_LEVELS = 5;
+    /// <inheritdoc cref="buildings"/>
+    public static List<Building> Buildings => buildings;
     /// <summary>List of all buildings on all levels.</summary>
-    public static List<Building> buildings = new();
+    static List<Building> buildings = new();
     /// <summary>List of all chunks on all levels.</summary>
     public static List<Chunk> chunks = new();
     /// <summary>List of all fluid networks on all levels.</summary>
@@ -57,6 +60,9 @@ public static class MyGrid
         levels[gp.y].SetGridItem(gp, clickable, isPipe);
     }
 
+    public static List<Building> GetBuildings(Func<Building, bool> predicate) => Buildings.Where(predicate).ToList();
+    public static List<T> GetBuildings<T>(Func<T, bool> predicate) => Buildings.Where(q => q is T).Cast<T>().Where(predicate).ToList();
+    public static Building GetBuilding(Func<Building, bool> predicate) => Buildings.FirstOrDefault(predicate);
     public static UIOverlay GetOverlay(int lIndex = -1)
     {
         if (lIndex == -1)
@@ -73,44 +79,6 @@ public static class MyGrid
     }
     #endregion Grid Access
 
-    #region Grid Creation
-    public static void CreateGrid(GroundLevel level, GroundLevel mainLevel)
-    {
-        PrepGridLists();
-        for (int i = 0; i < 5; i++)
-        {
-            // creates an empty ground level
-            GroundLevel _level;
-            if (i == 0)
-            {
-                _level = GameObject.Instantiate(mainLevel,
-                    new Vector3(0, i * 2, 0),
-                    Quaternion.identity,
-                    SceneRefs.gridTiles.transform);
-                _level.unlocked = true;
-            }
-            else
-            {
-                _level = GameObject.Instantiate(level,
-                    new Vector3(0, i * 2, 0),
-                    Quaternion.identity,
-                    SceneRefs.gridTiles.transform);
-                _level.unlocked = false;
-            }
-            levels[i] = _level;
-            _level.CreateGrid();
-        }
-    }
-
-    public static GroundLevel AddEmptyGridLevel(GroundLevel templateLevel, int i, int gridSize)
-    {
-        levels[i] = GameObject.Instantiate(templateLevel, new Vector3(0, i * 2, 0), Quaternion.identity, SceneRefs.gridTiles.transform);
-        levels[i].CreateGrid(gridSize);
-
-        return levels[i];
-    }
-    #endregion Grid Creation
-
     #region Grid Updating
     /// <summary>
     /// Updates the building grid.
@@ -120,7 +88,7 @@ public static class MyGrid
     public static void SetBuilding(Building building, bool load = false)
     {
         GridPos gridPos = building.GetPos();
-        levels[gridPos.y].PlaceBuild(building, gridPos, load);
+        levels[gridPos.y].RegisterBuilding(building, gridPos, load);
     }
 
     public static void UnsetRock(Rock rock)
@@ -182,7 +150,7 @@ public static class MyGrid
 
     public static Transform FindLevelChunks(int lIndex) => levels[lIndex].chunks;
     public static Transform FindLevelRoads(int lIndex) => levels[lIndex].roads;
-    public static Transform FindLevelWater(int lIndex) => levels[lIndex].water;
+    public static Transform FindLevelWater(int lIndex) => levels[lIndex].waters;
     public static Transform FindLevelRocks(int lIndex) => levels[lIndex].rocks;
     public static Transform FindLevelBuildings(int lIndex) => levels[lIndex].buildings;
 

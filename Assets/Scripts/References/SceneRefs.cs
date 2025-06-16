@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,6 @@ public class SceneRefs : MonoBehaviour
     [Header("Adapters")]
     [SerializeField] ResearchAdapter _researchAdapter;
 
-    bool messageShown = false;
 
     [SerializeReference] List<MonoBehaviour> afterLoads = new();
     [SerializeReference] List<MonoBehaviour> beforeLoads = new();
@@ -87,12 +87,8 @@ public class SceneRefs : MonoBehaviour
     /// <param name="text">Message text.</param>
     IEnumerator MessageToggle(string text)
     {
-        messageShown = true;
         ((Label)miscellaneous.rootVisualElement[1]).text = text;
         yield return new WaitForSecondsRealtime(2f);
         ((Label)miscellaneous.rootVisualElement[1]).text = "";
-        messageShown = false;
     }
-
-
 }

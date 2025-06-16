@@ -18,14 +18,14 @@ namespace InfoWindowElements
                     Building building = tup.Item1;
                     if (useBindings)
                     {
-                        binding = SetupResTypes(building.cost, nameof(Building.LocalRes));
+                        binding = SetupResTypes(building.Cost, nameof(Building.LocalRes));
                         onResChange = tup.Item2;
-                        binding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage.stored));
+                        binding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage));
                         SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, building);
                     }
                     else
                     {
-                        SetResWithoutBinding(building.cost);
+                        SetResWithoutBinding(building.Cost);
                         return;
                     }
                     break;
