@@ -160,5 +160,11 @@ public class StorageResource : CapacityResource
         carriers = new();
         carrierIDs = resSave.carriers;
     }
+
+    public void Dump()
+    {
+        type.Clear();
+        ammount.Clear();
+    }
     #endregion
 }

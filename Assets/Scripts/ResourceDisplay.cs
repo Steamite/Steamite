@@ -19,9 +19,8 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
 
     #region Variables
     /// <summary>Unused stored resources.</summary>
-    Resource resources;
-    /// <summary>Money for upgrades and trading</summary>
-    int money;
+    MoneyResource resources = new();
+
     /// <summary>Resource display on the top bar.</summary>
     IUIElement resourceList;
     /// <summary>Money bar in the top center.</summary>
@@ -31,7 +30,7 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
     #region Properties
     /// <inheritdoc cref="resources"/>
     [CreateProperty]
-    public Resource GlobalResources
+    public MoneyResource GlobalResources
     {
         get => resources;
     }
@@ -39,11 +38,12 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
     [CreateProperty]
     public int Money
     {
-        get => money;
+        get => +resources.Money;
         set
         {
-            money = value;
+            resources.Money.currentValue = value;
             UIUpdate(nameof(Money));
+            UIUpdate(nameof(GlobalResources));
         }
     }
     #endregion
@@ -54,11 +54,8 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="fillMoney">If the game is new then set default value for <see cref="Money"/>.</param>
     /// <returns>Empty Resources of all types.</returns>
-    public Resource InitializeResources(bool fillMoney)
+    public Resource InitializeResources()
     {
-        resources = new();
-        if (fillMoney)
-            Money = 2000;
         string[] names = Enum.GetNames(typeof(ResourceType));
         for (int i = 1; i < names.Length; i++)
         {

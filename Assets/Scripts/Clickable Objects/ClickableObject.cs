@@ -167,8 +167,6 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <param name="property">Name of the property, not field.</param>
     public void UIUpdate(string property = "")
     {
-        if (selected && propertyChanged == null)
-            Debug.LogWarning($"no bindings {property}");
         propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
 
@@ -196,6 +194,8 @@ public abstract class ClickableObject : MonoBehaviour,
     public virtual void Load(ClickableObjectSave save)
     {
         id = save.id;
+        if (id == -1)
+            UniqueID();
         objectName = save.objectName;
     }
 

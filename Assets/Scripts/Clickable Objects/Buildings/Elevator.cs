@@ -52,6 +52,7 @@ public class Elevator : Building, IStorage
         (clickable as StorageBSave).isMain = isMain;
         return base.Save(clickable);
     }
+
     public override void Load(ClickableObjectSave save)
     {
         CanStore = (save as StorageBSave).canStore;
@@ -65,7 +66,7 @@ public class Elevator : Building, IStorage
     public override void FinishBuild()
     {
         localRes.ammount = new();
-        ((IStorage)this).SetupStorage(SceneRefs.jobQueue, false);
+        ((IStorage)this).FinishStorageConstruction();
         base.FinishBuild();
     }
 

@@ -43,26 +43,21 @@ public static class MyRes
     /// Starting function for the resource system.
     /// </summary>
     /// <param name="setupStorages"></param>
-    public static void ActivateResources(bool setupStorages)
+    public static void ActivateResources()
     {
         // Update text, or display error
         try
         {
-            resourceTemplate = resDisplay.InitializeResources(setupStorages);
+            resDisplay.InitializeResources();
             globalStorageSpace = 0;
 
             storage = MyGrid.GetBuildings<IStorage>(q => q != null);
             JobQueue jQ = SceneRefs.jobQueue;
             foreach (IStorage _s in storage)
             {
-                if (setupStorages)
-                {
-                    _s.SetupStorage(jQ);
-                }
-                else
-                    jQ.storages.Add(_s);
+                jQ.storages.Add(_s);
                 globalStorageSpace += _s.LocalResources.capacity - _s.LocalResources.Sum();
-                ManageRes(resourceTemplate, _s.LocalResources, 1);
+                ManageRes(resDisplay.GlobalResources, _s.LocalResources, 1);
             }
             resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
             resDisplay.UIUpdate(nameof(ResourceDisplay.Money));

@@ -153,7 +153,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <summary>Loads a building.</summary>
     public Building CreateSavedBuilding(BSave save)
     {
-        GridPos rotate = MyGrid.Rotate(save.blueprint.moveBy, transform.rotation.eulerAngles.y);
+        GridPos rotate = MyGrid.Rotate(save.blueprint.moveBy, save.rotationY);
         Building b = Instantiate(
             buildPrefabs.GetBuilding(save.categoryID, save.wrapperID),
             new Vector3(save.gridPos.x + rotate.x, (save.gridPos.y * LEVEL_HEIGHT) + BUILD_OFFSET, save.gridPos.z + rotate.z),

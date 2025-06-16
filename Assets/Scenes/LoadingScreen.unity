@@ -559,6 +559,7 @@ GameObject:
   - component: {fileID: 642414927}
   - component: {fileID: 642414931}
   - component: {fileID: 642414932}
+  - component: {fileID: 642414933}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -693,6 +694,26 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1c3d32d887bb74046af6627885ac30b8, type: 2}
   - {fileID: 11400000, guid: fd427511e764df5408494dc7e0e9b586, type: 2}
   dirt: {fileID: 2100000, guid: 0930df6ecc353d34d8d6511a134ceda6, type: 2}
+--- !u!114 &642414933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642414926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 454ec1f76f06c9c4199102c595a14c14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseLocation: Highlands
+  hatMaterial:
+  - {r: 0.9411765, g: 1, b: 1, a: 1}
+  - {r: 0.1333333, g: 0.5450981, b: 0.1333333, a: 1}
+  - {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
+  numberOfDays: 6
+  dayTime: 360
+  priority: 0000000001000000020000000300000004000000050000000600000007000000
 --- !u!1 &676738600
 GameObject:
   m_ObjectHideFlags: 0

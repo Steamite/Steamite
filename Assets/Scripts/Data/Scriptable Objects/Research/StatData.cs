@@ -72,10 +72,8 @@ namespace BuildingStats
                         if (newMask == 0)
                             break;
                     }
-                    
                 }
             }
-            
         }
 
         void HandleCases(Building building, StatPair pair)
@@ -86,9 +84,8 @@ namespace BuildingStats
                     if(building.id == -1)
                     {
                         DoMod(
-                            building.cost,
+                            building.Cost,
                             pair,
-                            nameof(Building.cost),
                             building);
                     }
                     break;
@@ -99,6 +96,7 @@ namespace BuildingStats
                         nameof(IAssign.AssignLimit),
                         building);
                     break;
+                // TODO TEST THIS(no indicator exists right now)
                 case StatModifiers.ProdSpeed:
                     DoMod(
                         ((IProduction)building).ProdSpeed,
@@ -124,17 +122,23 @@ namespace BuildingStats
                     DoMod(
                         building.LocalRes.capacity,
                         pair,
-                        nameof(building.LocalRes.capacity),
+                        nameof(building.LocalRes),
                         building);
                     break;
             }
-            Debug.Log(pair.mask);
+            //Debug.Log(pair.mask);
         }
 
         void DoMod(IModifiable obj, StatPair pair, string propName, Building building)
         {
             obj.AddMod(pair);
             building.UIUpdate(propName);
+        }
+
+        void DoMod(IModifiable obj, StatPair pair, Building building)
+        {
+            obj.AddMod(pair);
+            SceneRefs.infoWindow.buildingCostChange?.Invoke(building);
         }
 
         public void AddEffect()
@@ -155,6 +159,5 @@ namespace BuildingStats
     [CreateAssetMenu(fileName = "Stats", menuName = "UI Data/Stats", order = 2)]
     public class StatData : DataHolder<BuildingStatCateg, Stat>
     {
-        
     }
 }

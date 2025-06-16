@@ -172,7 +172,7 @@ namespace InfoWindowElements
                     ToolkitUtils.Init();
 
                     binding = BindingUtil.CreateBinding(nameof(ResourceDisplay.GlobalResources));
-                    binding.sourceToUiConverters.AddConverter((ref Resource globalRes) => ToUIRes(globalRes));
+                    binding.sourceToUiConverters.AddConverter((ref MoneyResource globalRes) => ToUIRes(globalRes));
                     SetBinding("resources", binding);
                     dataSource = data;
                     ((IUpdatable)data).UIUpdate(binding.dataSourcePath.ToString());

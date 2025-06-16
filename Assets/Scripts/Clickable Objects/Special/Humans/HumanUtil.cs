@@ -29,21 +29,6 @@ public class HumanUtil : MonoBehaviour
 
     #region Loading Levels
     /// <summary>
-    /// Called when creating a new game, creates three new Humans.
-    /// </summary>
-    /// <param name="humanActivation">Event that links new humans to activation.</param>
-    public void NewGameInit(ref Action humanActivation)
-    {
-        humans = new();
-        int i = MyGrid.gridSize;
-        GridPos pos = new(i / 2, 0, i / 2);
-        for (i = 0; i < 3; i++)
-        {
-            AddHuman(SceneRefs.objectFactory.CreateHuman(pos, hatMaterial[i], i), ref humanActivation);
-        }
-    }
-
-    /// <summary>
     /// Loads all Humans.
     /// </summary>
     /// <param name="progress">NOT USED.</param>

@@ -83,6 +83,8 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
 
     /// <summary>Stores last opened mode. To hide it and remove datasource.</summary>
     public InfoMode lastInfo { get; private set; }
+
+    public Action<Building> buildingCostChange;
     #endregion
 
     /// <summary>Fills all control references.</summary>
@@ -328,7 +330,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
             }
             else
             {
-                if (MyRes.DiffRes(building.cost, building.LocalRes).Sum() > 0)
+                if (MyRes.DiffRes(building.Cost, building.LocalRes).Sum() > 0)
                     constructionStateLabel.text = "Waiting for resources";
                 else
                     constructionStateLabel.text = "Constructing";

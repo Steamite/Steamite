@@ -35,7 +35,8 @@ public class Building : StorageObject
     /// <summary>Building layout(entry points, anchor, ...).</summary>
     public BuildingGrid blueprint;
     /// <summary>Construction cost in resources.</summary>
-    [SerializeField] public MoneyResource cost = new();
+    [SerializeField] protected MoneyResource cost = new();
+    [CreateProperty] public MoneyResource Cost { get => cost; set => cost = value; }
     /// <summary>Is constructed.</summary>
     public bool constructed;
     /// <summary>Is being deconstructed.</summary>
@@ -136,22 +137,17 @@ public class Building : StorageObject
         localRes.Load((save as BSave).resSave);
         GetColors();
 
-        if (constructed)
+        InitModifiers();
+
+        gameObject.layer = 6;
+        for (int i = 0; i < transform.childCount; i++)
+            transform.GetChild(i).gameObject.layer = 6;
+        GetComponent<SortingGroup>().sortingLayerName = "Buildings";
+
+        if (!constructed)
         {
-            foreach (GameObject g in transform.GetComponentsInChildren<Transform>().Select(q => q.gameObject))
-            {
-                g.layer = 6;
-            }
-            GetComponent<SortingGroup>().sortingLayerName = "Buildings";
-            if (deconstructing)
-            {
-                SceneRefs.jobQueue.AddJob(JobState.Deconstructing, this);
-            }
-            InitModifiers();
-        }
-        else
-        {
-            PlaceBuilding(true);
+            SceneRefs.jobQueue.AddJob(JobState.Constructing, this);
+            ChangeRenderMode(true); 
         }
         base.Load(save);
     }
@@ -207,13 +203,9 @@ public class Building : StorageObject
     /// </summary>
     public virtual void FinishBuild()
     {
-        // DEBUG_Binding Problem entrypoint
-        // This happens when a building construction is finished.
-        // If the building is selected(and InfoWindow is open), the information should refresh and show a different view.
-        // The view is switched however, the bindings do not work.
         if (!constructed && this is not IStorage)
         {
-            localRes = new();
+            localRes.Dump();
         }
         constructed = true;
         ChangeRenderMode(false);
@@ -407,32 +399,20 @@ public class Building : StorageObject
     }
 
     /// <summary>
-    /// Entry point to call for creating building that are stationary. (loading and placing)
-    /// Do not call for moving blueprints.
+    /// Sets the layer, updates global resources and creates a construction job.
     /// </summary>
-    public virtual void PlaceBuilding(bool loading = false)
+    public virtual void PlaceBuilding()
     {
-        foreach (Transform t in transform.GetComponentsInChildren<Transform>())
-        {
-            t.gameObject.layer = 6;
-        }
+        gameObject.layer = 6;
+        for (int i = 0; i < transform.childCount; i++)
+            transform.GetChild(i).gameObject.layer = 6;
         GetComponent<SortingGroup>().sortingLayerName = "Buildings";
+
         SceneRefs.gridTiles.HighLight(new(), gameObject);
-
         MyRes.UpdateResource(cost, -1);
-        if (loading)
-        {
-            InitModifiers();
-            maximalProgress = CalculateMaxProgress();
-            ChangeRenderMode(true);
-        }
-        else
-        {
-            SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
-            UniqueID();
-            MyGrid.SetBuilding(this, loading);
-        }
-
+        SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
+        UniqueID();
+        MyGrid.SetBuilding(this);
     }
 
     public virtual void InitModifiers()

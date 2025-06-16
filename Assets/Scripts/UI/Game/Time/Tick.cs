@@ -145,11 +145,9 @@ public class Tick : MonoBehaviour
     #endregion
 
     #region Init
-    public void InitTicks(bool newGame)
+    public void InitTicks()
     {
         minutesPerTick = (int)(60f / ticksPerHour);
-        if (newGame)
-            timeInMinutes *= 60;
         if (timeInMinutes < 6 * 60 || timeInMinutes > 21 * 60)
             nightStart?.Invoke();
 

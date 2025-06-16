@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using Unity.Properties;
 using UnityEngine;
@@ -92,10 +93,18 @@ namespace InfoWindowElements
                                 nameof(IResourceProduction.ProductionYield),
                                 nameof(Building.LocalRes),
                                 data);
+                        mainBinding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage));
                     }
                     else
-                        break;
-                    mainBinding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage));
+                    {
+                        mainBinding = SetupResTypes(b.Cost, nameof(ResourceDisplay.GlobalResources));
+                        mainBinding.sourceToUiConverters.AddConverter((ref MoneyResource storage) => ToUIRes(storage));
+                        data = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
+                        dataSource = data;
+                        SetBinding(nameof(resources), mainBinding);
+                        ((IUpdatable)data).UIUpdate(nameof(ResourceDisplay.GlobalResources));
+                        return;
+                    }
                     break;
 
                 case LevelsTab:
@@ -154,6 +163,10 @@ namespace InfoWindowElements
         protected DataBinding SetupResTypes(Resource resource, string propName)
         {
             resources = new();
+            if (resource is MoneyResource)
+                resources.Add(new DoubleUIResource(
+                    MyRes.Money, 
+                    +((MoneyResource)resource).Money));
             for (int i = 0; i < resource.type.Count; i++)
                 resources.Add(new DoubleUIResource(
                         0,
@@ -176,9 +189,7 @@ namespace InfoWindowElements
         {
             Debug.Log(resource);
             for (int i = 0; i < resource.type.Count; i++)
-            {
                 ((DoubleUIResource)resources[i]).secondAmmount = resource.ammount[i];
-            }
             resources = resources;
             return resources;
         }
@@ -188,9 +199,14 @@ namespace InfoWindowElements
         /// <inheritdoc/>
         protected override List<UIResource> ToUIRes(Resource storage)
         {
+            if(storage is MoneyResource)
+            {
+                int i = resources.FindIndex(q => q.type == null);
+                resources[i].ammount = +((MoneyResource)storage).Money;
+            }
             for (int i = 0; i < storage.type.Count; i++)
             {
-                int j = resources.FindIndex(q => (ResourceType)q.type == storage.type[i]);
+                int j = resources.FindIndex(q => q.type != null && (ResourceType)q.type == storage.type[i]);
                 if (j > -1)
                     resources[j].ammount = storage.ammount[i];
             }

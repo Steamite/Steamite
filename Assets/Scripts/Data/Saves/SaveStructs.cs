@@ -94,6 +94,16 @@ public class RockSave : ClickableObjectSave
     public float originalIntegrity;
     public float integrity;
     public bool toBeDug;
+
+    public RockSave(){}
+
+    public RockSave(Resource yeild, float originalIntegrity, float integrity, bool toBeDug)
+    {
+        this.yeild = yeild;
+        this.originalIntegrity = originalIntegrity;
+        this.integrity = integrity;
+        this.toBeDug = toBeDug;
+    }
 }
 [Serializable]
 public class WaterSave : ClickableObjectSave

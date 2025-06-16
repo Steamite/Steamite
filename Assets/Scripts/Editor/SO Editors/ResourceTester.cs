@@ -54,7 +54,7 @@ class ResourceTester : IPreprocessBuildWithReport
                 Building building = data.Categories[i].Objects[j].building;
                 if (building != null)
                 {
-                    if (CheckResource(building.cost, building.objectName, data.Categories[i].Name, "Production cost"))
+                    if (CheckResource(building.Cost, building.objectName, data.Categories[i].Name, "Production cost"))
                         succes = false;
 
                     IResourceProduction res = building as IResourceProduction;

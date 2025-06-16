@@ -23,7 +23,7 @@ public class GroundLevel : MonoBehaviour
     /// <summary>Road holder</summary>
     public Transform roads;
     /// <summary>Water holder</summary>
-    public Transform water;
+    public Transform waters;
     /// <summary>Chunk holder</summary>
     public Transform chunks;
     /// <summary>Building holder</summary>
@@ -115,86 +115,6 @@ public class GroundLevel : MonoBehaviour
     }
     #endregion Base Grid operations
 
-    #region Creation
-
-    /// <summary>
-    /// Registers all parts of the grid.
-    /// </summary>
-    /// <param name="gridSize">Size of the grid.</param>
-    public void CreateGrid(int gridSize = -1)
-    {
-        ClearGrid(gridSize);
-
-        FillRoads(); // adds roads
-        FillRocks(); // adds ores
-        FillWater(); // adds water
-        FillBuildings(); // adds Buildings and (entry points)
-
-        gameObject.SetActive(false);
-    }
-
-    #region specific Creations
-    /// <summary>Registers all instantiated roads.</summary>
-    void FillRoads()
-    {
-        for (int j = 0; j < roads.childCount; j++)
-        {
-            GridPos vec = new(roads.GetChild(j).transform.localPosition);
-            SetGridItem(vec, roads.GetChild(j).GetComponent<Road>());
-        }
-    }
-
-    /// <summary>Registers all instantiated rocks.</summary>
-    void FillRocks()
-    {
-        for (int j = 0; j < rocks.childCount; j++)
-        {
-            GridPos vec = new(rocks.GetChild(j).transform.localPosition);
-            Rock rock = rocks.GetChild(j).GetComponent<Rock>();
-            SetGridItem(vec, rock);
-            rock.UniqueID();
-            if (rock.rockYield.Sum() == 0)
-            {
-                rock.ColorWithIntegrity();
-            }
-        }
-    }
-
-    /// <summary>Registers all instantiated waters.</summary>
-    void FillWater()
-    {
-        for (int j = 0; j < water.childCount; j++)
-        {
-            GridPos vec = new(water.GetChild(j).transform.localPosition);
-            SetGridItem(vec, water.GetChild(j).GetComponent<Water>());
-        }
-    }
-
-    /// <summary>Registers all instantiated buildings.</summary>
-    void FillBuildings()
-    {
-        foreach (Building building in buildings.GetComponentsInChildren<Building>())
-        {
-            building.UniqueID();
-            if (building.constructed)
-                building.constructionProgress = building.CalculateMaxProgress();
-            if (!building.GetComponent<BuildPipe>())
-            {
-                building.InitModifiers();
-                RegisterBuilding(building, load: true);
-                if (building is IResourceProduction)
-                {
-                    ((IResourceProduction)building).Init(building.constructed);
-                }
-            }
-            else
-                building.GetComponent<BuildPipe>().PlacePipe();
-        }
-    }
-    #endregion
-
-    #endregion Creation
-
     #region Adding to Grid
     /// <summary>
     /// Used for placing the building when ordering construction, or loading a level. <br/>
@@ -222,18 +142,12 @@ public class GroundLevel : MonoBehaviour
             {
                 case GridItemType.Road:
                 case GridItemType.Anchor:
-                    if (load)
-                        SceneRefs.objectFactory.CreateRoad(new(x, gridPos.y, y), false);
                     overlays.ToggleEntryPoints(r);
                     SetGridItem(new(x, y), building);
                     break;
                 case GridItemType.Entrance:
-                    if (load)
-                        overlays.Add(new(itemPos.x, itemPos.z), -1);
-                    else
-                        overlays.Add(new(itemPos.x, itemPos.z), i);
+                    overlays.Add(new(itemPos.x, itemPos.z), load ? - 1 : i);
                     r?.entryPoints.Add(building.id);
-                    //[^1].gameObject.SetActive(r != null);
                     break;
             }
         }
@@ -466,4 +380,79 @@ public class GroundLevel : MonoBehaviour
         return ok;
     }
     #endregion Checks
+
+
+
+    #region Game initialization
+
+    /// <summary>
+    /// Registers all parts of the grid.
+    /// </summary>
+    /// <param name="gridSize">Size of the grid.</param>
+    public void CreateGrid(WorldSave save, int level)
+    {
+        GridSave grid = new(width, height);
+        save.gridSave[level] = grid;//= new ClickableObjectSave[width, height];
+        FillRocks(save.gridSave[level]); // adds ores
+        FillWater(save.gridSave[level]); // adds water
+        FillBuildings(save, level); // adds Buildings and (entry points)
+
+        gameObject.SetActive(false);
+    }
+
+    #region specific Creations
+    /// <summary>Registers all instantiated roads.</summary>
+    void FillRoads()
+    {
+        for (int j = 0; j < roads.childCount; j++)
+        {
+            GridPos vec = new(roads.GetChild(j).transform.localPosition);
+            SetGridItem(vec, roads.GetChild(j).GetComponent<Road>());
+        }
+    }
+
+    /// <summary>Registers all instantiated rocks.</summary>
+    void FillRocks(GridSave save)
+    {
+        for (int j = 0; j < rocks.childCount; j++)
+        {
+            Rock rock = rocks.GetChild(j).GetComponent<Rock>();
+            GridPos vec = rock.GetPos();
+            rock.UniqueID();
+            save.grid[Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.z)] = rock.Save();
+        }
+    }
+
+    /// <summary>Registers all instantiated waters.</summary>
+    void FillWater(GridSave save)
+    {
+        for (int j = 0; j < waters.childCount; j++)
+        {
+            Water water = waters.GetChild(j).GetComponent<Water>();
+            GridPos vec = water.GetPos();
+            save.grid[Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.z)] = water.Save();
+        }
+    }
+
+    /// <summary>Registers all instantiated buildings.</summary>
+    void FillBuildings(WorldSave save, int level)
+    {
+        List<BSave> buildingList = buildings.GetComponentsInChildren<Building>().Select(q =>
+        {
+            if (!q.constructed)
+                q.maximalProgress = q.CalculateMaxProgress();
+            if (q is IStorage)
+                ((IStorage)q).SetupStorage();
+
+            BSave bSave = q.Save() as BSave;
+            bSave.gridPos.y = level;
+            return bSave;
+        }).ToList();
+        buildingList.AddRange(save.objectsSave.buildings);
+        save.objectsSave.buildings = buildingList.ToArray();
+    }
+    #endregion
+
+    #endregion Creation
+
 }

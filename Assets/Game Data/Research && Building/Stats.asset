@@ -36,7 +36,7 @@ MonoBehaviour:
         mod: 2
         modAmmount: 3
         percent: 0
-      - mask: 1
+      - mask: 3
         underProp: 0
         mod: 6
         modAmmount: 5

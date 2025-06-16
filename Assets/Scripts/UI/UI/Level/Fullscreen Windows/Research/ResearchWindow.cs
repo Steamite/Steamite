@@ -3,6 +3,7 @@ using ResearchUI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using TradeData.Stats;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -24,12 +25,6 @@ public class ResearchWindow : FullscreenWindow
         ((IInitiableUI)UI).Init();
         window.style.display = DisplayStyle.Flex;
         window.schedule.Execute(() => window.style.display = DisplayStyle.None).ExecuteLater(15);
-    }
-
-    public async void NewGame()
-    {
-        researchData = Instantiate<ResearchData>(await Addressables.LoadAssetAsync<ResearchData>("Assets/Game Data/Research && Building/Research Data.asset").Task);
-        Init();
     }
 
     public async void LoadGame(ResearchSave researchSave)
