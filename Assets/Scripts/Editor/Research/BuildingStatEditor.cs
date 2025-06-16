@@ -94,6 +94,7 @@ public class BuildingStatEditor : DataGridWindow<BuildingStatCateg, Stat>
                 ListView listView = el as ListView;
                 listView.allowAdd = true;
                 listView.allowRemove = true;
+                listView.reorderable = true;
                 listView.showAddRemoveFooter = true;
 
                 listView.itemsSource = ((Stat)dataGrid.itemsSource[i]).pairs;
