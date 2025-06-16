@@ -53,38 +53,50 @@ public class MapGen : MonoBehaviour
     /// </summary>
     /// <param name="_seed">Seed containing all generation paramaters.</param>
     /// <param name="templateLevel">Level template for creating <see cref="GroundLevel"/>s.</param>
-    public void Generate(string _seed, GroundLevel templateLevel)
+    public void Generate(string _seed, out WorldSave world)
     {
         seed = _seed;
+        world = new();
         ParseInput();
 
-        MyGrid.PrepGridLists();
         #region Generation
 
         minCenter = (gridSize / 2) - 5;
         maxCenter = (gridSize / 2) + 5;
 
+        world.gridSave = new GridSave[5];
         for (level = 0; level < 5; level++)
         {
-            MyGrid.AddEmptyGridLevel(templateLevel, level, gridSize);
-            map = new MapTile[gridSize, gridSize];
-            CreateGrid();
-            PerlinNoise(level);
+            GridSave levelSave = new(gridSize, gridSize);
 
+            map = new MapTile[gridSize, gridSize];
+            PerlinNoise(level);
+            MapTile tile;
             for (int x = 0; x < gridSize; x++)
             {
                 for (int y = 0; y < gridSize; y++)
                 {
-                    if (map[x, y] != null)
-                        SceneRefs.objectFactory.CreateRock(new(x, level, y), map[x, y].color, map[x, y].resource, map[x, y].hardness, map[x, y].name);
-                    else
-                    {
-                        SceneRefs.objectFactory.CreateRoad(new(x, level, y), true);
-                    }
+                    tile = map[x, y];
+                    if (tile != null)
+                        levelSave.grid[x, y] = new RockSave(
+                            tile.resource,
+                            tile.hardness,
+                            tile.hardness,
+                            false);
                 }
             }
+            world.gridSave[level] = levelSave;
         }
-        SceneRefs.objectFactory.CreateElevator(new(gridSize / 2, 0, gridSize / 2), true);
+        world.objectsSave = new BuildsAndChunksSave(
+            new BSave[] { 
+                new StorageBSave() { 
+                    prefabName="Elevator", 
+                    constructed=true,
+                } 
+            }, 
+            new ChunkSave[] {});
+
+        //SceneRefs.objectFactory.CreateElevator(new(gridSize / 2, 0, gridSize / 2), true);
         #endregion
     }
 

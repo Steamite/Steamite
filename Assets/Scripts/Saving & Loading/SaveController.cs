@@ -249,5 +249,61 @@ public class SaveController : MonoBehaviour, IAfterLoad
                 jsonWriter.Close();  
         }
     }
+
+    // TODO
+    void NewGameSave(string saveName, bool autoSave, WorldSave world)
+    {
+        string tmpPath = $"{Application.persistentDataPath}/saves/_tmp";
+        Directory.CreateDirectory($"{tmpPath}");
+        JsonSerializer jsonSerializer = PrepSerializer();
+        try
+        {
+            WriteSave(
+                $"{tmpPath}/Grid.json",
+                jsonSerializer,
+                world.objectsSave);
+
+            for (int i = 0; i < 5; i++)
+                WriteSave(
+                    $"{tmpPath}/Level{i}.json",
+                    jsonSerializer,
+                    world.gridSave[i]);
+
+            WriteSave(
+                $"{tmpPath}/Humans.json",
+                jsonSerializer,
+                SceneRefs.humans.SaveHumans());
+
+            WriteSave(
+               $"{tmpPath}/Game State.json",
+               jsonSerializer,
+               SaveGameState(autoSave));
+
+            WriteSave(
+               $"{tmpPath}/Research.json",
+               jsonSerializer,
+               new ResearchSave(UIRefs.research));
+
+            WriteSave(
+               $"{tmpPath}/Trade.json",
+               jsonSerializer,
+               new TradeSave(UIRefs.trading));
+
+            if (autoSave)
+                saveName = "autosave";
+            AfterSave(tmpPath, saveName, autoSave);
+        }
+        catch (Exception e)
+        {
+            SceneRefs.ShowMessage("An error ocured when saving.");
+            Debug.LogWarning("Saving error: " + e);
+            foreach (string file in Directory.GetFiles(tmpPath))
+            {
+                File.Delete(file);
+            }
+            Directory.Delete($"{tmpPath}");
+            return;
+        }
+    }
     #endregion
 }

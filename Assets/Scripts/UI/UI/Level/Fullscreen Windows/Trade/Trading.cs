@@ -30,16 +30,6 @@ public class Trading : FullscreenWindow
     public List<TradeConvoy> GetConvoys() => convoys;
     #endregion
 
-    public void NewGame(int selectedColony)
-    {
-        TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Colony Locations/{baseLocation}");
-        colonyLocation = tradeHolder.startingLocation;
-        colonyLocation.NewGame();
-        tradeLocations = tradeHolder.tradeLocations;
-        convoys = new();
-        Init();
-    }
-
     public void LoadGame(TradeSave tradeSave)
     {
         TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Colony Locations/{tradeSave.colonyLocation}");

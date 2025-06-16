@@ -70,7 +70,6 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
         (clickable as ResProductionBSave).inputRes = new(InputResource);
         (clickable as ProductionBSave).prodTime = ProdTime;
         (clickable as ProductionBSave).currentTime = CurrentTime;
-        (clickable as ProductionBSave).modifier = +ProdSpeed;
         (clickable as ProductionBSave).ProdStates = ProdStates;
         return base.Save(clickable);
     }
@@ -81,7 +80,6 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
 
         ProdTime = (save as ProductionBSave).prodTime;
         CurrentTime = (save as ProductionBSave).currentTime;
-        ProdSpeed = new((save as ProductionBSave).modifier);
         ProdStates = (save as ProductionBSave).ProdStates;
         if (!ProdStates.supplied)
         {

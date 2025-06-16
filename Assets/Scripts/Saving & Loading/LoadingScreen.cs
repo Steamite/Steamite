@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -51,42 +52,32 @@ public class LoadingScreen : MonoBehaviour
     }
 
 
-    public void StartNewGame(string _folderName, string seed = "")
+    public async void StartNewGame(string _folderName, string seed = "")
     {
-        StartCoroutine(NewGame(_folderName, seed));
-    }
-    /// <summary>
-    /// Creates a new game save and Load it's scene.
-    /// </summary>
-    /// <param name="_folderName">Save name</param>
-    /// <param name="seed">Generation seed</param>
-    IEnumerator NewGame(string _folderName, string seed = ""/*, bool tutorial*/)
-    {
-        worldName = _folderName;
-        if (worldName != "test - TopGun")
-            yield return SceneManager.UnloadSceneAsync("Main Menu");
-        transform.GetChild(0).gameObject.SetActive(true);
-
-        yield return SceneManager.LoadSceneAsync(3, LoadSceneMode.Additive);
-        yield return BeforeLevelLoad(true);
-
+        NewGameInit newGameInit = gameObject.GetComponent<NewGameInit>();
+        WorldSave save;
         if (seed != "")
-            gameObject.GetComponent<MapGen>().Generate(seed, templateLevel);
+            gameObject.GetComponent<MapGen>().Generate(seed, out save);
         else
-            MyGrid.CreateGrid(startLevel, mainLevel);
+            newGameInit.CreateGrid(startLevel, mainLevel, out save);
 
-        UIRefs.trading.NewGame(0);
-        UIRefs.research.NewGame();
-        SceneRefs.humans.NewGameInit(ref humanActivation);
-
-        AfterLevelLoad(true);
+        ResearchSave researchSave = await newGameInit.InitResearch();
+        StartCoroutine(StartLoading(_folderName, _folderName,
+            new Save()
+            {
+                gameState = newGameInit.SetNewGameState(),
+                trade = newGameInit.CreateTrade(0),
+                research = researchSave,
+                humans = newGameInit.InitHumans(mainLevel.height),
+                world = save
+            }));
     }
     #endregion
 
     #region Loading Game State
     public void LoadGame(string _folderName, string _worldName)
     {
-        StartCoroutine(StartLoading(_folderName, _worldName));
+        StartCoroutine(StartLoading(_folderName, _worldName, LoadSavedData(_folderName)));
     }
     /// <summary>
     /// Assigns parameters and shows loading screen.<br/>
@@ -94,22 +85,14 @@ public class LoadingScreen : MonoBehaviour
     /// After that loads "Level" scene.
     /// </summary>
     /// <param name="_folderName">Current folder name.</param>
-    IEnumerator StartLoading(string _folderName, string _worldName)
+    IEnumerator StartLoading(string _folderName, string _worldName, Save save)
     {
-        Save save = LoadSavedData(_folderName);
         worldName = _worldName;
-
         transform.GetChild(0).gameObject.SetActive(true);
         transform.GetChild(0).GetChild(2).GetComponent<TMP_Text>().text = _folderName;
         transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
 
-        if (GameObject.Find("Main Menu"))
-        {
-            yield return SceneManager.UnloadSceneAsync("Main Menu");
-        }
-        yield return SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
-
-        yield return BeforeLevelLoad(false);
+        yield return BeforeLevelLoad();
         yield return LoadWorldData(save);
 
         AfterLevelLoad(false);
@@ -312,9 +295,11 @@ public class LoadingScreen : MonoBehaviour
     #endregion UI loading
     #endregion Loading Game State
 
-    IEnumerator BeforeLevelLoad(bool newGame)
+    IEnumerator BeforeLevelLoad()
     {
-        //UnityEngine.Rendering.DebugManager.instance.enableRuntimeUI = false;
+        if (GameObject.Find("Main Menu"))
+            yield return SceneManager.UnloadSceneAsync("Main Menu");
+        yield return SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
         yield return GameObject.Find("Scene").GetComponent<SceneRefs>().BeforeLoad();
         GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
         MyRes.PreLoad();
@@ -328,11 +313,11 @@ public class LoadingScreen : MonoBehaviour
     {
         MyGrid.worldName = worldName;
 
-        MyRes.ActivateResources(newGame);
+        MyRes.ActivateResources();
 
         actionText.text = "Press any button";
         InputSystem.onAnyButtonPress.CallOnce(
-            (action) => StartCoroutine(CancelInput(newGame)));
+            (action) => StartCoroutine(CancelInput()));
     }
     
     /// <summary>
@@ -340,13 +325,13 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="newGame"></param>
     /// <returns></returns>
-    IEnumerator CancelInput(bool newGame)
+    IEnumerator CancelInput()
     {
         for (int i = 0; i < 5; i++)
         {
             yield return null;
         }
-        EnableLevelContollers(newGame);
+        EnableLevelContollers();
     }
     
     /// <summary>
@@ -354,9 +339,9 @@ public class LoadingScreen : MonoBehaviour
     /// And enables user input.
     /// </summary>
     /// <param name="newGame">Information for ticks</param>
-    async void EnableLevelContollers(bool newGame)
+    async void EnableLevelContollers()
     {
-        StopCoroutine(CancelInput(newGame));
+        StopCoroutine(CancelInput());
         for (int i = SceneManager.sceneCount - 1; i > -1; i--)
         {
             if (SceneManager.GetSceneAt(i).name == "LoadingScreen" && SceneManager.GetSceneAt(i).isLoaded)
@@ -367,7 +352,7 @@ public class LoadingScreen : MonoBehaviour
 
         humanActivation?.Invoke();
         humanActivation = null;
-        SceneRefs.tick.InitTicks(newGame);
+        SceneRefs.tick.InitTicks();
         UIRefs.toolkitShortcuts.GetComponent<IToolkitController>().Init(UIRefs.toolkitShortcuts.rootVisualElement);
     }
 }

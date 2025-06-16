@@ -75,11 +75,11 @@ public class UIOverlay : MonoBehaviour
     }
 
     /// <summary>
-    /// Adds an entrypoint overaly tile.
+    /// Adds an entrypoint overaly tile, use child index only with user interactions(previously created, that just need to be moved).
     /// </summary>
     /// <param name="gridPos">Position for the entrypoint.</param>
     /// <param name="childIndex">Index for recycling overlay tiles.</param>
-    public void Add(GridPos gridPos, int childIndex)
+    public void Add(GridPos gridPos, int childIndex = -1)
     {
         RectTransform rect;
         if (childIndex == -1)

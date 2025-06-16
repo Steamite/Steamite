@@ -55,7 +55,7 @@ namespace InfoWindowViews
         #region Constructors
         public ProductionButton()
         {
-            inputResource = new(true, "Input");
+            inputResource = new(true, "Input", true);
             Add(inputResource);
 
             VisualElement visualElement = new();
@@ -67,6 +67,7 @@ namespace InfoWindowViews
             capacityLabel.style.unityTextAlign = TextAnchor.UpperCenter;
             capacityLabel.style.fontSize = 15;
             capacityLabel.AddToClassList("no-space-around");
+            
             visualElement.Add(capacityLabel);
 
             #region Border
@@ -81,7 +82,7 @@ namespace InfoWindowViews
             radialElement.ElementAt(0).Add(button);
             #endregion
 
-            outputResource = new(false, "Output");
+            outputResource = new(false, "Output", true);
             Add(outputResource);
             UpdateButton();
         }

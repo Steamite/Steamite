@@ -4,6 +4,6 @@ using UnityEngine;
 
 [Serializable]public class MoneyResource : ModifiableResource
 {
-    [SerializeField] ModifiableInteger money;
+    [SerializeField] ModifiableInteger money = new();
     [CreateProperty] public ModifiableInteger Money { get => money; set => money = value; }
 }

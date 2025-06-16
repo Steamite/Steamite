@@ -243,7 +243,7 @@ namespace EditorWindows.Windows
                 {
                     el.parent.focusable = true;
                     ResourceCell cell = el.Q<ResourceCell>();
-                    cell.Open(((BuildingWrapper)dataGrid.itemsSource[i]).building?.cost, ((BuildingWrapper)dataGrid.itemsSource[i]).building, true);
+                    cell.Open(((BuildingWrapper)dataGrid.itemsSource[i]).building?.Cost, ((BuildingWrapper)dataGrid.itemsSource[i]).building, true);
                 };
             #endregion
 

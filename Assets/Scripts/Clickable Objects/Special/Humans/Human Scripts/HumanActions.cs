@@ -21,10 +21,6 @@ public static class HumanActions
     /// <summary>Multiplies progress of <see cref="DoProduction(Human)"/> action.</summary>
     static readonly float productionSpeed = 1f;
     #endregion
-
-
-    
-
     public static void ChangeEfficiency(JobState toChange, int ammount)
     {
         throw new NotImplementedException();
@@ -238,7 +234,7 @@ public static class HumanActions
                 List<Building> missingProgress = new();
                 foreach (var building in jobQueue.constructions)
                 {
-                    if (!building.LocalRes.Future().Equals(building.cost) && building.constructed == false)
+                    if (!building.LocalRes.Future().Equals(building.Cost) && building.constructed == false)
                     {
                         missingResoucerces.Add(building);
                     }
