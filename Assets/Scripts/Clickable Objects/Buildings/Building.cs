@@ -52,10 +52,8 @@ public class Building : StorageObject
     #endregion
 
     #region Basic Operations
-    /// <summary>Fills<see cref="myColor"/>.</summary>
-    protected virtual void Awake() => GetColors();
 
-    /// <summary>Creates a list from <see cref="MyGrid.buildings"/></summary>
+    /// <summary>Creates a new unique id not present in <see cref="MyGrid.buildings"/></summary>
     public override void UniqueID() => CreateNewId(MyGrid.Buildings.Select(q => q.id).ToList());
     /// <summary>
     /// Calculates positio using the anchor from <see cref="blueprint"/>.
@@ -162,7 +160,12 @@ public class Building : StorageObject
     public override void Store(Human human, int transferPerTick)
     {
         int index = localRes.carriers.IndexOf(human);
-        MyRes.MoveRes(localRes, human.Inventory, localRes.requests[index], transferPerTick);
+        MyRes.MoveRes(
+            localRes, 
+            human.Inventory, 
+            localRes.requests[index], 
+            transferPerTick, 
+            !constructed);
         UIUpdate(nameof(LocalRes));
         if (localRes.requests[index].Sum() == 0)
         {
@@ -361,7 +364,7 @@ public class Building : StorageObject
         }
     }
 
-    public void UpdateConstructionProgressAlpha()
+    protected virtual void UpdateConstructionProgressAlpha()
     {
         for (int i = 0; i < _meshRenderers.Count; i++)
         {
@@ -425,7 +428,7 @@ public class Building : StorageObject
     /// <summary>
     /// Fills <see cref="myColor"/>.
     /// </summary>
-    public void GetColors()
+    public virtual void GetColors()
     {
         _meshRenderers = transform.GetComponentsInChildren<Renderer>().ToList();
         _materialColors = _meshRenderers.Select(q => q.material.color).ToList();

@@ -221,7 +221,7 @@ namespace EditorWindows.Windows
                 (el, i) =>
                 {
                     DropdownField field = (DropdownField)el;
-                    field.choices = buildingTypes.Select(q => q.Name).Where(q => !q.Contains("Pipe")).ToList();
+                    field.choices = buildingTypes.Select(q => q.Name).ToList();//.Select(q => q.Name).Where(q => !q.Contains("Pipe")).ToList();
                     field.value = ((BuildingWrapper)dataGrid.itemsSource[i]).building
                         ? ((BuildingWrapper)dataGrid.itemsSource[i]).building.GetType().ToString()
                         : "None";
@@ -266,8 +266,10 @@ namespace EditorWindows.Windows
                     {
                         if (building.blueprint.itemList == null ||
                             building.blueprint.itemList.Count == 0 ||
-                            building.blueprint.itemList.Count(q => q.itemType == GridItemType.Anchor) == 0 ||
-                            building.blueprint.itemList.Count(q => q.itemType == GridItemType.Entrance) == 0)
+                            (building is not Pipe && 
+                                (building.blueprint.itemList.Count(q => q.itemType == GridItemType.Anchor) == 0 ||
+                                 building.blueprint.itemList.Count(q => q.itemType == GridItemType.Entrance) == 0))
+                            || (building is Pipe && building.blueprint.itemList.Count(q=> q.itemType == GridItemType.Pipe) == 0))
                         {
                             button.style.color = Color.red;
                         }
@@ -522,7 +524,7 @@ namespace EditorWindows.Windows
                     }
                     else
                     {
-                        Debug.LogError("Already exists!");
+                        Debug.LogError("Already exists!\n" + path + "/" + b.objectName);
                     }
                 }
                 else if (b == null)
@@ -686,8 +688,11 @@ namespace EditorWindows.Windows
         void StorageCapacityChanged(ChangeEvent<int> ev)
         {
             int i = GetRowIndex((VisualElement)ev.target);
-            ((BuildingWrapper)dataGrid.itemsSource[i]).building.LocalRes.capacity.BaseValue = ev.newValue;
-            EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
+            if(((BuildingWrapper)dataGrid.itemsSource[i]).building != null)
+            {
+                ((BuildingWrapper)dataGrid.itemsSource[i]).building.LocalRes.capacity.BaseValue = ev.newValue;
+                EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
+            }
         }
         #endregion
 

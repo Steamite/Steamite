@@ -64,20 +64,20 @@ public abstract class ClickableObject : MonoBehaviour,
     /// Fills the <paramref name="jobSave"/> with object id and type.
     /// </summary>
     /// <exception cref="NotImplementedException">Not Implemented</exception>
-    public void GetID(JobSave jobSave)
+    public Tuple<int, JobSave.InterestType> GetID()
     {
-        jobSave.interestID = id;
         switch (this)
         {
+            case Pipe:
+                return new(id, JobSave.InterestType.P);
             case Building:
-                jobSave.interestType = JobSave.InterestType.B;
-                break;
+                return new(id, JobSave.InterestType.B);
             case Rock:
-                jobSave.interestType = JobSave.InterestType.R;
-                break;
+                return new(id, JobSave.InterestType.R);
             case Chunk:
-                jobSave.interestType = JobSave.InterestType.C;
-                break;
+                return new(id, JobSave.InterestType.C);
+            default:
+                return new(id, JobSave.InterestType.Nothing);
         }
     }
     /// <summary>

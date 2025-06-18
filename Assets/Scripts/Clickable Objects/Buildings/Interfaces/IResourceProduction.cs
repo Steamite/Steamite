@@ -34,14 +34,18 @@ public interface IResourceProduction : IProduction
             Debug.Log("");
         CapacityResource resource = new(-1);
         // TODO: IMPROVE
-        MyRes.MoveRes(resource, human.Inventory, InputResource.requests[index], transferPerTick);
+        MyRes.MoveRes(
+            resource, 
+            human.Inventory, 
+            InputResource.requests[index], 
+            transferPerTick);
         MyRes.UpdateResource(resource, -1);
         MyRes.ManageRes(InputResource, resource, 1);
         // TODO END
         ((ClickableObject)this).UIUpdate(nameof(InputResource));
         if (MyRes.DiffRes(ProductionCost, InputResource).Sum() == 0)
         {
-            human.transform.parent.parent.GetComponent<JobQueue>().CancelJob(JobState.Supply, (ClickableObject)this);
+            SceneRefs.jobQueue.CancelJob(JobState.Supply, (ClickableObject)this);
             ProdStates.supplied = true;
             RefreshStatus();
         }

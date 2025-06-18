@@ -23,7 +23,10 @@ public struct JobData
         interest = null;
         if (jobSave.destinationID > -1)
         {
-            human.destination = MyGrid.GetBuilding(q => q.id == jobSave.destinationID);
+            if (jobSave.destType == JobSave.InterestType.P)
+                human.destination = MyGrid.GetPipes(q => q.id == jobSave.destinationID);
+            else
+                human.destination = MyGrid.GetBuilding(q => q.id == jobSave.destinationID);
             human.destination.TryLink(human);
         }
 
@@ -38,6 +41,9 @@ public struct JobData
                 break;
             case JobSave.InterestType.C:
                 interest = MyGrid.chunks.FirstOrDefault(q => q.id == jobSave.interestID);
+                break;
+            case JobSave.InterestType.P:
+                interest = MyGrid.GetPipes(q => q.id == jobSave.interestID);
                 break;
             default:
                 return;

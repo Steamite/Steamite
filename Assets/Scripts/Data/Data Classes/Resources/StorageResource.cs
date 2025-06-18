@@ -137,9 +137,6 @@ public class StorageResource : CapacityResource
         int index = carrierIDs.FindIndex(q => q == h.id);
         if (index > -1)
         {
-            carrierIDs.Remove(index);
-            if (carrierIDs.Count == 0)
-                carrierIDs = null;
             if (carriers.Count <= index)
             {
                 carriers.Add(h);
@@ -148,6 +145,8 @@ public class StorageResource : CapacityResource
             {
                 carriers.Insert(index, h);
             }
+            /*if (carrierIDs.Count == carriers.Count)
+                carrierIDs = null;*/
         }
     }
 
@@ -158,7 +157,7 @@ public class StorageResource : CapacityResource
         requests = resSave.requests;
         mods = resSave.mod;
         carriers = new();
-        carrierIDs = resSave.carriers;
+        carrierIDs = resSave.carriers.ToList();
     }
 
     public void Dump()

@@ -209,7 +209,7 @@ MonoBehaviour:
       ammount: 05000000
     money:
       baseValue: 520
-      currentValue: 0
+      currentValue: 520
   constructed: 0
   deconstructing: 0
   constructionProgress: 0

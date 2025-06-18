@@ -34,6 +34,8 @@ namespace InfoWindowElements
 
         [UxmlAttribute] protected bool useBindings;
 
+        [UxmlAttribute] protected bool showMoney = true;
+
         #region Constructors
         ///<summary> Do not use from code, this is only for adding the resource list from UI Builder.</summary>
         public DoubleResourceList() : base()
@@ -144,7 +146,7 @@ namespace InfoWindowElements
         protected void SetResWithoutBinding(Resource res)
         {
             List<UIResource> temp = new List<UIResource>();
-            if (res is MoneyResource && ((MoneyResource)res).Money > -1)
+            if (res is MoneyResource && showMoney && ((MoneyResource)res).Money > -1)
                 temp.Add(new DoubleUIResource(MyRes.Money, +((MoneyResource)res).Money));
             for (int i = 0; i < res.type.Count; i++)
             {
@@ -163,7 +165,7 @@ namespace InfoWindowElements
         protected DataBinding SetupResTypes(Resource resource, string propName)
         {
             resources = new();
-            if (resource is MoneyResource)
+            if (resource is MoneyResource && showMoney)
                 resources.Add(new DoubleUIResource(
                     MyRes.Money, 
                     +((MoneyResource)resource).Money));

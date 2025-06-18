@@ -82,7 +82,7 @@ public class Chunk : StorageObject
                 }
                 else
                 {
-                    if (HumanActions.HandleJobTypes(h.transform.parent.parent.GetComponent<JobQueue>(), h, JobState.Cleanup))
+                    if (HumanActions.HandleJobTypes(SceneRefs.jobQueue, h, JobState.Cleanup))
                         FindS(h);
                 }
             }

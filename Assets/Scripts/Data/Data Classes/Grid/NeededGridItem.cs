@@ -13,7 +13,9 @@ public enum GridItemType
     /// <summary>atleast one of them must be on a road tile</summary>
     Entrance,
     /// <summary>only one for each blueprint, where the cursor is when moving</summary>
-    Anchor
+    Anchor,
+    /// <summary>Pipe itself</summary>
+    Pipe,
 }
 
 /// <summary>Represents one tile of a building.</summary>

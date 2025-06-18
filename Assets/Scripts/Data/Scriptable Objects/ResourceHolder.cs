@@ -13,16 +13,17 @@ public class ResourceHolder : ScriptableObject
     /// </summary>
     /// <param name="prefName">Name of the prefab.</param>
     /// <returns>Matching prefab.</returns>
-    public ClickableObject GetPrefab(string prefName)
+    public T GetPrefab<T>(string prefName) where T: ClickableObject
     {
         for (int i = 0; i < prefabs.Count; i++)
         {
             if (prefabs[i].objectName.ToUpper() == prefName.ToUpper())
-                return prefabs[i];
+                return prefabs[i] as T;
         }
         Debug.LogError("Could not find Prefab! " + prefName);
         return null;
     }
+
     /// <summary>
     /// Gets prefab at <paramref name="index"/>.
     /// </summary>

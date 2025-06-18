@@ -31,7 +31,7 @@ public class BuildingSerialization
         }
     }
 
-    //[MenuItem("API/Serialize buildings", priority = 10)]
+    [MenuItem("API/Serialize buildings", priority = 10)]
     public static async void Serialize()
     {
         Init();

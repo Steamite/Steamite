@@ -138,8 +138,14 @@ public static class MyRes
     /// <param name="source">resource to remove from</param>
     /// <param name="diff">resource to exchange</param>
     /// <param name="ammountToTransfer">ammount to transfer(how many resources to be moved this tick)</param>
+    /// <param name="ingoreCapacity">Used when constructing to eliminate the resource cap.</param>
     /// <returns>true = continue exchange, false = stop exchange</returns>
-    public static bool MoveRes(CapacityResource destination, Resource source, Resource diff, int ammountToTransfer)
+    public static bool MoveRes(
+        CapacityResource destination, 
+        Resource source, 
+        Resource diff, 
+        int ammountToTransfer, 
+        bool ingoreCapacity = false)
     {
         try
         {
@@ -167,10 +173,11 @@ public static class MyRes
                 // can Transfer setting
                 int canTransfer = source.ammount[sIndex] > diff.ammount[i]
                     ? diff.ammount[i] : source.ammount[sIndex];
+                if(!ingoreCapacity)
+                    canTransfer = canTransfer > destination.FreeSpace
+                        ? destination.FreeSpace
+                        : canTransfer;
 
-                canTransfer = canTransfer > destination.FreeSpace
-                    ? destination.FreeSpace
-                    : canTransfer;
                 if (ammountToTransfer > -1)
                 {
                     canTransfer = canTransfer > ammountToTransfer
@@ -293,8 +300,7 @@ public static class MyRes
     /// <returns></returns>
     static List<IStorage> FilterStorages(Resource r, Human h, bool perfect)
     {
-        JobQueue jQ = h.transform.parent.parent.GetComponent<JobQueue>();
-        List<IStorage> storages = jQ.storages.ToList();
+        List<IStorage> storages = SceneRefs.jobQueue.storages.ToList();
         int wantToStore = r.Sum();
         for (int i = storages.Count - 1; i >= 0; i--)
         {

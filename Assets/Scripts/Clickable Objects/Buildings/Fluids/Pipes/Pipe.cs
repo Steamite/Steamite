@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
@@ -8,6 +9,8 @@ using UnityEngine.Rendering;
 public class Pipe : Building
 {
     public FluidNetwork network = new();
+    PipePart[] connectedPipes = new PipePart[4];
+
     public override void OrderDeconstruct()
     {
         base.OrderDeconstruct();
@@ -18,14 +21,6 @@ public class Pipe : Building
                 pipe.OrderDeconstruct();
             }
         }
-    }
-    public override bool CanPlace()
-    {
-        if (MyRes.CanAfford(cost))
-        {
-            return MyGrid.CanPlace(this);
-        }
-        return false;
     }
     public override void FinishBuild()
     {
@@ -79,53 +74,54 @@ public class Pipe : Building
             }
         }
     }
-    public override void OnPointerEnter(PointerEventData eventData)
-    {
-        base.OnPointerEnter(eventData);
-    }
     public override void PlaceBuilding()
     {
+        UniqueID();
         gameObject.layer = 7;
         GetComponent<SortingGroup>().sortingLayerName = "Pipes";
         maximalProgress = cost.Sum() * 2;
         SceneRefs.gridTiles.HighLight(new(), gameObject);
 
-        SceneRefs.humans.GetComponent<JobQueue>().AddJob(JobState.Constructing, this); // creates a new job with the data above
+        SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         MyRes.UpdateResource(cost, -1);
     }
     public void ConnectPipe(int _case, Pipe connectedPipe, bool canNext)
     {
-        Transform pipePrefab;
-        if ((pipePrefab = transform.GetComponentsInChildren<Transform>().FirstOrDefault(q => q.name == _case.ToString())) == null || !canNext)
+        Transform pipePart;
+        if ((pipePart = transform.GetComponentsInChildren<Transform>().FirstOrDefault(q => q.name == _case.ToString())) == null || !canNext)
         {
-            pipePrefab = Instantiate(SceneRefs.objectFactory.specialPrefabs.GetPrefab("Pipe connection"), transform).transform;
-            pipePrefab.GetComponent<MeshRenderer>().sharedMaterial = gameObject.GetComponent<MeshRenderer>().sharedMaterial;
-            pipePrefab.gameObject.name = _case.ToString();
+            if (connectedPipes[_case] != null)
+                Debug.LogError("Pipe is already present");
+            connectedPipes[_case] = Instantiate(SceneRefs.objectFactory.specialPrefabs.GetPrefab<PipePart>("Pipe connection"), transform);
+            _meshRenderers.Add(connectedPipes[_case].GetComponent<Renderer>());
+
+            pipePart = connectedPipes[_case].transform;
+            pipePart.GetComponent<MeshRenderer>().sharedMaterial = gameObject.GetComponent<MeshRenderer>().sharedMaterial;
         }
-        pipePrefab.GetComponent<PipePart>().connectedPipe = connectedPipe;
+        connectedPipes[_case].connectedPipe = connectedPipe;
         switch (_case)
         {
             case 0:
-                pipePrefab.rotation = Quaternion.Euler(90, 0, 90);
-                pipePrefab.localPosition = new(1.03f, 0, 0);
+                pipePart.rotation = Quaternion.Euler(90, 0, 90);
+                pipePart.localPosition = new(1.03f, 0, 0);
                 if (canNext)
                     connectedPipe.ConnectPipe(1, this, false);
                 break;
             case 1:
-                pipePrefab.rotation = Quaternion.Euler(90, 0, 90);
-                pipePrefab.localPosition = new(-1.03f, 0, 0);
+                pipePart.rotation = Quaternion.Euler(90, 0, 90);
+                pipePart.localPosition = new(-1.03f, 0, 0);
                 if (canNext)
                     connectedPipe.ConnectPipe(0, this, false);
                 break;
             case 2:
-                pipePrefab.rotation = Quaternion.Euler(90, 0, 0);
-                pipePrefab.localPosition = new(0, 0, 1.03f);
+                pipePart.rotation = Quaternion.Euler(90, 0, 0);
+                pipePart.localPosition = new(0, 0, 1.03f);
                 if (canNext)
                     connectedPipe.ConnectPipe(3, this, false);
                 break;
             case 3:
-                pipePrefab.rotation = Quaternion.Euler(90, 0, 0);
-                pipePrefab.localPosition = new(0, 0, -1.03f);
+                pipePart.rotation = Quaternion.Euler(90, 0, 0);
+                pipePart.localPosition = new(0, 0, -1.03f);
                 if (canNext)
                     connectedPipe.ConnectPipe(2, this, false);
                 break;
@@ -150,35 +146,41 @@ public class Pipe : Building
         }
         base.DestoyBuilding();
     }
+
     public void DisconnectPipe(int _case, bool canNext)
     {
         try
         {
-            PipePart connection = null;
-            GridTiles gT = GameObject.FindWithTag("Grid")?.GetComponent<GridTiles>();
-            for (int i = 0; i < transform.childCount; i++)
+            PipePart connection = connectedPipes[_case];
+            if (connection != null)
             {
-                connection = transform.GetChild(i).GetComponent<PipePart>();
-                if (connection.gameObject.name == _case.ToString())
+                Destroy(connection.gameObject);
+                _meshRenderers.Remove(connection.GetComponent<Renderer>());
+                connectedPipes[_case] = null;
+                if (canNext)
                 {
-                    Destroy(connection.gameObject);
-                    if (canNext)
+                    Pipe p = connection.connectedPipe;
+                    if (p != null)
                     {
-                        Pipe p = connection.connectedPipe;
-                        if (p != null)
-                        {
-                            p.DisconnectPipe(_case % 2 == 0 ? _case + 1 : _case - 1, false);
-                        }
+                        p.DisconnectPipe(_case % 2 == 0 ? _case + 1 : _case - 1, false);
                     }
-                    else
-                        connection.connectedPipe = null;
-                    break;
                 }
+                else
+                    connection.connectedPipe = null;
             }
         }
         catch (Exception e)
         {
             Debug.LogError("FUCK" + e);
+        }
+    }
+
+    protected override void UpdateConstructionProgressAlpha()
+    {
+        for (int i = 0; i < _meshRenderers.Count; i++)
+        {
+            _meshRenderers[i].material.color
+                = new(_materialColors[0].r, _materialColors[0].g, _materialColors[0].b, 0.1f + (constructionProgress / maximalProgress) * 0.9f);
         }
     }
 
@@ -229,16 +231,17 @@ public class Pipe : Building
             s += $"Steam: {steam}";
         return s;
     }
+
     public virtual void PlacePipe()
     {
-        if (id == -1)
-            UniqueID();
-        GridPos pos = new(transform.position);
-        MyGrid.SetGridItem(pos, this, true);
-        MyGrid.CanPlace(this);
+        MyGrid.SetBuilding(this);
+        MyGrid.SetGridItem(GetPos(), this, true);
+        FindConnections();
         if (constructed)
             FinishBuild();
     }
+
+    #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         // if constructed or ordered to be deconstructed save all data
@@ -256,6 +259,7 @@ public class Pipe : Building
                 clickable = new LightWeightPipeBSave();
             (clickable as LightWeightPipeBSave).networkID = network.networkID;
             clickable.id = id;
+            clickable.objectName = objectName;
             return clickable;
         }
     }
@@ -273,5 +277,52 @@ public class Pipe : Building
             network.networkID = (save as LightWeightPipeBSave).networkID;
         }
         PlacePipe();
+    }
+    #endregion
+
+    public override GridPos GetPos()
+    {
+        return new(
+            transform.position.x,
+            (transform.position.y - ClickableObjectFactory.PIPE_OFFSET) / 2,
+            transform.position.z);
+    }
+
+    public void FindConnections(bool canPlace = true)
+    {
+        GridPos pos = GetPos();
+        for (int i = 0; i < 4; i++) // checks in every direction
+        {
+            GridPos checkVec = new();
+            switch (i)
+            {
+                case 0:
+                    checkVec = new(pos.x + 1, pos.z);
+                    if (checkVec.x == MyGrid.gridSize(pos.y))
+                        continue;
+                    break;
+                case 1:
+                    checkVec = new(pos.x - 1, pos.z);
+                    if (checkVec.x < 0)
+                        continue;
+                    break;
+                case 2:
+                    checkVec = new(pos.x, pos.z + 1);
+                    if (checkVec.z == MyGrid.gridSize(pos.y))
+                        continue;
+                    break;
+                case 3:
+                    checkVec = new(pos.x, pos.z - 1);
+                    if (checkVec.z < 0)
+                        continue;
+                    break;
+            }
+            DisconnectPipe(i, true);
+            Pipe connectedPipe = MyGrid.GetGridItem(checkVec, true) as Pipe;
+            if (connectedPipe && canPlace)
+            {
+                ConnectPipe(i, connectedPipe, true);
+            }
+        }
     }
 }

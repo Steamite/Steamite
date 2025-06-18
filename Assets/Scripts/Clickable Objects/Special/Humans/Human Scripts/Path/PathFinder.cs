@@ -61,11 +61,7 @@ public static class PathFinder
             if (b)
             {
                 Pipe p = interest.GetComponent<Pipe>();
-                if (p)
-                {
-                    plan.path.RemoveAt(plan.path.Count - 1);
-                }
-                else if (MyGrid.GetGridItem(_start).id != b.id && plan.foundNormaly)
+                if (interest is not Pipe && (MyGrid.GetGridItem(_start).id != b.id && plan.foundNormaly))
                     plan.path.Add(BuildingStep(plan.path.Count > 0 ? plan.path[^1] : _start, b.gameObject, 1));
             }
             else
@@ -113,13 +109,13 @@ public static class PathFinder
             if (building)
             {
                 GridPos gp = building.GetPos();
-                /*Pipe pipe = building as Pipe;
+                Pipe pipe = building as Pipe;
                 if (pipe)
                 {
-                    coordinates.positions.Add(new(pipe.transform.position));
+                    coordinates.entryPoints.Add(pipe.GetPos());
                     entryPoints.Add(i);
                     continue;
-                }*/
+                }
 
                 foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q => q.name == building.id.ToString())
                     .GetComponentsInChildren<Image>().Select(q => q.transform))

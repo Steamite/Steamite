@@ -302,7 +302,11 @@ public static class HumanActions
                         CapacityResource toMove = new(-1);
                         Chunk chunk = (Chunk)h.Job.interest;
                         Resource chunkStorage = chunk.LocalRes.Future();
-                        MyRes.MoveRes(toMove, chunkStorage, chunkStorage, h.Inventory.capacity - h.Inventory.Sum());
+                        MyRes.MoveRes(
+                            toMove, 
+                            chunkStorage, 
+                            chunkStorage, 
+                            h.Inventory.capacity - h.Inventory.Sum());
                         chunk.RequestRes(toMove, h, -1);
                         return false;
                     }

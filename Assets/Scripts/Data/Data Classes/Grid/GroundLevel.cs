@@ -76,7 +76,7 @@ public class GroundLevel : MonoBehaviour
             Debug.LogError($"(Set)Index outside of grid bounds, x: {x}, y :{y}.");
             return;
         }
-        if (clickable.GetType() == typeof(Road))
+        if (clickable?.GetType() == typeof(Road))
         {
             foreach (Transform tran in overlays.buildingOverlays)
             {
@@ -197,50 +197,8 @@ public class GroundLevel : MonoBehaviour
     public bool CanPlace(Pipe pipe, GridPos pos)
     {
         bool canPlace = !pipeGrid[(int)pos.x, (int)pos.z] || pipeGrid[(int)pos.x, (int)pos.z].id == pipe.id;
-        for (int i = 0; i < 4; i++) // checks in every direction
-        {
-            GridPos checkVec = new();
-            switch (i)
-            {
-                case 0:
-                    checkVec = new(pos.x + 1, pos.z);
-                    if (checkVec.x == width)
-                        continue;
-                    break;
-                case 1:
-                    checkVec = new(pos.x - 1, pos.z);
-                    if (checkVec.x < 0)
-                        continue;
-                    break;
-                case 2:
-                    checkVec = new(pos.x, pos.z + 1);
-                    if (checkVec.z == height)
-                        continue;
-                    break;
-                case 3:
-                    checkVec = new(pos.x, pos.z - 1);
-                    if (checkVec.z < 0)
-                        continue;
-                    break;
-            }
-            Pipe connectedPipe = pipeGrid[(int)checkVec.x, (int)checkVec.z];
-            if (connectedPipe && canPlace)
-            {
-                foreach (PipePart connection in pipe.transform.GetComponentsInChildren<PipePart>())
-                {
-                    if (connection.objectName == $"{i}")
-                    {
-                        connection.connectedPipe.DisconnectPipe(i % 2 == 0 ? i + 1 : i - 1, false);
-                    }
-                }
-                pipe.ConnectPipe(i, connectedPipe, true);
-            }
-            else
-            {
-                pipe.DisconnectPipe(i, true);
-            }
-        }
-        return false;
+        pipe.FindConnections(canPlace);
+        return canPlace;
     }
 
     /// <summary>
@@ -380,8 +338,6 @@ public class GroundLevel : MonoBehaviour
         return ok;
     }
     #endregion Checks
-
-
 
     #region Game initialization
 

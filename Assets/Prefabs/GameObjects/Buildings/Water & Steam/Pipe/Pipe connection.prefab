@@ -100,8 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0794380450b7ebd43b80aa6385bc1187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selected: 0
+  name: 
   id: -1
+  objectName: Pipe connection
   connectedPipe: {fileID: 0}
 --- !u!136 &2201271979948965190
 CapsuleCollider:

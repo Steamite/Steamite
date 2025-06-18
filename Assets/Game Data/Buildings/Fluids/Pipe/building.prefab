@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4676457964629507834}
   - component: {fileID: 2337060514408432828}
   m_Layer: 7
-  m_Name: Fluid Pipe base
+  m_Name: building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122,22 +122,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4523f6caa22f114198a5b1122f841d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selected: 0
+  name: 
   id: -1
+  objectName: Pipe
   localRes:
-    stored:
-      capacity: -1
-      type: 
-      ammount: 
+    type: 
+    ammount: 
+    capacity:
+      baseValue: 0
+      currentValue: 0
     requests: []
     carriers: []
     mods: 
-  myColor: []
-  buildName: 
+  _materialColors: []
+  _meshRenderers: []
+  buildingCategories: 0
   blueprint:
     size:
-      x: 0
-      z: 0
+      x: 1
+      z: 1
       y: 0
     moveBy:
       x: 0
@@ -147,15 +150,27 @@ MonoBehaviour:
       x: 0
       z: 0
       y: 0
-    itemList: []
+    itemList:
+    - pos:
+        x: 0
+        z: 0
+        y: 0
+      itemType: 5
   cost:
-    capacity: -1
-    type: 
-    ammount: 
+    type: 02000000
+    ammount: 05000000
+    baseResource:
+      type: 02000000
+      ammount: 05000000
+    money:
+      baseValue: 2
+      currentValue: 2
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 0
+  categoryID: 3
+  wrapperID: 1082678288
   network:
     pipes: []
     buildings: []
