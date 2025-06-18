@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     public const int LEVEL_HEIGHT = 2;
 
     public const int BUILD_OFFSET = 1;
+    public const int PIPE_OFFSET = 2;
     public const int CHUNK_OFFSET = 1;
 
     public const float HUMAN_OFFSET = 0.47f;
@@ -37,10 +39,10 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     public void CreateRoad(GridPos gp, bool doSet)
     {
         Road replacement = Instantiate(
-            tilePrefabs.GetPrefab("Road").gameObject,
+            tilePrefabs.GetPrefab<Road>("Road"),
             gp.ToVec(ROAD_OFFSET),
             Quaternion.identity,
-            MyGrid.FindLevelRoads(gp.y)).GetComponent<Road>(); // creates a road on the place of tiles
+            MyGrid.FindLevelRoads(gp.y)); // creates a road on the place of tiles
 
         replacement.objectName = replacement.objectName.Replace("(Clone)", "");
         if (doSet)
@@ -58,10 +60,10 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     public void CreateRock(GridPos gp, Color color, Resource resource, int hardness, string _name)
     {
         Rock r = Instantiate(
-            tilePrefabs.GetPrefab("Dirt"),
+            tilePrefabs.GetPrefab<Rock>("Dirt"),
             gp.ToVec(ROCK_OFFSET),
             Quaternion.identity,
-            MyGrid.FindLevelRocks(gp.y)).GetComponent<Rock>();
+            MyGrid.FindLevelRocks(gp.y));
         r.rockYield = resource;
         r.Integrity = hardness;
         r.originalIntegrity = hardness;
@@ -116,10 +118,10 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
                 gp = PathFinder.BuildingStep(gp, building.gameObject, -1);
 
             Chunk chunk = Instantiate(
-                specialPrefabs.GetPrefab("Chunk"),
+                specialPrefabs.GetPrefab<Chunk>("Chunk"),
                 gp.ToVec(CHUNK_OFFSET),
                 Quaternion.identity,
-                MyGrid.FindLevelChunks(gp.y)).GetComponent<Chunk>();
+                MyGrid.FindLevelChunks(gp.y));
             chunk.Init(resources, updateGlobalResource);
             return chunk;
         }
@@ -135,8 +137,8 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <returns></returns>
     public Human CreateHuman(GridPos gp, Material material, int i)
     {
-        Human h = (Human)Instantiate(
-            specialPrefabs.GetPrefab("Human"),
+        Human h = Instantiate(
+            specialPrefabs.GetPrefab<Human>("Human"),
             gp.ToVec(HUMAN_OFFSET),
             Quaternion.identity,
             SceneRefs.humans.transform.GetChild(0).transform);
@@ -151,7 +153,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
 
     #region Loading Game
     /// <summary>Loads a building.</summary>
-    public Building CreateSavedBuilding(BSave save)
+    public void CreateSavedBuilding(BSave save)
     {
         GridPos rotate = MyGrid.Rotate(save.blueprint.moveBy, save.rotationY);
         Building b = Instantiate(
@@ -161,17 +163,16 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             MyGrid.FindLevelBuildings(save.gridPos.y));
         b.Load(save);
         MyGrid.SetBuilding(b, true);
-        return b;
     }
 
     /// <summary>Loads a Rock.</summary>
-    public Rock CreateSavedRock(RockSave save, GridPos gp, List<MinableRes> resData)
+    public void CreateSavedRock(RockSave save, GridPos gp, List<MinableRes> resData)
     {
         Rock rock = Instantiate(
-            tilePrefabs.GetPrefab("Dirt"),
+            tilePrefabs.GetPrefab<Rock>("Dirt"),
             gp.ToVec(ROCK_OFFSET),
             Quaternion.identity,
-            MyGrid.FindLevelRocks(gp.y)).GetComponent<Rock>();
+            MyGrid.FindLevelRocks(gp.y));
         rock.Load(save);
         if(rock.rockYield != null)
             rock.GetComponent<MeshRenderer>().material.color = resData.FirstOrDefault(q => q.name == save.objectName).color;
@@ -184,20 +185,18 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             SceneRefs.jobQueue.toBeDug.Add(rock);
             SceneRefs.gridTiles.HighLight(SceneRefs.gridTiles.toBeDugColor, rock.gameObject);
         }
-        return rock;
     }
 
     /// <summary>Loads a Water.</summary>
-    public Water CreateSavedWater(WaterSave save, GridPos gp)
+    public void CreateSavedWater(WaterSave save, GridPos gp)
     {
         Water water = Instantiate(
-             tilePrefabs.GetPrefab("Water").gameObject,
+             tilePrefabs.GetPrefab<Water>("Water"),
              gp.ToVec(),
              Quaternion.identity,
-             MyGrid.FindLevelWater(gp.y)).GetComponent<Water>();
+             MyGrid.FindLevelWater(gp.y));
         water.Load(save);
         MyGrid.SetGridItem(gp, water);
-        return water;
     }
 
     /// <summary>Loads a Human.</summary>
@@ -205,15 +204,29 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     {
         int parent = save.workplaceId > -1 ? 1 : 0;
         Human human = Instantiate(
-            specialPrefabs.GetPrefab("Human"),
+            specialPrefabs.GetPrefab<Human>("Human"),
             save.gridPos.ToVec(HUMAN_OFFSET),
             Quaternion.identity,
-            SceneRefs.humans.transform.GetChild(parent)).GetComponent<Human>();
+            SceneRefs.humans.transform.GetChild(parent));
         human.Load(save);
         return human;
     }
 
+    public void CreateSavedPipe(ClickableObjectSave save, GridPos pos)
+    {
+        if (save == null)
+            return;
+
+        Pipe pipe = Instantiate(
+            buildPrefabs.GetBuilding(3, 1082678288) as Pipe,
+            pos.ToVec(PIPE_OFFSET),
+            Quaternion.identity,
+            MyGrid.FindLevelPipes(pos.y));
+        pipe.Load(save);
+    }
+
     #endregion Loading Game
+
     public IEnumerator Init()
     {
         AsyncOperationHandle<BuildingData> buttons = Addressables.LoadAssetAsync<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
@@ -222,4 +235,6 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         buildPrefabs = buttons.Result;
         buildPrefabs.Categories.SelectMany(q => q.Objects).Select(q => q.building).ToList().ForEach(q => q.InitModifiers());
     }
+
+    
 }

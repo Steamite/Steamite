@@ -554,7 +554,7 @@ MonoBehaviour:
     type: 
     ammount: 
     capacity:
-      baseValue: 10
+      baseValue: 0
       currentValue: 10
     requests: []
     carriers: []

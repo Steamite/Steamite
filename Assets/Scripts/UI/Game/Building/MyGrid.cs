@@ -9,6 +9,11 @@ public static class MyGrid
     #region Variables
     /// <summary>Number of Levels in game.</summary>
     public const int NUMBER_OF_LEVELS = 5;
+
+
+    public static List<Pipe> Pipes => pipes;
+    static List<Pipe> pipes = new();
+
     /// <inheritdoc cref="buildings"/>
     public static List<Building> Buildings => buildings;
     /// <summary>List of all buildings on all levels.</summary>
@@ -32,7 +37,7 @@ public static class MyGrid
     /// <summary>Get current active level.</summary>
     public static int currentLevel { get; private set; }
     /// <summary>Get grid size.(from one of the levels)</summary>
-    public static int gridSize { get { return levels[currentLevel].height; } }
+    public static int gridSize(int level) => levels[level].height; 
     #endregion
 
     [RuntimeInitializeOnLoadMethod]
@@ -63,6 +68,7 @@ public static class MyGrid
     public static List<Building> GetBuildings(Func<Building, bool> predicate) => Buildings.Where(predicate).ToList();
     public static List<T> GetBuildings<T>(Func<T, bool> predicate) => Buildings.Where(q => q is T).Cast<T>().Where(predicate).ToList();
     public static Building GetBuilding(Func<Building, bool> predicate) => Buildings.FirstOrDefault(predicate);
+    public static Pipe GetPipes(Func<Pipe, bool> predicate) => Pipes.FirstOrDefault(predicate);
     public static UIOverlay GetOverlay(int lIndex = -1)
     {
         if (lIndex == -1)
@@ -87,8 +93,15 @@ public static class MyGrid
     /// <param name="load"></param>
     public static void SetBuilding(Building building, bool load = false)
     {
-        GridPos gridPos = building.GetPos();
-        levels[gridPos.y].RegisterBuilding(building, gridPos, load);
+        if(building is Pipe)
+        {
+            pipes.Add(building as Pipe);
+        }
+        else
+        {
+            GridPos gridPos = building.GetPos();
+            levels[gridPos.y].RegisterBuilding(building, gridPos, load);
+        }
     }
 
     public static void UnsetRock(Rock rock)
@@ -103,7 +116,7 @@ public static class MyGrid
     {
         if (building is Pipe)
         {
-
+            pipes.Remove(building as Pipe);
         }
         else
         {
@@ -113,8 +126,8 @@ public static class MyGrid
                 GridPos gridPos = building.GetPos();
                 levels[gridPos.y].UnsetBuilding(building, gridPos);
             }
+            buildings.Remove(building);
         }
-        buildings.Remove(building);
         GameObject.Destroy(building.gameObject);
     }
 
@@ -131,16 +144,11 @@ public static class MyGrid
     #region Checking
     public static bool CanPlace(Building building)
     {
+        GridPos gridPos = building.GetPos();
         if (building is Pipe)
-        {
-            GridPos pos = new(building.transform.position);
-            return levels[pos.y].CanPlace(building as Pipe, pos);
-        }
+            return levels[gridPos.y].CanPlace(building as Pipe, gridPos);
         else
-        {
-            GridPos gridPos = building.GetPos();
             return levels[gridPos.y].CanPlace(building, gridPos);
-        }
     }
 
     #endregion Checking
@@ -153,6 +161,7 @@ public static class MyGrid
     public static Transform FindLevelWater(int lIndex) => levels[lIndex].waters;
     public static Transform FindLevelRocks(int lIndex) => levels[lIndex].rocks;
     public static Transform FindLevelBuildings(int lIndex) => levels[lIndex].buildings;
+    public static Transform FindLevelPipes(int lIndex) => levels[lIndex].pipes;
 
     public static bool IsUnlocked(int lIndex) => levels[lIndex].unlocked;
     #endregion
@@ -214,7 +223,7 @@ public static class MyGrid
             for (int y = 0; y < gridSave.width; y++)
             {
                 gp.z = y;
-                ClickableObject click = level.GetGridItem(gp, false);
+                ClickableObject click = level.GetGridItem(gp);
                 gridSave.grid[x, y] = (click is Building) ? null : click?.Save();
                 gridSave.pipes[x, y] = level.GetGridItem(gp, true)?.Save();
             }
@@ -244,8 +253,13 @@ public static class MyGrid
                         SceneRefs.objectFactory.CreateRoad(new(x, i, z), true);
                         break;
                 }
+                if (gridSave.pipes[x, z] != null)
+                {
+                    SceneRefs.objectFactory.CreateSavedPipe(gridSave.pipes[x, z], new GridPos(x, i, z));
+                }
             }
         }
     }
+
     #endregion
 }

@@ -41,7 +41,11 @@ public abstract class StorageObject : ClickableObject
     /// <param name="transferPerTick">Max resources that can be transfered.</param>
     public virtual void Take(Human h, int transferPerTick)
     {
-        MyRes.MoveRes(h.Inventory, localRes, localRes.requests[localRes.carriers.IndexOf(h)], transferPerTick);
+        MyRes.MoveRes(
+            h.Inventory, 
+            localRes, 
+            localRes.requests[localRes.carriers.IndexOf(h)], 
+            transferPerTick);
         UIUpdate(nameof(LocalRes));
         if (localRes.requests[localRes.carriers.IndexOf(h)].Sum() == 0)
         {

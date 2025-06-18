@@ -10,7 +10,7 @@ public class BuildingWrapper : DataObject
     public Building building => b;
     [SerializeField] Building b;
 
-    public override string GetName() => b.objectName;
+    public override string GetName() => b?.objectName;
 
 
     [SerializeField] public Sprite preview;

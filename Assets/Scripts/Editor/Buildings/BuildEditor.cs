@@ -165,6 +165,9 @@ class BuildEditor : EditorWindow
             case GridItemType.Anchor:
                 GUI.backgroundColor = Color.green;
                 break;
+            case GridItemType.Pipe:
+                GUI.backgroundColor = Color.darkOrange;
+                break;
         }
     }
 
@@ -205,8 +208,8 @@ class BuildEditor : EditorWindow
                 elem.pos.x -= anchor.x;
                 elem.pos.z = elem.pos.z - anchor.y;
             }
-
-            center = center / centerChild;
+            if(centerChild > 0)
+              center = center / centerChild;
 
             actBuild.moveBy.x = center.x - anchor.x;
             actBuild.moveBy.z = anchor.y - center.y;

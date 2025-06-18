@@ -188,8 +188,10 @@ public class Human : ClickableObject
             clickable = new HumanSave();
         (clickable as HumanSave).color = new(transform.GetChild(1).GetComponent<MeshRenderer>().material.color); // saves color of hat
         (clickable as HumanSave).gridPos = GetPos();
-        (clickable as HumanSave).jobSave = new(jData);
+        (clickable as HumanSave).jobSave = new(jData, destination);
         (clickable as HumanSave).jobSave.destinationID = destination ? destination.id : -1;
+        //(clickable as HumanSave).jobSave.destType = ;// = destination ? destination.id : -1;
+
         (clickable as HumanSave).inventory = inventory;
         (clickable as HumanSave).specs = specialization;
         (clickable as HumanSave).houseID = home ? home.id : -1;

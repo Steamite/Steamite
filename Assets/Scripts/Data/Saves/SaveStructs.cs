@@ -16,28 +16,42 @@ public class JobSave
         /// <summary>Interest is a <see cref="Rock"/></summary>
         R,
         /// <summary>Interest is a <see cref="Chunk"/></summary>
-        C
+        C,
+        /// <summary>Interest is a <see cref="Pipe"/></summary>
+        P
     }
     public JobState job;
     public List<GridPos> path;
     public int destinationID;
     public int interestID;
     public InterestType interestType; // -1 – unassigned; 0 – nothing; 1 – building; 2 – rock; 3 – chunk
+    public InterestType destType; // -1 – unassigned; 0 – nothing; 1 – building; 2 – rock; 3 – chunk; 4 -
     public JobSave()
     {
 
     }
-    public JobSave(JobData jobData)
+    public JobSave(JobData jobData, ClickableObject destination)
     {
         job = jobData.job;
         path = jobData.path;
         // interest assign 
         if (jobData.interest)
-            jobData.interest.GetComponent<ClickableObject>().GetID(this);
-        else
         {
-            interestID = -1;
+            Tuple<int, InterestType> data = jobData.interest.GetID();
+            interestID = data.Item1;
+            interestType = data.Item2;
         }
+        else
+            interestID = -1;
+
+        if (destination)
+        {
+            Tuple<int, InterestType> data = destination.GetID();
+            destinationID = data.Item1;
+            destType = data.Item2;
+        }
+        else
+            destinationID = -1;
     }
 }
 ////////////////////////////////////////////////////////////
