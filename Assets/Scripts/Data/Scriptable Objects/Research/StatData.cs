@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace BuildingStats
 {
@@ -62,7 +61,7 @@ namespace BuildingStats
                     // filter buildings using the mask 
                     int newMask = _building.BuildingCateg & mask;
                     // loop though the mask and do the effect
-                    while(newMask > 0)
+                    while (newMask > 0)
                     {
                         if ((newMask & 1) == 1 || newMask == -1)
                         {
@@ -81,7 +80,7 @@ namespace BuildingStats
             switch (pair.mod)
             {
                 case StatModifiers.Cost:
-                    if(building.id == -1)
+                    if (building.id == -1)
                     {
                         DoMod(
                             building.Cost,
@@ -106,9 +105,9 @@ namespace BuildingStats
                     break;
                 case StatModifiers.InputResource:
                     DoMod(
-                        ((IResourceProduction)building).ProductionCost, 
-                        pair, 
-                        nameof(IResourceProduction.ProductionCost), 
+                        ((IResourceProduction)building).ProductionCost,
+                        pair,
+                        nameof(IResourceProduction.ProductionCost),
                         building);
                     break;
                 case StatModifiers.ProductionYield:

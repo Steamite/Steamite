@@ -1,4 +1,3 @@
-using Mono.Cecil;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -22,7 +21,7 @@ public class ModifiableResource : Resource, IModifiable
     public ModValue Modifier { get; set; }
 
 
-    public ModifiableResource(){}
+    public ModifiableResource() { }
 
     /// <summary>Cycles though the base resource and recalculates the current resource.</summary>
     public void RecalculateMod()

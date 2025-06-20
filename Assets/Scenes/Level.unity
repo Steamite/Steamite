@@ -1078,6 +1078,7 @@ MonoBehaviour:
   buildPrefabs: {fileID: 0}
   tilePrefabs: {fileID: 11400000, guid: 8df949a33652dbf41967796a41eace3e, type: 2}
   specialPrefabs: {fileID: 11400000, guid: 5e85ccb93c567d64cb0f47d2049664b8, type: 2}
+  PipeConnectionPrefab: {fileID: 6402951971433127325, guid: 5852de1a953b4494da398cd3d7d46e7a, type: 3}
 --- !u!114 &4967022013944964017
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using AbstractControls;
+using System.Collections.Generic;
 using UnityEngine.UIElements;
 
 namespace RadioGroups
@@ -17,7 +17,7 @@ namespace RadioGroups
 
         public void Open()
         {
-            if(itemsSource == null)
+            if (itemsSource == null)
             {
                 contentContainer.style.minHeight = new Length(100, LengthUnit.Percent);
                 contentContainer.style.justifyContent = Justify.SpaceAround;

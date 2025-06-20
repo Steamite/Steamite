@@ -1,5 +1,5 @@
-using System;
 using InfoWindowElements;
+using System;
 using UnityEngine.UIElements;
 
 namespace InfoWindowViews

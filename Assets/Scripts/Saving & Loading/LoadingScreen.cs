@@ -1,9 +1,7 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -319,7 +317,7 @@ public class LoadingScreen : MonoBehaviour
         InputSystem.onAnyButtonPress.CallOnce(
             (action) => StartCoroutine(CancelInput()));
     }
-    
+
     /// <summary>
     /// Wait one frame to forget the pressed value.
     /// </summary>
@@ -333,7 +331,7 @@ public class LoadingScreen : MonoBehaviour
         }
         EnableLevelContollers();
     }
-    
+
     /// <summary>
     /// Unloads the loading screen. 
     /// And enables user input.

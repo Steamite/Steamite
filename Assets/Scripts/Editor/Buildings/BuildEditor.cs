@@ -192,7 +192,7 @@ class BuildEditor : EditorWindow
                     if (actItem == GridItemType.None)
                         continue;
                     actBuild.itemList.Add(new(new(i, j), actItem));
-                    if (actItem == GridItemType.Road || actItem == GridItemType.Anchor)
+                    if (actItem == GridItemType.Pipe || actItem == GridItemType.Road || actItem == GridItemType.Anchor)
                     {
                         center += new Vector2(i, j);
                         centerChild++;
@@ -208,8 +208,8 @@ class BuildEditor : EditorWindow
                 elem.pos.x -= anchor.x;
                 elem.pos.z = elem.pos.z - anchor.y;
             }
-            if(centerChild > 0)
-              center = center / centerChild;
+            if (centerChild > 0)
+                center = center / centerChild;
 
             actBuild.moveBy.x = center.x - anchor.x;
             actBuild.moveBy.z = anchor.y - center.y;
@@ -233,36 +233,38 @@ class BuildEditor : EditorWindow
         {
             if (Event.current.button == 0)
             {
+                if (gridItemTypes[i, j] == GridItemType.Anchor)
+                    hasAnchor = false;
                 item = (int)gridItemTypes[i, j] + 1;
                 if (item == maxItem)
                 {
-                    hasAnchor = false;
                     item = 0;
                 }
-                else if (item == maxItem - 1)
+                else if (item == (int)GridItemType.Anchor)
                 {
-                    if (hasAnchor)
-                        item = 0;
-                    else
+                    if (hasAnchor == false)
                         hasAnchor = true;
+                    else
+                        item++;
                 }
                 gridItemTypes[i, j] = (GridItemType)item;
             }
             else if (Event.current.button == 1)
             {
+                if (gridItemTypes[i, j] == GridItemType.Anchor)
+                    hasAnchor = false;
                 item = (int)gridItemTypes[i, j] - 1;
                 if (item == -1)
                 {
-                    if (hasAnchor)
-                        item = maxItem - 2;
-                    else
-                    {
-                        item = maxItem - 1;
-                        hasAnchor = true;
-                    }
+                    item = maxItem - 1;
                 }
-                else if (item == maxItem - 2)
-                    hasAnchor = false;
+                else if (item == (int)GridItemType.Anchor)
+                {
+                    if (hasAnchor == false)
+                        hasAnchor = true;
+                    else
+                        item--;
+                }
                 gridItemTypes[i, j] = (GridItemType)item;
             }
             else if (Event.current.button == 2)

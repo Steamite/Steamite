@@ -1,6 +1,6 @@
+using InfoWindowElements;
 using System;
 using System.Collections.Generic;
-using InfoWindowElements;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,7 +9,7 @@ using Object = UnityEngine.Object;
 [UxmlElement]
 public partial class ResourceCell : ResourceList
 {
-    
+
     Resource resource;
     Resource moneyResource;
     public Object whatToSave;

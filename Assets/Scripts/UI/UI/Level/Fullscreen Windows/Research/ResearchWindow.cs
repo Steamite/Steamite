@@ -2,9 +2,6 @@ using BuildingStats;
 using ResearchUI;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using TradeData.Stats;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
@@ -41,7 +38,7 @@ public class ResearchWindow : FullscreenWindow
         }
         foreach ((int cat, int id) queueItem in researchSave.queue)
         {
-            queue.Add(researchData.Categories[queueItem.cat].Objects.Find(q=> q.id == queueItem.id));
+            queue.Add(researchData.Categories[queueItem.cat].Objects.Find(q => q.id == queueItem.id));
         }
         if (queue.Count > 0)
             currentResearch = queue[0];
@@ -63,7 +60,7 @@ public class ResearchWindow : FullscreenWindow
         {
             foreach (var node in categ.Objects)
             {
-                if(node.nodeType == NodeType.Stat)
+                if (node.nodeType == NodeType.Stat)
                 {
                     int i = statData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
                     Stat stat = statData.Categories[node.nodeCategory].Objects[i];
@@ -85,7 +82,7 @@ public class ResearchWindow : FullscreenWindow
         base.OpenWindow();
         UI.Open(researchData);
     }
-    
+
     public void OpenWindow(BuildingWrapper wrapper)
     {
         base.OpenWindow();
@@ -98,7 +95,7 @@ public class ResearchWindow : FullscreenWindow
                     && cat.Objects[j].nodeAssignee == wrapper.id)
                 {
                     int x = cat.Objects.FindIndex(q => q.level == cat.Objects[j].level);
-                    UI.Open((i, cat.Objects[j].level+1, j - x));
+                    UI.Open((i, cat.Objects[j].level + 1, j - x));
                     return;
                 }
             }

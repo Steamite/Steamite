@@ -45,7 +45,7 @@ namespace AbstractControls
         {
             if (SelectedChoice > -1)
                 ((CustomRadioButton)ElementAt(SelectedChoice)).Deselect();
-            if(SelectedChoice == value)
+            if (SelectedChoice == value)
             {
                 SelectedChoice = -1;
                 changeEvent?.Invoke(-1);

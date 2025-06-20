@@ -144,7 +144,7 @@ public static class HumanActions
     public static void Deconstruct(Human h)
     {
         Building building = h.Job.interest as Building;
-        if(building.ProgressDeconstruction(h.Efficiency * decontructSpeed, h))
+        if (building.ProgressDeconstruction(h.Efficiency * decontructSpeed, h))
         {
             SceneRefs.jobQueue.CancelJob(JobState.Deconstructing, building);
             h.SetJob(JobState.Free);
@@ -238,7 +238,7 @@ public static class HumanActions
                     {
                         missingResoucerces.Add(building);
                     }
-                    else if(building.LocalRes.carriers.Count == 0)
+                    else if (building.LocalRes.carriers.Count == 0)
                         missingProgress.Add(building);
                 }
 
@@ -270,11 +270,11 @@ public static class HumanActions
                         h.destination = h.Job.interest.GetComponent<Building>();
                         Resource toMove = h.destination.LocalRes.Future();
                         CapacityResource r = new(-1);
-                        MyRes.MoveRes(r, 
-                            toMove.Clone(), 
-                            toMove, 
-                            h.Inventory.capacity < MyRes.globalStorageSpace 
-                                ? h.Inventory.capacity.currentValue 
+                        MyRes.MoveRes(r,
+                            toMove.Clone(),
+                            toMove,
+                            h.Inventory.capacity < MyRes.globalStorageSpace
+                                ? h.Inventory.capacity.currentValue
                                 : MyRes.globalStorageSpace);
                         h.destination.RequestRes(r, h, -1);
                         MyRes.FindStorage(r, h);
@@ -303,9 +303,9 @@ public static class HumanActions
                         Chunk chunk = (Chunk)h.Job.interest;
                         Resource chunkStorage = chunk.LocalRes.Future();
                         MyRes.MoveRes(
-                            toMove, 
-                            chunkStorage, 
-                            chunkStorage, 
+                            toMove,
+                            chunkStorage,
+                            chunkStorage,
                             h.Inventory.capacity - h.Inventory.Sum());
                         chunk.RequestRes(toMove, h, -1);
                         return false;

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
-using UnityEngine;
 /// <summary>Provides a place to sleep for <see cref="Human"/>s.</summary>
 public class House : Building, IAssign
 {

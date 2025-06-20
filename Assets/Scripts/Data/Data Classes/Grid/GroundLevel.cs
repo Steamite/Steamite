@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-
 /// <summary>Util class for managment of each different level.</summary>
 public class GroundLevel : MonoBehaviour
 {
@@ -146,8 +145,11 @@ public class GroundLevel : MonoBehaviour
                     SetGridItem(new(x, y), building);
                     break;
                 case GridItemType.Entrance:
-                    overlays.Add(new(itemPos.x, itemPos.z), load ? - 1 : i);
+                    overlays.Add(new(itemPos.x, itemPos.z), load ? -1 : i);
                     r?.entryPoints.Add(building.id);
+                    break;
+                case GridItemType.Pipe:
+                    overlays.Add(new(itemPos.x, itemPos.z), load ? -1 : i, false);
                     break;
             }
         }
@@ -196,7 +198,8 @@ public class GroundLevel : MonoBehaviour
     /// <returns>If it's ok to build there or not.</returns>
     public bool CanPlace(Pipe pipe, GridPos pos)
     {
-        bool canPlace = !pipeGrid[(int)pos.x, (int)pos.z] || pipeGrid[(int)pos.x, (int)pos.z].id == pipe.id;
+        bool canPlace = pipeGrid[(int)pos.x, (int)pos.z] == null && GetGridItem(pos) is Road;
+        overlays.MovePlaceOverlay(pipe);
         pipe.FindConnections(canPlace);
         return canPlace;
     }
@@ -214,8 +217,8 @@ public class GroundLevel : MonoBehaviour
         overlays.MovePlaceOverlay(building);
         // checks all Parts of a building
         Transform overlay = overlays.overlayParent;
-        List<Road> roads = new();
-        List<Image> images = new();
+        List<Road> foreignObscuredRoads = new();
+        List<Image> foreignEntryOverlay = new();
         List<Image> entrances = new();
         int activeEntrances = -1;
         for (int i = 0; i < building.blueprint.itemList.Count; i++)
@@ -231,75 +234,106 @@ public class GroundLevel : MonoBehaviour
                 case GridItemType.Road:
                     c = new(0, 1, 0, 0.25f);
                     errC = new(1, 0, 0, 0.25f);
+                    CheckMassObscursion(
+                        itemPos,
+                        tile.GetComponent<Image>(),
+                        c,
+                        errC,
+                        ref canBuild,
+                        foreignObscuredRoads,
+                        foreignEntryOverlay);
                     break;
                 case GridItemType.Anchor:
                     c = new(1, 0.843f, 0, 0.25f);
                     errC = new(1, 0.643f, 0, 0.25f);
+                    CheckMassObscursion(
+                        itemPos,
+                        tile.GetComponent<Image>(),
+                        c,
+                        errC,
+                        ref canBuild,
+                        foreignObscuredRoads,
+                        foreignEntryOverlay);
                     break;
                 case GridItemType.Entrance:
-                    c = new(0.5f, 0.5f, 0.5f, 0.25f);
-                    errC = new(1f, 0.3f, 0.3f, 0.25f);
+                    /*c = new(0.5f, 0.5f, 0.5f, 0.25f);
+                    errC = new(1f, 0.3f, 0.3f, 0.25f);*/
                     entrances.Add(tile.GetComponent<Image>());
-                    activeEntrances++;
+                    if(GetGridItem(itemPos) is Road)
+                        activeEntrances++;
+
+                    break;
+                case GridItemType.Water:
+                    c = new(0.211765f, 0.1686275f, 1, 0.25f);
+                    errC = new(0.8f, 0.2196079f, 1, 0.25f);
+                    CheckWaterObscursion(
+                        itemPos,
+                        tile.GetComponent<Image>(),
+                        c,
+                        errC,
+                        ref canBuild);
+                    break;
+                case GridItemType.Pipe:
+                    tile.GetComponent<Image>().color = new(1f, 0.5490196f, 0f, 0.25f);
                     break;
                 default:
                     continue;
             }
-            ClickableObject clickable = GetGridItem(itemPos);
-            if (!clickable)
-                continue;
-            if (clickable.GetComponent<Rock>())
-            {
+            // Move the tile up or down
+            ClickableObject clickableObject = GetGridItem(itemPos);
+            if (clickableObject is Rock)
                 tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 2.01f);
-                if (item.itemType == GridItemType.Entrance)
-                {
-
-                }
-                else if (item.itemType != GridItemType.Anchor)
-                {
-                    tile.GetComponent<Image>().color = errC;
-                    canBuild = false;
-                }
-                else
-                    canBuild = false;
-            }
             else
-            {
                 tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 0);
-                Road r = clickable.GetComponent<Road>();
-                if (r)
-                {
-                    if (r.entryPoints.Count > 0 && (item.itemType == GridItemType.Road || item.itemType == GridItemType.Anchor))
-                    {
-                        roads.Add(r);
-                        images.Add(tile.GetComponent<Image>());
-                    }
-                    tile.GetComponent<Image>().color = c;
-                    continue;
-                }
-                else if (item.itemType != GridItemType.Entrance)
-                {
-                    tile.GetComponent<Image>().color = errC;
-                    canBuild = false;
-                }
-            }
-            if (item.itemType == GridItemType.Entrance)
-                activeEntrances--;
+
         }
 
-        if (!CheckEntranceObscursion(roads, images))
+        if (!CheckEntranceObscursion(foreignObscuredRoads, foreignEntryOverlay))
             canBuild = false;
-        foreach (Image image in entrances)
+        foreach (Image entrance in entrances)
         {
             if (activeEntrances == -1)
             {
-                image.color = new(1f, 0.3f, 0.3f, 0.25f);
+                entrance.color = new(1f, 0.3f, 0.3f, 0.25f);
                 canBuild = false;
             }
             else
-                image.color = new(0.5f, 0.5f, 0.5f, 0.25f);
+                entrance.color = new(0.5f, 0.5f, 0.5f, 0.25f);
         }
         return canBuild;
+    }
+
+    void CheckMassObscursion(GridPos pos, Image image, Color baseColor, Color errColor, ref bool canBuild, List<Road> _roads, List<Image> images)
+    {
+        ClickableObject clickable = GetGridItem(pos);
+        if (clickable != null && clickable is Road)
+        {
+            Road road = clickable as Road;
+            if (road.entryPoints.Count > 0)
+            {
+                _roads.Add(road);
+                images.Add(image);
+            }
+            image.color = baseColor;
+            return;
+        }
+        image.color = errColor;
+        canBuild = false;
+    }
+
+
+    void CheckWaterObscursion(GridPos pos, Image image, Color baseColor, Color errColor, ref bool canBuild)
+    {
+        ClickableObject clickable = GetGridItem(pos);
+        if (clickable != null && clickable is Water)
+        {
+            image.color = baseColor;
+        }
+        else
+        {
+            image.color = errColor;
+            canBuild = false;
+        }
     }
 
     /// <summary>

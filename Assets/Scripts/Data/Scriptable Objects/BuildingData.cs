@@ -36,7 +36,7 @@ public class BuildingWrapper : DataObject
     {
     }
 
-    public BuildingWrapper(){}
+    public BuildingWrapper() { }
 }
 /// <summary>Helps serialize build categories.</summary>
 [Serializable]
@@ -79,5 +79,10 @@ public class BuildingData : DataHolder<BuildCategWrapper, BuildingWrapper>
     public Building GetBuilding(string name)
     {
         return Categories[0].Objects.Find(q => q.building.objectName == name).building;
+    }
+
+    public Pipe GetPipe()
+    {
+        return Categories[3].Objects.Find(q => q.id == 1082678288).building as Pipe;
     }
 }

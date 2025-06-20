@@ -1,5 +1,5 @@
-using System;
 using RadioGroups;
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -92,7 +92,7 @@ namespace InfoWindowElements
         /// <param name="data">Elevator that is selected.</param>
         public void Open(object data)
         {
-            if(SelectedLevel == -1)
+            if (SelectedLevel == -1)
             {
                 levelGroup.Rebuild();
                 levelGroup.RegisterCallbackOnce<GeometryChangedEvent>(

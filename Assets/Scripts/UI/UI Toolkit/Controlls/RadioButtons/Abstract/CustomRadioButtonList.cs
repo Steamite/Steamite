@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UIElements;
 
@@ -102,10 +101,10 @@ namespace AbstractControls
         /// <param name="customRadioButton">Button pressed.</param>
         public virtual bool Select(int index)
         {
-            if(SelectedChoice > -1)
+            if (SelectedChoice > -1)
                 ((CustomRadioButton)contentContainer.Children()
                     .FirstOrDefault(q => ((CustomRadioButton)q)?.value == SelectedChoice))?.Deselect();
-            if(SelectedChoice == index)
+            if (SelectedChoice == index)
             {
                 SelectedChoice = -1;
                 return false;

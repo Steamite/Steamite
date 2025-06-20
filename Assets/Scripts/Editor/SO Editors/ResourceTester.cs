@@ -1,6 +1,4 @@
 using ResearchUI;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Build;
@@ -10,7 +8,7 @@ using UnityEngine;
 class ResourceTester : IPreprocessBuildWithReport
 {
     public int callbackOrder { get { return 0; } }
-    
+
     public void OnPreprocessBuild(BuildReport report)
     {
         CheckBuildings();
@@ -62,7 +60,7 @@ class ResourceTester : IPreprocessBuildWithReport
                     {
                         if (CheckResource(res.ProductionYield, building.objectName, data.Categories[i].Name, "Production cost"))
                             succes = false;
-                        if(CheckResource(res.ProductionYield, building.objectName, data.Categories[i].Name, "Production Yeild"))
+                        if (CheckResource(res.ProductionYield, building.objectName, data.Categories[i].Name, "Production Yeild"))
                             succes = false;
                     }
                 }

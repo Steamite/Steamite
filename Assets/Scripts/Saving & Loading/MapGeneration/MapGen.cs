@@ -88,13 +88,13 @@ public class MapGen : MonoBehaviour
             world.gridSave[level] = levelSave;
         }
         world.objectsSave = new BuildsAndChunksSave(
-            new BSave[] { 
-                new StorageBSave() { 
-                    prefabName="Elevator", 
+            new BSave[] {
+                new StorageBSave() {
+                    prefabName="Elevator",
                     constructed=true,
-                } 
-            }, 
-            new ChunkSave[] {});
+                }
+            },
+            new ChunkSave[] { });
 
         //SceneRefs.objectFactory.CreateElevator(new(gridSize / 2, 0, gridSize / 2), true);
         #endregion

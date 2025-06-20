@@ -63,10 +63,10 @@ public class GridTiles : MonoBehaviour
 
     /// <summary>Building that's currently beeing placed.</summary>
     Building blueprintInstance;
-    public Building BlueprintInstance 
-    { 
-        get => blueprintInstance; 
-        set 
+    public Building BlueprintInstance
+    {
+        get => blueprintInstance;
+        set
         {
             MyGrid.GetOverlay(MyGrid.currentLevel).DestroyBuilingTiles();
             blueprintInstance = value;
@@ -634,20 +634,22 @@ public class GridTiles : MonoBehaviour
             q = new(blueprintInstance.transform.rotation.x, blueprintInstance.transform.rotation.y, blueprintInstance.transform.rotation.z, blueprintInstance.transform.rotation.w);
         GridPos gp = MyGrid.Rotate(blueprintPrefab.blueprint.moveBy, blueprintPrefab.transform.eulerAngles.y);
         gp = new(
-            activePos.x + gp.x, 
-            (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) + 
-                (blueprintPrefab is Pipe 
-                ? ClickableObjectFactory.PIPE_OFFSET 
-                : ClickableObjectFactory.BUILD_OFFSET), 
+            activePos.x + gp.x,
+            (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) +
+                (blueprintPrefab is Pipe
+                ? ClickableObjectFactory.PIPE_OFFSET
+                : ClickableObjectFactory.BUILD_OFFSET),
             activePos.z + gp.z);
 
         blueprintInstance = Instantiate(
-            blueprintPrefab, 
+            blueprintPrefab,
             new Vector3(gp.x, gp.y, gp.z),
             q,
             blueprintPrefab.GetComponent<Pipe>()
                 ? GameObject.FindWithTag("Pipes").transform
                 : GameObject.Find("Buildings").transform);
+        if(blueprintInstance is IFluidWork)
+            ((IFluidWork)blueprintInstance).CreatePipes();
         blueprintInstance.GetColors();
 
         blueprintInstance.maximalProgress = blueprintInstance.CalculateMaxProgress();
@@ -714,14 +716,14 @@ public class GridTiles : MonoBehaviour
     /// <param name="forgetInstance">If true removes the instance.</param>
     void DestroyBlueprint(bool forgetInstance)
     {
-        if(blueprintInstance is Pipe)
+        if (blueprintInstance is Pipe)
         {
             Pipe pipe = blueprintInstance as Pipe;
             for (int i = 0; i < 4; i++)
                 pipe.DisconnectPipe(i, true);
-        }            
+        }
         Destroy(blueprintInstance.gameObject);
-        if(forgetInstance)
+        if (forgetInstance)
             BlueprintInstance = null;
         else
             MyGrid.GetOverlay(MyGrid.currentLevel).DestroyBuilingTiles();

@@ -555,7 +555,7 @@ MonoBehaviour:
     ammount: 
     capacity:
       baseValue: 0
-      currentValue: 10
+      currentValue: 0
     requests: []
     carriers: []
     mods: 

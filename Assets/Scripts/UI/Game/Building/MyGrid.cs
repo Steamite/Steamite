@@ -37,7 +37,7 @@ public static class MyGrid
     /// <summary>Get current active level.</summary>
     public static int currentLevel { get; private set; }
     /// <summary>Get grid size.(from one of the levels)</summary>
-    public static int gridSize(int level) => levels[level].height; 
+    public static int gridSize(int level) => levels[level].height;
     #endregion
 
     [RuntimeInitializeOnLoadMethod]
@@ -93,7 +93,7 @@ public static class MyGrid
     /// <param name="load"></param>
     public static void SetBuilding(Building building, bool load = false)
     {
-        if(building is Pipe)
+        if (building is Pipe)
         {
             pipes.Add(building as Pipe);
         }
@@ -194,7 +194,8 @@ public static class MyGrid
                     gp = new(-offset.z, offset.x);
                 break;
             default:
-                return new(offset.x, offset.z);
+                gp = new(offset.x, offset.z);
+                break;
         }
         return gp;
     }

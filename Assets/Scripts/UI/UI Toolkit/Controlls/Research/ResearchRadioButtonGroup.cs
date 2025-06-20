@@ -1,6 +1,5 @@
-﻿using System;
+﻿using AbstractControls;
 using System.Collections.Generic;
-using AbstractControls;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -97,7 +96,7 @@ namespace ResearchUI
                 SelectedChoice = value;
                 changeEvent?.Invoke(value);
                 return true;
-            }                
+            }
         }
 
         public ResearchRadioButton GetButtonByIndex(int i)

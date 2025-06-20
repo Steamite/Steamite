@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
 using AbstractControls;
 using InfoWindowElements;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 

@@ -8,7 +8,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
 {
     VisualElement anchor;
     object activeObject;
-    
+
     VisualElement menu;
     Label header;
     Label secondHeader;
@@ -25,11 +25,11 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
         secondHeader = menu.ElementAt(1) as Label;
         costList = menu.ElementAt(2) as DoubleResourceList;
         description = menu.ElementAt(3) as Label;
-        SceneRefs.infoWindow.buildingCostChange = (building) => 
+        SceneRefs.infoWindow.buildingCostChange = (building) =>
         {
             if (activeObject == null)
                 return;
-            if(building.Equals(((BuildingWrapper)activeObject).building))
+            if (building.Equals(((BuildingWrapper)activeObject).building))
                 UpdateContent(activeObject, onlyUpdate: true);
         };
     }
@@ -130,7 +130,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
 
             Show();
         }
-            
+
     }
 
     void Show()

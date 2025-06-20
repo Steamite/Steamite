@@ -1,22 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-interface IFluidWork
+public interface IFluidWork
 {
-    void ID(Transform t)
-    {
-        foreach (Pipe pipe in t.GetComponentsInChildren<Pipe>())
-        {
-            pipe.UniqueID();
-        }
-    }
+    List<Pipe> AttachedPipes { get; set; }
     /// <summary>
     /// Call in CanPlace(), connect or disconnects pipes, and check if the place to build the pipes is free.
     /// </summary>
     /// <param name="t">Building transform</param>
     bool ConnectPipes(Transform t)
     {
-        bool canPlace = true;
+        /*bool canPlace = true;
         foreach (Pipe pipe in t.GetComponentsInChildren<Pipe>())
         {
             pipe.transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -25,16 +20,17 @@ interface IFluidWork
                 canPlace = false;
             }
         }
-        return canPlace;
+        return canPlace;*/
+        return true;
     }
 
     /// <summary>
     /// Call in PlaceBuilding(), replaces or preps pipes.
     /// </summary>
     /// <param name="t">Building reference</param>
-    void PlacePipes(Transform t)
+    void PlacePipes()
     {
-        foreach (BuildPipe buildPipe in t.GetComponentsInChildren<BuildPipe>())
+        foreach (BuildPipe buildPipe in AttachedPipes)
         {
             buildPipe.PlacePipe();
         }
@@ -64,9 +60,9 @@ interface IFluidWork
     /// Call in FinishBuild(), adds the build and pipes into the network.
     /// </summary>
     /// <param name="building"></param>
-    void ConnectToNetwork(Transform t)
+    void ConnectToNetwork()
     {
-        foreach (BuildPipe buildPipe in t.GetComponentsInChildren<BuildPipe>())
+        foreach (BuildPipe buildPipe in AttachedPipes)
         {
             buildPipe.FinishBuild();
         }
@@ -88,6 +84,28 @@ interface IFluidWork
             }
         }
     }
+
+    void CreatePipes()
+    {
+        AttachedPipes = new();
+        Building building = (Building)this;
+        GridPos buildPos = building.GetPos();
+        for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
+        {
+
+            NeededGridItem item = building.blueprint.itemList[i];
+            if (item.itemType == GridItemType.Pipe)
+            {
+                GridPos itemPos = MyGrid.Rotate(item.pos, building.transform.rotation.eulerAngles.y, true);
+                itemPos.x += buildPos.x;
+                itemPos.z = buildPos.z - itemPos.z;
+                SceneRefs.objectFactory.CreateBuildingPipe(itemPos, this);
+            }
+        }
+    }
+
+
+
     /// <summary>
     /// Call when there's no space to store the resource
     /// </summary>

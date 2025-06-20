@@ -13,7 +13,7 @@ public class ResearchProduction : Building, IProduction, IAssign
     public float ProdTime { get; set; }
     public float CurrentTime { get; set; }
     [SerializeField] ModifiableFloat modifier;
-    [CreateProperty]public ModifiableFloat ProdSpeed { get => modifier; set => modifier = value; }
+    [CreateProperty] public ModifiableFloat ProdSpeed { get => modifier; set => modifier = value; }
     public bool Stoped { get; set; }
 
     #region Window
@@ -62,8 +62,8 @@ public class ResearchProduction : Building, IProduction, IAssign
                     human.SetJob(job, true);
                 else
                     human.SetJob(
-                        JobState.FullTime, 
-                        interest: job.interest, 
+                        JobState.FullTime,
+                        interest: job.interest,
                         shouldDecide: true);
                 human.lookingForAJob = false;
 

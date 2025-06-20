@@ -15,14 +15,14 @@ public class DataObject
         Name = "";
     }
 
-    public DataObject(){}
+    public DataObject() { }
 }
 
-public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CATEG_T: DataCategory<WRAPPER_T> where WRAPPER_T: DataObject
+public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CATEG_T : DataCategory<WRAPPER_T> where WRAPPER_T : DataObject
 {
     #region Editor
 #if UNITY_EDITOR
-    public List<string> Choices() => Categories.Select(q=> q.Name).ToList();
+    public List<string> Choices() => Categories.Select(q => q.Name).ToList();
     public int UniqueID()
     {
         int i;

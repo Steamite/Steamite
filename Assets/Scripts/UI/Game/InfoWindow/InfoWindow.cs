@@ -108,12 +108,12 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         inConstructionElement = buildingElement.Q<VisualElement>("Construction-View");
         constructionStateLabel = buildingElement.Q<Label>("State-Label");
         deconstructButton = buildingElement.Q<Button>("State-Change");
-        deconstructButton.clicked += 
-            () => 
+        deconstructButton.clicked +=
+            () =>
             {
                 Building b = (Building)buildingElement.dataSource;
                 b.OrderDeconstruct();
-                if(b != null)
+                if (b != null)
                     UpdateConstructionText(b);
             };
 
@@ -218,7 +218,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                     binding = BindingUtil.CreateBinding(nameof(building.constructionProgress));
                     binding.sourceToUiConverters.AddConverter((ref float progress) => $"Progress: {(progress / building.maximalProgress) * 100:0}%");
                     RegisterTempBinding(new(inConstructionElement.Q<Label>("Progress"), "text"), binding, building);
-                     
+
                     if (building.deconstructing)
                     {
                         buildingElement.Q<VisualElement>("Resources").style.display = DisplayStyle.None;
@@ -240,9 +240,8 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                                 }));
                     }
                 }
-                else 
+                else
                     ToggleChildElems(buildingElement, new() { "Constructed" });
-
                 break;
 
             case InfoMode.Human:
@@ -352,7 +351,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     }
 
     /// <summary>
-    /// Also fills them selected elements and disables others.
+    /// Also fills selected elements and disables others.
     /// </summary>
     /// <param name="element">Parent element.</param>
     /// <param name="toEnable">List of child elements to enable.</param>

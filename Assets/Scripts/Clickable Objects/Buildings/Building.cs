@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.UIElements;
 
 public enum BuildingCategType
 {
@@ -122,7 +120,7 @@ public class Building : StorageObject
 
         return base.Save(save);
     }
-    
+
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
@@ -145,7 +143,7 @@ public class Building : StorageObject
         if (!constructed)
         {
             SceneRefs.jobQueue.AddJob(JobState.Constructing, this);
-            ChangeRenderMode(true); 
+            ChangeRenderMode(true);
         }
         base.Load(save);
     }
@@ -161,10 +159,10 @@ public class Building : StorageObject
     {
         int index = localRes.carriers.IndexOf(human);
         MyRes.MoveRes(
-            localRes, 
-            human.Inventory, 
-            localRes.requests[index], 
-            transferPerTick, 
+            localRes,
+            human.Inventory,
+            localRes.requests[index],
+            transferPerTick,
             !constructed);
         UIUpdate(nameof(LocalRes));
         if (localRes.requests[index].Sum() == 0)
@@ -212,7 +210,7 @@ public class Building : StorageObject
         }
         constructed = true;
         ChangeRenderMode(false);
-        if(selected)
+        if (selected)
             OpenWindow();
     }
     #endregion
@@ -271,7 +269,7 @@ public class Building : StorageObject
                 queue.CancelJob(JobState.Constructing, this);
                 foreach (Human carrier in localRes.carriers)
                 {
-                    if(carrier.Job.interest != null && carrier.Job.interest != this)
+                    if (carrier.Job.interest != null && carrier.Job.interest != this)
                     {
                         ((Building)carrier.Job.interest).LocalRes.RemoveRequest(carrier);
                     }
@@ -340,15 +338,16 @@ public class Building : StorageObject
     /// <param name="transparent">Requested render mode.</param>
     public virtual void ChangeRenderMode(bool transparent)
     {
-        Material newMat = transparent 
-            ? MaterialChanger.Transparent 
+        Material newMat = transparent
+            ? MaterialChanger.Transparent
             : MaterialChanger.Opaque;
         for (int i = 0; i < _meshRenderers.Count; i++)
         {
-            Color c = new(-1,-1,-1);
-            if (selected || SceneRefs.gridTiles.activeObject == this) { 
+            Color c = new(-1, -1, -1);
+            if (selected || SceneRefs.gridTiles.activeObject == this)
+            {
                 c = _meshRenderers[i].material.GetColor("_EmissionColor");
-                
+
                 _meshRenderers[i].material = newMat;
                 _meshRenderers[i].material.EnableKeyword("_EMISSION");
                 _meshRenderers[i].material.SetColor("_EmissionColor", c);
@@ -368,8 +367,8 @@ public class Building : StorageObject
     {
         for (int i = 0; i < _meshRenderers.Count; i++)
         {
-            _meshRenderers[i].material.color 
-                = new(_materialColors[i].r, _materialColors[i].g, _materialColors[i].b, 0.1f + (constructionProgress / maximalProgress)*0.9f);
+            _meshRenderers[i].material.color
+                = new(_materialColors[i].r, _materialColors[i].g, _materialColors[i].b, 0.1f + (constructionProgress / maximalProgress) * 0.9f);
         }
     }
     #endregion
@@ -442,7 +441,7 @@ public class Building : StorageObject
         if (result == 0)
             result = 1;
         return result;
-    } 
+    }
 
     #endregion
 

@@ -13,7 +13,7 @@ public class ResourceHolder : ScriptableObject
     /// </summary>
     /// <param name="prefName">Name of the prefab.</param>
     /// <returns>Matching prefab.</returns>
-    public T GetPrefab<T>(string prefName) where T: ClickableObject
+    public T GetPrefab<T>(string prefName) where T : ClickableObject
     {
         for (int i = 0; i < prefabs.Count; i++)
         {

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -28,7 +26,7 @@ namespace InfoWindowElements
     [UxmlElement]
     public partial class DoubleResourceList : ResourceList
     {
-        [CreateProperty]List<UIResource> secondResource;
+        [CreateProperty] List<UIResource> secondResource;
         /// <summary>Display as x/y or x (y).</summary>
         [UxmlAttribute] protected bool cost;
 
@@ -86,7 +84,7 @@ namespace InfoWindowElements
                         if (cost)
                             mainBinding = SetupResTypes(
                                 ((IResourceProduction)b).ProductionCost,
-                                nameof(IResourceProduction.ProductionCost), 
+                                nameof(IResourceProduction.ProductionCost),
                                 nameof(IResourceProduction.InputResource),
                                 data);
                         else
@@ -167,7 +165,7 @@ namespace InfoWindowElements
             resources = new();
             if (resource is MoneyResource && showMoney)
                 resources.Add(new DoubleUIResource(
-                    MyRes.Money, 
+                    MyRes.Money,
                     +((MoneyResource)resource).Money));
             for (int i = 0; i < resource.type.Count; i++)
                 resources.Add(new DoubleUIResource(
@@ -201,7 +199,7 @@ namespace InfoWindowElements
         /// <inheritdoc/>
         protected override List<UIResource> ToUIRes(Resource storage)
         {
-            if(storage is MoneyResource)
+            if (storage is MoneyResource)
             {
                 int i = resources.FindIndex(q => q.type == null);
                 resources[i].ammount = +((MoneyResource)storage).Money;

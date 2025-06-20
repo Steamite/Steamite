@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -28,6 +26,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     public BuildingData buildPrefabs;
     public ResourceHolder tilePrefabs;
     public ResourceHolder specialPrefabs;
+    public PipePart PipeConnectionPrefab;
     #endregion
 
     #region Tiles
@@ -174,12 +173,12 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             Quaternion.identity,
             MyGrid.FindLevelRocks(gp.y));
         rock.Load(save);
-        if(rock.rockYield != null)
+        if (rock.rockYield != null)
             rock.GetComponent<MeshRenderer>().material.color = resData.FirstOrDefault(q => q.name == save.objectName).color;
         else
             rock.ColorWithIntegrity();
 
-    MyGrid.SetGridItem(gp, rock);
+        MyGrid.SetGridItem(gp, rock);
         if (rock.toBeDug)
         {
             SceneRefs.jobQueue.toBeDug.Add(rock);
@@ -218,11 +217,26 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             return;
 
         Pipe pipe = Instantiate(
-            buildPrefabs.GetBuilding(3, 1082678288) as Pipe,
+            buildPrefabs.GetPipe(),
             pos.ToVec(PIPE_OFFSET),
             Quaternion.identity,
             MyGrid.FindLevelPipes(pos.y));
         pipe.Load(save);
+    }
+
+    public void CreateBuildingPipe(GridPos localPos, IFluidWork building)
+    {
+        BuildPipe pipe = Instantiate(
+            buildPrefabs.GetBuilding("Build pipe") as BuildPipe,
+            localPos.ToVec(PIPE_OFFSET),
+            Quaternion.identity,
+            ((Building)building).transform);
+        pipe.transform.localScale = new(
+            0.5f / pipe.transform.parent.lossyScale.x,
+            0.1f / pipe.transform.parent.lossyScale.y,
+            0.5f / pipe.transform.parent.lossyScale.z);
+        pipe.connectedBuilding = (Building)building;
+        building.AttachedPipes.Add(pipe);
     }
 
     #endregion Loading Game
@@ -236,5 +250,5 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         buildPrefabs.Categories.SelectMany(q => q.Objects).Select(q => q.building).ToList().ForEach(q => q.InitModifiers());
     }
 
-    
+
 }

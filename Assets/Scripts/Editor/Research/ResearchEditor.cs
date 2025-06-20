@@ -3,7 +3,6 @@ using ResearchUI;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEditorInternal.VR;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,7 +22,7 @@ namespace EditorWindows.Research
         public ResearchNode activeNode;
         #endregion
 
-//        public void SaveValues() => EditorUtility.SetDirty((ResearchData)data);
+        //        public void SaveValues() => EditorUtility.SetDirty((ResearchData)data);
 
         #region Opening
         /// <summary>Opens the window, if it's already opened close it.</summary>
@@ -297,16 +296,16 @@ namespace EditorWindows.Research
             switch (node.nodeType)
             {
                 case NodeType.Building:
-                    return Available<BuildCategWrapper, BuildingWrapper>(buildingData, node); 
+                    return Available<BuildCategWrapper, BuildingWrapper>(buildingData, node);
                 case NodeType.Stat:
                     return Available<BuildingStatCateg, Stat>(statData, node);
             }
             return new() { "Select" };
         }
 
-        List<string> Available<T_CAT, T_OBJ>(DataHolder<T_CAT, T_OBJ> dataHolder, ResearchNode node) 
-            where T_CAT: DataCategory<T_OBJ>
-            where T_OBJ: DataObject
+        List<string> Available<T_CAT, T_OBJ>(DataHolder<T_CAT, T_OBJ> dataHolder, ResearchNode node)
+            where T_CAT : DataCategory<T_OBJ>
+            where T_OBJ : DataObject
         {
             List<string> str = new() { "Select" };
             if (node.nodeAssignee > -1)
@@ -354,7 +353,7 @@ namespace EditorWindows.Research
         public int GetIndexInRow(ResearchNode node) =>
             selectedCategory.Objects.FindIndex(q => q.id == node.id) -
             selectedCategory.Objects.FindIndex(q => q.level == node.level);
-        
+
         /// <summary>Gets index of a node by id.</summary>
         /// <param name="id">Id of the node.</param>
         /// <returns>Index of node by <paramref name="id"/></returns>

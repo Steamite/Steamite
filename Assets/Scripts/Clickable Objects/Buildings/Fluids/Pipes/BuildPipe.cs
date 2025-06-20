@@ -37,14 +37,13 @@ public class BuildPipe : Pipe
         base.FinishBuild();
         if (network.buildings.IndexOf(connectedBuilding) == -1)
         {
-            network.buildings.Add(transform.parent.parent.GetComponent<Building>());
+            network.buildings.Add(connectedBuilding);
         }
     }
     public override void PlacePipe()
     {
         transform.rotation = Quaternion.Euler(Vector3.zero);
         base.PlacePipe();
-        connectedBuilding = transform.parent.parent.GetComponent<Building>();
     }
     public override void Load(ClickableObjectSave save)
     {

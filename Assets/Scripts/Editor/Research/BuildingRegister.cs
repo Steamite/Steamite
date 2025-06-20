@@ -8,6 +8,7 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
@@ -18,7 +19,7 @@ namespace EditorWindows.Windows
         const string BUILDING_PATH = "Assets/Game Data/Buildings/";
         const string BUILD_NAME = "/building.prefab";
         const string TEX_NAME = "/texture.png";
-        
+
         Button rebindButton;
 
         List<Type> buildingTypes;
@@ -157,6 +158,10 @@ namespace EditorWindows.Windows
                 string s = AssetDatabase.GUIDToAssetPath(AssetDatabase.CreateFolder($"{BUILDING_PATH}{selectedCategory.Name}", "Dummy"));
 
                 GameObject gameObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                gameObj.AddComponent<SortingGroup>();
+                gameObj.GetComponent<SortingGroup>().sortingLayerID = 2;
+                gameObj.GetComponent<SortingGroup>().sortingOrder = 10;
+
                 gameObj.AddComponent<Building>();
                 PrefabUtility.SaveAsPrefabAsset(gameObj, $"{s}{BUILD_NAME}");
                 wrapper.SetBuilding(
@@ -266,10 +271,10 @@ namespace EditorWindows.Windows
                     {
                         if (building.blueprint.itemList == null ||
                             building.blueprint.itemList.Count == 0 ||
-                            (building is not Pipe && 
+                            (building is not Pipe &&
                                 (building.blueprint.itemList.Count(q => q.itemType == GridItemType.Anchor) == 0 ||
                                  building.blueprint.itemList.Count(q => q.itemType == GridItemType.Entrance) == 0))
-                            || (building is Pipe && building.blueprint.itemList.Count(q=> q.itemType == GridItemType.Pipe) == 0))
+                            || (building is Pipe && building.blueprint.itemList.Count(q => q.itemType == GridItemType.Pipe) == 0))
                         {
                             button.style.color = Color.red;
                         }
@@ -478,9 +483,15 @@ namespace EditorWindows.Windows
                 bindCell = (el, i) =>
                 {
                     IntegerField field = (IntegerField)el;
-                    field.value = ((BuildingWrapper)dataGrid.itemsSource[i]).building
-                        ? ((BuildingWrapper)dataGrid.itemsSource[i]).building.LocalRes.capacity.BaseValue
-                        : 0;
+                    Building building = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
+                    if (building != null)
+                    {
+                        if (building.LocalRes.capacity == null)
+                            building.LocalRes.capacity = new(-1);
+                        field.value = building.LocalRes.capacity.BaseValue;
+                    }
+                    else
+                        field.value = 0;
                     field.RegisterValueChangedCallback(StorageCapacityChanged);
                 },
                 unbindCell = (el, i) =>
@@ -679,7 +690,7 @@ namespace EditorWindows.Windows
             if (prev != null)
             {
                 int categ = prev.BuildingCateg;
-                if(categ != ev.newValue)
+                if (categ != ev.newValue)
                 {
                     prev.BuildingCateg = ev.newValue;
                 }
@@ -688,7 +699,7 @@ namespace EditorWindows.Windows
         void StorageCapacityChanged(ChangeEvent<int> ev)
         {
             int i = GetRowIndex((VisualElement)ev.target);
-            if(((BuildingWrapper)dataGrid.itemsSource[i]).building != null)
+            if (((BuildingWrapper)dataGrid.itemsSource[i]).building != null)
             {
                 ((BuildingWrapper)dataGrid.itemsSource[i]).building.LocalRes.capacity.BaseValue = ev.newValue;
                 EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);

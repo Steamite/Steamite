@@ -2,7 +2,8 @@ using System;
 using UnityEngine;
 
 // cannot use generics, unity doesnt support number restraint
-[Serializable] public class ModifiableInteger : IModifiable
+[Serializable]
+public class ModifiableInteger : IModifiable
 {
 #if UNITY_EDITOR
     public int BaseValue { get => baseValue; set => baseValue = value; }
@@ -16,7 +17,7 @@ using UnityEngine;
     {
         return currentValue.ToString();
     }
-    
+
     public void RecalculateMod()
     {
         currentValue = Mathf.RoundToInt(baseValue * Modifier.percentMod) + Modifier.absoluteMod;

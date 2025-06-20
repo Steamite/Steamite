@@ -34,8 +34,8 @@ public class Rock : ClickableObject
     public float Integrity
     {
         get { return integrity; }
-        set 
-        { 
+        set
+        {
             integrity = value;
         }
     }
@@ -123,7 +123,7 @@ public class Rock : ClickableObject
             if (rockYield?.Sum() > 0)
             {
                 Chunk chunk = SceneRefs.objectFactory.CreateChunk(GetPos(), rockYield, true);
-                chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material.color 
+                chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material.color
                     = GetComponent<MeshRenderer>().material.color;
             }
             SceneRefs.objectFactory.CreateRoad(GetPos(), true);

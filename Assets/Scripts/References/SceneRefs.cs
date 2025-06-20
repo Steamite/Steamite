@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UIElements;
 
 /// <summary>Holds references to the most important and frequented classes.</summary>
@@ -54,7 +51,7 @@ public class SceneRefs : MonoBehaviour
     public IEnumerator BeforeLoad()
     {
         instance = this;
-        
+
         foreach (IBeforeLoad beforeLoad in instance.beforeLoads)
             yield return beforeLoad.Init();
         beforeLoads = null;

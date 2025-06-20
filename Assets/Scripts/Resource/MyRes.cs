@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -141,10 +140,10 @@ public static class MyRes
     /// <param name="ingoreCapacity">Used when constructing to eliminate the resource cap.</param>
     /// <returns>true = continue exchange, false = stop exchange</returns>
     public static bool MoveRes(
-        CapacityResource destination, 
-        Resource source, 
-        Resource diff, 
-        int ammountToTransfer, 
+        CapacityResource destination,
+        Resource source,
+        Resource diff,
+        int ammountToTransfer,
         bool ingoreCapacity = false)
     {
         try
@@ -173,7 +172,7 @@ public static class MyRes
                 // can Transfer setting
                 int canTransfer = source.ammount[sIndex] > diff.ammount[i]
                     ? diff.ammount[i] : source.ammount[sIndex];
-                if(!ingoreCapacity)
+                if (!ingoreCapacity)
                     canTransfer = canTransfer > destination.FreeSpace
                         ? destination.FreeSpace
                         : canTransfer;
@@ -275,7 +274,7 @@ public static class MyRes
     /// <param name="h"></param>
     public static void FindStorage(Human h)
     {
-        if(h.Inventory.Sum() > 0)
+        if (h.Inventory.Sum() > 0)
         {
             List<IStorage> storages = FilterStorages(h.Inventory, h, true);
             JobData job = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h);

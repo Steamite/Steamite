@@ -1,7 +1,5 @@
-﻿using BuildingStats;
-using ResearchUI;
+﻿using ResearchUI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -81,7 +79,7 @@ namespace EditorWindows.Research
             toggle.text = "";
             toggle.value = _nodeData.researched;
             toggle.RegisterValueChangedCallback<bool>(
-                (ev) => 
+                (ev) =>
                 {
                     _nodeData.researched = ev.newValue;
                     editor.SaveValues();
@@ -266,7 +264,7 @@ namespace EditorWindows.Research
                 case NodeType.Dummy:
                     return;
                 case NodeType.Building:
-                    _nodeData.nodeAssignee = 
+                    _nodeData.nodeAssignee =
                         editor.buildingData.Categories[_nodeData.nodeCategory]
                         .availableObjects.FirstOrDefault(q => q.GetName() == newVal).id;
                     break;
@@ -286,7 +284,7 @@ namespace EditorWindows.Research
             {
                 string descr = _nodeData.GetDescr(editor.statData.Categories[_nodeData.nodeCategory]
                     .Objects.FirstOrDefault(q => q.id == _nodeData.nodeAssignee));
-                this.Q<TextField>(className:"description-field").value = descr;
+                this.Q<TextField>(className: "description-field").value = descr;
             }
         }
 

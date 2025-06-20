@@ -118,7 +118,7 @@ namespace EditorWindows
             createCategory.SetEnabled(
                 ev.newValue.Length > 0 &&
                 selectedCategory.Name != ev.newValue &&
-                data.Categories.Count(q => (q as DataCategory<DATA_TYPE>).Name == ev.newValue) == 0);
+                data.Categories.Count(q => q.Name == ev.newValue) == 0);
         }
 
         #region Categ Buttons

@@ -1,10 +1,7 @@
+using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PipePart : ClickableObject
+public class PipePart : MonoBehaviour
 {
     public Pipe connectedPipe; // not parent but the next pipe
-    public override void OnPointerEnter(PointerEventData eventData)
-    {
-        transform.parent.GetComponent<ClickableObject>().OnPointerEnter(eventData);
-    }
 }
