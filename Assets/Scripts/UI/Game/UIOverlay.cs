@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -41,10 +40,23 @@ public class UIOverlay : MonoBehaviour
                     RectTransform tile = Instantiate(overlayTile, overlayParent).GetComponent<RectTransform>();
                     tile.anchoredPosition = new(item.pos.x, item.pos.z);
                     tile.localRotation = Quaternion.Euler(0, 0, 0);
-                    if (item.itemType == GridItemType.Anchor)
-                        tile.GetComponent<Image>().color = Color.yellow;
-                    else if (item.itemType == GridItemType.Entrance)
-                        tile.GetComponent<Image>().color = Color.grey;
+                    Color color = new();
+                    switch (item.itemType)
+                    {
+                        case GridItemType.Water:
+                            color = Color.blue;
+                            break;
+                        case GridItemType.Entrance:
+                            color = Color.grey;
+                            break;
+                        case GridItemType.Anchor:
+                            color = Color.yellow;
+                            break;
+                        case GridItemType.Pipe:
+                            color = Color.darkViolet;
+                            break;
+                    }
+                    tile.GetComponent<Image>().color = color;
                 }
             }
             buildGridFilled = true;
@@ -74,26 +86,28 @@ public class UIOverlay : MonoBehaviour
         buildingOverlays.Add(t);
     }
 
+
     /// <summary>
     /// Adds an entrypoint overaly tile, use child index only with user interactions(previously created, that just need to be moved).
     /// </summary>
     /// <param name="gridPos">Position for the entrypoint.</param>
     /// <param name="childIndex">Index for recycling overlay tiles.</param>
-    public void Add(GridPos gridPos, int childIndex = -1)
+    public void Add(GridPos gridPos, int childIndex = -1, bool road = true)
     {
         RectTransform rect;
         if (childIndex == -1)
         {
             rect = Instantiate(overlayTile, buildingOverlays[^1]).GetComponent<RectTransform>();
             rect.anchoredPosition = new(gridPos.x, gridPos.z);
+            rect.GetComponent<Image>().color = road ? new(0.5f, 0.5f, 0.5f, 0.25f) : new(0.1f, 0.1f, 0.1f, 0.25f);
         }
         else
         {
             rect = overlayParent.GetChild(childIndex).GetComponent<RectTransform>();
             rect.transform.SetParent(buildingOverlays[^1]);
+            rect.gameObject.layer = 5;
         }
-        rect.gameObject.layer = 5;
-        rect.GetComponent<Image>().color = new(0.5f, 0.5f, 0.5f, 0.25f);
+
     }
 
     /// <summary>

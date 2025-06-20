@@ -152,7 +152,7 @@ namespace InfoWindowElements
                     SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Rock:
-                    if(((Rock)data).rockYield != null)
+                    if (((Rock)data).rockYield != null)
                     {
                         binding = BindingUtil.CreateBinding(nameof(Rock.rockYield));
                         binding.sourceToUiConverters.AddConverter((ref Resource yeild) => ToUIRes(yeild));

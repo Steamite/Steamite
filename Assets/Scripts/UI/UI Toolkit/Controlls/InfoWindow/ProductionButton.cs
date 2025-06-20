@@ -1,4 +1,3 @@
-using System.Linq;
 using InfoWindowElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -107,7 +106,7 @@ namespace InfoWindowViews
             DataBinding binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"Space\n{res.Sum()}/{res.capacity}");
             SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
-            
+
             binding = BindingUtil.CreateBinding(nameof(IProduction.ProdSpeed));
             binding.sourceToUiConverters.AddConverter((ref ModifiableFloat speed) => $"Speed\n{speed}x");
             SceneRefs.infoWindow.RegisterTempBinding(new(prodSpeedLabel, "text"), binding, data);

@@ -1,6 +1,6 @@
-﻿using System;
-using AbstractControls;
+﻿using AbstractControls;
 using RadioGroups;
+using System;
 using UnityEngine.UIElements;
 
 namespace InfoWindowElements

@@ -1,11 +1,10 @@
+using RadioGroups;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using RadioGroups;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace StartMenu

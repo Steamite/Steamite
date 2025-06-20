@@ -68,7 +68,7 @@ public static class ToolkitUtils
     }
     public static T GetParentOfType<T>(VisualElement element) where T : VisualElement
     {
-        while(element is not T && element.parent != null)
+        while (element is not T && element.parent != null)
             element = element.parent;
 
         return element as T;

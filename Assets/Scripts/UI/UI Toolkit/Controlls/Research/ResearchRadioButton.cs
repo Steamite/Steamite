@@ -1,5 +1,4 @@
 using AbstractControls;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace ResearchUI
@@ -102,14 +101,14 @@ namespace ResearchUI
                 }
                 else
                     UnlockResearch(false);
-                    
+
             }
             else
                 state = ButtonState.Unavailable;
         }
         protected override bool SelectChange(bool UpdateGroup)
         {
-            if(UpdateGroup == false)
+            if (UpdateGroup == false)
             {
                 base.SelectChange(UpdateGroup);
                 return true;

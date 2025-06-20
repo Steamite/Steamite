@@ -1,5 +1,4 @@
 ﻿using BuildingStats;
-using System;
 using UnityEngine;
 
 public class ModValue
@@ -7,7 +6,7 @@ public class ModValue
     public float percentMod;
     public int absoluteMod;
 
-    public ModValue() 
+    public ModValue()
     {
         percentMod = 1;
         absoluteMod = 0;
@@ -25,7 +24,7 @@ public interface IModifiable
         RecalculateMod();
     }
     public void RecalculateMod();
-    
+
     public void AddMod(StatPair pair)
     {
         if (pair.percent)

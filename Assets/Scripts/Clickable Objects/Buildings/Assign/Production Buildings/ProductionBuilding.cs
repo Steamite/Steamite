@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 
@@ -166,7 +164,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
         {
             base.OrderDeconstruct();
         }
-        else 
+        else
         {
             if (!deconstructing) // start deconstruction now!
             {
@@ -180,7 +178,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
                 human = localRes.ReassignCarriers();
                 if (human)
                     InputResource.ReassignCarriers(false);
-                else if(InputResource.carriers.Count > 0)
+                else if (InputResource.carriers.Count > 0)
                 {
                     human = InputResource.carriers[0];
                     localRes.AddRequest(new(), human, 0);

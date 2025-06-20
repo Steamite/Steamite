@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using AbstractControls;
-using BuildingStats;
 using ResearchUI;
 using UnityEngine.UIElements;
 
@@ -35,13 +30,13 @@ namespace BottomBar.Building
                     wrapper.unlocked = true;
                 }
             }
-            
+
             ResearchData researchData = UIRefs.research.researchData;
             foreach (var categ in researchData.Categories)
             {
                 foreach (var node in categ.Objects)
                 {
-                    if(node.nodeType == NodeType.Building && node.nodeAssignee > -1 && node.researched == false)
+                    if (node.nodeType == NodeType.Building && node.nodeAssignee > -1 && node.researched == false)
                     {
                         int i = buildingData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
                         if (i != -1)
@@ -67,7 +62,7 @@ namespace BottomBar.Building
 
             buildingList = new(BlueprintChange);
             Add(buildingList);
-            
+
             categGroup = new();
             categGroup.SetChangeCallback(CategChange);
             Add(categGroup);
@@ -79,7 +74,7 @@ namespace BottomBar.Building
 
         void CategChange(int i)
         {
-            if(i == -1)
+            if (i == -1)
                 buildingList.SetItemSource(null);
             else
                 buildingList.SetItemSource(buildingData.Categories[i].Objects);

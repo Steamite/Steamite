@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2464263253761612878}
   - component: {fileID: 6402951971433127325}
   - component: {fileID: 2201271979948965190}
+  - component: {fileID: -8790105291573995359}
   m_Layer: 2
   m_Name: Pipe connection
   m_TagString: Untagged
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.333, y: 0.65, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -123,7 +124,19 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.5
   m_Height: 2.13
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!210 &-8790105291573995359
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3927272716968193916}
+  m_Enabled: 1
+  m_SortingLayerID: -545164103
+  m_SortingLayer: 4
+  m_SortingOrder: 14
+  m_SortAtRoot: 0

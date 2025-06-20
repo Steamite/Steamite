@@ -1,18 +1,11 @@
-using BottomBar.Building;
 using BuildingStats;
-using EditorWindows;
-using EditorWindows.Research;
-using Params;
 using ResearchUI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEditorInternal.VR;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
 
 public class BuildingStatEditor : DataGridWindow<BuildingStatCateg, Stat>
 {
@@ -202,7 +195,7 @@ public class BuildingStatEditor : DataGridWindow<BuildingStatCateg, Stat>
                 q.nodeType == NodeType.Stat &&
                 q.nodeCategory == categIndex &&
                 q.nodeAssignee == stat.id).GetDescr(stat);
-        
+
     }
 
     #region Changes
@@ -245,7 +238,7 @@ public class BuildingStatEditor : DataGridWindow<BuildingStatCateg, Stat>
         Vector2Int pos = GetRowSmall(ev);
 
         ((Stat)dataGrid.itemsSource[pos.y]).pairs[pos.x].modAmmount = ev.newValue;
-        
+
         SaveStatChange(pos.y);
     }
 

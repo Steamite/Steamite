@@ -109,7 +109,7 @@ public class RockSave : ClickableObjectSave
     public float integrity;
     public bool toBeDug;
 
-    public RockSave(){}
+    public RockSave() { }
 
     public RockSave(Resource yeild, float originalIntegrity, float integrity, bool toBeDug)
     {

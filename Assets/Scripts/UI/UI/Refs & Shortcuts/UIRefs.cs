@@ -19,7 +19,7 @@ public class UIRefs : MonoBehaviour
     public static Menu pauseMenu => instance._pauseMenu;
     public static VisualElement bottomBar => instance._bottomBar.rootVisualElement[0];
     public static UIDocument toolkitShortcuts => instance._bottomBar;
-    
+
 
 
     [RuntimeInitializeOnLoadMethod]

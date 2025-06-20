@@ -42,7 +42,7 @@ public class ConfirmWindow : MonoBehaviour, IToolkitController
         visualElement.style.display = DisplayStyle.Flex;
         opened = true;
     }
-    public void Open(Action _resultAction, Action _noAction,  string _head, string _body, string _confirm = "confirm", string _cancel = "cancel")
+    public void Open(Action _resultAction, Action _noAction, string _head, string _body, string _confirm = "confirm", string _cancel = "cancel")
     {
         resultAction = _resultAction;
         noAction = _noAction;

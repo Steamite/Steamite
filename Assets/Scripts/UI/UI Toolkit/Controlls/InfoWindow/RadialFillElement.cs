@@ -38,9 +38,9 @@ namespace InfoWindowElements
                 {
                     using (ChangeEvent<float> pooled = ChangeEvent<float>.GetPooled(this.m_value, value))
                     {
-                        pooled.target = (IEventHandler)this;
+                        pooled.target = this;
                         this.SetValueWithoutNotify(value);
-                        this.SendEvent((EventBase)pooled);
+                        this.SendEvent(pooled);
                     }
                 }
                 else

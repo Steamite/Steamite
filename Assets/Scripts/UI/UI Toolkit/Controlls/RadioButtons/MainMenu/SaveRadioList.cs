@@ -1,9 +1,8 @@
+using AbstractControls;
 using System;
 using System.IO;
 using System.Linq;
-using AbstractControls;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 namespace RadioGroups
@@ -113,7 +112,7 @@ namespace RadioGroups
                 }
                 itemsSource = folders.Select(q =>
                     new RadioSaveButtonData(
-                        Path.GetFileNameWithoutExtension(q.path), 
+                        Path.GetFileNameWithoutExtension(q.path),
                         q)
                         as RadioButtonData).ToList();
                 return folders;

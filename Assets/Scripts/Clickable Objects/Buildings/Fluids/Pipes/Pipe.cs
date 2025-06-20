@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.MemoryProfiler;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
+using static UnityEditor.Progress;
 
 public class Pipe : Building
 {
     public FluidNetwork network = new();
     PipePart[] connectedPipes = new PipePart[4];
-
+    readonly int[] connectionOrder = { 1, 0, 3, 2};
     public override void OrderDeconstruct()
     {
         base.OrderDeconstruct();
@@ -78,6 +78,15 @@ public class Pipe : Building
     {
         UniqueID();
         gameObject.layer = 7;
+        for (int i = 0; i < 4; i++)
+        {
+            PipePart part = connectedPipes[i];
+            if (part != null)
+            {
+                part.gameObject.layer = 7;
+                part.connectedPipe.connectedPipes[connectionOrder[i]].gameObject.layer = 7;
+            }
+        }
         GetComponent<SortingGroup>().sortingLayerName = "Pipes";
         maximalProgress = cost.Sum() * 2;
         SceneRefs.gridTiles.HighLight(new(), gameObject);
@@ -87,15 +96,20 @@ public class Pipe : Building
     }
     public void ConnectPipe(int _case, Pipe connectedPipe, bool canNext)
     {
+        float pipeLenghtScale = (1 - transform.lossyScale.z) / 4 / transform.lossyScale.z;
         Transform pipePart;
         if ((pipePart = transform.GetComponentsInChildren<Transform>().FirstOrDefault(q => q.name == _case.ToString())) == null || !canNext)
         {
             if (connectedPipes[_case] != null)
                 Debug.LogError("Pipe is already present");
-            connectedPipes[_case] = Instantiate(SceneRefs.objectFactory.specialPrefabs.GetPrefab<PipePart>("Pipe connection"), transform);
-            _meshRenderers.Add(connectedPipes[_case].GetComponent<Renderer>());
-
+            connectedPipes[_case] = Instantiate(SceneRefs.objectFactory.PipeConnectionPrefab, transform);
             pipePart = connectedPipes[_case].transform;
+            pipePart.localScale = new(
+                0.1f / transform.lossyScale.x,
+                pipeLenghtScale,
+                0.1f / transform.lossyScale.y);
+            _meshRenderers.Add(pipePart.GetComponent<Renderer>());
+
             pipePart.GetComponent<MeshRenderer>().sharedMaterial = gameObject.GetComponent<MeshRenderer>().sharedMaterial;
         }
         connectedPipes[_case].connectedPipe = connectedPipe;
@@ -103,33 +117,35 @@ public class Pipe : Building
         {
             case 0:
                 pipePart.rotation = Quaternion.Euler(90, 0, 90);
-                pipePart.localPosition = new(1.03f, 0, 0);
+                pipePart.localPosition = new((0.5f/transform.lossyScale.z) - pipeLenghtScale, 0, 0);
                 if (canNext)
-                    connectedPipe.ConnectPipe(1, this, false);
+                    connectedPipe.ConnectPipe(connectionOrder[_case], this, false);
                 break;
             case 1:
                 pipePart.rotation = Quaternion.Euler(90, 0, 90);
-                pipePart.localPosition = new(-1.03f, 0, 0);
+                pipePart.localPosition = new(-((0.5f / transform.lossyScale.z) - pipeLenghtScale), 0, 0);
                 if (canNext)
-                    connectedPipe.ConnectPipe(0, this, false);
+                    connectedPipe.ConnectPipe(connectionOrder[_case], this, false);
                 break;
             case 2:
                 pipePart.rotation = Quaternion.Euler(90, 0, 0);
-                pipePart.localPosition = new(0, 0, 1.03f);
+                pipePart.localPosition = new(0, 0, (0.5f / transform.lossyScale.z) - pipeLenghtScale);
                 if (canNext)
-                    connectedPipe.ConnectPipe(3, this, false);
+                    connectedPipe.ConnectPipe(connectionOrder[_case], this, false);
                 break;
             case 3:
                 pipePart.rotation = Quaternion.Euler(90, 0, 0);
-                pipePart.localPosition = new(0, 0, -1.03f);
+                pipePart.localPosition = new(0, 0, -((0.5f / transform.lossyScale.z) - pipeLenghtScale));
                 if (canNext)
-                    connectedPipe.ConnectPipe(2, this, false);
+                    connectedPipe.ConnectPipe(connectionOrder[_case], this, false);
                 break;
             default:
                 Debug.LogError("WTF");
                 break;
         }
     }
+
+
     public override void DestoyBuilding()
     {
         GridPos gridPos = GetPos();
@@ -186,23 +202,14 @@ public class Pipe : Building
 
     #region Window
 
-    /*protected override void SetupWindow(InfoWindow info, List<String> toEnable)
+    protected override void ToggleInfoComponents(InfoWindow info, List<string> toEnable)
     {
-        base.SetupWindow(info, toEnable);
-        *//*info.SwitchMods(InfoMode.Water, $"network {network.networkID}");
-        info.transform.GetChild(1).GetChild(4).GetChild(0).GetComponent<TMP_Text>().text =
-            $"Network: {network.networkID} \n";*//*
+        toEnable.Add("Pipes");
+        base.ToggleInfoComponents(info, toEnable);
     }
-
-    protected override void UpdateWindow(InfoWindow info)
-    {
-        base.UpdateWindow(info);
-        *//*info.transform.GetChild(1).GetChild(4).GetChild(0).GetComponent<TMP_Text>().text +=
-                $"{PrintBuildings()}" +
-                $"{PrintStoredFluids()}"; *//*
-    }*/
     #endregion
 
+    #region Print
     string PrintBuildings()
     {
         string s = "";
@@ -231,6 +238,7 @@ public class Pipe : Building
             s += $"Steam: {steam}";
         return s;
     }
+    #endregion
 
     public virtual void PlacePipe()
     {

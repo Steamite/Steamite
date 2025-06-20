@@ -1,4 +1,3 @@
-using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 
@@ -35,9 +34,9 @@ public interface IResourceProduction : IProduction
         CapacityResource resource = new(-1);
         // TODO: IMPROVE
         MyRes.MoveRes(
-            resource, 
-            human.Inventory, 
-            InputResource.requests[index], 
+            resource,
+            human.Inventory,
+            InputResource.requests[index],
             transferPerTick);
         MyRes.UpdateResource(resource, -1);
         MyRes.ManageRes(InputResource, resource, 1);
@@ -83,8 +82,8 @@ public interface IResourceProduction : IProduction
 
     void IProduction.Product()
     {
-        while (CurrentTime >= ProdTime && 
-            (LocalResource.capacity.currentValue == -1 || 
+        while (CurrentTime >= ProdTime &&
+            (LocalResource.capacity.currentValue == -1 ||
                 LocalResource.Sum() < LocalResource.capacity.currentValue))
         {
             CurrentTime -= ProdTime;

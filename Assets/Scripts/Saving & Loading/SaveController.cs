@@ -1,7 +1,7 @@
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -34,7 +34,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
             else if (s == "LoadingScreen")
                 loaded = false;
         }
-        if(level && loaded)
+        if (level && loaded)
             SaveGame("", true);
     }
 
@@ -246,7 +246,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
             if (writer != null)
                 writer.Dispose();
             if (jsonWriter != null && jsonWriter.WriteState != WriteState.Closed)
-                jsonWriter.Close();  
+                jsonWriter.Close();
         }
     }
 

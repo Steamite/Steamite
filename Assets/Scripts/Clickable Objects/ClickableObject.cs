@@ -22,7 +22,7 @@ public abstract class ClickableObject : MonoBehaviour,
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
     /// <summary>Object is beeing currently inspected.</summary>
-    [NonSerialized]public bool selected = false;
+    [NonSerialized] public bool selected = false;
     /// <summary>ID is a unique identifier for each group of objects.</summary>
     public int id = -1;
 
@@ -157,7 +157,7 @@ public abstract class ClickableObject : MonoBehaviour,
         Debug.LogWarning($"Object \"{this}\" not selected, why open window?");
         return null;
     }
-    
+
 
     /// <summary>
     /// Must be called after updating a bindable parameter. <br/>

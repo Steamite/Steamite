@@ -20,9 +20,9 @@ namespace ResearchUI
 
                 ResearchRadioButtonGroup group = new ResearchRadioButtonGroup(category);
                 group.SetChangeCallback(
-                    (nodeIndex) => 
+                    (nodeIndex) =>
                     {
-                        if (nodeIndex > -1) 
+                        if (nodeIndex > -1)
                             OpenButton(category.Objects[nodeIndex], group);
                     });
 
@@ -59,7 +59,7 @@ namespace ResearchUI
                         VisualElement button = groups[cat].contentContainer[row][1][j];
                         button.AddToClassList("found");
                         button.schedule.Execute(
-                            () => 
+                            () =>
                             {
                                 button.RemoveFromClassList("found");
                             }).ExecuteLater(600);

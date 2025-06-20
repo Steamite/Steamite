@@ -1,7 +1,7 @@
+using AbstractControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AbstractControls;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -106,7 +106,7 @@ namespace BottomBar.Building
         {
             ToolkitUtils.ChangeClassWithoutTransition($"{BUILD_BUTTON_CLASS}-selected", BUILD_BUTTON_CLASS, element);
             element.AddToClassList(BUILD_BUTTON_CLASS);
-            element.UnregisterCallback<PointerEnterEvent>(Hover); 
+            element.UnregisterCallback<PointerEnterEvent>(Hover);
             element.UnregisterCallback<PointerLeaveEvent>(EndHove);
         }
 
@@ -130,7 +130,7 @@ namespace BottomBar.Building
                 SelectedChoice = -1;
                 return false;
             }
-            else if(index == -1) 
+            else if (index == -1)
             {
                 SelectedChoice = index;
                 return false;

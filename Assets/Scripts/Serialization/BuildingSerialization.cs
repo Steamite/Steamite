@@ -24,7 +24,7 @@ public class BuildingSerialization
         if (!init)
         {
             client = new();
-            client.BaseAddress = new Uri(connection); 
+            client.BaseAddress = new Uri(connection);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
             init = true;
@@ -43,10 +43,12 @@ public class BuildingSerialization
         {
             foreach (var building in item.Objects)
             {
-                BuildingSerialize serialize = new() { 
-                    id = i,                     
+                BuildingSerialize serialize = new()
+                {
+                    id = i,
                     Name = building.building.objectName,
-                    Data = JsonUtility.ToJson(building.building)};
+                    Data = JsonUtility.ToJson(building.building)
+                };
                 Debug.Log(Path.GetDirectoryName(AssetDatabase.GetAssetPath(building.building)));
                 MultipartFormDataContent content = new();
                 content.Add(new StringContent(JsonUtility.ToJson(serialize), Encoding.UTF8, "application/json"), "building");
@@ -57,10 +59,10 @@ public class BuildingSerialization
                             "texture.png"))),
                     "texture", $"{building.building.objectName}.png");
                 await client.PostAsync("post-building", content);
-                
+
                 i++;
             }
         }
-        
+
     }
 }

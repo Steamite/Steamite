@@ -2,9 +2,9 @@ using EditorWindows;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, DATA_TYPE> 
-    where CATEG_TYPE : DataCategory<DATA_TYPE> 
-    where DATA_TYPE  : DataObject
+public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, DATA_TYPE>
+    where CATEG_TYPE : DataCategory<DATA_TYPE>
+    where DATA_TYPE : DataObject
 {
     protected MultiColumnListView dataGrid;
 
