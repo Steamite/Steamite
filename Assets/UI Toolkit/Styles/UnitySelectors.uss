@@ -28,8 +28,6 @@
     color: rgb(161, 148, 59);
     align-content: stretch;
     align-self: stretch;
-    transition-duration: 0.2s;
-    transition-timing-function: ease-out;
 }
 
 #unity-tab__header:hover {

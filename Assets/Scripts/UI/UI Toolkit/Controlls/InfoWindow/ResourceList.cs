@@ -67,6 +67,7 @@ namespace InfoWindowElements
         public const int ICON_SIZE = 60;
         [UxmlAttribute] public int iconSize = 60;
         [UxmlAttribute] public int verticalPadding = 2;
+        [UxmlAttribute] public int leftPadding = 10;
         #endregion
 
         #region Constructors
@@ -100,6 +101,7 @@ namespace InfoWindowElements
             {
                 element.ElementAt(0).style.paddingTop = new Length(verticalPadding, LengthUnit.Percent);
                 element.ElementAt(0).style.paddingBottom = new Length(verticalPadding, LengthUnit.Percent);
+                element.ElementAt(0).style.paddingLeft = new Length(leftPadding, LengthUnit.Percent);
             }
             element.ElementAt(0).ElementAt(0).style.fontSize = 40 * iconSize / ICON_SIZE;
             element.ElementAt(0).ElementAt(0).style.paddingRight = 5 * iconSize / ICON_SIZE;
