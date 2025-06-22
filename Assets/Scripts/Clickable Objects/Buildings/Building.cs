@@ -92,9 +92,9 @@ public class Building : StorageObject
     /// </summary>
     /// <param name="info"><see cref="InfoWindow"/> supplied from <see cref="OpenWindow"/>.</param>
     /// <param name="toEnable">List of components to enable in the Visual Element.</param>
-    protected virtual void ToggleInfoComponents(InfoWindow info, List<string> toEnable)
+    protected virtual void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
-        info.ToggleChildElems(info.constructedElement, toEnable, this);
+        info.CreateBuildingControls(toEnable, this);
     }
 
 
@@ -302,9 +302,9 @@ public class Building : StorageObject
     public virtual Chunk Deconstruct(GridPos instantPos)
     {
         Resource r = new();
-        MyRes.ManageRes(r, cost, 1);
         if (constructed)
         {
+            MyRes.ManageRes(r, cost, 1);
             for (int i = 0; i < r.ammount.Count; i++)
             {
                 r.ammount[i] /= 2;

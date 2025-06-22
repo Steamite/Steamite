@@ -44,12 +44,11 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     /// If there's no other component in <see href="toEnable"/> adds "Production", and fills it.
     /// </summary>
     /// <inheritdoc/>
-    protected override void ToggleInfoComponents(InfoWindow info, List<string> toEnable)
+    protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
         if (toEnable.Count == 0)
         {
-            toEnable.Add("Production");
-            toEnable.Add("Assign");
+            toEnable.Add("General", new List<string> { "Production Info", "Assign Info" });
             base.ToggleInfoComponents(info, toEnable);
         }
         else

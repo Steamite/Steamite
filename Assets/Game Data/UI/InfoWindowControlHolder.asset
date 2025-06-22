@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 168ff3b10306d584389d7050a7f51965, type: 3}
+  m_Name: InfoWindowControlHolder
+  m_EditorClassIdentifier: 
+  visualTreeAssets:
+  - {fileID: 9197481963319205126, guid: 5fef3b58edc99634c9f7f4397a227378, type: 3}
+  - {fileID: 9197481963319205126, guid: 871750dd022b19e4e9f07f3de75b53c4, type: 3}
+  - {fileID: 9197481963319205126, guid: a2aaf691f56d3264a9ea60f9cd159001, type: 3}
+  - {fileID: 9197481963319205126, guid: 09dac0cf86d0c1440bf64a9253c771c7, type: 3}
+  - {fileID: 9197481963319205126, guid: 2f666a0318115c844b5824ee05cf6760, type: 3}
+  - {fileID: 9197481963319205126, guid: 3888b8fcf39071e44b74b70d5e26e7bf, type: 3}
+  - {fileID: 9197481963319205126, guid: 73eba4102aca7094bb199b533f94d558, type: 3}
+  - {fileID: 9197481963319205126, guid: d9a379c24b17de945b04279aeeb4813a, type: 3}
+  - {fileID: 9197481963319205126, guid: dbc7e3127f773e54cb31d4f02a95a90e, type: 3}

@@ -1,0 +1,4 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Info%20Window/Human%20Info.uss?fileID=7433441132597879392&amp;guid=ac02d692c9aa20041a1f810f7dbe7087&amp;type=3#Human Info" />
+    <HumanInfo />
+</ui:UXML>

@@ -66,6 +66,7 @@ namespace InfoWindowElements
 
         public const int ICON_SIZE = 60;
         [UxmlAttribute] public int iconSize = 60;
+        [UxmlAttribute] public int verticalPadding = 2;
         #endregion
 
         #region Constructors
@@ -95,10 +96,17 @@ namespace InfoWindowElements
         {
             //Debug.Log($"Making item{name}, {itemsSource.Count}, {parent.name}/{name}");
             VisualElement element = itemTemplate.CloneTree();
+            if (element[0].name == "ResText")
+            {
+                element.ElementAt(0).style.paddingTop = new Length(verticalPadding, LengthUnit.Percent);
+                element.ElementAt(0).style.paddingBottom = new Length(verticalPadding, LengthUnit.Percent);
+            }
             element.ElementAt(0).ElementAt(0).style.fontSize = 40 * iconSize / ICON_SIZE;
             element.ElementAt(0).ElementAt(0).style.paddingRight = 5 * iconSize / ICON_SIZE;
             element.ElementAt(0).ElementAt(1).style.width = iconSize;
             element.ElementAt(0).ElementAt(1).style.height = iconSize;
+            element.ElementAt(0).ElementAt(1).style.height = iconSize;
+
             return element;
         }
 

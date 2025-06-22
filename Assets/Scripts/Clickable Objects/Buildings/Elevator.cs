@@ -27,9 +27,10 @@ public class Elevator : Building, IStorage
     }
     #region Window
     /// <inheritdoc/>
-    protected override void ToggleInfoComponents(InfoWindow info, List<string> toEnable)
+    protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
-        toEnable.Add("Storage");
+        toEnable.Add("Storage", new List<string> { "Storage Info" });
+        toEnable.Add("Levels", new List<string> { "Level Info" });
         base.ToggleInfoComponents(info, toEnable);
     }
 
