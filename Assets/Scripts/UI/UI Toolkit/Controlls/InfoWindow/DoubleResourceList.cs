@@ -28,11 +28,11 @@ namespace InfoWindowElements
     {
         [CreateProperty] List<UIResource> secondResource;
         /// <summary>Display as x/y or x (y).</summary>
-        [UxmlAttribute] protected bool cost;
+        [UxmlAttribute] public bool cost;
 
-        [UxmlAttribute] protected bool useBindings;
+        [UxmlAttribute] public bool useBindings;
 
-        [UxmlAttribute] protected bool showMoney = true;
+        [UxmlAttribute] public bool showMoney = true;
 
         #region Constructors
         ///<summary> Do not use from code, this is only for adding the resource list from UI Builder.</summary>
@@ -107,8 +107,8 @@ namespace InfoWindowElements
                     }
                     break;
 
-                case LevelsTab:
-                    LevelsTab tab = (LevelsTab)data;
+                case LevelInfo:
+                    LevelInfo tab = (LevelInfo)data;
                     Resource resource = tab.LevelData.costs[tab.SelectedLevel];
 
                     if (cost)

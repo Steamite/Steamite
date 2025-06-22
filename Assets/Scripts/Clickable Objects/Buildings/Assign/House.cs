@@ -35,9 +35,9 @@ public class House : Building, IAssign
     /// Adds Assign list to <paramref name="toEnable"/>.
     /// </summary>
     /// <inheritdoc/>
-    protected override void ToggleInfoComponents(InfoWindow info, List<string> toEnable)
+    protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
-        toEnable.Add("Assign");
+        toEnable.Add("General", new List<string> { "Assign Info" });
         base.ToggleInfoComponents(info, toEnable);
     }
 

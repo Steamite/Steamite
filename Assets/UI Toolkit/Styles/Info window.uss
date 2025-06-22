@@ -1,0 +1,463 @@
+#Line-Container {
+    flex-grow: 1;
+    flex-direction: row;
+    justify-content: space-between;
+    max-height: 45px;
+    min-height: 45px;
+    font-size: 22px;
+}
+
+#Line-Container > Label {
+    -unity-text-align: middle-left;
+    font-size: 22px;
+}
+
+#Resource-Header {
+    align-self: center;
+    -unity-text-align: upper-center;
+    -unity-font-style: bold;
+    align-items: stretch;
+}
+
+#Group {
+    flex-grow: 0;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    max-width: 90%;
+}
+
+#Body .main-button {
+    font-size: 40px;
+    padding-left: 5px;
+    min-width: 90%;
+    max-width: 90%;
+    align-items: center;
+    align-self: center;
+    margin-bottom: 10px;
+}
+
+.close-button {
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding-left: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+    padding-right: 0;
+    margin-bottom: 4px;
+    margin-top: 4px;
+    background-color: rgb(130, 0, 0);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    width: auto;
+    max-width: 11%;
+}
+
+.close-button:hover {
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding-left: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+    padding-right: 0;
+    margin-bottom: 4px;
+    margin-top: 4px;
+    background-color: rgb(178, 0, 0);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.deconstruct-button {
+    margin-bottom: 5%;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    color: rgb(0, 0, 0);
+}
+
+.deconstruct-button {
+    margin-bottom: 5%;
+    background-color: rgb(130, 0, 0);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    color: rgb(0, 0, 0);
+}
+
+.deconstruct-button:hover {
+    margin-bottom: 5%;
+    background-color: rgb(200, 3, 3);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    color: rgb(0, 0, 0);
+}
+
+.toggle-on {
+    width: 25%;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    max-width: 7%;
+    margin-right: 13px;
+    margin-left: 4px;
+    background-color: rgb(87, 87, 87);
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transition-property: scale;
+    transition-duration: 0.2s;
+    scale: 1 1;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.toggle-on:hover {
+    width: 25%;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    max-width: 7%;
+    margin-right: 13px;
+    margin-left: 4px;
+    background-color: rgb(97, 161, 142);
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transition-property: scale;
+    transition-duration: 0.2s;
+    scale: 1 1;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.toggle-on:selected {
+    width: 25%;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    max-width: 7%;
+    margin-right: 13px;
+    margin-left: 4px;
+    background-color: rgb(55, 94, 83);
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transition-property: scale;
+    transition-duration: 0.2s;
+    scale: 1.05 1.1;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.toggle-of {
+    width: 25%;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    max-width: 7%;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    background-color: rgb(99, 99, 99);
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transition-property: scale;
+    transition-duration: 0.2s;
+}
+
+.toggle-of:hover {
+    width: 25%;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    max-width: 7%;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    background-color: rgb(214, 75, 15);
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transition-duration: 0.2s;
+    transition-property: scale;
+}
+
+.toggle-of:selected {
+    width: 25%;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    max-width: 7%;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    background-color: rgb(193, 68, 14);
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    scale: 1.05 1.1;
+    transition-duration: 0.2s;
+    transition-property: scale;
+}
+
+.worker-button {
+    flex-grow: 1;
+    height: 50px;
+    background-color: rgb(28, 28, 28);
+    margin-left: 1%;
+    opacity: 1;
+    margin-right: 1%;
+    flex-direction: row;
+    align-self: auto;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transition-property: all;
+    transition-duration: 0.05s;
+    color: rgb(249, 233, 141);
+    -unity-text-align: middle-left;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(74, 74, 74);
+    border-right-color: rgb(74, 74, 74);
+    border-top-color: rgb(74, 74, 74);
+    border-bottom-color: rgb(74, 74, 74);
+}
+
+.worker-button:hover {
+    flex-grow: 1;
+    height: 50px;
+    background-color: rgb(38, 38, 38);
+    margin-left: 1%;
+    opacity: 1;
+    margin-right: 1%;
+    flex-direction: row;
+    align-self: auto;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    scale: 1.01 1.05;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgb(28, 28, 28);
+    border-right-color: rgb(28, 28, 28);
+    border-top-color: rgb(28, 28, 28);
+    border-bottom-color: rgb(28, 28, 28);
+}
+
+.production-button {
+    width: 90%;
+    height: 90%;
+    top: 5%;
+    left: 5%;
+    position: absolute;
+    background-color: rgb(74, 74, 74);
+    padding-left: 7%;
+    padding-top: 7%;
+    padding-right: 7%;
+    padding-bottom: 7%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgb(28, 28, 28);
+    border-right-color: rgb(28, 28, 28);
+    border-top-color: rgb(28, 28, 28);
+    border-bottom-color: rgb(28, 28, 28);
+    -unity-background-image-tint-color: rgb(0, 0, 0);
+}
+
+#radial-boundary {
+    overflow: hidden;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-left-color: rgb(28, 28, 28);
+    border-right-color: rgb(28, 28, 28);
+    border-top-color: rgb(28, 28, 28);
+    border-bottom-color: rgb(28, 28, 28);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    align-self: center;
+    background-color: rgb(93, 64, 55);
+}
+
+.production-button:hover {
+    width: 90%;
+    height: 90%;
+    top: 5%;
+    left: 5%;
+    position: absolute;
+    background-color: rgb(139, 140, 137);
+    padding-left: 7%;
+    padding-top: 7%;
+    padding-right: 7%;
+    padding-bottom: 7%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgb(28, 28, 28);
+    border-right-color: rgb(28, 28, 28);
+    border-top-color: rgb(28, 28, 28);
+    border-bottom-color: rgb(28, 28, 28);
+    -unity-background-image-tint-color: rgb(0, 0, 0);
+}
+
+.production-button:selected {
+    width: 90%;
+    height: 90%;
+    top: 5%;
+    left: 5%;
+    position: absolute;
+    background-color: rgb(28, 28, 28);
+    padding-left: 7%;
+    padding-top: 7%;
+    padding-right: 7%;
+    padding-bottom: 7%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgb(28, 28, 28);
+    border-right-color: rgb(28, 28, 28);
+    border-top-color: rgb(28, 28, 28);
+    border-bottom-color: rgb(28, 28, 28);
+    -unity-background-image-tint-color: rgb(0, 0, 0);
+}
+
+ResearchInfo {
+    flex-grow: 0;
+    flex-direction: column;
+    height: 40%;
+    align-content: stretch;
+    justify-content: space-between;
+    display: flex;
+    width: auto;
+    align-items: stretch;
+    align-self: center;
+}
+
+.res-title {
+    max-height: 40px;
+    margin-right: 0;
+    margin-left: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    margin-top: 5px;
+    -unity-text-align: upper-center;
+}
+
+.res-image {
+    flex-grow: 1;
+    background-image: url("project://database/Assets/Sprites/Textures/Button_Sprite.png?fileID=2800000&guid=ab06e4b2b595a5d439dc3408edb876d1&type=3#Button_Sprite");
+    max-width: 135px;
+    max-height: 135px;
+    align-self: center;
+    align-items: center;
+    min-width: 135px;
+    min-height: 135px;
+}
+
+.res-progress {
+    -unity-text-align: middle-center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    width: 300px;
+}

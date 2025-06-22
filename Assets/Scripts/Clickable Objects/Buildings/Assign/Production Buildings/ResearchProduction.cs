@@ -22,10 +22,9 @@ public class ResearchProduction : Building, IProduction, IAssign
     /// <inheritdoc cref="Building.ToggleInfoComponents(InfoWindow, List{string})"/>
     /// </summary>
     /// <inheritdoc/>
-    protected override void ToggleInfoComponents(InfoWindow info, List<string> toEnable)
+    protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
-        toEnable.Add("Research");
-        toEnable.Add("Assign");
+        toEnable.Add("General", new List<string> { "Research Info", "Assign Info" });
         base.ToggleInfoComponents(info, toEnable);
     }
     #endregion

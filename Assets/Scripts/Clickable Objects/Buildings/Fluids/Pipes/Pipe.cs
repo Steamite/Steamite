@@ -202,9 +202,9 @@ public class Pipe : Building
 
     #region Window
 
-    protected override void ToggleInfoComponents(InfoWindow info, List<string> toEnable)
+    protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
-        toEnable.Add("Pipes");
+        toEnable.Add("Pipes", new List<string> { "Pipe Info"});
         base.ToggleInfoComponents(info, toEnable);
     }
     #endregion
