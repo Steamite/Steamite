@@ -20,11 +20,13 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
     public void Init()
     {
         menu = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Menu");
+        menu.pickingMode = PickingMode.Ignore;
         ToolkitUtils.localMenu = this;
         header = menu.ElementAt(0) as Label;
         secondHeader = menu.ElementAt(1) as Label;
         costList = menu.ElementAt(2) as DoubleResourceList;
         description = menu.ElementAt(3) as Label;
+        
         SceneRefs.infoWindow.buildingCostChange = (building) =>
         {
             if (activeObject == null)
@@ -53,7 +55,13 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
         else
             anchor = element;
 
-        Rect vec = new();
+        if (onlyUpdate == false)
+        {
+            Rect rect = element.worldBound;
+            menu.style.width = 300;
+            menu.style.left = rect.x + rect.width + 25;
+            menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
+        }
         switch (data)
         {
             case ColonyStat:
@@ -76,6 +84,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 ResearchNode node = data as ResearchNode;
                 header.text = node.Name;
                 secondHeader.style.display = DisplayStyle.Flex;
+                menu.style.width = 400;
                 if (node.researched)
                 {
                     secondHeader.text = "researched";
@@ -97,7 +106,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                             $"paid";
                     }
                 }
-                description.text = node.description;
+                description.text = node.description.Replace('$', ' ');
                 break;
             case BuildingWrapper:
                 BuildingWrapper wrapper = data as BuildingWrapper;
@@ -121,15 +130,8 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 description.text = "";
                 break;
         }
-        if (onlyUpdate == false)
-        {
-            vec = element.worldBound;
-            menu.style.width = 300;
-            menu.style.left = vec.x + vec.width + 25;
-            menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
-
+        if(onlyUpdate == false)
             Show();
-        }
 
     }
 

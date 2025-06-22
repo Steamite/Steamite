@@ -1,3 +1,3 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <InfoWindowViews.AssignInfo />
+    <InfoWindowViews.AssignInfo prefab="project://database/Assets/UI%20Toolkit/Game/Elements/Worker%20Button.uxml?fileID=9197481963319205126&amp;guid=e76fd5099dd522240b3cbf7c60edcd25&amp;type=3#Worker Button" />
 </ui:UXML>

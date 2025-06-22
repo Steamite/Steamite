@@ -13,14 +13,6 @@ MonoBehaviour:
   m_Name: Text StyleSheet
   m_EditorClassIdentifier: 
   m_StyleList:
-  - m_Name: worker
-    m_HashCode: -815987754
-    m_OpeningDefinition: 
-    m_ClosingDefinition: 
-    m_OpeningTagArray: 
-    m_ClosingTagArray: 
-    m_OpeningTagUnicodeArray: 
-    m_ClosingTagUnicodeArray: 
   - m_Name: Normal
     m_HashCode: -1183493901
     m_OpeningDefinition: 

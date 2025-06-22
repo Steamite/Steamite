@@ -1,3 +1,3 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <InfoWindowViews.ProductionInfo />
+    <InfoWindowViews.ProductionInfo pause-tex="project://database/Assets/Sprites/Icons/Info%20window/Pause.png?fileID=2800000&amp;guid=0cd57bcb85dcc014e9c040dade904eaf&amp;type=3#Pause" resume-tex="project://database/Assets/Sprites/Icons/Info%20window/Play.png?fileID=2800000&amp;guid=eb36bdcec37eb0b4baf394a5a6679c2c&amp;type=3#Play" />
 </ui:UXML>

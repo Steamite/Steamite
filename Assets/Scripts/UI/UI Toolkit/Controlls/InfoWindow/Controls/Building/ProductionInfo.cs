@@ -95,7 +95,7 @@ namespace InfoWindowViews
             prodSpeedLabel.AddToClassList("no-space-around");
             visualElement.Add(prodSpeedLabel);
 
-            outputResource = new(false, "Output", true);
+            outputResource = new(false, "Output", true) { leftPadding = 0 };
             Add(outputResource);
             UpdateButton();
         }
