@@ -694,6 +694,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1c3d32d887bb74046af6627885ac30b8, type: 2}
   - {fileID: 11400000, guid: fd427511e764df5408494dc7e0e9b586, type: 2}
   dirt: {fileID: 2100000, guid: 0930df6ecc353d34d8d6511a134ceda6, type: 2}
+  elevator: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
 --- !u!114 &642414933
 MonoBehaviour:
   m_ObjectHideFlags: 0

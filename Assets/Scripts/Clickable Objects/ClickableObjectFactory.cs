@@ -165,7 +165,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     }
 
     /// <summary>Loads a Rock.</summary>
-    public void CreateSavedRock(RockSave save, GridPos gp, List<MinableRes> resData)
+    public void CreateSavedRock(RockSave save, GridPos gp, List<MinableRes> resData, Material dirtMat)
     {
         Rock rock = Instantiate(
             tilePrefabs.GetPrefab<Rock>("Dirt"),
@@ -174,7 +174,13 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             MyGrid.FindLevelRocks(gp.y));
         rock.Load(save);
         if (rock.rockYield != null)
-            rock.GetComponent<MeshRenderer>().material.color = resData.FirstOrDefault(q => q.name == save.objectName).color;
+        {
+            MinableRes res = resData.FirstOrDefault(q => q.name == save.objectName);
+            if (res != null)
+                rock.GetComponent<MeshRenderer>().material.color = res.color;
+            else
+                rock.GetComponent<MeshRenderer>().material = dirtMat;
+        }
         else
             rock.ColorWithIntegrity();
 

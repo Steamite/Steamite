@@ -173,7 +173,6 @@ MonoBehaviour:
   wrapperID: 1082678288
   network:
     pipes: []
-    buildings: []
     networkID: -1
     networkName: 
 --- !u!210 &2337060514408432828

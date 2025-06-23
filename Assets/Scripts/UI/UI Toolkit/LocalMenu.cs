@@ -26,7 +26,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
         secondHeader = menu.ElementAt(1) as Label;
         costList = menu.ElementAt(2) as DoubleResourceList;
         description = menu.ElementAt(3) as Label;
-        
+
         SceneRefs.infoWindow.buildingCostChange = (building) =>
         {
             if (activeObject == null)
@@ -130,7 +130,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 description.text = "";
                 break;
         }
-        if(onlyUpdate == false)
+        if (onlyUpdate == false)
             Show();
 
     }

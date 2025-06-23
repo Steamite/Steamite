@@ -111,12 +111,14 @@ public class RockSave : ClickableObjectSave
 
     public RockSave() { }
 
-    public RockSave(Resource yeild, float originalIntegrity, float integrity, bool toBeDug)
+    public RockSave(Resource yeild, float originalIntegrity, float integrity, bool toBeDug, string _name)
     {
         this.yeild = yeild;
         this.originalIntegrity = originalIntegrity;
         this.integrity = integrity;
         this.toBeDug = toBeDug;
+        objectName = _name;
+        id = -1;
     }
 }
 [Serializable]
@@ -161,6 +163,20 @@ public class StorageBSave : BSave
 {
     public List<bool> canStore;
     public bool isMain;
+
+    public void SetupStorage()
+    {
+        constructed = true;
+        isMain = true;
+        int i = 1;
+        foreach (var item in Enum.GetNames(typeof(ResourceType)).Skip(1))
+        {
+            resSave.type.Add((ResourceType)i);
+            resSave.ammount.Add(100);
+            canStore.Add(true);
+            i++;
+        }
+    }
 }
 
 [Serializable]
@@ -184,7 +200,7 @@ public class ProductionBSave : AssignBSave
     public ProductionStates ProdStates;
 }
 [Serializable]
-public class WaterPumpSave: ProductionBSave
+public class WaterPumpSave : ProductionBSave
 {
     public Fluid fluidSave;
 }

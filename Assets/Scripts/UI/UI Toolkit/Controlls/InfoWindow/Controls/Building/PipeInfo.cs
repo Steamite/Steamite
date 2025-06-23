@@ -21,7 +21,7 @@ public partial class PipeInfo : InfoWindowControl
 
     public PipeInfo()
     {
-        VisualElement element = new() { name="Group"};
+        VisualElement element = new() { name = "Group" };
         VisualElement secElement = new() { name = "Line-Container" }; ;
         secElement.Add(new Label("Network id"));
         secElement.Add(networkId = new Label("##"));
@@ -41,7 +41,7 @@ public partial class PipeInfo : InfoWindowControl
                         {
                             unityTextAlign = TextAnchor.MiddleCenter,
                             backgroundColor = new Color(0,0,0,0)
-                            
+
                         }
                     };
                 },

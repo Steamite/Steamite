@@ -54,10 +54,16 @@ public class LoadingScreen : MonoBehaviour
     {
         NewGameInit newGameInit = gameObject.GetComponent<NewGameInit>();
         WorldSave save;
+        int size;
         if (seed != "")
-            gameObject.GetComponent<MapGen>().Generate(seed, out save);
+        {
+            size = gameObject.GetComponent<MapGen>().Generate(seed, out save);
+        }
         else
+        {
+            size = mainLevel.height;
             newGameInit.CreateGrid(startLevel, mainLevel, out save);
+        }
 
         ResearchSave researchSave = await newGameInit.InitResearch();
         StartCoroutine(StartLoading(_folderName, _folderName,
@@ -66,7 +72,7 @@ public class LoadingScreen : MonoBehaviour
                 gameState = newGameInit.SetNewGameState(),
                 trade = newGameInit.CreateTrade(0),
                 research = researchSave,
-                humans = newGameInit.InitHumans(mainLevel.height),
+                humans = newGameInit.InitHumans(size),
                 world = save
             }));
     }
@@ -236,9 +242,10 @@ public class LoadingScreen : MonoBehaviour
         MyGrid.PrepGridLists();
         // creates an empty ground level
 
+        MapGen mapGen = gameObject.GetComponent<MapGen>();
         for (int i = 0; i < gridSave.Length; i++)
         {
-            MyGrid.Load(gridSave[i], templateLevel, i, gameObject.GetComponent<MapGen>().minableResources);
+            MyGrid.Load(gridSave[i], templateLevel, i, mapGen.minableResources, mapGen.dirt);
             progress.Report(progressGlobal += TILE_WEIGHT);
         }
         Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;

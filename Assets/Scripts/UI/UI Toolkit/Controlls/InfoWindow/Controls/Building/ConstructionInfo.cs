@@ -36,22 +36,23 @@ public partial class ConstructionInfo : InfoWindowControl
     public ConstructionInfo()
     {
         // Assigned
-        VisualElement element = new() 
-        { name = "Group", 
-            style = 
-            { 
+        VisualElement element = new()
+        {
+            name = "Group",
+            style =
+            {
                 marginBottom=10
-            } 
+            }
         };
 
-        element.Add(status = new Label("No state") 
-        { 
-            style = 
-            { 
-                unityTextAlign = TextAnchor.MiddleCenter, 
-                fontSize = 30, 
-                marginBottom = 20 
-            } 
+        element.Add(status = new Label("No state")
+        {
+            style =
+            {
+                unityTextAlign = TextAnchor.MiddleCenter,
+                fontSize = 30,
+                marginBottom = 20
+            }
         });
         Add(element);
 
@@ -62,16 +63,16 @@ public partial class ConstructionInfo : InfoWindowControl
 
 
         //inventory
-        Add(resourceList = new DoubleResourceListWithEvent() 
-        { 
-            cost = true, 
-            useBindings = true, 
-            showMoney = false, 
-            verticalPadding = 2, 
-            style = 
-            { 
+        Add(resourceList = new DoubleResourceListWithEvent()
+        {
+            cost = true,
+            useBindings = true,
+            showMoney = false,
+            verticalPadding = 2,
+            style =
+            {
                 maxWidth = StyleKeyword.Auto
-            } 
+            }
         });
         Add(button = new Button()
         {

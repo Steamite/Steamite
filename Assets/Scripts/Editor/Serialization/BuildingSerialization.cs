@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
+
 public class BuildingSerialization
 {
     private static HttpClient client = null;

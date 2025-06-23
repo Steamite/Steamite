@@ -1,7 +1,4 @@
 using InfoWindowElements;
-using Newtonsoft.Json.Linq;
-using Unity.Jobs.LowLevel.Unsafe;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 [UxmlElement]

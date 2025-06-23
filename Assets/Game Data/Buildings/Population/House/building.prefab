@@ -208,3 +208,6 @@ MonoBehaviour:
   maximalProgress: 20
   categoryID: 2
   wrapperID: 1580670160
+  assignLimit:
+    baseValue: 3
+    currentValue: 3

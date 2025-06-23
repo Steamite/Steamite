@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 /// <summary>Class generating new maps.</summary>
 public class MapGen : MonoBehaviour
@@ -39,21 +42,23 @@ public class MapGen : MonoBehaviour
     /// <summary>List of resources that are posible to spawn./summary>
     [Header("Resource data")][SerializeField] public List<MinableRes> minableResources;
     /// <summary>Material for dirt rocks./summary>
-    [SerializeField] Material dirt;
+    [SerializeField] public Material dirt;
 
     /// <summary>Left/Top./summary>
     int minCenter;
     /// <summary>Right/Bottom./summary>
     int maxCenter;
+    [SerializeField] Elevator elevator;
     #endregion
 
+    List<int> tileUniqueIds = new();
     #region Initialization
     /// <summary>
     /// Generates and creates a new map.
     /// </summary>
     /// <param name="_seed">Seed containing all generation paramaters.</param>
     /// <param name="templateLevel">Level template for creating <see cref="GroundLevel"/>s.</param>
-    public void Generate(string _seed, out WorldSave world)
+    public int Generate(string _seed, out WorldSave world)
     {
         seed = _seed;
         world = new();
@@ -63,13 +68,13 @@ public class MapGen : MonoBehaviour
 
         minCenter = (gridSize / 2) - 5;
         maxCenter = (gridSize / 2) + 5;
-
         world.gridSave = new GridSave[5];
         for (level = 0; level < 5; level++)
         {
             GridSave levelSave = new(gridSize, gridSize);
 
             map = new MapTile[gridSize, gridSize];
+            CreateGrid();
             PerlinNoise(level);
             MapTile tile;
             for (int x = 0; x < gridSize; x++)
@@ -82,22 +87,26 @@ public class MapGen : MonoBehaviour
                             tile.resource,
                             tile.hardness,
                             tile.hardness,
-                            false);
+                            false,
+                            tile.name);
                 }
             }
             world.gridSave[level] = levelSave;
         }
+
+        StorageBSave save = (StorageBSave)elevator.Save();
+        save.gridPos = new(gridSize / 2, 0, gridSize / 2);
+        save.SetupStorage();
+
         world.objectsSave = new BuildsAndChunksSave(
             new BSave[] {
-                new StorageBSave() {
-                    prefabName="Elevator",
-                    constructed=true,
-                }
+                save
             },
             new ChunkSave[] { });
 
         //SceneRefs.objectFactory.CreateElevator(new(gridSize / 2, 0, gridSize / 2), true);
         #endregion
+        return gridSize;
     }
 
     /// <summary>Extracts parameters from the <see cref="seed"/>.</summary>

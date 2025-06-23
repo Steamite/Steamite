@@ -8,7 +8,7 @@ public partial class PipeNetworkControl : VisualElement, IUIElement
     Label networkIdLabel;
     public PipeNetworkControl()
     {
-        tabView = new() { name = "tabView"};
+        tabView = new() { name = "tabView" };
         Add(tabView);
         //tabView.Add()
         networkIdLabel = new() { name = "networkIdLabel", text = "Network ID: ##" };
