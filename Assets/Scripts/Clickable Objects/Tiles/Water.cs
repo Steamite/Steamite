@@ -4,16 +4,18 @@ using UnityEngine;
 public class Water : ClickableObject
 {
     public readonly int quality = 50;
-    [SerializeField]int ammount = 50;
-    [CreateProperty]public int Ammount 
-    { 
-        get => ammount; 
-        set { 
+    [SerializeField] int ammount = 50;
+    [CreateProperty]
+    public int Ammount
+    {
+        get => ammount;
+        set
+        {
             ammount = value;
             if (ammount == 0)
                 hasResources = false;
             UIUpdate(nameof(Ammount));
-        } 
+        }
     }
     public bool hasResources;
 
@@ -24,23 +26,13 @@ public class Water : ClickableObject
     }
     #endregion
 
-    #region Window
-    /*public override InfoWindow OpenWindow()
+    public override InfoWindow OpenWindow()
     {
-        InfoWindow info;
-        if (info = base.OpenWindow())
-        {
-            info.SwitchMods(InfoMode.Water);
-            return info;
-        }
-        throw new ArgumentException();
-    }*/
-    /*protected override void UpdateWindow(InfoWindow info)
-    {
-        base.UpdateWindow(info);
-        //info.clickObjectTransform.GetChild((int)InfoMode.Water).GetChild(0).GetComponent<TMP_Text>().text = $"Storing: {ammount}";
-    }*/
-    #endregion
+        InfoWindow info = base.OpenWindow();
+        info.Open(this, InfoMode.Water);
+        return info;
+    }
+
 
     #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)

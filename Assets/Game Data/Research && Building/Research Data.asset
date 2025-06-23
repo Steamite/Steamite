@@ -102,7 +102,7 @@ MonoBehaviour:
       nodeCategory: 0
       nodeAssignee: 2090065767
       unlockedBy: 
-      unlocks: 
+      unlocks: e006623a
       description: 'Improved metal casting.
 
         $
@@ -112,10 +112,15 @@ MonoBehaviour:
         Production:
         AssignLimit by 3
 
-        Population: Capacity by 5
+        Population, Production: Capacity by 5
 
-        Population:
-        InputResource -50%'
+        Production:
+        InputResource -50%
+
+        Production: ProdSpeed by 2
+
+        Production:
+        ProductionYield 10%'
       lineColor: {r: 1, g: 0, b: 0, a: 1}
     - Name: Extension
       id: 442275305
@@ -161,7 +166,7 @@ MonoBehaviour:
       nodeType: 2
       nodeCategory: 1
       nodeAssignee: 1472558132
-      unlockedBy: bd29a30ae9955c1ae429d526
+      unlockedBy: bd29a30ae9955c1ae429d52634caf053
       unlocks: 
       description: 
       lineColor: {r: 0.1870589, g: 0.6698113, b: 0.27058825, a: 0.49019608}

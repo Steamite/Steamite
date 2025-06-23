@@ -136,7 +136,7 @@ MonoBehaviour:
     mods: 
   _materialColors: []
   _meshRenderers: []
-  buildingCategories: 2
+  buildingCategories: 3
   blueprint:
     size:
       x: 1
@@ -172,8 +172,8 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    type: 
-    ammount: 
+    type: 03000000
+    ammount: 02000000
     baseResource:
       type: 03000000
       ammount: 02000000

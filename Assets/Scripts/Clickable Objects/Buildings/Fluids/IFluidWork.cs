@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public interface IFluidWork
 {
@@ -54,16 +53,14 @@ public interface IFluidWork
     /// Call on DestoyBuilding().
     /// </summary>
     /// <param name="t">pipes</param>
-    void DisconnectFromNetwork(Transform t)
+    void DisconnectFromNetwork()
     {
         List<int> networks = new();
-        foreach (BuildPipe p in t.GetComponentsInChildren<BuildPipe>())
+        foreach (BuildPipe buildPipe in AttachedPipes)
         {
-            if (networks.IndexOf(p.network.networkID) == -1)
+            for (int i = 0; i < 4; i++)
             {
-                networks.Add(p.network.networkID);
-                p.network.buildings.Remove(p.connectedBuilding);
-                p.DestoyBuilding();
+                buildPipe.DisconnectPipe(i, true);
             }
         }
     }
@@ -84,7 +81,7 @@ public interface IFluidWork
                 itemPos.z = buildPos.z - itemPos.z;
                 AttachedPipes.Add(
                     SceneRefs.objectFactory.CreateBuildingPipe(itemPos, this));
-                
+
             }
         }
         if (loading)

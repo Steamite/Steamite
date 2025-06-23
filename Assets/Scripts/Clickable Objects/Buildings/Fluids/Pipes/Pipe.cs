@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.UIElements;
-using static UnityEditor.Progress;
 
 public class Pipe : Building
 {
     public FluidNetwork network = new();
     PipePart[] connectedPipes = new PipePart[4];
-    readonly int[] connectionOrder = { 1, 0, 3, 2};
+    readonly int[] connectionOrder = { 1, 0, 3, 2 };
     public override void OrderDeconstruct()
     {
         base.OrderDeconstruct();
@@ -116,26 +114,30 @@ public class Pipe : Building
         switch (_case)
         {
             case 0:
-                pipePart.rotation = Quaternion.Euler(90, 0, 90);
-                pipePart.localPosition = new((0.5f/transform.lossyScale.z) - pipeLenghtScale, 0, 0);
+                pipePart.SetLocalPositionAndRotation(
+                    new((0.5f / transform.lossyScale.z) - pipeLenghtScale, 0, 0),
+                    Quaternion.Euler(90, 0, 90));
                 if (canNext)
                     connectedPipe.ConnectPipe(connectionOrder[_case], this, false);
                 break;
             case 1:
-                pipePart.rotation = Quaternion.Euler(90, 0, 90);
-                pipePart.localPosition = new(-((0.5f / transform.lossyScale.z) - pipeLenghtScale), 0, 0);
+                pipePart.SetLocalPositionAndRotation(
+                    new(-((0.5f / transform.lossyScale.z) - pipeLenghtScale), 0, 0),
+                    Quaternion.Euler(90, 0, 90));
                 if (canNext)
                     connectedPipe.ConnectPipe(connectionOrder[_case], this, false);
                 break;
             case 2:
-                pipePart.rotation = Quaternion.Euler(90, 0, 0);
-                pipePart.localPosition = new(0, 0, (0.5f / transform.lossyScale.z) - pipeLenghtScale);
+                pipePart.SetLocalPositionAndRotation(
+                    new(0, 0, (0.5f / transform.lossyScale.z) - pipeLenghtScale), 
+                    Quaternion.Euler(90, 0, 0));
                 if (canNext)
                     connectedPipe.ConnectPipe(connectionOrder[_case], this, false);
                 break;
             case 3:
-                pipePart.rotation = Quaternion.Euler(90, 0, 0);
-                pipePart.localPosition = new(0, 0, -((0.5f / transform.lossyScale.z) - pipeLenghtScale));
+                pipePart.SetLocalPositionAndRotation(
+                    new(0, 0, -((0.5f / transform.lossyScale.z) - pipeLenghtScale)),
+                    Quaternion.Euler(90, 0, 0));
                 if (canNext)
                     connectedPipe.ConnectPipe(connectionOrder[_case], this, false);
                 break;
@@ -143,6 +145,11 @@ public class Pipe : Building
                 Debug.LogError("WTF");
                 break;
         }
+    }
+
+    protected virtual void ConnectionCases()
+    {
+
     }
 
 
@@ -205,7 +212,7 @@ public class Pipe : Building
 
     protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
-        toEnable.Add("Pipes", new List<string> { "Pipe Info"});
+        toEnable.Add("Pipes", new List<string> { "Pipe Info" });
         base.ToggleInfoComponents(info, toEnable);
     }
     #endregion

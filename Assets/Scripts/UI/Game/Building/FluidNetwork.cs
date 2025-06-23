@@ -12,7 +12,7 @@ public class FluidNetwork
     public List<Pipe> pipes = new();
     /// <summary>All connected buildings in the network.</summary>
     public List<Building> inspectorBuildings => buildings.Cast<Building>().ToList();
-    
+
     public List<IFluidWork> buildings = new();
     /// <summary>Network ID for identification and display.</summary>
     public int networkID = -1;

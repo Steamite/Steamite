@@ -29,7 +29,7 @@ namespace InfoWindowElements
 
         #region Variables
         /// <summary>Prefab for resource elements.</summary>
-        [UxmlAttribute]public VisualTreeAsset elemPref;
+        [UxmlAttribute] public VisualTreeAsset elemPref;
         /// <summary>Reference to label displaying capacity state.</summary>
         Label capacityLabel;
         /// <summary>Refence to scroller.</summary>

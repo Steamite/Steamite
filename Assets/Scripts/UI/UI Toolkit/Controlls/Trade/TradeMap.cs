@@ -41,7 +41,7 @@ namespace TradeWindowElements
                 Vector2 locationPos = UIRefs.trading.tradeLocations[i].pos.ToVecUI();
 
                 float distance = Vector2.Distance(basePos, locationPos);
-                slider = new("", 0, distance);
+                slider = new("", 0, distance / 10);
                 slider.style.width = distance;
                 slider.style.height = 50;
                 slider.focusable = false;

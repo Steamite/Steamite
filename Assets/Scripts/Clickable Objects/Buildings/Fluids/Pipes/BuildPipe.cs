@@ -13,7 +13,10 @@ public class BuildPipe : Pipe
     }
     public override void OnPointerEnter(PointerEventData eventData) { }
     public override void OnPointerExit(PointerEventData eventData) { }
-    public override void OnPointerDown(PointerEventData eventData) { }
+    public override void OnPointerDown(PointerEventData eventData)
+    {
+        ((Building)connectedBuilding).OnPointerDown(eventData);
+    }
     public override void OnPointerUp(PointerEventData eventData) { }
     public override void OrderDeconstruct()
     {
@@ -36,4 +39,6 @@ public class BuildPipe : Pipe
     {
         return null;
     }
+
+    
 }

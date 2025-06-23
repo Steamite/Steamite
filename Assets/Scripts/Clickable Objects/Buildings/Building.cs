@@ -412,6 +412,7 @@ public class Building : StorageObject
 
         SceneRefs.gridTiles.HighLight(new(), gameObject);
         MyRes.UpdateResource(cost, -1);
+        MyRes.ManageMoneyGlobal(-cost.Money);
         SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         UniqueID();
         MyGrid.SetBuilding(this);

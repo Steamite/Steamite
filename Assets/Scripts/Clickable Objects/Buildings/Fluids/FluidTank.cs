@@ -30,6 +30,12 @@ public class FluidTank : Building, IFluidWork
         ((IFluidWork)this).ConnectToNetwork();
     }
 
+    public override void DestoyBuilding()
+    {
+        AttachedPipes.ForEach(q=> q.DestoyBuilding());
+        base.DestoyBuilding();
+    }
+
     protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
         toEnable.Add("Fluids", new List<string> { "Fluid Info" });

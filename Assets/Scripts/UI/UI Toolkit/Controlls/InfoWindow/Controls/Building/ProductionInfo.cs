@@ -62,7 +62,7 @@ namespace InfoWindowViews
             inputResource = new(true, "Input", true);
             Add(inputResource);
 
-            VisualElement visualElement = new() 
+            VisualElement visualElement = new()
             {
                 style =
                 {

@@ -148,7 +148,7 @@ MonoBehaviour:
     mods: 
   _materialColors: []
   _meshRenderers: []
-  buildingCategories: 4
+  buildingCategories: 0
   blueprint:
     size:
       x: 2
@@ -208,3 +208,7 @@ MonoBehaviour:
   maximalProgress: 0
   categoryID: 3
   wrapperID: 262182155
+  storedFluid:
+    types: 
+    ammounts: 
+    capacities: 

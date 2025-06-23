@@ -140,9 +140,9 @@ namespace InfoWindowElements
             maxValue = ((IProduction)data).ProdTime;
             DataBinding binding = BindingUtil.CreateBinding(nameof(IProduction.CurrentTime));
             binding.sourceToUiConverters.AddConverter(
-                (ref float time) => 
+                (ref float time) =>
                 {
-                    return time / maxValue; 
+                    return time / maxValue;
                 });
             SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(value)), binding, data);
         }

@@ -23,7 +23,7 @@ namespace InfoWindowElements
 
     /// <summary>Tab for <see cref="Elevator"/> "Levels" tab.</summary>
     [UxmlElement]
-    public partial class LevelInfo: InfoWindowControl
+    public partial class LevelInfo : InfoWindowControl
     {
         /// <summary>Data for unlocking and displaying info about each of the levels.</summary>
         public LevelPresent LevelData { get; private set; }

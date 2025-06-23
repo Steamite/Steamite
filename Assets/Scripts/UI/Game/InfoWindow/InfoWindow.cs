@@ -90,10 +90,10 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         window = gameObject.GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Info-Window");
         windowBody = window[1];
         AsyncOperationHandle<InfoWindowControlHolder> op = Addressables.LoadAssetAsync<InfoWindowControlHolder>("Assets/Game Data/UI/InfoWindowControlHolder.asset");
-        if(!op.IsDone)
+        if (!op.IsDone)
             yield return op;
         controls = op.Result;
-        
+
 
 
         window.style.display = DisplayStyle.None;
@@ -133,8 +133,10 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         switch (active)
         {
             case InfoMode.None:
+                break;
             case InfoMode.Water:
-                throw new NotImplementedException();
+                controls.CreateElementByName("Water Info", windowBody, dataSource);
+                break;
 
             case InfoMode.Building:
                 Building building = (Building)dataSource;
@@ -144,13 +146,13 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                 }
                 else
                 {
-                    windowBody.Add(buildingTabView = new TabView() 
-                    { 
-                        name="Building Info", 
-                        style = 
+                    windowBody.Add(buildingTabView = new TabView()
+                    {
+                        name = "Building Info",
+                        style =
                         {
-                            flexGrow = 1 
-                        } 
+                            flexGrow = 1
+                        }
                     });
                 }
                 break;
@@ -166,6 +168,8 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
             case InfoMode.Chunk:
                 controls.CreateElementByName("Chunk Info", windowBody, dataSource);
                 break;
+
+
         }
     }
 
@@ -187,7 +191,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                 controls.CreateElementByName(control, tabContentContainer, building);
             }
         }
-        if(controlsToCreate.Keys.Count == 1)
+        if (controlsToCreate.Keys.Count == 1)
         {
             buildingTabView.hierarchy.Children().ElementAt(0).style.display = DisplayStyle.None;
         }

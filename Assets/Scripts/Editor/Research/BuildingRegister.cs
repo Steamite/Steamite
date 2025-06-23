@@ -620,7 +620,7 @@ namespace EditorWindows.Windows
                     ((BuildingWrapper)dataGrid.itemsSource[i]).building)
                     .Replace("/building.prefab", "");
 
-                AddressableAssetEntry entry 
+                AddressableAssetEntry entry
                     = group.GetAssetEntry(
                         AssetDatabase.GUIDFromAssetPath(oldPath).ToString());
 
@@ -640,7 +640,7 @@ namespace EditorWindows.Windows
                     }
                     return;
                 }
-                
+
                 entry.address = value;
                 settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryModified, value, true);
                 ((BuildingWrapper)dataGrid.itemsSource[i]).building.objectName = value;

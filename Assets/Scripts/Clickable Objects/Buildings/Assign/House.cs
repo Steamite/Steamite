@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
+using UnityEngine;
 /// <summary>Provides a place to sleep for <see cref="Human"/>s.</summary>
 public class House : Building, IAssign
 {
     [CreateProperty] public List<Human> Assigned { get; set; } = new();
-    public ModifiableInteger AssignLimit { get; set; }
+    [SerializeField] ModifiableInteger assignLimit;
+    [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
 
     #region Deconstruction
     /// <summary>
@@ -29,6 +31,11 @@ public class House : Building, IAssign
     }
     #endregion
 
+    public override void InitModifiers()
+    {
+        base.InitModifiers();
+        ((IModifiable)AssignLimit).Init();
+    }
     #region UI
     /// <summary>
     /// <inheritdoc/> <br/>

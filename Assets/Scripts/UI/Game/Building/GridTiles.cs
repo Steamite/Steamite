@@ -436,7 +436,7 @@ public class GridTiles : MonoBehaviour
     /// </summary>
     void CalcPipes()
     {
-        Transform pipes = MyGrid.FindLevelPipes(startPos.y/2);
+        Transform pipes = MyGrid.FindLevelPipes(startPos.y / 2);
         List<GridPos> path = PathFinder.FindPath(startPos, activePos, null);
         path.Add(startPos);
         List<ClickableObject> tempMarkedTiles = new();
@@ -588,7 +588,7 @@ public class GridTiles : MonoBehaviour
                     Camera.main.GetComponent<PhysicsRaycaster>().eventMask = defaultMask;
                     if (drag)
                     {
-                        foreach(Pipe pipe in markedTiles)
+                        foreach (Pipe pipe in markedTiles)
                         {
                             blueprintInstance = pipe;
                             DestroyBlueprint(false);
@@ -662,7 +662,7 @@ public class GridTiles : MonoBehaviour
             blueprintPrefab.GetComponent<Pipe>()
                 ? GameObject.FindWithTag("Pipes").transform
                 : GameObject.Find("Buildings").transform);
-        if(blueprintInstance is IFluidWork)
+        if (blueprintInstance is IFluidWork)
             ((IFluidWork)blueprintInstance).CreatePipes();
         blueprintInstance.GetColors();
 
@@ -735,6 +735,10 @@ public class GridTiles : MonoBehaviour
             Pipe pipe = blueprintInstance as Pipe;
             for (int i = 0; i < 4; i++)
                 pipe.DisconnectPipe(i, true);
+        }
+        else if (blueprintInstance is IFluidWork)
+        {
+            (blueprintInstance as IFluidWork).DisconnectFromNetwork();
         }
         Destroy(blueprintInstance.gameObject);
         if (forgetInstance)

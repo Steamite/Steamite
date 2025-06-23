@@ -262,7 +262,7 @@ public class GroundLevel : MonoBehaviour
                     /*c = new(0.5f, 0.5f, 0.5f, 0.25f);
                     errC = new(1f, 0.3f, 0.3f, 0.25f);*/
                     entrances.Add(tile.GetComponent<Image>());
-                    if(GetGridItem(itemPos) is Road)
+                    if (GetGridItem(itemPos) is Road)
                         activeEntrances++;
 
                     break;

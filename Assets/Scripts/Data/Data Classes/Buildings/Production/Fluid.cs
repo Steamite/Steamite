@@ -18,7 +18,7 @@ public class Fluid
     public void AddFluid(FluidType type, int ammount, int capacity = -1)
     {
         int i = types.IndexOf(type);
-        if(i == -1)
+        if (i == -1)
         {
             types.Add(type);
             ammounts.Add(ammount);

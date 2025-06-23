@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 
@@ -7,7 +6,7 @@ public class WaterPump : Building, IFluidWork, IProduction, IAssign
 {
     public Water waterSource;
     public List<Pipe> AttachedPipes { get; set; } = new();
-    
+
     [SerializeField] float prodTime;
     [CreateProperty] public float ProdTime { get => prodTime; set => prodTime = value; }
 
@@ -40,6 +39,7 @@ public class WaterPump : Building, IFluidWork, IProduction, IAssign
         return canPlace;
     }
 
+
     public override void FinishBuild()
     {
         StoredFluids = new(
@@ -53,7 +53,8 @@ public class WaterPump : Building, IFluidWork, IProduction, IAssign
 
     public void ProgressProduction(float progress)
     {
-        if (waterSource.hasResources == false 
+        if (Stoped 
+            || waterSource.hasResources == false
             || !AttachedPipes[0].network.HasSpace(FluidType.Water, 2))
             return;
 
@@ -74,11 +75,12 @@ public class WaterPump : Building, IFluidWork, IProduction, IAssign
         {
             AttachedPipes[0].network.StoreFluid(FluidType.Water, 2);
         }
-        
+
         CurrentTime -= +ProdTime;
         waterSource.Ammount--;
     }
 
+    
     protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
         toEnable.Add("Production", new List<string> { "Production Info", "Assign Info" });
@@ -87,6 +89,14 @@ public class WaterPump : Building, IFluidWork, IProduction, IAssign
     }
 
 
+    public override void DestoyBuilding()
+    {
+        AttachedPipes.ForEach(q => q.DestoyBuilding());
+        base.DestoyBuilding();
+    }
+
+
+    #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
 
@@ -99,8 +109,9 @@ public class WaterPump : Building, IFluidWork, IProduction, IAssign
 
     public override void Load(ClickableObjectSave save)
     {
-        StoredFluids = (save as WaterPumpSave).fluidSave; 
+        StoredFluids = (save as WaterPumpSave).fluidSave;
         ((IFluidWork)this).CreatePipes(true);
         base.Load(save);
     }
+    #endregion
 }

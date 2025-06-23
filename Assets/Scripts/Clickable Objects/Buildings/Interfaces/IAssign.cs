@@ -57,8 +57,8 @@ public interface IAssign
         }
         ((IUpdatable)this).UIUpdate(nameof(Assigned));
         return true;
-    
-}
+
+    }
 
 
     /// <summary>

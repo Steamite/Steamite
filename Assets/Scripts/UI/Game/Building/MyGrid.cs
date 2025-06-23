@@ -232,7 +232,7 @@ public static class MyGrid
         return gridSave;
     }
 
-    public static void Load(GridSave gridSave, GroundLevel templateLevel, int i, List<MinableRes> rockData)
+    public static void Load(GridSave gridSave, GroundLevel templateLevel, int i, List<MinableRes> rockData, Material dirtMat)
     {
         GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickableObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.gridTiles.transform);
         levels[i] = groundLevel;
@@ -245,7 +245,7 @@ public static class MyGrid
                 switch (gridSave.grid[x, z])
                 {
                     case RockSave:
-                        SceneRefs.objectFactory.CreateSavedRock(gridSave.grid[x, z] as RockSave, new(x, i, z), rockData);
+                        SceneRefs.objectFactory.CreateSavedRock(gridSave.grid[x, z] as RockSave, new(x, i, z), rockData, dirtMat);
                         break;
                     case WaterSave:
                         SceneRefs.objectFactory.CreateSavedWater(gridSave.grid[x, z] as WaterSave, new(x, i, z));
