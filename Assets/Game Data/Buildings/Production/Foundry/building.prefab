@@ -642,7 +642,7 @@ MonoBehaviour:
   assignLimit:
     baseValue: 5
     currentValue: 5
-  productionTime: 10
+  productionTime: 5
   productionCost:
     type: 0200000001000000
     ammount: 0500000005000000

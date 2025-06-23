@@ -153,14 +153,15 @@ public class Pipe : Building
         {
             DisconnectPipe(x, true);
         }
-        Pipe pipe = (Pipe)MyGrid.GetGridItem(gridPos, true);
-        if (pipe?.id == id)
+        if (id == -1)
+            Destroy(gameObject);
+        else
         {
             MyGrid.SetGridItem(gridPos, null, true);
             if (network.networkID != -1)
                 network.Split(this);
+            base.DestoyBuilding();
         }
-        base.DestoyBuilding();
     }
 
     public void DisconnectPipe(int _case, bool canNext)
@@ -280,6 +281,7 @@ public class Pipe : Building
         }
         else
         {
+            gameObject.layer = 6;
             constructed = true;
             id = save.id;
             network.networkID = (save as LightWeightPipeBSave).networkID;

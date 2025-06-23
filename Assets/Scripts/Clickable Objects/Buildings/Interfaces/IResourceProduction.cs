@@ -125,8 +125,7 @@ public interface IResourceProduction : IProduction
         RequestPickup();
     }
 
-    /// <summary>Toggles state indicators.</summary>
-    public void RefreshStatus()
+    new public void RefreshStatus()
     {
         Building building = this as Building;
 
@@ -136,17 +135,6 @@ public interface IResourceProduction : IProduction
             building.transform.GetChild(0).GetChild(1).gameObject.SetActive(!ProdStates.supplied);
             building.transform.GetChild(0).GetChild(2).gameObject.SetActive(!ProdStates.space);
         }
-    }
-
-    /// <summary>
-    /// Manual production toggle.
-    /// </summary>
-    /// <returns>New toggle state.</returns>
-    public bool StopProduction()
-    {
-        Stoped = !Stoped;
-        RefreshStatus();
-        return Stoped;
     }
     #endregion
 

@@ -136,17 +136,18 @@ namespace InfoWindowElements
         /// <inheritdoc/>
         public void Open(object data)
         {
-            maxValue = ((ProductionBuilding)data).ProdTime;
-            DataBinding binding = BindingUtil.CreateBinding(nameof(ProductionBuilding.CurrentTime));
-            binding.sourceToUiConverters.AddConverter((ref float time) => time / maxValue);
+            Debug.Log(((IProduction)data).ProdTime);
+            maxValue = ((IProduction)data).ProdTime;
+            DataBinding binding = BindingUtil.CreateBinding(nameof(IProduction.CurrentTime));
+            binding.sourceToUiConverters.AddConverter(
+                (ref float time) => 
+                {
+                    return time / maxValue; 
+                });
             SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(value)), binding, data);
         }
 
         #region Radial Logic
-        public void AngleUpdate(ChangeEvent<float> evt)
-        {
-            radialFill?.MarkDirtyRepaint();
-        }
 
         /// <summary>
         /// 

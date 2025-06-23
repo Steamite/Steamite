@@ -5,24 +5,7 @@ using UnityEngine.UIElements;
 public interface IFluidWork
 {
     List<Pipe> AttachedPipes { get; set; }
-    /// <summary>
-    /// Call in CanPlace(), connect or disconnects pipes, and check if the place to build the pipes is free.
-    /// </summary>
-    /// <param name="t">Building transform</param>
-    bool ConnectPipes(Transform t)
-    {
-        /*bool canPlace = true;
-        foreach (Pipe pipe in t.GetComponentsInChildren<Pipe>())
-        {
-            pipe.transform.rotation = Quaternion.Euler(0, 0, 0);
-            if (!pipe.CanPlace())
-            {
-                canPlace = false;
-            }
-        }
-        return canPlace;*/
-        return true;
-    }
+    Fluid StoredFluids { get; set; }
 
     /// <summary>
     /// Call in PlaceBuilding(), replaces or preps pipes.
@@ -85,7 +68,7 @@ public interface IFluidWork
         }
     }
 
-    void CreatePipes()
+    void CreatePipes(bool loading = false)
     {
         AttachedPipes = new();
         Building building = (Building)this;
@@ -99,8 +82,15 @@ public interface IFluidWork
                 GridPos itemPos = MyGrid.Rotate(item.pos, building.transform.rotation.eulerAngles.y, true);
                 itemPos.x += buildPos.x;
                 itemPos.z = buildPos.z - itemPos.z;
-                SceneRefs.objectFactory.CreateBuildingPipe(itemPos, this);
+                AttachedPipes.Add(
+                    SceneRefs.objectFactory.CreateBuildingPipe(itemPos, this));
+                
             }
+        }
+        if (loading)
+        {
+            PlacePipes();
+            ConnectToNetwork();
         }
     }
 

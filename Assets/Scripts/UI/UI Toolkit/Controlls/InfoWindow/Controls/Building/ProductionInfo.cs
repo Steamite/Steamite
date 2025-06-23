@@ -1,4 +1,5 @@
 using InfoWindowElements;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -49,7 +50,7 @@ namespace InfoWindowViews
         Label prodSpeedLabel;
         #endregion
 
-        IResourceProduction building;
+        IProduction building;
         #endregion
 
         #region Constructors
@@ -105,15 +106,25 @@ namespace InfoWindowViews
         public override void Open(object data)
         {
             // DEBUG_Binding
-            building = (IResourceProduction)data;
-            enable = building.Stoped;
+            building = (IProduction)data;
             inputResource.Open(data);
             outputResource.Open(data);
+            enable = building.Stoped;
             radialElement.Open(data);
 
-            DataBinding binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
-            binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"Space\n{res.Sum()}/{res.capacity}");
-            SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
+            DataBinding binding;
+            if (building is WaterPump)
+            {
+                binding = BindingUtil.CreateBinding(nameof(WaterPump.StoredFluids));
+                binding.sourceToUiConverters.AddConverter((ref Fluid fluid) => $"Space\n{fluid.ammounts.Sum()}/{fluid.capacities[0]}");
+                SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
+            }
+            else
+            {
+                binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
+                binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"Space\n{res.Sum()}/{res.capacity}");
+                SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
+            }
 
             binding = BindingUtil.CreateBinding(nameof(IProduction.ProdSpeed));
             binding.sourceToUiConverters.AddConverter((ref ModifiableFloat speed) => $"Speed\n{speed}x");

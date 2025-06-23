@@ -1,7 +1,21 @@
-﻿public class Water : ClickableObject
+﻿using Unity.Properties;
+using UnityEngine;
+
+public class Water : ClickableObject
 {
     public readonly int quality = 50;
-    public int ammount = 50;
+    [SerializeField]int ammount = 50;
+    [CreateProperty]public int Ammount 
+    { 
+        get => ammount; 
+        set { 
+            ammount = value;
+            if (ammount == 0)
+                hasResources = false;
+            UIUpdate(nameof(Ammount));
+        } 
+    }
+    public bool hasResources;
 
     #region Basic Operations
     public override GridPos GetPos()
@@ -39,6 +53,7 @@
     public override void Load(ClickableObjectSave save)
     {
         ammount = (save as WaterSave).ammount;
+        hasResources = ammount != 0;
         base.Load(save);
     }
     #endregion Saving

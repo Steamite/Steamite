@@ -11,20 +11,17 @@ public class InfoWindowControlHolder : ScriptableObject
 
     public void CreateElementByName(string name, VisualElement parent, object data)
     {
-        try
+        VisualTreeAsset asset = visualTreeAssets.Find(q => q.name == name);
+        if (asset)
         {
-            visualTreeAssets
-                .Where(q => q != null)
-                .FirstOrDefault(q => q.name == name).CloneTree(parent);
+            asset.CloneTree(parent);
             parent[parent.childCount - 1].dataSource = data;
             ((IUIElement)parent[parent.childCount - 1]).Open(data);
         }
-        catch (Exception e)
+        else
         {
-            if (e is NullReferenceException)
-                Debug.LogError(
-                    $"Element with this name is not pressent in the collection: {name}\n" +
-                    $"{e}");
+            Debug.LogError($"'{name}' is not present in the catalog.");
         }
+
     }
 }

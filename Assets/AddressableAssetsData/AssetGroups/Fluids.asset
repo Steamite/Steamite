@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 540254f64d4bebd47bd400d54248ffab
+    m_Address: Water tank
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 998b6498c6dbeb14fad09120ad4df1be
     m_Address: Water Pump
     m_ReadOnly: 0

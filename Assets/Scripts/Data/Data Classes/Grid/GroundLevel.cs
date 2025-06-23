@@ -151,6 +151,9 @@ public class GroundLevel : MonoBehaviour
                 case GridItemType.Pipe:
                     overlays.Add(new(itemPos.x, itemPos.z), load ? -1 : i, false);
                     break;
+                case GridItemType.Water:
+                    (building as WaterPump).waterSource = GetGridItem(new(x, y)) as Water;
+                    break;
             }
         }
         if (!load)

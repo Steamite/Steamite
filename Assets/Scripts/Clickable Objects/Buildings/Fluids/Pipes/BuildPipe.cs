@@ -3,34 +3,21 @@ using UnityEngine.EventSystems;
 
 public class BuildPipe : Pipe
 {
-    public Building connectedBuilding;
+    public IFluidWork connectedBuilding;
     //bool pipesSaved = false;
-    public void FillData(Pipe p, Building _connectedBuild)
+    public void FillData(Pipe p, IFluidWork _connectedBuild)
     {
         network = p.network;
         id = p.id;
         connectedBuilding = _connectedBuild;
     }
-    public override void OnPointerEnter(PointerEventData eventData)
-    {
-        connectedBuilding.OnPointerEnter(eventData);
-    }
-    public override void OnPointerExit(PointerEventData eventData)
-    {
-        connectedBuilding.OnPointerExit(eventData);
-    }
-    public override void OnPointerDown(PointerEventData eventData)
-    {
-        connectedBuilding.OnPointerDown(eventData);
-    }
-    public override void OnPointerUp(PointerEventData eventData)
-    {
-        connectedBuilding.OnPointerUp(eventData);
-    }
+    public override void OnPointerEnter(PointerEventData eventData) { }
+    public override void OnPointerExit(PointerEventData eventData) { }
+    public override void OnPointerDown(PointerEventData eventData) { }
+    public override void OnPointerUp(PointerEventData eventData) { }
     public override void OrderDeconstruct()
     {
-        Debug.LogError("Can't deconstructed!");
-        // connectedBuilding.OrderDeconstruct();
+        ((Building)connectedBuilding).OrderDeconstruct();
     }
     public override void FinishBuild()
     {
@@ -45,8 +32,8 @@ public class BuildPipe : Pipe
         transform.rotation = Quaternion.Euler(Vector3.zero);
         base.PlacePipe();
     }
-    public override void Load(ClickableObjectSave save)
+    public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
-        base.Load(save);
+        return null;
     }
 }

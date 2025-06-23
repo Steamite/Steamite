@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>Stores data about the resource visual.</summary>
@@ -24,13 +25,13 @@ public class ResourceSkins : ScriptableObject
     /// </summary>
     private void OnValidate()
     {
-        string[] resNames = Enum.GetNames(typeof(ResourceType));
+        List<string> resNames = Enum.GetNames(typeof(ResourceType)).Union(Enum.GetNames(typeof(FluidType))).ToList();
 
-        while (skins.Count > resNames.Length)
+        while (skins.Count > resNames.Count)
         {
             skins.RemoveAt(skins.Count - 1);
         }
-        while (skins.Count < resNames.Length)
+        while (skins.Count < resNames.Count)
         {
             skins.Add(new());
         }
