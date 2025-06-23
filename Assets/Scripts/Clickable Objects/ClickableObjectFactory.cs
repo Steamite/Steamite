@@ -224,7 +224,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         pipe.Load(save);
     }
 
-    public void CreateBuildingPipe(GridPos localPos, IFluidWork building)
+    public BuildPipe CreateBuildingPipe(GridPos localPos, IFluidWork building)
     {
         BuildPipe pipe = Instantiate(
             buildPrefabs.GetBuilding("Build pipe") as BuildPipe,
@@ -235,8 +235,8 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             0.5f / pipe.transform.parent.lossyScale.x,
             0.1f / pipe.transform.parent.lossyScale.y,
             0.5f / pipe.transform.parent.lossyScale.z);
-        pipe.connectedBuilding = (Building)building;
-        building.AttachedPipes.Add(pipe);
+        pipe.connectedBuilding = building;
+        return pipe;
     }
 
     #endregion Loading Game

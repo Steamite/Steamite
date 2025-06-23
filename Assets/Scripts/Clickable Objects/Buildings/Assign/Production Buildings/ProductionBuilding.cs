@@ -46,15 +46,8 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     /// <inheritdoc/>
     protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
-        if (toEnable.Count == 0)
-        {
-            toEnable.Add("General", new List<string> { "Production Info", "Assign Info" });
-            base.ToggleInfoComponents(info, toEnable);
-        }
-        else
-        {
-            base.ToggleInfoComponents(info, toEnable);
-        }
+        toEnable.Add("General", new List<string> { "Production Info", "Assign Info" });
+        base.ToggleInfoComponents(info, toEnable);
     }
     #endregion
 

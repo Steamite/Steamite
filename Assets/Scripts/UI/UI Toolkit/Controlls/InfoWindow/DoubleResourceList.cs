@@ -67,6 +67,7 @@ namespace InfoWindowElements
         }
         #endregion
 
+        Label noneLabel;
 
         #region Init
         /// <inheritdoc/>
@@ -77,7 +78,17 @@ namespace InfoWindowElements
             {
                 case Building:
                     Building b = (Building)data;
-                    if (data is IResourceProduction)
+                    if (b.id == -1)
+                    {
+                        mainBinding = SetupResTypes(b.Cost, nameof(ResourceDisplay.GlobalResources));
+                        mainBinding.sourceToUiConverters.AddConverter((ref MoneyResource storage) => ToUIRes(storage));
+                        data = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
+                        dataSource = data;
+                        SetBinding(nameof(resources), mainBinding);
+                        ((IUpdatable)data).UIUpdate(nameof(ResourceDisplay.GlobalResources));
+                        return;
+                    }
+                    else if (data is IResourceProduction)
                     {
                         // DEBUG_Binding example binding
                         // Creates a list that's used as itemSource, containg a static resouce and a dynamic binded resource.
@@ -95,16 +106,32 @@ namespace InfoWindowElements
                                 data);
                         mainBinding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage));
                     }
+                    else if (data is WaterPump)
+                    {
+                        if (cost)
+                        {
+                            noneLabel.dataSource = (data as WaterPump).waterSource;
+                            noneLabel.style.height = new Length(50, LengthUnit.Pixel);
+                            DataBinding binding = BindingUtil.CreateBinding(nameof(Water.Ammount));
+                            binding.sourceToUiConverters.AddConverter((ref int amm) => $"Water Source:\n {amm}/1");
+                            SceneRefs.infoWindow.RegisterTempBinding(new BindingContext(noneLabel, "text"), binding, (data as WaterPump).waterSource);
+                            return;
+                        }
+                        else
+                        {
+                            noneLabel.dataSource = data;
+                            DataBinding binding = BindingUtil.CreateBinding(nameof(WaterPump.StoredFluids));
+                            binding.sourceToUiConverters.AddConverter((ref Fluid fluid) => $"Water: 2({fluid[FluidType.Water]})");
+                            SceneRefs.infoWindow.RegisterTempBinding(new BindingContext(noneLabel, "text"), binding, data);
+                            return;
+                        }
+                    }
                     else
                     {
-                        mainBinding = SetupResTypes(b.Cost, nameof(ResourceDisplay.GlobalResources));
-                        mainBinding.sourceToUiConverters.AddConverter((ref MoneyResource storage) => ToUIRes(storage));
-                        data = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
-                        dataSource = data;
-                        SetBinding(nameof(resources), mainBinding);
-                        ((IUpdatable)data).UIUpdate(nameof(ResourceDisplay.GlobalResources));
+
                         return;
                     }
+
                     break;
 
                 case LevelInfo:
@@ -226,6 +253,12 @@ namespace InfoWindowElements
                 return ((DoubleUIResource)resource).secondAmmount > 0 ? $"{((DoubleUIResource)resource).secondAmmount}({resource.ammount})" : "";
         }
         #endregion
+
+        protected override VisualElement MakeNoneElement()
+        {
+            noneLabel = base.MakeNoneElement() as Label;
+            return noneLabel;
+        }
     }
 }
 

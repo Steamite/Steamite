@@ -129,14 +129,14 @@ MonoBehaviour:
     type: 
     ammount: 
     capacity:
-      baseValue: 0
-      currentValue: 0
+      baseValue: 50
+      currentValue: 50
     requests: []
     carriers: []
     mods: 
   _materialColors: []
   _meshRenderers: []
-  buildingCategories: 0
+  buildingCategories: 2
   blueprint:
     size:
       x: 1
@@ -175,8 +175,8 @@ MonoBehaviour:
     type: 
     ammount: 
     baseResource:
-      type: 
-      ammount: 
+      type: 03000000
+      ammount: 02000000
     money:
       baseValue: 0
       currentValue: 0
@@ -186,6 +186,11 @@ MonoBehaviour:
   maximalProgress: 0
   categoryID: 3
   wrapperID: 2082713551
+  waterSource: {fileID: 0}
+  prodTime: 2
+  assignLimit:
+    baseValue: 2
+    currentValue: 2
 --- !u!210 &8138561932775318445
 SortingGroup:
   m_ObjectHideFlags: 0

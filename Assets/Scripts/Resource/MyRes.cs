@@ -499,8 +499,8 @@ public static class MyRes
         IStorage store = Elevator.main;
         if (store != null)
         {
-            MoveRes(store.LocalResources, resource, resource, resource.Sum());
             UpdateResource(resource, 1);
+            MoveRes(store.LocalResources, resource, resource, resource.Sum());
         }
         else
         {

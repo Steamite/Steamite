@@ -159,8 +159,9 @@ namespace EditorWindows.Windows
 
                 GameObject gameObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 gameObj.AddComponent<SortingGroup>();
-                gameObj.GetComponent<SortingGroup>().sortingLayerID = 2;
+                gameObj.GetComponent<SortingGroup>().sortingLayerName = "Blueprint";
                 gameObj.GetComponent<SortingGroup>().sortingOrder = 10;
+                gameObj.layer = 2;
 
                 gameObj.AddComponent<Building>();
                 PrefabUtility.SaveAsPrefabAsset(gameObj, $"{s}{BUILD_NAME}");
@@ -513,9 +514,10 @@ namespace EditorWindows.Windows
                 if (b != null && !changedType)
                 {
                     string path = $"{BUILDING_PATH}{selectedCategory.Name}";
-                    if (!Directory.Exists(path + "/" + b.objectName))
+                    string _name = b.objectName.Length > 0 ? b.objectName : UnityEngine.Random.Range(0, int.MaxValue).ToString();
+                    if (!Directory.Exists(path + "/" + _name))
                     {
-                        string GUID = AssetDatabase.CreateFolder(path, $"{b.objectName}");
+                        string GUID = AssetDatabase.CreateFolder(path, $"{_name}");
                         if ((path = AssetDatabase.GUIDToAssetPath(GUID)) != "")
                         {
                             string oldPath = AssetDatabase.GetAssetPath(ev.newValue);
@@ -527,7 +529,7 @@ namespace EditorWindows.Windows
                             AssetDatabase.Refresh();
 
                             AddressableAssetEntry entry = settings.CreateOrMoveEntry(GUID, group);
-                            entry.SetAddress(b.objectName);
+                            entry.SetAddress(_name);
                             settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryCreated, group, true);
                         }
                         else
@@ -535,7 +537,7 @@ namespace EditorWindows.Windows
                     }
                     else
                     {
-                        Debug.LogError("Already exists!\n" + path + "/" + b.objectName);
+                        Debug.LogError("Already exists!\n" + path + "/" + _name);
                     }
                 }
                 else if (b == null)
@@ -614,8 +616,16 @@ namespace EditorWindows.Windows
             int i = GetRowIndex((VisualElement)ev.target);
             if (((BuildingWrapper)dataGrid.itemsSource[i]).building.objectName != value)
             {
+                string oldPath = AssetDatabase.GetAssetPath(
+                    ((BuildingWrapper)dataGrid.itemsSource[i]).building)
+                    .Replace("/building.prefab", "");
+
+                AddressableAssetEntry entry 
+                    = group.GetAssetEntry(
+                        AssetDatabase.GUIDFromAssetPath(oldPath).ToString());
+
                 string result = AssetDatabase.MoveAsset(
-                        $"{BUILDING_PATH}{selectedCategory.Name}/{((BuildingWrapper)dataGrid.itemsSource[i]).building.objectName}",
+                        $"{oldPath}",
                         $"{BUILDING_PATH}{selectedCategory.Name}/{value}");
                 if (result != "")
                 {
@@ -630,7 +640,7 @@ namespace EditorWindows.Windows
                     }
                     return;
                 }
-                AddressableAssetEntry entry = group.GetAssetEntry(AssetDatabase.GUIDFromAssetPath($"{BUILDING_PATH}{selectedCategory.Name}/{value}").ToString());
+                
                 entry.address = value;
                 settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryModified, value, true);
                 ((BuildingWrapper)dataGrid.itemsSource[i]).building.objectName = value;

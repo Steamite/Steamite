@@ -55,7 +55,10 @@ public class GridTiles : MonoBehaviour
         {
             blueprintPrefab = value;
             if (value == null)
-                ChangeSelMode(ControlMode.nothing);
+            {
+                if (blueprintInstance != null)
+                    ChangeSelMode(ControlMode.nothing);
+            }
             else
                 ChangeSelMode(ControlMode.build);
         }
@@ -73,6 +76,7 @@ public class GridTiles : MonoBehaviour
             if (value == null)
             {
                 DeselectBuildingButton?.Invoke();
+                ChangeSelMode(ControlMode.nothing);
             }
         }
     }
@@ -260,8 +264,9 @@ public class GridTiles : MonoBehaviour
             return;
         else if (activeObject == clickedObject)
         {
+            ClickableObject temp = clickedObject;
             DeselectObjects();
-            Enter(activeObject);
+            Enter(temp);
             return;
         }
         Color c = new();
@@ -370,7 +375,6 @@ public class GridTiles : MonoBehaviour
                     else
                     {
                         BlueprintInstance = null;
-                        ChangeSelMode(ControlMode.nothing);
                     }
                 }
                 else
@@ -432,7 +436,7 @@ public class GridTiles : MonoBehaviour
     /// </summary>
     void CalcPipes()
     {
-        Transform pipes = GameObject.FindWithTag("Pipes").transform;
+        Transform pipes = MyGrid.FindLevelPipes(startPos.y/2);
         List<GridPos> path = PathFinder.FindPath(startPos, activePos, null);
         path.Add(startPos);
         List<ClickableObject> tempMarkedTiles = new();
@@ -522,8 +526,8 @@ public class GridTiles : MonoBehaviour
     /// </summary>
     public void BreakAction()
     {
-        drag = false;
         ChangeSelMode(ControlMode.nothing);
+        drag = false;
     }
 
     /// <summary>
@@ -582,7 +586,17 @@ public class GridTiles : MonoBehaviour
                     break;
                 case ControlMode.build:
                     Camera.main.GetComponent<PhysicsRaycaster>().eventMask = defaultMask;
-                    if (blueprintInstance)
+                    if (drag)
+                    {
+                        foreach(Pipe pipe in markedTiles)
+                        {
+                            blueprintInstance = pipe;
+                            DestroyBlueprint(false);
+                        }
+                        blueprintInstance = null;
+                        DeselectBuildingButton?.Invoke();
+                    }
+                    else if (blueprintInstance)
                         DestroyBlueprint(true);
                     shiftKey.Disable();
                     break;

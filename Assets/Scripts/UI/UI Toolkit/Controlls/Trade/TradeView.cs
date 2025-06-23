@@ -187,7 +187,6 @@ namespace TradeWindowElements
             if (categoryIndex == 0)
             {
                 MakeSummary(out _totalCost, out _totalCount, selectedLocation.Buy, deal);
-                _totalCost = -_totalCost;
                 for (int i = 0; i < selectedLocation.Buy.Count; i++)
                 {
                     deal = GetDeal(categoryIndex, i);
@@ -247,7 +246,7 @@ namespace TradeWindowElements
 
         void UpdateConfirmButton()
         {
-            ((Label)ElementAt(2).ElementAt(0).ElementAt(1)).text = $"{MyRes.Money + BuyMoney + SellMoney} £";
+            ((Label)ElementAt(2).ElementAt(0).ElementAt(1)).text = $"{MyRes.Money - BuyMoney + SellMoney} £";
             if (UIRefs.trading.ConvoyOnRoute(selectedLocationIndex))
             {
                 confirmButton.RemoveFromClassList("main-button");

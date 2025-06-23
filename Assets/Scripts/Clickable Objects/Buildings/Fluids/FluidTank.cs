@@ -1,60 +1,54 @@
+using System.Collections.Generic;
+using Unity.Properties;
 using UnityEngine;
 
-public class FluidTank : Building
+public class FluidTank : Building, IFluidWork
 {
-    [Header("Fluid")]
-    [SerializeField] NetworkAccesBuilding networkAccess = new();
-    [SerializeField] Color fillColor;
+    public List<Pipe> AttachedPipes { get; set; }
 
-    public override void UniqueID()
-    {
-        base.UniqueID();
-        networkAccess.ID(transform.GetChild(1));
-    }
+    [SerializeField] Fluid storedFluid;
+    [CreateProperty] public Fluid StoredFluids { get => storedFluid; set => storedFluid = value; }
+
     public override void PlaceBuilding()
     {
         base.PlaceBuilding();
-        networkAccess.PlacePipes(transform.GetChild(2));
+        ((IFluidWork)this).PlacePipes();
     }
     public override bool CanPlace()
     {
-        bool res = true;
-        if (!base.CanPlace())
-            res = false;
-        if (!networkAccess.ConnectPipes(transform.GetChild(2)))
-            res = false;
-        return res;
+        bool canPlace = base.CanPlace();
+        AttachedPipes.ForEach(q => q.FindConnections(canPlace));
+        return canPlace;
     }
     public override void FinishBuild()
     {
-        networkAccess.ConnectToNetwork(transform.GetChild(2));
+        StoredFluids = new(
+            new List<FluidType> { FluidType.Water },
+            new List<int> { 0 },
+            new List<int> { localRes.capacity.currentValue });
         base.FinishBuild();
+        ((IFluidWork)this).ConnectToNetwork();
     }
-    #region Window
-    #endregion
 
-    public override void DestoyBuilding()
+    protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
-        base.DestoyBuilding();
-        networkAccess.DisconnectFromNetwork(transform.GetChild(1));
+        toEnable.Add("Fluids", new List<string> { "Fluid Info" });
+        base.ToggleInfoComponents(info, toEnable);
     }
-    /*public override Fluid GetFluid()
-    {
-        return networkAccess.fluid;
-    }*/
 
+    #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
             clickable = new TankBSave();
-        (clickable as TankBSave).fillColor = new MyColor(fillColor);
-        (clickable as TankBSave).fluidSave = networkAccess.SaveFluidData(transform.GetChild(1));
+        (clickable as TankBSave).fluidSave = storedFluid;
         return base.Save(clickable);
     }
     public override void Load(ClickableObjectSave save)
     {
-        networkAccess.fluid = (save as TankBSave).fluidSave.fluid;
-        networkAccess.Load(transform.GetChild(1), (save as TankBSave).fluidSave.pipeSaves);
+        StoredFluids = (save as TankBSave).fluidSave;
+        ((IFluidWork)this).CreatePipes(true);
         base.Load(save);
     }
+    #endregion
 }

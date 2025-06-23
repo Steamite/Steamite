@@ -11,7 +11,9 @@ public class FluidNetwork
     /// <summary>All connected pipes in the network.</summary>
     public List<Pipe> pipes = new();
     /// <summary>All connected buildings in the network.</summary>
-    public List<Building> buildings = new();
+    public List<Building> inspectorBuildings => buildings.Cast<Building>().ToList();
+    
+    public List<IFluidWork> buildings = new();
     /// <summary>Network ID for identification and display.</summary>
     public int networkID = -1;
     /// <summary>Network name for display.</summary>
@@ -57,7 +59,7 @@ public class FluidNetwork
             pipes.Add(pipe);
             pipe.network = this;
         }
-        foreach (Building building in _mergeWith.buildings)
+        foreach (IFluidWork building in _mergeWith.buildings)
         {
             buildings.Add(building);
             // TODO: call to building
@@ -137,6 +139,21 @@ public class FluidNetwork
             {
                 ChangeNetwork(connected);
             }
+        }
+    }
+
+    public bool HasSpace(FluidType type, int ammount)
+    {
+        return buildings.FirstOrDefault(q => q.StoredFluids.HasSpace(type, ammount)) != null;
+    }
+
+    public void StoreFluid(FluidType type, int ammount)
+    {
+        IFluidWork build = buildings.FirstOrDefault(q => q.StoredFluids.HasSpace(type, ammount));
+        if (build != null)
+        {
+            build.StoredFluids.AddFluid(FluidType.Water, ammount);
+            ((IUpdatable)build).UIUpdate(nameof(IFluidWork.StoredFluids));
         }
     }
     #endregion

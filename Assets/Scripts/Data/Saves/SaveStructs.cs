@@ -183,6 +183,11 @@ public class ProductionBSave : AssignBSave
     public float modifier = 1;
     public ProductionStates ProdStates;
 }
+[Serializable]
+public class WaterPumpSave: ProductionBSave
+{
+    public Fluid fluidSave;
+}
 
 public class PipeBSave : BSave
 {
@@ -194,8 +199,7 @@ public class LightWeightPipeBSave : ClickableObjectSave
 }
 public class TankBSave : BSave
 {
-    public MyColor fillColor;
-    public FluidWorkSave fluidSave;
+    public Fluid fluidSave;
 }
 
 public class FluidProdBSave : ProductionBSave

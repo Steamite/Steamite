@@ -1,0 +1,60 @@
+#container {
+    flex-grow: 0;
+    background-color: rgb(255, 255, 255);
+    border-top-left-radius: 360px;
+    border-top-right-radius: 360px;
+    border-bottom-right-radius: 360px;
+    border-bottom-left-radius: 360px;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    justify-content: flex-end;
+}
+
+#empty-mask {
+    flex-grow: 1;
+    background-color: rgb(68, 44, 21);
+}
+
+#empty-label {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    -unity-text-align: middle-center;
+    top: -3px;
+    left: -2px;
+    color: rgb(161, 148, 59);
+    font-size: 38px;
+}
+
+#filled-mask {
+    flex-grow: 0;
+    background-color: rgb(69, 0, 255);
+    height: 22px;
+    overflow: hidden;
+}
+
+#filled-label {
+    position: absolute;
+    bottom: -1px;
+    left: -2px;
+    width: 100px;
+    height: 100px;
+    -unity-text-align: middle-center;
+    font-size: 38px;
+    color: rgb(182, 116, 56);
+    -unity-font-style: normal;
+}
+
+FluidInfo {
+    align-self: center;
+    justify-content: space-around;
+}

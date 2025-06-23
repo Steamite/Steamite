@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 [UxmlElement]
 public partial class TimeButtons : CustomRadioButtonGroup
 {
-    [UxmlAttribute] List<int> speedStates = new() { 0, 1, 2, 10 };
+    [UxmlAttribute] List<int> speedStates = new() { 0, 1, 2, 3 };
     [UxmlAttribute][Range(0, 3)] int startState;
     public TimeButtons() : base()
     {

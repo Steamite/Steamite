@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.Analytics.IAnalytic;
 
 
 namespace InfoWindowElements
@@ -133,7 +134,6 @@ namespace InfoWindowElements
         /// <returns>Created none element.</returns>
         protected virtual VisualElement MakeNoneElement()
         {
-
             Label l = new Label($"Empty"); // Free {(itemsSource != null ? itemsSource.Count : 0)}
             l.style.marginBottom = 0;
             l.style.marginTop = 0;
