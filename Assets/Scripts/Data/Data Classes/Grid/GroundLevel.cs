@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 /// <summary>Util class for managment of each different level.</summary>
 public class GroundLevel : MonoBehaviour
@@ -36,6 +38,36 @@ public class GroundLevel : MonoBehaviour
     /// <summary>If the level is unlocked(has a elevator).</summary>
     public bool unlocked;
     #endregion
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Vector3 vec = new Vector3(0, transform.position.y+1, 0);
+        for (int i = 0; i < width; i++)
+        {
+            vec.x = i;
+            for (int j = 0; j < height; j++)
+            {
+                vec.z = j;
+                switch (grid[i, j])
+                {
+                    case Rock:
+                        Gizmos.color = Color.black;
+                        break;
+                    case Building:
+                        Gizmos.color = Color.darkGreen;
+                        break;
+                    case Road:
+                        continue;
+                    case Water:
+                        Gizmos.color = Color.darkBlue;
+                        break;
+                }
+                Gizmos.DrawCube(vec, new(1, 1, 1));
+            }
+        }
+    }
+#endif
 
     #region Base Grid operations
     /// <summary>
@@ -150,6 +182,7 @@ public class GroundLevel : MonoBehaviour
                     break;
                 case GridItemType.Pipe:
                     overlays.Add(new(itemPos.x, itemPos.z), load ? -1 : i, false);
+                    SetGridItem(new(x, y), building);
                     break;
                 case GridItemType.Water:
                     (building as WaterPump).waterSource = GetGridItem(new(x, y)) as Water;
