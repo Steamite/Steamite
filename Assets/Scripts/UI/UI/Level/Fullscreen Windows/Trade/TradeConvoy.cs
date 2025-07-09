@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
-
 [Serializable]
 public class TradeConvoy
 {
@@ -66,7 +65,7 @@ public class TradeConvoy
         string x = buying.ToString();
         if (x != "")
             s += $"resources:{x}";
-        s += $"reward:{reward}";
+        //s += $"reward:{reward}";
         return s;
     }
 }

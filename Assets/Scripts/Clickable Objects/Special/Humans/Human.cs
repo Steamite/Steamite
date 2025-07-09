@@ -206,9 +206,9 @@ public class Human : ClickableObject
         transform.GetChild(1).GetComponent<MeshRenderer>().material.color = s.color.ConvertColor();
         id = save.id;
         objectName = save.objectName;
-        SetJob(new JobData(s.jobSave, this));
         Inventory = new(20);
-        MyRes.ManageRes(Inventory, s.inventory, 1);
+        SetJob(new JobData(s.jobSave, this));
+        Inventory.Manage(s.inventory, true);
         specialization = s.specs;
         // house assigment
         if (s.houseID != -1)

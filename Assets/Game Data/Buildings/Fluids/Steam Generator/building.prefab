@@ -1,0 +1,238 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8266218100161583699
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1844143092968880448}
+  - component: {fileID: 2095240065467319246}
+  - component: {fileID: 3015698113300343158}
+  - component: {fileID: 5352615877605319612}
+  - component: {fileID: 7292234863825777584}
+  - component: {fileID: 8030177481246889903}
+  m_Layer: 2
+  m_Name: building
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1844143092968880448
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8266218100161583699}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 1, z: 2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &2095240065467319246
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8266218100161583699}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &3015698113300343158
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8266218100161583699}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &5352615877605319612
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8266218100161583699}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 4ededca8b19f0154ea53fa1bb7558e2a, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!210 &7292234863825777584
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8266218100161583699}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 10
+  m_SortAtRoot: 0
+--- !u!114 &8030177481246889903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8266218100161583699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ad0e95bbf93c914cad42fb506b5774e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: 
+  id: -1
+  objectName: Steam Generator
+  localRes:
+    types: 
+    ammounts: 
+    capacity:
+      baseValue: 25
+      currentValue: 25
+    requests: []
+    carriers: []
+    mods: 
+  _materialColors: []
+  _meshRenderers: []
+  buildingCategories: 8
+  blueprint:
+    size:
+      x: 2
+      z: 3
+      y: 0
+    moveBy:
+      x: -0.5
+      z: 0.5
+      y: 0
+    anchor:
+      x: 1
+      z: 1
+      y: 0
+    itemList:
+    - pos:
+        x: -1
+        z: -1
+        y: 0
+      itemType: 5
+    - pos:
+        x: -1
+        z: 0
+        y: 0
+      itemType: 1
+    - pos:
+        x: -1
+        z: 1
+        y: 0
+      itemType: 3
+    - pos:
+        x: 0
+        z: -1
+        y: 0
+      itemType: 1
+    - pos:
+        x: 0
+        z: 0
+        y: 0
+      itemType: 4
+    - pos:
+        x: 0
+        z: 1
+        y: 0
+      itemType: 3
+  cost:
+    types: 03000000
+    ammounts: 05000000
+    baseResource:
+      types: 03000000
+      ammounts: 05000000
+    money:
+      baseValue: 20
+      currentValue: 20
+  constructed: 0
+  deconstructing: 0
+  constructionProgress: 0
+  maximalProgress: 0
+  categoryID: 3
+  wrapperID: 1473669319
+  assignLimit:
+    baseValue: 2
+    currentValue: 2
+  productionTime: 2
+  resourceCost:
+    types: 01000000
+    ammounts: 02000000
+    baseResource:
+      types: 01000000
+      ammounts: 02000000
+  resourceYield:
+    types: 02000000
+    ammounts: 0f000000
+    baseResource:
+      types: 02000000
+      ammounts: 0f000000
+  fluidCost:
+    types: 00000000
+    ammounts: 01000000
+    capacities: 
+  fluidYeild:
+    types: 01000000
+    ammounts: 05000000
+    capacities: 
+  storedFluids:
+    types: 
+    ammounts: 
+    capacities: 

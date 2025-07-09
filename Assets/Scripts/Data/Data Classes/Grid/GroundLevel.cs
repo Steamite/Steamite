@@ -310,7 +310,16 @@ public class GroundLevel : MonoBehaviour
                         ref canBuild);
                     break;
                 case GridItemType.Pipe:
-                    tile.GetComponent<Image>().color = new(1f, 0.5490196f, 0f, 0.25f);
+                    c = new(1, 0.843f, 0, 0.25f);
+                    errC = new(1, 0, 0, 0.25f);
+                    CheckMassObscursion(
+                        itemPos,
+                        tile.GetComponent<Image>(),
+                        c,
+                        errC,
+                        ref canBuild,
+                        foreignObscuredRoads,
+                        foreignEntryOverlay);
                     break;
                 default:
                     continue;

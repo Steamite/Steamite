@@ -100,6 +100,6 @@ public class Outpost
         }
         level++;
         timeToFinish = SceneRefs.tick.GetWeekTime(); // marks the finished time
-        production.ammount[0] += resourceAmmount[production.type[0]]; // upgrades the production
+        production.ammounts[0] += resourceAmmount[production.types[0]]; // upgrades the production
     }
 }

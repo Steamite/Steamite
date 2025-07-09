@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 public partial class HumanInfo : InfoWindowControl
 {
     Label specialization, efficiency, jobType, jobPosition, jobObject;
-    ResourceList inventory;
+    ResList inventory;
 
     public override void Open(object data)
     {
@@ -72,7 +72,7 @@ public partial class HumanInfo : InfoWindowControl
 
         //inventory
         Add(new Label("Inventory") { name = "Resource-Header" });
-        Add(inventory = new ResourceList());
+        Add(inventory = new ResList());
         inventory.verticalPadding = 2;
     }
 }

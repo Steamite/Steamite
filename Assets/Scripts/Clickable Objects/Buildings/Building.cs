@@ -9,7 +9,8 @@ public enum BuildingCategType
 {
     Population,
     Production,
-    Research
+    Research,
+    Fluid
 }
 
 /// <summary>
@@ -88,7 +89,7 @@ public class Building : StorageObject
     }
 
     /// <summary>
-    /// Opens and fills needed components in Building Visual Element.
+    /// Opens and fills needed components in "Building" VisualElement.
     /// </summary>
     /// <param name="info"><see cref="InfoWindow"/> supplied from <see cref="OpenWindow"/>.</param>
     /// <param name="toEnable">List of components to enable in the Visual Element.</param>
@@ -145,7 +146,16 @@ public class Building : StorageObject
             SceneRefs.jobQueue.AddJob(JobState.Constructing, this);
             ChangeRenderMode(true);
         }
+
         base.Load(save);
+        if (this is IFluidWork)
+        {
+            ((IFluidWork)this).CreatePipes(true);
+        }
+        if(this is IResourceProduction)
+        {
+            ((IResourceProduction)this).Init(constructed);
+        }
     }
     #endregion Saving
 
@@ -212,6 +222,9 @@ public class Building : StorageObject
         ChangeRenderMode(false);
         if (selected)
             OpenWindow();
+
+        if (this is IFluidWork fluidWork)
+            fluidWork.ConnectToNetwork();
     }
     #endregion
 
@@ -304,13 +317,13 @@ public class Building : StorageObject
         Resource r = new();
         if (constructed)
         {
-            MyRes.ManageRes(r, cost, 1);
-            for (int i = 0; i < r.ammount.Count; i++)
+            r.Manage(cost, true);
+            for (int i = 0; i < r.ammounts.Count; i++)
             {
-                r.ammount[i] /= 2;
+                r.ammounts[i] /= 2;
             }
         }
-        MyRes.ManageRes(r, localRes, 1);
+        r.Manage(localRes, true);
         DestoyBuilding(); // destroy self
         return SceneRefs.objectFactory.CreateChunk(instantPos, r, true);
     }
@@ -381,23 +394,23 @@ public class Building : StorageObject
     /// <returns>Missing resources.</returns>
     public virtual Resource GetDiff(Resource inventory)
     {
-        Resource r = null;
-        r = MyRes.DiffRes(cost, localRes.Future(), inventory);
-        return r;
+        return inventory.Diff(localRes.Future(), cost);
     }
     /// <summary>Short info for building buttons.</summary>
     public virtual List<string> GetInfoText()
     {
-        return new() { $"<u>Costs</u>:\n{cost.GetDisplayText()}" };
+        return new() { $"<u>Costs</u>:\n{cost}" };
     }
 
     /// <summary>Checks if you can afford the building.</summary>
     public virtual bool CanPlace()
     {
-        if (MyRes.CanAfford(cost) && MyGrid.CanPlace(this))
-            return true;
-        else
-            return false;
+        bool canPlace = MyRes.CanAfford(cost) && MyGrid.CanPlace(this);
+        if(this is IFluidWork fluidWork)
+        {
+            fluidWork.AttachedPipes.ForEach(q => q.FindConnections(canPlace));
+        }
+        return canPlace;
     }
 
     /// <summary>
@@ -411,17 +424,39 @@ public class Building : StorageObject
         GetComponent<SortingGroup>().sortingLayerName = "Buildings";
 
         SceneRefs.gridTiles.HighLight(new(), gameObject);
-        MyRes.UpdateResource(cost, -1);
-        MyRes.ManageMoneyGlobal(-cost.Money);
+        MyRes.PayCostGlobal(cost);
         SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         UniqueID();
         MyGrid.SetBuilding(this);
+
+        if(this is IFluidWork fluidWork)
+        {
+            fluidWork.PlacePipes();
+        }
     }
 
     public virtual void InitModifiers()
     {
         cost.Init();
         ((IModifiable)LocalRes.capacity).Init();
+
+        #region Interface modifiers
+        if (this is IAssign assign)
+        {
+            ((IModifiable)assign.AssignLimit).Init();
+        }
+
+        if(this is IProduction prod)
+        {
+            prod.ProdSpeed = new(1);
+            if (this is IResourceProduction resProd)
+            {
+                resProd.InputResource.capacity = new(-1);
+                resProd.ResourceCost.Init();
+                resProd.ResourceYield.Init();
+            }
+        }
+        #endregion
     }
 
 

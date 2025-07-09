@@ -126,8 +126,8 @@ MonoBehaviour:
   id: -1
   objectName: Water Pump
   localRes:
-    type: 
-    ammount: 
+    types: 
+    ammounts: 
     capacity:
       baseValue: 50
       currentValue: 50
@@ -136,7 +136,7 @@ MonoBehaviour:
     mods: 
   _materialColors: []
   _meshRenderers: []
-  buildingCategories: 3
+  buildingCategories: 8
   blueprint:
     size:
       x: 1
@@ -172,11 +172,11 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    type: 03000000
-    ammount: 02000000
+    types: 
+    ammounts: 
     baseResource:
-      type: 03000000
-      ammount: 02000000
+      types: 
+      ammounts: 
     money:
       baseValue: 0
       currentValue: 0

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public interface IFluidWork
@@ -7,7 +8,7 @@ public interface IFluidWork
     Fluid StoredFluids { get; set; }
 
     /// <summary>
-    /// Call in PlaceBuilding(), replaces or preps pipes.
+    /// Call in PlaceBuilding(), places pipes.
     /// </summary>
     /// <param name="t">Building reference</param>
     void PlacePipes()
@@ -16,28 +17,8 @@ public interface IFluidWork
         {
             buildPipe.PlacePipe();
         }
-        /*
-        foreach (BuildPipe p in building.transform.GetChild(3).GetComponentsInChildren<BuildPipe>())
-        {
-            GridPos grid = new(p.gameObject);
-            Pipe prevPipe = MyGrid.pipeGrid[(int)grid.x, (int)grid.z];
-            if (prevPipe && prevPipe.id != p.id)
-            {
-                BuildPipe newPipe = prevPipe.gameObject.AddComponent<BuildPipe>();
-                newPipe.FillData(prevPipe, building);
-                prevPipe.transform.parent = building.transform.GetChild(3);
-                if (prevPipe.associatedNetwork != -1)
-                {
-                    FluidNetwork fluidNet = MyGrid.fluidNetworks.First(q => q.networkID == prevPipe.associatedNetwork);
-                    fluidNet.pipes[fluidNet.pipes.FindIndex(q => q.id == prevPipe.id)] = newPipe;
-                    fluidNet.buildings.Add(building);
-                }
-                Object.Destroy(prevPipe);
-                Object.Destroy(p.gameObject);
-            }
-            MyGrid.pipeGrid[(int)grid.x, (int)grid.z] = p;
-        }*/
     }
+
     /// <summary>
     /// Call in FinishBuild(), adds the build and pipes into the network.
     /// </summary>
@@ -49,6 +30,7 @@ public interface IFluidWork
             buildPipe.FinishBuild();
         }
     }
+
     /// <summary>
     /// Call on DestoyBuilding().
     /// </summary>
@@ -62,6 +44,69 @@ public interface IFluidWork
             {
                 buildPipe.DisconnectPipe(i, true);
             }
+        }
+    }
+
+    /// <summary>
+    /// Finds buildings that can contain the needed fluids and then tries to take it from them.
+    /// </summary>
+    /// <param name="fluid">Fluid to take</param>
+    bool TakeFromNetwork(Fluid fluid, bool immediatelyUse = true)
+    {
+        if (immediatelyUse && StoredFluids.Contains(fluid))
+        {
+            StoredFluids.Remove(fluid);
+            return true;
+        }
+
+        IEnumerable<FluidNetwork> fluidNetworks =
+            AttachedPipes.Select(q => q.network).Distinct();
+        
+        IEnumerable<IFluidWork> bestSources = fluidNetworks
+            .SelectMany(q => q.storageBuildings
+                .Where(q => q.StoredFluids.types.Union(fluid.types).Count() > 0));
+
+        Fluid remainingTransfer = new(fluid);
+        foreach (var storage in bestSources)
+        {
+            storage.StoredFluids.Remove(ref remainingTransfer);
+            if (remainingTransfer.types.Count == 0)
+            {
+                if(immediatelyUse == false)
+                    StoredFluids.Add(fluid);
+                return true;
+            }
+        }
+
+        for (int i = 0; i < fluid.types.Count; i++)
+        {
+            int j = remainingTransfer.types.IndexOf(fluid.types[i]);
+            int x = j == -1 ? 0 : remainingTransfer.ammounts[j];
+            
+            StoredFluids.Add(
+                fluid.types[i], 
+                fluid.ammounts[i] - x);
+        }
+        return false;
+    }
+
+    public void StoreInNetwork(Fluid fluid)
+    {
+        if (StoredFluids.HasSpace(fluid))
+        {
+            StoredFluids.Add(fluid);
+            ((IUpdatable)this).UIUpdate(nameof(StoredFluids));
+            return;
+        }
+
+        IEnumerable<FluidNetwork> fluidNetworks =
+            AttachedPipes.Select(q => q.network).Distinct();
+
+        IFluidWork build = fluidNetworks.SelectMany(q => q.storageBuildings).FirstOrDefault(q => q.StoredFluids.HasSpace(fluid));
+        if (build != null)
+        {
+            build.StoredFluids.Add(fluid);
+            ((IUpdatable)build).UIUpdate(nameof(StoredFluids));
         }
     }
 
@@ -90,65 +135,4 @@ public interface IFluidWork
             ConnectToNetwork();
         }
     }
-
-
-
-    /// <summary>
-    /// Call when there's no space to store the resource
-    /// </summary>
-    /// <param name="resource"></param>
-    /// <param name="t"></param>
-    /// <param name="deposit">If deposit find place to store, else find place to take from </param>
-    /// <returns></returns>
-    /*Building FindStore(FluidType fluidType, Transform t, bool deposit)
-    {
-        List<int> networks = new();
-        foreach (FluidNetwork network in t.GetComponentsInChildren<Pipe>().Select(q => q.network))
-        {
-            if (networks.IndexOf(network.networkID) == -1)
-            {
-                // add prio to production buildings
-                networks.Add(network.networkID);
-                foreach (Building building in network.buildings)
-                {
-                    int i = building.GetFluid().type.IndexOf(fluidType);
-                    if (deposit)
-                    {
-                        if (i > -1 && building.GetFluid().ammount[i] < building.GetFluid().capacity[i])
-                        {
-                            return building;
-                        }
-                    }
-                    else
-                    {
-                        if (i > -1 && building.GetFluid().ammount[i] > 0)
-                        {
-                            return building;
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public FluidWorkSave SaveFluidData(Transform pipeHolder)
-    {
-        FluidWorkSave workSave = new();
-        workSave.fluid = fluid;
-        workSave.pipeSaves = new();
-        foreach (BuildPipe buildPipe in pipeHolder.GetComponentsInChildren<BuildPipe>())
-        {
-            workSave.pipeSaves.Add(buildPipe.Save());
-        }
-        return workSave;
-    }
-
-    internal void Load(Transform transform, List<ClickableObjectSave> pipeSaves)
-    {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            transform.GetChild(i).GetComponent<BuildPipe>().Load(pipeSaves[i]);
-        }
-    }*/
 }

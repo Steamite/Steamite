@@ -1,19 +1,42 @@
 using System;
 using System.Collections.Generic;
+using TradeData.Locations;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace InfoWindowElements
 {
+
+    public class DoubleUIFluid : DoubleUIResource<FluidType>
+    {
+        public DoubleUIFluid(int _ammount, int _secondAmmount) : base(_ammount, _secondAmmount)
+        {
+        }
+
+        public DoubleUIFluid(int _ammount, int _secondAmmount, FluidType _type) : base(_ammount, _secondAmmount, _type)
+        {
+        }
+    }
+    public class DoubleUIRes : DoubleUIResource<ResourceType>
+    {
+        public DoubleUIRes(int _ammount, int _secondAmmount) : base(_ammount, _secondAmmount)
+        {
+        }
+
+        public DoubleUIRes(int _ammount, int _secondAmmount, ResourceType _type) : base(_ammount, _secondAmmount, _type)
+        {
+        }
+    }
+
     /// <summary>
     /// <inheritdoc/> <br\>
     /// Adds a second ammount.(for costs)
     /// </summary>
-    public class DoubleUIResource : UIResource
+    public class DoubleUIResource<TEnum> : UIResource<TEnum> where TEnum : Enum
     {
         public int secondAmmount;
-        public DoubleUIResource(int _ammount, int _secondAmmount, ResourceType _type) : base(_ammount, _type)
+        public DoubleUIResource(int _ammount, int _secondAmmount, TEnum _type) : base(_ammount, _type)
         {
             secondAmmount = _secondAmmount;
         }
@@ -24,9 +47,11 @@ namespace InfoWindowElements
     }
 
     [UxmlElement]
-    public partial class DoubleResourceList : ResourceList
+    public partial class DoubleResourceList<T, TEnum> : ResourceList<T, TEnum>
+        where T : ResAmmount<TEnum>
+        where TEnum : Enum
     {
-        [CreateProperty] List<UIResource> secondResource;
+        [CreateProperty] List<UIResource<TEnum>> secondResource;
         /// <summary>Display as x/y or x (y).</summary>
         [UxmlAttribute] public bool cost;
 
@@ -62,7 +87,7 @@ namespace InfoWindowElements
         protected override void BindItem(VisualElement el, int i)
         {
             base.BindItem(el, i);
-            if (cost && resources[i].ammount < ((DoubleUIResource)resources[i]).secondAmmount)
+            if (cost && resources[i].ammount < ((DoubleUIResource<TEnum>)resources[i]).secondAmmount)
                 el.Q<Label>("Value").style.color = Color.red;
         }
         #endregion
@@ -80,8 +105,8 @@ namespace InfoWindowElements
                     Building b = (Building)data;
                     if (b.id == -1)
                     {
-                        mainBinding = SetupResTypes(b.Cost, nameof(ResourceDisplay.GlobalResources));
-                        mainBinding.sourceToUiConverters.AddConverter((ref MoneyResource storage) => ToUIRes(storage));
+                        mainBinding = SetupResTypes(b.Cost as T, nameof(ResourceDisplay.GlobalResources));
+                        mainBinding.sourceToUiConverters.AddConverter((ref MoneyResource storage) => ToUIRes(storage as T));
                         data = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
                         dataSource = data;
                         SetBinding(nameof(resources), mainBinding);
@@ -94,17 +119,17 @@ namespace InfoWindowElements
                         // Creates a list that's used as itemSource, containg a static resouce and a dynamic binded resource.
                         if (cost)
                             mainBinding = SetupResTypes(
-                                ((IResourceProduction)b).ProductionCost,
-                                nameof(IResourceProduction.ProductionCost),
+                                ((IResourceProduction)b).ResourceCost as T,
+                                nameof(IResourceProduction.ResourceCost),
                                 nameof(IResourceProduction.InputResource),
                                 data);
                         else
                             mainBinding = SetupResTypes(
-                                ((IResourceProduction)b).ProductionYield,
-                                nameof(IResourceProduction.ProductionYield),
+                                ((IResourceProduction)b).ResourceYield as T,
+                                nameof(IResourceProduction.ResourceYield),
                                 nameof(Building.LocalRes),
                                 data);
-                        mainBinding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage));
+                        mainBinding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage as T));
                     }
                     else if (data is WaterPump)
                     {
@@ -139,7 +164,7 @@ namespace InfoWindowElements
                     Resource resource = tab.LevelData.costs[tab.SelectedLevel];
 
                     if (cost)
-                        mainBinding = SetupResTypes(resource, nameof(ResourceDisplay.GlobalResources));
+                        mainBinding = SetupResTypes(resource as T, nameof(ResourceDisplay.GlobalResources));
                     else
                         throw new NotImplementedException();
 
@@ -147,7 +172,7 @@ namespace InfoWindowElements
                     mainBinding.sourceToUiConverters.AddConverter((ref Resource globalStorage) =>
                     {
                         tab.UpdateCostView();
-                        return ToUIRes(globalStorage);
+                        return ToUIRes(globalStorage as T);
                     });
                     data = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
                     dataSource = data;
@@ -170,13 +195,13 @@ namespace InfoWindowElements
 
         protected void SetResWithoutBinding(Resource res)
         {
-            List<UIResource> temp = new List<UIResource>();
+            List<UIResource<TEnum>> temp = new List<UIResource<TEnum>>();
             if (res is MoneyResource && showMoney && ((MoneyResource)res).Money > -1)
-                temp.Add(new DoubleUIResource(MyRes.Money, +((MoneyResource)res).Money));
-            for (int i = 0; i < res.type.Count; i++)
+                temp.Add(new DoubleUIResource<TEnum>(MyRes.Money, +((MoneyResource)res).Money));
+            for (int i = 0; i < res.types.Count; i++)
             {
-                temp.Add(new DoubleUIResource(
-                    MyRes.resDisplay.GlobalResources[res.type[i]], res.ammount[i], res.type[i]));
+                temp.Add(new DoubleUIResource<TEnum>(
+                    MyRes.resDisplay.GlobalResources[res.types[i]], res.ammounts[i], (TEnum)(object)res.types[i]));
             }
             resources = temp;
         }
@@ -187,23 +212,31 @@ namespace InfoWindowElements
         /// <param name="resource">Cost resource.</param>
         /// <param name="propName">Name of the datasource property.</param>
         /// <returns></returns>
-        protected DataBinding SetupResTypes(Resource resource, string propName)
+        protected DataBinding SetupResTypes(T resource, string propName)
         {
             resources = new();
-            if (resource is MoneyResource && showMoney)
-                resources.Add(new DoubleUIResource(
-                    MyRes.Money,
-                    +((MoneyResource)resource).Money));
-            for (int i = 0; i < resource.type.Count; i++)
-                resources.Add(new DoubleUIResource(
-                        0,
-                        resource.ammount[i],
-                        resource.type[i]));
+            showMoney = false;
+            if (resource is MoneyResource _money)
+            {
+                if (_money.Money > 0)
+                {
+                    showMoney = true;
+                    resources.Add(new DoubleUIResource<TEnum>(
+                        MyRes.Money,
+                        +_money.Money));
+                }
+            }
+
+            for (int i = 0; i < resource.types.Count; i++)
+                resources.Add(new DoubleUIResource<TEnum>(
+                    0,
+                    resource.ammounts[i],
+                    resource.types[i]));
 
             return BindingUtil.CreateBinding(propName);
         }
 
-        protected DataBinding SetupResTypes(Resource resource, string secondPropName, string propName, object data)
+        protected DataBinding SetupResTypes(T resource, string secondPropName, string propName, object data)
         {
             DataBinding mainBind = SetupResTypes(resource, propName);
             DataBinding dataBinding = BindingUtil.CreateBinding(secondPropName);
@@ -212,11 +245,11 @@ namespace InfoWindowElements
             return mainBind;
         }
 
-        protected virtual List<UIResource> UpdateSecondResource(Resource resource)
+        protected virtual List<UIResource<TEnum>> UpdateSecondResource(Resource resource)
         {
             Debug.Log(resource);
-            for (int i = 0; i < resource.type.Count; i++)
-                ((DoubleUIResource)resources[i]).secondAmmount = resource.ammount[i];
+            for (int i = 0; i < resource.types.Count; i++)
+                ((DoubleUIResource<TEnum>)resources[i]).secondAmmount = resource.ammounts[i];
             resources = resources;
             return resources;
         }
@@ -224,18 +257,17 @@ namespace InfoWindowElements
 
         #region Convertors
         /// <inheritdoc/>
-        protected override List<UIResource> ToUIRes(Resource storage)
+        protected override List<UIResource<TEnum>> ToUIRes(T storage)
         {
-            if (storage is MoneyResource)
+            if (showMoney)
             {
-                int i = resources.FindIndex(q => q.type == null);
-                resources[i].ammount = +((MoneyResource)storage).Money;
+                resources[0].ammount = MyRes.Money;
             }
-            for (int i = 0; i < storage.type.Count; i++)
+            for (int i = 0; i < storage.types.Count; i++)
             {
-                int j = resources.FindIndex(q => q.type != null && (ResourceType)q.type == storage.type[i]);
+                int j = resources.FindIndex(q => q.type != null && q.type.Equals(storage.types[i]));
                 if (j > -1)
-                    resources[j].ammount = storage.ammount[i];
+                    resources[j].ammount = storage.ammounts[i];
             }
             return resources;
         }
@@ -245,12 +277,12 @@ namespace InfoWindowElements
         /// </summary>
         /// <param name="resource">Data.</param>
         /// <returns>Based on <see cref="cost"/></returns>
-        protected override string ConvertString(UIResource resource)
+        protected override string ConvertString(UIResource<TEnum>resource)
         {
             if (cost)
-                return $"{resource.ammount}/{((DoubleUIResource)resource).secondAmmount}";
+                return $"{resource.ammount}/{((DoubleUIResource<TEnum>)resource).secondAmmount}";
             else
-                return ((DoubleUIResource)resource).secondAmmount > 0 ? $"{((DoubleUIResource)resource).secondAmmount}({resource.ammount})" : "";
+                return ((DoubleUIResource<TEnum>)resource).secondAmmount > 0 ? $"{((DoubleUIResource<TEnum>)resource).secondAmmount}({resource.ammount})" : "";
         }
         #endregion
 

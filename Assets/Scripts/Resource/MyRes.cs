@@ -56,7 +56,7 @@ public static class MyRes
             {
                 jQ.storages.Add(_s);
                 globalStorageSpace += _s.LocalResources.capacity - _s.LocalResources.Sum();
-                ManageRes(resDisplay.GlobalResources, _s.LocalResources, 1);
+                resDisplay.GlobalResources.Manage(_s.LocalResources, true);
             }
             resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
             resDisplay.UIUpdate(nameof(ResourceDisplay.Money));
@@ -75,60 +75,15 @@ public static class MyRes
     /// </summary>
     /// <param name="cost"><inheritdoc cref="ManageRes(Resource, Resource, float)" path="/param[@name='source']"/></param>
     /// <param name="mod"><inheritdoc cref="ManageRes(Resource, Resource, float)" path="/param[@name='mod']"/></param>
-    public static void UpdateResource(Resource cost, int mod)
+    public static void UpdateResource(Resource cost, bool add)
     {
-        ManageRes(resDisplay.GlobalResources, cost, mod);
+        resDisplay.GlobalResources.Manage(cost, add);
         resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
     }
     #endregion
 
     #region Resource moving
 
-
-    /// <summary>
-    /// Adds or removes resources in destination.
-    /// </summary>
-    /// <param name="destination">What will change</param>
-    /// <param name="source">Change ammount</param>
-    /// <param name="mod">1 = add, -1 = remove</param>
-    public static void ManageRes(Resource destination, Resource source, float mod) // destination is the resource/removed from; source ammount to be transfered
-    {
-        try
-        {
-            if (destination.Sum() == 0 && mod == 1)
-            {
-                destination.type = source.type.ToList();
-                destination.ammount = source.ammount.ToList();
-                return;
-            }
-            for (int i = 0; i < source.type.Count; i++)
-            {
-                int j = destination.type.IndexOf(source.type[i]);
-                if (j > -1)
-                {
-                    destination.ammount[j] += Mathf.FloorToInt(source.ammount[i] * mod);
-                    continue;
-                }
-                else if (mod > -1)
-                {
-                    if (source.ammount[i] > 0)
-                    {
-                        destination.ammount.Add(Mathf.FloorToInt(source.ammount[i] * mod));
-                        destination.type.Add(source.type[i]);
-                    }
-                    continue;
-                }
-                Debug.LogError("Not found!");
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e + "\n");
-            Debug.Log(string.Join(';', destination) + "\n");
-            Debug.Log(string.Join(';', source) + "\n");
-            Debug.Log(mod);
-        }
-    }
 
     /// <summary>
     /// moves resource from "source" to "destination"
@@ -148,30 +103,30 @@ public static class MyRes
     {
         try
         {
-            for (int i = 0; i < diff.type.Count; i++)
+            for (int i = 0; i < diff.types.Count; i++)
             {
-                if (diff.ammount[i] == 0)
+                if (diff.ammounts[i] == 0)
                 {
-                    diff.ammount.RemoveAt(i);
-                    diff.type.RemoveAt(i);
+                    diff.ammounts.RemoveAt(i);
+                    diff.types.RemoveAt(i);
                     continue;
                 }
-                int dIndex = destination.type.IndexOf(diff.type[i]);
-                int sIndex = source.type.IndexOf(diff.type[i]);
-                if (sIndex == -1 || source.ammount[sIndex] == 0)
+                int dIndex = destination.types.IndexOf(diff.types[i]);
+                int sIndex = source.types.IndexOf(diff.types[i]);
+                if (sIndex == -1 || source.ammounts[sIndex] == 0)
                 {
-                    Debug.LogWarning($"source is missing: {diff.ammount[i]} units of {diff.type[i]}");
+                    Debug.LogWarning($"source is missing: {diff.ammounts[i]} units of {diff.types[i]}");
                     continue;
                 }
                 if (dIndex == -1)
                 {
-                    dIndex = destination.type.Count;
-                    destination.ammount.Add(0);
-                    destination.type.Add(diff.type[i]);
+                    dIndex = destination.types.Count;
+                    destination.ammounts.Add(0);
+                    destination.types.Add(diff.types[i]);
                 }
                 // can Transfer setting
-                int canTransfer = source.ammount[sIndex] > diff.ammount[i]
-                    ? diff.ammount[i] : source.ammount[sIndex];
+                int canTransfer = source.ammounts[sIndex] > diff.ammounts[i]
+                    ? diff.ammounts[i] : source.ammounts[sIndex];
                 if (!ingoreCapacity)
                     canTransfer = canTransfer > destination.FreeSpace
                         ? destination.FreeSpace
@@ -186,10 +141,10 @@ public static class MyRes
                 // moving the resource
                 if (canTransfer > 0)
                 {
-                    destination.ammount[dIndex] += canTransfer;
-                    source.ammount[sIndex] -= canTransfer;
+                    destination.ammounts[dIndex] += canTransfer;
+                    source.ammounts[sIndex] -= canTransfer;
                     ammountToTransfer -= canTransfer;
-                    diff.ammount[i] -= canTransfer;
+                    diff.ammounts[i] -= canTransfer;
                     if (ammountToTransfer == 0)
                         return true; // max transfer this tick reached wait for the next one
                 }
@@ -237,7 +192,7 @@ public static class MyRes
 
                     MoveRes(resource, future, diff, -1);
                     sResource.RequestRes(resource, human, -1);
-                    human.destination.RequestRes(resource.Clone(), human, 1);
+                    human.destination.RequestRes(new(resource), human, 1);
                     human.SetJob(job);
                     human.lookingForAJob = false;
                     if (diff.Sum() == 0)
@@ -306,9 +261,9 @@ public static class MyRes
             int spaceToStore = storages[i].LocalResources.capacity - storages[i].LocalResources.Future().Sum();
             if (spaceToStore <= 0)
                 continue;
-            for (int j = 0; j < r.type.Count; j++)
+            for (int j = 0; j < r.types.Count; j++)
             {
-                if (storages[i].CanStore[(int)r.type[j]] == true)
+                if (storages[i].CanStore[(int)r.types[j]] == true)
                 {
                     if (perfect)
                     {
@@ -346,16 +301,16 @@ public static class MyRes
         for (int i = 0; i < stores.Count; i++)
         {
             Resource future = stores[i].LocalRes.Future(true);
-            for (int j = 0; j < diff.type.Count; j++)
+            for (int j = 0; j < diff.types.Count; j++)
             {
-                int index = future.type.IndexOf(diff.type[j]);
+                int index = future.types.IndexOf(diff.types[j]);
                 if (index > -1)
                 {
                     if (perfect)
                     {
-                        if (future.ammount[index] >= diff.ammount[j] || future.ammount[index] >= resCap)
+                        if (future.ammounts[index] >= diff.ammounts[j] || future.ammounts[index] >= resCap)
                         {
-                            if (j == diff.type.Count - 1)
+                            if (j == diff.types.Count - 1)
                             {
                                 storages.Add(stores[i]);
                             }
@@ -364,7 +319,7 @@ public static class MyRes
                     }
                     else
                     {
-                        if (future.ammount[index] > 0)
+                        if (future.ammounts[index] > 0)
                             storages.Add(stores[i]);
                     }
                 }
@@ -380,92 +335,13 @@ public static class MyRes
     }
 
     /// <summary>
-    /// Compares both paramets and returns what is needed, but not available.
-    /// </summary>
-    /// <param name="cost">Needed resources.</param>
-    /// <param name="storA">Available resources.</param>
-    /// <returns>Resources that are missing.</returns>
-    public static Resource DiffRes(Resource cost, Resource storA)
-    {
-        Resource ret = new();
-        for (int i = 0; i < cost.type.Count; i++)
-        {
-            int minus; // total stored
-            int j = storA.type.IndexOf(cost.type[i]);
-            minus = j > -1 ? storA.ammount[j] : 0;
-            if (minus > 0)
-            {
-                int exchange = DiffInPositive(cost.ammount[i], minus);
-                if (exchange > 0)
-                {
-                    ret.ammount.Add(exchange);
-                    ret.type.Add(cost.type[i]);
-                }
-            }
-            else
-            {
-                ret.ammount.Add(cost.ammount[i]);
-                ret.type.Add(cost.type[i]);
-            }
-        }
-        return ret;
-    }
-
-    /// <summary>
-    /// <inheritdoc cref="DiffRes(Resource, Resource)"/>
-    /// </summary>
-    /// <param name="cost"><inheritdoc cref="DiffRes(Resource, Resource)" path="/param[@name='cost']"/></param>
-    /// <param name="storA"><inheritdoc cref="DiffRes(Resource, Resource)" path="/param[@name='storA']"/></param>
-    /// <param name="storB">Second available resource.</param>
-    /// <returns></returns>
-    public static Resource DiffRes(Resource cost, Resource storA, Resource storB)
-    {
-        Resource ret = new();
-        for (int i = 0; i < cost.type.Count; i++)
-        {
-            int minus; // total stored
-            int j = storA.type.IndexOf(cost.type[i]);
-            minus = j > -1 ? storA.ammount[j] : 0;
-            j = storB.type.IndexOf(cost.type[i]);
-            minus += j > -1 ? storB.ammount[j] : 0;
-            if (minus > 0)
-            {
-                int exchange = DiffInPositive(cost.ammount[i], minus);
-                if (exchange > 0)
-                {
-                    ret.ammount.Add(exchange);
-                    ret.type.Add(cost.type[i]);
-                }
-            }
-            else
-            {
-                ret.ammount.Add(cost.ammount[i]);
-                ret.type.Add(cost.type[i]);
-            }
-        }
-        return ret;
-    }
-
-    /// <summary>
-    /// Compares values and returns the difference between <paramref name="a"/> and <paramref name="b"/>.
-    /// </summary>
-    /// <param name="a"></param>
-    /// <param name="b"></param>
-    /// <returns></returns>
-    static int DiffInPositive(int a, int b)
-    {
-        int diff = a - b;
-        return diff < 0 ? 0 : diff;
-    }
-
-    /// <summary>
     /// Compares against global resources.
     /// </summary>
     /// <param name="cost">Asking cost.</param>
     /// <returns>If the cost can be afforded.</returns>
     public static bool CanAfford(MoneyResource cost)
     {
-        return cost.Money <= Money && DiffRes(cost, resDisplay.GlobalResources).Sum() == 0;
+        return cost.Money <= Money && resDisplay.GlobalResources.Diff(cost).Sum() == 0;
     }
     #endregion
 
@@ -476,11 +352,11 @@ public static class MyRes
     /// <param name="human">Human that is effected by result.</param>
     public static void EatFood(Human human)
     {
-        IStorage store = storage.FirstOrDefault(q => q.LocalResources.ammount[q.LocalResources.Future(true).type.IndexOf(ResourceType.Food)] > 0);
+        IStorage store = storage.FirstOrDefault(q => q.LocalResources.ammounts[q.LocalResources.Future(true).types.IndexOf(ResourceType.Food)] > 0);
         if (store != null)
         {
             store.DestroyResource(ResourceType.Food, 1);
-            UpdateResource(new Resource(new() { ResourceType.Food }, new() { 1 }), -1);
+            UpdateResource(new Resource(new() { ResourceType.Food }, new() { 1 }), false);
             human.ModifyEfficiency(ModType.Food, true);
         }
         else
@@ -499,7 +375,7 @@ public static class MyRes
         IStorage store = Elevator.main;
         if (store != null)
         {
-            UpdateResource(resource, 1);
+            UpdateResource(resource, true);
             MoveRes(store.LocalResources, resource, resource, resource.Sum());
         }
         else
@@ -514,24 +390,24 @@ public static class MyRes
     /// <param name="cost">Cost to pay.</param>
     static void RemoveFromStorageGlobal(Resource cost)
     {
-        UpdateResource(cost, -1);
+        UpdateResource(cost, false);
         for (int i = 0; i < storage.Count; i++)
         {
-            Resource diff = DiffRes(cost, storage[i].LocalResources.Future(true));
-            for (int j = cost.type.Count - 1; j >= 0; j--)
+            Resource diff = storage[i].LocalResources.Future(true).Diff(cost);
+            for (int j = cost.types.Count - 1; j >= 0; j--)
             {
-                int x = diff.type.IndexOf(cost.type[j]);
+                int x = diff.types.IndexOf(cost.types[j]);
                 if (x == -1)
                 {
-                    storage[i].LocalResources[cost.type[j]] -= cost.ammount[j];
-                    cost.ammount.RemoveAt(j);
-                    cost.type.RemoveAt(j);
+                    storage[i].LocalResources[cost.types[j]] -= cost.ammounts[j];
+                    cost.ammounts.RemoveAt(j);
+                    cost.types.RemoveAt(j);
                 }
                 else
                 {
-                    int change = cost.ammount[j] - diff.ammount[x];
-                    storage[i].LocalResources[cost.type[j]] -= change;
-                    cost.ammount[j] -= change;
+                    int change = cost.ammounts[j] - diff.ammounts[x];
+                    storage[i].LocalResources[cost.types[j]] -= change;
+                    cost.ammounts[j] -= change;
                 }
             }
         }

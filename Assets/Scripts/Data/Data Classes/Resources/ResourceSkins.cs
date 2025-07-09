@@ -50,10 +50,6 @@ public class ResourceSkins : ScriptableObject
     /// <returns>The skin for this resource.</returns>
     public Color GetResourceColor(Enum resourceType)
     {
-        if (resourceType == null)
-            return moneySkin.color;
-        /*else if ((ResourceType)resourceType == ResourceType.None)
-            Debug.LogError("None type!");*/
         return skins[(int)(ResourceType)resourceType].color;
     }
 }

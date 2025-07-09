@@ -29,8 +29,8 @@ public class StorageResource : CapacityResource
 
     public StorageResource(Resource res)
     {
-        type = res.type.ToList();
-        ammount = res.ammount.ToList();
+        types = res.types.ToList();
+        ammounts = res.ammounts.ToList();
         requests = new();
         carriers = new();
         mods = new();
@@ -99,23 +99,23 @@ public class StorageResource : CapacityResource
     {
         if (!casheValid)
         {
-            futureCashe = Clone();
+            futureCashe = new(this);
             for (int i = 0; i < requests.Count; i++)
             {
                 int mod = mods[i];
                 Resource r = requests[i];
-                for (int j = 0; j < r.type.Count; j++)
+                for (int j = 0; j < r.types.Count; j++)
                 {
                     int index;
-                    int toAdd = _stored ? (mods[i] == 1 ? 0 : r.ammount[j] * mod) : r.ammount[j] * mod;
-                    if ((index = futureCashe.type.IndexOf(r.type[j])) == -1)
+                    int toAdd = _stored ? (mods[i] == 1 ? 0 : r.ammounts[j] * mod) : r.ammounts[j] * mod;
+                    if ((index = futureCashe.types.IndexOf(r.types[j])) == -1)
                     {
-                        futureCashe.type.Add(r.type[j]);
-                        futureCashe.ammount.Add(toAdd);
+                        futureCashe.types.Add(r.types[j]);
+                        futureCashe.ammounts.Add(toAdd);
                     }
                     else
                     {
-                        futureCashe.ammount[index] += toAdd;
+                        futureCashe.ammounts[index] += toAdd;
                     }
                 }
             }
@@ -149,8 +149,8 @@ public class StorageResource : CapacityResource
 
     public void Load(StorageResSave resSave)
     {
-        type = resSave.type.ToList();
-        ammount = resSave.ammount.ToList();
+        types = resSave.types.ToList();
+        ammounts = resSave.ammounts.ToList();
         requests = resSave.requests;
         mods = resSave.mod;
         carriers = new();
@@ -159,8 +159,8 @@ public class StorageResource : CapacityResource
 
     public void Dump()
     {
-        type.Clear();
-        ammount.Clear();
+        types.Clear();
+        ammounts.Clear();
     }
     #endregion
 }

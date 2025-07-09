@@ -3,15 +3,15 @@ using Unity.Properties;
 using UnityEngine;
 
 /// <summary>Adds Production Handling.</summary>
-public class ProductionBuilding : Building, IAssign, IResourceProduction
+public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
 {
     #region Variables
     [SerializeField] ModifiableInteger assignLimit;
     [SerializeField][Header("Production")] float productionTime;
     [SerializeField] ModifiableFloat prodSpeed;
 
-    [SerializeField] ModifiableResource productionCost = new();
-    [SerializeField] ModifiableResource productionYield = new();
+    [SerializeField] ModifiableResource resourceCost = new();
+    [SerializeField] ModifiableResource resourceYield = new();
     #endregion
 
     #region Properties
@@ -33,8 +33,8 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     [CreateProperty] public ProductionStates ProdStates { get; set; } = new();
     [CreateProperty] public StorageResource LocalResource { get => LocalRes; }
     [CreateProperty] public StorageResource InputResource { get; set; } = new();
-    [CreateProperty] public ModifiableResource ProductionCost { get => productionCost; set => productionCost = value; }
-    [CreateProperty] public ModifiableResource ProductionYield { get => productionYield; set => productionYield = value; }
+    [CreateProperty] public ModifiableResource ResourceCost { get => resourceCost; set => resourceCost = value; }
+    [CreateProperty] public ModifiableResource ResourceYield { get => resourceYield; set => resourceYield = value; }
     #endregion
 
     #endregion
@@ -58,7 +58,6 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
         if (clickable == null)
             clickable = new ResProductionBSave();
         (clickable as ResProductionBSave).inputRes = new(InputResource);
-        (clickable as ProductionBSave).prodTime = ProdTime;
         (clickable as ProductionBSave).currentTime = CurrentTime;
         (clickable as ProductionBSave).ProdStates = ProdStates;
         return base.Save(clickable);
@@ -68,18 +67,8 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     {
         InputResource.Load((save as ResProductionBSave).inputRes);
 
-        ProdTime = (save as ProductionBSave).prodTime;
         CurrentTime = (save as ProductionBSave).currentTime;
         ProdStates = (save as ProductionBSave).ProdStates;
-        if (!ProdStates.supplied)
-        {
-            SceneRefs.jobQueue.AddJob(JobState.Supply, this);
-        }
-        if (constructed && GetDiff(new()).Sum() > 0)
-        {
-            SceneRefs.jobQueue.AddJob(JobState.Pickup, this);
-        }
-        ((IResourceProduction)this).Init(constructed);
         base.Load(save);
     }
     #endregion
@@ -123,15 +112,6 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
 
     #region Construction & Deconstruction
 
-    public override void InitModifiers()
-    {
-        base.InitModifiers();
-        ((IModifiable)AssignLimit).Init();
-        prodSpeed = new(1);
-        InputResource.capacity = new(-1);
-        productionCost.Init();
-        productionYield.Init();
-    }
     /// <summary>
     /// <inheritdoc/>
     /// And requests resources for production.
@@ -139,7 +119,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     public override void FinishBuild()
     {
         base.FinishBuild();
-        if (ProductionCost.Sum() == 0)
+        if (ResourceCost.Sum() == 0)
         {
             ProdStates.supplied = true;
             return;
@@ -206,7 +186,7 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
                 c = SceneRefs.objectFactory.CreateChunk(instantPos, InputResource, true);
             }
             else
-                MyRes.ManageRes(c.LocalRes, InputResource, 1);
+                c.LocalRes.Manage(InputResource, true);
         }
         return c;
     }
@@ -228,9 +208,9 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
         }
         else
         {
-            Resource x = new();
-            MyRes.ManageRes(x, ProductionCost, 2);
-            return MyRes.DiffRes(x, InputResource.Future(), r);
+            Resource cost = new();
+            cost.Manage(ResourceCost, true, 2);
+            return r.Diff(InputResource.Future(), cost);
         }
     }
 
@@ -239,9 +219,9 @@ public class ProductionBuilding : Building, IAssign, IResourceProduction
     {
         List<string> strings = base.GetInfoText();
         strings[0] = $"Can employ up to {AssignLimit} workers";
-        strings.Insert(1, $"<u>Produces</u>: \n{ProductionYield.GetDisplayText()}");
-        if (ProductionCost.Sum() > 0)
-            strings[1] += $", from: \n{ProductionCost.GetDisplayText()}";
+        strings.Insert(1, $"<u>Produces</u>: \n{ResourceYield}");
+        if (ResourceCost.Sum() > 0)
+            strings[1] += $", from: \n{ResourceCost}";
         return strings;
     }
     #endregion

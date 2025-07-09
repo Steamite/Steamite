@@ -171,8 +171,8 @@ public class StorageBSave : BSave
         int i = 1;
         foreach (var item in Enum.GetNames(typeof(ResourceType)).Skip(1))
         {
-            resSave.type.Add((ResourceType)i);
-            resSave.ammount.Add(100);
+            resSave.types.Add((ResourceType)i);
+            resSave.ammounts.Add(100);
             canStore.Add(true);
             i++;
         }
@@ -194,15 +194,8 @@ public class ResProductionBSave : ProductionBSave
 
 public class ProductionBSave : AssignBSave
 {
-    public float prodTime = 20;
     public float currentTime = 0;
-    public float modifier = 1;
     public ProductionStates ProdStates;
-}
-[Serializable]
-public class WaterPumpSave : ProductionBSave
-{
-    public Fluid fluidSave;
 }
 
 public class PipeBSave : BSave
@@ -213,20 +206,22 @@ public class LightWeightPipeBSave : ClickableObjectSave
 {
     public int networkID;
 }
+
 public class TankBSave : BSave
 {
     public Fluid fluidSave;
 }
 
-public class FluidProdBSave : ProductionBSave
+public class FluidResProductionSave : ResProductionBSave
 {
-    public FluidWorkSave fluidSave;
+    public Fluid fluidSave;
 }
 
-public class FluidWorkSave
+
+[Serializable]
+public class FluidProdBSave : ProductionBSave
 {
-    public Fluid fluid;
-    public List<ClickableObjectSave> pipeSaves;
+    public Fluid fluidSave;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -260,8 +255,8 @@ public class StorageResSave : Resource
 
     public StorageResSave(StorageResource storageResource)
     {
-        type = storageResource.type.ToList();
-        ammount = storageResource.ammount.ToList();
+        types = storageResource.types.ToList();
+        ammounts = storageResource.ammounts.ToList();
         requests = storageResource.requests;
         carriers = storageResource.carriers.Select(q => q.id).ToList();
         mod = storageResource.mods;

@@ -87,7 +87,7 @@ public class Rock : ClickableObject
     {
         if (clickable == null)
             clickable = new RockSave();
-        if (rockYield?.type.Count == 0)
+        if (rockYield?.types.Count == 0)
             (clickable as RockSave).yeild = null;
         else
             (clickable as RockSave).yeild = rockYield;

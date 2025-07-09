@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace InfoWindowElements
 {
     [UxmlElement]
-    public partial class DoubleResourceListWithEvent : DoubleResourceList
+    public partial class DoubleResourceListWithEvent : DoubleResourceList<Resource, ResourceType>
     {
         Action<bool> onResChange;
         public override void Open(object data)
@@ -33,16 +33,16 @@ namespace InfoWindowElements
             }
         }
 
-        protected override List<UIResource> ToUIRes(Resource storage)
+        protected override List<UIResource<ResourceType>> ToUIRes(Resource storage)
         {
             bool canAfford = true;
             for (int i = 0; i < resources.Count; i++)
             {
-                int j = storage.type.IndexOf((ResourceType)resources[i].type);
+                int j = storage.types.IndexOf(resources[i].type);
                 if (j > -1)
                 {
-                    resources[i].ammount = storage.ammount[j];
-                    if (resources[i].ammount < storage.ammount[j])
+                    resources[i].ammount = storage.ammounts[j];
+                    if (resources[i].ammount < storage.ammounts[j])
                         canAfford = false;
                 }
                 else

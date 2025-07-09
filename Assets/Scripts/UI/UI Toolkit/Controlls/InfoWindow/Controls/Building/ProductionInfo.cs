@@ -41,8 +41,8 @@ namespace InfoWindowViews
 
 
         #region References
-        DoubleResourceList inputResource;
-        DoubleResourceList outputResource;
+        DoubleResList inputResource;
+        DoubleResList outputResource;
 
         Label capacityLabel;
         RadialFillElement radialElement;

@@ -36,7 +36,7 @@ namespace InfoWindowElements
         Label headerLabel;
         Label stateLabel;
         Label bodyLabel;
-        DoubleResourceList costList;
+        DoubleResList costList;
         /// <summary>Button for moving between levels or unlocking new ones.</summary>
         Button moveButton;
 

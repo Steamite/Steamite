@@ -38,7 +38,7 @@ namespace InfoWindowElements
         VisualElement lastRow;
 
         /// <summary>Data.</summary>
-        [CreateProperty] List<UIResource> resources;
+        [CreateProperty] List<UIRes> resources;
         /// <summary>List of all storage elems.</summary>
         List<StorageElem> storageElems;
 
@@ -103,9 +103,9 @@ namespace InfoWindowElements
         /// </summary>
         /// <param name="storage">New data.</param>
         /// <returns></returns>
-        List<UIResource> ToUIRes(StorageResource storage)
+        List<UIRes> ToUIRes(StorageResource storage)
         {
-            for (int i = 0; i < storage.type.Count; i++)
+            for (int i = 0; i < storage.types.Count; i++)
             {
                 if (i >= resources.Count)
                 {
@@ -115,11 +115,11 @@ namespace InfoWindowElements
                         lastRow.AddToClassList("storage-row");
                         storageScroll.Add(lastRow);
                     }
-                    AddNewElem(new(storage.ammount[i], storage.type[i]));
+                    AddNewElem(new(storage.ammounts[i], storage.types[i]));
                 }
-                else if (resources[i].ammount != storage.ammount[i])
+                else if (resources[i].ammount != storage.ammounts[i])
                 {
-                    resources[i].ammount = storage.ammount[i];
+                    resources[i].ammount = storage.ammounts[i];
                     storageElems[i].label.text = resources[i].ammount.ToString();
                 }
             }
@@ -156,7 +156,7 @@ namespace InfoWindowElements
         /// Creates and links a new element.
         /// </summary>
         /// <param name="uiResource"></param>
-        void AddNewElem(UIResource uiResource)
+        void AddNewElem(UIRes uiResource)
         {
             resources.Add(uiResource);
             VisualElement element = elemPref.CloneTree();

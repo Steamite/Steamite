@@ -138,8 +138,8 @@ MonoBehaviour:
   id: -1
   objectName: House
   localRes:
-    type: 
-    ammount: 
+    types: 
+    ammounts: 
     capacity:
       baseValue: 0
       currentValue: 0
@@ -194,11 +194,11 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    type: 
-    ammount: 
+    types: 
+    ammounts: 
     baseResource:
-      type: 
-      ammount: 
+      types: 
+      ammounts: 
     money:
       baseValue: 0
       currentValue: 0

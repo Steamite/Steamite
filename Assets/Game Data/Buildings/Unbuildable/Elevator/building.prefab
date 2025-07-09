@@ -166,8 +166,8 @@ MonoBehaviour:
   id: -1
   objectName: Elevator
   localRes:
-    type: 
-    ammount: 
+    types: 
+    ammounts: 
     capacity:
       baseValue: 2000
       currentValue: 2000
@@ -202,11 +202,11 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    type: 01000000
-    ammount: 05000000
+    types: 
+    ammounts: 
     baseResource:
-      type: 01000000
-      ammount: 05000000
+      types: 
+      ammounts: 
     money:
       baseValue: 520
       currentValue: 520

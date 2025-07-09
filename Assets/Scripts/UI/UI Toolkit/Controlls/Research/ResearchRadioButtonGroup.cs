@@ -118,7 +118,7 @@ namespace ResearchUI
             if (topButton.lineDown == null)
             {
                 #region Horizontal Line
-                ResearchLine horizontalLine = new(
+                ResearchHorizontalLine horizontalLine = new(
                     new(
                         Mathf.Min(topPos, botPos),
                         horPos,
@@ -146,8 +146,7 @@ namespace ResearchUI
             }
             else
             {
-                ResearchLine horizontalLine = topButton.lineDown.horizontalLine;
-                horizontalLine.style.width = botPos - horizontalLine.style.left.value.value;
+                topButton.lineDown.horizontalLine.Resize(botPos);
             }
             #endregion
 

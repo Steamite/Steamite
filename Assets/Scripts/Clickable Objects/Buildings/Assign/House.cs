@@ -31,11 +31,6 @@ public class House : Building, IAssign
     }
     #endregion
 
-    public override void InitModifiers()
-    {
-        base.InitModifiers();
-        ((IModifiable)AssignLimit).Init();
-    }
     #region UI
     /// <summary>
     /// <inheritdoc/> <br/>

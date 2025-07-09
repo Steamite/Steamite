@@ -22,8 +22,10 @@ public class Pipe : Building
     }
     public override void FinishBuild()
     {
-        base.FinishBuild();
-        List<FluidNetwork> connectedNetworks = transform.GetComponentsInChildren<PipePart>().Select(q => q.connectedPipe.network).Where(q => q.networkID != -1).ToList();
+        List<FluidNetwork> connectedNetworks = connectedPipes
+            .Where(q => q != null && q.connectedPipe.network.networkID != -1)
+            .Select(q => q.connectedPipe.network).ToList();
+        
         if (connectedNetworks.Count > 0)
         {
             connectedNetworks = connectedNetworks.OrderBy(q => q.networkID).ToList();
@@ -35,15 +37,16 @@ public class Pipe : Building
                 if (z != connectedNetworks[i].networkID)
                 {
                     z = connectedNetworks[i].networkID;
-                    network.Merge(MyGrid.fluidNetworks.First(q => q.networkID == z));
+                    network.Merge(connectedNetworks[0]);
                 }
             }
         }
         else
         {
-            MyGrid.fluidNetworks.Add(new(this));
-            network = MyGrid.fluidNetworks.Last();
+            network = new(this);
+            MyGrid.fluidNetworks.Add(network);
         }
+        base.FinishBuild();
     }
     public override void ChangeRenderMode(bool transparent)
     {
@@ -90,7 +93,7 @@ public class Pipe : Building
         SceneRefs.gridTiles.HighLight(new(), gameObject);
 
         SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
-        MyRes.UpdateResource(cost, -1);
+        MyRes.UpdateResource(cost, false);
     }
     public void ConnectPipe(int _case, Pipe connectedPipe, bool canNext)
     {

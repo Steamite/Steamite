@@ -243,12 +243,12 @@ namespace EditorWindows.Windows
 
             #region Cost
             dataGrid.columns["cost"].makeCell =
-                () => new ResourceCell();
+                () => new ResCell();
             dataGrid.columns["cost"].bindCell =
                 (el, i) =>
                 {
                     el.parent.focusable = true;
-                    ResourceCell cell = el.Q<ResourceCell>();
+                    ResCell cell = el.Q<ResCell>();
                     cell.Open(((BuildingWrapper)dataGrid.itemsSource[i]).building?.Cost, ((BuildingWrapper)dataGrid.itemsSource[i]).building, true);
                 };
             #endregion
@@ -406,18 +406,45 @@ namespace EditorWindows.Windows
                 maxWidth = dataGrid.columns["cost"].maxWidth,
                 resizable = true,
 
-                makeCell = () => new ResourceCell(),
+                makeCell = () =>
+                {
+                    VisualElement element = new VisualElement()
+                    {
+                        style =
+                        {
+                            flexDirection = FlexDirection.Column
+                        }
+                    };
+                    element.Add(new ResCell());
+                    element.Add(new Label("Fluid:") { name = "fluidLabel"});
+                    element.Add(new FluidCell());
+                    return element;
+                },
                 bindCell = (el, i) =>
                 {
                     el.parent.focusable = true;
-                    ResourceCell cell = el.Q<ResourceCell>();
+                    ResCell rCell = el.Q<ResCell>();
                     Building b = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
-                    if (b is IResourceProduction)
-                        cell.Open(
-                            ((IResourceProduction)b)?.ProductionCost.EditorResource,
-                            ((BuildingWrapper)dataGrid.itemsSource[i]).building, false);
+                    if (b is IResourceProduction resProd)
+                        rCell.Open(
+                            resProd.ResourceCost.EditorResource,
+                            b, false);
                     else
-                        cell.Open(null, null, false);
+                        rCell.Open(null, null, false);
+                    
+                    FluidCell fCell = el.Q<FluidCell>();
+                    if (b is FluidResProductionBuilding fluidProd)
+                    {
+                        el.Q<Label>("fluidLabel").style.display = DisplayStyle.Flex;
+                        fCell.Open(
+                            fluidProd.FluidCost,
+                            b, false);
+                    }
+                    else
+                    {
+                        el.Q<Label>("fluidLabel").style.display = DisplayStyle.None;
+                        fCell.Open(null, null, false);
+                    }
                 }
             });
             #endregion
@@ -431,18 +458,45 @@ namespace EditorWindows.Windows
                 maxWidth = dataGrid.columns["cost"].maxWidth,
                 resizable = true,
 
-                makeCell = () => new ResourceCell(),
+                makeCell = () => 
+                {
+                    VisualElement element = new VisualElement()
+                    {
+                        style =
+                        {
+                            flexDirection = FlexDirection.Column
+                        }
+                    };
+                    element.Add(new ResCell());
+                    element.Add(new Label("Fluid:") { name = "fluidLabel" });
+                    element.Add(new FluidCell());
+                    return element;
+                },
                 bindCell = (el, i) =>
                 {
                     el.parent.focusable = true;
-                    ResourceCell cell = el.Q<ResourceCell>();
+                    ResCell cell = el.Q<ResCell>();
                     Building b = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
                     if (b is IResourceProduction)
                         cell.Open(
-                            ((IResourceProduction)b)?.ProductionYield.EditorResource,
+                            ((IResourceProduction)b)?.ResourceYield.EditorResource,
                             ((BuildingWrapper)dataGrid.itemsSource[i]).building, false);
                     else
                         cell.Open(null, null, false);
+
+                    FluidCell fCell = el.Q<FluidCell>();
+                    if (b is FluidResProductionBuilding fluidProd)
+                    {
+                        el.Q<Label>("fluidLabel").style.display = DisplayStyle.Flex;
+                        fCell.Open(
+                            fluidProd.FluidYeild,
+                            b, false);
+                    }
+                    else
+                    {
+                        el.Q<Label>("fluidLabel").style.display = DisplayStyle.None;
+                        fCell.Open(null, null, false);
+                    }
                 }
             });
             #endregion

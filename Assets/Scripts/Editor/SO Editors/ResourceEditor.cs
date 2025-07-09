@@ -80,28 +80,28 @@ public class ResourceEditor : PropertyDrawer
         listView.allowRemove = true;
 
         listView.itemTemplate = Resources.Load<VisualTreeAsset>("UI Toolkit\\ResElem");
-        listView.itemsSource = ((Resource)property.boxedValue).type;
+        listView.itemsSource = ((Resource)property.boxedValue).types;
         listView.horizontalScrollingEnabled = false;
         #region Actions
         listView.bindItem =
             (elem, i) =>
             {
                 elem = elem.ElementAt(0);
-                ((EnumField)elem.ElementAt(0)).value = ((Resource)property.boxedValue).type[i];
+                ((EnumField)elem.ElementAt(0)).value = ((Resource)property.boxedValue).types[i];
                 ((EnumField)elem.ElementAt(0)).RegisterValueChangedCallback(
                     (enu) =>
                     {
                         property.FindPropertyRelative(
-                            nameof(Resource.type)).GetArrayElementAtIndex(i).enumValueIndex = (int)(ResourceType)enu.newValue;
+                            nameof(Resource.types)).GetArrayElementAtIndex(i).enumValueIndex = (int)(ResourceType)enu.newValue;
                         serializedObject.ApplyModifiedProperties();
                     });
 
-                ((IntegerField)elem.ElementAt(1)).value = ((Resource)property.boxedValue).ammount[i];
+                ((IntegerField)elem.ElementAt(1)).value = ((Resource)property.boxedValue).ammounts[i];
                 ((IntegerField)elem.ElementAt(1)).RegisterValueChangedCallback(
                     (val) =>
                     {
                         property.FindPropertyRelative(
-                            nameof(Resource.ammount)).GetArrayElementAtIndex(i).intValue = val.newValue;
+                            nameof(Resource.ammounts)).GetArrayElementAtIndex(i).intValue = val.newValue;
                         serializedObject.ApplyModifiedProperties();
                     });
             };
@@ -110,9 +110,9 @@ public class ResourceEditor : PropertyDrawer
             (view) =>
             {
                 int i = listView.itemsSource.Count;
-                property.FindPropertyRelative(nameof(Resource.type))
+                property.FindPropertyRelative(nameof(Resource.types))
                     .InsertArrayElementAtIndex(i);
-                property.FindPropertyRelative(nameof(Resource.ammount))
+                property.FindPropertyRelative(nameof(Resource.ammounts))
                     .InsertArrayElementAtIndex(i);
                 property.serializedObject.ApplyModifiedProperties();
 
@@ -126,9 +126,9 @@ public class ResourceEditor : PropertyDrawer
                 if (sel == -1)
                     sel = listView.itemsSource.Count - 1;
 
-                property.FindPropertyRelative(nameof(Resource.type))
+                property.FindPropertyRelative(nameof(Resource.types))
                     .DeleteArrayElementAtIndex(sel);
-                property.FindPropertyRelative(nameof(Resource.ammount))
+                property.FindPropertyRelative(nameof(Resource.ammounts))
                     .DeleteArrayElementAtIndex(sel);
                 property.serializedObject.ApplyModifiedProperties();
 

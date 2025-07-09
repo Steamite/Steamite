@@ -6,12 +6,12 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
-[UxmlElement]
-public partial class ResourceCell : ResourceList
+public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
+    where T: ResAmmount<TEnum> 
+    where TEnum : Enum
 {
-
-    Resource resource;
-    Resource moneyResource;
+    T resource;
+    MoneyResource moneyResource;
     public Object whatToSave;
     IntegerField capacityField;
     Label noneLabel;
@@ -24,8 +24,8 @@ public partial class ResourceCell : ResourceList
         onAdd =
             (_) =>
             {
-                resource.type.Add(ResourceType.None);
-                resource.ammount.Add(0);
+                resource.types.Add((TEnum)(object)0);
+                resource.ammounts.Add(0);
                 itemsSource = ToUIRes(resource);
                 EditorUtility.SetDirty(whatToSave);
             };
@@ -36,8 +36,8 @@ public partial class ResourceCell : ResourceList
                 {
                     if (selectedIndex == itemsSource.Count - 1)
                         allowRemove = false;
-                    resource.type.RemoveAt(el.selectedIndex);
-                    resource.ammount.RemoveAt(el.selectedIndex);
+                    resource.types.RemoveAt(el.selectedIndex);
+                    resource.ammounts.RemoveAt(el.selectedIndex);
                     itemsSource = ToUIRes(resource);
                     EditorUtility.SetDirty(whatToSave);
                 }
@@ -53,7 +53,7 @@ public partial class ResourceCell : ResourceList
             (ev) =>
             {
                 if (moneyResource != null)
-                    ((MoneyResource)moneyResource).Money = new(ev.newValue);
+                    (moneyResource).Money = new(ev.newValue);
                 EditorUtility.SetDirty(whatToSave);
             });
         capacityField.style.width = new Length(50, LengthUnit.Percent);
@@ -69,7 +69,7 @@ public partial class ResourceCell : ResourceList
         VisualElement visualElement = new();
         visualElement.style.flexDirection = FlexDirection.Row;
         visualElement.focusable = true;
-        EnumField dropField = new(ResourceType.None);
+        EnumField dropField = new((TEnum)(object)0);
         dropField.style.width = new Length(100, LengthUnit.Pixel);
         IntegerField integerField = new();
         integerField.style.flexGrow = 1;
@@ -89,12 +89,12 @@ public partial class ResourceCell : ResourceList
     {
         el.RemoveFromClassList("unity-collection-view__item");
         EnumField type = el.Q<EnumField>();
-        type.value = ((UIResource)itemsSource[i]).type;
+        type.value = ((UIResource<TEnum>)itemsSource[i]).type;
         type.RegisterValueChangedCallback<Enum>(ChangeType);
         type.style.marginRight = 10;
 
         IntegerField value = el.Q<IntegerField>();
-        value.value = ((UIResource)itemsSource[i]).ammount;
+        value.value = ((UIResource<TEnum>)itemsSource[i]).ammount;
         value.RegisterValueChangedCallback<int>(ChangeVal);
     }
 
@@ -134,16 +134,16 @@ public partial class ResourceCell : ResourceList
     private void ChangeType(ChangeEvent<Enum> evt)
     {
         int i = GetRowIndex((VisualElement)evt.target);
-        int j = resource.type.IndexOf((ResourceType)evt.newValue);
+        int j = resource.types.IndexOf((TEnum)(object)evt.newValue);
         if (j > -1 && i != j)
         {
-            resource.ammount[j] += resource.ammount[i];
-            resource.type.RemoveAt(i);
-            resource.ammount.RemoveAt(i);
+            resource.ammounts[j] += resource.ammounts[i];
+            resource.types.RemoveAt(i);
+            resource.ammounts.RemoveAt(i);
             itemsSource = ToUIRes(resource);
         }
         else
-            resource.type[i] = (ResourceType)evt.newValue;
+            resource.types[i] = (TEnum)evt.newValue;
         EditorUtility.SetDirty(whatToSave);
     }
 
@@ -154,7 +154,7 @@ public partial class ResourceCell : ResourceList
     private void ChangeVal(ChangeEvent<int> evt)
     {
         int i = GetRowIndex((VisualElement)evt.target);
-        resource.ammount[i] = evt.newValue;
+        resource.ammounts[i] = evt.newValue;
         EditorUtility.SetDirty(whatToSave);
     }
     #endregion
@@ -165,30 +165,33 @@ public partial class ResourceCell : ResourceList
     /// <param name="_resource">Editing resource.</param>
     /// <param name="_whatToSave">Object containing the resource.</param>
     /// <param name="_cost">Is it a cost resource?</param>
-    public void Open(Resource _resource, Object _whatToSave, bool _cost)
+    public void Open(T _resource, Object _whatToSave, bool _cost)
     {
-        resource = _resource;
         whatToSave = _whatToSave;
-        if (resource != null)
+        if (_resource != null)
         {
             showAddRemoveFooter = true;
             capacityField.labelElement.text = _cost ? "Cost" : "Capacity";
-            if (resource is MoneyResource)
+            if (_resource is MoneyResource _moneyRes)
             {
-                capacityField.value = +((MoneyResource)_resource).Money.BaseValue;
-                moneyResource = _resource;
-                resource = ((MoneyResource)_resource).EditorResource;
+                moneyResource = _moneyRes;
+                capacityField.value = +_moneyRes.Money.BaseValue;
+                resource = _moneyRes.EditorResource as T;
             }
             else
+            {
+                resource = _resource;
                 capacityField.visible = false;
+            }
             itemsSource = ToUIRes(resource);
             noneLabel.text = "Empty";
             style.display = DisplayStyle.Flex;
         }
         else
         {
+            resource = null;
             showAddRemoveFooter = false;
-            itemsSource = new List<UIResource>();
+            itemsSource = new List<UIResource<TEnum>>();
             noneLabel.text = "Nothing";
             style.display = DisplayStyle.None;
         }

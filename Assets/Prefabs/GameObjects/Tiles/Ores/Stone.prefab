@@ -122,13 +122,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Stone
-  selected: 0
   id: -1
   objectName: Stone
   rockYield:
-    capacity: -1
-    type: 02000000
-    ammount: 01000000
+    types: 03000000
+    ammounts: 02000000
   integrity: 7
+  originalIntegrity: 0
   toBeDug: 0
   assetPath: Tile/Road

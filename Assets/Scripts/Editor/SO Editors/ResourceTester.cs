@@ -32,7 +32,7 @@ class ResourceTester : IPreprocessBuildWithReport
         foreach (var res in minableRes)
         {
             Resource resource = new();
-            resource.type.Add(res.resource);
+            resource.types.Add(res.resource);
             if (CheckResource(resource, res.name, "Minable Res", "Minable Resouce yield"))
                 succes = false;
         }
@@ -58,9 +58,9 @@ class ResourceTester : IPreprocessBuildWithReport
                     IResourceProduction res = building as IResourceProduction;
                     if (res != null)
                     {
-                        if (CheckResource(res.ProductionYield, building.objectName, data.Categories[i].Name, "Production cost"))
+                        if (CheckResource(res.ResourceYield, building.objectName, data.Categories[i].Name, "Production cost"))
                             succes = false;
-                        if (CheckResource(res.ProductionYield, building.objectName, data.Categories[i].Name, "Production Yeild"))
+                        if (CheckResource(res.ResourceYield, building.objectName, data.Categories[i].Name, "Production Yeild"))
                             succes = false;
                     }
                 }
@@ -89,7 +89,7 @@ class ResourceTester : IPreprocessBuildWithReport
 
     static bool CheckResource(Resource testRes, string objectName, string categName, string problemName)
     {
-        if (testRes.type.Contains(ResourceType.None))
+        if (testRes.types.Contains(ResourceType.None))
         {
             /*if (handle == null)
                 handle = EditorUtility.DisplayDialog("None resources detected", "Do you want to fail the build, or remove all NONE types?", , );*/

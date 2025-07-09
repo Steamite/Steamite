@@ -18,7 +18,7 @@ MonoBehaviour:
     icon: {fileID: 0}
   skins:
   - name: None
-    color: {r: 1, g: 0, b: 0.9233203, a: 1}
+    color: {r: 1, g: 0.8431373, b: 0, a: 1}
     icon: {fileID: 0}
   - name: Coal
     color: {r: 0.10980393, g: 0.10980393, b: 0.10980393, a: 1}
@@ -34,4 +34,10 @@ MonoBehaviour:
     icon: {fileID: 0}
   - name: Wood
     color: {r: 0.3647059, g: 0.2509804, b: 0.21568629, a: 1}
+    icon: {fileID: 0}
+  - name: Water
+    color: {r: 0, g: 0, b: 0, a: 0}
+    icon: {fileID: 0}
+  - name: Steam
+    color: {r: 0, g: 0, b: 0, a: 0}
     icon: {fileID: 0}
