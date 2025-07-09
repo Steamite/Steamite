@@ -1,5 +1,8 @@
 ﻿using InfoWindowElements;
 using ResearchUI;
+using System.Collections.Generic;
+using System.Linq;
+using TradeData.Locations;
 using TradeData.Stats;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,7 +15,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
     VisualElement menu;
     Label header;
     Label secondHeader;
-    DoubleResourceList costList;
+    DoubleResList costList;
     Label description;
     bool isOpen;
 
@@ -24,7 +27,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
         ToolkitUtils.localMenu = this;
         header = menu.ElementAt(0) as Label;
         secondHeader = menu.ElementAt(1) as Label;
-        costList = menu.ElementAt(2) as DoubleResourceList;
+        costList = menu.ElementAt(2) as DoubleResList;
         description = menu.ElementAt(3) as Label;
 
         SceneRefs.infoWindow.buildingCostChange = (building) =>
@@ -50,7 +53,10 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
         {
             element = anchor;
             if (anchor == null)
+            {
                 Debug.LogWarning("No anchor to attach to.");
+                return;
+            }
         }
         else
             anchor = element;
@@ -60,7 +66,9 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
             Rect rect = element.worldBound;
             menu.style.width = 300;
             menu.style.left = rect.x + rect.width + 25;
-            menu.style.bottom = (Screen.height - element.worldBound.y) - element.resolvedStyle.height / 2;
+            float f = (1080 - element.worldBound.y) - element.resolvedStyle.height / 2;
+            menu.style.bottom = f;
+            Debug.LogWarning("see this: " + Screen.height + ", " + f);
         }
         switch (data)
         {
@@ -129,6 +137,18 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 }
                 description.text = "";
                 break;
+            case TradeLocation:
+                TradeLocation location = data as TradeLocation;
+                header.text = location.name;
+                secondHeader.text = "trade location";
+                costList.style.display = DisplayStyle.None;
+                List<TradeConvoy> convoyList = UIRefs.trading.GetConvoys();
+                TradeConvoy convoy = convoyList.FirstOrDefault(q => q.tradeLocation == UIRefs.trading.tradeLocations.IndexOf(location));
+                if (convoy != null)
+                    description.text = convoy.ToString();
+                else
+                    description.text = "";
+                    break;
         }
         if (onlyUpdate == false)
             Show();

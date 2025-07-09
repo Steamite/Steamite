@@ -116,8 +116,8 @@ namespace ResearchUI
             reseachCost = new();
             if (node.reseachCost != null)
             {
-                reseachCost.type = node.reseachCost.type.ToList();
-                reseachCost.ammount = node.reseachCost.ammount.ToList();
+                reseachCost.types = node.reseachCost.types.ToList();
+                reseachCost.ammounts = node.reseachCost.ammounts.ToList();
             }
         }
         public void UIUpdate(string property = "")

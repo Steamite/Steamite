@@ -134,7 +134,7 @@ namespace EditorWindows.Research
             #endregion
 
             #region Cost and Dropdowns
-            ResourceCell cell = new ResourceCell();
+            ResCell cell = new ResCell();
             cell.Open(_nodeData.reseachCost, data, true);
             body.Add(cell);
 

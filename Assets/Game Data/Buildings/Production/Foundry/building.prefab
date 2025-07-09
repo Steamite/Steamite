@@ -569,8 +569,8 @@ MonoBehaviour:
   id: -1
   objectName: Foundry
   localRes:
-    type: 
-    ammount: 
+    types: 
+    ammounts: 
     capacity:
       baseValue: 50
       currentValue: 50
@@ -625,11 +625,11 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    type: 03000000
-    ammount: 05000000
+    types: 
+    ammounts: 
     baseResource:
-      type: 03000000
-      ammount: 05000000
+      types: 
+      ammounts: 
     money:
       baseValue: 50
       currentValue: 50
@@ -643,15 +643,15 @@ MonoBehaviour:
     baseValue: 5
     currentValue: 5
   productionTime: 5
-  productionCost:
-    type: 0200000001000000
-    ammount: 0500000005000000
+  resourceCost:
+    types: 0100000002000000
+    ammounts: 0200000002000000
     baseResource:
-      type: 0200000001000000
-      ammount: 0500000005000000
-  productionYield:
-    type: 02000000
-    ammount: 0a000000
+      types: 0100000002000000
+      ammounts: 0200000002000000
+  resourceYield:
+    types: 03000000
+    ammounts: 05000000
     baseResource:
-      type: 02000000
-      ammount: 0a000000
+      types: 03000000
+      ammounts: 05000000

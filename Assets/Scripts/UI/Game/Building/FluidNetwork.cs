@@ -14,6 +14,10 @@ public class FluidNetwork
     public List<Building> inspectorBuildings => buildings.Cast<Building>().ToList();
 
     public List<IFluidWork> buildings = new();
+
+    public List<FluidResProductionBuilding> consumptionBuildings;
+
+    public List<IFluidWork> storageBuildings;
     /// <summary>Network ID for identification and display.</summary>
     public int networkID = -1;
     /// <summary>Network name for display.</summary>
@@ -145,16 +149,6 @@ public class FluidNetwork
     public bool HasSpace(FluidType type, int ammount)
     {
         return buildings.FirstOrDefault(q => q.StoredFluids.HasSpace(type, ammount)) != null;
-    }
-
-    public void StoreFluid(FluidType type, int ammount)
-    {
-        IFluidWork build = buildings.FirstOrDefault(q => q.StoredFluids.HasSpace(type, ammount));
-        if (build != null)
-        {
-            build.StoredFluids.AddFluid(FluidType.Water, ammount);
-            ((IUpdatable)build).UIUpdate(nameof(IFluidWork.StoredFluids));
-        }
     }
     #endregion
 }

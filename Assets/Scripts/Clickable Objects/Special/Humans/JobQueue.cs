@@ -45,7 +45,7 @@ public class JobQueue : MonoBehaviour
                 supplyNeeded.Add((IResourceProduction)interest);
                 break;
             case JobState.Pickup:
-                pickupNeeded.Add((ProductionBuilding)interest);
+                pickupNeeded.Add((ResourceProductionBuilding)interest);
                 break;
         }
     }

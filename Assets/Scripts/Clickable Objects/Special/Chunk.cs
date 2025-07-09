@@ -131,7 +131,7 @@ public class Chunk : StorageObject
         UniqueID();
         localRes = new(res);
         if (updateGlobalResource)
-            MyRes.UpdateResource(localRes, 1);
+            MyRes.UpdateResource(localRes, true);
         objectName = objectName.Replace("(Clone)", " ");
         MyGrid.chunks.Add(this);
     }

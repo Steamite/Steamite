@@ -59,8 +59,8 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
         string[] names = Enum.GetNames(typeof(ResourceType));
         for (int i = 1; i < names.Length; i++)
         {
-            resources.type.Add((ResourceType)i);
-            resources.ammount.Add(0);
+            resources.types.Add((ResourceType)i);
+            resources.ammounts.Add(0);
         }
 
         VisualElement root = gameObject.GetComponent<UIDocument>().rootVisualElement;

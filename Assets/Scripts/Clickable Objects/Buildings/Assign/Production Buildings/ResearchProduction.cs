@@ -95,10 +95,4 @@ public class ResearchProduction : Building, IProduction, IAssign
     }
 
     #endregion
-
-    public override void InitModifiers()
-    {
-        base.InitModifiers();
-        ((IModifiable)AssignLimit).Init();
-    }
 }

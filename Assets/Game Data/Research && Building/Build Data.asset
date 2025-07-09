@@ -56,4 +56,8 @@ MonoBehaviour:
       id: 262182155
       b: {fileID: -5037607063443067742, guid: 71345d36f743a7e47a57a60a967e4a78, type: 3}
       preview: {fileID: 21300000, guid: 3c805fc3897ae954594f05dc27600b4d, type: 3}
+    - Name: 
+      id: 1473669319
+      b: {fileID: 8030177481246889903, guid: 6c1663227674e6e44bf2a4d444928f5a, type: 3}
+      preview: {fileID: 21300000, guid: c63621c53a7984e41a870e4e0778ed5e, type: 3}
     Icon: {fileID: 3506167780502562645, guid: e9d58580ef70b7744addd1ff255f07aa, type: 3}

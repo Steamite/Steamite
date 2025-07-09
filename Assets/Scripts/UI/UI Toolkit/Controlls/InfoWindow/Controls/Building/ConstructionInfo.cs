@@ -114,7 +114,7 @@ public partial class ConstructionInfo : InfoWindowControl
             }
             else
             {
-                if (MyRes.DiffRes(building.Cost, building.LocalRes).Sum() > 0)
+                if (building.LocalRes.Diff(building.Cost).Sum() > 0)
                     status.text = "Waiting for resources";
                 else
                     status.text = "Constructing";

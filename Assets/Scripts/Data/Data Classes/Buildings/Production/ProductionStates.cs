@@ -6,7 +6,7 @@ public class ProductionStates
     public bool supplied = false;
     public bool space = true;
     public bool running = false;
-    public ProductionStates(bool _supplied, bool _space, bool _running, bool _isResearch)
+    public ProductionStates(bool _supplied, bool _space, bool _running)
     {
         this.supplied = _supplied;
         this.space = _space;

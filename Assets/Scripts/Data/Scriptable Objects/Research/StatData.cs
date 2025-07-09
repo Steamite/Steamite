@@ -65,7 +65,22 @@ namespace BuildingStats
                     {
                         if ((newMask & 1) == 1 || newMask == -1)
                         {
-                            HandleCases(_building, pair);
+                            try
+                            {
+                                HandleCases(_building, pair);
+                            }
+                            catch (Exception e)
+                            {
+                                if (e is InvalidCastException)
+                                {
+                                    Debug.LogError(
+                                        $"{_building} doesnt implement inteface containing: ${pair.mod}\n" +
+                                        $"{e}");
+
+                                }
+                                else
+                                    Debug.LogError(e);
+                            }
                         }
                         newMask = newMask >> 1;
                         if (newMask == 0)
@@ -77,6 +92,7 @@ namespace BuildingStats
 
         void HandleCases(Building building, StatPair pair)
         {
+
             switch (pair.mod)
             {
                 case StatModifiers.Cost:
@@ -105,16 +121,16 @@ namespace BuildingStats
                     break;
                 case StatModifiers.InputResource:
                     DoMod(
-                        ((IResourceProduction)building).ProductionCost,
+                        ((IResourceProduction)building).ResourceCost,
                         pair,
-                        nameof(IResourceProduction.ProductionCost),
+                        nameof(IResourceProduction.ResourceCost),
                         building);
                     break;
                 case StatModifiers.ProductionYield:
                     DoMod(
-                        ((IResourceProduction)building).ProductionYield,
+                        ((IResourceProduction)building).ResourceYield,
                         pair,
-                        nameof(IResourceProduction.ProductionYield),
+                        nameof(IResourceProduction.ResourceYield),
                         building);
                     break;
                 case StatModifiers.Capacity:

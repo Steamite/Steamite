@@ -138,8 +138,8 @@ MonoBehaviour:
   id: -1
   objectName: Water tank
   localRes:
-    type: 
-    ammount: 
+    types: 
+    ammounts: 
     capacity:
       baseValue: 100
       currentValue: 100
@@ -194,11 +194,11 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    type: 02000000
-    ammount: 05000000
+    types: 01000000
+    ammounts: 02000000
     baseResource:
-      type: 02000000
-      ammount: 05000000
+      types: 01000000
+      ammounts: 02000000
     money:
       baseValue: 0
       currentValue: 0

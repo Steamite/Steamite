@@ -18,13 +18,13 @@ public interface IStorage
     public void SetupStorage()
     {
         int i = 1;
-        LocalResources.type = new();
-        LocalResources.ammount = new();
+        LocalResources.types = new();
+        LocalResources.ammounts = new();
         CanStore = new();
         foreach (var item in Enum.GetNames(typeof(ResourceType)).Skip(1))
         {
-            LocalResources.type.Add((ResourceType)i);
-            LocalResources.ammount.Add(100);
+            LocalResources.types.Add((ResourceType)i);
+            LocalResources.ammounts.Add(100);
             CanStore.Add(true);
             i++;
         }
@@ -32,10 +32,10 @@ public interface IStorage
 
     public void FinishStorageConstruction()
     {
-        LocalResources.type = MyRes.resourceTemplate.type;
-        while (LocalResources.ammount.Count < MyRes.resourceTemplate.type.Count)
-            LocalResources.ammount.Add(0);
-        for (int i = 0; i < LocalResources.ammount.Count; i++)
+        LocalResources.types = MyRes.resourceTemplate.types;
+        while (LocalResources.ammounts.Count < MyRes.resourceTemplate.types.Count)
+            LocalResources.ammounts.Add(0);
+        for (int i = 0; i < LocalResources.ammounts.Count; i++)
             CanStore.Add(true);
         SceneRefs.jobQueue.storages.Add(this);
     }

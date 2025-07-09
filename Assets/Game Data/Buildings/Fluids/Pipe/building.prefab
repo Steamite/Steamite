@@ -126,8 +126,8 @@ MonoBehaviour:
   id: -1
   objectName: Pipe
   localRes:
-    type: 
-    ammount: 
+    types: 
+    ammounts: 
     capacity:
       baseValue: 0
       currentValue: 0
@@ -157,11 +157,11 @@ MonoBehaviour:
         y: 0
       itemType: 5
   cost:
-    type: 02000000
-    ammount: 05000000
+    types: 
+    ammounts: 
     baseResource:
-      type: 02000000
-      ammount: 05000000
+      types: 
+      ammounts: 
     money:
       baseValue: 2
       currentValue: 2
@@ -173,6 +173,7 @@ MonoBehaviour:
   wrapperID: 1082678288
   network:
     pipes: []
+    consumptionBuildings: []
     networkID: -1
     networkName: 
 --- !u!210 &2337060514408432828

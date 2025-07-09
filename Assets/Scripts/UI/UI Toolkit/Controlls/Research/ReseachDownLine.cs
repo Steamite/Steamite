@@ -6,10 +6,10 @@ namespace ResearchUI
     [UxmlElement]
     public partial class ResearchDownLine : ResearchLine
     {
-        public ResearchLine horizontalLine;
+        public ResearchHorizontalLine horizontalLine;
         public ResearchDownLine() { }
 
-        public ResearchDownLine(Rect rect, ResearchLine _horizontalLine)
+        public ResearchDownLine(Rect rect, ResearchHorizontalLine _horizontalLine)
         {
             AddToClassList("line");
             style.left = rect.x;

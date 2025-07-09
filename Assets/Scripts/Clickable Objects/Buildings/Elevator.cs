@@ -65,7 +65,7 @@ public class Elevator : Building, IStorage
 
     public override void FinishBuild()
     {
-        localRes.ammount = new();
+        localRes.ammounts = new();
         ((IStorage)this).FinishStorageConstruction();
         base.FinishBuild();
     }
@@ -89,20 +89,20 @@ public class Elevator : Building, IStorage
         {
             int spaceToStore = localRes.capacity.currentValue - localRes.Future().Sum();
             Resource transferRes = new();
-            for (int i = 0; i < request.type.Count && spaceToStore > 0; i++)
+            for (int i = 0; i < request.types.Count && spaceToStore > 0; i++)
             {
-                if (CanStore[(int)request.type[i]])
+                if (CanStore[(int)request.types[i]])
                 {
-                    transferRes.type.Add(request.type[i]);
-                    if (spaceToStore > request.ammount[i])
+                    transferRes.types.Add(request.types[i]);
+                    if (spaceToStore > request.ammounts[i])
                     {
-                        transferRes.ammount.Add(request.ammount[i]);
-                        spaceToStore -= request.ammount[i];
-                        MyRes.globalStorageSpace -= request.ammount[i];
+                        transferRes.ammounts.Add(request.ammounts[i]);
+                        spaceToStore -= request.ammounts[i];
+                        MyRes.globalStorageSpace -= request.ammounts[i];
                     }
                     else
                     {
-                        transferRes.ammount.Add(spaceToStore);
+                        transferRes.ammounts.Add(spaceToStore);
                         MyRes.globalStorageSpace -= spaceToStore;
                         break;
                     }

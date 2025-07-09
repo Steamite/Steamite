@@ -1,5 +1,6 @@
 using AbstractControls;
 using System.Collections.Generic;
+using TradeData.Locations;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -77,23 +78,32 @@ namespace TradeWindowElements
             LocationButton locationButton;
             for (int i = -1; i < UIRefs.trading.tradeLocations.Count; i++)
             {
+                Location location;
                 if (i == -1)
                 {
-                    locationButton = new(UIRefs.trading.colonyLocation.pos.ToVecUI(), 0);
+                    location = UIRefs.trading.colonyLocation;
+                    locationButton = new(location.pos.ToVecUI(), 0);
                     locationButton.style.unityBackgroundImageTintColor = Color.blue;
                 }
                 else
+                {
+                    location = UIRefs.trading.tradeLocations[i];
                     locationButton = new TradeLocationButton(
-                        UIRefs.trading.tradeLocations[i].pos.ToVecUI(),
+                        location.pos.ToVecUI(),
                         i + 1,
                         (Slider)sliderGroup.ElementAt(i).ElementAt(0),
                         UIRefs.trading.colonyLocation.pos.ToVecUI());
-
+                }
+                locationButton.RegisterCallback<MouseEnterEvent>(
+                        q => ToolkitUtils.localMenu.UpdateContent(location, q.target as VisualElement));
+                locationButton.RegisterCallback<MouseLeaveEvent>(
+                        q => ToolkitUtils.localMenu.Close());
                 locationGroup.Add(locationButton);
                 locationButtons.Add(locationButton);
 
                 locationButton.RecalculateLayout(zoom);
             }
+
         }
         #endregion
 

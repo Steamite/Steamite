@@ -28,6 +28,14 @@ public class BuildPipe : Pipe
         if (network.buildings.IndexOf(connectedBuilding) == -1)
         {
             network.buildings.Add(connectedBuilding);
+
+            if (connectedBuilding is WaterPump 
+                || connectedBuilding is FluidTank 
+                || connectedBuilding is FluidResProductionBuilding)
+                network.storageBuildings.Add(connectedBuilding);
+
+            if(connectedBuilding is FluidResProductionBuilding fluidResProduction)
+                network.consumptionBuildings.Add(fluidResProduction);
         }
     }
     public override void PlacePipe()

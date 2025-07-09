@@ -271,7 +271,7 @@ public static class HumanActions
                         Resource toMove = h.destination.LocalRes.Future();
                         CapacityResource r = new(-1);
                         MyRes.MoveRes(r,
-                            toMove.Clone(),
+                            new(toMove),
                             toMove,
                             h.Inventory.capacity < MyRes.globalStorageSpace
                                 ? h.Inventory.capacity.currentValue
@@ -286,8 +286,6 @@ public static class HumanActions
                     }
                 break;
             case JobState.Supply:
-                if (jobQueue.supplyNeeded.Count == 0)
-                    break;
                 if (FilterBuilds(jobQueue.supplyNeeded.Select(q => (Building)q), h, j))
                     return false;
                 break;
