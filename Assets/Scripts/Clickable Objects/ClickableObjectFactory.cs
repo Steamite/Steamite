@@ -237,14 +237,10 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             localPos.ToVec(PIPE_OFFSET),
             Quaternion.identity,
             ((Building)building).transform);
-        pipe.transform.localScale = new(
-            0.5f / pipe.transform.parent.lossyScale.x,
-            0.1f / pipe.transform.parent.lossyScale.y,
-            0.5f / pipe.transform.parent.lossyScale.z);
+        pipe.RecalculatePipeTransform();
         pipe.connectedBuilding = building;
         return pipe;
     }
-
     #endregion Loading Game
 
     public IEnumerator Init()
@@ -255,6 +251,4 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         buildPrefabs = buttons.Result;
         buildPrefabs.Categories.SelectMany(q => q.Objects).Select(q => q.building).ToList().ForEach(q => q.InitModifiers());
     }
-
-
 }

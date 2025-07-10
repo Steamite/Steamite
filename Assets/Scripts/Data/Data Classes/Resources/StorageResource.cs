@@ -142,17 +142,17 @@ public class StorageResource : CapacityResource
             {
                 carriers.Insert(index, h);
             }
-            /*if (carrierIDs.Count == carriers.Count)
-                carrierIDs = null;*/
         }
     }
 
     public void Load(StorageResSave resSave)
     {
-        types = resSave.types.ToList();
-        ammounts = resSave.ammounts.ToList();
+        types = resSave.types;
+        ammounts = resSave.ammounts;
         requests = resSave.requests;
         mods = resSave.mod;
+        if (mods.Count == 1 && requests.Count == 0)
+            requests.Add(new());
         carriers = new();
         carrierIDs = resSave.carriers.ToList();
     }
@@ -162,5 +162,8 @@ public class StorageResource : CapacityResource
         types.Clear();
         ammounts.Clear();
     }
+
+    public bool HasNoCarriers() 
+        => mods.Count == 0;
     #endregion
 }

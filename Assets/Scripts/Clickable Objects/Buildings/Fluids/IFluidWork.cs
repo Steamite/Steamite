@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IFluidWork
 {
-    List<Pipe> AttachedPipes { get; set; }
+    List<BuildPipe> AttachedPipes { get; set; }
     Fluid StoredFluids { get; set; }
 
     /// <summary>

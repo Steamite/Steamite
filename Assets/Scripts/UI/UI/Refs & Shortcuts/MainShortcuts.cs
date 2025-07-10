@@ -95,15 +95,20 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
                 float axis = buildRotate.ReadValue<float>();
                 if (SceneRefs.gridTiles.activeControl == ControlMode.build)
                 {
-                    if (SceneRefs.gridTiles.BlueprintInstance.GetComponent<Pipe>())
+                    Building building = SceneRefs.gridTiles.BlueprintInstance;
+                    if (building is Pipe)
                         return;
                     if (axis < 0)
                     {
-                        SceneRefs.gridTiles.BlueprintInstance.transform.Rotate(new Vector3(0, 90, 0));
+                        building.transform.Rotate(new Vector3(0, 90, 0));
                     }
                     else
                     {
-                        SceneRefs.gridTiles.BlueprintInstance.transform.Rotate(new Vector3(0, -90, 0));
+                        building.transform.Rotate(new Vector3(0, -90, 0));
+                    }
+                    if(building is IFluidWork fluid)
+                    {
+                        fluid.AttachedPipes.ForEach(q => q.RecalculatePipeTransform());
                     }
                     SceneRefs.gridTiles.Enter(SceneRefs.gridTiles.activeObject);
                 }

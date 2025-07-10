@@ -82,6 +82,7 @@ public static class MyGrid
         fluidNetworks = new();
         levels = new GroundLevel[5];
         currentLevel = 2;
+        pipes = new();
     }
     #endregion Grid Access
 

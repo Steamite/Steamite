@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public enum BuildingCategType
 {
@@ -21,8 +22,7 @@ public class Building : StorageObject
 {
     #region Variables
     /// <summary>Used for remembering color.</summary>
-    [SerializeField] protected List<Color> _materialColors;
-    [SerializeField] protected List<Renderer> _meshRenderers;
+    [SerializeField] public List<Renderer> meshRenderers;
 
     /// <summary>
     /// Mask saying which categories this building belongs to.
@@ -48,6 +48,8 @@ public class Building : StorageObject
     [Header("Prefab info")]
     public byte categoryID;
     public int wrapperID;
+
+    bool isTransparent = false;
     #endregion
 
     #region Basic Operations
@@ -115,7 +117,6 @@ public class Building : StorageObject
         save.constructed = constructed;
         save.deconstructing = deconstructing;
         save.constructionProgress = constructionProgress;
-        save.maximalProgress = maximalProgress;
         save.categoryID = categoryID;
         save.wrapperID = wrapperID;
 
@@ -130,9 +131,9 @@ public class Building : StorageObject
         constructed = (save as BSave).constructed;
         deconstructing = (save as BSave).deconstructing;
         constructionProgress = (save as BSave).constructionProgress;
-        maximalProgress = (save as BSave).maximalProgress;
+        maximalProgress = CalculateMaxProgress();
         localRes.Load((save as BSave).resSave);
-        GetColors();
+        GetRenderComponents();
 
         InitModifiers();
 
@@ -214,12 +215,14 @@ public class Building : StorageObject
     /// </summary>
     public virtual void FinishBuild()
     {
-        if (!constructed && this is not IStorage)
+        if (!constructed)
         {
-            localRes.Dump();
+            ChangeRenderMode(false);
+            constructed = true;
+            if (this is not IStorage)
+                localRes.Dump();
         }
-        constructed = true;
-        ChangeRenderMode(false);
+        
         if (selected)
             OpenWindow();
 
@@ -351,37 +354,47 @@ public class Building : StorageObject
     /// <param name="transparent">Requested render mode.</param>
     public virtual void ChangeRenderMode(bool transparent)
     {
-        Material newMat = transparent
-            ? MaterialChanger.Transparent
-            : MaterialChanger.Opaque;
-        for (int i = 0; i < _meshRenderers.Count; i++)
+        isTransparent = transparent;
+        foreach (var _renderer in meshRenderers)
         {
-            Color c = new(-1, -1, -1);
-            if (selected || SceneRefs.gridTiles.activeObject == this)
-            {
-                c = _meshRenderers[i].material.GetColor("_EmissionColor");
-
-                _meshRenderers[i].material = newMat;
-                _meshRenderers[i].material.EnableKeyword("_EMISSION");
-                _meshRenderers[i].material.SetColor("_EmissionColor", c);
-            }
-            else
-                _meshRenderers[i].material = newMat;
-
-            if (transparent)
-                _meshRenderers[i].material.color
-                    = new(_materialColors[i].r, _materialColors[i].g, _materialColors[i].b, 0.1f + (constructionProgress / maximalProgress) * 0.9f);
-            else
-                _meshRenderers[i].material.color = _materialColors[i];
+            UpdateRenderMode(_renderer);
         }
+    }
+
+    protected virtual void UpdateRenderMode(Renderer _renderer)
+    {
+        Material material = _renderer.material;
+        if (isTransparent)
+        {
+            material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+            material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            material.SetInt("_ZWrite", 0);
+            material.DisableKeyword("_ALPHATEST_ON");
+            material.DisableKeyword("_ALPHABLEND_ON");
+            material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+            material.renderQueue = 3000;
+            material.color = new(material.color.r, material.color.g, material.color.b, 0.1f + (constructionProgress / maximalProgress) * 0.9f);
+        }
+        else
+        {
+            material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+            material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+            material.SetInt("_ZWrite", 1);
+            material.DisableKeyword("_ALPHATEST_ON");
+            material.DisableKeyword("_ALPHABLEND_ON");
+            material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            material.renderQueue = -1;
+        }
+        _renderer.material = material;
     }
 
     protected virtual void UpdateConstructionProgressAlpha()
     {
-        for (int i = 0; i < _meshRenderers.Count; i++)
+        for (int i = 0; i < meshRenderers.Count; i++)
         {
-            _meshRenderers[i].material.color
-                = new(_materialColors[i].r, _materialColors[i].g, _materialColors[i].b, 0.1f + (constructionProgress / maximalProgress) * 0.9f);
+            Color color = meshRenderers[i].material.color;
+            meshRenderers[i].material.color
+                = new(color.r, color.g, color.b, 0.1f + (constructionProgress / maximalProgress) * 0.9f);
         }
     }
     #endregion
@@ -463,11 +476,9 @@ public class Building : StorageObject
     /// <summary>
     /// Fills <see cref="myColor"/>.
     /// </summary>
-    public virtual void GetColors()
+    public virtual void GetRenderComponents()
     {
-        _meshRenderers = transform.GetComponentsInChildren<Renderer>().ToList();
-        _materialColors = _meshRenderers.Select(q => q.material.color).ToList();
-
+        meshRenderers = transform.GetComponentsInChildren<Renderer>().ToList();
     } // saves the original color
 
 

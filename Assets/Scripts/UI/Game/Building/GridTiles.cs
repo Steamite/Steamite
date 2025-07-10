@@ -664,7 +664,7 @@ public class GridTiles : MonoBehaviour
                 : GameObject.Find("Buildings").transform);
         if (blueprintInstance is IFluidWork)
             ((IFluidWork)blueprintInstance).CreatePipes();
-        blueprintInstance.GetColors();
+        blueprintInstance.GetRenderComponents();
 
         blueprintInstance.maximalProgress = blueprintInstance.CalculateMaxProgress();
         blueprintInstance.ChangeRenderMode(true);

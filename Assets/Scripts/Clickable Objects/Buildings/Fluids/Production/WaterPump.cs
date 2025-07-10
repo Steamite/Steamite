@@ -5,7 +5,7 @@ using UnityEngine;
 public class WaterPump : Building, IFluidWork, IProduction, IAssign
 {
     public Water waterSource;
-    public List<Pipe> AttachedPipes { get; set; } = new();
+    public List<BuildPipe> AttachedPipes { get; set; } = new();
 
     [SerializeField] float prodTime;
     [CreateProperty] public float ProdTime { get => prodTime; set => prodTime = value; }

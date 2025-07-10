@@ -37,7 +37,7 @@ public struct JobData
                 break;
             case JobSave.InterestType.R:
                 interest = SceneRefs.jobQueue.toBeDug.FirstOrDefault(q => q.id == jobSave.interestID);
-                interest.GetComponent<Rock>().Assigned = human;
+                (interest as Rock).Assigned = human;
                 break;
             case JobSave.InterestType.C:
                 interest = MyGrid.chunks.FirstOrDefault(q => q.id == jobSave.interestID);
@@ -49,7 +49,7 @@ public struct JobData
                 return;
         }
         if (!interest.Equals(human.destination))
-            interest.GetComponent<StorageObject>()?.TryLink(human);
+            (interest as StorageObject)?.TryLink(human);
     }
     public JobData(List<GridPos> _path, ClickableObject _interest)
     {

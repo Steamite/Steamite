@@ -146,8 +146,7 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
-  _materialColors: []
-  _meshRenderers: []
+  meshRenderers: []
   buildingCategories: 8
   blueprint:
     size:
@@ -222,8 +221,8 @@ MonoBehaviour:
     types: 02000000
     ammounts: 0f000000
     baseResource:
-      types: 02000000
-      ammounts: 0f000000
+      types: 
+      ammounts: 
   fluidCost:
     types: 00000000
     ammounts: 01000000

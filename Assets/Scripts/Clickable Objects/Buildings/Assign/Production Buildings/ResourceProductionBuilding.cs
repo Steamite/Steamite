@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 
@@ -46,7 +47,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     /// <inheritdoc/>
     protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
-        toEnable.Add("General", new List<string> { "Production Info", "Assign Info" });
+        toEnable.TryAdd("General", new List<string> { "Production Info", "Assign Info" });
         base.ToggleInfoComponents(info, toEnable);
     }
     #endregion

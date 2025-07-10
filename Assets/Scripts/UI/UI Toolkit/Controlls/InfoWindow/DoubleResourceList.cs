@@ -58,6 +58,7 @@ namespace InfoWindowElements
         [UxmlAttribute] public bool useBindings;
 
         [UxmlAttribute] public bool showMoney = true;
+        bool hasMoney;
 
         #region Constructors
         ///<summary> Do not use from code, this is only for adding the resource list from UI Builder.</summary>
@@ -215,12 +216,12 @@ namespace InfoWindowElements
         protected DataBinding SetupResTypes(T resource, string propName)
         {
             resources = new();
-            showMoney = false;
-            if (resource is MoneyResource _money)
+            hasMoney = false;
+            if (showMoney && resource is MoneyResource _money)
             {
                 if (_money.Money > 0)
                 {
-                    showMoney = true;
+                    hasMoney = true;
                     resources.Add(new DoubleUIResource<TEnum>(
                         MyRes.Money,
                         +_money.Money));
@@ -259,7 +260,7 @@ namespace InfoWindowElements
         /// <inheritdoc/>
         protected override List<UIResource<TEnum>> ToUIRes(T storage)
         {
-            if (showMoney)
+            if (hasMoney)
             {
                 resources[0].ammount = MyRes.Money;
             }
