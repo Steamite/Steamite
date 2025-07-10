@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FluidTank : Building, IFluidWork
 {
-    public List<Pipe> AttachedPipes { get; set; }
+    public List<BuildPipe> AttachedPipes { get; set; }
 
     [SerializeField] Fluid storedFluid;
     [CreateProperty] public Fluid StoredFluids { get => storedFluid; set => storedFluid = value; }

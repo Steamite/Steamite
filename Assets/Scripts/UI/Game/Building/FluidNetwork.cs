@@ -10,10 +10,9 @@ public class FluidNetwork
     #region Variables
     /// <summary>All connected pipes in the network.</summary>
     public List<Pipe> pipes = new();
-    /// <summary>All connected buildings in the network.</summary>
-    public List<Building> inspectorBuildings => buildings.Cast<Building>().ToList();
 
-    public List<IFluidWork> buildings = new();
+    /// <summary>All connected buildings in the network.</summary>
+    public List<IFluidWork> buildings;
 
     public List<FluidResProductionBuilding> consumptionBuildings;
 
@@ -29,6 +28,10 @@ public class FluidNetwork
     public FluidNetwork()
     {
         CreateID();
+    }
+    public override string ToString()
+    {
+        return $"Network: {networkID}, with {buildings.Count} connected buildings";
     }
 
     /// <summary>
@@ -48,6 +51,9 @@ public class FluidNetwork
             networkID = MyGrid.fluidNetworks.Last().networkID + 1;
         else
             networkID = 0;
+        storageBuildings = new();
+        consumptionBuildings = new();
+        buildings = new();
     }
     #endregion
 
@@ -58,10 +64,14 @@ public class FluidNetwork
     /// <param name="_mergeWith">network to merge with</param>
     public void Merge(FluidNetwork _mergeWith)
     {
-        foreach (Pipe pipe in _mergeWith.pipes)
+        if (_mergeWith == this)
+            Debug.LogError("Merging the network into it self");
+        for (int i = _mergeWith.pipes.Count - 1; i > -1; i--)
         {
+            Pipe pipe = _mergeWith.pipes[i];
             pipes.Add(pipe);
             pipe.network = this;
+            pipe.UIUpdate(nameof(pipe.network));
         }
         foreach (IFluidWork building in _mergeWith.buildings)
         {

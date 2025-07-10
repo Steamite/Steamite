@@ -174,8 +174,7 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
-  _materialColors: []
-  _meshRenderers: []
+  meshRenderers: []
   buildingCategories: 0
   blueprint:
     size:

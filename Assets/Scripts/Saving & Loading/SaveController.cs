@@ -48,6 +48,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
         jsonSerializer.TypeNameHandling = TypeNameHandling.All;
         jsonSerializer.Formatting = Formatting.Indented;
         jsonSerializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        jsonSerializer.DefaultValueHandling = DefaultValueHandling.Include;
         return jsonSerializer;
     }
     #endregion
@@ -199,17 +200,6 @@ public class SaveController : MonoBehaviour, IAfterLoad
         }
         return bSaves;
     }
-    /*
-    void SavePipes(WorldSave gridSave)
-    {
-        gridSave..pipes = new ClickableObjectSave[gridSave.height, gridSave.width];
-        
-        foreach(Pipe pipe in GameObject.Find("Pipes").GetComponentsInChildren<Pipe>())
-        {
-            GridPos pos = new(pipe.gameObject);
-            gridSave.pipes[(int)pos.x, (int)pos.z] = pipe.Save();
-        }
-    }*/
     ChunkSave[] SaveChunks()
     {
         ChunkSave[] chunkSave = new ChunkSave[MyGrid.chunks.Count];
@@ -247,62 +237,6 @@ public class SaveController : MonoBehaviour, IAfterLoad
                 writer.Dispose();
             if (jsonWriter != null && jsonWriter.WriteState != WriteState.Closed)
                 jsonWriter.Close();
-        }
-    }
-
-    // TODO
-    void NewGameSave(string saveName, bool autoSave, WorldSave world)
-    {
-        string tmpPath = $"{Application.persistentDataPath}/saves/_tmp";
-        Directory.CreateDirectory($"{tmpPath}");
-        JsonSerializer jsonSerializer = PrepSerializer();
-        try
-        {
-            WriteSave(
-                $"{tmpPath}/Grid.json",
-                jsonSerializer,
-                world.objectsSave);
-
-            for (int i = 0; i < 5; i++)
-                WriteSave(
-                    $"{tmpPath}/Level{i}.json",
-                    jsonSerializer,
-                    world.gridSave[i]);
-
-            WriteSave(
-                $"{tmpPath}/Humans.json",
-                jsonSerializer,
-                SceneRefs.humans.SaveHumans());
-
-            WriteSave(
-               $"{tmpPath}/Game State.json",
-               jsonSerializer,
-               SaveGameState(autoSave));
-
-            WriteSave(
-               $"{tmpPath}/Research.json",
-               jsonSerializer,
-               new ResearchSave(UIRefs.research));
-
-            WriteSave(
-               $"{tmpPath}/Trade.json",
-               jsonSerializer,
-               new TradeSave(UIRefs.trading));
-
-            if (autoSave)
-                saveName = "autosave";
-            AfterSave(tmpPath, saveName, autoSave);
-        }
-        catch (Exception e)
-        {
-            SceneRefs.ShowMessage("An error ocured when saving.");
-            Debug.LogWarning("Saving error: " + e);
-            foreach (string file in Directory.GetFiles(tmpPath))
-            {
-                File.Delete(file);
-            }
-            Directory.Delete($"{tmpPath}");
-            return;
         }
     }
     #endregion

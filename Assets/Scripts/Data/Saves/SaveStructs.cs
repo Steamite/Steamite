@@ -152,7 +152,6 @@ public class BSave : StorageObjectSave
     public bool constructed;
     public bool deconstructing;
     public float constructionProgress;
-    public int maximalProgress;
 
     public int categoryID;
     public int wrapperID;
@@ -257,9 +256,9 @@ public class StorageResSave : Resource
     {
         types = storageResource.types.ToList();
         ammounts = storageResource.ammounts.ToList();
-        requests = storageResource.requests;
+        requests = storageResource.requests.ToList();
         carriers = storageResource.carriers.Select(q => q.id).ToList();
-        mod = storageResource.mods;
+        mod = storageResource.mods.ToList();
     }
     public StorageResSave()
     {

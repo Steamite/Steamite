@@ -1231,6 +1231,10 @@ PrefabInstance:
       propertyPath: mouseThreshold
       value: 0.005
       objectReference: {fileID: 0}
+    - target: {fileID: 4319378460532599062, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_Shadows.m_Bias
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 7690688619011433921, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1382,7 +1386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Version: 3
-  m_UsePipelineSettings: 1
+  m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 2
   m_LightLayerMask: 1
   m_RenderingLayers: 1

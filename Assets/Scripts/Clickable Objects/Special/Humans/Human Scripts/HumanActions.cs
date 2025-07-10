@@ -238,7 +238,7 @@ public static class HumanActions
                     {
                         missingResoucerces.Add(building);
                     }
-                    else if (building.LocalRes.carriers.Count == 0)
+                    else if (building.LocalRes.HasNoCarriers())
                         missingProgress.Add(building);
                 }
 

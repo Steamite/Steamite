@@ -48,5 +48,39 @@ public class BuildPipe : Pipe
         return null;
     }
 
-    
+    public override void ChangeRenderMode(bool transparent){}
+    public override void GetRenderComponents() {}
+
+    protected override void AddRenderer(Renderer _renderer)
+    {
+        Building connection = connectedBuilding as Building;
+        connection.meshRenderers.Add(_renderer);/*
+        _renderer.material = connection.meshRenderers[0].material;
+        _renderer.material.color = connection.meshRenderers[0].material.color;*/
+    }
+    protected override void RemoveRenderer(Renderer _renderer)
+    {
+        ((Building)connectedBuilding).meshRenderers.Remove(_renderer);
+    }
+
+
+    public void RecalculatePipeTransform()
+    {
+        transform.rotation = Quaternion.identity;
+        float f = Mathf.Abs(transform.parent.rotation.eulerAngles.y % 180);
+        if (f == 0)
+        {
+            transform.localScale = new(
+                0.5f / transform.parent.lossyScale.x,
+                0.1f / transform.parent.lossyScale.y,
+                0.5f / transform.parent.lossyScale.z);
+        }
+        else
+        {
+            transform.localScale = new(
+                0.5f / transform.parent.lossyScale.z,
+                0.1f / transform.parent.lossyScale.y,
+                0.5f / transform.parent.lossyScale.x);
+        }
+    }
 }

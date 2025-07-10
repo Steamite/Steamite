@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class Pipe : Building
 {
-    public FluidNetwork network = new();
+    public FluidNetwork network = null;
     PipePart[] connectedPipes = new PipePart[4];
     readonly int[] connectionOrder = { 1, 0, 3, 2 };
     public override void OrderDeconstruct()
@@ -25,7 +26,7 @@ public class Pipe : Building
         List<FluidNetwork> connectedNetworks = connectedPipes
             .Where(q => q != null && q.connectedPipe.network.networkID != -1)
             .Select(q => q.connectedPipe.network).ToList();
-        
+
         if (connectedNetworks.Count > 0)
         {
             connectedNetworks = connectedNetworks.OrderBy(q => q.networkID).ToList();
@@ -37,43 +38,18 @@ public class Pipe : Building
                 if (z != connectedNetworks[i].networkID)
                 {
                     z = connectedNetworks[i].networkID;
-                    network.Merge(connectedNetworks[0]);
+                    network.Merge(connectedNetworks[i]);
                 }
             }
         }
-        else
+        else 
         {
-            network = new(this);
+            if (network.networkID == -1)
+                network = new(this);
+            network.pipes.Add(this);
             MyGrid.fluidNetworks.Add(network);
         }
         base.FinishBuild();
-    }
-    public override void ChangeRenderMode(bool transparent)
-    {
-        foreach (MeshRenderer mesh in transform.GetComponentsInChildren<MeshRenderer>())
-        {
-            Material material = mesh.material;
-            if (transparent)
-            {
-                // transparent
-                material.SetInt("_SrcBlend", (int)BlendMode.SrcAlpha);
-                material.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
-                material.SetInt("_ZWrite", 0);
-                material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-                material.renderQueue = 3000;
-                material.color = new(1, 1, 1, 0.5f);
-            }
-            else
-            {
-                // opaque
-                material.SetInt("_SrcBlend", (int)BlendMode.One);
-                material.SetInt("_DstBlend", (int)BlendMode.Zero);
-                material.SetInt("_ZWrite", 1);
-                material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                material.renderQueue = -1;
-                material.color = new(material.color.r, material.color.g, material.color.b, 0.5f);
-            }
-        }
     }
     public override void PlaceBuilding()
     {
@@ -89,12 +65,12 @@ public class Pipe : Building
             }
         }
         GetComponent<SortingGroup>().sortingLayerName = "Pipes";
-        maximalProgress = cost.Sum() * 2;
         SceneRefs.gridTiles.HighLight(new(), gameObject);
 
         SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         MyRes.UpdateResource(cost, false);
     }
+
     public void ConnectPipe(int _case, Pipe connectedPipe, bool canNext)
     {
         float pipeLenghtScale = (1 - transform.lossyScale.z) / 4 / transform.lossyScale.z;
@@ -109,9 +85,7 @@ public class Pipe : Building
                 0.1f / transform.lossyScale.x,
                 pipeLenghtScale,
                 0.1f / transform.lossyScale.y);
-            _meshRenderers.Add(pipePart.GetComponent<Renderer>());
-
-            pipePart.GetComponent<MeshRenderer>().sharedMaterial = gameObject.GetComponent<MeshRenderer>().sharedMaterial;
+            AddRenderer(pipePart.GetComponent<Renderer>());
         }
         connectedPipes[_case].connectedPipe = connectedPipe;
         switch (_case)
@@ -150,12 +124,6 @@ public class Pipe : Building
         }
     }
 
-    protected virtual void ConnectionCases()
-    {
-
-    }
-
-
     public override void DestoyBuilding()
     {
         GridPos gridPos = GetPos();
@@ -182,7 +150,7 @@ public class Pipe : Building
             if (connection != null)
             {
                 Destroy(connection.gameObject);
-                _meshRenderers.Remove(connection.GetComponent<Renderer>());
+                RemoveRenderer(connection.GetComponent<Renderer>());
                 connectedPipes[_case] = null;
                 if (canNext)
                 {
@@ -202,15 +170,16 @@ public class Pipe : Building
         }
     }
 
-    protected override void UpdateConstructionProgressAlpha()
+    protected virtual void AddRenderer(Renderer _renderer)
     {
-        for (int i = 0; i < _meshRenderers.Count; i++)
-        {
-            _meshRenderers[i].material.color
-                = new(_materialColors[0].r, _materialColors[0].g, _materialColors[0].b, 0.1f + (constructionProgress / maximalProgress) * 0.9f);
-        }
+        meshRenderers.Add(_renderer);
+        UpdateRenderMode(_renderer);
     }
 
+    protected virtual void RemoveRenderer(Renderer _renderer)
+    {
+        meshRenderers.Remove(_renderer);
+    }
     #region Window
 
     protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
@@ -286,7 +255,6 @@ public class Pipe : Building
     {
         if (save is PipeBSave)
         {
-            network.networkID = (save as PipeBSave).networkID;
             base.Load(save);
         }
         else
