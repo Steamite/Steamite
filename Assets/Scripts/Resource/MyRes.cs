@@ -391,25 +391,14 @@ public static class MyRes
     static void RemoveFromStorageGlobal(Resource cost)
     {
         UpdateResource(cost, false);
+        Resource toRemove = new(cost);
         for (int i = 0; i < storage.Count; i++)
         {
-            Resource diff = storage[i].LocalResources.Future(true).Diff(cost);
-            for (int j = cost.types.Count - 1; j >= 0; j--)
-            {
-                int x = diff.types.IndexOf(cost.types[j]);
-                if (x == -1)
-                {
-                    storage[i].LocalResources[cost.types[j]] -= cost.ammounts[j];
-                    cost.ammounts.RemoveAt(j);
-                    cost.types.RemoveAt(j);
-                }
-                else
-                {
-                    int change = cost.ammounts[j] - diff.ammounts[x];
-                    storage[i].LocalResources[cost.types[j]] -= change;
-                    cost.ammounts[j] -= change;
-                }
-            }
+            Resource diff = storage[i].LocalResources.Future(true).Diff(toRemove);
+            storage[i].LocalResources.Manage(diff, false);
+            toRemove.Manage(diff, false, removeEmpty: true);
+            if (toRemove.types.Count == 0)
+                break;
         }
     }
 
@@ -429,8 +418,7 @@ public static class MyRes
     /// <param name="cost">Resource and money cost.</param>
     public static void PayCostGlobal(MoneyResource cost)
     {
-        RemoveFromStorageGlobal(cost);
-        ManageMoneyGlobal(-cost.Money);
+        PayCostGlobal(cost, +cost.Money);
     }
 
     /// <summary>

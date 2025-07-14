@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -239,6 +240,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             ((Building)building).transform);
         pipe.RecalculatePipeTransform();
         pipe.connectedBuilding = building;
+        pipe.UniqueID();
         return pipe;
     }
     #endregion Loading Game
@@ -249,6 +251,15 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         if (!buttons.IsDone)
             yield return buttons;
         buildPrefabs = buttons.Result;
-        buildPrefabs.Categories.SelectMany(q => q.Objects).Select(q => q.building).ToList().ForEach(q => q.InitModifiers());
+        buildPrefabs.Categories.SelectMany(q => q.Objects).ToList().ForEach(q =>
+        {
+            q.building.InitModifiers();
+            q.materials = q.building.GetComponentsInChildren<Renderer>().Select(q => q.sharedMaterial).ToList();
+        });
+    }
+
+    public List<Material> GetModelMaterials(Building building)
+    {
+        return buildPrefabs.Categories[building.categoryID].Objects.FirstOrDefault(q => q.id == building.wrapperID).materials;
     }
 }

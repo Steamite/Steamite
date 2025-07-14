@@ -41,8 +41,8 @@ namespace InfoWindowViews
 
 
         #region References
-        DoubleResList inputResource;
-        DoubleResList outputResource;
+        DoubleFluidResList inputResource;
+        DoubleFluidResList outputResource;
 
         Label capacityLabel;
         RadialFillElement radialElement;
@@ -66,8 +66,9 @@ namespace InfoWindowViews
             {
                 style =
                 {
-                    flexGrow = 1,
-                    maxWidth = new Length(30, LengthUnit.Percent),
+                    flexGrow = 0,
+                    minWidth = 124,
+                    maxWidth = 124
                 }
             };
             Add(visualElement);
@@ -96,7 +97,7 @@ namespace InfoWindowViews
             prodSpeedLabel.AddToClassList("no-space-around");
             visualElement.Add(prodSpeedLabel);
 
-            outputResource = new(false, "Output", true) { leftPadding = 0 };
+            outputResource = new(false, "Output", true);
             Add(outputResource);
             UpdateButton();
         }

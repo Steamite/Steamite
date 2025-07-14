@@ -18,28 +18,40 @@ public class ResourceSkins : ScriptableObject
 {
     [SerializeField] public ResourceSkin moneySkin;
     /// <summary>List of all skins.</summary>
-    [SerializeField] public List<ResourceSkin> skins = new();
+    [SerializeField] public List<ResourceSkin> resSkin = new();
+    [SerializeField] public List<ResourceSkin> fluidSkin = new();
 
     /// <summary>
     /// Ensures each resource type has it's own <see cref="ResourceSkin"/>.
     /// </summary>
     private void OnValidate()
     {
-        List<string> resNames = Enum.GetNames(typeof(ResourceType)).Union(Enum.GetNames(typeof(FluidType))).ToList();
-
-        while (skins.Count > resNames.Count)
+        List<string> resNames = Enum.GetNames(typeof(ResourceType)).ToList();
+        while (resSkin.Count > resNames.Count)
         {
-            skins.RemoveAt(skins.Count - 1);
+            resSkin.RemoveAt(resSkin.Count - 1);
         }
-        while (skins.Count < resNames.Count)
+        while (resSkin.Count < resNames.Count)
         {
-            skins.Add(new());
+            resSkin.Add(new());
+        }
+        for (int i = 0; i < resSkin.Count; i++)
+        {
+            resSkin[i].name = resNames[i];
         }
 
-
-        for (int i = 0; i < skins.Count; i++)
+        resNames = Enum.GetNames(typeof(FluidType)).ToList();
+        while (fluidSkin.Count > resNames.Count)
         {
-            skins[i].name = resNames[i];
+            fluidSkin.RemoveAt(fluidSkin.Count - 1);
+        }
+        while (fluidSkin.Count < resNames.Count)
+        {
+            fluidSkin.Add(new());
+        }
+        for (int i = 0; i < fluidSkin.Count; i++)
+        {
+            fluidSkin[i].name = resNames[i];
         }
     }
 
@@ -50,6 +62,9 @@ public class ResourceSkins : ScriptableObject
     /// <returns>The skin for this resource.</returns>
     public Color GetResourceColor(Enum resourceType)
     {
-        return skins[(int)(ResourceType)resourceType].color;
+        if(resourceType is ResourceType)
+            return resSkin[(int)(object)resourceType].color;
+        else
+            return fluidSkin[(int)(object)resourceType].color;
     }
 }

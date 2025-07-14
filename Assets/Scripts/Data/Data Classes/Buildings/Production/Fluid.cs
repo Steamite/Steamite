@@ -22,10 +22,20 @@ public class Fluid : ResAmmount<FluidType>
     {
         capacities = _capacity;
     }
+
+    public Fluid(List<FluidType> types, int currentValue)
+    {
+        foreach (var item in types)
+        {
+            types.Add(item);
+            ammounts.Add(0);
+            capacities.Add(currentValue);
+        }
+    }
     #endregion
 
     #region Adding
-    public override void Add(FluidType type, int ammount)
+    protected override void Add(FluidType type, int ammount)
     {
         int i = types.IndexOf(type);
         if (i == -1)
@@ -35,17 +45,9 @@ public class Fluid : ResAmmount<FluidType>
         else
             ammounts[i] += ammount;
     }
-
-    public void Add(Fluid fluid)
-    {
-        for (int i = 0; i < fluid.types.Count; i++)
-        {
-            Add(fluid.types[i], fluid.ammounts[i]);
-        }
-    }
     #endregion
 
-    public override int Remove(FluidType type, int change)
+    protected override int Remove(FluidType type, int change)
     {
         int i = types.IndexOf(type);
         if (i == -1)
@@ -60,16 +62,6 @@ public class Fluid : ResAmmount<FluidType>
             ammounts[i] -= change;
         }
         return change;
-    }
-
-    public void Remove(ref Fluid fluid)
-    {
-        for (int i = fluid.types.Count-1; i > 0; i--)
-        {
-            fluid.ammounts[i] -= Remove(fluid.types[i], fluid.ammounts[i]);
-            if (fluid.ammounts[i] == 0)
-                fluid.types.RemoveAt(i);
-        }
     }
 
 
@@ -107,5 +99,10 @@ public class Fluid : ResAmmount<FluidType>
 
 
     public Fluid Diff(Fluid FluidCost)
-        => base.Diff(new(this), FluidCost) as Fluid;
+    {
+        Fluid fluid = new Fluid();
+        Diff(fluid, FluidCost);
+        return fluid;
+    }
+
 }

@@ -48,9 +48,7 @@ public partial class FluidInfo : InfoWindowControl
                 for (int i = 0; i < fluid.types.Count; i++)
                 {
                     FluidType type = fluid.types[i];
-                    containers.Add(CreateFluidIcon());
-                    containers[i].filledMask.style.color
-                        = ToolkitUtils.resSkins.GetResourceColor(type);
+                    containers.Add(CreateFluidIcon(ToolkitUtils.resSkins.GetResourceColor(type)));
 
                     var t = type;
                     var container = containers[i];
@@ -64,11 +62,11 @@ public partial class FluidInfo : InfoWindowControl
                     SceneRefs.infoWindow.RegisterTempBinding(new BindingContext(container.filledMask, "style." + nameof(VisualElement.style.height)), binding, data);
 
                     binding = BindingUtil.CreateBinding(nameof(IFluidWork.StoredFluids));
-                    binding.sourceToUiConverters.AddConverter((ref Fluid flu) => flu[t].ToString());
+                    binding.sourceToUiConverters.AddConverter((ref Fluid flu) => $"{flu.ammounts[x]} / {flu.capacities[x]}");
                     SceneRefs.infoWindow.RegisterTempBinding(new BindingContext(container.filledLabel, "text"), binding, data);
 
                     binding = BindingUtil.CreateBinding(nameof(IFluidWork.StoredFluids));
-                    binding.sourceToUiConverters.AddConverter((ref Fluid flu) => flu[t].ToString());
+                    binding.sourceToUiConverters.AddConverter((ref Fluid flu) => $"{flu.ammounts[x]} / {flu.capacities[x]}");
                     SceneRefs.infoWindow.RegisterTempBinding(new BindingContext(container.emptyLabel, "text"), binding, data);
                 }
                 break;
@@ -77,10 +75,9 @@ public partial class FluidInfo : InfoWindowControl
 
     public FluidInfo()
     {
-        containers = new() { CreateFluidIcon(), CreateFluidIcon() };
+        containers = new() { CreateFluidIcon(Color.blue), CreateFluidIcon(Color.gray) };
     }
-
-    FluidContainerElem CreateFluidIcon()
+    FluidContainerElem CreateFluidIcon(Color filledColor = new())
     {
         Label emptyLabel, filledLabel;
         VisualElement container = new()
@@ -105,7 +102,8 @@ public partial class FluidInfo : InfoWindowControl
         });
         container.Add(mask);
 
-        mask = new() { name = "filled-mask" };
+        mask = new() 
+        { name = "filled-mask", style = { backgroundColor = filledColor} };
         mask.Add(filledLabel = new Label("##")
         {
             name = "filled-label",

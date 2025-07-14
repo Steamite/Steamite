@@ -16,28 +16,29 @@ MonoBehaviour:
     name: Money
     color: {r: 1, g: 0.8431373, b: 0, a: 1}
     icon: {fileID: 0}
-  skins:
+  resSkin:
   - name: None
     color: {r: 1, g: 0.8431373, b: 0, a: 1}
     icon: {fileID: 0}
   - name: Coal
-    color: {r: 0.10980393, g: 0.10980393, b: 0.10980393, a: 1}
+    color: {r: 0.14150941, g: 0.14150941, b: 0.14150941, a: 1}
     icon: {fileID: 0}
   - name: Metal
     color: {r: 1, g: 0, b: 0, a: 1}
     icon: {fileID: 0}
   - name: Stone
-    color: {r: 0.54509807, g: 0.54901963, b: 0.5372549, a: 1}
+    color: {r: 0.53086823, g: 0.5293254, b: 0.6132076, a: 1}
     icon: {fileID: 0}
   - name: Food
-    color: {r: 0.28627452, g: 0.47450984, b: 0.41960788, a: 1}
+    color: {r: 0.19884163, g: 0.6603774, b: 0.09656461, a: 1}
     icon: {fileID: 0}
   - name: Wood
-    color: {r: 0.3647059, g: 0.2509804, b: 0.21568629, a: 1}
+    color: {r: 0.44705886, g: 0.28627452, b: 0.13725491, a: 1}
     icon: {fileID: 0}
+  fluidSkin:
   - name: Water
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0, g: 0.10895157, b: 1, a: 1}
     icon: {fileID: 0}
   - name: Steam
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 1, g: 1, b: 1, a: 1}
     icon: {fileID: 0}

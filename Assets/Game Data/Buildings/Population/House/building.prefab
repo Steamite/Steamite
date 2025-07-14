@@ -146,8 +146,7 @@ MonoBehaviour:
     requests: []
     carriers: []
     mods: 
-  _materialColors: []
-  _meshRenderers: []
+  meshRenderers: []
   buildingCategories: 1
   blueprint:
     size:

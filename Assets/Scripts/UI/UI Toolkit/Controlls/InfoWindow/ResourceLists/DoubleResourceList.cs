@@ -64,8 +64,6 @@ namespace InfoWindowElements
         ///<summary> Do not use from code, this is only for adding the resource list from UI Builder.</summary>
         public DoubleResourceList() : base()
         {
-            //style.marginTop = new(new Length(9, LengthUnit.Percent));
-            style.maxWidth = new(new Length(35, LengthUnit.Percent));
             style.alignContent = Align.Center;
             cost = false;
             useBindings = true;
@@ -73,11 +71,12 @@ namespace InfoWindowElements
 
         public DoubleResourceList(bool _cost, string _name, bool _useBindings = false) : base()
         {
-            style.marginTop = new(new Length(9, LengthUnit.Percent));
-            style.width = new(new Length(35, LengthUnit.Percent));
+            style.height = 85;
             style.flexGrow = 0;
-            //style.minWidth = new(new Length(35, LengthUnit.Percent));
             style.alignContent = Align.Center;
+            VisualElement content = this.Q<VisualElement>("unity-content-container");
+            content.style.flexGrow = 1;
+            content.style.justifyContent = Justify.Center;
             cost = _cost;
             name = _name;
             useBindings = _useBindings;
@@ -93,105 +92,10 @@ namespace InfoWindowElements
         }
         #endregion
 
-        Label noneLabel;
+        protected Label noneLabel;
 
         #region Init
-        /// <inheritdoc/>
-        public override void Open(object data)
-        {
-            DataBinding mainBinding = null;
-            switch (data)
-            {
-                case Building:
-                    Building b = (Building)data;
-                    if (b.id == -1)
-                    {
-                        mainBinding = SetupResTypes(b.Cost as T, nameof(ResourceDisplay.GlobalResources));
-                        mainBinding.sourceToUiConverters.AddConverter((ref MoneyResource storage) => ToUIRes(storage as T));
-                        data = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
-                        dataSource = data;
-                        SetBinding(nameof(resources), mainBinding);
-                        ((IUpdatable)data).UIUpdate(nameof(ResourceDisplay.GlobalResources));
-                        return;
-                    }
-                    else if (data is IResourceProduction)
-                    {
-                        // DEBUG_Binding example binding
-                        // Creates a list that's used as itemSource, containg a static resouce and a dynamic binded resource.
-                        if (cost)
-                            mainBinding = SetupResTypes(
-                                ((IResourceProduction)b).ResourceCost as T,
-                                nameof(IResourceProduction.ResourceCost),
-                                nameof(IResourceProduction.InputResource),
-                                data);
-                        else
-                            mainBinding = SetupResTypes(
-                                ((IResourceProduction)b).ResourceYield as T,
-                                nameof(IResourceProduction.ResourceYield),
-                                nameof(Building.LocalRes),
-                                data);
-                        mainBinding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage as T));
-                    }
-                    else if (data is WaterPump)
-                    {
-                        if (cost)
-                        {
-                            noneLabel.dataSource = (data as WaterPump).waterSource;
-                            noneLabel.style.height = new Length(50, LengthUnit.Pixel);
-                            DataBinding binding = BindingUtil.CreateBinding(nameof(Water.Ammount));
-                            binding.sourceToUiConverters.AddConverter((ref int amm) => $"Water Source:\n {amm}/1");
-                            SceneRefs.infoWindow.RegisterTempBinding(new BindingContext(noneLabel, "text"), binding, (data as WaterPump).waterSource);
-                            return;
-                        }
-                        else
-                        {
-                            noneLabel.dataSource = data;
-                            DataBinding binding = BindingUtil.CreateBinding(nameof(WaterPump.StoredFluids));
-                            binding.sourceToUiConverters.AddConverter((ref Fluid fluid) => $"Water: 2({fluid[FluidType.Water]})");
-                            SceneRefs.infoWindow.RegisterTempBinding(new BindingContext(noneLabel, "text"), binding, data);
-                            return;
-                        }
-                    }
-                    else
-                    {
 
-                        return;
-                    }
-
-                    break;
-
-                case LevelInfo:
-                    LevelInfo tab = (LevelInfo)data;
-                    Resource resource = tab.LevelData.costs[tab.SelectedLevel];
-
-                    if (cost)
-                        mainBinding = SetupResTypes(resource as T, nameof(ResourceDisplay.GlobalResources));
-                    else
-                        throw new NotImplementedException();
-
-
-                    mainBinding.sourceToUiConverters.AddConverter((ref Resource globalStorage) =>
-                    {
-                        tab.UpdateCostView();
-                        return ToUIRes(globalStorage as T);
-                    });
-                    data = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
-                    dataSource = data;
-                    break;
-
-                case Resource:
-                    Resource res = (Resource)data;
-
-                    if (cost && !useBindings)
-                    {
-                        SetResWithoutBinding(res);
-                    }
-                    return;
-                default:
-                    throw new NotImplementedException(data.ToString());
-            }
-            SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), mainBinding, data);
-        }
 
 
         protected void SetResWithoutBinding(Resource res)
@@ -287,6 +191,13 @@ namespace InfoWindowElements
         }
         #endregion
 
+        protected override VisualElement MakeItem()
+        {
+            VisualElement visualElement = base.MakeItem();
+            //visualElement.style.alignContent = Align.Center;
+            visualElement.style.alignSelf = Align.Center;
+            return visualElement;
+        }
         protected override VisualElement MakeNoneElement()
         {
             noneLabel = base.MakeNoneElement() as Label;

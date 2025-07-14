@@ -15,7 +15,7 @@ public class BuildingWrapper : DataObject
 
     [SerializeField] public Sprite preview;
     [NonSerialized] public bool unlocked = true;
-
+    [NonSerialized] public List<Material> materials = new();
 
 #if UNITY_EDITOR
     public void SetBuilding(Building _b, byte categoryID, string name = null)

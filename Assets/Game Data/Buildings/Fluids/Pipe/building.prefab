@@ -162,8 +162,8 @@ MonoBehaviour:
       types: 
       ammounts: 
     money:
-      baseValue: 2
-      currentValue: 2
+      baseValue: 20
+      currentValue: 20
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
@@ -175,6 +175,11 @@ MonoBehaviour:
     consumptionBuildings: []
     networkID: -1
     networkName: 
+  connectedPipes:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!210 &2337060514408432828
 SortingGroup:
   m_ObjectHideFlags: 0

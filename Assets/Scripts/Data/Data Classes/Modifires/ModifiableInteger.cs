@@ -30,7 +30,7 @@ public class ModifiableInteger : IModifiable
     }
 
     public static int operator -(ModifiableInteger i)
-        => i.currentValue;
+        => -i.currentValue;
     public static int operator +(ModifiableInteger i)
         => i.currentValue;
 

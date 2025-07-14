@@ -46,6 +46,7 @@ public interface IResourceProduction : IProduction
         {
             SceneRefs.jobQueue.CancelJob(JobState.Supply, (ClickableObject)this);
             ProdStates.supplied = true;
+            ProdStates.requestedSupply = false;
             RefreshStatus();
         }
         if (InputResource.requests[index].Sum() == 0)
@@ -68,13 +69,9 @@ public interface IResourceProduction : IProduction
             {
                 CurrentTime += ProdSpeed * progress;
                 ((Building)this).UIUpdate(nameof(CurrentTime));
-                if (CurrentTime >= ProdTime && ProdStates.space)
+                if (CurrentTime >= ProdTime)
                 {
                     Product();
-                    AfterProduction();
-
-                    ((Building)this).UIUpdate(nameof(Building.LocalRes));
-                    RefreshStatus();
                 }
             }
         }
@@ -82,16 +79,15 @@ public interface IResourceProduction : IProduction
 
     void IProduction.Product()
     {
-        while (CurrentTime >= ProdTime &&
-            (LocalResource.capacity.currentValue == -1 || LocalResource.Sum() < LocalResource.capacity.currentValue))
-        {
-            CurrentTime -= ProdTime;
-            LocalResource.Manage(ResourceYield, true);
-            MyRes.UpdateResource(ResourceYield, true);
+        CurrentTime -= ProdTime;
+        LocalResource.Manage(ResourceYield, true);
+        ((IUpdatable)this).UIUpdate(nameof(Building.LocalRes));
+        MyRes.UpdateResource(ResourceYield, true);
+
+        if(ProdStates.needsResources)
             ProdStates.supplied = InputResource.Diff(ResourceCost).Sum() == 0;
-            if (!ManageInputRes())
-                return;
-        }
+        ProdStates.space = ResourceYield.Sum() <= LocalResource.FreeSpace;
+        ManageInputRes();
     }
 
     /// <summary>
@@ -101,27 +97,25 @@ public interface IResourceProduction : IProduction
     /// <returns>Returns production is running.</returns>
     public bool ManageInputRes()
     {
-        if (!ProdStates.supplied)
+        if (ProdStates.needsResources && !ProdStates.supplied)
         {
             ProdStates.running = false;
             RequestRestock();
+            return false;
+        }
+        else if (!ProdStates.space)
+        {
+            ProdStates.running = false;
+            RequestPickup();
             return false;
         }
         else
         {
             InputResource.Manage(ResourceCost, false);
             ((ClickableObject)this).UIUpdate("InputResource");
-            //MyRes.UpdateResource(ProductionCost, -1);
             ProdStates.running = true;
             return true;
         }
-    }
-
-    /// <summary>Place for custom implementations on child classes.</summary>
-    void AfterProduction()
-    {
-        RequestRestock();
-        RequestPickup();
     }
 
     new public void RefreshStatus()
@@ -130,9 +124,9 @@ public interface IResourceProduction : IProduction
 
         if (building.constructed)
         {
-            building.transform.GetChild(0).GetChild(0).gameObject.SetActive(Stoped);
+            /*building.transform.GetChild(0).GetChild(0).gameObject.SetActive(Stoped);
             building.transform.GetChild(0).GetChild(1).gameObject.SetActive(!ProdStates.supplied);
-            building.transform.GetChild(0).GetChild(2).gameObject.SetActive(!ProdStates.space);
+            building.transform.GetChild(0).GetChild(2).gameObject.SetActive(!ProdStates.space);*/
         }
     }
     #endregion
@@ -141,19 +135,27 @@ public interface IResourceProduction : IProduction
     /// <summary>Adds a <see cref="JobState.Supply"/> job order.</summary>
     void RequestRestock()
     {
-        if (InputResource.carriers.Count == 0 && !SceneRefs.jobQueue.supplyNeeded.Contains(this))
+        if(ProdStates.needsResources && ProdStates.requestedSupply == false)
+        {
+            ProdStates.requestedSupply = true;
             SceneRefs.jobQueue.AddJob(JobState.Supply, (ClickableObject)this);
+        }
     }
 
     /// <summary>Adds a <see cref="JobState.Pickup"/> job order.</summary>
     void RequestPickup()
     {
-        if (LocalResource.carriers.Count == 0 && !SceneRefs.jobQueue.pickupNeeded.Contains((StorageObject)this))
+        if (ProdStates.requestedPickup == false && LocalResource.Sum() > 0)
+        {
+            ProdStates.requestedPickup = true;
             SceneRefs.jobQueue.AddJob(JobState.Pickup, (ClickableObject)this);
+        }
     }
 
     void Init(bool constructed)
     {
+        ProdStates.needsResources = ResourceCost.Sum() > 0;
+
         if (constructed)
         {
             RequestRestock();
