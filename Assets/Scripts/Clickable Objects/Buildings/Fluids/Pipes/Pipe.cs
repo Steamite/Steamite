@@ -3,24 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.MemoryProfiler;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
 public class Pipe : Building
 {
     public FluidNetwork network = null;
-    PipePart[] connectedPipes = new PipePart[4];
+    public PipePart[] connectedPipes = new PipePart[4];
     readonly int[] connectionOrder = { 1, 0, 3, 2 };
-    public override void OrderDeconstruct()
-    {
-        base.OrderDeconstruct();
-        if (Input.GetButton("Shift"))
-        {
-            foreach (Pipe pipe in transform.GetComponentsInChildren<PipePart>().Select(q => q.connectedPipe).Where(q => q.deconstructing == false))
-            {
-                pipe.OrderDeconstruct();
-            }
-        }
-    }
+
     public override void FinishBuild()
     {
         List<FluidNetwork> connectedNetworks = connectedPipes
@@ -50,7 +41,29 @@ public class Pipe : Building
             MyGrid.fluidNetworks.Add(network);
         }
         base.FinishBuild();
+        ConnectToNetwork(network);
     }
+    public virtual void ConnectToNetwork(FluidNetwork _network)
+    {
+        if(_network == network)
+        {
+            return;
+        }
+        else
+        {
+            network.pipes.Remove(this);
+
+            network = _network;
+            network.pipes.Add(this);
+
+            foreach (Pipe connected in connectedPipes.Where(q => q != null).Select(q => q.connectedPipe))
+            {
+                connected.ConnectToNetwork(network);
+            }
+        }
+    }
+
+
     public override void PlaceBuilding()
     {
         UniqueID();
@@ -68,7 +81,7 @@ public class Pipe : Building
         SceneRefs.gridTiles.HighLight(new(), gameObject);
 
         SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
-        MyRes.UpdateResource(cost, false);
+        MyRes.PayCostGlobal(cost);
     }
 
     public void ConnectPipe(int _case, Pipe connectedPipe, bool canNext)
@@ -129,29 +142,28 @@ public class Pipe : Building
         GridPos gridPos = GetPos();
         for (int x = 0; x < 4; x++)
         {
-            DisconnectPipe(x, true);
+            DisconnectPipe(x, true, false);
         }
-        if (id == -1)
-            Destroy(gameObject);
-        else
-        {
-            MyGrid.SetGridItem(gridPos, null, true);
-            if (network.networkID != -1)
-                network.Split(this);
-            base.DestoyBuilding();
-        }
+        MyGrid.SetGridItem(gridPos, null, true);
+        if (network.networkID != -1)
+            network.Split(this);
+        base.DestoyBuilding();
     }
 
-    public void DisconnectPipe(int _case, bool canNext)
+    public void DisconnectPipe(int _case, bool canNext, bool destroyConnection = true)
     {
         try
         {
             PipePart connection = connectedPipes[_case];
             if (connection != null)
             {
-                Destroy(connection.gameObject);
-                RemoveRenderer(connection.GetComponent<Renderer>());
-                connectedPipes[_case] = null;
+                if (destroyConnection)
+                {
+                    Destroy(connection.gameObject);
+                    connectedPipes[_case] = null;
+                    RemoveRenderer(connection.GetComponent<Renderer>());
+                }
+
                 if (canNext)
                 {
                     Pipe p = connection.connectedPipe;
@@ -173,7 +185,7 @@ public class Pipe : Building
     protected virtual void AddRenderer(Renderer _renderer)
     {
         meshRenderers.Add(_renderer);
-        UpdateRenderMode(_renderer);
+        UpdateRenderMode(meshRenderers.Count-1, meshRenderers[0].material);
     }
 
     protected virtual void RemoveRenderer(Renderer _renderer)
@@ -313,4 +325,6 @@ public class Pipe : Building
             }
         }
     }
+
+    
 }

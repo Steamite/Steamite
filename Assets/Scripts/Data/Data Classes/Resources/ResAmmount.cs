@@ -11,9 +11,9 @@ public class ResAmmount<T> : ResAmmountBase where T : System.Enum
 {
     #region Variables
     /// <summary>Resource types here, coresponds to the <see cref="ammounts"/>.</summary>
-    public List<T> types = new();
+    public List<T> types;
     /// <summary>Resource ammounts here, coresponds to the <see cref="types"/>.</summary>
-    public List<int> ammounts = new();
+    public List<int> ammounts;
     #endregion
 
     #region Constructors
@@ -31,7 +31,8 @@ public class ResAmmount<T> : ResAmmountBase where T : System.Enum
 
     public ResAmmount()
     {
-
+        types = new();
+        ammounts = new();
     }
     #endregion
 
@@ -91,7 +92,7 @@ public class ResAmmount<T> : ResAmmountBase where T : System.Enum
     }
     #endregion
 
-    public virtual void Add(T type, int ammount)
+    protected virtual void Add(T type, int ammount)
     {
         int i = types.IndexOf(type);
         if (i == -1)
@@ -103,7 +104,7 @@ public class ResAmmount<T> : ResAmmountBase where T : System.Enum
             ammounts[i] += ammount;
     }
 
-    public virtual int Remove(T type, int change)
+    protected virtual int Remove(T type, int change)
     {
         int i = types.IndexOf(type);
         if (i == -1)
@@ -115,26 +116,43 @@ public class ResAmmount<T> : ResAmmountBase where T : System.Enum
         return change;
     }
 
-    public void Remove(ResAmmount<T> resAmmount)
+    public void Manage(ResAmmount<T> resAmmount, bool add, int mod = 1, bool removeEmpty = false)
     {
-        for (int i = 0; i < resAmmount.types.Count; i++)
+        for (int i = resAmmount.types.Count - 1; i > -1; i--)
+            ManageSimple(resAmmount.types[i], resAmmount.ammounts[i], add, mod, removeEmpty);
+    }
+
+    public void ManageSimple(T type, int ammount, bool add, int mod = 1, bool removeEmpty = false)
+    {
+        if (add)
+            Add(type, ammount * mod);
+        else
         {
-            Remove(resAmmount.types[i], resAmmount.ammounts[i]);
+            Remove(type, ammount * mod);
+            if (removeEmpty)
+            {
+                int i = types.IndexOf(type);
+                if (ammounts[i] <= 0)
+                {
+                    if (ammount < 0)
+                        Debug.LogError("removed too much");
+                    types.RemoveAt(i);
+                    ammounts.RemoveAt(i);
+                }
+            }
         }
     }
 
-    public void Manage(ResAmmount<T> resAmmount, bool add, int mod = 1)
+    public void RemoveAndCheck(ResAmmount<T> toTransfer)
     {
-        for (int i = 0; i < resAmmount.types.Count; i++)
-        {
-            if (add)
-                Add(resAmmount.types[i], resAmmount.ammounts[i] * mod);
-            else
-                Remove(resAmmount.types[i], resAmmount.ammounts[i] * mod);
-        }
+        ResAmmount<T> ret = new();
+        Diff(ret, toTransfer);
+        ret = toTransfer - ret;
+        Manage(ret, false);
+        toTransfer.Manage(ret, false, removeEmpty: true);
     }
 
-    protected ResAmmount<T> Diff(ResAmmount<T> ret, ResAmmount<T> cost)
+    protected void Diff(ResAmmount<T> ret, ResAmmount<T> cost)
     {
         for (int i = 0; i < cost.types.Count; i++)
         {
@@ -154,10 +172,16 @@ public class ResAmmount<T> : ResAmmountBase where T : System.Enum
                 ret.ammounts.Add(cost.ammounts[i]);
             }
         }
-        return ret;
     }
 
     public int Sum() => ammounts.Sum();
+
+    public static ResAmmount<T> operator -(ResAmmount<T> a, ResAmmount<T> b)
+    {
+        ResAmmount<T> res = new(a);
+        res.Manage(b, false, removeEmpty: true);
+        return res;
+    }
 }
 
 [Serializable]

@@ -308,7 +308,10 @@ namespace TradeWindowElements
             VisualElement dealsElem = ElementAt(category).ElementAt(1);
             for (int i = 0; i < deals.Count; i++)
             {
-                resource.Add(deals[i].type, ((SliderInt)dealsElem.ElementAt(i).ElementAt(0).ElementAt(1)).value);
+                resource.ManageSimple(
+                    deals[i].type, 
+                    ((SliderInt)dealsElem.ElementAt(i).ElementAt(0).ElementAt(1)).value,
+                    true);
             }
             return resource;
         }

@@ -355,37 +355,41 @@ public class Building : StorageObject
     public virtual void ChangeRenderMode(bool transparent)
     {
         isTransparent = transparent;
-        foreach (var _renderer in meshRenderers)
-        {
-            UpdateRenderMode(_renderer);
-        }
-    }
-
-    protected virtual void UpdateRenderMode(Renderer _renderer)
-    {
-        Material material = _renderer.material;
+        Material mat;
         if (isTransparent)
         {
-            material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-            material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            material.SetInt("_ZWrite", 0);
-            material.DisableKeyword("_ALPHATEST_ON");
-            material.DisableKeyword("_ALPHABLEND_ON");
-            material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-            material.renderQueue = 3000;
-            material.color = new(material.color.r, material.color.g, material.color.b, 0.1f + (constructionProgress / maximalProgress) * 0.9f);
+            mat = MaterialChanger.Transparent;
+            for (int i = 0; i < meshRenderers.Count; i++)
+            {
+                UpdateRenderMode(i, mat);
+            }
         }
         else
         {
-            material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-            material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-            material.SetInt("_ZWrite", 1);
-            material.DisableKeyword("_ALPHATEST_ON");
-            material.DisableKeyword("_ALPHABLEND_ON");
-            material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-            material.renderQueue = -1;
+            List<Material> materials = SceneRefs.objectFactory.GetModelMaterials(this);
+            for (int i = 0; i < meshRenderers.Count; i++)
+            {
+                if(i >= materials.Count)
+                    UpdateRenderMode(i, materials[0]);
+                else
+                    UpdateRenderMode(i, materials[i]);
+            }
         }
-        _renderer.material = material;
+    }
+
+    protected virtual void UpdateRenderMode(int i, Material material = null)
+    {
+        Renderer _renderer = meshRenderers[i];
+        if (isTransparent)
+        {
+            Material newMat = new(material);
+            Color c = _renderer.material.color;
+            newMat.color = new(c.r, c.g, c.b, 
+                0.1f + (constructionProgress / maximalProgress) * 0.9f);
+            _renderer.SetMaterials(new List<Material>(){ newMat });
+        }
+        else
+            _renderer.material = new(material);
     }
 
     protected virtual void UpdateConstructionProgressAlpha()

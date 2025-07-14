@@ -185,11 +185,35 @@ MonoBehaviour:
   maximalProgress: 0
   categoryID: 3
   wrapperID: 2082713551
-  waterSource: {fileID: 0}
-  prodTime: 2
   assignLimit:
     baseValue: 2
     currentValue: 2
+  productionTime: 2
+  resourceCost:
+    types: 
+    ammounts: 
+    baseResource:
+      types: 
+      ammounts: 
+  resourceYield:
+    types: 
+    ammounts: 
+    baseResource:
+      types: 
+      ammounts: 
+  fluidCost:
+    types: 
+    ammounts: 
+    capacities: 
+  fluidYeild:
+    types: 00000000
+    ammounts: 02000000
+    capacities: 
+  storedFluids:
+    types: 
+    ammounts: 
+    capacities: 
+  waterSource: {fileID: 0}
 --- !u!210 &8138561932775318445
 SortingGroup:
   m_ObjectHideFlags: 0

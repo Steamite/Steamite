@@ -5,12 +5,7 @@ public class BuildPipe : Pipe
 {
     public IFluidWork connectedBuilding;
     //bool pipesSaved = false;
-    public void FillData(Pipe p, IFluidWork _connectedBuild)
-    {
-        network = p.network;
-        id = p.id;
-        connectedBuilding = _connectedBuild;
-    }
+
     public override void OnPointerEnter(PointerEventData eventData) { }
     public override void OnPointerExit(PointerEventData eventData) { }
     public override void OnPointerDown(PointerEventData eventData)
@@ -25,18 +20,36 @@ public class BuildPipe : Pipe
     public override void FinishBuild()
     {
         base.FinishBuild();
+    }
+    public override void ConnectToNetwork(FluidNetwork network)
+    {
+        base.ConnectToNetwork(network);
         if (network.buildings.IndexOf(connectedBuilding) == -1)
         {
             network.buildings.Add(connectedBuilding);
 
-            if (connectedBuilding is WaterPump 
-                || connectedBuilding is FluidTank 
+            if (connectedBuilding is WaterPump
+                || connectedBuilding is FluidTank
                 || connectedBuilding is FluidResProductionBuilding)
                 network.storageBuildings.Add(connectedBuilding);
 
-            if(connectedBuilding is FluidResProductionBuilding fluidResProduction)
+            if (connectedBuilding is FluidResProductionBuilding fluidResProduction)
                 network.consumptionBuildings.Add(fluidResProduction);
         }
+    }
+
+    public override void DestoyBuilding()
+    {
+        network.buildings.Remove(connectedBuilding);
+
+        if (connectedBuilding is WaterPump
+            || connectedBuilding is FluidTank
+            || connectedBuilding is FluidResProductionBuilding)
+            network.storageBuildings.Remove(connectedBuilding);
+
+        if (connectedBuilding is FluidResProductionBuilding fluidResProduction)
+            network.consumptionBuildings.Remove(fluidResProduction);
+        base.DestoyBuilding();
     }
     public override void PlacePipe()
     {

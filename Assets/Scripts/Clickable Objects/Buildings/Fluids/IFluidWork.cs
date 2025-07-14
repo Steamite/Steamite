@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public interface IFluidWork
@@ -47,67 +48,91 @@ public interface IFluidWork
         }
     }
 
+    public void OnDestroy()
+    {
+        Empty();
+        AttachedPipes.ForEach(q => q.DestoyBuilding());
+    }
+    void Empty()
+    {
+        StoreInNetwork(StoredFluids, false);
+    }
     /// <summary>
     /// Finds buildings that can contain the needed fluids and then tries to take it from them.
     /// </summary>
     /// <param name="fluid">Fluid to take</param>
     bool TakeFromNetwork(Fluid fluid, bool immediatelyUse = true)
     {
-        if (immediatelyUse && StoredFluids.Contains(fluid))
+        if (StoredFluids.Contains(fluid))
         {
-            StoredFluids.Remove(fluid);
+            if(immediatelyUse)
+                StoredFluids.Manage(fluid, false);
             return true;
         }
 
         IEnumerable<FluidNetwork> fluidNetworks =
             AttachedPipes.Select(q => q.network).Distinct();
-        
+
         IEnumerable<IFluidWork> bestSources = fluidNetworks
             .SelectMany(q => q.storageBuildings
-                .Where(q => q.StoredFluids.types.Union(fluid.types).Count() > 0));
+                .Where(q => q.StoredFluids.types.Union(fluid.types).Count() > 0))
+                .Where(q => q != this);
 
-        Fluid remainingTransfer = new(fluid);
+        Fluid toTransfer = new(fluid);
         foreach (var storage in bestSources)
         {
-            storage.StoredFluids.Remove(ref remainingTransfer);
-            if (remainingTransfer.types.Count == 0)
+            storage.StoredFluids.RemoveAndCheck(toTransfer);
+            ((IUpdatable)storage).UIUpdate(nameof(StoredFluids));
+            if (toTransfer.types.Count == 0)
             {
                 if(immediatelyUse == false)
-                    StoredFluids.Add(fluid);
+                {
+                    StoredFluids.Manage(fluid, true);
+                    ((IUpdatable)this).UIUpdate(nameof(StoredFluids));
+                }
                 return true;
             }
         }
 
+        
         for (int i = 0; i < fluid.types.Count; i++)
         {
-            int j = remainingTransfer.types.IndexOf(fluid.types[i]);
-            int x = j == -1 ? 0 : remainingTransfer.ammounts[j];
-            
-            StoredFluids.Add(
-                fluid.types[i], 
-                fluid.ammounts[i] - x);
+            int j = toTransfer.types.IndexOf(fluid.types[i]);
+            int x = j == -1 ? 0 : toTransfer.ammounts[j];
+
+            StoredFluids.ManageSimple(
+                fluid.types[i],
+                fluid.ammounts[i] - x,
+                true);
         }
+        ((IUpdatable)this).UIUpdate(nameof(StoredFluids));
         return false;
     }
 
-    public void StoreInNetwork(Fluid fluid)
+    public bool StoreInNetwork(Fluid fluid, bool storeInSelf = true)
     {
-        if (StoredFluids.HasSpace(fluid))
+        if (storeInSelf && StoredFluids.HasSpace(fluid))
         {
-            StoredFluids.Add(fluid);
+            StoredFluids.Manage(fluid, true);
             ((IUpdatable)this).UIUpdate(nameof(StoredFluids));
-            return;
+            if(StoredFluids.HasSpace(fluid))
+                return true;
         }
 
-        IEnumerable<FluidNetwork> fluidNetworks =
-            AttachedPipes.Select(q => q.network).Distinct();
-
-        IFluidWork build = fluidNetworks.SelectMany(q => q.storageBuildings).FirstOrDefault(q => q.StoredFluids.HasSpace(fluid));
+        IEnumerable<IFluidWork> buildings = AttachedPipes.Select(q => q.network).Distinct().SelectMany(q => q.storageBuildings);
+        IFluidWork build = buildings.FirstOrDefault(q => q.StoredFluids.HasSpace(fluid));
         if (build != null)
         {
-            build.StoredFluids.Add(fluid);
+            build.StoredFluids.Manage(fluid, true);
             ((IUpdatable)build).UIUpdate(nameof(StoredFluids));
+            if (build.StoredFluids.HasSpace(fluid) 
+                || buildings.FirstOrDefault(q => q.StoredFluids.HasSpace(fluid)) != null)
+                return true;
         }
+
+        StoredFluids.Manage(fluid, true);
+        ((IUpdatable)this).UIUpdate(nameof(StoredFluids));
+        return false;
     }
 
     void CreatePipes(bool loading = false)
@@ -134,5 +159,10 @@ public interface IFluidWork
             PlacePipes();
             ConnectToNetwork();
         }
+    }
+
+    public bool HasSpace(Fluid fluid)
+    {
+        return AttachedPipes.Select(q => q.network).Distinct().FirstOrDefault(q=> q.HasSpace(fluid)) != null;
     }
 }

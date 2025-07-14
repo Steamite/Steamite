@@ -278,10 +278,6 @@ public static class HumanActions
                                 : MyRes.globalStorageSpace);
                         h.destination.RequestRes(r, h, -1);
                         MyRes.FindStorage(r, h);
-                        if (toMove.Sum() == 0)
-                        {
-                            jobQueue.CancelJob(JobState.Pickup, h.Job.interest);
-                        }
                         return false;
                     }
                 break;
@@ -291,7 +287,7 @@ public static class HumanActions
                 break;
             case JobState.Cleanup:
                 if (MyRes.globalStorageSpace == 0)
-                    return true;
+                    break;
                 IEnumerable<ClickableObject> chunks;
                 if ((chunks = MyGrid.chunks.Where(q => q.LocalRes.Future().Sum() > 0)).Count() > 0)
                 {

@@ -63,6 +63,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
         (clickable as ProductionBSave).ProdStates = ProdStates;
         return base.Save(clickable);
     }
+
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
@@ -92,6 +93,18 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
             base.Store(human, transferPerTick);
         }
     }
+    public override void Take(Human h, int transferPerTick)
+    {
+        base.Take(h, transferPerTick);
+
+        if (localRes.requests.Count == 0) 
+        {
+            ProdStates.requestedPickup = false;
+            ProdStates.space = ResourceYield.Sum() <= localRes.FreeSpace;
+            SceneRefs.jobQueue.CancelJob(JobState.Pickup, this);
+        }
+    }
+
     /// <inheritdoc/>
     public override void RequestRes(Resource request, Human human, int mod)
     {
@@ -125,9 +138,9 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
             ProdStates.supplied = true;
             return;
         }
-        ((IResourceProduction)this).RefreshStatus();
-        ((IResourceProduction)this).RequestRestock();
+        ((IResourceProduction)this).Init(constructed);
     }
+
 
     /// <inheritdoc/>
     public override void OrderDeconstruct()
@@ -280,4 +293,5 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
         return SceneRefs.humans.GetPartTime();
     }
     #endregion
+
 }

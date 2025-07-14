@@ -42,7 +42,7 @@ public class JobQueue : MonoBehaviour
                 deconstructions.Add((Building)interest);
                 break;
             case JobState.Supply:
-                supplyNeeded.Add((IResourceProduction)interest);
+                supplyNeeded.Add(interest as IResourceProduction);
                 break;
             case JobState.Pickup:
                 pickupNeeded.Add((ResourceProductionBuilding)interest);

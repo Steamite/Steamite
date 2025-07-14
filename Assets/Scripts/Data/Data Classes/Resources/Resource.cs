@@ -23,12 +23,13 @@ public class Resource : ResAmmount<ResourceType>
     }
 
 
-    public Resource Diff(Resource cost)
+    public Resource Diff(Resource resourceCost)
     {
-        ResAmmount<ResourceType> a = base.Diff(new Resource(), cost);
-        return a as Resource;
+        Resource resource = new Resource();
+        base.Diff(resource, resourceCost);
+        return resource;
     }
-    
+
     public Resource Diff(Resource bonusInventory, Resource cost)
     {
         Resource resource = new(this);

@@ -572,13 +572,12 @@ MonoBehaviour:
     types: 
     ammounts: 
     capacity:
-      baseValue: 50
-      currentValue: 50
+      baseValue: 5
+      currentValue: 5
     requests: []
     carriers: []
     mods: 
-  _materialColors: []
-  _meshRenderers: []
+  meshRenderers: []
   buildingCategories: 2
   blueprint:
     size:
@@ -642,7 +641,7 @@ MonoBehaviour:
   assignLimit:
     baseValue: 5
     currentValue: 5
-  productionTime: 5
+  productionTime: 2
   resourceCost:
     types: 0100000002000000
     ammounts: 0200000002000000

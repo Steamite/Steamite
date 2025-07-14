@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace InfoWindowElements
 {
     [UxmlElement]
-    public partial class DoubleResourceListWithEvent : DoubleResourceList<Resource, ResourceType>
+    public partial class DoubleResourceListWithEvent : DoubleResList
     {
         Action<bool> onResChange;
         public override void Open(object data)
@@ -13,15 +13,14 @@ namespace InfoWindowElements
             DataBinding binding = null;
             switch (data)
             {
-                case Tuple<Building, Action<bool>>:
-                    Tuple<Building, Action<bool>> tup = data as Tuple<Building, Action<bool>>;
+                case Tuple<Building, Action<bool>> tup:
                     Building building = tup.Item1;
                     if (useBindings)
                     {
                         binding = SetupResTypes(building.Cost, nameof(Building.LocalRes));
                         onResChange = tup.Item2;
                         binding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage));
-                        SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, building);
+                        SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(resources)), binding, building);
                     }
                     else
                     {

@@ -65,7 +65,7 @@ public class FluidNetwork
     public void Merge(FluidNetwork _mergeWith)
     {
         if (_mergeWith == this)
-            Debug.LogError("Merging the network into it self");
+            Debug.LogError("Merging the network into itself");
         for (int i = _mergeWith.pipes.Count - 1; i > -1; i--)
         {
             Pipe pipe = _mergeWith.pipes[i];
@@ -73,11 +73,11 @@ public class FluidNetwork
             pipe.network = this;
             pipe.UIUpdate(nameof(pipe.network));
         }
-        foreach (IFluidWork building in _mergeWith.buildings)
-        {
-            buildings.Add(building);
-            // TODO: call to building
-        }
+
+        buildings = buildings.Union(_mergeWith.buildings).ToList();
+        storageBuildings = storageBuildings.Union(_mergeWith.storageBuildings).ToList();
+        consumptionBuildings = consumptionBuildings.Union(_mergeWith.consumptionBuildings).ToList();
+
         MyGrid.fluidNetworks.Remove(_mergeWith);
     }
 
@@ -87,78 +87,29 @@ public class FluidNetwork
     /// <param name="spliter">The destroyed pipe, which is missing now.</param>
     public void Split(Pipe spliter)
     {
-        if (spliter.transform.childCount == 0)
+        IEnumerable<Pipe> pipes = spliter.connectedPipes.Where(q => q != null).Select(q => q.connectedPipe);
+
+        int count = pipes.Count();
+        if(count != 1)
         {
-            MyGrid.fluidNetworks.Remove(spliter.network);
-            return;
+            foreach (var pipe in pipes)
+            {
+                if (pipe.network.networkID == networkID)
+                {
+                    FluidNetwork network = new();
+                    pipe.ConnectToNetwork(network);
+                    MyGrid.fluidNetworks.Add(network);
+                }
+            }
+
+            MyGrid.fluidNetworks.Remove(this);
         }
-        else if (spliter.transform.childCount > 1)
-        {
-            pipes.Remove(spliter);
-            DoSplit(0, 1, spliter.transform);
-        }
+
     }
 
-    /// <summary>
-    /// Recursion that checks all connections, to find if they're connected somewhere else or not.
-    /// </summary>
-    /// <param name="childA">The pipe I'm looking at.</param>
-    /// <param name="childB">The pipe I want to compare with.</param>
-    /// <param name="pipeTransform">Transform of the splitting pipe.</param>
-    void DoSplit(int childA, int childB, Transform pipeTransform)
+    public bool HasSpace(Fluid fluid)
     {
-        if (childA == pipeTransform.childCount || childB == pipeTransform.childCount)
-            return;
-        Pipe pipeA = pipeTransform.transform.GetChild(childA).GetComponent<PipePart>().connectedPipe;
-        Pipe pipeB = pipeTransform.transform.GetChild(childB).GetComponent<PipePart>().connectedPipe;
-        if (PathFinder.FindPath(pipeA.GetPos(), pipeB.GetPos(), typeof(Pipe)).Count == 0)
-        {
-            if (childA == 0)
-            {
-                FluidNetwork fluidNetwork = new();
-                MyGrid.fluidNetworks.Add(fluidNetwork);
-                fluidNetwork.ChangeNetwork(pipeB);
-                DoSplit(childB, childB + 1, pipeTransform);
-            }
-            else
-            {
-                DoSplit(0, childB, pipeTransform);
-            }
-        }
-        else
-        {
-            DoSplit(childA, childB + 1, pipeTransform);
-        }
-    }
-
-    /// <summary>
-    /// Handles transfer of pipes across networks.
-    /// </summary>
-    /// <param name="pipe"></param>
-    void ChangeNetwork(Pipe pipe)
-    {
-        if (pipe.network.networkID == -1)
-            return;
-        pipe.network.pipes.Remove(pipe);
-        pipes.Add(pipe);
-        if (pipe.GetComponent<BuildPipe>())
-            buildings.Add(pipe.GetComponent<BuildPipe>().connectedBuilding);
-        pipe.network = this;
-
-        foreach (Pipe connected in pipe.GetComponentsInChildren<PipePart>().Select(q => q.connectedPipe).Where(q => q != null))
-        {
-            if (!connected)
-                continue;
-            if (connected.network.networkID != networkID)
-            {
-                ChangeNetwork(connected);
-            }
-        }
-    }
-
-    public bool HasSpace(FluidType type, int ammount)
-    {
-        return buildings.FirstOrDefault(q => q.StoredFluids.HasSpace(type, ammount)) != null;
+        return buildings.FirstOrDefault(q => q.StoredFluids.HasSpace(fluid)) != null;
     }
     #endregion
 }
