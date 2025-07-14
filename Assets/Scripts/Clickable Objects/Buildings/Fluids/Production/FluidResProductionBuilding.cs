@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 
@@ -11,12 +12,12 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IFluidWork
     [CreateProperty] public Fluid FluidYeild { get => fluidYeild; set => fluidYeild = value; }
     [SerializeField] Fluid fluidYeild = new();
     [CreateProperty] public Fluid StoredFluids { get => storedFluids; set => storedFluids = value; }
-    [SerializeField] Fluid storedFluids = new();
+    [SerializeField] Fluid storedFluids;
 
     public override void FinishBuild()
     {
         ProdStates = new FluidProdStates();
-        StoredFluids = new(FluidCost.types, localRes.capacity.currentValue);
+        StoredFluids = new(FluidCost.types.Union(FluidYeild.types), localRes.capacity.currentValue);
         base.FinishBuild();
     }
 
@@ -36,7 +37,7 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IFluidWork
     #endregion
 
     #region Production
-    public bool ManageInputRes()
+    public virtual bool ManageInputRes()
     {
         bool res = true;
         if (ProdStates.needsResources && !ProdStates.supplied)

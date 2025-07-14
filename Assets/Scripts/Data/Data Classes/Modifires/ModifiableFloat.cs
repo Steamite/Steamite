@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 
+[Serializable]
 public class ModifiableFloat : IModifiable
 {
 
@@ -9,7 +11,8 @@ public class ModifiableFloat : IModifiable
     [SerializeField] protected float baseValue;
 
     public float currentValue;
-    public ModValue Modifier { get; set; }
+    public ModValue Modifier { get => mod; set => mod = value; }
+    [SerializeField] ModValue mod;
 
     public override string ToString()
     {

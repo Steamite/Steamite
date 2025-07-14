@@ -1,6 +1,8 @@
 ﻿using BuildingStats;
+using System;
 using UnityEngine;
 
+[Serializable]
 public class ModValue
 {
     public float percentMod;

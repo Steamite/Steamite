@@ -18,7 +18,8 @@ public class ModifiableResource : Resource, IModifiable
 #endif
 
     /// <summary>Current resource modifier(multiplier)</summary>
-    public ModValue Modifier { get; set; }
+    public ModValue Modifier { get => mod; set => mod = value; }
+    [SerializeField] ModValue mod;
 
 
     public ModifiableResource() { }
