@@ -23,9 +23,9 @@ public class Fluid : ResAmmount<FluidType>
         capacities = _capacity;
     }
 
-    public Fluid(List<FluidType> types, int currentValue)
+    public Fluid(IEnumerable<FluidType> _types, int currentValue)
     {
-        foreach (var item in types)
+        foreach (var item in _types)
         {
             types.Add(item);
             ammounts.Add(0);

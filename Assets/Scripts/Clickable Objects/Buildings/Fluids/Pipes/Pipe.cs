@@ -63,7 +63,6 @@ public class Pipe : Building
         }
     }
 
-
     public override void PlaceBuilding()
     {
         UniqueID();

@@ -173,16 +173,13 @@ public class GroundLevel : MonoBehaviour
             {
                 case GridItemType.Road:
                 case GridItemType.Anchor:
+                case GridItemType.Pipe:
                     overlays.ToggleEntryPoints(r);
                     SetGridItem(new(x, y), building);
                     break;
                 case GridItemType.Entrance:
                     overlays.Add(new(itemPos.x, itemPos.z), load ? -1 : i);
                     r?.entryPoints.Add(building.id);
-                    break;
-                case GridItemType.Pipe:
-                    overlays.Add(new(itemPos.x, itemPos.z), load ? -1 : i, false);
-                    SetGridItem(new(x, y), building);
                     break;
                 case GridItemType.Water:
                     (building as WaterPump).waterSource = GetGridItem(new(x, y)) as Water;
@@ -396,8 +393,7 @@ public class GroundLevel : MonoBehaviour
         {
             foreach (int i in road.entryPoints)
             {
-                if (!buildings.Keys.Contains(i))
-                    buildings.Add(i, overlays.buildingOverlays.First(q => q.name == i.ToString()).GetComponentsInChildren<Image>().Where(q => q.enabled).Count());
+                    buildings.TryAdd(i, overlays.buildingOverlays.First(q => q.name == i.ToString()).GetComponentsInChildren<Image>().Where(q => q.enabled).Count());
                 buildings[i]--;
                 if (buildings[i] == 0)
                 {

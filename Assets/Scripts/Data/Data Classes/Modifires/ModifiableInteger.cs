@@ -11,7 +11,8 @@ public class ModifiableInteger : IModifiable
     [SerializeField] protected int baseValue;
 
     public int currentValue;
-    public ModValue Modifier { get; set; }
+    public ModValue Modifier { get => mod; set => mod = value; }
+    [SerializeField] ModValue mod;
 
     public override string ToString()
     {

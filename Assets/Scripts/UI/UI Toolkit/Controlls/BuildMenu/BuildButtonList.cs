@@ -81,6 +81,7 @@ namespace BottomBar.Building
         protected override void DefaultBindItem(VisualElement element, int index)
         {
             base.DefaultBindItem(element, index);
+            element.style.display = DisplayStyle.Flex;
             if (((RadioBuildButtonData)itemsSource[index]).unlocked)
             {
                 // hide locked blocker
