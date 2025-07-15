@@ -20,6 +20,7 @@ namespace BottomBar.Building
     [UxmlElement]
     public partial class BuildButtonList : CustomRadioButtonList
     {
+        const float itemWidth = 100f;
         const string BUILD_BUTTON_CLASS = "build-button";
         List<BuildingWrapper> wrappers;
         public BuildButtonList() { }
@@ -41,17 +42,25 @@ namespace BottomBar.Building
         {
             wrappers = _wrappers;
             if (_wrappers == null)
+            {
+                itemsSource = null;
                 style.display = DisplayStyle.None;
+            }
             else
             {
-                style.display = DisplayStyle.Flex;
-                itemsSource =
-                    _wrappers.Select(
-                        q => new RadioBuildButtonData(
-                            q.building.objectName,
-                            q.preview,
-                            q.unlocked)
-                            as RadioButtonData).ToList();
+                itemsSource = null;
+                style.display = DisplayStyle.None;
+                schedule.Execute(() =>
+                {
+                    style.display = DisplayStyle.Flex;
+                    itemsSource =
+                        _wrappers.Select(
+                            q => new RadioBuildButtonData(
+                                q.building.objectName,
+                                q.preview,
+                                q.unlocked)
+                                as RadioButtonData).ToList();
+                });
             }
         }
 
@@ -66,9 +75,20 @@ namespace BottomBar.Building
             button.Add(new Label());
             button[1].name = "label";
             button[1].AddToClassList("build-button-label");
+
+            VisualElement blocker = new();
+            blocker.AddToClassList("button-blocker");
+            blocker.AddToClassList("not-research-blocker");
+            blocker.pickingMode = PickingMode.Ignore;
+            button[0].Add(blocker);
+
+            blocker = new();
             button.Add(new());
-            button[2].AddToClassList("button-blocker");
-            button[2].pickingMode = PickingMode.Ignore;
+            blocker.AddToClassList("button-blocker");
+            blocker.AddToClassList("cannot-afford-blocker");
+            blocker.pickingMode = PickingMode.Ignore;
+            button[0].Add(blocker);
+
             return button;
         }
 
@@ -81,11 +101,11 @@ namespace BottomBar.Building
         protected override void DefaultBindItem(VisualElement element, int index)
         {
             base.DefaultBindItem(element, index);
-            element.style.display = DisplayStyle.Flex;
-            if (((RadioBuildButtonData)itemsSource[index]).unlocked && MyRes.CanAfford(wrappers[index].building.Cost))
+            //element.style.display = DisplayStyle.Flex;
+            if (((RadioBuildButtonData)itemsSource[index]).unlocked)
             {
                 // hide locked blocker
-                element[2].style.display = DisplayStyle.None;
+                element[0][0].style.display = DisplayStyle.None;
                 if (wrappers[index].building == SceneRefs.GridTiles.BuildPrefab)
                 {
                     element.AddToClassList($"{BUILD_BUTTON_CLASS}-selected");
@@ -94,11 +114,29 @@ namespace BottomBar.Building
             else
             {
                 // the locked blocker
-                element[2].style.display = DisplayStyle.Flex;
+                element[0][0].style.display = DisplayStyle.Flex;
             }
             element.Q<VisualElement>("img").style.backgroundImage = new(((RadioBuildButtonData)itemsSource[index]).img);
             element.Q<Label>("label").text = ((RadioBuildButtonData)itemsSource[index]).text;
             ((Button)element).text = "";
+
+            DataBinding binding = BindingUtil.CreateBinding(nameof(ResourceDisplay.GlobalResources));
+            binding.sourceToUiConverters.AddConverter<MoneyResource, StyleEnum<DisplayStyle>>((ref MoneyResource res) => 
+            {
+                if (wrappers[index].unlocked == false)
+                    return DisplayStyle.None;
+
+                if (MyRes.CanAfford(wrappers[index].building.Cost))
+                {
+                    return DisplayStyle.None;
+                }
+                else
+                {
+                    return DisplayStyle.Flex;
+                }
+            });
+            element[0][1].dataSource = MyRes.resDataSource;
+            element[0][1].SetBinding("style.display", binding);
 
             element.RegisterCallback<PointerEnterEvent>(Hover);
             element.RegisterCallback<PointerLeaveEvent>(EndHove);
@@ -108,6 +146,8 @@ namespace BottomBar.Building
         {
             ToolkitUtils.ChangeClassWithoutTransition($"{BUILD_BUTTON_CLASS}-selected", BUILD_BUTTON_CLASS, element);
             element.AddToClassList(BUILD_BUTTON_CLASS);
+            element.ClearBindings();
+            element.dataSource = null;
             element.UnregisterCallback<PointerEnterEvent>(Hover);
             element.UnregisterCallback<PointerLeaveEvent>(EndHove);
         }
@@ -127,14 +167,9 @@ namespace BottomBar.Building
             if (SelectedChoice > -1)
                 ((CustomRadioButton)contentContainer.Children()
                     .FirstOrDefault(q => ((CustomRadioButton)q)?.value == SelectedChoice))?.Deselect();
-            if (SelectedChoice == index)
+            if (index == -1 || SelectedChoice == index || !MyRes.CanAfford(wrappers[index].building.Cost))
             {
                 SelectedChoice = -1;
-                return false;
-            }
-            else if (index == -1)
-            {
-                SelectedChoice = index;
                 return false;
             }
             else if (wrappers[index].unlocked)

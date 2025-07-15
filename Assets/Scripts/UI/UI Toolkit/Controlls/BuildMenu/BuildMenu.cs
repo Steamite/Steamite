@@ -84,8 +84,9 @@ namespace BottomBar.Building
         {
             if (i > -1)
             {
-                if (buildingData.Categories[categGroup.SelectedChoice].Objects[i].unlocked)
-                    SceneRefs.GridTiles.BuildPrefab = buildingData.Categories[categGroup.SelectedChoice].Objects[i].building;
+                BuildingWrapper wrapper = buildingData.Categories[categGroup.SelectedChoice].Objects[i];
+                if (wrapper.unlocked && MyRes.CanAfford(wrapper.building.Cost))
+                    SceneRefs.GridTiles.BuildPrefab = wrapper.building;
             }
             else
                 SceneRefs.GridTiles.BuildPrefab = null;

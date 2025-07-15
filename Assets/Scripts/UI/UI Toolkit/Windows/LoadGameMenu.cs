@@ -226,6 +226,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
 
     async void Load()
     {
+        Binding.SetGlobalLogLevel(BindingLogLevel.All);
         if (selectedSave == -1 || selectedSave > saves.Length)
             return;
         if (GameObject.Find("Main Menu") == null)

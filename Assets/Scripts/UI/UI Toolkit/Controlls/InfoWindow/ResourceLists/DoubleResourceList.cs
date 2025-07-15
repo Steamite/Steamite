@@ -104,7 +104,7 @@ namespace InfoWindowElements
             for (int i = 0; i < res.types.Count; i++)
             {
                 temp.Add(new DoubleUIResource<TEnum>(
-                    MyRes.resDisplay.GlobalResources[res.types[i]], res.ammounts[i], (TEnum)(object)res.types[i]));
+                    MyRes.resDataSource.GlobalResources[res.types[i]], res.ammounts[i], (TEnum)(object)res.types[i]));
             }
             resources = temp;
         }
