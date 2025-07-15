@@ -28,11 +28,11 @@ public interface IAssign
             if (job.interest)
             {
                 Assigned.Add(human);
-                human.transform.SetParent(SceneRefs.humans.transform.GetChild(1).transform);
+                human.transform.SetParent(SceneRefs.Humans.transform.GetChild(1).transform);
                 human.workplace = this;
                 job.job = JobState.FullTime;
 
-                SceneRefs.jobQueue.FreeHuman(human);
+                SceneRefs.JobQueue.FreeHuman(human);
                 if (!human.nightTime)
                     human.SetJob(job);
                 else
@@ -51,7 +51,7 @@ public interface IAssign
         {
             Assigned.Remove(human);
             human.workplace = null;
-            human.transform.SetParent(SceneRefs.humans.transform.GetChild(0).transform);
+            human.transform.SetParent(SceneRefs.Humans.transform.GetChild(0).transform);
             human.SetJob(JobState.Free);
             human.Idle();
         }
@@ -67,7 +67,7 @@ public interface IAssign
     /// <returns><see cref="NotImplementedException"/> </returns>
     public List<Human> GetUnassigned()
     {
-        return SceneRefs.humans.GetPartTime();
+        return SceneRefs.Humans.GetPartTime();
     }
     #endregion
 }

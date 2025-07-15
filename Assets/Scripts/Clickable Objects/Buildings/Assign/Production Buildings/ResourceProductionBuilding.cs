@@ -101,7 +101,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
         {
             ProdStates.requestedPickup = false;
             ProdStates.space = ResourceYield.Sum() <= localRes.FreeSpace;
-            SceneRefs.jobQueue.CancelJob(JobState.Pickup, this);
+            SceneRefs.JobQueue.CancelJob(JobState.Pickup, this);
         }
     }
 
@@ -145,7 +145,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     /// <inheritdoc/>
     public override void OrderDeconstruct()
     {
-        JobQueue queue = SceneRefs.jobQueue;
+        JobQueue queue = SceneRefs.JobQueue;
         if (!constructed)
         {
             base.OrderDeconstruct();
@@ -191,13 +191,13 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     /// <returns><inheritdoc/></returns>
     public override Chunk Deconstruct(GridPos instantPos)
     {
-        SceneRefs.jobQueue.CancelJob(JobState.Supply, this);
+        SceneRefs.JobQueue.CancelJob(JobState.Supply, this);
         Chunk c = base.Deconstruct(instantPos);
         if (InputResource.Sum() > 0)
         {
             if (!c)
             {
-                c = SceneRefs.objectFactory.CreateChunk(instantPos, InputResource, true);
+                c = SceneRefs.ObjectFactory.CreateChunk(instantPos, InputResource, true);
             }
             else
                 c.LocalRes.Manage(InputResource, true);
@@ -253,11 +253,11 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
             if (job.interest)
             {
                 Assigned.Add(human);
-                human.transform.SetParent(SceneRefs.humans.transform.GetChild(1).transform);
+                human.transform.SetParent(SceneRefs.Humans.transform.GetChild(1).transform);
                 human.workplace = this;
                 job.job = JobState.FullTime;
 
-                SceneRefs.jobQueue.FreeHuman(human);
+                SceneRefs.JobQueue.FreeHuman(human);
                 if (!human.nightTime)
                     human.SetJob(job);
                 else
@@ -276,7 +276,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
         {
             Assigned.Remove(human);
             human.workplace = null;
-            human.transform.SetParent(SceneRefs.humans.transform.GetChild(0).transform);
+            human.transform.SetParent(SceneRefs.Humans.transform.GetChild(0).transform);
             human.SetJob(JobState.Free);
             human.Idle();
         }
@@ -290,7 +290,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     /// <returns></returns>
     public List<Human> GetUnassigned()
     {
-        return SceneRefs.humans.GetPartTime();
+        return SceneRefs.Humans.GetPartTime();
     }
     #endregion
 

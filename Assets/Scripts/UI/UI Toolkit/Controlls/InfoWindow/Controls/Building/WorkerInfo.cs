@@ -95,7 +95,7 @@ namespace InfoWindowViews
 
                 DataBinding binding = BindingUtil.CreateBinding(nameof(Human.Job));
                 binding.sourceToUiConverters.AddConverter((ref JobData data) => data.job.ToString());
-                SceneRefs.infoWindow.RegisterTempBinding(new(el.Q<Label>("Job"), "text"), binding, human);
+                SceneRefs.InfoWindow.RegisterTempBinding(new(el.Q<Label>("Job"), "text"), binding, human);
             };
 
             listView.unbindItem = (el, i) =>
@@ -118,17 +118,17 @@ namespace InfoWindowViews
             building = (IAssign)obj;
             if (!humans)
             {
-                humans = SceneRefs.humans;
+                humans = SceneRefs.Humans;
             }
 
             assignLabel.text = $"Assigned {building.Assigned.Count}/{building.AssignLimit}";
             DataBinding binding = BindingUtil.CreateBinding(nameof(IAssign.Assigned));
             binding.sourceToUiConverters.AddConverter((ref List<Human> assig) => $"Assigned {assig.Count}/{building?.AssignLimit}");
-            SceneRefs.infoWindow.RegisterTempBinding(new(assignLabel, "text"), binding, building);
+            SceneRefs.InfoWindow.RegisterTempBinding(new(assignLabel, "text"), binding, building);
 
             binding = BindingUtil.CreateBinding(nameof(IAssign.AssignLimit));
             binding.sourceToUiConverters.AddConverter((ref ModifiableInteger assig) => $"Assigned {building.Assigned.Count}/{assig.currentValue}");
-            SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(assignTextCap)), binding, building);
+            SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(assignTextCap)), binding, building);
 
             unassigned = building.GetUnassigned();
 

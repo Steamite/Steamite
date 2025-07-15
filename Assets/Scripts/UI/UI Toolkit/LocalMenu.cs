@@ -30,7 +30,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
         costList = menu.ElementAt(2) as DoubleResList;
         description = menu.ElementAt(3) as Label;
 
-        SceneRefs.infoWindow.buildingCostChange = (building) =>
+        SceneRefs.InfoWindow.buildingCostChange = (building) =>
         {
             if (activeObject == null)
                 return;
@@ -68,7 +68,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
             menu.style.left = rect.x + rect.width + 25;
             float f = (1080 - element.worldBound.y) - element.resolvedStyle.height / 2;
             menu.style.bottom = f;
-            Debug.LogWarning("see this: " + Screen.height + ", " + f);
+           // Debug.LogWarning("see this: " + Screen.height + ", " + f);
         }
         switch (data)
         {

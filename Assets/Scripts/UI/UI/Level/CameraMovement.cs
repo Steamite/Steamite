@@ -60,9 +60,9 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
         isMod = mainShortcuts?.inputAsset.actionMaps[1].FindAction("Shift");
 
 
-        mainCamera.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;
+        SceneRefs.CameraSceneMover.SetRaycastMask(SceneRefs.GridTiles.defaultMask);
         mainCamera.GetComponent<PhysicsRaycaster>().enabled = true;
-        mainCamera.GetComponent<Physics2DRaycaster>().enabled = true;
+        //mainCamera.GetComponent<Physics2DRaycaster>().enabled = true;
         mainCamera.GetComponent<AudioListener>().enabled = true;
 
         enabled = true;

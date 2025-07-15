@@ -48,9 +48,9 @@ public static class MyGrid
     /// </summary>
     public static void Init()
     {
-        GridChange += (int _, int _) => SceneRefs.gridTiles.ChangeSelMode(ControlMode.nothing);
-        GridChange += (int _, int _) => SceneRefs.gridTiles.Exit(SceneRefs.gridTiles.activeObject);
-        GridChange += (int i, int newI) => SceneRefs.humans.SwitchLevel(i, newI);
+        GridChange += (int _, int _) => SceneRefs.GridTiles.ChangeSelMode(ControlMode.nothing);
+        GridChange += (int _, int _) => SceneRefs.GridTiles.Exit(SceneRefs.GridTiles.activeObject);
+        GridChange += (int i, int newI) => SceneRefs.Humans.SwitchLevel(i, newI);
         ChangeGridLevel(0);
     }
 
@@ -107,24 +107,26 @@ public static class MyGrid
 
     public static void UnsetRock(Rock rock)
     {
-        SceneRefs.jobQueue.toBeDug.Remove(rock); // removes from list
-        SceneRefs.gridTiles.markedTiles.Remove(rock);
-        SceneRefs.gridTiles.DestroyUnselect(rock);
+        SceneRefs.JobQueue.toBeDug.Remove(rock); // removes from list
+        SceneRefs.GridTiles.tempMarkedTiles.Remove(rock);
+        SceneRefs.GridTiles.DestroyUnselect(rock);
         GameObject.Destroy(rock.gameObject);
     }
 
     public static void UnsetBuilding(Building building)
     {
+        GridPos gridPos = building.GetPos();
         if (building is Pipe)
         {
             pipes.Remove(building as Pipe);
+            if (building.id != -1 || levels[gridPos.y].GetGridItem(gridPos, true)?.id == -1)
+                levels[gridPos.y].SetGridItem(gridPos, null, true);
         }
         else
         {
-            SceneRefs.gridTiles.DestroyUnselect(building);
+            SceneRefs.GridTiles.DestroyUnselect(building);
             if (building.blueprint.itemList.Count > 0)
             {
-                GridPos gridPos = building.GetPos();
                 levels[gridPos.y].UnsetBuilding(building, gridPos);
             }
             buildings.Remove(building);
@@ -163,6 +165,15 @@ public static class MyGrid
     public static Transform FindLevelRocks(int lIndex) => levels[lIndex].rocks;
     public static Transform FindLevelBuildings(int lIndex) => levels[lIndex].buildings;
     public static Transform FindLevelPipes(int lIndex) => levels[lIndex].pipes;
+
+    public static Transform FindLevelChunks() => levels[currentLevel].chunks;
+    public static Transform FindLevelRoads() => levels[currentLevel].roads;
+    public static Transform FindLevelWater() => levels[currentLevel].waters;
+    public static Transform FindLevelRocks() => levels[currentLevel].rocks;
+    public static Transform FindLevelBuildings() => levels[currentLevel].buildings;
+    public static Transform FindLevelPipes() => levels[currentLevel].pipes;
+
+
 
     public static bool IsUnlocked(int lIndex) => levels[lIndex].unlocked;
     #endregion
@@ -235,7 +246,7 @@ public static class MyGrid
 
     public static void Load(GridSave gridSave, GroundLevel templateLevel, int i, List<MinableRes> rockData, Material dirtMat)
     {
-        GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickableObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.gridTiles.transform);
+        GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickableObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.GridTiles.transform);
         levels[i] = groundLevel;
         groundLevel.ClearGrid(gridSave.width);
         groundLevel.gameObject.SetActive(i == 2);
@@ -246,18 +257,18 @@ public static class MyGrid
                 switch (gridSave.grid[x, z])
                 {
                     case RockSave:
-                        SceneRefs.objectFactory.CreateSavedRock(gridSave.grid[x, z] as RockSave, new(x, i, z), rockData, dirtMat);
+                        SceneRefs.ObjectFactory.CreateSavedRock(gridSave.grid[x, z] as RockSave, new(x, i, z), rockData, dirtMat);
                         break;
                     case WaterSave:
-                        SceneRefs.objectFactory.CreateSavedWater(gridSave.grid[x, z] as WaterSave, new(x, i, z));
+                        SceneRefs.ObjectFactory.CreateSavedWater(gridSave.grid[x, z] as WaterSave, new(x, i, z));
                         break;
                     default:
-                        SceneRefs.objectFactory.CreateRoad(new(x, i, z), true);
+                        SceneRefs.ObjectFactory.CreateRoad(new(x, i, z), true);
                         break;
                 }
                 if (gridSave.pipes[x, z] != null)
                 {
-                    SceneRefs.objectFactory.CreateSavedPipe(gridSave.pipes[x, z], new GridPos(x, i, z));
+                    SceneRefs.ObjectFactory.CreateSavedPipe(gridSave.pipes[x, z], new GridPos(x, i, z));
                 }
             }
         }

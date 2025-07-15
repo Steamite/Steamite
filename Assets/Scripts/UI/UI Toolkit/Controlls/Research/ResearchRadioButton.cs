@@ -65,7 +65,7 @@ namespace ResearchUI
 
             VisualElement preview = new();
             preview.AddToClassList("research-button-background");
-            BuildCategWrapper cat = SceneRefs.objectFactory.buildPrefabs.Categories[node.nodeCategory];
+            BuildCategWrapper cat = SceneRefs.ObjectFactory.buildPrefabs.Categories[node.nodeCategory];
             building = cat.Objects.FindIndex(q => q.id == node.nodeAssignee);
             if (building > -1)
             {

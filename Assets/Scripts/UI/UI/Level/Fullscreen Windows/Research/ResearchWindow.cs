@@ -49,7 +49,7 @@ public class ResearchWindow : FullscreenWindow
     {
         statData = Instantiate(await Addressables.LoadAssetAsync<BuildingStats.StatData>("Assets/Game Data/Research && Building/Stats.asset").Task);
         GetWindow();
-        SceneRefs.researchAdapter.Init(DoResearch);
+        SceneRefs.ResearchAdapter.Init(DoResearch);
         ((IInitiableUI)UIRefs.bottomBar.Q<VisualElement>(className: "build-menu")).Init();
         InitResearchStats();
     }

@@ -144,7 +144,7 @@ public class Building : StorageObject
 
         if (!constructed)
         {
-            SceneRefs.jobQueue.AddJob(JobState.Constructing, this);
+            SceneRefs.JobQueue.AddJob(JobState.Constructing, this);
             ChangeRenderMode(true);
         }
 
@@ -235,7 +235,7 @@ public class Building : StorageObject
     /// <summary>If being constructed delete the building, else toogle deconstruction. <b>TODO: COLOR CHANGING</b></summary>
     public virtual void OrderDeconstruct()
     {
-        JobQueue queue = SceneRefs.jobQueue;
+        JobQueue queue = SceneRefs.JobQueue;
         if (constructed) // if contructed
         {
             // if there isn't a deconstruction order yet
@@ -328,15 +328,15 @@ public class Building : StorageObject
         }
         r.Manage(localRes, true);
         DestoyBuilding(); // destroy self
-        return SceneRefs.objectFactory.CreateChunk(instantPos, r, true);
+        return SceneRefs.ObjectFactory.CreateChunk(instantPos, r, true);
     }
     /// <summary>
     /// Removes the building from 
     /// </summary>
     public virtual void DestoyBuilding()
     {
-        SceneRefs.gridTiles.DestroyUnselect(this);
-        if (id > -1)
+        SceneRefs.GridTiles.DestroyUnselect(this);
+        if (id > -1 || this is Pipe)
         {
             MyGrid.UnsetBuilding(this);
         }
@@ -366,18 +366,18 @@ public class Building : StorageObject
         }
         else
         {
-            List<Material> materials = SceneRefs.objectFactory.GetModelMaterials(this);
+            List<Material> materials = SceneRefs.ObjectFactory.GetModelMaterials(this);
             for (int i = 0; i < meshRenderers.Count; i++)
             {
                 if(i >= materials.Count)
-                    UpdateRenderMode(i, materials[0]);
+                    UpdateRenderMode(i, SceneRefs.ObjectFactory.GetPipeMaterial());
                 else
                     UpdateRenderMode(i, materials[i]);
             }
         }
     }
 
-    protected virtual void UpdateRenderMode(int i, Material material = null)
+    protected virtual void UpdateRenderMode(int i, Material material)
     {
         Renderer _renderer = meshRenderers[i];
         if (isTransparent)
@@ -385,8 +385,8 @@ public class Building : StorageObject
             Material newMat = new(material);
             Color c = _renderer.material.color;
             newMat.color = new(c.r, c.g, c.b, 
-                0.1f + (constructionProgress / maximalProgress) * 0.9f);
-            _renderer.SetMaterials(new List<Material>(){ newMat });
+                0.1f + (maximalProgress != 0 ? (constructionProgress / maximalProgress) * 0.9f : 0));
+            _renderer.material = newMat;
         }
         else
             _renderer.material = new(material);
@@ -420,9 +420,10 @@ public class Building : StorageObject
     }
 
     /// <summary>Checks if you can afford the building.</summary>
-    public virtual bool CanPlace()
+    public virtual bool CanPlace(bool checkCost = true)
     {
-        bool canPlace = MyRes.CanAfford(cost) && MyGrid.CanPlace(this);
+        bool canPlace = (checkCost ? MyRes.CanAfford(cost) : true) && MyGrid.CanPlace(this);
+        
         if(this is IFluidWork fluidWork)
         {
             fluidWork.AttachedPipes.ForEach(q => q.FindConnections(canPlace));
@@ -440,9 +441,9 @@ public class Building : StorageObject
             transform.GetChild(i).gameObject.layer = 6;
         GetComponent<SortingGroup>().sortingLayerName = "Buildings";
 
-        SceneRefs.gridTiles.HighLight(new(), gameObject);
+        SceneRefs.GridTiles.HighLight(new(), gameObject);
         MyRes.PayCostGlobal(cost);
-        SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
+        SceneRefs.JobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         UniqueID();
         MyGrid.SetBuilding(this);
 
@@ -506,4 +507,5 @@ public class Building : StorageObject
     }
 #endif
     #endregion
+
 }

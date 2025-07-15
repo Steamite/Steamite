@@ -49,7 +49,7 @@ namespace BuildingStats
             // create a mask with the affected categories
             int mask = 0;
             List<Building> buildings = MyGrid.Buildings
-                .Union(SceneRefs.objectFactory.buildPrefabs.Categories
+                .Union(SceneRefs.ObjectFactory.buildPrefabs.Categories
                     .SelectMany(q => q.Objects)
                         .Select(w => w.building)).ToList();
             int j = Enum.GetNames(typeof(BuildingCategType)).Length;
@@ -153,7 +153,7 @@ namespace BuildingStats
         void DoMod(IModifiable obj, StatPair pair, Building building)
         {
             obj.AddMod(pair);
-            SceneRefs.infoWindow.buildingCostChange?.Invoke(building);
+            SceneRefs.InfoWindow.buildingCostChange?.Invoke(building);
         }
 
         public void AddEffect()

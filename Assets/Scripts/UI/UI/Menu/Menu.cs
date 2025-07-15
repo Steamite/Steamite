@@ -41,8 +41,8 @@ public class Menu : MonoBehaviour
             UIRefs.research.CloseWindow();
         else if (UIRefs.trading.isOpen)
             UIRefs.trading.CloseWindow();
-        else if (SceneRefs.gridTiles.activeControl != ControlMode.nothing)
-            SceneRefs.gridTiles.ChangeSelMode(ControlMode.nothing);
+        else if (SceneRefs.GridTiles.activeControl != ControlMode.nothing)
+            SceneRefs.GridTiles.BreakAction();
         else
             return true;
 
@@ -57,12 +57,12 @@ public class Menu : MonoBehaviour
             if (menuIsOn)
             {
                 MainShortcuts.EnableInput();
-                SceneRefs.tick.UIWindowToggle(true);
+                SceneRefs.Tick.UIWindowToggle(true);
             }
             else
             {
                 MainShortcuts.DisableInput(false);
-                SceneRefs.tick.UIWindowToggle(false);
+                SceneRefs.Tick.UIWindowToggle(false);
             }
             UIRefs.levelCamera.enabled = menuIsOn;
             UIRefs.levelCamera.mainCamera.GetComponent<PhysicsRaycaster>().enabled = menuIsOn;

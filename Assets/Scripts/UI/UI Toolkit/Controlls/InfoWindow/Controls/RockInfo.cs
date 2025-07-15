@@ -12,12 +12,12 @@ public partial class RockInfo : InfoWindowControl
         // Assigned Binding
         DataBinding binding = BindingUtil.CreateBinding(nameof(Rock.Assigned));
         binding.sourceToUiConverters.AddConverter((ref Human human) => $"{(human ? human.objectName : "None")}");
-        SceneRefs.infoWindow.RegisterTempBinding(new(assigned, "text"), binding, dataSource);
+        SceneRefs.InfoWindow.RegisterTempBinding(new(assigned, "text"), binding, dataSource);
 
         // Integrity Binding
         binding = BindingUtil.CreateBinding(nameof(Rock.Integrity));
         binding.sourceToUiConverters.AddConverter((ref float integrity) => $"{integrity:0.#}");
-        SceneRefs.infoWindow.RegisterTempBinding(new(integrity, "text"), binding, dataSource);
+        SceneRefs.InfoWindow.RegisterTempBinding(new(integrity, "text"), binding, dataSource);
         yeild.Open(data);
     }
 

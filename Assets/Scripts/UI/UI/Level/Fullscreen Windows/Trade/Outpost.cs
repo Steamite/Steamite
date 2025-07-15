@@ -99,7 +99,7 @@ public class Outpost
             trade.transform.GetChild(0).GetChild(2).GetChild(trade.outposts.Count-1).GetChild(0).GetComponent<Image>().color = trade.availableColor;*/
         }
         level++;
-        timeToFinish = SceneRefs.tick.GetWeekTime(); // marks the finished time
+        timeToFinish = SceneRefs.Tick.GetWeekTime(); // marks the finished time
         production.ammounts[0] += resourceAmmount[production.types[0]]; // upgrades the production
     }
 }

@@ -150,7 +150,7 @@ public interface IFluidWork
                 itemPos.x += buildPos.x;
                 itemPos.z = buildPos.z - itemPos.z;
                 AttachedPipes.Add(
-                    SceneRefs.objectFactory.CreateBuildingPipe(itemPos, this));
+                    SceneRefs.ObjectFactory.CreateBuildingPipe(itemPos, this));
 
             }
         }

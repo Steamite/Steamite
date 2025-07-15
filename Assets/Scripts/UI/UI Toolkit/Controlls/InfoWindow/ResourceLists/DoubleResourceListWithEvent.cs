@@ -20,7 +20,7 @@ namespace InfoWindowElements
                         binding = SetupResTypes(building.Cost, nameof(Building.LocalRes));
                         onResChange = tup.Item2;
                         binding.sourceToUiConverters.AddConverter((ref StorageResource storage) => ToUIRes(storage));
-                        SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(resources)), binding, building);
+                        SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(resources)), binding, building);
                     }
                     else
                     {

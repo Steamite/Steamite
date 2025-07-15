@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Population
   m_GUID: 1b2a071d731a43443aa1795bb2533ec6
   m_SerializeEntries:
+  - m_GUID: 829c2b457e775ae459befe3d32ae4aee
+    m_Address: Dummy
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e07bc6bb40d70d14087632cefb5f45e7
     m_Address: House
     m_ReadOnly: 0

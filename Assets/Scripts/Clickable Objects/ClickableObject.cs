@@ -102,8 +102,8 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <param name="eventData">Mouse data</param>
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        SceneRefs.gridTiles.Enter(this);
-        if (SceneRefs.gridTiles.drag)
+        SceneRefs.GridTiles.Enter(this);
+        if (SceneRefs.GridTiles.drag)
             eventData.pointerPress = gameObject;
     }
     /// <summary>
@@ -113,7 +113,7 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <param name="eventData">Mouse data</param>
     public virtual void OnPointerExit(PointerEventData eventData)
     {
-        SceneRefs.gridTiles.Exit(this);
+        SceneRefs.GridTiles.Exit(this);
         eventData.pointerPress = null;
     }
     /// <summary>
@@ -122,8 +122,8 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <param name="eventData">Mouse data</param>
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        if (SceneRefs.gridTiles.drag == false && eventData.button == PointerEventData.InputButton.Left)
-            SceneRefs.gridTiles.Down();
+        if (SceneRefs.GridTiles.drag == false && eventData.button == PointerEventData.InputButton.Left)
+            SceneRefs.GridTiles.Down();
     }
     /// <summary>
     /// If left button was released Triggers <see cref="GridTiles.Up()"/>.<br/>
@@ -134,9 +134,9 @@ public abstract class ClickableObject : MonoBehaviour,
     {
         //print(gameObject.name + $", {transform.position.x}, {transform.position.z}");
         if (eventData.button == PointerEventData.InputButton.Left)
-            SceneRefs.gridTiles.Up();
+            SceneRefs.GridTiles.Up();
         else
-            SceneRefs.gridTiles.BreakAction();
+            SceneRefs.GridTiles.BreakAction();
     }
     #endregion Mouse Events
 
@@ -150,7 +150,7 @@ public abstract class ClickableObject : MonoBehaviour,
     {
         if (selected)
         {
-            InfoWindow info = SceneRefs.infoWindow;
+            InfoWindow info = SceneRefs.InfoWindow;
             info.header.text = objectName;
             return info;
         }

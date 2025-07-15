@@ -24,7 +24,7 @@ public partial class TimeButtons : CustomRadioButtonGroup
             }
             Add(button);
         }
-        SetChangeCallback((i) => SceneRefs.tick.ChangeGameSpeed(speedStates[SelectedChoice]));
+        SetChangeCallback((i) => SceneRefs.Tick.ChangeGameSpeed(speedStates[SelectedChoice]));
     }
 
     public void Start()

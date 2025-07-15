@@ -6,4 +6,5 @@ public partial class ResCell : ResourceCell<Resource, ResourceType>
 }
 public partial class FluidCell : ResourceCell<Fluid, FluidType>
 {
+    public FluidCell() : base() { }
 }

@@ -210,7 +210,7 @@ public class LoadingScreen : MonoBehaviour
     {
         foreach (ChunkSave chunkSave in chunks)
         {
-            SceneRefs.objectFactory
+            SceneRefs.ObjectFactory
                 .CreateChunk(chunkSave.gridPos, chunkSave.resSave, true)
                 .Load(chunkSave);
             progress.Report(progressGlobal += CHUNK_WEIGHT);
@@ -226,7 +226,7 @@ public class LoadingScreen : MonoBehaviour
     {
         foreach (BSave save in buildings) // for each saved building
         {
-            SceneRefs.objectFactory.CreateSavedBuilding(save);
+            SceneRefs.ObjectFactory.CreateSavedBuilding(save);
             progress.Report(progressGlobal += BUILD_WEIGHT);
         }
     }
@@ -248,7 +248,6 @@ public class LoadingScreen : MonoBehaviour
             MyGrid.Load(gridSave[i], templateLevel, i, mapGen.minableResources, mapGen.dirt);
             progress.Report(progressGlobal += TILE_WEIGHT);
         }
-        Camera.main.GetComponent<PhysicsRaycaster>().eventMask = SceneRefs.gridTiles.defaultMask;
     }
 
     /// <summary>
@@ -259,7 +258,7 @@ public class LoadingScreen : MonoBehaviour
     void FillHumans(IProgress<int> progress, HumanSave[] humanSaves)
     {
         actionText.text = "Kidnaping workers";
-        SceneRefs.humans.LoadHumans(progress, humanSaves, ref humanActivation, HUMAN_WEIGHT, ref progressGlobal);
+        SceneRefs.Humans.LoadHumans(progress, humanSaves, ref humanActivation, HUMAN_WEIGHT, ref progressGlobal);
     }
     #endregion Model Loading
 
@@ -272,8 +271,8 @@ public class LoadingScreen : MonoBehaviour
     /// <param name="gameState"></param>
     void FillGameState(IProgress<int> progress, GameStateSave gameState)
     {
-        SceneRefs.jobQueue.priority = gameState.priorities;
-        SceneRefs.tick.Load(gameState);
+        SceneRefs.JobQueue.priority = gameState.priorities;
+        SceneRefs.Tick.Load(gameState);
     }
 
     /// <summary>
@@ -357,7 +356,7 @@ public class LoadingScreen : MonoBehaviour
 
         humanActivation?.Invoke();
         humanActivation = null;
-        SceneRefs.tick.InitTicks();
+        SceneRefs.Tick.InitTicks();
         UIRefs.toolkitShortcuts.GetComponent<IToolkitController>().Init(UIRefs.toolkitShortcuts.rootVisualElement);
     }
 }

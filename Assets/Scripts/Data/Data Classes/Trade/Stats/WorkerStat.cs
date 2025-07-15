@@ -16,7 +16,7 @@ namespace TradeData.Stats
         public override void DoStat()
         {
             for (int i = 0; i < CurrentState * workersPerLevel; i++)
-                SceneRefs.humans.AddHuman();
+                SceneRefs.Humans.AddHuman();
         }
 
         public override string GetText(int state)

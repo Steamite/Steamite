@@ -574,6 +574,9 @@ MonoBehaviour:
     capacity:
       baseValue: 5
       currentValue: 5
+      mod:
+        percentMod: 1
+        absoluteMod: 0
     requests: []
     carriers: []
     mods: 
@@ -629,9 +632,15 @@ MonoBehaviour:
     baseResource:
       types: 
       ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
     money:
       baseValue: 50
       currentValue: 50
+      mod:
+        percentMod: 1
+        absoluteMod: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
@@ -641,16 +650,31 @@ MonoBehaviour:
   assignLimit:
     baseValue: 5
     currentValue: 5
+    mod:
+      percentMod: 1
+      absoluteMod: 0
   productionTime: 2
+  prodSpeed:
+    baseValue: 1
+    currentValue: 1
+    mod:
+      percentMod: 1
+      absoluteMod: 0
   resourceCost:
     types: 0100000002000000
     ammounts: 0200000002000000
     baseResource:
       types: 0100000002000000
       ammounts: 0200000002000000
+    mod:
+      percentMod: 1
+      absoluteMod: 0
   resourceYield:
     types: 03000000
     ammounts: 05000000
     baseResource:
       types: 03000000
       ammounts: 05000000
+    mod:
+      percentMod: 1
+      absoluteMod: 0

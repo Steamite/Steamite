@@ -44,7 +44,7 @@ public interface IResourceProduction : IProduction
         ((ClickableObject)this).UIUpdate(nameof(InputResource));
         if (InputResource.Diff(ResourceCost).Sum() == 0)
         {
-            SceneRefs.jobQueue.CancelJob(JobState.Supply, (ClickableObject)this);
+            SceneRefs.JobQueue.CancelJob(JobState.Supply, (ClickableObject)this);
             ProdStates.supplied = true;
             ProdStates.requestedSupply = false;
             RefreshStatus();
@@ -138,7 +138,7 @@ public interface IResourceProduction : IProduction
         if(ProdStates.needsResources && ProdStates.requestedSupply == false)
         {
             ProdStates.requestedSupply = true;
-            SceneRefs.jobQueue.AddJob(JobState.Supply, (ClickableObject)this);
+            SceneRefs.JobQueue.AddJob(JobState.Supply, (ClickableObject)this);
         }
     }
 
@@ -148,7 +148,7 @@ public interface IResourceProduction : IProduction
         if (ProdStates.requestedPickup == false && LocalResource.Sum() > 0)
         {
             ProdStates.requestedPickup = true;
-            SceneRefs.jobQueue.AddJob(JobState.Pickup, (ClickableObject)this);
+            SceneRefs.JobQueue.AddJob(JobState.Pickup, (ClickableObject)this);
         }
     }
 

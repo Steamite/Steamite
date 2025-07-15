@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -22,7 +23,9 @@ public class ModifiableResource : Resource, IModifiable
     [SerializeField] ModValue mod;
 
 
-    public ModifiableResource() { }
+    public ModifiableResource() : base() { }
+    public ModifiableResource(ResAmmount<ResourceType> resAmmount) : base(resAmmount) { }
+    public ModifiableResource(List<ResourceType> types, List<int> ammounts) : base(types, ammounts) { }
 
     /// <summary>Cycles though the base resource and recalculates the current resource.</summary>
     public void RecalculateMod()

@@ -59,15 +59,15 @@ public partial class FluidInfo : InfoWindowControl
                         Debug.Log((float)flu[t] / flu.capacities[x] * size);
                         return new StyleLength(flu[t] / (float)flu.capacities[x] * size);
                     });
-                    SceneRefs.infoWindow.RegisterTempBinding(new BindingContext(container.filledMask, "style." + nameof(VisualElement.style.height)), binding, data);
+                    SceneRefs.InfoWindow.RegisterTempBinding(new BindingContext(container.filledMask, "style." + nameof(VisualElement.style.height)), binding, data);
 
                     binding = BindingUtil.CreateBinding(nameof(IFluidWork.StoredFluids));
                     binding.sourceToUiConverters.AddConverter((ref Fluid flu) => $"{flu.ammounts[x]} / {flu.capacities[x]}");
-                    SceneRefs.infoWindow.RegisterTempBinding(new BindingContext(container.filledLabel, "text"), binding, data);
+                    SceneRefs.InfoWindow.RegisterTempBinding(new BindingContext(container.filledLabel, "text"), binding, data);
 
                     binding = BindingUtil.CreateBinding(nameof(IFluidWork.StoredFluids));
                     binding.sourceToUiConverters.AddConverter((ref Fluid flu) => $"{flu.ammounts[x]} / {flu.capacities[x]}");
-                    SceneRefs.infoWindow.RegisterTempBinding(new BindingContext(container.emptyLabel, "text"), binding, data);
+                    SceneRefs.InfoWindow.RegisterTempBinding(new BindingContext(container.emptyLabel, "text"), binding, data);
                 }
                 break;
         }

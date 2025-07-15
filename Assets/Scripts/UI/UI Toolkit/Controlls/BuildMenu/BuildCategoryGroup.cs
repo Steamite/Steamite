@@ -9,7 +9,7 @@ namespace BottomBar.Building
         {
             AddToClassList("categ-bar");
             int i = 0;
-            foreach (BuildCategWrapper categ in SceneRefs.objectFactory.buildPrefabs.Categories)
+            foreach (BuildCategWrapper categ in SceneRefs.ObjectFactory.buildPrefabs.Categories)
             {
                 Add(CreateCategButton(categ, i));
                 i++;

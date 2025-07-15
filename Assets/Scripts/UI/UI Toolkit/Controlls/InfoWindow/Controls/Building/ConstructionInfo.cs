@@ -14,7 +14,7 @@ public partial class ConstructionInfo : InfoWindowControl
         Building building = (Building)data;
         DataBinding binding = BindingUtil.CreateBinding(nameof(Building.constructionProgress));
         binding.sourceToUiConverters.AddConverter((ref float progress) => $"{(progress / building.maximalProgress) * 100:0}%");
-        SceneRefs.infoWindow.RegisterTempBinding(new BindingContext(progress, "text"), binding, building);
+        SceneRefs.InfoWindow.RegisterTempBinding(new BindingContext(progress, "text"), binding, building);
 
         if (building.deconstructing)
         {

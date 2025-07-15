@@ -96,8 +96,6 @@ namespace InfoWindowElements
 
         #region Init
 
-
-
         protected void SetResWithoutBinding(Resource res)
         {
             List<UIResource<TEnum>> temp = new List<UIResource<TEnum>>();
@@ -146,7 +144,7 @@ namespace InfoWindowElements
             DataBinding mainBind = SetupResTypes(resource, propName);
             DataBinding dataBinding = BindingUtil.CreateBinding(secondPropName);
             dataBinding.sourceToUiConverters.AddConverter((ref ModifiableResource secRes) => UpdateSecondResource(secRes));
-            SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(secondResource)), dataBinding, data);
+            SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(secondResource)), dataBinding, data);
             return mainBind;
         }
 

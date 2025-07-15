@@ -22,7 +22,7 @@ public class Road : ClickableObject
     /// <inheritdoc/>
     public override void OnPointerDown(PointerEventData eventData)
     {
-        if ((SceneRefs.gridTiles.markedTiles.Count > 0 || SceneRefs.gridTiles.activeControl == ControlMode.build))
+        if ((SceneRefs.GridTiles.tempMarkedTiles.Count > 0 || SceneRefs.GridTiles.activeControl == ControlMode.build))
             base.OnPointerDown(eventData);
     }
 
@@ -32,13 +32,13 @@ public class Road : ClickableObject
     /// <param name="eventData"><inheritdoc/></param>
     public override void OnPointerUp(PointerEventData eventData)
     {
-        if (SceneRefs.gridTiles.markedTiles.Count > 0 || SceneRefs.gridTiles.activeControl == ControlMode.build)
+        if (SceneRefs.GridTiles.tempMarkedTiles.Count > 0 || SceneRefs.GridTiles.activeControl == ControlMode.build)
         {
             base.OnPointerUp(eventData);
         }
         else if (eventData.button != PointerEventData.InputButton.Left)
         {
-            SceneRefs.gridTiles.BreakAction();
+            SceneRefs.GridTiles.BreakAction();
         }
     }
     #endregion Mouse Events

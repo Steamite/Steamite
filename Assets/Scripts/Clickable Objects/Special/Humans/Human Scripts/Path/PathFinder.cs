@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -182,7 +183,17 @@ public static class PathFinder
     {
         Plan p = new();
         if (!startPos.Equals(activePos))
+        {
             LookForPath(startPos, null, new(activePos), p, enterObjectType);
+            if (p.path.Count == 0)
+                p.path = null;
+            else if(MyGrid.GetGridItem(p.path[p.path.Count - 1]).GetType() != enterObjectType)
+                p.path.RemoveAt(p.path.Count - 1);
+        }
+        else
+        {
+            p.path.Add(startPos);
+        }
         return p.path;
     }
     #endregion
@@ -254,7 +265,7 @@ public static class PathFinder
     /// <returns></returns>
     static bool CanEnter(ClickableObject clickable, Type t)
     {
-        return clickable.GetType() == t;
+        return t == null || clickable.GetType() == t;
     }
 
     /// <summary>

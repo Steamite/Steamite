@@ -134,7 +134,7 @@ public class Human : ClickableObject
     /// <summary>
     /// Creates a list from <see cref="HumanUtil.humans"/>.
     /// </summary>
-    public override void UniqueID() => CreateNewId(SceneRefs.humans.GetHumen().Select(q => q.id).ToList());
+    public override void UniqueID() => CreateNewId(SceneRefs.Humans.GetHumen().Select(q => q.id).ToList());
 
     /// <summary>
     /// Links tick, day and night actions.
@@ -144,8 +144,8 @@ public class Human : ClickableObject
 #if UNITY_EDITOR
         transform.GetChild(0).gameObject.SetActive(true);
 #endif
-        SceneRefs.tick.SubscribeToEvent(DoRepetableAction, Tick.TimeEventType.Ticks);
-        SceneRefs.tick.SubscribeToEvent(Day, Tick.TimeEventType.DayStart);
+        SceneRefs.Tick.SubscribeToEvent(DoRepetableAction, Tick.TimeEventType.Ticks);
+        SceneRefs.Tick.SubscribeToEvent(Day, Tick.TimeEventType.DayStart);
         ((IModifiable)Inventory.capacity).Init();
         //SceneRefs.tick.SubscribeToEvent(Night, Tick.TimeEventType.Night);
     }

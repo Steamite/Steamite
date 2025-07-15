@@ -63,6 +63,7 @@ public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
         hierarchy.Add(capacityField);
         #endregion
     }
+
     #region Item Events
     protected override VisualElement MakeItem()
     {

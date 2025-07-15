@@ -31,8 +31,8 @@ public class UIOverlay : MonoBehaviour
         if (overlayParent.gameObject.activeSelf)
         {
             GridPos gp = MyGrid.Rotate(building.blueprint.moveBy, building.transform.rotation.eulerAngles.y);
-            overlayParent.anchoredPosition = new(building.transform.position.x - gp.x, building.transform.position.z - gp.z);
             overlayParent.localRotation = Quaternion.Euler(180, 0, building.transform.rotation.eulerAngles.y);
+            overlayParent.anchoredPosition = new(building.transform.position.x - gp.x, building.transform.position.z - gp.z);
             if (buildGridFilled == false)
             {
                 foreach (NeededGridItem item in building.blueprint.itemList)
@@ -63,6 +63,36 @@ public class UIOverlay : MonoBehaviour
         }
     }
 
+    public void MovePlacePipeOverlay(GridPos pos, bool init)
+    {
+        if(init == true)
+        {
+            overlayParent.anchoredPosition = new(0, 0);
+            Image image = Instantiate(overlayTile, overlayParent);
+            image.rectTransform.anchoredPosition = new(pos.x, -pos.z);
+            image.color = new Color(0.5803922f, 0f, 0.8274511f, 0.25f);
+            image = Instantiate(overlayTile, overlayParent);
+            image.color = new Color(0.5803922f, 0f, 0.8274511f, 0.25f);
+        }
+        else
+        {
+            overlayParent.GetChild(1).GetComponent<RectTransform>()
+                .anchoredPosition = new(pos.x, -pos.z);
+        }
+    }
+    public void AddCheckPointTile(GridPos pos)
+    {
+        Image image = Instantiate(overlayTile, overlayParent);
+        image.rectTransform.anchoredPosition = new(pos.x, -pos.z);
+        image.color = new Color(0.5803922f, 0f, 0.8274511f, 0.25f);
+    }
+
+    public void RemoveCheckPointTile(int i)
+    {
+        Destroy(overlayParent.GetChild(i).gameObject);
+    }
+
+
     /// <summary>Clears all tiles from the <see cref="overlayParent"/>.</summary>
     public void DestroyBuilingTiles()
     {
@@ -81,7 +111,7 @@ public class UIOverlay : MonoBehaviour
     public void AddBuildingOverlay(GridPos gridPos, int id)
     {
         RectTransform t = Instantiate(groupPrefab, entryPointParent).GetComponent<RectTransform>();
-        t.anchoredPosition = new(gridPos.x, -gridPos.z);
+        t.anchoredPosition = new(gridPos.x, gridPos.z);
         t.name = id.ToString();
         buildingOverlays.Add(t);
     }
@@ -98,7 +128,7 @@ public class UIOverlay : MonoBehaviour
         if (childIndex == -1)
         {
             rect = Instantiate(overlayTile, buildingOverlays[^1]).GetComponent<RectTransform>();
-            rect.anchoredPosition = new(gridPos.x, gridPos.z);
+            rect.anchoredPosition = new(gridPos.x, -gridPos.z);
             rect.GetComponent<Image>().color = road ? new(0.5f, 0.5f, 0.5f, 0.25f) : new(0.1f, 0.1f, 0.1f, 0.25f);
         }
         else

@@ -114,22 +114,16 @@ namespace InfoWindowViews
             radialElement.Open(data);
 
             DataBinding binding;
-            if (building is WaterPump)
+            if (building is FluidResProductionBuilding)
             {
                 binding = BindingUtil.CreateBinding(nameof(WaterPump.StoredFluids));
                 binding.sourceToUiConverters.AddConverter((ref Fluid fluid) => $"Space\n{fluid.ammounts.Sum()}/{fluid.capacities[0]}");
-                SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
-            }
-            else
-            {
-                binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
-                binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"Space\n{res.Sum()}/{res.capacity}");
-                SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
+                SceneRefs.InfoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
             }
 
             binding = BindingUtil.CreateBinding(nameof(IProduction.ProdSpeed));
             binding.sourceToUiConverters.AddConverter((ref ModifiableFloat speed) => $"Speed\n{speed}x");
-            SceneRefs.infoWindow.RegisterTempBinding(new(prodSpeedLabel, "text"), binding, data);
+            SceneRefs.InfoWindow.RegisterTempBinding(new(prodSpeedLabel, "text"), binding, data);
             UpdateButton();
         }
 
