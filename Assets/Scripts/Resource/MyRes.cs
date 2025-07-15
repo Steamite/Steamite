@@ -24,19 +24,19 @@ public static class MyRes
     /// <summary>All storage buildings.</summary>
     static List<IStorage> storage;
     /// <summary>Reference to global resource storage counter.</summary>
-    public static ResourceDisplay resDisplay;
+    public static ResourceDisplay resDataSource;
     #endregion
 
     #region Getters
     /// <summary>Reference to global money.</summary>
-    public static int Money => resDisplay.Money;
+    public static int Money => resDataSource.Money;
     #endregion
 
     #region Init
 
     public static void PreLoad()
     {
-        resDisplay = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
+        resDataSource = SceneRefs.BottomBar.GetComponent<ResourceDisplay>();
     }
     /// <summary>
     /// Starting function for the resource system.
@@ -47,7 +47,7 @@ public static class MyRes
         // Update text, or display error
         try
         {
-            resDisplay.InitializeResources();
+            resDataSource.InitializeResources();
             globalStorageSpace = 0;
 
             storage = MyGrid.GetBuildings<IStorage>(q => q != null);
@@ -56,10 +56,10 @@ public static class MyRes
             {
                 jQ.storages.Add(_s);
                 globalStorageSpace += _s.LocalResources.capacity - _s.LocalResources.Sum();
-                resDisplay.GlobalResources.Manage(_s.LocalResources, true);
+                resDataSource.GlobalResources.Manage(_s.LocalResources, true);
             }
-            resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
-            resDisplay.UIUpdate(nameof(ResourceDisplay.Money));
+            resDataSource.UIUpdate(nameof(ResourceDisplay.GlobalResources));
+            resDataSource.UIUpdate(nameof(ResourceDisplay.Money));
         }
         catch (Exception e)
         {
@@ -77,8 +77,8 @@ public static class MyRes
     /// <param name="mod"><inheritdoc cref="ManageRes(Resource, Resource, float)" path="/param[@name='mod']"/></param>
     public static void UpdateResource(Resource cost, bool add)
     {
-        resDisplay.GlobalResources.Manage(cost, add);
-        resDisplay.UIUpdate(nameof(ResourceDisplay.GlobalResources));
+        resDataSource.GlobalResources.Manage(cost, add);
+        resDataSource.UIUpdate(nameof(ResourceDisplay.GlobalResources));
     }
     #endregion
 
@@ -341,7 +341,7 @@ public static class MyRes
     /// <returns>If the cost can be afforded.</returns>
     public static bool CanAfford(MoneyResource cost)
     {
-        return cost.Money <= Money && resDisplay.GlobalResources.Diff(cost).Sum() == 0;
+        return cost.Money <= Money && resDataSource.GlobalResources.Diff(cost).Sum() == 0;
     }
     #endregion
 
@@ -408,7 +408,7 @@ public static class MyRes
     /// <param name="change">Ammount to add(if negative subtracts).</param>
     public static void ManageMoneyGlobal(int change)
     {
-        resDisplay.Money += change;
+        resDataSource.Money += change;
     }
 
     /// <summary>

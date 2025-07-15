@@ -138,7 +138,7 @@ namespace TradeWindowElements
         void SetDeals(int categ, List<TradeDeal> tradeDeals)
         {
             VisualElement deals = ElementAt(categ).ElementAt(1);
-            Resource globalResources = MyRes.resDisplay.GlobalResources;
+            Resource globalResources = MyRes.resDataSource.GlobalResources;
 
             for (int i = 0; i < 3; i++)
             {
@@ -203,7 +203,7 @@ namespace TradeWindowElements
                     deal = GetDeal(categoryIndex, i);
                     ((SliderInt)deal.ElementAt(1)).highValue =
                         Math.Min(
-                            MyRes.resDisplay.GlobalResources[selectedLocation.Sell[i].type],
+                            MyRes.resDataSource.GlobalResources[selectedLocation.Sell[i].type],
                             Trading.CONVOY_STORAGE_LIMIT - (_totalCount - ((SliderInt)deal.ElementAt(1)).value));
                 }
                 SellMoney = _totalCost;

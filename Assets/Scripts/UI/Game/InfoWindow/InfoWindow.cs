@@ -213,6 +213,10 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         /*if (activeBindings.FindIndex(q => q.context == context.context && q.bindingId == context.bindingId) > -1)
             throw new NotSupportedException("This object already has a binding! Clear it first.");*/
         context.context.SetBinding(context.bindingId, binding);
+        BindingResult res;
+        context.context.TryGetLastBindingToUIResult(context.bindingId, out res);
+        if(res.status == BindingStatus.Failure)
+            Debug.Log(res.message);
         context.context.schedule.Execute(() =>
         {
             //activeBindings.Add(context);

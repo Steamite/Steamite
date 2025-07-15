@@ -142,7 +142,7 @@ MonoBehaviour:
     ammounts: 
     capacity:
       baseValue: 25
-      currentValue: -1
+      currentValue: 25
       mod:
         percentMod: 1
         absoluteMod: 0
@@ -196,8 +196,8 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    types: 
-    ammounts: 
+    types: 05000000
+    ammounts: 14000000
     baseResource:
       types: 05000000
       ammounts: 14000000
@@ -224,8 +224,8 @@ MonoBehaviour:
       absoluteMod: 0
   productionTime: 0
   prodSpeed:
-    baseValue: 0
-    currentValue: 0
+    baseValue: 1
+    currentValue: 1
     mod:
       percentMod: 1
       absoluteMod: 0
@@ -239,8 +239,8 @@ MonoBehaviour:
       percentMod: 1
       absoluteMod: 0
   resourceYield:
-    types: 
-    ammounts: 
+    types: 04000000
+    ammounts: 05000000
     baseResource:
       types: 04000000
       ammounts: 05000000

@@ -367,15 +367,8 @@ public class GridTiles : MonoBehaviour
                                     b.DestoyBuilding();
                             }
                             markedTiles.Clear();
-                            drag = false;
-                            if (shiftKey.IsPressed())
-                            {
-                                Blueprint();
-                            }
-                            else
-                            {
-                                BlueprintInstance = null;
-                            }
+                            tempMarkedTiles.Clear();
+                            BlueprintInstance = null;
                         }
                     }
 
@@ -384,7 +377,7 @@ public class GridTiles : MonoBehaviour
                 {
                     blueprintInstance.PlaceBuilding();
 
-                    if (shiftKey.IsInProgress())
+                    if (shiftKey.IsInProgress() && MyRes.CanAfford(blueprintPrefab.Cost))
                     {
                         Blueprint();
                     }
@@ -647,6 +640,7 @@ public class GridTiles : MonoBehaviour
                         DeselectBuildingButton?.Invoke();
                         markedTiles.Clear();
                         tempMarkedTiles.Clear();
+                        drag = false;
                     }
                     else if (blueprintInstance)
                         DestroyBlueprint(true);
