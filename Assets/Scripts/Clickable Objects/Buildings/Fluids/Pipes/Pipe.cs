@@ -77,9 +77,9 @@ public class Pipe : Building
             }
         }
         GetComponent<SortingGroup>().sortingLayerName = "Pipes";
-        SceneRefs.gridTiles.HighLight(new(), gameObject);
+        SceneRefs.GridTiles.HighLight(new(), gameObject);
 
-        SceneRefs.jobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
+        SceneRefs.JobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         MyRes.PayCostGlobal(cost);
     }
 
@@ -91,7 +91,7 @@ public class Pipe : Building
         {
             if (connectedPipes[_case] != null)
                 Debug.LogError("Pipe is already present");
-            connectedPipes[_case] = Instantiate(SceneRefs.objectFactory.PipeConnectionPrefab, transform);
+            connectedPipes[_case] = Instantiate(SceneRefs.ObjectFactory.PipeConnectionPrefab, transform);
             pipePart = connectedPipes[_case].transform;
             pipePart.localScale = new(
                 0.1f / transform.lossyScale.x,
@@ -243,6 +243,8 @@ public class Pipe : Building
     #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
+        if (id == -1)
+            return null;
         // if constructed or ordered to be deconstructed save all data
         if (!constructed || deconstructing)
         {

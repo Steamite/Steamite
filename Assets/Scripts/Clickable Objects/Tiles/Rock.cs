@@ -122,11 +122,11 @@ public class Rock : ClickableObject
         {
             if (rockYield?.Sum() > 0)
             {
-                Chunk chunk = SceneRefs.objectFactory.CreateChunk(GetPos(), rockYield, true);
+                Chunk chunk = SceneRefs.ObjectFactory.CreateChunk(GetPos(), rockYield, true);
                 chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material.color
                     = GetComponent<MeshRenderer>().material.color;
             }
-            SceneRefs.objectFactory.CreateRoad(GetPos(), true);
+            SceneRefs.ObjectFactory.CreateRoad(GetPos(), true);
             MyGrid.UnsetRock(this);
             return true;
         }

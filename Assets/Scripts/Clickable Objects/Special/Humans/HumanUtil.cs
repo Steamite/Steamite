@@ -39,7 +39,7 @@ public class HumanUtil : MonoBehaviour
         humans = new();
         foreach (HumanSave hSave in humanSaves)
         {
-            AddHuman(SceneRefs.objectFactory.CreateSavedHuman(hSave), ref humanActivation);
+            AddHuman(SceneRefs.ObjectFactory.CreateSavedHuman(hSave), ref humanActivation);
             progress.Report(currentProg += HumanWeight);
         }
     }
@@ -59,7 +59,7 @@ public class HumanUtil : MonoBehaviour
     public void AddHuman()
     {
         int i = UnityEngine.Random.Range(0, 2);
-        Human human = SceneRefs.objectFactory.CreateHuman(Elevator.main.GetPos(), hatMaterial[i], i);
+        Human human = SceneRefs.ObjectFactory.CreateHuman(Elevator.main.GetPos(), hatMaterial[i], i);
         humans.Add(human);
         human.ActivateHuman();
     }

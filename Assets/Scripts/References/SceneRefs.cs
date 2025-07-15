@@ -21,6 +21,7 @@ public class SceneRefs : MonoBehaviour
     [SerializeField] Transform _stats;
     [SerializeField] UIDocument _miscellaneous;
     [SerializeField] InfoWindow _infoWindow;
+    [SerializeField] CameraSceneMovement _cameraSceneMover;
 
     [Header("Adapters")]
     [SerializeField] ResearchAdapter _researchAdapter;
@@ -31,17 +32,18 @@ public class SceneRefs : MonoBehaviour
     #endregion
 
     #region Getters
-    public static GridTiles gridTiles => instance._gridTiles;
-    public static ClickableObjectFactory objectFactory => instance._objectFactory;
-    public static HumanUtil humans => instance._humans;
-    public static JobQueue jobQueue => instance._jobQueue;
-    public static Tick tick => instance._tick;
+    public static GridTiles GridTiles => instance._gridTiles;
+    public static ClickableObjectFactory ObjectFactory => instance._objectFactory;
+    public static HumanUtil Humans => instance._humans;
+    public static JobQueue JobQueue => instance._jobQueue;
+    public static Tick Tick => instance._tick;
 
     public static Transform BottomBar => instance._stats;
-    public static UIDocument miscellaneous => instance._miscellaneous;
-    public static InfoWindow infoWindow => instance._infoWindow;
+    public static UIDocument Miscellaneous => instance._miscellaneous;
+    public static InfoWindow InfoWindow => instance._infoWindow;
+    public static CameraSceneMovement CameraSceneMover => instance._cameraSceneMover;
 
-    public static ResearchAdapter researchAdapter => instance._researchAdapter;
+    public static ResearchAdapter ResearchAdapter => instance._researchAdapter;
     #endregion
 
     [RuntimeInitializeOnLoadMethod]
@@ -84,8 +86,8 @@ public class SceneRefs : MonoBehaviour
     /// <param name="text">Message text.</param>
     IEnumerator MessageToggle(string text)
     {
-        ((Label)miscellaneous.rootVisualElement[1]).text = text;
+        ((Label)Miscellaneous.rootVisualElement[1]).text = text;
         yield return new WaitForSecondsRealtime(2f);
-        ((Label)miscellaneous.rootVisualElement[1]).text = "";
+        ((Label)Miscellaneous.rootVisualElement[1]).text = "";
     }
 }

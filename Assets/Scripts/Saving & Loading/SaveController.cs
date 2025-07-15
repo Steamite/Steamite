@@ -16,7 +16,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
     #region Init
     public void Init()
     {
-        SceneRefs.tick.SubscribeToEvent(() => SaveGame("", true), Tick.TimeEventType.Day);
+        SceneRefs.Tick.SubscribeToEvent(() => SaveGame("", true), Tick.TimeEventType.Day);
         UIRefs.pauseMenu.Init((s) => SaveGame(s, false), ref saveUIAction);
         worldName = MyGrid.worldName;
     }
@@ -126,7 +126,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
             WriteSave(
                 $"{tmpPath}/Humans.json",
                 jsonSerializer,
-                SceneRefs.humans.SaveHumans());
+                SceneRefs.Humans.SaveHumans());
 
             WriteSave(
                $"{tmpPath}/Game State.json",
@@ -213,8 +213,8 @@ public class SaveController : MonoBehaviour, IAfterLoad
     GameStateSave SaveGameState(bool autoSave)
     {
         GameStateSave gameState = new();
-        gameState.priorities = SceneRefs.jobQueue.priority;
-        SceneRefs.tick.Save(gameState);
+        gameState.priorities = SceneRefs.JobQueue.priority;
+        SceneRefs.Tick.Save(gameState);
         gameState.autoSave = autoSave;
         return gameState;
     }

@@ -15,22 +15,22 @@ public partial class HumanInfo : InfoWindowControl
         // Efficiency Binding
         DataBinding binding = BindingUtil.CreateBinding(nameof(Human.Efficiency));
         binding.sourceToUiConverters.AddConverter((ref Efficiency efficiency) => $"{efficiency.efficiency * 100:0.#}%");
-        SceneRefs.infoWindow.RegisterTempBinding(new(efficiency, "text"), binding, dataSource);
+        SceneRefs.InfoWindow.RegisterTempBinding(new(efficiency, "text"), binding, dataSource);
 
         // Job Binding
         binding = BindingUtil.CreateBinding(nameof(Human.Job));
         binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{jobData.job}");
-        SceneRefs.infoWindow.RegisterTempBinding(new(jobType, "text"), binding, dataSource);
+        SceneRefs.InfoWindow.RegisterTempBinding(new(jobType, "text"), binding, dataSource);
 
         // Pos Binding
         binding = BindingUtil.CreateBinding(nameof(Human.Job));
         binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{(jobData.interest ? jobData.interest.GetPos() : "None")}");
-        SceneRefs.infoWindow.RegisterTempBinding(new(jobPosition, "text"), binding, dataSource);
+        SceneRefs.InfoWindow.RegisterTempBinding(new(jobPosition, "text"), binding, dataSource);
 
         // Object Binding
         binding = BindingUtil.CreateBinding(nameof(Human.Job));
         binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{(jobData.interest ? jobData.interest.objectName : "None")}");
-        SceneRefs.infoWindow.RegisterTempBinding(new(jobObject, "text"), binding, dataSource);
+        SceneRefs.InfoWindow.RegisterTempBinding(new(jobObject, "text"), binding, dataSource);
     }
 
     public HumanInfo()

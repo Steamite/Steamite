@@ -82,11 +82,11 @@ namespace BottomBar.Building
         {
             base.DefaultBindItem(element, index);
             element.style.display = DisplayStyle.Flex;
-            if (((RadioBuildButtonData)itemsSource[index]).unlocked)
+            if (((RadioBuildButtonData)itemsSource[index]).unlocked && MyRes.CanAfford(wrappers[index].building.Cost))
             {
                 // hide locked blocker
                 element[2].style.display = DisplayStyle.None;
-                if (wrappers[index].building == SceneRefs.gridTiles.BuildPrefab)
+                if (wrappers[index].building == SceneRefs.GridTiles.BuildPrefab)
                 {
                     element.AddToClassList($"{BUILD_BUTTON_CLASS}-selected");
                 }
@@ -99,6 +99,7 @@ namespace BottomBar.Building
             element.Q<VisualElement>("img").style.backgroundImage = new(((RadioBuildButtonData)itemsSource[index]).img);
             element.Q<Label>("label").text = ((RadioBuildButtonData)itemsSource[index]).text;
             ((Button)element).text = "";
+
             element.RegisterCallback<PointerEnterEvent>(Hover);
             element.RegisterCallback<PointerLeaveEvent>(EndHove);
         }

@@ -98,7 +98,7 @@ namespace InfoWindowElements
                     style.display = DisplayStyle.None;
                     return;
             }
-            SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
+            SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
         }
     }
 }

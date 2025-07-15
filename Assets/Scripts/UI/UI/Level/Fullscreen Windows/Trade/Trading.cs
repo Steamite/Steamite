@@ -52,7 +52,7 @@ public class Trading : FullscreenWindow
 
 
         //Moves all convoys each tick.
-        SceneRefs.tick.SubscribeToEvent(
+        SceneRefs.Tick.SubscribeToEvent(
             () =>
             {
                 for (int i = convoys.Count - 1; i >= 0; i--)
@@ -60,7 +60,7 @@ public class Trading : FullscreenWindow
             },
            Tick.TimeEventType.Ticks);
 
-        SceneRefs.tick.SubscribeToEvent(
+        SceneRefs.Tick.SubscribeToEvent(
             colonyLocation.DoProduction,
             Tick.TimeEventType.Week);
     }

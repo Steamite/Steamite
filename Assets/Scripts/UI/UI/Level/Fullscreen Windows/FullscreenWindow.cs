@@ -27,11 +27,12 @@ public abstract class FullscreenWindow : MonoBehaviour
     public virtual void OpenWindow()
     {
         isOpen = true;
-        SceneRefs.gridTiles.DeselectObjects();
+        SceneRefs.GridTiles.MarkPipeCheckpoint();
+        SceneRefs.GridTiles.DeselectObjects();
         MainShortcuts.DisableInput();
-        SceneRefs.infoWindow?.Close();
+        SceneRefs.InfoWindow?.Close();
         window.style.display = DisplayStyle.Flex;
-        SceneRefs.tick.UIWindowToggle(false);
+        SceneRefs.Tick.UIWindowToggle(false);
     }
 
     /// <summary>Closing the window, enables shortcuts.</summary>
@@ -40,6 +41,6 @@ public abstract class FullscreenWindow : MonoBehaviour
         isOpen = false;
         MainShortcuts.EnableInput();
         window.style.display = DisplayStyle.None;
-        SceneRefs.tick.UIWindowToggle(true);
+        SceneRefs.Tick.UIWindowToggle(true);
     }
 }

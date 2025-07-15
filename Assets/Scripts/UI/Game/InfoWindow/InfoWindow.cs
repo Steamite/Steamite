@@ -99,7 +99,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         window.style.display = DisplayStyle.None;
 
         header = window.Q<Label>("Header");
-        header.parent.Q<Button>("Close").RegisterCallback<ClickEvent>((_) => SceneRefs.gridTiles.DeselectObjects());
+        header.parent.Q<Button>("Close").RegisterCallback<ClickEvent>((_) => SceneRefs.GridTiles.DeselectObjects());
         yield return null;
     }
 

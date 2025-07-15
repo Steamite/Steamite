@@ -10,7 +10,7 @@ public class ObjectSelectionShortcuts
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = SceneRefs.infoWindow.gameObject;
+        GameObject gameObject = SceneRefs.InfoWindow.gameObject;
         Selection.activeGameObject = gameObject;
     }
 

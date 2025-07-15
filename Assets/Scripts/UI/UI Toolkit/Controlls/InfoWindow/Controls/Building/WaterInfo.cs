@@ -9,7 +9,7 @@ public partial class WaterInfo : InfoWindowControl
         dataSource = data;
         DataBinding binding = BindingUtil.CreateBinding(nameof(Water.Ammount));
         binding.sourceToUiConverters.AddConverter((ref int ammount) => $"{ammount}");
-        SceneRefs.infoWindow.RegisterTempBinding(new(waterAmmount, "text"), binding, data);
+        SceneRefs.InfoWindow.RegisterTempBinding(new(waterAmmount, "text"), binding, data);
     }
 
     public WaterInfo()

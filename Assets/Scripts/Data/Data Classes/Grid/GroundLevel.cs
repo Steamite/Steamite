@@ -42,28 +42,31 @@ public class GroundLevel : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        Vector3 vec = new Vector3(0, transform.position.y+1, 0);
-        for (int i = 0; i < width; i++)
+        if (EditorApplication.isPlaying)
         {
-            vec.x = i;
-            for (int j = 0; j < height; j++)
+            Vector3 vec = new Vector3(0, transform.position.y + 1, 0);
+            for (int i = 0; i < width; i++)
             {
-                vec.z = j;
-                switch (grid[i, j])
+                vec.x = i;
+                for (int j = 0; j < height; j++)
                 {
-                    case Rock:
-                        Gizmos.color = Color.black;
-                        break;
-                    case Building:
-                        Gizmos.color = Color.darkGreen;
-                        break;
-                    case Road:
-                        continue;
-                    case Water:
-                        Gizmos.color = Color.darkBlue;
-                        break;
+                    vec.z = j;
+                    switch (grid[i, j])
+                    {
+                        case Rock:
+                            Gizmos.color = Color.black;
+                            break;
+                        case Building:
+                            Gizmos.color = Color.darkGreen;
+                            break;
+                        case Road:
+                            continue;
+                        case Water:
+                            Gizmos.color = Color.darkBlue;
+                            break;
+                    }
+                    Gizmos.DrawCube(vec, new(1, 1, 1));
                 }
-                Gizmos.DrawCube(vec, new(1, 1, 1));
             }
         }
     }
@@ -124,7 +127,10 @@ public class GroundLevel : MonoBehaviour
             }
         }
         if (isPipe)
-            pipeGrid[x, y] = (Pipe)clickable;
+        {
+            if (pipeGrid[x, y] == null)
+                pipeGrid[x, y] = (Pipe)clickable;
+        }
         else
             grid[x, y] = clickable;
     }
@@ -232,7 +238,6 @@ public class GroundLevel : MonoBehaviour
     public bool CanPlace(Pipe pipe, GridPos pos)
     {
         bool canPlace = pipeGrid[(int)pos.x, (int)pos.z] == null && GetGridItem(pos) is Road;
-        overlays.MovePlaceOverlay(pipe);
         pipe.FindConnections(canPlace);
         return canPlace;
     }
@@ -289,12 +294,9 @@ public class GroundLevel : MonoBehaviour
                         foreignEntryOverlay);
                     break;
                 case GridItemType.Entrance:
-                    /*c = new(0.5f, 0.5f, 0.5f, 0.25f);
-                    errC = new(1f, 0.3f, 0.3f, 0.25f);*/
                     entrances.Add(tile.GetComponent<Image>());
                     if (GetGridItem(itemPos) is Road)
                         activeEntrances++;
-
                     break;
                 case GridItemType.Water:
                     c = new(0.211765f, 0.1686275f, 1, 0.25f);
@@ -307,7 +309,7 @@ public class GroundLevel : MonoBehaviour
                         ref canBuild);
                     break;
                 case GridItemType.Pipe:
-                    c = new(1, 0.843f, 0, 0.25f);
+                    c = new(1f, 0.5490196f, 0f, 0.25f);
                     errC = new(1, 0, 0, 0.25f);
                     CheckMassObscursion(
                         itemPos,
@@ -350,14 +352,17 @@ public class GroundLevel : MonoBehaviour
         ClickableObject clickable = GetGridItem(pos);
         if (clickable != null && clickable is Road)
         {
-            Road road = clickable as Road;
-            if (road.entryPoints.Count > 0)
+            if(GetGridItem(pos, true) == null)
             {
-                _roads.Add(road);
-                images.Add(image);
+                Road road = clickable as Road;
+                if (road.entryPoints.Count > 0)
+                {
+                    _roads.Add(road);
+                    images.Add(image);
+                }
+                image.color = baseColor;
+                return;
             }
-            image.color = baseColor;
-            return;
         }
         image.color = errColor;
         canBuild = false;

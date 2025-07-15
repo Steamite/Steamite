@@ -37,7 +37,7 @@ public class ResearchProduction : Building, IProduction, IAssign
     /// <param name="speed"></param>
     public void ProgressProduction(float speed)
     {
-        SceneRefs.researchAdapter.DoProduction(speed);
+        SceneRefs.ResearchAdapter.DoProduction(speed);
     }
 
     public bool ManageAssigned(Human human, bool add)
@@ -52,11 +52,11 @@ public class ResearchProduction : Building, IProduction, IAssign
             if (job.interest)
             {
                 Assigned.Add(human);
-                human.transform.SetParent(SceneRefs.humans.transform.GetChild(1).transform);
+                human.transform.SetParent(SceneRefs.Humans.transform.GetChild(1).transform);
                 human.workplace = this;
                 job.job = JobState.FullTime;
 
-                SceneRefs.jobQueue.FreeHuman(human);
+                SceneRefs.JobQueue.FreeHuman(human);
                 if (!human.nightTime)
                     human.SetJob(job, true);
                 else
@@ -77,7 +77,7 @@ public class ResearchProduction : Building, IProduction, IAssign
         {
             Assigned.Remove(human);
             human.workplace = null;
-            human.transform.SetParent(SceneRefs.humans.transform.GetChild(0).transform);
+            human.transform.SetParent(SceneRefs.Humans.transform.GetChild(0).transform);
             human.Idle();
         }
         UIUpdate(nameof(Assigned));
@@ -86,7 +86,7 @@ public class ResearchProduction : Building, IProduction, IAssign
 
     public List<Human> GetUnassigned()
     {
-        return SceneRefs.humans.GetPartTime();
+        return SceneRefs.Humans.GetPartTime();
     }
 
     public void Product()

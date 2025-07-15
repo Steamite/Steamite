@@ -181,14 +181,14 @@ namespace InfoWindowElements
                 case StorageObject:
                     binding = BindingUtil.CreateBinding(nameof(StorageObject.LocalRes));
                     binding.sourceToUiConverters.AddConverter((ref StorageResource stored) => ToUIRes(stored as T));
-                    SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Rock:
                     if (((Rock)data).rockYield != null)
                     {
                         binding = BindingUtil.CreateBinding(nameof(Rock.rockYield));
                         binding.sourceToUiConverters.AddConverter((ref Resource yeild) => ToUIRes(yeild as T));
-                        SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                        SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     }
                     else
                     {
@@ -198,7 +198,7 @@ namespace InfoWindowElements
                 case Human:
                     binding = BindingUtil.CreateBinding(nameof(Human.Inventory));
                     binding.sourceToUiConverters.AddConverter((ref CapacityResource inventory) => ToUIRes(inventory as T));
-                    SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case ResourceDisplay:
                     ToolkitUtils.Init();

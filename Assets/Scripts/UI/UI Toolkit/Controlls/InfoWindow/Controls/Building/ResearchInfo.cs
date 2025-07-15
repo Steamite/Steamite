@@ -67,10 +67,10 @@ public partial class ResearchInfo : InfoWindowControl
 
             DataBinding binding = BindingUtil.CreateBinding(nameof(ResearchNode.CurrentTime));
             binding.sourceToUiConverters.AddConverter((ref float dat) => $"{dat:0}/{node.researchTime}");
-            SceneRefs.infoWindow.RegisterTempBinding(new(progress, nameof(ProgressBar.title)), binding, dataSource);
+            SceneRefs.InfoWindow.RegisterTempBinding(new(progress, nameof(ProgressBar.title)), binding, dataSource);
 
             binding = BindingUtil.CreateBinding(nameof(ResearchNode.CurrentTime));
-            SceneRefs.infoWindow.RegisterTempBinding(new(progress, nameof(ProgressBar.value)), binding, dataSource);
+            SceneRefs.InfoWindow.RegisterTempBinding(new(progress, nameof(ProgressBar.value)), binding, dataSource);
         }
         else
         {

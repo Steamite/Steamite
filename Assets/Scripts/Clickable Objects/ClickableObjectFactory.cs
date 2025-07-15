@@ -29,6 +29,8 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     public ResourceHolder specialPrefabs;
     public PipePart PipeConnectionPrefab;
     #endregion
+    Material pipeMaterial;
+
 
     #region Tiles
     /// <summary>
@@ -141,7 +143,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             specialPrefabs.GetPrefab<Human>("Human"),
             gp.ToVec(HUMAN_OFFSET),
             Quaternion.identity,
-            SceneRefs.humans.transform.GetChild(0).transform);
+            SceneRefs.Humans.transform.GetChild(0).transform);
         h.UniqueID();
         h.Inventory = new(20);
         // color for debug
@@ -188,8 +190,8 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         MyGrid.SetGridItem(gp, rock);
         if (rock.toBeDug)
         {
-            SceneRefs.jobQueue.toBeDug.Add(rock);
-            SceneRefs.gridTiles.HighLight(SceneRefs.gridTiles.toBeDugColor, rock.gameObject);
+            SceneRefs.JobQueue.toBeDug.Add(rock);
+            SceneRefs.GridTiles.HighLight(SceneRefs.GridTiles.toBeDugColor, rock.gameObject);
         }
     }
 
@@ -213,7 +215,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             specialPrefabs.GetPrefab<Human>("Human"),
             save.gridPos.ToVec(HUMAN_OFFSET),
             Quaternion.identity,
-            SceneRefs.humans.transform.GetChild(parent));
+            SceneRefs.Humans.transform.GetChild(parent));
         human.Load(save);
         return human;
     }
@@ -234,7 +236,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     public BuildPipe CreateBuildingPipe(GridPos localPos, IFluidWork building)
     {
         BuildPipe pipe = Instantiate(
-            buildPrefabs.GetBuilding("Build pipe") as BuildPipe,
+            buildPrefabs.GetBuilding(BuildPipe.BUILD_PIPE_PREF_NAME) as BuildPipe,
             localPos.ToVec(PIPE_OFFSET),
             Quaternion.identity,
             ((Building)building).transform);
@@ -256,10 +258,16 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             q.building.InitModifiers();
             q.materials = q.building.GetComponentsInChildren<Renderer>().Select(q => q.sharedMaterial).ToList();
         });
+        pipeMaterial = buildPrefabs.GetBuilding(BuildPipe.BUILD_PIPE_PREF_NAME).GetComponent<Renderer>().sharedMaterial;
     }
 
     public List<Material> GetModelMaterials(Building building)
     {
         return buildPrefabs.Categories[building.categoryID].Objects.FirstOrDefault(q => q.id == building.wrapperID).materials;
+    }
+
+    public Material GetPipeMaterial()
+    {
+        return pipeMaterial;
     }
 }

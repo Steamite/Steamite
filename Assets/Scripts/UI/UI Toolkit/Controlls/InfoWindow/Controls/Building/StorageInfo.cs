@@ -82,11 +82,11 @@ namespace InfoWindowElements
             storage = (IStorage)_storage;
             DataBinding binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource store) => ToUIRes(store));
-            SceneRefs.infoWindow.RegisterTempBinding(new(this, "resources"), binding, storage);
+            SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, storage);
 
             binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource store) => $"Capacity: {store.Sum()}/{store.capacity}");
-            SceneRefs.infoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, storage);
+            SceneRefs.InfoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, storage);
 
             if (storageElems.Count > 0)
             {

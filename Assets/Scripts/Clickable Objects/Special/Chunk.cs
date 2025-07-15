@@ -82,14 +82,14 @@ public class Chunk : StorageObject
                 }
                 else
                 {
-                    if (HumanActions.HandleJobTypes(SceneRefs.jobQueue, h, JobState.Cleanup))
+                    if (HumanActions.HandleJobTypes(SceneRefs.JobQueue, h, JobState.Cleanup))
                         FindS(h);
                 }
             }
         }
         if (localRes.Sum() == 0)
         {
-            SceneRefs.gridTiles.DestroyUnselect(this);
+            SceneRefs.GridTiles.DestroyUnselect(this);
             MyGrid.chunks.Remove(this);
             Destroy(gameObject);
         }

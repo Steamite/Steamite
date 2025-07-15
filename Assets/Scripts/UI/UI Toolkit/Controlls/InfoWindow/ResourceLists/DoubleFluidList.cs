@@ -36,13 +36,13 @@ namespace InfoWindowElements
                     noneLabel.style.height = new Length(50, LengthUnit.Pixel);
                     DataBinding binding = BindingUtil.CreateBinding(nameof(Water.Ammount));
                     binding.sourceToUiConverters.AddConverter((ref int amm) => $"Water Source:\n {amm}/1");
-                    SceneRefs.infoWindow.RegisterTempBinding(new BindingContext(noneLabel, "text"), binding, water);
+                    SceneRefs.InfoWindow.RegisterTempBinding(new BindingContext(noneLabel, "text"), binding, water);
                     return;
                 default:
                     style.display = DisplayStyle.None;
                     return;
             }
-            SceneRefs.infoWindow.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
+            SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
 
         }
     }

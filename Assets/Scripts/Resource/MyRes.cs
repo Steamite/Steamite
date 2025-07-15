@@ -51,7 +51,7 @@ public static class MyRes
             globalStorageSpace = 0;
 
             storage = MyGrid.GetBuildings<IStorage>(q => q != null);
-            JobQueue jQ = SceneRefs.jobQueue;
+            JobQueue jQ = SceneRefs.JobQueue;
             foreach (IStorage _s in storage)
             {
                 jQ.storages.Add(_s);
@@ -173,7 +173,7 @@ public static class MyRes
     /// <param name="j">job to cancel if all requested resource have been requested</param>
     public static bool FindResources(Human human, Building building, JobState j)
     {
-        JobQueue jQ = SceneRefs.jobQueue;
+        JobQueue jQ = SceneRefs.JobQueue;
         Resource diff = building.GetDiff(human.Inventory);
         List<StorageObject> stores = MyGrid.chunks.Union(jQ.pickupNeeded.Union(jQ.storages.Cast<Building>())).ToList();
         if (stores.Count > 0)
@@ -254,7 +254,7 @@ public static class MyRes
     /// <returns></returns>
     static List<IStorage> FilterStorages(Resource r, Human h, bool perfect)
     {
-        List<IStorage> storages = SceneRefs.jobQueue.storages.ToList();
+        List<IStorage> storages = SceneRefs.JobQueue.storages.ToList();
         int wantToStore = r.Sum();
         for (int i = storages.Count - 1; i >= 0; i--)
         {

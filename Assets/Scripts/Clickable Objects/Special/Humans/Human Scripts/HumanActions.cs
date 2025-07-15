@@ -97,7 +97,7 @@ public static class HumanActions
     {
         if (h.Job.interest.GetComponent<Rock>().DamageRock(digSpeed * h.Efficiency))
         {
-            SceneRefs.jobQueue.CancelJob(JobState.Digging, h.Job.interest); // removes job order
+            SceneRefs.JobQueue.CancelJob(JobState.Digging, h.Job.interest); // removes job order
             h.SetJob(JobState.Free);
         }
     }
@@ -132,7 +132,7 @@ public static class HumanActions
         if (building.ProgressConstruction(h.Efficiency * buildSpeed))
         {
             building.LocalRes.RemoveRequest(h);
-            SceneRefs.jobQueue.CancelJob(JobState.Constructing, building);
+            SceneRefs.JobQueue.CancelJob(JobState.Constructing, building);
             h.SetJob(JobState.Free);
         }
     }
@@ -146,7 +146,7 @@ public static class HumanActions
         Building building = h.Job.interest as Building;
         if (building.ProgressDeconstruction(h.Efficiency * decontructSpeed, h))
         {
-            SceneRefs.jobQueue.CancelJob(JobState.Deconstructing, building);
+            SceneRefs.JobQueue.CancelJob(JobState.Deconstructing, building);
             h.SetJob(JobState.Free);
         }
     }
@@ -191,7 +191,7 @@ public static class HumanActions
         h.destination = null;
         if (!h.nightTime && !h.lookingForAJob)
         {
-            JobQueue jobQueue = SceneRefs.jobQueue;
+            JobQueue jobQueue = SceneRefs.JobQueue;
             h.lookingForAJob = true;
 
             // go throuh the jobs according to priority

@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 
 public class BuildPipe : Pipe
 {
+    public const string BUILD_PIPE_PREF_NAME = "Build pipe";
     public IFluidWork connectedBuilding;
     //bool pipesSaved = false;
 

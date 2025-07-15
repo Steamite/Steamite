@@ -556,6 +556,9 @@ MonoBehaviour:
     capacity:
       baseValue: 0
       currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
     requests: []
     carriers: []
     mods: 
@@ -611,9 +614,15 @@ MonoBehaviour:
     baseResource:
       types: 
       ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
     money:
       baseValue: 45
       currentValue: 45
+      mod:
+        percentMod: 1
+        absoluteMod: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
@@ -623,6 +632,15 @@ MonoBehaviour:
   assignLimit:
     baseValue: 1
     currentValue: 1
+    mod:
+      percentMod: 1
+      absoluteMod: 0
+  modifier:
+    baseValue: 1
+    currentValue: 1
+    mod:
+      percentMod: 1
+      absoluteMod: 0
 --- !u!210 &9080560569971430985
 SortingGroup:
   m_ObjectHideFlags: 0

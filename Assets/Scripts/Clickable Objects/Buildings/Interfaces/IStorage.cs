@@ -37,7 +37,7 @@ public interface IStorage
             LocalResources.ammounts.Add(0);
         for (int i = 0; i < LocalResources.ammounts.Count; i++)
             CanStore.Add(true);
-        SceneRefs.jobQueue.storages.Add(this);
+        SceneRefs.JobQueue.storages.Add(this);
     }
 
     /// <summary>

@@ -24,10 +24,10 @@ public class TimeDisplay : MonoBehaviour, IToolkitController
         months = root.Q<Label>("Months");
         years = root.Q<Label>("Years");
 
-        SceneRefs.tick.SubscribeToEvent(UpdateTime, Tick.TimeEventType.Ticks);
-        SceneRefs.tick.SubscribeToEvent(UpdateDay, Tick.TimeEventType.Day);
-        SceneRefs.tick.SubscribeToEvent(UpdateMonth, Tick.TimeEventType.Month);
-        SceneRefs.tick.SubscribeToEvent(UpdateYear, Tick.TimeEventType.Year);
+        SceneRefs.Tick.SubscribeToEvent(UpdateTime, Tick.TimeEventType.Ticks);
+        SceneRefs.Tick.SubscribeToEvent(UpdateDay, Tick.TimeEventType.Day);
+        SceneRefs.Tick.SubscribeToEvent(UpdateMonth, Tick.TimeEventType.Month);
+        SceneRefs.Tick.SubscribeToEvent(UpdateYear, Tick.TimeEventType.Year);
 
         UpdateTime();
         UpdateDay();
@@ -37,17 +37,17 @@ public class TimeDisplay : MonoBehaviour, IToolkitController
 
     void UpdateTime()
     {
-        minutes.text = (SceneRefs.tick.timeInMinutes % 60).ToString();
-        hours.text = (SceneRefs.tick.timeInMinutes / 60).ToString();
+        minutes.text = (SceneRefs.Tick.timeInMinutes % 60).ToString();
+        hours.text = (SceneRefs.Tick.timeInMinutes / 60).ToString();
         //Debug.Log("Time:" + (SceneRefs.tick.timeInMinutes % 60).ToString());
     }
 
     void UpdateDay() =>
-        days.text = ((SceneRefs.tick.numberOfDays % 28) + 1).ToString();
+        days.text = ((SceneRefs.Tick.numberOfDays % 28) + 1).ToString();
 
     void UpdateMonth() =>
-        months.text = (((SceneRefs.tick.numberOfDays % 336) / 28) + 1).ToString();
+        months.text = (((SceneRefs.Tick.numberOfDays % 336) / 28) + 1).ToString();
 
     void UpdateYear() =>
-        years.text = (1885 + (SceneRefs.tick.numberOfDays / 336)).ToString();
+        years.text = (1885 + (SceneRefs.Tick.numberOfDays / 336)).ToString();
 }

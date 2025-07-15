@@ -36,7 +36,7 @@ public struct JobData
                 interest = MyGrid.GetBuilding(q => q.id == jobSave.interestID);
                 break;
             case JobSave.InterestType.R:
-                interest = SceneRefs.jobQueue.toBeDug.FirstOrDefault(q => q.id == jobSave.interestID);
+                interest = SceneRefs.JobQueue.toBeDug.FirstOrDefault(q => q.id == jobSave.interestID);
                 (interest as Rock).Assigned = human;
                 break;
             case JobSave.InterestType.C:

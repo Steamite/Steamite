@@ -37,7 +37,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
         handleGrid = false;
         handleWindows = win;
         UIRefs.levelCamera.enabled = false;
-        SceneRefs.gridTiles.activeObject = null;
+        SceneRefs.GridTiles.activeObject = null;
     }
     public static void EnableInput()
     {
@@ -57,7 +57,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
 
     void Update()
     {
-        GridTiles gt = SceneRefs.gridTiles;
+        GridTiles gt = SceneRefs.GridTiles;
         if (handleGrid)
         {
             // toggle build menu
@@ -93,9 +93,9 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
             else if (buildRotate.triggered)
             {
                 float axis = buildRotate.ReadValue<float>();
-                if (SceneRefs.gridTiles.activeControl == ControlMode.build)
+                if (SceneRefs.GridTiles.activeControl == ControlMode.build)
                 {
-                    Building building = SceneRefs.gridTiles.BlueprintInstance;
+                    Building building = SceneRefs.GridTiles.BlueprintInstance;
                     if (building is Pipe)
                         return;
                     if (axis < 0)
@@ -110,7 +110,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
                     {
                         fluid.AttachedPipes.ForEach(q => q.RecalculatePipeTransform());
                     }
-                    SceneRefs.gridTiles.Enter(SceneRefs.gridTiles.activeObject);
+                    SceneRefs.GridTiles.Enter(SceneRefs.GridTiles.activeObject);
                 }
             }
         }

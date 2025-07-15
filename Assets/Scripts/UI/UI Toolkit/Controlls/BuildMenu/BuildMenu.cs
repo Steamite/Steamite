@@ -21,7 +21,7 @@ namespace BottomBar.Building
         /// </summary>
         public void Init()
         {
-            buildingData = SceneRefs.objectFactory.buildPrefabs;
+            buildingData = SceneRefs.ObjectFactory.buildPrefabs;
             foreach (var item in buildingData.Categories)
             {
                 foreach (var wrapper in item.Objects)
@@ -67,7 +67,7 @@ namespace BottomBar.Building
             categGroup.SetChangeCallback(CategChange);
             Add(categGroup);
 
-            SceneRefs.gridTiles.DeselectBuildingButton = () => buildingList.Select(-1);
+            SceneRefs.GridTiles.DeselectBuildingButton = () => buildingList.Select(-1);
             style.display = DisplayStyle.None;
             opened = false;
         }
@@ -85,10 +85,10 @@ namespace BottomBar.Building
             if (i > -1)
             {
                 if (buildingData.Categories[categGroup.SelectedChoice].Objects[i].unlocked)
-                    SceneRefs.gridTiles.BuildPrefab = buildingData.Categories[categGroup.SelectedChoice].Objects[i].building;
+                    SceneRefs.GridTiles.BuildPrefab = buildingData.Categories[categGroup.SelectedChoice].Objects[i].building;
             }
             else
-                SceneRefs.gridTiles.BuildPrefab = null;
+                SceneRefs.GridTiles.BuildPrefab = null;
         }
 
         public void Open()
