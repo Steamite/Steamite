@@ -7,7 +7,7 @@ namespace AbstractControls
     {
         public bool IsSelected { get; protected set; }
         bool toggle;
-        public int value;
+        public int selIndex;
 
         public string styleClass;
 
@@ -16,7 +16,7 @@ namespace AbstractControls
         {
             styleClass = "save-radio-button";
             AddToClassList("save-radio-button");
-            value = -1;
+            selIndex = -1;
             toggle = false;
         }
 
@@ -26,7 +26,7 @@ namespace AbstractControls
             ClearClassList();
             styleClass = _styleClass;
             AddToClassList(_styleClass);
-            value = _value;
+            selIndex = _value;
             inGroup = _inGroup;
             toggle = _toggle;
             RegisterCallback<ClickEvent>((_) => Select());
@@ -74,7 +74,7 @@ namespace AbstractControls
                     {
                         el = el.parent;
                     } while (el.parent != null && el is not CustomRadioButtonGroup);
-                    return ((CustomRadioButtonGroup)el).Select(value);
+                    return ((CustomRadioButtonGroup)el).Select(selIndex);
                 }
                 else
                 {
@@ -82,7 +82,7 @@ namespace AbstractControls
                     {
                         el = el.parent;
                     } while (el.parent != null && el is not CustomRadioButtonList);
-                    return ((CustomRadioButtonList)el).Select(value);
+                    return ((CustomRadioButtonList)el).Select(selIndex);
                 }
             }
             return true;

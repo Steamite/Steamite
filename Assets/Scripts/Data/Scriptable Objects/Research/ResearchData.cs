@@ -124,8 +124,6 @@ namespace ResearchUI
         {
             propertyChanged?.Invoke(this, new(property));
         }
-
-        public bool HasActiveBinding() => propertyChanged != null;
         #region Editor modifications
 #if UNITY_EDITOR
 

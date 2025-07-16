@@ -37,7 +37,7 @@ public class ModifiableResource : Resource, IModifiable
     }
 
     /// <summary>Sets the <see cref="resourceModifier"/> to 1 and copies <see cref="baseResource"/>to the current one</summary>
-    public void Init()
+    public virtual void Init()
     {
         types = baseResource.types.ToList();
         ammounts = baseResource.ammounts.ToList();

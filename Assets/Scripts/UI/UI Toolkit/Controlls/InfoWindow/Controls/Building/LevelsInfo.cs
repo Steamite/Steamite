@@ -76,13 +76,44 @@ namespace InfoWindowElements
             bodyLabel.name = "Body";
             view.Add(bodyLabel);
 
-            costList = new(true, "Cost");
-            view.Add(costList);
+            VisualElement element = new()
+            {
+                style =
+                {
+                    flexGrow = 1,
+                    minWidth = new Length(100, LengthUnit.Percent),
+                    justifyContent = Justify.FlexEnd
 
-            moveButton = new();
+                }
+            };
+
+            costList = new(true, "Cost")
+            {
+                style =
+                {
+                    flexGrow = 1,
+                    marginTop = 0,
+                    minHeight = 200
+                },
+            };
+            element.Add(costList);
+
+            moveButton = new() 
+            { 
+                style = 
+                {
+                    minWidth = new Length(100, LengthUnit.Percent),
+                    maxWidth = new Length(100, LengthUnit.Percent),
+                    marginBottom = 15,
+                    paddingLeft = 0,
+                    height = new Length(50, LengthUnit.Pixel)
+                },
+            };
             moveButton.AddToClassList("main-button");
             moveButton.RegisterCallback<ClickEvent>(HandleButton);
-            view.Add(moveButton);
+            element.Add(moveButton);
+
+            view.Add(element);
             Add(view);
         }
 
@@ -112,6 +143,7 @@ namespace InfoWindowElements
                 return;
             headerLabel.text = LevelData.headers[i];
             bodyLabel.text = LevelData.bodies[i];
+            SelectedLevel = i;
 
             LevelState state = levelGroup[i];
             switch (state)
@@ -197,7 +229,19 @@ namespace InfoWindowElements
             switch (levelGroup[SelectedLevel])
             {
                 case LevelState.CanUnlock:
-                    //ConfirmWindow.window.Open(MyGrid., "");
+                    ConfirmWindow.window.Open(
+                        () =>
+                        {
+                            SceneRefs.ObjectFactory.CreateElevator(
+                                new(MyGrid.gridSize(SelectedLevel) / 2, SelectedLevel, MyGrid.gridSize(SelectedLevel) / 2));
+                            MyRes.PayCostGlobal(LevelData.costs[SelectedLevel]);
+                            MyGrid.UnlockLevel(SelectedLevel);
+                            MyGrid.ChangeGridLevel(SelectedLevel);
+                        }, 
+                        "Unlock new level",
+                        $"Do you want to unlock the {LevelData.headers[SelectedLevel]}?",
+                        "Unlock",
+                        "Cancel");
                     break;
                 case LevelState.Unlocked:
                     MyGrid.ChangeGridLevel(SelectedLevel);

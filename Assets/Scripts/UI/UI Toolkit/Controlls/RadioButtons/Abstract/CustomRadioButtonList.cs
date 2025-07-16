@@ -82,7 +82,7 @@ namespace AbstractControls
         {
             element.RemoveFromClassList("unity-collection-view__item");
             element.RemoveFromClassList("unity-list-view__item");
-            (element as CustomRadioButton).value = index;
+            (element as CustomRadioButton).selIndex = index;
             (element as CustomRadioButton).text = ((RadioButtonData)itemsSource[index]).text;
             return;
         }
@@ -103,7 +103,7 @@ namespace AbstractControls
         {
             if (SelectedChoice > -1)
                 ((CustomRadioButton)contentContainer.Children()
-                    .FirstOrDefault(q => ((CustomRadioButton)q)?.value == SelectedChoice))?.Deselect();
+                    .FirstOrDefault(q => ((CustomRadioButton)q)?.selIndex == SelectedChoice))?.Deselect();
             if (SelectedChoice == index)
             {
                 SelectedChoice = -1;

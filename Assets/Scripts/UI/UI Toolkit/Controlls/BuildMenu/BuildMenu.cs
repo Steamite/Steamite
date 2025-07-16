@@ -31,7 +31,7 @@ namespace BottomBar.Building
                 }
             }
 
-            ResearchData researchData = UIRefs.research.researchData;
+            ResearchData researchData = UIRefs.ResearchWindow.researchData;
             foreach (var categ in researchData.Categories)
             {
                 foreach (var node in categ.Objects)
@@ -96,14 +96,14 @@ namespace BottomBar.Building
         {
             opened = true;
             style.display = DisplayStyle.Flex;
-            UIRefs.bottomBar[1].style.display = DisplayStyle.None;
+            UIRefs.BottomBar[1].style.display = DisplayStyle.None;
         }
 
         void Close()
         {
             opened = false;
             style.display = DisplayStyle.None;
-            UIRefs.bottomBar[1].style.display = DisplayStyle.Flex;
+            UIRefs.BottomBar[1].style.display = DisplayStyle.Flex;
             categGroup.Select(-1);
             BlueprintChange(-1);
         }

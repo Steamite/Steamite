@@ -7,6 +7,7 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
 {
     [SerializeField] public InputActionAsset inputAsset;
     public TimeButtons timeButtons;
+    public LevelButtons levelButtons;
     //[SerializeField] public RadioButtons levelButtons;
 
     InputAction shift;
@@ -26,6 +27,10 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
 
         timeButtons = bottomBar.Q<TimeButtons>();
         timeButtons.Start();
+
+        levelButtons = bottomBar.Q<LevelButtons>();
+        levelButtons.Start();
+
         enabled = true;
     }
 
@@ -46,7 +51,7 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
             {
                 if (level.triggered)
                 {
-                    //levelButtons.OutsideTrigger(Mathf.RoundToInt(level.ReadValue<float>()));
+                    levelButtons.OutsideTrigger(-1, Mathf.RoundToInt(level.ReadValue<float>()));
                 }
             }
             else
@@ -63,7 +68,7 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
 
             if (buildMenu.triggered)
             {
-                ((BuildMenu)UIRefs.bottomBar[0]).Toggle();
+                ((BuildMenu)UIRefs.BottomBar[0]).Toggle();
             }
         }
     }

@@ -37,10 +37,10 @@ public class Menu : MonoBehaviour
             saveDialog.CloseWindow();
         else if (((IGridMenu)loadMenu).IsOpen())
             ((IGridMenu)loadMenu).CloseWindow();
-        else if (UIRefs.research.isOpen)
-            UIRefs.research.CloseWindow();
-        else if (UIRefs.trading.isOpen)
-            UIRefs.trading.CloseWindow();
+        else if (UIRefs.ResearchWindow.isOpen)
+            UIRefs.ResearchWindow.CloseWindow();
+        else if (UIRefs.TradingWindow.isOpen)
+            UIRefs.TradingWindow.CloseWindow();
         else if (SceneRefs.GridTiles.activeControl != ControlMode.nothing)
             SceneRefs.GridTiles.BreakAction();
         else
@@ -64,9 +64,9 @@ public class Menu : MonoBehaviour
                 MainShortcuts.DisableInput(false);
                 SceneRefs.Tick.UIWindowToggle(false);
             }
-            UIRefs.levelCamera.enabled = menuIsOn;
-            UIRefs.levelCamera.mainCamera.GetComponent<PhysicsRaycaster>().enabled = menuIsOn;
-            UIRefs.levelCamera.mainCamera.GetComponent<Physics2DRaycaster>().enabled = menuIsOn;
+            UIRefs.LevelCamera.enabled = menuIsOn;
+            UIRefs.LevelCamera.mainCamera.GetComponent<PhysicsRaycaster>().enabled = menuIsOn;
+            UIRefs.LevelCamera.mainCamera.GetComponent<Physics2DRaycaster>().enabled = menuIsOn;
             menuContainer.style.display = menuIsOn ? DisplayStyle.None : DisplayStyle.Flex;
         }
     }

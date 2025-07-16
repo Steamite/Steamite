@@ -107,7 +107,7 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     {
         Vector2 vec = move.ReadValue<Vector2>();
         Vector2 mouse = Mouse.current.position.value;
-        if (UIRefs.trading.isOpen)
+        if (UIRefs.TradingWindow.isOpen)
         {
 
         }

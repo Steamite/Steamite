@@ -142,8 +142,8 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 header.text = location.name;
                 secondHeader.text = "trade location";
                 costList.style.display = DisplayStyle.None;
-                List<TradeConvoy> convoyList = UIRefs.trading.GetConvoys();
-                TradeConvoy convoy = convoyList.FirstOrDefault(q => q.tradeLocation == UIRefs.trading.tradeLocations.IndexOf(location));
+                List<TradeConvoy> convoyList = UIRefs.TradingWindow.GetConvoys();
+                TradeConvoy convoy = convoyList.FirstOrDefault(q => q.tradeLocation == UIRefs.TradingWindow.tradeLocations.IndexOf(location));
                 if (convoy != null)
                     description.text = convoy.ToString();
                 else

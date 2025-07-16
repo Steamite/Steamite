@@ -25,43 +25,73 @@ MonoBehaviour:
   - ddddddd
   - eeeeeee
   costs:
-  - type: 030000000100000003000000
-    ammount: 000000000000000000000000
+  - types: 
+    ammounts: 
     baseResource:
-      type: 
-      ammount: 
+      types: 
+      ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
     money:
       baseValue: 0
       currentValue: 0
-  - type: 
-    ammount: 
+      mod:
+        percentMod: 1
+        absoluteMod: 0
+  - types: 
+    ammounts: 
     baseResource:
-      type: 
-      ammount: 
+      types: 
+      ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
     money:
       baseValue: 0
       currentValue: 0
-  - type: 
-    ammount: 
+      mod:
+        percentMod: 1
+        absoluteMod: 0
+  - types: 
+    ammounts: 
     baseResource:
-      type: 
-      ammount: 
+      types: 0100000003000000
+      ammounts: 050000000a000000
+    mod:
+      percentMod: 1
+      absoluteMod: 0
+    money:
+      baseValue: 50
+      currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
+  - types: 
+    ammounts: 
+    baseResource:
+      types: 
+      ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
     money:
       baseValue: 0
       currentValue: 0
-  - type: 
-    ammount: 
+      mod:
+        percentMod: 1
+        absoluteMod: 0
+  - types: 
+    ammounts: 
     baseResource:
-      type: 
-      ammount: 
+      types: 
+      ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
     money:
       baseValue: 0
       currentValue: 0
-  - type: 
-    ammount: 
-    baseResource:
-      type: 
-      ammount: 
-    money:
-      baseValue: 0
-      currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0

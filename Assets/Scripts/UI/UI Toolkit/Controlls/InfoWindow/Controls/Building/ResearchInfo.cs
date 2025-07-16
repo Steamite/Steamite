@@ -46,10 +46,10 @@ public partial class ResearchInfo : InfoWindowControl
         if (wasOpened == false)
         {
             // Research completion can be assigned only once.
-            UIRefs.research.researchCompletion += RefillData;
+            UIRefs.ResearchWindow.researchCompletion += RefillData;
             wasOpened = true;
         }
-        RefillData(UIRefs.research.currentResearch);
+        RefillData(UIRefs.ResearchWindow.currentResearch);
     }
 
     /// <summary>

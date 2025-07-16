@@ -71,7 +71,7 @@ public class MapGen : MonoBehaviour
         world.gridSave = new GridSave[5];
         for (level = 0; level < 5; level++)
         {
-            GridSave levelSave = new(gridSize, gridSize);
+            GridSave levelSave = new(gridSize, gridSize, level == 0);
 
             map = new MapTile[gridSize, gridSize];
             CreateGrid();

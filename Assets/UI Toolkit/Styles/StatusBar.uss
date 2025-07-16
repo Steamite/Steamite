@@ -1,4 +1,4 @@
-.speed-button {
+.status-bar-button {
     padding-top: 0;
     padding-right: 0;
     padding-bottom: 0;
@@ -30,12 +30,22 @@
     -unity-text-align: middle-center;
 }
 
-.speed-button:hover {
+.status-bar-button:hover {
     scale: 1.1 1.1;
     background-color: rgb(114, 73, 35);
 }
 
-.speed-button-selected {
+.status-bar-button:disabled {
+    scale: 0.9 0.9;
+    background-color: rgba(137, 87, 42, 0.58);
+    color: rgb(101, 93, 41);
+}
+
+.status-bar-button:disabled:hover {
+    scale: 1 1;
+}
+
+.status-bar-button-selected {
     padding-top: 0;
     padding-right: 0;
     padding-bottom: 0;

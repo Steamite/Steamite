@@ -36,14 +36,14 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
     {
         handleGrid = false;
         handleWindows = win;
-        UIRefs.levelCamera.enabled = false;
+        UIRefs.LevelCamera.enabled = false;
         SceneRefs.GridTiles.activeObject = null;
     }
     public static void EnableInput()
     {
         handleGrid = true;
         handleWindows = true;
-        UIRefs.levelCamera.enabled = true;
+        UIRefs.LevelCamera.enabled = true;
     }
 
     private void OnEnable()
@@ -127,15 +127,15 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
         {
             if (research.triggered)
             {
-                if (UIRefs.trading.isOpen)
-                    UIRefs.trading.CloseWindow();
-                UIRefs.research.ToggleWindow();
+                if (UIRefs.TradingWindow.isOpen)
+                    UIRefs.TradingWindow.CloseWindow();
+                UIRefs.ResearchWindow.ToggleWindow();
             }
             else if (trade.triggered)
             {
-                if (UIRefs.research.isOpen)
-                    UIRefs.research.CloseWindow();
-                UIRefs.trading.ToggleWindow();
+                if (UIRefs.ResearchWindow.isOpen)
+                    UIRefs.ResearchWindow.CloseWindow();
+                UIRefs.TradingWindow.ToggleWindow();
             }
             /*else if(UIRefs.trading.isOpen && )
             {
@@ -145,7 +145,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
         // opens ingame menu
         if (menu.triggered)
         {
-            UIRefs.pauseMenu.Toggle();
+            UIRefs.PauseMenu.Toggle();
         }
     }
 }

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 /// <summary>Util class for managment of each different level.</summary>
-public class GroundLevel : MonoBehaviour
+public class GroundLevel : MonoBehaviour, IUpdatable
 {
     #region Variables
     /// <summary>grid witdth(x)</summary>
@@ -36,8 +37,17 @@ public class GroundLevel : MonoBehaviour
     public UIOverlay overlays;
 
     /// <summary>If the level is unlocked(has a elevator).</summary>
-    public bool unlocked;
+    bool unlocked;
+    [CreateProperty] public bool Unlocked { get => unlocked; set { unlocked = value; UIUpdate(nameof(Unlocked)); } }
+
+    public event EventHandler<UnityEngine.UIElements.BindablePropertyChangedEventArgs> propertyChanged;
+
     #endregion
+
+    public void UIUpdate(string property = "")
+    {
+        propertyChanged?.Invoke(this, new UnityEngine.UIElements.BindablePropertyChangedEventArgs(property));
+    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
@@ -427,7 +437,17 @@ public class GroundLevel : MonoBehaviour
     /// <param name="gridSize">Size of the grid.</param>
     public void CreateGrid(WorldSave save, int level)
     {
-        GridSave grid = new(width, height);
+        bool _unlocked = false;
+        for (int i = 0; i < buildings.childCount; i++)
+        {
+            if (buildings.GetChild(i).GetComponent<Elevator>())
+            {
+                _unlocked = true;
+                break;
+            }
+        }
+
+        GridSave grid = new(width, height, _unlocked);
         save.gridSave[level] = grid;//= new ClickableObjectSave[width, height];
         FillRocks(save.gridSave[level]); // adds ores
         FillWater(save.gridSave[level]); // adds water
@@ -487,6 +507,7 @@ public class GroundLevel : MonoBehaviour
         buildingList.AddRange(save.objectsSave.buildings);
         save.objectsSave.buildings = buildingList.ToArray();
     }
+
     #endregion
 
     #endregion Creation

@@ -26,7 +26,7 @@ public class TradeConvoy
     {
         currentprogress = 2 * maxprogress - currentprogress;
         firstPhase = false;
-        VisualElement slider = ((VisualElement)UIRefs.trading.map).ElementAt(0).ElementAt(0).ElementAt(tradeLocation).ElementAt(0);
+        VisualElement slider = ((VisualElement)UIRefs.TradingWindow.map).ElementAt(0).ElementAt(0).ElementAt(tradeLocation).ElementAt(0);
         slider.RemoveFromClassList("trading");
         slider.AddToClassList("retreat");
     }
@@ -35,8 +35,8 @@ public class TradeConvoy
     {
         MyRes.DeliverToElevator(buying);
         MyRes.ManageMoneyGlobal(reward);
-        UIRefs.trading.RemoveConvoy(this);
-        Slider slider = (Slider)((VisualElement)UIRefs.trading.map).ElementAt(0).ElementAt(0).ElementAt(tradeLocation).ElementAt(0);
+        UIRefs.TradingWindow.RemoveConvoy(this);
+        Slider slider = (Slider)((VisualElement)UIRefs.TradingWindow.map).ElementAt(0).ElementAt(0).ElementAt(tradeLocation).ElementAt(0);
         slider.RemoveFromClassList("retreat");
         slider.AddToClassList("free");
         slider.value = 0;

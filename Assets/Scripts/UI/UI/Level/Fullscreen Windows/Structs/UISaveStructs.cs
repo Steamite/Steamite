@@ -26,7 +26,7 @@ public class TradeSave
     public List<TradeConvoy> convoys;
     //public List<Outpost> outposts;
     public int money;
-    public TradeSave(Trading trading)
+    public TradeSave(TradingWindow trading)
     {
         colonyLocation = trading.colonyLocation.name;
         prodLevels = trading.colonyLocation.production.Select(q => q.CurrentState).ToList();

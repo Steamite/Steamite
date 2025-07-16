@@ -13,7 +13,7 @@ public partial class TimeButtons : CustomRadioButtonGroup
     {
         for (int i = 0; i < speedStates?.Count; i++)
         {
-            CustomRadioButton button = new("speed-button", i, true);
+            CustomRadioButton button = new("status-bar-button", i, true);
             if (i == 0)
             {
                 button.iconImage = Resources.Load<Texture2D>("Icon/Pause");

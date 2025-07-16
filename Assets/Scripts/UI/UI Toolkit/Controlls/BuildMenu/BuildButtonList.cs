@@ -154,7 +154,7 @@ namespace BottomBar.Building
 
         private void Hover(PointerEnterEvent evt)
         {
-            int i = ((CustomRadioButton)evt.target).value;
+            int i = ((CustomRadioButton)evt.target).selIndex;
             ToolkitUtils.localMenu.UpdateContent(wrappers[i], (CustomRadioButton)evt.target);
         }
         private void EndHove(PointerLeaveEvent evt)
@@ -166,7 +166,7 @@ namespace BottomBar.Building
         {
             if (SelectedChoice > -1)
                 ((CustomRadioButton)contentContainer.Children()
-                    .FirstOrDefault(q => ((CustomRadioButton)q)?.value == SelectedChoice))?.Deselect();
+                    .FirstOrDefault(q => ((CustomRadioButton)q)?.selIndex == SelectedChoice))?.Deselect();
             if (index == -1 || SelectedChoice == index || !MyRes.CanAfford(wrappers[index].building.Cost))
             {
                 SelectedChoice = -1;
@@ -179,7 +179,7 @@ namespace BottomBar.Building
             }
             else
             {
-                UIRefs.research.OpenWindow(wrappers[index]);
+                UIRefs.ResearchWindow.OpenWindow(wrappers[index]);
                 return false;
             }
         }

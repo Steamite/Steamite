@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEngine;
@@ -26,10 +27,7 @@ public class LoadingScreen : MonoBehaviour
     /// <summary>Load progress for the load bar.</summary>
     int progressGlobal = 0;
 
-    /// <summary>Start normal Level.</summary>
-    [SerializeField] GroundLevel startLevel;
-    /// <summary>Start main Level.</summary>
-    [SerializeField] GroundLevel mainLevel;
+    [SerializeField] List<GroundLevel> testLevels;
     /// <summary>Empty template level.</summary>
     [SerializeField] GroundLevel templateLevel;
 
@@ -61,8 +59,8 @@ public class LoadingScreen : MonoBehaviour
         }
         else
         {
-            size = mainLevel.height;
-            newGameInit.CreateGrid(startLevel, mainLevel, out save);
+            size = testLevels[0].height;
+            newGameInit.CreateGrid(testLevels, out save);
         }
 
         ResearchSave researchSave = await newGameInit.InitResearch();
@@ -283,7 +281,7 @@ public class LoadingScreen : MonoBehaviour
     void FillResearches(IProgress<int> progress, ResearchSave researchSave)
     {
         actionText.text = "Remembering research";
-        UIRefs.research.LoadGame(researchSave);
+        UIRefs.ResearchWindow.LoadGame(researchSave);
     }
 
     /// <summary>
@@ -294,7 +292,7 @@ public class LoadingScreen : MonoBehaviour
     void FillTrade(IProgress<int> progress, TradeSave tradeSave)
     {
         actionText.text = "Making Deals";
-        UIRefs.trading.LoadGame(tradeSave);
+        UIRefs.TradingWindow.LoadGame(tradeSave);
     }
     #endregion UI loading
     #endregion Loading Game State
@@ -357,6 +355,8 @@ public class LoadingScreen : MonoBehaviour
         humanActivation?.Invoke();
         humanActivation = null;
         SceneRefs.Tick.InitTicks();
-        UIRefs.toolkitShortcuts.GetComponent<IToolkitController>().Init(UIRefs.toolkitShortcuts.rootVisualElement);
+        UIRefs.TimeDisplay.GetComponent<IToolkitController>().Init(UIRefs.TimeDisplay.rootVisualElement);
+        UIRefs.ToolkitShortcuts.Init(UIRefs.TimeDisplay.rootVisualElement);
+
     }
 }

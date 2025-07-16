@@ -662,8 +662,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 954dde689db4c9044be8a1f7dc0acd8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startLevel: {fileID: 8292747787264182705, guid: 5d2fc7fe1586e9a4f92424803d3e179a, type: 3}
-  mainLevel: {fileID: 8292747787264182705, guid: aed02f0746a70df4182f61780b0431bd, type: 3}
+  testLevels:
+  - {fileID: 8292747787264182705, guid: aed02f0746a70df4182f61780b0431bd, type: 3}
+  - {fileID: 8292747787264182705, guid: 5d2fc7fe1586e9a4f92424803d3e179a, type: 3}
+  - {fileID: 8292747787264182705, guid: 526772f9b42d92d44a6ec1a51a46d23e, type: 3}
+  - {fileID: 8292747787264182705, guid: 526772f9b42d92d44a6ec1a51a46d23e, type: 3}
+  - {fileID: 8292747787264182705, guid: 526772f9b42d92d44a6ec1a51a46d23e, type: 3}
   templateLevel: {fileID: 1135758614679704061, guid: d9f415992495cb841b318eb1f8d8a04f, type: 3}
   actionText: {fileID: 235806608}
   loadingSlider: {fileID: 2524945086358073128}
