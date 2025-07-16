@@ -77,7 +77,7 @@ namespace InfoWindowElements
                         throw new NotImplementedException();
 
 
-                    mainBinding.sourceToUiConverters.AddConverter((ref Resource globalStorage) =>
+                    mainBinding.sourceToUiConverters.AddConverter((ref MoneyResource globalStorage) =>
                     {
                         tab.UpdateCostView();
                         return ToUIRes(globalStorage);

@@ -148,6 +148,7 @@ LevelUnlocker:disabled {
     border-right-color: rgb(255, 0, 0);
     border-top-color: rgb(255, 0, 0);
     border-bottom-color: rgb(255, 0, 0);
+    max-height: 82.5px;
 }
 
 ________________ {
@@ -199,80 +200,15 @@ ________________ {
     flex-grow: 1;
     justify-content: space-between;
     margin-top: 0;
-    margin-bottom: 10%;
+    margin-bottom: 0%;
     margin-right: 5%;
     margin-left: 5%;
     padding-top: 0;
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
-    height: auto;
 }
 
-#Level-View > Button {
-    flex-grow: 0;
-    margin-top: 0;
-    margin-bottom: 5%;
-    margin-right: 0;
-    margin-left: 0;
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-top-width: 3px;
-    border-right-width: 3px;
-    border-bottom-width: 3px;
-    border-left-width: 3px;
-    transition-duration: 0.2s;
-    flex-shrink: 0;
-    height: 15%;
-    width: 100%;
-    max-width: none;
-    max-height: none;
-    border-left-color: rgba(74, 74, 74, 0);
-    border-right-color: rgba(74, 74, 74, 0);
-    border-top-color: rgba(74, 74, 74, 0);
-    border-bottom-color: rgba(74, 74, 74, 0);
-    font-size: 50px;
-}
-
-#L {
-    flex-grow: 1;
-    justify-content: space-between;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-right: 5%;
-    margin-left: 5%;
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    align-self: stretch;
-    max-height: 15%;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-top-width: 3px;
-    border-right-width: 3px;
-    border-bottom-width: 3px;
-    border-left-width: 3px;
-    border-left-color: rgb(74, 74, 74);
-    border-right-color: rgb(74, 74, 74);
-    border-top-color: rgb(74, 74, 74);
-    border-bottom-color: rgb(74, 74, 74);
-    background-color: rgb(139, 140, 137);
-}
-
-#Level-View > DoubleResourceList {
-    align-self: center;
-    align-content: stretch;
-    flex-grow: 1;
-    margin-right: 2%;
-    min-width: 98%;
-    max-width: 100%;
+#Cost #ResText Label {
+    font-size: 35px;
 }

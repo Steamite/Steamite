@@ -26,7 +26,7 @@ namespace InfoWindowElements
         public override void Deselect(bool triggerTransition = true)
         {
             base.Deselect();
-            LevelState state = (ToolkitUtils.GetParentOfType<LevelUnlockerRadioList>(this))[value];
+            LevelState state = (ToolkitUtils.GetParentOfType<LevelUnlockerRadioList>(this))[selIndex];
             if (state == LevelState.Selected)
                 ToggleButtonStyle(LevelState.Unlocked);
             else

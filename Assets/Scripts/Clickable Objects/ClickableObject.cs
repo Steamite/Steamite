@@ -200,5 +200,4 @@ public abstract class ClickableObject : MonoBehaviour,
     }
 
     #endregion Saving
-    public bool HasActiveBinding() => propertyChanged != null;
 }

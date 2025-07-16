@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 220867751}
   - component: {fileID: 220867755}
   - component: {fileID: 220867756}
-  - component: {fileID: 220867758}
   m_Layer: 5
   m_Name: Stats
   m_TagString: Untagged
@@ -193,21 +192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffc7b665c5741084eb6ad285b5f5b4c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &220867758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 220867750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11357ec3f258701439138ed742633409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  states: 
-  previusState: 0
-  currentState: 1
 --- !u!1 &225780439
 GameObject:
   m_ObjectHideFlags: 0
@@ -730,7 +714,7 @@ MonoBehaviour:
   _trading: {fileID: 850631610}
   _research: {fileID: 745012310}
   _pauseMenu: {fileID: 1708745677}
-  toolkitShotcuts: {fileID: 8277524054700303562}
+  _toolkitShotcuts: {fileID: 8277524054700303564}
   _bottomBar: {fileID: 897350251}
 --- !u!1 &1708745675
 GameObject:

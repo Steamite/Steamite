@@ -84,7 +84,7 @@ namespace RadioGroups
             {
                 gridPos.y = i;
                 CheckLevel(gridPos, ref unlocked, levelData);
-            }
+            } 
 
             // check down
             unlocked = true;

@@ -48,11 +48,14 @@ public static class MyGrid
     /// </summary>
     public static void Init()
     {
+        GridChange = null;
         GridChange += (int _, int _) => SceneRefs.GridTiles.ChangeSelMode(ControlMode.nothing);
         GridChange += (int _, int _) => SceneRefs.GridTiles.Exit(SceneRefs.GridTiles.activeObject);
-        GridChange += (int i, int newI) => SceneRefs.Humans.SwitchLevel(i, newI);
+        GridChange += SceneRefs.Humans.SwitchLevel;
         ChangeGridLevel(0);
     }
+    public static void AddToGridChange(Action<int, int> action)
+        => GridChange += action;
 
     #region Grid Access
     public static ClickableObject GetGridItem(GridPos gp, bool isPipe = false)
@@ -138,7 +141,7 @@ public static class MyGrid
     {
         if (!IsUnlocked(levelToUnlock))
         {
-            levels[levelToUnlock].unlocked = true;
+            levels[levelToUnlock].Unlocked = true;
         }
     }
 
@@ -173,9 +176,13 @@ public static class MyGrid
     public static Transform FindLevelBuildings() => levels[currentLevel].buildings;
     public static Transform FindLevelPipes() => levels[currentLevel].pipes;
 
-
-
-    public static bool IsUnlocked(int lIndex) => levels[lIndex].unlocked;
+    /// <summary>
+    /// Use for event purposes only, not direct access.
+    /// </summary>
+    /// <param name="lIndex"></param>
+    /// <returns></returns>
+    public static GroundLevel GetGroundLevel(int lIndex) => levels[lIndex];
+    public static bool IsUnlocked(int lIndex) => levels[lIndex].Unlocked;
     #endregion
 
     /// <summary>
@@ -228,7 +235,7 @@ public static class MyGrid
     public static GridSave Save(int i)
     {
         GroundLevel level = levels[i];
-        GridSave gridSave = new(level.height, level.width);
+        GridSave gridSave = new(level.height, level.width, level.Unlocked);
         GridPos gp = new();
         for (int x = 0; x < gridSave.height; x++)
         {
@@ -248,6 +255,8 @@ public static class MyGrid
     {
         GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickableObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.GridTiles.transform);
         levels[i] = groundLevel;
+        levels[i].Unlocked = gridSave.unlocked;
+
         groundLevel.ClearGrid(gridSave.width);
         groundLevel.gameObject.SetActive(i == 2);
         for (int x = 0; x < gridSave.width; x++)

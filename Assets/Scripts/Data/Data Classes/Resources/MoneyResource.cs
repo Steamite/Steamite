@@ -28,4 +28,9 @@ public class MoneyResource : ModifiableResource
         moneyResource.money.currentValue *= multiplier;
         return moneyResource;
     }
+    public override void Init()
+    {
+        ((IModifiable)Money).Init();
+        base.Init();
+    }
 }

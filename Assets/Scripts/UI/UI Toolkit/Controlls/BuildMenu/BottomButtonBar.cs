@@ -37,9 +37,9 @@ namespace BottomBar
         public void Init()
         {
             buildOpen.iconImage = buildSprite;
-            researchOpen.clicked += UIRefs.research.OpenWindow;
+            researchOpen.clicked += UIRefs.ResearchWindow.OpenWindow;
             researchOpen.iconImage = researchSprite;
-            tradeOpen.clicked += UIRefs.trading.OpenWindow;
+            tradeOpen.clicked += UIRefs.TradingWindow.OpenWindow;
             tradeOpen.iconImage = tradeSprite;
         }
     }

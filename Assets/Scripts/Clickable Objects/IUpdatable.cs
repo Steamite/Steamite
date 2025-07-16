@@ -10,6 +10,5 @@ public interface IUpdatable : INotifyBindablePropertyChanged
     /// </summary>
     /// <param name="property">Updated property</param>
     public void UIUpdate(string property = "");
-
-    public bool HasActiveBinding();
+    // propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
 }

@@ -6,20 +6,20 @@ public class UIRefs : MonoBehaviour
     static UIRefs instance;
 
     [SerializeField] CameraMovement _levelCamera;
-    [SerializeField] Trading _trading;
+    [SerializeField] TradingWindow _trading;
     [SerializeField] ResearchWindow _research;
     [SerializeField] Menu _pauseMenu;
-    [SerializeField] MonoBehaviour toolkitShotcuts;
+    [SerializeField] MonoBehaviour _toolkitShotcuts;
     [SerializeField] UIDocument _bottomBar;
 
 
-    public static CameraMovement levelCamera => instance._levelCamera;
-    public static Trading trading => instance._trading;
-    public static ResearchWindow research => instance._research;
-    public static Menu pauseMenu => instance._pauseMenu;
-    public static VisualElement bottomBar => instance._bottomBar.rootVisualElement[0];
-    public static UIDocument toolkitShortcuts => instance._bottomBar;
-
+    public static CameraMovement LevelCamera => instance._levelCamera;
+    public static TradingWindow TradingWindow => instance._trading;
+    public static ResearchWindow ResearchWindow => instance._research;
+    public static Menu PauseMenu => instance._pauseMenu;
+    public static VisualElement BottomBar => instance._bottomBar.rootVisualElement[0];
+    public static UIDocument TimeDisplay => instance._bottomBar;
+    public static IToolkitController ToolkitShortcuts => instance._toolkitShotcuts.GetComponent<IToolkitController>();
 
 
     [RuntimeInitializeOnLoadMethod]
@@ -27,8 +27,7 @@ public class UIRefs : MonoBehaviour
     public void Init()
     {
         instance = this;
-        toolkitShotcuts.GetComponent<IToolkitController>().Init(_bottomBar.rootVisualElement);
 
-        ((IInitiableUI)bottomBar).Init();
+        ((IInitiableUI)BottomBar).Init();
     }
 }

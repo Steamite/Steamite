@@ -32,8 +32,8 @@ namespace TradeWindowElements
 
         public void Init()
         {
-            CreateStats(0, UIRefs.trading.colonyLocation.stats);
-            CreateStats(1, UIRefs.trading.colonyLocation.production);
+            CreateStats(0, UIRefs.TradingWindow.colonyLocation.stats);
+            CreateStats(1, UIRefs.TradingWindow.colonyLocation.production);
             style.display = DisplayStyle.None;
         }
 
@@ -117,12 +117,12 @@ namespace TradeWindowElements
             style.display = DisplayStyle.Flex;
             RefreshStates();
 
-            return UIRefs.trading.colonyLocation.name;
+            return UIRefs.TradingWindow.colonyLocation.name;
         }
 
         void RefreshStates()
         {
-            ColonyLocation location = UIRefs.trading.colonyLocation;
+            ColonyLocation location = UIRefs.TradingWindow.colonyLocation;
 
             VisualElement statGroup = ElementAt(0).ElementAt(1);
 

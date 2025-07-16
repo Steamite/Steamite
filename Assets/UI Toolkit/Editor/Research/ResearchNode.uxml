@@ -16,7 +16,7 @@
                     <engine:TextField placeholder-text="filler text" name="Name" class="name-text" />
                     <engine:IntegerField value="42" name="Ammount" class="time-elem" />
                 </engine:VisualElement>
-                <ResourceCell name="Cost" show-add-remove-footer="true" />
+                <ResCell name="Cost" show-add-remove-footer="true" />
                 <engine:DropdownField choices="Stat,Building" name="Type" class="dropdown" />
             </engine:VisualElement>
             <engine:DropdownField name="Categ" class="dropdown" />

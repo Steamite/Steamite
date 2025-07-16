@@ -28,7 +28,7 @@ public class ObjectSelectionShortcuts
     {
         if (EditorSceneManager.GetActiveScene().name != "Level")
             return;
-        GameObject gameObject = UIRefs.pauseMenu.gameObject;
+        GameObject gameObject = UIRefs.PauseMenu.gameObject;
         Selection.activeGameObject = gameObject;
     }
 

@@ -14,7 +14,6 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
     {
         propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
-    public bool HasActiveBinding() => propertyChanged != null;
     #endregion
 
     #region Variables

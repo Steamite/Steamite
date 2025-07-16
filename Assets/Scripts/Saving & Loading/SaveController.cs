@@ -17,7 +17,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
     public void Init()
     {
         SceneRefs.Tick.SubscribeToEvent(() => SaveGame("", true), Tick.TimeEventType.Day);
-        UIRefs.pauseMenu.Init((s) => SaveGame(s, false), ref saveUIAction);
+        UIRefs.PauseMenu.Init((s) => SaveGame(s, false), ref saveUIAction);
         worldName = MyGrid.worldName;
     }
 
@@ -136,12 +136,12 @@ public class SaveController : MonoBehaviour, IAfterLoad
             WriteSave(
                $"{tmpPath}/Research.json",
                jsonSerializer,
-               new ResearchSave(UIRefs.research));
+               new ResearchSave(UIRefs.ResearchWindow));
 
             WriteSave(
                $"{tmpPath}/Trade.json",
                jsonSerializer,
-               new TradeSave(UIRefs.trading));
+               new TradeSave(UIRefs.TradingWindow));
 
             if (autoSave)
                 saveName = "autosave";

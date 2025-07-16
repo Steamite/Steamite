@@ -16,18 +16,14 @@ public class NewGameInit : MonoBehaviour
     //[SerializeField] List<Color> hatMaterial = new List<Color> { Color.azure, Color.forestGreen, Color.crimson };
 
     #region Grid
-    public void CreateGrid(GroundLevel level, GroundLevel mainLevel, out WorldSave save)
+    public void CreateGrid(List<GroundLevel> mainLevel, out WorldSave save)
     {
-
         save = new();
         save.gridSave = new GridSave[5];
         save.objectsSave = new(new BSave[] { }, new ChunkSave[] { });
         for (int i = 0; i < 5; i++)
         {
-            if (i == 0)
-                mainLevel.CreateGrid(save, i);
-            else
-                level.CreateGrid(save, i);
+            mainLevel[i].CreateGrid(save, i);
         }
     }
 

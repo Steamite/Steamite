@@ -35,11 +35,11 @@ namespace TradeWindowElements
             sliderGroup.name = "Sliders";
             mapElem.Add(sliderGroup);
             Slider slider;
-            Vector2 basePos = UIRefs.trading.colonyLocation.pos.ToVecUI();
-            List<TradeConvoy> convoys = UIRefs.trading.GetConvoys();
-            for (int i = 0; i < UIRefs.trading.tradeLocations.Count; i++)
+            Vector2 basePos = UIRefs.TradingWindow.colonyLocation.pos.ToVecUI();
+            List<TradeConvoy> convoys = UIRefs.TradingWindow.GetConvoys();
+            for (int i = 0; i < UIRefs.TradingWindow.tradeLocations.Count; i++)
             {
-                Vector2 locationPos = UIRefs.trading.tradeLocations[i].pos.ToVecUI();
+                Vector2 locationPos = UIRefs.TradingWindow.tradeLocations[i].pos.ToVecUI();
 
                 float distance = Vector2.Distance(basePos, locationPos);
                 slider = new("", 0, distance / 10);
@@ -76,23 +76,23 @@ namespace TradeWindowElements
             mapElem.Add(locationGroup);
 
             LocationButton locationButton;
-            for (int i = -1; i < UIRefs.trading.tradeLocations.Count; i++)
+            for (int i = -1; i < UIRefs.TradingWindow.tradeLocations.Count; i++)
             {
                 Location location;
                 if (i == -1)
                 {
-                    location = UIRefs.trading.colonyLocation;
+                    location = UIRefs.TradingWindow.colonyLocation;
                     locationButton = new(location.pos.ToVecUI(), 0);
                     locationButton.style.unityBackgroundImageTintColor = Color.blue;
                 }
                 else
                 {
-                    location = UIRefs.trading.tradeLocations[i];
+                    location = UIRefs.TradingWindow.tradeLocations[i];
                     locationButton = new TradeLocationButton(
                         location.pos.ToVecUI(),
                         i + 1,
                         (Slider)sliderGroup.ElementAt(i).ElementAt(0),
-                        UIRefs.trading.colonyLocation.pos.ToVecUI());
+                        UIRefs.TradingWindow.colonyLocation.pos.ToVecUI());
                 }
                 locationButton.RegisterCallback<MouseEnterEvent>(
                         q => ToolkitUtils.localMenu.UpdateContent(location, q.target as VisualElement));
@@ -113,7 +113,7 @@ namespace TradeWindowElements
         {
             //TODO: NEED TO MOVE TRADE SLIDERS
             ((LocationButton)ElementAt(0).ElementAt(1).ElementAt(0)).Select();
-            ((Label)parent.ElementAt(1).ElementAt(0)).text = $"{UIRefs.trading.AvailableConvoy}/{UIRefs.trading.maxConvoy} Convoyes";
+            ((Label)parent.ElementAt(1).ElementAt(0)).text = $"{UIRefs.TradingWindow.AvailableConvoy}/{UIRefs.TradingWindow.maxConvoy} Convoyes";
 
             Slider slider;
             foreach (TradeConvoy tradeConvoy in (List<TradeConvoy>)data)

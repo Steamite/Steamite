@@ -10,7 +10,7 @@ namespace ResearchUI
         List<ResearchRadioButtonGroup> groups;
         public void Init()
         {
-            ResearchData data = UIRefs.research.researchData;
+            ResearchData data = UIRefs.ResearchWindow.researchData;
             Vector2 categWindowSize = new(1920, 1080);
             groups = new List<ResearchRadioButtonGroup>();
             for (int i = 0; i < data.Categories.Count; i++)
@@ -41,7 +41,7 @@ namespace ResearchUI
         {
             if (node?.researched == false)
             {
-                UIRefs.research.SetActive(node);
+                UIRefs.ResearchWindow.SetActive(node);
                 SceneRefs.ShowMessage($"Research Changed {node.Name}");
                 prevGroup = groups.IndexOf(group);
             }

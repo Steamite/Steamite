@@ -96,7 +96,7 @@
 .disabled-button {
     opacity: 1;
     -unity-text-align: middle-center;
-    transition-property: opacity;
+    transition-property: all;
     transition-duration: 0.25s;
     transition-timing-function: ease-in;
     border-left-width: 0;
@@ -107,6 +107,7 @@
     -unity-background-image-tint-color: rgba(33, 28, 7, 0.69);
     color: rgba(161, 148, 59, 0.31);
     background-color: rgba(0, 0, 0, 0);
+    font-size: 50px;
 }
 
 .main-button {
@@ -135,7 +136,7 @@
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
-    transition-duration: 0.2s;
+    transition-duration: 0.25s;
     max-width: none;
     min-width: 100%;
 }

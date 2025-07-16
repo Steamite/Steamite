@@ -4,7 +4,7 @@ using TradeData.Locations;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Trading : FullscreenWindow
+public class TradingWindow : FullscreenWindow
 {
     #region Const
     public const int CONVOY_STORAGE_LIMIT = 50;
