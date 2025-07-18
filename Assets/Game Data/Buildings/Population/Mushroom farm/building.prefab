@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -136,7 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: 
   id: -1
-  objectName: Dummy
+  objectName: Mushroom farm
   localRes:
     types: 
     ammounts: 
@@ -150,7 +150,7 @@ MonoBehaviour:
     carriers: []
     mods: 
   meshRenderers: []
-  buildingCategories: 0
+  buildingCategories: 2
   blueprint:
     size:
       x: 2
@@ -217,12 +217,12 @@ MonoBehaviour:
   categoryID: 2
   wrapperID: 1632144239
   assignLimit:
-    baseValue: 0
-    currentValue: 0
+    baseValue: 3
+    currentValue: 3
     mod:
       percentMod: 1
       absoluteMod: 0
-  productionTime: 0
+  productionTime: 2
   prodSpeed:
     baseValue: 1
     currentValue: 1
@@ -249,7 +249,7 @@ MonoBehaviour:
       absoluteMod: 0
   fluidCost:
     types: 01000000
-    ammounts: 00000000
+    ammounts: 01000000
     capacities: 
   fluidYeild:
     types: 

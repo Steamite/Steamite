@@ -121,8 +121,19 @@ public static class PathFinder
                 foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q => q.name == building.id.ToString())
                     .GetComponentsInChildren<Image>().Select(q => q.transform))
                 {
-                    coordinates.entryPoints.Add(new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z)));
-                    entryPoints.Add(i);
+                    GridPos entryPos = new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z));
+                    if (entryPos.Equals(_start))
+                    {
+                        plan.path.Add(BuildingStep(entryPos, building.gameObject, 1));
+                        plan.index = i;
+                        plan.foundNormaly = false;
+                        return plan;
+                    }
+                    else
+                    {
+                        coordinates.entryPoints.Add(entryPos);
+                        entryPoints.Add(i);
+                    }
                 }
                 if (part != null && part.id == building.id) // the build that the worker is standing on, is one of the destinations 
                 {

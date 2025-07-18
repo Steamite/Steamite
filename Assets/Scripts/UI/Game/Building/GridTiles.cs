@@ -209,7 +209,6 @@ public class GridTiles : MonoBehaviour
         if (exitObject == null)
             return;
         Color c = new();
-        Material[] m = exitObject.GetComponentsInChildren<MeshRenderer>().Select(q => q.material).ToArray();
         switch (activeControl)
         {
             case ControlMode.nothing:
@@ -581,7 +580,8 @@ public class GridTiles : MonoBehaviour
         {
             clickedObject.selected = false;
             Exit(clickedObject);
-            activeObject = clickedObject;
+            if (activeObject == null)
+                activeObject = clickedObject;
             clickedObject = null;
             SceneRefs.InfoWindow.Close();
         }

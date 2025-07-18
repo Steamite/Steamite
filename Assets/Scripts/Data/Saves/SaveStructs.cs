@@ -206,10 +206,6 @@ public class PipeBSave : BSave
 {
     public int networkID;
 }
-public class LightWeightPipeBSave : ClickableObjectSave
-{
-    public int networkID;
-}
 
 public class TankBSave : BSave
 {

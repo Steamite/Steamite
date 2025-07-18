@@ -9,12 +9,6 @@ namespace TradeWindowElements
     [UxmlElement]
     public partial class TradeMap : Map, IInitiableUI, IUIElement
     {
-        /*public TradeMap() : base()
-        {
-            UIRefs.SetTrade();
-            Init(null);
-            ((Slider)ElementAt(0).ElementAt(0).ElementAt(2).ElementAt(0)).value = 300;
-        }*/
         List<LocationButton> locationButtons = new();
         VisualElement sliderGroup;
 
@@ -26,6 +20,7 @@ namespace TradeWindowElements
         {
             CreateSliders();
             CreateLocations();
+            (parent[2] as Button).clicked += UIRefs.TradingWindow.CloseWindow;
         }
 
         /// <summary>Creates and alligns all sliders.</summary>
