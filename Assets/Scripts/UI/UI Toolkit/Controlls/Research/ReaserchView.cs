@@ -8,9 +8,17 @@ namespace ResearchUI
     {
         int prevGroup;
         List<ResearchRadioButtonGroup> groups;
+        Button closeButton;
+        public ResearchView() : base()
+        {
+            closeButton = new Button();
+            closeButton.AddToClassList("close-button");
+            hierarchy.Add(closeButton);
+        }
         public void Init()
         {
             ResearchData data = UIRefs.ResearchWindow.researchData;
+            closeButton.clicked += UIRefs.ResearchWindow.CloseWindow;
             Vector2 categWindowSize = new(1920, 1080);
             groups = new List<ResearchRadioButtonGroup>();
             for (int i = 0; i < data.Categories.Count; i++)

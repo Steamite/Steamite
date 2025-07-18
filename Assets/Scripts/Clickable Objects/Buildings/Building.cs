@@ -250,10 +250,18 @@ public class Building : StorageObject
             else
             {
                 queue.CancelJob(JobState.Deconstructing, this);
-                queue.AddJob(JobState.Constructing, this);
-                if (localRes.carriers.Count > 0)
+                if(constructionProgress == maximalProgress)
                 {
-                    localRes.carriers[0].SetJob(JobState.Constructing);
+                    deconstructing = false;
+                    OpenWindow();
+                }
+                else
+                {
+                    queue.AddJob(JobState.Constructing, this);
+                    if (localRes.carriers.Count > 0)
+                    {
+                        localRes.carriers[0].SetJob(JobState.Constructing);
+                    }
                 }
             }
             deconstructing = !deconstructing;

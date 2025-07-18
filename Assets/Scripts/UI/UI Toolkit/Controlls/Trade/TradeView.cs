@@ -9,6 +9,7 @@ namespace TradeWindowElements
     [UxmlElement]
     public partial class TradeView : VisualElement
     {
+
         #region Variables
         VisualTreeAsset dealAsset;
         [UxmlAttribute] VisualTreeAsset DealAsset { get => dealAsset; set { dealAsset = value; CreateDeals(0); CreateDeals(1); } }

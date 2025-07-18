@@ -202,7 +202,10 @@ public static class HumanActions
             }
         }
         else if (h.lookingForAJob)
+        {
             Debug.LogError("SOMETHING IS WRONG, should not get here!");
+            return;
+        }
         h.Idle();
         h.lookingForAJob = false;
         return;

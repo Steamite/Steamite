@@ -246,37 +246,15 @@ public class Pipe : Building
         if (id == -1)
             return null;
         // if constructed or ordered to be deconstructed save all data
-        if (!constructed || deconstructing)
-        {
-            if (clickable == null)
-                clickable = new PipeBSave();
-            (clickable as PipeBSave).networkID = network.networkID;
-            return base.Save(clickable);
-        }
-        else
-        {
-            // else save only id of pipe and id of network
-            if (clickable == null)
-                clickable = new LightWeightPipeBSave();
-            (clickable as LightWeightPipeBSave).networkID = network.networkID;
-            clickable.id = id;
-            clickable.objectName = objectName;
-            return clickable;
-        }
+        if (clickable == null)
+            clickable = new PipeBSave();
+        (clickable as PipeBSave).networkID = network.networkID;
+        return base.Save(clickable);
     }
     public override void Load(ClickableObjectSave save)
     {
-        if (save is PipeBSave)
-        {
-            base.Load(save);
-        }
-        else
-        {
-            gameObject.layer = 6;
-            constructed = true;
-            id = save.id;
-            network.networkID = (save as LightWeightPipeBSave).networkID;
-        }
+        base.Load(save);
+        network.networkID = (save as PipeBSave).networkID;
         PlacePipe();
     }
     #endregion
