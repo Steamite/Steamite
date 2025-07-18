@@ -8,22 +8,14 @@ using UnityEngine;
 public class Elevator : Building, IStorage
 {
     #region Variables
-    public static Elevator main;
-    public bool isMain = false;
-
-
     /// <inheritdoc/>
     [CreateProperty] public List<bool> CanStore { get; set; } = new();
     public StorageResource LocalResources => localRes;
     #endregion
 
-    [RuntimeInitializeOnLoadMethod]
-    static void ReloadDomain() => main = null;
     public override void UniqueID()
     {
         base.UniqueID();
-        if (isMain == true)
-            main = this;
     }
     #region Window
     /// <inheritdoc/>
@@ -49,17 +41,17 @@ public class Elevator : Building, IStorage
         if (clickable == null)
             clickable = new StorageBSave();
         (clickable as StorageBSave).canStore = CanStore;
-        (clickable as StorageBSave).isMain = isMain;
         return base.Save(clickable);
     }
 
     public override void Load(ClickableObjectSave save)
     {
         CanStore = (save as StorageBSave).canStore;
-        isMain = (save as StorageBSave).isMain;
-        if (isMain)
-            main = this;
         base.Load(save);
+        if (SceneRefs.ObjectFactory.ElevatorIds.Contains(id))
+        {
+            MyGrid.UnlockLevel(this, GetPos().y);
+        }
     }
     #endregion
 
@@ -118,13 +110,13 @@ public class Elevator : Building, IStorage
     #region Deconstruction
     public override void OrderDeconstruct()
     {
-        if (main)
-            print("can't order destroy");
+        /*if (main)
+            print("can't order destroy");*/
     }
     public override Chunk Deconstruct(GridPos instantPos)
     {
-        if (main)
-            print("can't destroy");
+        /*if (main)
+            print("can't destroy");*/
         return null;
     }
     #endregion

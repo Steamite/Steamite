@@ -15,7 +15,7 @@ public interface IStorage
     /// Assigns all resource types and setups base storage resources.
     /// </summary>
     /// <param name="jQ">Reference to register this object to global storage list.</param>
-    public void SetupStorage()
+    public void SetupStorage(int ammount = 0)
     {
         int i = 1;
         LocalResources.types = new();
@@ -24,7 +24,7 @@ public interface IStorage
         foreach (var item in Enum.GetNames(typeof(ResourceType)).Skip(1))
         {
             LocalResources.types.Add((ResourceType)i);
-            LocalResources.ammounts.Add(100);
+            LocalResources.ammounts.Add(ammount);
             CanStore.Add(true);
             i++;
         }
@@ -32,11 +32,7 @@ public interface IStorage
 
     public void FinishStorageConstruction()
     {
-        LocalResources.types = MyRes.resourceTemplate.types;
-        while (LocalResources.ammounts.Count < MyRes.resourceTemplate.types.Count)
-            LocalResources.ammounts.Add(0);
-        for (int i = 0; i < LocalResources.ammounts.Count; i++)
-            CanStore.Add(true);
+        SetupStorage();
         SceneRefs.JobQueue.storages.Add(this);
     }
 

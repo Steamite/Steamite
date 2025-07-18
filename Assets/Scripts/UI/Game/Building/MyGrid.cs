@@ -78,6 +78,13 @@ public static class MyGrid
             lIndex = currentLevel;
         return levels[lIndex].overlays;
     }
+
+    public static Elevator GetLevelElevator(int i)
+    {
+        if (IsUnlocked(i))
+            return levels[i].ConnectingElevator;
+        throw new NotImplementedException($"No elevator on level {i}");
+    }
     public static void PrepGridLists()
     {
         buildings = new List<Building>();
@@ -137,12 +144,9 @@ public static class MyGrid
         GameObject.Destroy(building.gameObject);
     }
 
-    public static void UnlockLevel(int levelToUnlock)
+    public static void UnlockLevel(Elevator elevator, int levelToUnlock)
     {
-        if (!IsUnlocked(levelToUnlock))
-        {
-            levels[levelToUnlock].Unlocked = true;
-        }
+        levels[levelToUnlock].SetUnlocked(elevator);
     }
 
     #endregion Grid Updating
@@ -181,7 +185,7 @@ public static class MyGrid
     /// </summary>
     /// <param name="lIndex"></param>
     /// <returns></returns>
-    public static GroundLevel GetGroundLevel(int lIndex) => levels[lIndex];
+    public static object GetGroundLevelData(int lIndex) => levels[lIndex];
     public static bool IsUnlocked(int lIndex) => levels[lIndex].Unlocked;
     #endregion
 
@@ -235,7 +239,7 @@ public static class MyGrid
     public static GridSave Save(int i)
     {
         GroundLevel level = levels[i];
-        GridSave gridSave = new(level.height, level.width, level.Unlocked);
+        GridSave gridSave = new(level.height, level.width, level.ConnectingElevator ? level.ConnectingElevator.id :  -1);
         GridPos gp = new();
         for (int x = 0; x < gridSave.height; x++)
         {
@@ -255,7 +259,7 @@ public static class MyGrid
     {
         GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickableObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.GridTiles.transform);
         levels[i] = groundLevel;
-        levels[i].Unlocked = gridSave.unlocked;
+        SceneRefs.ObjectFactory.ElevatorIds.Add(gridSave.elevatorID);
 
         groundLevel.ClearGrid(gridSave.width);
         groundLevel.gameObject.SetActive(i == 2);
@@ -282,6 +286,7 @@ public static class MyGrid
             }
         }
     }
+
 
     #endregion
 }

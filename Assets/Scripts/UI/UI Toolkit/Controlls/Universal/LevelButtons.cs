@@ -27,10 +27,10 @@ public partial class LevelButtons : CustomRadioButtonGroup
         SetChangeCallback((i) => MyGrid.ChangeGridLevel(i));
         ((CustomRadioButton)ElementAt(0)).SelectWithoutTransition(false);
         MyGrid.AddToGridChange(OutsideTrigger);
-        GroundLevel level;
+        object level;
         for (int i = 0; i < levels.Count; i++)
         {
-            level = MyGrid.GetGroundLevel(i);
+            level = MyGrid.GetGroundLevelData(i);
             hierarchy[i].SetBinding(
                 nameof(GroundLevel.Unlocked), 
                 nameof(enabledSelf), 

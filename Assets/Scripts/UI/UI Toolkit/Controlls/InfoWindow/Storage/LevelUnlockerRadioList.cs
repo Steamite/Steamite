@@ -95,7 +95,7 @@ namespace RadioGroups
             }
 
             ((RadioLevelButtonData)itemsSource[level]).active = true;
-            SetStates(level, LevelState.Selected);
+            SetStates(level, LevelState.Unlocked);
             ((LevelUnlocker)contentContainer[level]).SelectWithoutTransition(true);
             RefreshItems();
             return SelectedChoice;
@@ -114,7 +114,7 @@ namespace RadioGroups
             {
                 if (MyGrid.GetGridItem(gridPos) is Elevator)
                     SetStates(gridPos.y, LevelState.Unlocked);
-                else
+                else if(MyGrid.GetGridItem(gridPos) is Road)
                 {
                     unlocked = false;
                     if (MyRes.CanAfford(levelData.costs[gridPos.y]))

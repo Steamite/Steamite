@@ -70,15 +70,15 @@ public class GridSave
     public int height;
     public ClickableObjectSave[,] grid;
     public ClickableObjectSave[,] pipes;
-    public bool unlocked;
+    public int elevatorID;
 
-    public GridSave(int _width, int _height, bool _unlocked)
+    public GridSave(int _width, int _height, int _elevatorID)
     {
         width = _width;
         height = _height;
         grid = new ClickableObjectSave[_width, _height];
         pipes = new ClickableObjectSave[_width, _height];
-        unlocked = _unlocked;
+        elevatorID = _elevatorID;
     }
     public GridSave()
     {

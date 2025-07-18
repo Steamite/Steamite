@@ -297,8 +297,9 @@ public class Human : ClickableObject
     /// <summary>Gets the Main <see cref="Elevator"/> and if the Human isn't there move to it, else set free state.</summary>
     public void Idle()
     {
-        ClickableObject el = Elevator.main;
-        if (!el.GetPos().Equals(GetPos())) // if not standing on the elevator
+        GridPos pos = GetPos();
+        ClickableObject el = MyGrid.GetLevelElevator(pos.y);// ClickableObject el = Elevator.main;
+        if (!el.GetPos().Equals(pos)) // if not standing on the elevator
         {
             JobData data = PathFinder.FindPath(new() { el }, this);
             data.job = JobState.Free;
@@ -359,7 +360,7 @@ public class Human : ClickableObject
                 return _jData;
             }
         }
-        _jData = PathFinder.FindPath(new() { Elevator.main }, this);
+        _jData = PathFinder.FindPath(new() { MyGrid.GetLevelElevator(GetPos().y) }, this);
         ModifyEfficiency(ModType.House, false);
         if (_jData.interest)
         {
