@@ -137,9 +137,14 @@ LevelUnlocker:disabled {
 }
 
 .Level-Selected {
-    background-color: rgb(141, 129, 51);
     scale: 1.15 1.15;
-    color: rgb(35, 32, 2);
+    color: rgb(217, 7, 15);
+    text-shadow: 1px 1px 0 rgb(80, 74, 29);
+}
+
+.Level-Selected:hover {
+    scale: 1.15 1.15;
+    color: rgb(217, 7, 15);
     text-shadow: 1px 1px 0 rgb(80, 74, 29);
 }
 

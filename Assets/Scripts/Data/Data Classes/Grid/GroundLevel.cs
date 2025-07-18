@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Hierarchy;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
@@ -38,7 +39,9 @@ public class GroundLevel : MonoBehaviour, IUpdatable
 
     /// <summary>If the level is unlocked(has a elevator).</summary>
     bool unlocked;
-    [CreateProperty] public bool Unlocked { get => unlocked; set { unlocked = value; UIUpdate(nameof(Unlocked)); } }
+    [CreateProperty] public bool Unlocked { get => unlocked; private set { unlocked = value; UIUpdate(nameof(Unlocked)); } }
+
+    public Elevator ConnectingElevator { get; private set; }
 
     public event EventHandler<UnityEngine.UIElements.BindablePropertyChangedEventArgs> propertyChanged;
 
@@ -81,6 +84,16 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         }
     }
 #endif
+    #region Unlocking
+    public void SetUnlocked(Elevator elevator)
+    {
+        if (Unlocked)
+            Debug.LogError("Already unlocked!");
+        Unlocked = true;
+        ConnectingElevator = elevator;
+    }
+    #endregion
+
 
     #region Base Grid operations
     /// <summary>
@@ -437,12 +450,14 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <param name="gridSize">Size of the grid.</param>
     public void CreateGrid(WorldSave save, int level)
     {
-        bool _unlocked = false;
+        int _unlocked = -1;
         for (int i = 0; i < buildings.childCount; i++)
         {
-            if (buildings.GetChild(i).GetComponent<Elevator>())
+            Elevator el;
+            if ((el = buildings.GetChild(i).GetComponent<Elevator>()) != null)
             {
-                _unlocked = true;
+                el.id = level;
+                _unlocked = el.id;
                 break;
             }
         }
@@ -498,7 +513,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             if (!q.constructed)
                 q.maximalProgress = q.CalculateMaxProgress();
             if (q is IStorage)
-                ((IStorage)q).SetupStorage();
+                ((IStorage)q).SetupStorage(100);
 
             BSave bSave = q.Save() as BSave;
             bSave.gridPos.y = level;

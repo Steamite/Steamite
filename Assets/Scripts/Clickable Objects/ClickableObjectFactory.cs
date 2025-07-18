@@ -30,6 +30,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     public PipePart PipeConnectionPrefab;
     #endregion
     Material pipeMaterial;
+    public List<int> ElevatorIds { get; private set; }
 
 
     #region Tiles
@@ -87,17 +88,14 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <param name="gp">Position to create at.</param>
     /// <param name="isMain">Mark it as main or not.</param>
     /// <returns></returns>
-    public Elevator CreateElevator(GridPos gp, bool isMain = false)
+    public Elevator CreateElevator(GridPos gp, int rotation = 0)
     {
         Elevator el = Instantiate(
             buildPrefabs.GetBuilding("Elevator"),
             gp.ToVec(BUILD_OFFSET),
-            Quaternion.identity,
+            Quaternion.Euler(0, rotation, 0),
             MyGrid.FindLevelBuildings(gp.y)).GetComponent<Elevator>();
         el.constructed = true;
-        if (isMain)
-            Elevator.main = el;
-        el.isMain = isMain;
         el.objectName = el.objectName.Replace("(Clone)", "");
         MyGrid.SetBuilding(el, true);
 
@@ -249,6 +247,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
 
     public IEnumerator Init()
     {
+        ElevatorIds = new();
         AsyncOperationHandle<BuildingData> buttons = Addressables.LoadAssetAsync<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
         if (!buttons.IsDone)
             yield return buttons;

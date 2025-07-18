@@ -27,17 +27,14 @@ namespace InfoWindowElements
         {
             base.Deselect();
             LevelState state = (ToolkitUtils.GetParentOfType<LevelUnlockerRadioList>(this))[selIndex];
-            if (state == LevelState.Selected)
-                ToggleButtonStyle(LevelState.Unlocked);
-            else
-                ToggleButtonStyle(state);
+            DeselectButton();
         }
 
         /// <inheritdoc/>
         protected override bool SelectChange(bool UpdateGroup)
         {
             base.SelectChange(UpdateGroup);
-            ToggleButtonStyle(LevelState.Selected);
+            SelectButton();
             return false;
         }
         #endregion
@@ -49,35 +46,38 @@ namespace InfoWindowElements
         /// <param name="state">New state.</param>
         public void ToggleButtonStyle(LevelState state)
         {
-            bool active = ClassListContains("Level-Active");
-            ClearClassList();
-            if (active)
-                AddToClassList("Level-Active");
             switch (state)
-            {
-                case LevelState.Unavailable:
-                    enabledSelf = false;
-                    break;
-                case LevelState.Available:
-                    enabledSelf = true;
-                    AddToClassList("Level-Available");
-                    break;
-                case LevelState.CanUnlock:
-                    enabledSelf = true;
-                    AddToClassList("Level-Can-Unlock");
-                    break;
-                case LevelState.Unlocked:
-                    enabledSelf = true;
-                    AddToClassList("Level-Opened");
-                    break;
-                case LevelState.Selected:
-                    enabledSelf = true;
-                    AddToClassList("Level-Selected");
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
+                {
+                    case LevelState.Unavailable:
+                        enabledSelf = false;
+                        break;
+                    case LevelState.Available:
+                        enabledSelf = true;
+                        AddToClassList("Level-Available");
+                        break;
+                    case LevelState.CanUnlock:
+                        enabledSelf = true;
+                        AddToClassList("Level-Can-Unlock");
+                        break;
+                    case LevelState.Unlocked:
+                        enabledSelf = true;
+                        AddToClassList("Level-Opened");
+                        break;
+                    //case LevelState.Selected:
+                    default:
+                        throw new NotImplementedException();
+                }
         }
+
+        public void DeselectButton()
+        {
+            RemoveFromClassList("Level-Selected");
+        }
+        public void SelectButton() 
+        {
+            AddToClassList("Level-Selected");
+        }
+
         #endregion
     }
 }

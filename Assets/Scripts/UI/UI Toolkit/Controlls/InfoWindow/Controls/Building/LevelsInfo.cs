@@ -17,8 +17,6 @@ namespace InfoWindowElements
         CanUnlock,
         /// <summary>unlocked level</summary>
         Unlocked,
-        /// <summary>selected level</summary>
-        Selected,
     }
 
     /// <summary>Tab for <see cref="Elevator"/> "Levels" tab.</summary>
@@ -29,6 +27,7 @@ namespace InfoWindowElements
         public LevelPresent LevelData { get; private set; }
         /// <summary>Active level in the <see cref="levelGroup"/>.</summary>
         public int SelectedLevel { get; private set; } = -1;
+        Elevator selectedElevator;
 
         /// <summary>Control for level unlockers.</summary>
         LevelUnlockerRadioList levelGroup;
@@ -104,9 +103,18 @@ namespace InfoWindowElements
                 {
                     minWidth = new Length(100, LengthUnit.Percent),
                     maxWidth = new Length(100, LengthUnit.Percent),
-                    marginBottom = 15,
+                    marginBottom = 15, 
+                    marginTop = 0,
+                    marginLeft = 0,
+                    marginRight = 0,
+
+                    paddingBottom = 0,
+                    paddingTop = 0,
                     paddingLeft = 0,
-                    height = new Length(50, LengthUnit.Pixel)
+                    paddingRight = 0,
+                    fontSize = 45,
+
+                    height = new Length(60, LengthUnit.Pixel)
                 },
             };
             moveButton.AddToClassList("main-button");
@@ -123,14 +131,15 @@ namespace InfoWindowElements
         /// <param name="data">Elevator that is selected.</param>
         public override void Open(object data)
         {
+            selectedElevator = data as Elevator;
             if (SelectedLevel == -1)
             {
                 levelGroup.Rebuild();
                 levelGroup.RegisterCallbackOnce<GeometryChangedEvent>(
-                    (_) => SelectedLevel = levelGroup.Open((Elevator)data, LevelData));
+                    (_) => SelectedLevel = levelGroup.Open(selectedElevator, LevelData));
             }
             else
-                SelectedLevel = levelGroup.Open((Elevator)data, LevelData);
+                SelectedLevel = levelGroup.Open(selectedElevator, LevelData);
         }
 
         /// <summary>
@@ -145,32 +154,35 @@ namespace InfoWindowElements
             bodyLabel.text = LevelData.bodies[i];
             SelectedLevel = i;
 
+            
             LevelState state = levelGroup[i];
             switch (state)
             {
                 case LevelState.Available:
-                    moveButton.text = "Unlock";
                     costList.style.display = DisplayStyle.Flex;
                     costList.Open(this);
                     stateLabel.text = "Not enough resources";
-                    MoveButtonUpdate(true, "Unlock");
+                    MoveButtonUpdate(true, MyGrid.IsUnlocked(i) ? "Connect" : "Unlock");
+
                     break;
                 case LevelState.CanUnlock:
-                    moveButton.text = "Unlock";
                     costList.style.display = DisplayStyle.Flex;
                     costList.Open(this);
-                    stateLabel.text = "Can unlock";
-                    MoveButtonUpdate(true, "Unlock");
+                    if (MyGrid.IsUnlocked(i))
+                    {
+                        stateLabel.text = "Can connect";
+                        MoveButtonUpdate(true, "Connect");
+                    }
+                    else
+                    {
+                        stateLabel.text = "Can unlock";
+                        MoveButtonUpdate(true, "Unlock");
+                    }
                     break;
                 case LevelState.Unlocked:
                     costList.style.display = DisplayStyle.None;
                     stateLabel.text = "Unlocked";
-                    MoveButtonUpdate(true, "Move to");
-                    break;
-                case LevelState.Selected:
-                    costList.style.display = DisplayStyle.None;
-                    stateLabel.text = "Unlocked";
-                    MoveButtonUpdate(false, "Move to");
+                    MoveButtonUpdate(MyGrid.currentLevel != i, "Move to");
                     break;
             }
         }
@@ -229,24 +241,44 @@ namespace InfoWindowElements
             switch (levelGroup[SelectedLevel])
             {
                 case LevelState.CanUnlock:
-                    ConfirmWindow.window.Open(
-                        () =>
-                        {
-                            SceneRefs.ObjectFactory.CreateElevator(
-                                new(MyGrid.gridSize(SelectedLevel) / 2, SelectedLevel, MyGrid.gridSize(SelectedLevel) / 2));
-                            MyRes.PayCostGlobal(LevelData.costs[SelectedLevel]);
-                            MyGrid.UnlockLevel(SelectedLevel);
-                            MyGrid.ChangeGridLevel(SelectedLevel);
-                        }, 
-                        "Unlock new level",
-                        $"Do you want to unlock the {LevelData.headers[SelectedLevel]}?",
-                        "Unlock",
-                        "Cancel");
+                    if (MyGrid.IsUnlocked(SelectedLevel))
+                    {
+                        ConfirmWindow.window.Open(
+                            () =>
+                            {
+                                GridPos pos = selectedElevator.GetPos();
+                                SceneRefs.ObjectFactory.CreateElevator(
+                                    new(pos.x, SelectedLevel, pos.z), 
+                                    Mathf.RoundToInt(selectedElevator.transform.eulerAngles.y));
+                                MyRes.PayCostGlobal(LevelData.costs[SelectedLevel]);
+                                MyGrid.ChangeGridLevel(SelectedLevel);
+                            },
+                            $"Connect to level: {SelectedLevel}",
+                            $"Do you want to connect to the {LevelData.headers[SelectedLevel]}?",
+                            "Connect",
+                            "Cancel");
+                    }
+                    else
+                    {
+                        ConfirmWindow.window.Open(
+                            () =>
+                            {
+                                GridPos pos = selectedElevator.GetPos();
+                                SceneRefs.ObjectFactory.CreateElevator(new(pos.x, SelectedLevel, pos.z));
+                                MyRes.PayCostGlobal(LevelData.costs[SelectedLevel]);
+                                MyGrid.UnlockLevel(selectedElevator, SelectedLevel);
+                                MyGrid.ChangeGridLevel(SelectedLevel);
+                            },
+                            "Unlock new level",
+                            $"Do you want to unlock the {LevelData.headers[SelectedLevel]}?",
+                            "Unlock",
+                            "Cancel");
+                    } 
                     break;
                 case LevelState.Unlocked:
                     MyGrid.ChangeGridLevel(SelectedLevel);
                     break;
-                case LevelState.Selected:
+                //case LevelState.Selected:
                 case LevelState.Available:
                     break;
                 default:

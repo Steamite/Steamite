@@ -18,7 +18,6 @@ public enum ResourceType
 public static class MyRes
 {
     #region Variables
-    public static Resource resourceTemplate;
     /// <summary>Used for faster determening new jobs faster.</summary>
     public static int globalStorageSpace;
     /// <summary>All storage buildings.</summary>
@@ -372,7 +371,7 @@ public static class MyRes
     /// <param name="resource">Resources to add.</param>
     public static void DeliverToElevator(Resource resource)
     {
-        IStorage store = Elevator.main;
+        IStorage store = MyGrid.GetLevelElevator(0);
         if (store != null)
         {
             UpdateResource(resource, true);

@@ -69,9 +69,21 @@ public class MapGen : MonoBehaviour
         minCenter = (gridSize / 2) - 5;
         maxCenter = (gridSize / 2) + 5;
         world.gridSave = new GridSave[5];
+
+        StorageBSave save = (StorageBSave)elevator.Save();
+        save.id = 20;
+        save.gridPos = new(gridSize / 2, 0, gridSize / 2);
+        save.SetupStorage();
+
+        world.objectsSave = new BuildsAndChunksSave(
+            new BSave[] {
+                save
+            },
+            new ChunkSave[] { });
+
         for (level = 0; level < 5; level++)
         {
-            GridSave levelSave = new(gridSize, gridSize, level == 0);
+            GridSave levelSave = new(gridSize, gridSize, level == 0 ? save.id : -1);
 
             map = new MapTile[gridSize, gridSize];
             CreateGrid();
@@ -94,17 +106,6 @@ public class MapGen : MonoBehaviour
             world.gridSave[level] = levelSave;
         }
 
-        StorageBSave save = (StorageBSave)elevator.Save();
-        save.gridPos = new(gridSize / 2, 0, gridSize / 2);
-        save.SetupStorage();
-
-        world.objectsSave = new BuildsAndChunksSave(
-            new BSave[] {
-                save
-            },
-            new ChunkSave[] { });
-
-        //SceneRefs.objectFactory.CreateElevator(new(gridSize / 2, 0, gridSize / 2), true);
         #endregion
         return gridSize;
     }
@@ -249,15 +250,8 @@ public class MapGen : MonoBehaviour
     {
         if (map[x, y] == null)
         {
-            if (level == 0)
-            {
-                if (!((x > minCenter && x < maxCenter) && (y > minCenter && y < maxCenter)))
-                    return true;
-            }
-            else
-            {
+            if (!((x > minCenter && x < maxCenter) && (y > minCenter && y < maxCenter)))
                 return true;
-            }
         }
         return false;
     }
