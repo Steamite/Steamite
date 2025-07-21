@@ -11,6 +11,9 @@ public class Elevator : Building, IStorage
     /// <inheritdoc/>
     [CreateProperty] public List<bool> CanStore { get; set; } = new();
     public StorageResource LocalResources => localRes;
+
+    public int CanStoreMask { get => canStoreInt; set => canStoreInt = value; }
+    [SerializeField] int canStoreInt; 
     #endregion
 
     public override void UniqueID()

@@ -69,7 +69,10 @@ public class Fluid : ResAmmount<FluidType>
 
     public bool HasSpace(FluidType type, int ammount)
     {
-        return capacities[types.IndexOf(type)] - this[type] >= ammount;
+        int i = types.IndexOf(type);
+        if (i > -1)
+            return capacities[types.IndexOf(type)] - this[type] >= ammount;
+        return false;
     }
 
     public bool HasSpace(Fluid fluid)

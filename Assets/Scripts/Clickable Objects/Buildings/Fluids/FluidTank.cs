@@ -8,13 +8,24 @@ public class FluidTank : Building, IFluidWork
 
     [SerializeField] Fluid storedFluid;
     [CreateProperty] public Fluid StoredFluids { get => storedFluid; set => storedFluid = value; }
-
+    public int TypesToStore;
     public override void FinishBuild()
     {
-        StoredFluids = new(
-            new List<FluidType> { FluidType.Water },
-            new List<int> { 0 },
-            new List<int> { localRes.capacity.currentValue });
+        storedFluid = new();
+
+        int byt = TypesToStore;
+        int i = 0;
+        while(byt != 0) 
+        {
+            if((byt & 1) == 1 || byt == -1)
+            {
+                storedFluid.types.Add((FluidType)i);
+                storedFluid.ammounts.Add(0);
+                storedFluid.capacities.Add(localRes.capacity.currentValue);
+            }
+            byt = byt >> 1;
+            i++;
+        }
         base.FinishBuild();
     }
 

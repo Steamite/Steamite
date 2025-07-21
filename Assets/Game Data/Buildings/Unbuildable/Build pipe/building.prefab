@@ -143,11 +143,13 @@ MonoBehaviour:
     capacity:
       baseValue: 0
       currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
     requests: []
     carriers: []
     mods: 
-  _materialColors: []
-  _meshRenderers: []
+  meshRenderers: []
   buildingCategories: 0
   blueprint:
     size:
@@ -174,9 +176,15 @@ MonoBehaviour:
     baseResource:
       types: 
       ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
     money:
       baseValue: 0
       currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
@@ -188,3 +196,8 @@ MonoBehaviour:
     consumptionBuildings: []
     networkID: -1
     networkName: 
+  connectedPipes:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

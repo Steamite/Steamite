@@ -220,3 +220,4 @@ MonoBehaviour:
     types: 
     ammounts: 
     capacities: 
+  TypesToStore: 1

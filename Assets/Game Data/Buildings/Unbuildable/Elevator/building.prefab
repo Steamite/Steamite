@@ -224,3 +224,4 @@ MonoBehaviour:
   maximalProgress: 0
   categoryID: 0
   wrapperID: 1122905122
+  canStoreInt: 62
