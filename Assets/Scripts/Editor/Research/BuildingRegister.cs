@@ -503,6 +503,46 @@ namespace EditorWindows.Windows
 
             #endregion
 
+            #region Storing
+            dataGrid.columns.Add(new()
+            {
+                name = "canStore",
+                title = "Can store",
+                resizable = true,
+                width = 150,
+                makeCell = () => new MaskField(),
+                bindCell = (el, i) =>
+                {
+                    MaskField field = (MaskField)el;
+                    Building building = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
+                    if (building is IStorage storage)
+                    {
+                        el.style.display = DisplayStyle.Flex;
+                        List<string> choices = Enum.GetNames(typeof(ResourceType)).ToList();
+                        field.choices = choices;
+                        field.value = storage.CanStoreMask;
+                        field.RegisterValueChangedCallback(CanStoreFluidsChange);
+                    }
+                    else if (building is FluidTank tank)
+                    {
+                        el.style.display = DisplayStyle.Flex;
+                        List<string> choices = Enum.GetNames(typeof(FluidType)).ToList();
+                        field.choices = choices;
+                        field.value = tank.TypesToStore;
+                        field.RegisterValueChangedCallback(CanStoreFluidsChange);
+                    }
+                    else
+                    {
+                        el.style.display = DisplayStyle.None;
+                    }
+                },
+                unbindCell = (el, i) =>
+                {
+                    MaskField field = (MaskField)el;
+                    field.UnregisterValueChangedCallback(CanStoreFluidsChange);
+                },
+            });
+            #endregion
             #region Mask
             dataGrid.columns.Add(new()
             {
@@ -785,6 +825,30 @@ namespace EditorWindows.Windows
             ((IProduction)((BuildingWrapper)dataGrid.itemsSource[i]).building).ProdTime = ev.newValue;
             EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
         }
+
+
+        void CanStoreFluidsChange(ChangeEvent<int> ev)
+        {
+            int i = GetRowIndex((VisualElement)ev.target);
+            Building prev = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
+            if (prev != null)
+            {
+                if (prev is FluidTank tank)
+                {
+                    if (tank.TypesToStore != ev.newValue)
+                        tank.TypesToStore = ev.newValue;
+                }
+                else if (prev is IStorage storage)
+                {
+                    if (storage.CanStoreMask != ev.newValue)
+                        storage.CanStoreMask = ev.newValue;
+                }
+                else
+                    return;
+            }
+            EditorUtility.SetDirty(prev);
+        }
+
         #endregion
 
         #endregion

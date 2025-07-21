@@ -262,18 +262,23 @@ public static class MyRes
                 continue;
             for (int j = 0; j < r.types.Count; j++)
             {
-                if (storages[i].CanStore[(int)r.types[j]] == true)
+                int x = storages[i].LocalResources.types.IndexOf(r.types[j]);
+                if(x > -1)
                 {
-                    if (perfect)
+                    if (storages[i].CanStore[x] == true)
                     {
-                        if (wantToStore <= spaceToStore)
+                        if (perfect)
+                        {
+                            if (wantToStore <= spaceToStore)
+                                continue;
+                        }
+                        else
+                        {
                             continue;
-                    }
-                    else
-                    {
-                        continue;
+                        }
                     }
                 }
+                
                 storages.RemoveAt(i);
                 break;
             }

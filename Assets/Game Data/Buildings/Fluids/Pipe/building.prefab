@@ -168,8 +168,8 @@ MonoBehaviour:
       percentMod: 1
       absoluteMod: 0
     money:
-      baseValue: 200
-      currentValue: 200
+      baseValue: 20
+      currentValue: 20
       mod:
         percentMod: 1
         absoluteMod: 0

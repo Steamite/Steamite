@@ -61,9 +61,9 @@ namespace BuildingStats
                     // filter buildings using the mask 
                     int newMask = _building.BuildingCateg & mask;
                     // loop though the mask and do the effect
-                    while (newMask > 0)
+                    while (newMask != 0)
                     {
-                        if ((newMask & 1) == 1 || newMask == -1)
+                        if ((newMask & 1) == 1)
                         {
                             try
                             {
@@ -83,8 +83,6 @@ namespace BuildingStats
                             }
                         }
                         newMask = newMask >> 1;
-                        if (newMask == 0)
-                            break;
                     }
                 }
             }

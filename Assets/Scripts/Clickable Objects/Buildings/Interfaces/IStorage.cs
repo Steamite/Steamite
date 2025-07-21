@@ -10,6 +10,7 @@ public interface IStorage
     /// <summary>List containing which resources can be stored.</summary>
     public List<bool> CanStore { get; set; }
     public StorageResource LocalResources { get; }
+    public int CanStoreMask { get; set; }
 
     /// <summary>
     /// Assigns all resource types and setups base storage resources.
@@ -17,15 +18,21 @@ public interface IStorage
     /// <param name="jQ">Reference to register this object to global storage list.</param>
     public void SetupStorage(int ammount = 0)
     {
-        int i = 1;
         LocalResources.types = new();
         LocalResources.ammounts = new();
         CanStore = new();
-        foreach (var item in Enum.GetNames(typeof(ResourceType)).Skip(1))
+
+        int i = 0;
+        int mask = CanStoreMask;
+        while (mask != 0)
         {
-            LocalResources.types.Add((ResourceType)i);
-            LocalResources.ammounts.Add(ammount);
-            CanStore.Add(true);
+            if((mask & 1) == 1)
+            {
+                LocalResources.types.Add((ResourceType)i);
+                LocalResources.ammounts.Add(ammount);
+                CanStore.Add(true);
+            }
+            mask = mask >> 1;
             i++;
         }
     }
