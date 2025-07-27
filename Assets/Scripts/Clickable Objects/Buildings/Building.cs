@@ -108,8 +108,8 @@ public class Building : StorageObject
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
         if (clickable == null)
-            clickable = new BSave();
-        BSave save = (clickable as BSave);
+            clickable = new BuildingSave();
+        BuildingSave save = (clickable as BuildingSave);
         save.prefabName = objectName;
         save.rotationY = transform.rotation.eulerAngles.y;
 
@@ -126,13 +126,13 @@ public class Building : StorageObject
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-        objectName = (save as BSave).prefabName;
-        blueprint = (save as BSave).blueprint;
-        constructed = (save as BSave).constructed;
-        deconstructing = (save as BSave).deconstructing;
-        constructionProgress = (save as BSave).constructionProgress;
+        objectName = (save as BuildingSave).prefabName;
+        blueprint = (save as BuildingSave).blueprint;
+        constructed = (save as BuildingSave).constructed;
+        deconstructing = (save as BuildingSave).deconstructing;
+        constructionProgress = (save as BuildingSave).constructionProgress;
         maximalProgress = CalculateMaxProgress();
-        localRes.Load((save as BSave).resSave);
+        localRes.Load((save as BuildingSave).resSave);
         GetRenderComponents();
 
         InitModifiers();

@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -63,7 +64,9 @@ namespace AbstractControls
         /// <summary>Current zoom level.</summary>
         protected float zoom = 1;
         #endregion
-
+        bool ignoreNextDelta = false;
+        Rect boundBox;
+        float screenScale;
         protected void EnableInput() => actions.FindActionMap("Trade").Enable();
         protected void DisableInput() => actions.FindActionMap("Trade").Disable();
 
@@ -88,11 +91,51 @@ namespace AbstractControls
             #endregion
 
             RegisterCallback<WheelEvent>((eve) => ZoomMap(eve));
+            RegisterCallback<MouseEnterEvent>((_) =>
+            {
+                boundBox = worldBound;
+                screenScale = Screen.width / 1920f;
+            });
             RegisterCallback<MouseMoveEvent>(
                 (eve) =>
                 {
-                    if (actions.actionMaps[3].actions[0].inProgress)
+                    if (actions.actionMaps[3].actions[0].inProgress && !ignoreNextDelta)
+                    {
                         Move(eve.mouseDelta * moveSpeed * Time.deltaTime * zoom / Time.timeScale);
+                        #region Mouse warp
+                        Vector2 newMousePos = eve.mousePosition;
+                        if (eve.mouseDelta.x > 0 && eve.mousePosition.x >= boundBox.xMax - 10)
+                        {
+                            newMousePos.x = boundBox.x;
+                        }
+                        else if (eve.mouseDelta.x < 0 && newMousePos.x <= boundBox.x + 10)
+                        {
+                            newMousePos.x = boundBox.xMax;
+                        }
+
+                        // Must be reversed
+                        // screen.y is up
+                        // boundBox.y is down
+                        if (eve.mouseDelta.y > 0 && eve.mousePosition.y >= boundBox.yMax - 10)
+                        {
+                            newMousePos.y = boundBox.height;
+                        }
+                        else if (eve.mouseDelta.y < 0 && newMousePos.y <= boundBox.y + 10)
+                        {
+                            newMousePos.y = 0;
+                        }
+
+                        if (newMousePos != eve.mousePosition)
+                        {
+                            if(newMousePos.x != eve.mousePosition.x)
+                                newMousePos.y = Mathf.Abs(newMousePos.y - 1080);
+                            Mouse.current.WarpCursorPosition(newMousePos * screenScale);
+                            ignoreNextDelta = true;
+                        }
+                        #endregion
+                    }
+                    else
+                        ignoreNextDelta = false;
                 }
             );
         }
@@ -179,6 +222,7 @@ namespace AbstractControls
             arrowBottom.style.display = position.y == clamp ? DisplayStyle.None : DisplayStyle.Flex;
 
             mapElem.transform.position = position;
+            ToolkitUtils.localMenu.Move();
         }
         #endregion
     }

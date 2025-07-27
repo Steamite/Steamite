@@ -34,6 +34,10 @@ MonoBehaviour:
       id: 1197943099
       b: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
       preview: {fileID: 21300000, guid: 6141d9965f66f6a4097dac7efb27eaa4, type: 3}
+    - Name: 
+      id: 1210278343
+      b: {fileID: -8095187260356523125, guid: 2ffa8c7c60840cf40ac52e767bf304b8, type: 3}
+      preview: {fileID: 21300000, guid: f718799bf6a46be46a04d16c3651babf, type: 3}
     Icon: {fileID: 2800000, guid: 31a2fc60fcb027a45869f7484256409a, type: 3}
   - Name: Population
     Objects:
@@ -54,8 +58,8 @@ MonoBehaviour:
       preview: {fileID: 21300000, guid: af12f7dbf4371724b9331c594fb1b6d4, type: 3}
     - Name: 
       id: 2082713551
-      b: {fileID: -7499099920757844138, guid: 31ecaffeada030a45935b04c1e9889a5, type: 3}
-      preview: {fileID: 21300000, guid: f85cf4d88c5c2e946be3c34d5db92765, type: 3}
+      b: {fileID: 5046250939739785881, guid: 31ecaffeada030a45935b04c1e9889a5, type: 3}
+      preview: {fileID: 21300000, guid: 8d56f6d5e177f0343bf4465b57cb3d33, type: 3}
     - Name: 
       id: 262182155
       b: {fileID: -5037607063443067742, guid: 71345d36f743a7e47a57a60a967e4a78, type: 3}

@@ -88,13 +88,15 @@ public class GridSave
 [Serializable]
 public class BuildsAndChunksSave
 {
-    public BSave[] buildings;
+    public BuildingSave[] buildings;
     public ChunkSave[] chunks;
+    public VeinSave[] veins;
 
-    public BuildsAndChunksSave(BSave[] _buildings, ChunkSave[] _chunks)
+    public BuildsAndChunksSave(BuildingSave[] _buildings, ChunkSave[] _chunks, VeinSave[] _veins)
     {
         buildings = _buildings;
         chunks = _chunks;
+        veins = _veins;
     }
 }
 
@@ -129,8 +131,18 @@ public class RockSave : ClickableObjectSave
 [Serializable]
 public class WaterSave : ClickableObjectSave
 {
-    public int ammount;
+    public Fluid fluid;
 }
+
+[Serializable]
+public class VeinSave : ClickableObjectSave
+{
+    public GridPos gridPos;
+    public Resource resource;
+    public int sizeX;
+    public int sizeZ;
+}
+
 ////////////////////////////////////////////////////////////
 //---------------------Grid Buildings---------------------//
 ////////////////////////////////////////////////////////////
@@ -147,7 +159,7 @@ public class ChunkSave : StorageObjectSave
     public MyColor resColor;
 }
 [Serializable]
-public class BSave : StorageObjectSave
+public class BuildingSave : StorageObjectSave
 {
     ///public Build build;
     public string prefabName;
@@ -163,7 +175,7 @@ public class BSave : StorageObjectSave
 }
 
 [Serializable]
-public class StorageBSave : BSave
+public class StorageBSave : BuildingSave
 {
     public List<bool> canStore;
     public bool isMain;
@@ -184,7 +196,7 @@ public class StorageBSave : BSave
 }
 
 [Serializable]
-public class AssignBSave : BSave
+public class AssignBSave : BuildingSave
 {
     public List<int> assigned;
     public int limit;
@@ -202,12 +214,12 @@ public class ProductionBSave : AssignBSave
     public ProductionStates ProdStates;
 }
 
-public class PipeBSave : BSave
+public class PipeBSave : BuildingSave
 {
     public int networkID;
 }
 
-public class TankBSave : BSave
+public class TankBSave : BuildingSave
 {
     public Fluid fluidSave;
 }

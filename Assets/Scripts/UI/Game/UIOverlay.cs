@@ -43,8 +43,11 @@ public class UIOverlay : MonoBehaviour
                     Color color = new();
                     switch (item.itemType)
                     {
-                        case GridItemType.Water:
+                        case GridItemType.WaterSource:
                             color = Color.blue;
+                            break;
+                        case GridItemType.ResourceSource:
+                            color = Color.black;
                             break;
                         case GridItemType.Entrance:
                             color = Color.grey;

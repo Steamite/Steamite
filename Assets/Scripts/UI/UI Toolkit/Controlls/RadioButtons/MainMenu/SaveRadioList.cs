@@ -58,7 +58,7 @@ namespace RadioGroups
         }
         protected override CustomRadioButton DefaultMakeItem()
         {
-            return new SaveRadioButton("string", "save-radio-button", -1, new DateTime());
+            return new SaveRadioButton("string", "save-radio-button", -1, new DateTime(), this);
         }
         #endregion
 

@@ -43,7 +43,7 @@ RepeatButton {
     border-top-color: rgb(198, 131, 70);
     border-bottom-color: rgb(198, 131, 70);
     background-color: rgb(46, 29, 14);
-    background-image: url("project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-1008301579157283121&guid=e9d58580ef70b7744addd1ff255f07aa&type=3#arrow-left@2x");
+    background-image: url("project://database/Assets/Sprites/Icons/Info%20window/arrow-left@2x.texture2D?fileID=2800000&guid=8722be010bfcbbf4b9ac49df5e968f61&type=2#arrow-left@2x");
     transition-duration: 0.2s;
 }
 

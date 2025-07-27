@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace TradeData.Locations
 {
@@ -11,5 +12,6 @@ namespace TradeData.Locations
         public List<TradeDeal> Buy;
         /// <summary>Selling deals.</summary>
         public List<TradeDeal> Sell;
+        [HideInInspector] public float distance;
     }
 }

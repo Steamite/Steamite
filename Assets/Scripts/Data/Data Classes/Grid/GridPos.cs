@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 /// <summary>
 /// Class used for unitialized coordnites.<br/>
@@ -34,6 +35,23 @@ public class GridPos
     {
         return $"({x}, {y}, {z})";
     }
+
+    public GridPos Switch(int dirCase, int mod = 1)
+    {
+        switch (dirCase)
+        {
+            case 0:
+                return new(x, y, z + 1 * mod);
+            case 1:
+                return new(x + 1 * mod, y, z);
+            case 2:
+                return new(x, y, z - 1 * mod);
+            case 3:
+                return new(x - 1 * mod, y, z);
+            default:
+                throw new ArgumentException();
+        }
+    }
     #endregion
 
     #region Constructors
@@ -59,14 +77,20 @@ public class GridPos
         z = vec.z;
     }
 
-    public Vector3 ToVec(float Yoffset = 0)
+    public Vector3 ToVec(float yOffset = 0)
     {
         return new(
             x,
-            (y * ClickableObjectFactory.LEVEL_HEIGHT) + Yoffset,
+            (y * ClickableObjectFactory.LEVEL_HEIGHT) + yOffset,
             z);
     }
-
+    public Vector3 ToVec(float xOffset, float Yoffset, float zOffset)
+    {
+        return new(
+            x + xOffset,
+            (y * ClickableObjectFactory.LEVEL_HEIGHT) + Yoffset,
+            z + zOffset);
+    }
     public Vector2 ToVecUI()
     {
         if (y != 0)

@@ -16,7 +16,7 @@ namespace RadioGroups
         {
         }
 
-        public SaveRadioButton(string labelText, string _styleClass, int i, DateTime date) : base(_styleClass, i, false)
+        public SaveRadioButton(string labelText, string _styleClass, int i, DateTime date, CustomRadioButtonList list) : base(_styleClass, i, list)
         {
             saveDate = new TextElement();
             saveDate.text = date.ToString();

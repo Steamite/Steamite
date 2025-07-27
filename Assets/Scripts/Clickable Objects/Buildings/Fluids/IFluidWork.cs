@@ -81,7 +81,7 @@ public interface IFluidWork
         Fluid toTransfer = new(fluid);
         foreach (var storage in bestSources)
         {
-            storage.StoredFluids.RemoveAndCheck(toTransfer);
+            storage.StoredFluids.TakeResource(toTransfer);
             ((IUpdatable)storage).UIUpdate(nameof(StoredFluids));
             if (toTransfer.types.Count == 0)
             {

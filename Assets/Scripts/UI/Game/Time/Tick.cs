@@ -40,6 +40,7 @@ public class Tick : MonoBehaviour
     /// <summary>Current number of days, increased each new day.<summary>
     public int numberOfDays = 5;
 
+    public static int TicksInDay;
     /// <summary>The most subscribed action in the whole project, Triggers each tick.</summary>
     event Action tickAction;
     /// <summary>Subscribable event, triggered when starting Day(00:00).</summary>
@@ -148,6 +149,7 @@ public class Tick : MonoBehaviour
     public void InitTicks()
     {
         minutesPerTick = (int)(60f / ticksPerHour);
+        TicksInDay = 1440 / minutesPerTick;
         if (timeInMinutes < 6 * 60 || timeInMinutes > 21 * 60)
             nightStart?.Invoke();
 

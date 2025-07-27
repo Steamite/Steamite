@@ -25,8 +25,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 998b6498c6dbeb14fad09120ad4df1be
-    m_Address: Water Pump
+  - m_GUID: 5ade339683129074685868b343a3469f
+    m_Address: Water pump
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

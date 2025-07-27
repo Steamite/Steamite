@@ -69,7 +69,11 @@ public class Outpost
     }
     public Outpost()
     {
-
+        name = "";
+        level = 0;
+        production = new();
+        constructed = false;
+        timeToFinish = -1;
     }
 
     /// <summary>

@@ -30,7 +30,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     public PipePart PipeConnectionPrefab;
     #endregion
     Material pipeMaterial;
-    public List<int> ElevatorIds { get; private set; }
+    public List<int> CenterElevatorIds { get; private set; }
 
 
     #region Tiles
@@ -153,7 +153,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
 
     #region Loading Game
     /// <summary>Loads a building.</summary>
-    public void CreateSavedBuilding(BSave save)
+    public void CreateSavedBuilding(BuildingSave save)
     {
         GridPos rotate = MyGrid.Rotate(save.blueprint.moveBy, save.rotationY);
         Building b = Instantiate(
@@ -196,13 +196,32 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <summary>Loads a Water.</summary>
     public void CreateSavedWater(WaterSave save, GridPos gp)
     {
-        Water water = Instantiate(
+        Water newSource = Instantiate(
              tilePrefabs.GetPrefab<Water>("Water"),
              gp.ToVec(),
              Quaternion.identity,
              MyGrid.FindLevelWater(gp.y));
-        water.Load(save);
-        MyGrid.SetGridItem(gp, water);
+        newSource.Load(save);
+        MyGrid.SetGridItem(gp, newSource);
+    }
+
+    public void CreateSavedVein(VeinSave save)
+    {
+        Vein vein = Instantiate(
+            tilePrefabs.GetPrefab<Vein>("Vein"),
+            save.gridPos.ToVec(save.sizeX / 4f, ROCK_OFFSET, save.sizeZ / 4f),
+            Quaternion.identity,
+            MyGrid.FindLevelVeins(save.gridPos.y));
+        vein.Load(save);
+        int posX = Mathf.FloorToInt(save.gridPos.x);
+        int posZ = Mathf.FloorToInt(save.gridPos.z);
+        for (int x = 0; x < vein.xSize; x++)
+        {
+            for (int z = 0; z < vein.zSize; z++)
+            {
+                MyGrid.SetGridItem(new(posX+x, save.gridPos.y, posZ+z), vein);
+            }
+        }
     }
 
     /// <summary>Loads a Human.</summary>
@@ -247,7 +266,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
 
     public IEnumerator Init()
     {
-        ElevatorIds = new();
+        CenterElevatorIds = new();
         AsyncOperationHandle<BuildingData> buttons = Addressables.LoadAssetAsync<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
         if (!buttons.IsDone)
             yield return buttons;

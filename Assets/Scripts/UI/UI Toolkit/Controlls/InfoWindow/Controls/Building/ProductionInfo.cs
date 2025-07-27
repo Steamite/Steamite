@@ -116,7 +116,7 @@ namespace InfoWindowViews
             DataBinding binding;
             if (building is FluidResProductionBuilding)
             {
-                binding = BindingUtil.CreateBinding(nameof(WaterPump.StoredFluids));
+                binding = BindingUtil.CreateBinding(nameof(NeedSourceProduction.StoredFluids));
                 binding.sourceToUiConverters.AddConverter((ref Fluid fluid) => $"Space\n{fluid.ammounts.Sum()}/{fluid.capacities[0]}");
                 SceneRefs.InfoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
             }

@@ -98,16 +98,7 @@ public static class PathFinder
 
         for (int i = 0; i < objects.Count; i++)
         {
-            Building building = null;
-            try
-            {
-                building = objects[i].GetComponent<Building>();
-            }
-            catch (Exception e)
-            {
-                Debug.Log("object is null" + e);
-            }
-            if (building)
+            if (objects[i] is Building building)
             {
                 GridPos gp = building.GetPos();
                 Pipe pipe = building as Pipe;
@@ -386,25 +377,9 @@ public static class PathFinder
     /// <returns>Calculated additional position.</returns>
     public static GridPos BuildingStep(GridPos _vec, GameObject building, int mod)
     {
-        GridPos vec = new(_vec.x, _vec.y, _vec.z);
         float rotation = building.transform.eulerAngles.y;
         int rot = Mathf.RoundToInt(rotation / 90f);
-        switch (rot)
-        {
-            case 0:
-                vec.z += (1 * mod);
-                break;
-            case 1:
-                vec.x += (1 * mod);
-                break;
-            case 2:
-                vec.z -= (1 * mod);
-                break;
-            case 3:
-                vec.x -= (1 * mod);
-                break;
-        }
-        return vec;
+        return _vec.Switch(rot, mod);
     }
 
 }

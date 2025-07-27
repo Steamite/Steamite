@@ -29,7 +29,7 @@ public class BuildPipe : Pipe
         {
             network.buildings.Add(connectedBuilding);
 
-            if (connectedBuilding is WaterPump
+            if (connectedBuilding is NeedSourceProduction
                 || connectedBuilding is FluidTank
                 || connectedBuilding is FluidResProductionBuilding)
                 network.storageBuildings.Add(connectedBuilding);
@@ -43,7 +43,7 @@ public class BuildPipe : Pipe
     {
         network.buildings.Remove(connectedBuilding);
 
-        if (connectedBuilding is WaterPump
+        if (connectedBuilding is NeedSourceProduction
             || connectedBuilding is FluidTank
             || connectedBuilding is FluidResProductionBuilding)
             network.storageBuildings.Remove(connectedBuilding);

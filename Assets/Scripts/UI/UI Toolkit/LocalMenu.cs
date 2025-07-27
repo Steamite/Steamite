@@ -2,6 +2,7 @@
 using ResearchUI;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using TradeData.Locations;
 using TradeData.Stats;
 using UnityEngine;
@@ -9,6 +10,8 @@ using UnityEngine.UIElements;
 
 public class LocalMenu : MonoBehaviour, IAfterLoad
 {
+    const int LOFFSET = 20; // Left offset
+    const int ROFFSET = 25; // Right offset
     VisualElement anchor;
     object activeObject;
 
@@ -19,7 +22,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
     Label description;
     bool isOpen;
 
-
+    int width = 300;
     public void Init()
     {
         menu = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Menu");
@@ -61,25 +64,17 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
         else
             anchor = element;
 
-        if (onlyUpdate == false)
-        {
-            Rect rect = element.worldBound;
-            menu.style.width = 300;
-            menu.style.left = rect.x + rect.width + 25;
-            float f = (1080 - element.worldBound.y) - element.resolvedStyle.height / 2;
-            menu.style.bottom = f;
-           // Debug.LogWarning("see this: " + Screen.height + ", " + f);
-        }
+        secondHeader.style.display = DisplayStyle.None;
+        costList.style.display = DisplayStyle.None;
+        width = 300;
         switch (data)
         {
             case ColonyStat:
                 ColonyStat stat = data as ColonyStat;
                 header.text = stat.name;
-                secondHeader.style.display = DisplayStyle.None;
                 if (element is Label)
                 {
                     description.text = stat.GetText(true);
-                    costList.style.display = DisplayStyle.None;
                 }
                 else
                 {
@@ -96,7 +91,6 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 if (node.researched)
                 {
                     secondHeader.text = "researched";
-                    costList.style.display = DisplayStyle.None;
                 }
                 else
                 {
@@ -108,7 +102,6 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                     }
                     else
                     {
-                        costList.style.display = DisplayStyle.None;
                         secondHeader.text =
                             $"({node.CurrentTime}/{node.researchTime})\n" +
                             $"paid";
@@ -123,8 +116,6 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
 
                 if (wrapper.unlocked)
                 {
-                    secondHeader.style.display = DisplayStyle.None;
-
                     costList.style.display = DisplayStyle.Flex;
                     costList.Open(building);
                 }
@@ -132,8 +123,6 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 {
                     secondHeader.style.display = DisplayStyle.Flex;
                     secondHeader.text = "needs to be researched";
-
-                    costList.style.display = DisplayStyle.None;
                 }
                 description.text = "";
                 break;
@@ -141,7 +130,6 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 TradeLocation location = data as TradeLocation;
                 header.text = location.name;
                 secondHeader.text = "trade location";
-                costList.style.display = DisplayStyle.None;
                 List<TradeConvoy> convoyList = UIRefs.TradingWindow.GetConvoys();
                 TradeConvoy convoy = convoyList.FirstOrDefault(q => q.tradeLocation == UIRefs.TradingWindow.tradeLocations.IndexOf(location));
                 if (convoy != null)
@@ -149,10 +137,25 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 else
                     description.text = "";
                     break;
+            case ColonyLocation:
+                ColonyLocation colonyLocation = data as ColonyLocation;
+                header.text = colonyLocation.name;
+                secondHeader.text = "colony";
+                secondHeader.style.display = DisplayStyle.Flex;
+                break;
+            case Outpost:
+                width = 200;
+                Outpost outpost = data as Outpost;
+                header.text = outpost.name;
+                secondHeader.text = "outpost";
+                secondHeader.style.display = DisplayStyle.Flex;
+                break;
         }
         if (onlyUpdate == false)
+        {
+            Move();
             Show();
-
+        }
     }
 
     void Show()
@@ -165,14 +168,39 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
     public void Close()
     {
         activeObject = null;
-        anchor = null;
         costList.ClearBindings();
         isOpen = false;
         menu.RegisterCallbackOnce<TransitionEndEvent>(
             (q) =>
             {
-                if (isOpen == false) menu.style.display = DisplayStyle.None;
+                if (isOpen == false)
+                {
+                    menu.style.display = DisplayStyle.None;
+                    anchor = null;
+                }
             });
         menu.RemoveFromClassList("show");
+    }
+
+    public void Move()
+    {
+        if (anchor != null)
+        {
+            Rect rect = anchor.worldBound;
+            menu.style.width = width;
+            float pos = rect.x + rect.width + LOFFSET;
+            if (pos < 1620) // = 1920 - 300
+            {
+                menu.style.right = StyleKeyword.Auto;
+                menu.style.left = pos;
+            }
+            else
+            {
+                menu.style.left = StyleKeyword.Auto;
+                menu.style.right = 1920 - rect.x + ROFFSET; // = 1920 + OFFSET
+            }
+            float f = (1080 - anchor.worldBound.y) - anchor.resolvedStyle.height / 2;
+            menu.style.bottom = f;
+        }
     }
 }

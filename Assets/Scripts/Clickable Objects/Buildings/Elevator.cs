@@ -50,8 +50,9 @@ public class Elevator : Building, IStorage
     public override void Load(ClickableObjectSave save)
     {
         CanStore = (save as StorageBSave).canStore;
+        SceneRefs.JobQueue.storages.Add(this);
         base.Load(save);
-        if (SceneRefs.ObjectFactory.ElevatorIds.Contains(id))
+        if (SceneRefs.ObjectFactory.CenterElevatorIds.Contains(id))
         {
             MyGrid.UnlockLevel(this, GetPos().y);
         }

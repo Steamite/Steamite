@@ -192,11 +192,13 @@ public class LoadingScreen : MonoBehaviour
     void FillGrid(IProgress<int> progress, WorldSave worldSave)
     {
         actionText.text = "Loading grid";
-        CreateGrid(progress, worldSave.gridSave);
+        LoadGrid(progress, worldSave.gridSave);
+        actionText.text = "Filling Veins";
+        LoadVeins(progress, worldSave.objectsSave.veins);
         actionText.text = "Spawning chunks";
-        CreateChunks(progress, worldSave.objectsSave.chunks);
+        LoadChunks(progress, worldSave.objectsSave.chunks);
         actionText.text = "Constructing buildings";
-        CreateBuildings(progress, worldSave.objectsSave.buildings);
+        LoadBuildings(progress, worldSave.objectsSave.buildings);
     }
 
     /// <summary>
@@ -204,7 +206,7 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="chunks"></param>
-    void CreateChunks(IProgress<int> progress, ChunkSave[] chunks)
+    void LoadChunks(IProgress<int> progress, ChunkSave[] chunks)
     {
         foreach (ChunkSave chunkSave in chunks)
         {
@@ -220,11 +222,20 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="buildings"></param>
-    void CreateBuildings(IProgress<int> progress, BSave[] buildings)
+    void LoadBuildings(IProgress<int> progress, BuildingSave[] buildings)
     {
-        foreach (BSave save in buildings) // for each saved building
+        foreach (BuildingSave save in buildings) // for each saved building
         {
             SceneRefs.ObjectFactory.CreateSavedBuilding(save);
+            progress.Report(progressGlobal += BUILD_WEIGHT);
+        }
+    }
+
+    void LoadVeins(IProgress<int> progress, VeinSave[] veins)
+    {
+        foreach (VeinSave save in veins) // for each saved building
+        {
+            SceneRefs.ObjectFactory.CreateSavedVein(save);
             progress.Report(progressGlobal += BUILD_WEIGHT);
         }
     }
@@ -234,7 +245,7 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="gridSave"></param>
-    void CreateGrid(IProgress<int> progress, GridSave[] gridSave)
+    void LoadGrid(IProgress<int> progress, GridSave[] gridSave)
     {
         // Empties grid
         MyGrid.PrepGridLists();

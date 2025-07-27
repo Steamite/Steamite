@@ -38,7 +38,7 @@ namespace ResearchUI
         /// <summary>Creates the button using the <paramref name="categ"/>.</summary>
         /// <param name="categ">Research category to find the node.</param>
         /// <param name="i">Index of the node in category.</param>
-        public ResearchRadioButton(ResearchCategory categ, int i) : base("research-button", i, true)
+        public ResearchRadioButton(ResearchCategory categ, int i, CustomRadioButtonGroup group) : base("research-button", i, group)
         {
             node = categ.Objects[i];
             name = node.Name;

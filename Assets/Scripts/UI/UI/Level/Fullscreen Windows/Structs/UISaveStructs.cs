@@ -24,7 +24,7 @@ public class TradeSave
     public List<int> statLevels;
     public List<TradeLocation> tradeLocations;
     public List<TradeConvoy> convoys;
-    //public List<Outpost> outposts;
+    public List<Outpost> outposts;
     public int money;
     public TradeSave(TradingWindow trading)
     {
@@ -33,7 +33,7 @@ public class TradeSave
         statLevels = trading.colonyLocation.stats.Select(q => q.CurrentState).ToList();
         tradeLocations = trading.tradeLocations;
         convoys = trading.GetConvoys();
-        //outposts = trading.outposts;
+        outposts = trading.outposts;
         money = MyRes.Money;
     }
     public TradeSave()

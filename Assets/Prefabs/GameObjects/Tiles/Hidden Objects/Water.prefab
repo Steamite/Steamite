@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 152481171013417514}
   - component: {fileID: 2952357697249687575}
   - component: {fileID: 2108192293580490192}
-  - component: {fileID: 5002764873158423511}
+  - component: {fileID: 7233198647385399241}
   m_Layer: 9
   m_Name: Water
   m_TagString: Untagged
@@ -137,7 +137,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &5002764873158423511
+--- !u!114 &7233198647385399241
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,11 +146,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2480035025278558596}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3646364002e199f48ba0cd76e37ffd0e, type: 3}
+  m_Script: {fileID: 11500000, guid: b59433e1ca47b4e4cbb8f47362b34bec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   name: 
-  id: 0
+  id: -1
   objectName: Water
-  ammount: 10
-  hasResources: 0
+  storing:
+    types: 00000000
+    ammounts: 32000000
+    capacities: 

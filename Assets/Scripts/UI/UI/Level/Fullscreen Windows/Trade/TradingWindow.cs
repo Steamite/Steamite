@@ -8,7 +8,7 @@ public class TradingWindow : FullscreenWindow
 {
     #region Const
     public const int CONVOY_STORAGE_LIMIT = 50;
-    const int CONVOY_SPEED = 10;
+    public const int CONVOY_SPEED = 10;
     public int maxConvoy = 3;
     #endregion
 
@@ -19,8 +19,12 @@ public class TradingWindow : FullscreenWindow
 
     public ColonyLocation colonyLocation;
     public List<TradeLocation> tradeLocations;
+    public List<Outpost> outposts;
 
+    [HideInInspector] public float distance; 
     [SerializeField] string baseLocation = "Highlands";
+
+    public int outpostLimit = 3;
     #endregion
 
     #region Properties
@@ -38,6 +42,7 @@ public class TradingWindow : FullscreenWindow
 
         tradeLocations = tradeSave.tradeLocations;
         convoys = tradeSave.convoys;
+        outposts = tradeSave.outposts;
         SceneRefs.BottomBar.GetComponent<ResourceDisplay>().Money = tradeSave.money;
         Init();
     }

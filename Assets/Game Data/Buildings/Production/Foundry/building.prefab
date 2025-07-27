@@ -600,12 +600,12 @@ MonoBehaviour:
         x: -1
         z: -1
         y: 0
-      itemType: 1
+      itemType: 2
     - pos:
         x: -1
         z: 0
         y: 0
-      itemType: 1
+      itemType: 2
     - pos:
         x: -1
         z: 1
@@ -615,12 +615,12 @@ MonoBehaviour:
         x: 0
         z: -1
         y: 0
-      itemType: 1
+      itemType: 2
     - pos:
         x: 0
         z: 0
         y: 0
-      itemType: 4
+      itemType: 1
     - pos:
         x: 0
         z: 1

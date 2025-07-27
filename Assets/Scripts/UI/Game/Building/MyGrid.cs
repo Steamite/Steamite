@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Hierarchy;
 using UnityEngine;
 
 /// <summary>Basic highlight color(for selection).</summary>
@@ -20,6 +21,8 @@ public static class MyGrid
     static List<Building> buildings = new();
     /// <summary>List of all chunks on all levels.</summary>
     public static List<Chunk> chunks = new();
+    /// <summary>List of all veins on all levels.</summary>
+    public static List<Vein> veins = new();
     /// <summary>List of all fluid networks on all levels.</summary>
     public static List<FluidNetwork> fluidNetworks = new();
 
@@ -89,6 +92,7 @@ public static class MyGrid
     {
         buildings = new List<Building>();
         chunks = new List<Chunk>();
+        veins = new List<Vein>();
         fluidNetworks = new();
         levels = new GroundLevel[5];
         currentLevel = 2;
@@ -172,6 +176,7 @@ public static class MyGrid
     public static Transform FindLevelRocks(int lIndex) => levels[lIndex].rocks;
     public static Transform FindLevelBuildings(int lIndex) => levels[lIndex].buildings;
     public static Transform FindLevelPipes(int lIndex) => levels[lIndex].pipes;
+    public static Transform FindLevelVeins(int lIndex) => levels[lIndex].veins;
 
     public static Transform FindLevelChunks() => levels[currentLevel].chunks;
     public static Transform FindLevelRoads() => levels[currentLevel].roads;
@@ -248,7 +253,18 @@ public static class MyGrid
             {
                 gp.z = y;
                 ClickableObject click = level.GetGridItem(gp);
-                gridSave.grid[x, y] = (click is Building) ? null : click?.Save();
+                switch (click)
+                {
+                    case Building:
+                        gridSave.grid[x, y] = null;
+                        break;
+                    case Vein:
+                        gridSave.grid[x, y] = new();
+                        break;
+                    default:
+                        gridSave.grid[x, y] = (click is Building) ? null : click?.Save();
+                        break;
+                }
                 gridSave.pipes[x, y] = level.GetGridItem(gp, true)?.Save();
             }
         }
@@ -259,7 +275,7 @@ public static class MyGrid
     {
         GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickableObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.GridTiles.transform);
         levels[i] = groundLevel;
-        SceneRefs.ObjectFactory.ElevatorIds.Add(gridSave.elevatorID);
+        SceneRefs.ObjectFactory.CenterElevatorIds.Add(gridSave.elevatorID);
 
         groundLevel.ClearGrid(gridSave.width);
         groundLevel.gameObject.SetActive(i == 2);
@@ -286,7 +302,5 @@ public static class MyGrid
             }
         }
     }
-
-
     #endregion
 }

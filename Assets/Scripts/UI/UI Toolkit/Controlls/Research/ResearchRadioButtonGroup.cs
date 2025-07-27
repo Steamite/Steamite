@@ -49,7 +49,7 @@ namespace ResearchUI
             int lastLevel = -1;
             for (int i = 0; i < category.Objects.Count; i++)
             {
-                ResearchRadioButton researchUIButton = new(category, i);
+                ResearchRadioButton researchUIButton = new(category, i, this);
                 ResearchNode node = category.Objects[i];
                 if (lastLevel != node.level)
                 {

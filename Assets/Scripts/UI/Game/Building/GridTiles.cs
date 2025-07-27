@@ -297,6 +297,9 @@ public class GridTiles : MonoBehaviour
                 clickedObject = activeObject;
                 clickedObject.selected = true;
                 clickedObject.OpenWindow();
+#if UNITY_EDITOR
+                Selection.activeObject = clickedObject.gameObject;
+#endif
                 break;
             case ControlMode.deconstruct:
                 Building b = activeObject.GetComponent<Building>();

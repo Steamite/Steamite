@@ -22,6 +22,8 @@ public enum InfoMode
     Chunk,
     /// <summary><see cref="global::Water"/> is selected.</summary>
     Water,
+    /// <summary><see cref="global::Vein"/> is selected.</summary>
+    Vein,
 }
 
 /// <summary>
@@ -137,6 +139,9 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
             case InfoMode.Water:
                 controls.CreateElementByName("Water Info", windowBody, dataSource);
                 break;
+            case InfoMode.Vein:
+                controls.CreateElementByName("Vein Info", windowBody, dataSource);
+                break;
 
             case InfoMode.Building:
                 Building building = (Building)dataSource;
@@ -169,7 +174,9 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                 controls.CreateElementByName("Chunk Info", windowBody, dataSource);
                 break;
 
-
+            default:
+                Close();
+                break;
         }
     }
 
