@@ -21,20 +21,7 @@ public partial class DoubleFluidResList : VisualElement
 
     public void Open(object data)
     {
-        switch (data)
-        {
-            case Building:
-                if(data is WaterPump pump)
-                {
-                    resList.Open(null);
-                    fluidList.Open(pump.waterSource);
-                }
-                if(data is IResourceProduction prod)
-                {
-                    resList.Open(prod);
-                    fluidList.Open(prod);
-                }
-                break;
-        }
+        resList.Open(data);
+        fluidList.Open(data);
     }
 }

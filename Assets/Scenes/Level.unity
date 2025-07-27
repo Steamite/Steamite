@@ -500,7 +500,10 @@ MonoBehaviour:
     stats: []
     production: []
   tradeLocations: []
+  outposts: []
+  distance: 0
   baseLocation: Highlands
+  outpostLimit: 3
 --- !u!1 &897350249
 GameObject:
   m_ObjectHideFlags: 0

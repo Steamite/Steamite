@@ -87,6 +87,7 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IFluidWork
 
         // Resource Prod
         LocalRes.Manage(ResourceYield, true);
+        MyRes.UpdateResource(ResourceYield, true);
         UIUpdate(nameof(LocalRes));
         if (ProdStates.needsResources)
             ProdStates.supplied = InputResource.Diff(ResourceCost).Sum() == 0;

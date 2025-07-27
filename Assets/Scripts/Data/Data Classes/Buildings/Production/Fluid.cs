@@ -40,7 +40,9 @@ public class Fluid : ResAmmount<FluidType>
         int i = types.IndexOf(type);
         if (i == -1)
         {
-            Debug.LogError($"{type} not present in this fluid: {this}, adding");
+            types.Add(type);
+            ammounts.Add(ammount);
+            Debug.LogWarning($"{type} not present in this fluid: {this}, adding");
         }
         else
             ammounts[i] += ammount;

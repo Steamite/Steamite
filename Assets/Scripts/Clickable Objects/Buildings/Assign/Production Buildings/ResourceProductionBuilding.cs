@@ -135,7 +135,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
         base.FinishBuild();
         if (ResourceCost.Sum() == 0)
         {
-            ProdStates.supplied = true;
+            ProdStates.needsResources = false;
             return;
         }
         ((IResourceProduction)this).Init(constructed);

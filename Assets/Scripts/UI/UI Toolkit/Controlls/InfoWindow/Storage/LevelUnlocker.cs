@@ -15,7 +15,7 @@ namespace InfoWindowElements
 
         }
 
-        public LevelUnlocker(int i, LevelState _state) : base("", i, false)
+        public LevelUnlocker(int i, LevelState _state, CustomRadioButtonList list) : base("", i, list)
         {
             ToggleButtonStyle(_state);
         }

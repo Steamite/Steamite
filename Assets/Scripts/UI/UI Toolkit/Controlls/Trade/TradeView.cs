@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TradeData.Locations;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace TradeWindowElements
@@ -9,7 +10,6 @@ namespace TradeWindowElements
     [UxmlElement]
     public partial class TradeView : VisualElement
     {
-
         #region Variables
         VisualTreeAsset dealAsset;
         [UxmlAttribute] VisualTreeAsset DealAsset { get => dealAsset; set { dealAsset = value; CreateDeals(0); CreateDeals(1); } }
@@ -19,7 +19,9 @@ namespace TradeWindowElements
         TradeLocation selectedLocation;
         int selectedLocationIndex;
         Button confirmButton;
+        Label balanceLabel, dateLabel;
 
+        TradeMap map;
         int BuyMoney, SellMoney, BuyCount, SellCount;
         #endregion
 
@@ -31,35 +33,12 @@ namespace TradeWindowElements
 
             CreateCateg("Buy", 0);
             CreateCateg("Sell", 1);
-
-            #region Summary
-            VisualElement summary, temp;
-            Label label;
-            summary = new();
-            summary.name = "Summary";
-
-            #region Numbers
-            temp = new();
-            temp.name = "Numbers";
-
-            label = new("New Balance:");
-            label.name = "NewBalance";
-            temp.Add(label);
-
-            label = new("###### £");
-            label.name = "NewBalanceValue";
-            temp.Add(label);
-            summary.Add(temp);
-            #endregion
-            confirmButton = new();
-            confirmButton.AddToClassList("main-button");
-            confirmButton.clicked += TradeCommit;
-            summary.Add(confirmButton);
-            Add(summary);
-            #endregion
+            CreateSummary();
         }
+        #endregion
 
-        VisualElement CreateCateg(string _name, int i)
+        #region Init
+        void CreateCateg(string _name, int i)
         {
             VisualElement categ, temp;
             Label label;
@@ -95,9 +74,65 @@ namespace TradeWindowElements
                 CreateDeals(i);
             #endregion
             Add(categ);
-            return temp;
         }
+        void CreateSummary()
+        {
+            VisualElement summary, temp;
+            Label label;
+            summary = new();
+            summary.AddToClassList("summary");
 
+            #region Numbers
+            temp = new();
+            temp.AddToClassList("new-balance");
+
+            label = new("New Balance:");
+            label.name = "NewBalance";
+            temp.Add(label);
+
+            balanceLabel = new("###### £");
+            balanceLabel.name = "NewBalanceValue";
+            temp.Add(balanceLabel);
+            summary.Add(temp);
+            #endregion
+            temp = new();
+            temp.AddToClassList("date-confirm");
+
+            VisualElement t = new();
+            t.AddToClassList("date-length");
+            label = new("Length");
+            t.Add(label);
+            dateLabel = new("##.# d");
+            dateLabel.AddToClassList("date-label");
+            t.Add(dateLabel);
+            temp.Add(t);
+
+            confirmButton = new()
+            {
+                style =
+                {
+                    minWidth = new Length(75, LengthUnit.Percent),
+                    maxWidth = new Length(75, LengthUnit.Percent),
+                    scale = new Vector2(1, 1),
+                    fontSize = 40,
+                    paddingBottom = 0,
+                    paddingLeft = 0,
+                    paddingRight = 0,
+                    paddingTop = 0,
+                    marginBottom = 0,
+                    marginLeft = 0,
+                    marginRight = 0,
+                    marginTop = 0,
+                    height = new Length(100, LengthUnit.Percent),
+                    flexGrow = 1
+                }
+            };
+            confirmButton.AddToClassList("main-button");
+            confirmButton.clicked += TradeCommit;
+            temp.Add(confirmButton);
+            summary.Add(temp);
+            Add(summary);
+        }
         void CreateDeals(int categIndex)
         {
             if (DealAsset == null)
@@ -133,6 +168,13 @@ namespace TradeWindowElements
             UpdateConfirmButton();
 
             style.display = DisplayStyle.Flex;
+            float time = (2 * selectedLocation.distance) / (TradingWindow.CONVOY_SPEED * Tick.TicksInDay);
+            if (time > 1)
+                dateLabel.text = $"{time:F1} d";
+            else
+                dateLabel.text = $"{time*24:F1} h";
+            if (map == null)
+                map = parent.parent[1][0] as TradeMap;
             return selectedLocation.name;
         }
 
@@ -166,6 +208,7 @@ namespace TradeWindowElements
                     deal.parent.style.display = DisplayStyle.Flex;
                 }
             }
+
             // Categ header
             deals = ElementAt(categ).ElementAt(0);
             ((Label)deals.ElementAt(1)).text = $"(0/{TradingWindow.CONVOY_STORAGE_LIMIT})";
@@ -297,7 +340,7 @@ namespace TradeWindowElements
                     BuyMoney);
                 Open(selectedLocationIndex);
 
-                ((Label)parent.parent.ElementAt(1).ElementAt(1).ElementAt(0)).text = $"{UIRefs.TradingWindow.AvailableConvoy}/{UIRefs.TradingWindow.maxConvoy} Convoyes";
+                map.convoyLabel.text = $"{UIRefs.TradingWindow.AvailableConvoy}/{UIRefs.TradingWindow.maxConvoy} Convoyes";
                 slider.RemoveFromClassList("free");
                 slider.AddToClassList("trading");
             }

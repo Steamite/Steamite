@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7784641955251836836}
   - component: {fileID: 5940660140976413039}
   - component: {fileID: 8272053442680625997}
-  - component: {fileID: -7499099920757844138}
   - component: {fileID: 8138561932775318445}
+  - component: {fileID: 5046250939739785881}
   m_Layer: 2
   m_Name: building
   m_TagString: Untagged
@@ -110,7 +110,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &-7499099920757844138
+--- !u!210 &8138561932775318445
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4367906751782207857}
+  m_Enabled: 1
+  m_SortingLayerID: -451778777
+  m_SortingLayer: 2
+  m_SortingOrder: 15
+  m_SortAtRoot: 0
+--- !u!114 &5046250939739785881
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,18 +131,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 4367906751782207857}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4469e9358e25689418ae97e799a791ae, type: 3}
+  m_Script: {fileID: 11500000, guid: de946a0cacc359741a19151d246750ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   name: 
   id: -1
-  objectName: Water Pump
+  objectName: Water pump
   localRes:
     types: 
     ammounts: 
     capacity:
-      baseValue: 50
-      currentValue: 50
+      baseValue: 25
+      currentValue: 25
       mod:
         percentMod: 1
         absoluteMod: 0
@@ -138,7 +150,7 @@ MonoBehaviour:
     carriers: []
     mods: 
   meshRenderers: []
-  buildingCategories: 8
+  buildingCategories: 0
   blueprint:
     size:
       x: 1
@@ -157,17 +169,17 @@ MonoBehaviour:
         x: 0
         z: -2
         y: 0
-      itemType: 2
+      itemType: 5
     - pos:
         x: 0
         z: -1
         y: 0
-      itemType: 5
+      itemType: 4
     - pos:
         x: 0
         z: 0
         y: 0
-      itemType: 4
+      itemType: 1
     - pos:
         x: 0
         z: 1
@@ -183,8 +195,8 @@ MonoBehaviour:
       percentMod: 1
       absoluteMod: 0
     money:
-      baseValue: 0
-      currentValue: 0
+      baseValue: 5
+      currentValue: 5
       mod:
         percentMod: 1
         absoluteMod: 0
@@ -200,7 +212,7 @@ MonoBehaviour:
     mod:
       percentMod: 1
       absoluteMod: 0
-  productionTime: 2
+  productionTime: 4
   prodSpeed:
     baseValue: 1
     currentValue: 1
@@ -230,23 +242,11 @@ MonoBehaviour:
     ammounts: 
     capacities: 
   fluidYeild:
-    types: 00000000
-    ammounts: 02000000
+    types: 
+    ammounts: 
     capacities: 
   storedFluids:
     types: 
     ammounts: 
     capacities: 
-  waterSource: {fileID: 0}
---- !u!210 &8138561932775318445
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4367906751782207857}
-  m_Enabled: 1
-  m_SortingLayerID: -451778777
-  m_SortingLayer: 2
-  m_SortingOrder: 15
-  m_SortAtRoot: 0
+  ammountPerCycle: 3

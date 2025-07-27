@@ -34,7 +34,7 @@ namespace InfoWindowElements
                 case Water water:
                     noneLabel.dataSource = water;
                     noneLabel.style.height = new Length(50, LengthUnit.Pixel);
-                    DataBinding binding = BindingUtil.CreateBinding(nameof(Water.Ammount));
+                    DataBinding binding = BindingUtil.CreateBinding(nameof(Water.Storing));
                     binding.sourceToUiConverters.AddConverter((ref int amm) => $"Water Source:\n {amm}/1");
                     SceneRefs.InfoWindow.RegisterTempBinding(new BindingContext(noneLabel, "text"), binding, water);
                     return;

@@ -32,7 +32,7 @@ namespace RadioGroups
 
         protected override CustomRadioButton DefaultMakeItem()
         {
-            CustomRadioButton button = new CustomRadioButton("main-button", -1, false);
+            CustomRadioButton button = new CustomRadioButton("main-button", -1, this);
             button.style.fontSize = 65;
             button.style.marginTop = 0;
             return button;

@@ -171,7 +171,7 @@ public static class HumanActions
     {
         try
         {
-            h.Job.interest.GetComponent<StorageObject>().Take(h, transferPerTick);
+            ((StorageObject)h.Job.interest).Take(h, transferPerTick);
             h.UIUpdate(nameof(Human.Inventory));
         }
         catch (Exception e)
@@ -270,18 +270,22 @@ public static class HumanActions
                 if (MyRes.globalStorageSpace > 0)
                     if (FindInterests(jobQueue.pickupNeeded.Where(q => q.LocalRes.Future().Sum() > 0), h, j))
                     {
-                        h.destination = h.Job.interest.GetComponent<Building>();
-                        Resource toMove = h.destination.LocalRes.Future();
-                        CapacityResource r = new(-1);
+                        Building pickupObject = h.Job.interest as Building;
+                        Resource toMove = pickupObject.LocalRes.Future();
+                        CapacityResource r = new(h.Inventory.FreeSpace);
                         MyRes.MoveRes(r,
                             new(toMove),
                             toMove,
                             h.Inventory.capacity < MyRes.globalStorageSpace
                                 ? h.Inventory.capacity.currentValue
                                 : MyRes.globalStorageSpace);
-                        h.destination.RequestRes(r, h, -1);
                         MyRes.FindStorage(r, h);
-                        return false;
+                        if (h.destination)
+                        {
+                            h.destination.RequestRes(r, h, 1);
+                            pickupObject.RequestRes(r, h, -1);
+                            return false;
+                        }
                     }
                 break;
             case JobState.Supply:

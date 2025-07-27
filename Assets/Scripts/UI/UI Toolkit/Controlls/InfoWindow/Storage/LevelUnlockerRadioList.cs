@@ -45,7 +45,7 @@ namespace RadioGroups
 
         protected override CustomRadioButton DefaultMakeItem()
         {
-            return new LevelUnlocker(-1, LevelState.Unavailable);
+            return new LevelUnlocker(-1, LevelState.Unavailable, this);
         }
 
         protected override void DefaultBindItem(VisualElement element, int index)

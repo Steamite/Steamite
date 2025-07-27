@@ -229,6 +229,37 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 1
+--- !u!1 &4154890756373658007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2403016778296746734}
+  m_Layer: 2
+  m_Name: Veins
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2403016778296746734
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4154890756373658007}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8192549997447066428}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4243522573366403026
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,6 +453,7 @@ Transform:
   - {fileID: 1739259922143558596}
   - {fileID: 3648922814593868028}
   - {fileID: 4110801998864547646}
+  - {fileID: 2403016778296746734}
   m_Father: {fileID: 114942921115005622}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7012266252935636342
@@ -572,8 +604,8 @@ MonoBehaviour:
   rocks: {fileID: 4110801998864547646}
   roads: {fileID: 3648922814593868028}
   waters: {fileID: 1739259922143558596}
+  veins: {fileID: 2403016778296746734}
   chunks: {fileID: 2572323033166613145}
   buildings: {fileID: 5844745823362512448}
   pipes: {fileID: 4897319285753657160}
   overlays: {fileID: 2016009571760947615}
-  unlocked: 0

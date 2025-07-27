@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using AbstractControls;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace TradeWindowElements
@@ -11,7 +12,7 @@ namespace TradeWindowElements
 
         public TradeLocationButton() : base() { }
 
-        public TradeLocationButton(Vector2 _pos, int i, Slider _slider, Vector2 _basePosition) : base(_pos, i)
+        public TradeLocationButton(Vector2 _pos, int i, Slider _slider, Vector2 _basePosition, CustomRadioButtonGroup group) : base(_pos, i, group)
         {
             slider = _slider;
             basePosition = _basePosition;

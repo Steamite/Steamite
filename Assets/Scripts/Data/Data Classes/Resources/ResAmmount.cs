@@ -143,13 +143,30 @@ public class ResAmmount<T> : ResAmmountBase where T : System.Enum
         }
     }
 
-    public void RemoveAndCheck(ResAmmount<T> toTransfer)
+    public void TakeResource(ResAmmount<T> toTransfer)
     {
         ResAmmount<T> ret = new();
         Diff(ret, toTransfer);
         ret = toTransfer - ret;
         Manage(ret, false);
         toTransfer.Manage(ret, false, removeEmpty: true);
+    }
+
+    public ResAmmount<T> GetResOfAmmount(ResAmmount<T> ret, int _ammount, bool remove)
+    {
+        for (int i = types.Count -1; i > -1; i--)
+        {
+            int x = (ammounts[i] < _ammount) 
+                ? ammounts[i] 
+                : _ammount;
+            ret.ManageSimple(types[i], x, true);
+            if(remove)
+                ManageSimple(types[i], x, false, removeEmpty: true);
+            _ammount -= x;
+            if(_ammount <= 0)
+                break;
+        }
+        return ret;
     }
 
     protected void Diff(ResAmmount<T> ret, ResAmmount<T> cost)
@@ -185,4 +202,6 @@ public class ResAmmount<T> : ResAmmountBase where T : System.Enum
 }
 
 [Serializable]
-public abstract class ResAmmountBase {}
+public abstract class ResAmmountBase 
+{
+}

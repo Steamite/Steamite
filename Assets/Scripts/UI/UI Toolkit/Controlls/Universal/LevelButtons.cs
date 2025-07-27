@@ -12,7 +12,7 @@ public partial class LevelButtons : CustomRadioButtonGroup
     {
         for (int i = 0; i < levels?.Count; i++)
         {
-            CustomRadioButton button = new("status-bar-button", i, true);
+            CustomRadioButton button = new("status-bar-button", i, this);
             button.text = $"{levels[i]}";
             button.style.marginTop = 5;
             button.style.marginBottom = 5;

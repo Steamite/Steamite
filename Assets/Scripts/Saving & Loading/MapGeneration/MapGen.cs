@@ -76,10 +76,11 @@ public class MapGen : MonoBehaviour
         save.SetupStorage();
 
         world.objectsSave = new BuildsAndChunksSave(
-            new BSave[] {
+            new BuildingSave[] {
                 save
             },
-            new ChunkSave[] { });
+            new ChunkSave[] { },
+            new VeinSave[] { });
 
         for (level = 0; level < 5; level++)
         {

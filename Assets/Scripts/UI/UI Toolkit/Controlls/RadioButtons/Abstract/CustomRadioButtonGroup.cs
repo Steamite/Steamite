@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine.UIElements;
 
 namespace AbstractControls
@@ -13,6 +14,7 @@ namespace AbstractControls
         #region Variables
         protected Action<int> changeEvent;
 
+        public List<CustomRadioButton> buttons = new();
         /// <summary>Index of the currently selected button.</summary>
         public int SelectedChoice
         {
@@ -44,7 +46,7 @@ namespace AbstractControls
         public virtual bool Select(int value)
         {
             if (SelectedChoice > -1)
-                ((CustomRadioButton)ElementAt(SelectedChoice)).Deselect();
+                buttons[SelectedChoice].Deselect();
             if (SelectedChoice == value)
             {
                 SelectedChoice = -1;
@@ -57,6 +59,11 @@ namespace AbstractControls
                 changeEvent?.Invoke(value);
                 return true;
             }
+        }
+
+        public void AddButton(CustomRadioButton button)
+        {
+            buttons.Add(button);
         }
         #endregion
     }

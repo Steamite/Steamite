@@ -1,4 +1,5 @@
 using AbstractControls;
+using System;
 using System.Collections.Generic;
 using TradeData.Locations;
 using UnityEngine;
@@ -9,8 +10,38 @@ namespace TradeWindowElements
     [UxmlElement]
     public partial class TradeMap : Map, IInitiableUI, IUIElement
     {
+        const float DISTANCE_MOD = 2;
         List<LocationButton> locationButtons = new();
         VisualElement sliderGroup;
+
+        Button closeButton;
+        public Label convoyLabel;
+        TradeButtonGroup locationGroup;
+        VisualElement outpostElement;
+
+        int index;
+        public TradeMap() : base()
+        {
+            closeButton = new();
+            closeButton.AddToClassList("close-button");
+            Add(closeButton);
+
+            VisualElement convoyElem = new() { style = { top = 0, right = new Length(7, LengthUnit.Percent), borderTopWidth = 0, borderTopLeftRadius = 0, borderTopRightRadius = 0 } };
+            convoyElem.AddToClassList("small-window");
+
+            convoyLabel = new("#/# Convoyes");
+            convoyLabel.AddToClassList("convoy-label");
+            convoyElem.Add(convoyLabel);
+            Add(convoyElem);
+
+            outpostElement = new();
+            outpostElement.AddToClassList("outpost-group");
+            Add(outpostElement);
+            for (int i = 0; i < 3; i++)
+            {
+                outpostElement.Add(new OutpostButton());
+            }
+        }
 
         #region Init
         /// <summary>
@@ -18,9 +49,12 @@ namespace TradeWindowElements
         /// </summary>
         public void Init()
         {
+            outpostElement.Clear();
             CreateSliders();
             CreateLocations();
-            (parent[2] as Button).clicked += UIRefs.TradingWindow.CloseWindow;
+            CreateOutposts();
+            closeButton.clicked += UIRefs.TradingWindow.CloseWindow;
+            //CreateTextAndBackButton();
         }
 
         /// <summary>Creates and alligns all sliders.</summary>
@@ -36,8 +70,10 @@ namespace TradeWindowElements
             {
                 Vector2 locationPos = UIRefs.TradingWindow.tradeLocations[i].pos.ToVecUI();
 
-                float distance = Vector2.Distance(basePos, locationPos);
-                slider = new("", 0, distance / 10);
+                float distance = Vector2.Distance(basePos, locationPos) / DISTANCE_MOD;
+                UIRefs.TradingWindow.tradeLocations[i].distance = distance;
+
+                slider = new("", 0, distance);
                 slider.style.width = distance;
                 slider.style.height = 50;
                 slider.focusable = false;
@@ -67,48 +103,80 @@ namespace TradeWindowElements
         /// <summary>Creates a location button for all <see cref="TradeLocation"/>s and the <see cref="ColonyLocation"/>.</summary>
         void CreateLocations()
         {
-            TradeButtonGroup locationGroup = new(this);
+            int tradeLocationCount = UIRefs.TradingWindow.tradeLocations.Count;
+            locationGroup = new(this, tradeLocationCount);
             mapElem.Add(locationGroup);
 
             LocationButton locationButton;
-            for (int i = -1; i < UIRefs.TradingWindow.tradeLocations.Count; i++)
+            for (index = -1; index < tradeLocationCount; index++)
             {
                 Location location;
-                if (i == -1)
+                if (index == -1)
                 {
                     location = UIRefs.TradingWindow.colonyLocation;
-                    locationButton = new(location.pos.ToVecUI(), 0);
+                    locationButton = new (location.pos.ToVecUI(), 0, locationGroup);
                     locationButton.style.unityBackgroundImageTintColor = Color.blue;
                 }
                 else
                 {
-                    location = UIRefs.TradingWindow.tradeLocations[i];
+                    location = UIRefs.TradingWindow.tradeLocations[index];
                     locationButton = new TradeLocationButton(
                         location.pos.ToVecUI(),
-                        i + 1,
-                        (Slider)sliderGroup.ElementAt(i).ElementAt(0),
-                        UIRefs.TradingWindow.colonyLocation.pos.ToVecUI());
+                        index + 1,
+                        (Slider)sliderGroup.ElementAt(index).ElementAt(0),
+                        UIRefs.TradingWindow.colonyLocation.pos.ToVecUI(), 
+                        locationGroup);
                 }
                 locationButton.RegisterCallback<MouseEnterEvent>(
-                        q => ToolkitUtils.localMenu.UpdateContent(location, q.target as VisualElement));
+                    q => ToolkitUtils.localMenu.UpdateContent(location, q.target as VisualElement));
                 locationButton.RegisterCallback<MouseLeaveEvent>(
-                        q => ToolkitUtils.localMenu.Close());
+                    q => ToolkitUtils.localMenu.Close());
                 locationGroup.Add(locationButton);
                 locationButtons.Add(locationButton);
 
                 locationButton.RecalculateLayout(zoom);
             }
+        }
 
+        void CreateOutposts()
+        {
+            for (int i = 0; i < UIRefs.TradingWindow.outpostLimit; i++)
+            {
+                index++;
+                CreateOutpost(i);
+            }
         }
         #endregion
+
+        public void CreateOutpost(int i)
+        {
+            OutpostButton outpostButton = new(locationGroup, index);
+            if (i > 0 && !UIRefs.TradingWindow.outposts[i - 1].constructed)
+                outpostButton.enabledSelf = false;
+
+            outpostButton.RegisterCallback<MouseEnterEvent>(
+                q => ToolkitUtils.localMenu.UpdateContent(
+                    UIRefs.TradingWindow.outposts[i],
+                    q.target as VisualElement));
+
+            outpostButton.RegisterCallback<MouseLeaveEvent>(
+                q => ToolkitUtils.localMenu.Close());
+
+            outpostElement.Add(outpostButton);
+        }
+
+        public void EnableOutpost(int i)
+        {
+            OutpostButton outpostButton = locationGroup.buttons[locationGroup.tradeLocationCount] as OutpostButton;
+            outpostButton.enabledSelf = true;
+        }
 
         #region Updates
 
         public void Open(object data)
         {
-            //TODO: NEED TO MOVE TRADE SLIDERS
             ((LocationButton)ElementAt(0).ElementAt(1).ElementAt(0)).Select();
-            ((Label)parent.ElementAt(1).ElementAt(0)).text = $"{UIRefs.TradingWindow.AvailableConvoy}/{UIRefs.TradingWindow.maxConvoy} Convoyes";
+            convoyLabel.text = $"{UIRefs.TradingWindow.AvailableConvoy}/{UIRefs.TradingWindow.maxConvoy} Convoyes";
 
             Slider slider;
             foreach (TradeConvoy tradeConvoy in (List<TradeConvoy>)data)
@@ -123,6 +191,7 @@ namespace TradeWindowElements
         {
             if (base.ZoomMap(wheelEvent))
             {
+                locationButtons[locationButtons.Count - 1].RegisterCallbackOnce<GeometryChangedEvent>((_) => ToolkitUtils.localMenu.Move());
                 for (int i = 0; i < locationButtons.Count; i++)
                 {
                     locationButtons[i].RecalculateLayout(zoom);

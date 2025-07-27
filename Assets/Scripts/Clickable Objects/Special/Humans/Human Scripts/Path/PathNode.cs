@@ -23,23 +23,7 @@ class PathNode
     /// <exception cref="ArgumentException">If <paramref name="_i"/> is out of range.</exception>
     public PathNode(int _i, PathNode _previous)
     {
-        switch (_i)
-        {
-            case 0:
-                pos = new(_previous.pos.x + 1, _previous.pos.y, _previous.pos.z);
-                break;
-            case 1:
-                pos = new(_previous.pos.x - 1, _previous.pos.y, _previous.pos.z);
-                break;
-            case 2:
-                pos = new(_previous.pos.x, _previous.pos.y, _previous.pos.z + 1);
-                break;
-            case 3:
-                pos = new(_previous.pos.x, _previous.pos.y, _previous.pos.z - 1);
-                break;
-            default:
-                throw new ArgumentException();
-        }
+        pos = _previous.pos.Switch(_i);
         previous = _previous;
         minCost = _previous.minCost;
     }

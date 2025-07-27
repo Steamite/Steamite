@@ -51,7 +51,6 @@ namespace InfoWindowElements
                                 nameof(IResourceProduction.ResourceYield),
                                 nameof(Building.LocalRes),
                                 data);
-                            
                         }
                         else
                         {

@@ -215,11 +215,9 @@ public static class MyRes
     public static void FindStorage(Resource r, Human h)
     {
         List<IStorage> storages = FilterStorages(r, h, true);
-        h.destination = PathFinder.FindPath(storages.Select(q => ((MonoBehaviour)q).GetComponent<ClickableObject>()).ToList(), h).interest.GetComponent<Building>();
-        if (h.destination)
-        {
-            h.destination.RequestRes(r, h, 1);
-        }
+        List<ClickableObject> objects = storages.Select(
+            q => ((MonoBehaviour)q).GetComponent<ClickableObject>()).ToList();
+        h.destination = PathFinder.FindPath(objects, h).interest?.GetComponent<Building>();
     }
 
     /// <summary>

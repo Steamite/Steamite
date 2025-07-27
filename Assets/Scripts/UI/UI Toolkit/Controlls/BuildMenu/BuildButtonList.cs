@@ -68,7 +68,7 @@ namespace BottomBar.Building
 
         protected override CustomRadioButton DefaultMakeItem()
         {
-            CustomRadioButton button = new(BUILD_BUTTON_CLASS, -1, false, true);
+            CustomRadioButton button = new(BUILD_BUTTON_CLASS, -1, this, true);
             button.Add(new());
             button[0].name = "img";
             button[0].AddToClassList("building-background");

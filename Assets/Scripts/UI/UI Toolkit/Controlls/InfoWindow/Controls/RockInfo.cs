@@ -38,8 +38,10 @@ public partial class RockInfo : InfoWindowControl
         Add(element);
 
         //inventory
-        Add(new Label("Yeild") { name = "Resource-Header" });
-        Add(yeild = new ResList());
+        element = new() { name = "Group" };
+        element.Add(new Label("Yeild") { name = "Resource-Header" });
+        element.Add(yeild = new ResList());
+        Add(element);
         yeild.verticalPadding = 2;
     }
 }

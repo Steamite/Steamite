@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace AbstractControls
@@ -11,7 +12,8 @@ namespace AbstractControls
 
         public string styleClass;
 
-        bool inGroup;
+        CustomRadioButtonGroup buttonGroup = null;
+        CustomRadioButtonList buttonList = null;
         public CustomRadioButton()
         {
             styleClass = "save-radio-button";
@@ -21,13 +23,25 @@ namespace AbstractControls
         }
 
 
-        public CustomRadioButton(string _styleClass, int _value, bool _inGroup, bool _toggle = false)
+        public CustomRadioButton(string _styleClass, int _value, CustomRadioButtonGroup group, bool _toggle = false)
         {
             ClearClassList();
             styleClass = _styleClass;
             AddToClassList(_styleClass);
             selIndex = _value;
-            inGroup = _inGroup;
+            buttonGroup = group;
+            buttonGroup.AddButton(this);
+            toggle = _toggle;
+            RegisterCallback<ClickEvent>((_) => Select());
+        }
+
+        public CustomRadioButton(string _styleClass, int _value, CustomRadioButtonList list, bool _toggle = false)
+        {
+            ClearClassList();
+            styleClass = _styleClass;
+            AddToClassList(_styleClass);
+            selIndex = _value;
+            buttonList = list;
             toggle = _toggle;
             RegisterCallback<ClickEvent>((_) => Select());
         }
@@ -68,22 +82,10 @@ namespace AbstractControls
             if (UpdateGroup)
             {
                 VisualElement el = this;
-                if (inGroup)
-                {
-                    do
-                    {
-                        el = el.parent;
-                    } while (el.parent != null && el is not CustomRadioButtonGroup);
-                    return ((CustomRadioButtonGroup)el).Select(selIndex);
-                }
+                if (buttonList != null)
+                    buttonList.Select(selIndex);
                 else
-                {
-                    do
-                    {
-                        el = el.parent;
-                    } while (el.parent != null && el is not CustomRadioButtonList);
-                    return ((CustomRadioButtonList)el).Select(selIndex);
-                }
+                    buttonGroup.Select(selIndex);
             }
             return true;
         }
@@ -107,6 +109,11 @@ namespace AbstractControls
             {
                 ToolkitUtils.ChangeClassWithoutTransition(styleClass + "-selected", styleClass, this);
             }
+        }
+        protected void Rotate(TransitionEndEvent _)
+        {
+            Debug.Log(ClassListContains("rotate"));
+            ToggleInClassList("rotate");
         }
     }
 }

@@ -59,7 +59,7 @@ class BuildEditor : EditorWindow
             height = 0;
             gridItemTypes = null;
         }
-        mesh = inspectedBuilding.GetComponent<MeshFilter>().sharedMesh;
+        //mesh = inspectedBuilding.GetComponent<MeshFilter>().sharedMesh;
         var v = GetWindow(typeof(BuildEditor));
         v.maxSize = new(600, 600);
         v.minSize = new(200, 200);
@@ -153,20 +153,23 @@ class BuildEditor : EditorWindow
             case GridItemType.None:
                 GUI.backgroundColor = Color.black;
                 break;
+            case GridItemType.Anchor:
+                GUI.backgroundColor = Color.green;
+                break;
             case GridItemType.Road:
                 GUI.backgroundColor = Color.yellow;
-                break;
-            case GridItemType.Water:
-                GUI.backgroundColor = Color.blue;
                 break;
             case GridItemType.Entrance:
                 GUI.backgroundColor = Color.white;
                 break;
-            case GridItemType.Anchor:
-                GUI.backgroundColor = Color.green;
-                break;
             case GridItemType.Pipe:
                 GUI.backgroundColor = Color.darkOrange;
+                break;
+            case GridItemType.WaterSource:
+                GUI.backgroundColor = Color.blue;
+                break;
+            case GridItemType.ResourceSource:
+                GUI.backgroundColor = Color.blue;
                 break;
         }
     }

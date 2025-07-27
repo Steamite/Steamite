@@ -115,7 +115,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
             WriteSave(
                 $"{tmpPath}/Grid.json",
                 jsonSerializer,
-                new BuildsAndChunksSave(SaveBuildings(), SaveChunks()));
+                new BuildsAndChunksSave(SaveBuildings(), SaveChunks(), SaveVeins()));
 
             for (int i = 0; i < 5; i++)
                 WriteSave(
@@ -191,12 +191,12 @@ public class SaveController : MonoBehaviour, IAfterLoad
 
 
     #region Save Parts
-    BSave[] SaveBuildings()
+    BuildingSave[] SaveBuildings()
     {
-        BSave[] bSaves = new BSave[MyGrid.Buildings.Count];
+        BuildingSave[] bSaves = new BuildingSave[MyGrid.Buildings.Count];
         for (int i = 0; i < bSaves.Length; i++)
         {
-            bSaves[i] = MyGrid.Buildings[i].Save() as BSave;
+            bSaves[i] = MyGrid.Buildings[i].Save() as BuildingSave;
         }
         return bSaves;
     }
@@ -208,6 +208,15 @@ public class SaveController : MonoBehaviour, IAfterLoad
             chunkSave[i] = MyGrid.chunks[i].Save() as ChunkSave;
         }
         return chunkSave;
+    }
+    VeinSave[] SaveVeins()
+    {
+        VeinSave[] veinSave = new VeinSave[MyGrid.veins.Count];
+        for (int i = 0; i < MyGrid.veins.Count; i++)
+        {
+            veinSave[i] = MyGrid.veins[i].Save() as VeinSave;
+        }
+        return veinSave;
     }
     //------Game State------\\
     GameStateSave SaveGameState(bool autoSave)

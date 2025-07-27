@@ -9,15 +9,15 @@
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
     position: absolute;
-}
-
-.location-button-selected {
-    background-color: rgba(0, 0, 0, 0);
-    border-top-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-    position: absolute;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    overflow: visible;
 }
 
 .location-button > VisualElement {
@@ -34,8 +34,21 @@
     -unity-background-image-tint-color: rgb(181, 166, 66);
 }
 
-.location-button-selected > VisualElement {
+.location-button:disabled:hover > VisualElement {
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    scale: 1 1;
+}
+
+.location-button-selected {
     background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    position: absolute;
+}
+
+.location-button-selected > VisualElement {
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
@@ -43,11 +56,14 @@
     -unity-background-image-tint-color: rgb(121, 111, 44);
     transition-duration: 1ms, 0.2s, 0.2s;
     transition-property: rotate, scale, -unity-background-image-tint-color;
-    rotate: 0;
     transition-timing-function: linear, ease, ease;
     background-image: url("project://database/Assets/Sprites/Textures/1filled%20cog@2x.png?fileID=2800000&guid=5a869fc421e59114e9ecac48c51af2ed&type=3#1filled cog@2x");
     flex-grow: 1;
     scale: 1.1 1.1;
+    rotate: 0;
+}
+
+____ {
 }
 
 .rotate > VisualElement {
@@ -55,4 +71,32 @@
     transition-duration: 4s;
     transition-property: rotate;
     transition-timing-function: linear;
+}
+
+.convoy-label {
+    -unity-text-align: middle-right;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 10px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+_____ {
+}
+
+.outpost-group {
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.13);
+    flex-direction: row-reverse;
+    height: 120px;
+    align-self: center;
+    align-items: center;
+    padding-right: 10px;
+    padding-left: 10px;
 }

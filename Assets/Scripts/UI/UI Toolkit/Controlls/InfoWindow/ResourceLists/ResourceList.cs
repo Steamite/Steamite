@@ -211,6 +211,16 @@ namespace InfoWindowElements
                     (hierarchy.ElementAt(0) as ScrollView).verticalScrollerVisibility = ScrollerVisibility.Hidden;
                     showEmpty = true;
                     break;
+                case Vein:
+                    /*hierarchy[i].SetBinding(
+                nameof(GroundLevel.Unlocked),
+                nameof(enabledSelf),
+                dataSource: level,
+                check: true);*/
+                    binding = BindingUtil.CreateBinding(nameof(Vein.Storing));
+                    binding.sourceToUiConverters.AddConverter((ref Resource stored) => ToUIRes(stored as T));
+                    SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    break;
                 default:
                     throw new NotImplementedException();
             }

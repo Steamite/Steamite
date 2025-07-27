@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Unity.Hierarchy;
 using Unity.Properties;
@@ -27,6 +28,8 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     public Transform roads;
     /// <summary>Water holder</summary>
     public Transform waters;
+    /// <summary>Vein holder</summary>
+    public Transform veins;
     /// <summary>Chunk holder</summary>
     public Transform chunks;
     /// <summary>Building holder</summary>
@@ -76,6 +79,9 @@ public class GroundLevel : MonoBehaviour, IUpdatable
                             continue;
                         case Water:
                             Gizmos.color = Color.darkBlue;
+                            break;
+                        case Vein:
+                            Gizmos.color = Color.blanchedAlmond;
                             break;
                     }
                     Gizmos.DrawCube(vec, new(1, 1, 1));
@@ -210,8 +216,9 @@ public class GroundLevel : MonoBehaviour, IUpdatable
                     overlays.Add(new(itemPos.x, itemPos.z), load ? -1 : i);
                     r?.entryPoints.Add(building.id);
                     break;
-                case GridItemType.Water:
-                    (building as WaterPump).waterSource = GetGridItem(new(x, y)) as Water;
+                case GridItemType.WaterSource:
+                case GridItemType.ResourceSource:
+                    (building as NeedSourceProduction).Source = GetGridItem(new(x, y)) as TileSource;
                     break;
             }
         }
@@ -282,6 +289,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         List<Image> foreignEntryOverlay = new();
         List<Image> entrances = new();
         int activeEntrances = -1;
+        Vein source = null;
         for (int i = 0; i < building.blueprint.itemList.Count; i++)
         {
             NeededGridItem item = building.blueprint.itemList[i];
@@ -321,15 +329,26 @@ public class GroundLevel : MonoBehaviour, IUpdatable
                     if (GetGridItem(itemPos) is Road)
                         activeEntrances++;
                     break;
-                case GridItemType.Water:
+                case GridItemType.WaterSource:
                     c = new(0.211765f, 0.1686275f, 1, 0.25f);
                     errC = new(0.8f, 0.2196079f, 1, 0.25f);
-                    CheckWaterObscursion(
+                    CheckWaterPresence(
                         itemPos,
                         tile.GetComponent<Image>(),
                         c,
                         errC,
                         ref canBuild);
+                    break;
+                case GridItemType.ResourceSource:
+                    c = new(0.211765f, 0.1686275f, 1, 0.25f);
+                    errC = new(0.8f, 0.2196079f, 1, 0.25f);
+                    CheckVeinPresence(
+                        itemPos,
+                        tile.GetComponent<Image>(),
+                        c,
+                        errC,
+                        ref canBuild,
+                        ref source);
                     break;
                 case GridItemType.Pipe:
                     c = new(1f, 0.5490196f, 0f, 0.25f);
@@ -392,18 +411,38 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     }
 
 
-    void CheckWaterObscursion(GridPos pos, Image image, Color baseColor, Color errColor, ref bool canBuild)
+    void CheckWaterPresence(
+        GridPos pos, Image image, 
+        Color baseColor, Color errColor, ref bool canBuild)
     {
         ClickableObject clickable = GetGridItem(pos);
-        if (clickable != null && clickable is Water)
+        if (clickable != null && clickable is Water water)
         {
             image.color = baseColor;
+            return;
         }
-        else
+        image.color = errColor;
+        canBuild = false;
+    }
+
+    void CheckVeinPresence(
+        GridPos pos, Image image, 
+        Color baseColor, Color errColor, 
+        ref bool canBuild, ref Vein source)
+    {
+        ClickableObject clickable = GetGridItem(pos);
+        if (clickable != null && clickable is Vein _vein)
         {
-            image.color = errColor;
-            canBuild = false;
+            if (source == null)
+                source = _vein;
+            if (source == _vein)
+            {
+                image.color = baseColor;
+                return;
+            }
         }
+        image.color = errColor;
+        canBuild = false;
     }
 
     /// <summary>
@@ -464,12 +503,13 @@ public class GroundLevel : MonoBehaviour, IUpdatable
 
         GridSave grid = new(width, height, _unlocked);
         save.gridSave[level] = grid;//= new ClickableObjectSave[width, height];
-        FillRocks(save.gridSave[level]); // adds ores
-        FillWater(save.gridSave[level]); // adds water
-        FillBuildings(save, level); // adds Buildings and (entry points)
-
+        CreateRocks(save.gridSave[level]); // adds ores
+        CreateWater(save.gridSave[level]); // adds water
+        CreateVeins(save, level);
+        CreateBuildings(save, level); // adds Buildings
         gameObject.SetActive(false);
     }
+
 
     #region specific Creations
     /// <summary>Registers all instantiated roads.</summary>
@@ -483,39 +523,58 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     }
 
     /// <summary>Registers all instantiated rocks.</summary>
-    void FillRocks(GridSave save)
-    {
+    void CreateRocks(GridSave save)
+    { 
         for (int j = 0; j < rocks.childCount; j++)
         {
             Rock rock = rocks.GetChild(j).GetComponent<Rock>();
             GridPos vec = rock.GetPos();
-            rock.UniqueID();
+            rock.id = j + 1;
             save.grid[Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.z)] = rock.Save();
         }
     }
 
-    /// <summary>Registers all instantiated waters.</summary>
-    void FillWater(GridSave save)
+    /// <summary>Registers all instantiated sources.</summary>
+    void CreateWater(GridSave save)
     {
         for (int j = 0; j < waters.childCount; j++)
         {
             Water water = waters.GetChild(j).GetComponent<Water>();
+            water.id = j+1;
             GridPos vec = water.GetPos();
             save.grid[Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.z)] = water.Save();
         }
     }
 
-    /// <summary>Registers all instantiated buildings.</summary>
-    void FillBuildings(WorldSave save, int level)
+    private void CreateVeins(WorldSave save, int level)
     {
-        List<BSave> buildingList = buildings.GetComponentsInChildren<Building>().Select(q =>
+        int idCounter = save.objectsSave.veins.Length + 1;
+        List<VeinSave> veinList = veins.GetComponentsInChildren<Vein>().Select(vein =>
+        {
+            GridPos vec = vein.GetPos();
+            int x = Mathf.FloorToInt(vec.x);
+            int z = Mathf.FloorToInt(vec.z);
+            vein.id = idCounter++;
+            for (int j = 0; j < vein.xSize; j++)
+                for (int k = 0; k < vein.zSize; k++)
+                    save.gridSave[level].grid[x + j, z + k] = new();
+            return vein.Save() as VeinSave;
+        }).ToList();
+        veinList.AddRange(save.objectsSave.veins);
+        save.objectsSave.veins = veinList.ToArray();
+    }
+
+    /// <summary>Registers all instantiated buildings.</summary>
+    void CreateBuildings(WorldSave save, int level)
+    {
+        List<BuildingSave> buildingList = buildings.GetComponentsInChildren<Building>().Select(q =>
         {
             if (!q.constructed)
                 q.maximalProgress = q.CalculateMaxProgress();
             if (q is IStorage)
                 ((IStorage)q).SetupStorage(100);
 
-            BSave bSave = q.Save() as BSave;
+            BuildingSave bSave = q.Save() as BuildingSave;
             bSave.gridPos.y = level;
             return bSave;
         }).ToList();

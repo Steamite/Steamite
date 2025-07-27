@@ -55,6 +55,36 @@
     justify-content: space-evenly;
 }
 
+.summary {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.new-balance {
+    flex-grow: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 35%;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.date-length {
+    min-width: 25%;
+    margin-right: 10px;
+}
+
+.date-confirm {
+    flex-direction: row;
+}
+
+.date-label {
+    -unity-text-align: upper-center;
+}
+
 #Deals > #Deal {
     height: 30%;
     max-height: 30%;
@@ -135,16 +165,6 @@
 
 TradeView > #Summary {
     flex-grow: 1;
-}
-
-#Numbers {
-    flex-grow: 0;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    height: 35%;
-    padding-left: 5%;
-    padding-right: 5%;
 }
 
 #NewBalance {

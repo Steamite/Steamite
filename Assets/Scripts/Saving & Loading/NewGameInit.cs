@@ -20,7 +20,7 @@ public class NewGameInit : MonoBehaviour
     {
         save = new();
         save.gridSave = new GridSave[5];
-        save.objectsSave = new(new BSave[] { }, new ChunkSave[] { });
+        save.objectsSave = new(new BuildingSave[] { }, new ChunkSave[] { }, new VeinSave[] {});
         for (int i = 0; i < 5; i++)
         {
             mainLevel[i].CreateGrid(save, i);
@@ -41,6 +41,12 @@ public class NewGameInit : MonoBehaviour
             money = 2000,
             prodLevels = tradeHolder.startingLocation.config.production.Select(q => q.min).ToList(),
             statLevels = tradeHolder.startingLocation.config.stats.Select(q => q.min).ToList(),
+            outposts = new()
+            {
+                new(),
+                new(),
+                new()
+            }
         };
         return save;
     }
