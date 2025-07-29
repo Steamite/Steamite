@@ -19,7 +19,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     public const int CHUNK_OFFSET = 1;
 
     public const float HUMAN_OFFSET = 0.47f;
-    public const float ROCK_OFFSET = 1.5f;
+    public const float ROCK_OFFSET = 0.5f;
     public const float ROAD_OFFSET = 0.45f;
     #endregion
 
@@ -39,7 +39,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// </summary>
     /// <param name="gp">Position to create at.</param>
     /// <param name="doSet">If the road should be registered.</param>
-    public void CreateRoad(GridPos gp, bool doSet)
+    public Road CreateRoad(GridPos gp, bool loading = false)
     {
         Road replacement = Instantiate(
             tilePrefabs.GetPrefab<Road>("Road"),
@@ -48,8 +48,12 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             MyGrid.FindLevelRoads(gp.y)); // creates a road on the place of tiles
 
         replacement.objectName = replacement.objectName.Replace("(Clone)", "");
-        if (doSet)
-            MyGrid.SetGridItem(gp, replacement);
+        MyGrid.SetGridItem(gp, replacement);
+        if (loading)
+        {
+            replacement.RevealRocks();
+        }
+        return replacement;
     }
 
     /// <summary>
@@ -166,7 +170,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     }
 
     /// <summary>Loads a Rock.</summary>
-    public void CreateSavedRock(RockSave save, GridPos gp, List<MinableRes> resData, Material dirtMat)
+    public Rock CreateSavedRock(RockSave save, GridPos gp, List<MinableRes> resData, Material dirtMat)
     {
         Rock rock = Instantiate(
             tilePrefabs.GetPrefab<Rock>("Dirt"),
@@ -178,7 +182,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         {
             MinableRes res = resData.FirstOrDefault(q => q.name == save.objectName);
             if (res != null)
-                rock.GetComponent<MeshRenderer>().material.color = res.color;
+                rock.GetComponent<MeshRenderer>().material.SetColor("_Normal_Color", res.color);
             else
                 rock.GetComponent<MeshRenderer>().material = dirtMat;
         }
@@ -191,6 +195,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             SceneRefs.JobQueue.toBeDug.Add(rock);
             SceneRefs.GridTiles.HighLight(SceneRefs.GridTiles.toBeDugColor, rock.gameObject);
         }
+        return rock;
     }
 
     /// <summary>Loads a Water.</summary>
@@ -198,7 +203,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     {
         Water newSource = Instantiate(
              tilePrefabs.GetPrefab<Water>("Water"),
-             gp.ToVec(),
+             gp.ToVec(ROAD_OFFSET),
              Quaternion.identity,
              MyGrid.FindLevelWater(gp.y));
         newSource.Load(save);

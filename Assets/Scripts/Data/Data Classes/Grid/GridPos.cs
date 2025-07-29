@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 /// <summary>
 /// Class used for unitialized coordnites.<br/>

@@ -1111,7 +1111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   opaqueMaterial: {fileID: 2100000, guid: 53b082ebb47dbf642aca567c53d62751, type: 2}
-  transparentMaterial: {fileID: 2100000, guid: 685d6310e1b21ce429d6d295230e1cfb, type: 2}
+  transparentMaterial: {fileID: 2100000, guid: 70b0af3bc4134144c84cb2af04028a8f, type: 2}
 --- !u!4 &5026351469592114601
 Transform:
   m_ObjectHideFlags: 0

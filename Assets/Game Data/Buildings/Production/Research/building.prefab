@@ -612,8 +612,8 @@ MonoBehaviour:
     types: 
     ammounts: 
     baseResource:
-      types: 
-      ammounts: 
+      types: 02000000
+      ammounts: 0a000000
     mod:
       percentMod: 1
       absoluteMod: 0

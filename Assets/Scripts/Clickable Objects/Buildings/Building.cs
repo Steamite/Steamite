@@ -392,8 +392,8 @@ public class Building : StorageObject
         {
             Material newMat = new(material);
             Color c = _renderer.material.color;
-            newMat.color = new(c.r, c.g, c.b, 
-                0.1f + (maximalProgress != 0 ? (constructionProgress / maximalProgress) * 0.9f : 0));
+            newMat.color = new(c.r, c.g, c.b);
+            newMat.SetFloat("_Progress", 0.1f + (constructionProgress / maximalProgress) * 0.9f);
             _renderer.material = newMat;
         }
         else
@@ -404,9 +404,7 @@ public class Building : StorageObject
     {
         for (int i = 0; i < meshRenderers.Count; i++)
         {
-            Color color = meshRenderers[i].material.color;
-            meshRenderers[i].material.color
-                = new(color.r, color.g, color.b, 0.1f + (constructionProgress / maximalProgress) * 0.9f);
+            meshRenderers[i].material.SetFloat("_Progress", 0.1f + (constructionProgress / maximalProgress) * 0.9f);
         }
     }
     #endregion

@@ -11,6 +11,7 @@ public static class MyGrid
     /// <summary>Number of Levels in game.</summary>
     public const int NUMBER_OF_LEVELS = 5;
 
+    public const int ROAD_SCAN_RADIUS = 2;
 
     public static List<Pipe> Pipes => pipes;
     static List<Pipe> pipes = new();
@@ -259,7 +260,7 @@ public static class MyGrid
                         gridSave.grid[x, y] = null;
                         break;
                     case Vein:
-                        gridSave.grid[x, y] = new();
+                        gridSave.grid[x, y] = new() { id = -2 };
                         break;
                     default:
                         gridSave.grid[x, y] = (click is Building) ? null : click?.Save();
@@ -279,6 +280,7 @@ public static class MyGrid
 
         groundLevel.ClearGrid(gridSave.width);
         groundLevel.gameObject.SetActive(i == 2);
+        List<Road> roads = new();
         for (int x = 0; x < gridSave.width; x++)
         {
             for (int z = 0; z < gridSave.width; z++)
@@ -286,13 +288,18 @@ public static class MyGrid
                 switch (gridSave.grid[x, z])
                 {
                     case RockSave:
-                        SceneRefs.ObjectFactory.CreateSavedRock(gridSave.grid[x, z] as RockSave, new(x, i, z), rockData, dirtMat);
+                        Rock r = SceneRefs.ObjectFactory.CreateSavedRock(gridSave.grid[x, z] as RockSave, new(x, i, z), rockData, dirtMat);
+                        r.Hide();
                         break;
                     case WaterSave:
                         SceneRefs.ObjectFactory.CreateSavedWater(gridSave.grid[x, z] as WaterSave, new(x, i, z));
                         break;
                     default:
-                        SceneRefs.ObjectFactory.CreateRoad(new(x, i, z), true);
+                        if (gridSave.grid[x, z] == null)
+                        {
+                            GridPos pos = new(x, i, z);
+                            roads.Add(SceneRefs.ObjectFactory.CreateRoad(pos));
+                        }
                         break;
                 }
                 if (gridSave.pipes[x, z] != null)
@@ -300,6 +307,10 @@ public static class MyGrid
                     SceneRefs.ObjectFactory.CreateSavedPipe(gridSave.pipes[x, z], new GridPos(x, i, z));
                 }
             }
+        }
+        foreach (Road road in roads)
+        {
+            road.RevealRocks();
         }
     }
     #endregion

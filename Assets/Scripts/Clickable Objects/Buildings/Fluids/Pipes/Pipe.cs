@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.MemoryProfiler;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
 public class Pipe : Building
@@ -254,7 +252,7 @@ public class Pipe : Building
     public override void Load(ClickableObjectSave save)
     {
         base.Load(save);
-        network.networkID = (save as PipeBSave).networkID;
+        network.networkID = -1;// = (save as PipeBSave).networkID;
         PlacePipe();
     }
     #endregion
