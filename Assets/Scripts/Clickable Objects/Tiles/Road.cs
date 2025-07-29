@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 /// <summary>Provides paths for <see cref="Human"/>s.</summary>
@@ -45,5 +47,31 @@ public class Road : ClickableObject
 
     #region Save
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null) => null;
-    #endregion
+
+    public void RevealRocks()
+    {
+        GridPos pos = GetPos();
+        int k;
+        int baseX = Mathf.RoundToInt(pos.x);
+        int baseZ = Mathf.RoundToInt(pos.z);
+        GridPos checkPos = new(0, pos.y, 0);
+        int radius = MyGrid.ROAD_SCAN_RADIUS;
+        for (int i = -radius; i <= radius; i++)
+        {
+            for (int j = -radius; j <= radius; j++)
+            {
+                k = Math.Abs(i) + Math.Abs(j);
+                if (k > 0 && k < MyGrid.ROAD_SCAN_RADIUS + 1)
+                {
+                    checkPos.x = baseX + i;
+                    checkPos.z = baseZ + j;
+                    if (MyGrid.GetGridItem(checkPos) is Rock rock)
+                    {
+                        rock.Unhide();
+                    }
+                }
+            }
+        }
+    }
 }
+    #endregion

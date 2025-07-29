@@ -171,15 +171,15 @@ public class LoadingScreen : MonoBehaviour
         {
             loadingSlider.value = value;
         });
-        FillGrid(progress, worldSave);
+        LoadMap(progress, worldSave);
         yield return new();
-        FillGameState(progress, gameState);
+        LoadGameState(progress, gameState);
         yield return new();
-        FillHumans(progress, humanSaves);
+        LoadHumans(progress, humanSaves);
         yield return new();
-        FillResearches(progress, researchSave);
+        LoadResearches(progress, researchSave);
         yield return new();
-        FillTrade(progress, tradeSave);
+        LoadTrade(progress, tradeSave);
     }
 
 
@@ -189,7 +189,7 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="worldSave"></param>
-    void FillGrid(IProgress<int> progress, WorldSave worldSave)
+    void LoadMap(IProgress<int> progress, WorldSave worldSave)
     {
         actionText.text = "Loading grid";
         LoadGrid(progress, worldSave.gridSave);
@@ -264,7 +264,7 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="humanSaves"></param>
-    void FillHumans(IProgress<int> progress, HumanSave[] humanSaves)
+    void LoadHumans(IProgress<int> progress, HumanSave[] humanSaves)
     {
         actionText.text = "Kidnaping workers";
         SceneRefs.Humans.LoadHumans(progress, humanSaves, ref humanActivation, HUMAN_WEIGHT, ref progressGlobal);
@@ -278,7 +278,7 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="gameState"></param>
-    void FillGameState(IProgress<int> progress, GameStateSave gameState)
+    void LoadGameState(IProgress<int> progress, GameStateSave gameState)
     {
         SceneRefs.JobQueue.priority = gameState.priorities;
         SceneRefs.Tick.Load(gameState);
@@ -289,7 +289,7 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="researchSave"></param>
-    void FillResearches(IProgress<int> progress, ResearchSave researchSave)
+    void LoadResearches(IProgress<int> progress, ResearchSave researchSave)
     {
         actionText.text = "Remembering research";
         UIRefs.ResearchWindow.LoadGame(researchSave);
@@ -300,7 +300,7 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="tradeSave"></param>
-    void FillTrade(IProgress<int> progress, TradeSave tradeSave)
+    void LoadTrade(IProgress<int> progress, TradeSave tradeSave)
     {
         actionText.text = "Making Deals";
         UIRefs.TradingWindow.LoadGame(tradeSave);

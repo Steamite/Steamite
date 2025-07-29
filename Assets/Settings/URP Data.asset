@@ -24,8 +24,9 @@ MonoBehaviour:
     probeSamplingDebugMesh: {fileID: 0}
     probeSamplingDebugTexture: {fileID: 0}
     probeVolumeBlendStatesCS: {fileID: 0}
-  m_RendererFeatures: []
-  m_RendererFeatureMap: 
+  m_RendererFeatures:
+  - {fileID: 7036933977140508741}
+  m_RendererFeatureMap: 4538563f2b36a861
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   m_AssetVersion: 2
@@ -44,9 +45,41 @@ MonoBehaviour:
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 2
-  m_DepthPrimingMode: 0
-  m_CopyDepthMode: 1
+  m_DepthPrimingMode: 1
+  m_CopyDepthMode: 0
   m_DepthAttachmentFormat: 0
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 0
+--- !u!114 &7036933977140508741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f7ba73f27184da43a165f020b65aa9b, type: 3}
+  m_Name: OutlineRenderFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  FeatureSettings:
+    RenderPassEvent: 600
+    LayerMask:
+      serializedVersion: 2
+      m_Bits: 1472
+    RenderingLayerMask:
+      serializedVersion: 0
+      m_Bits: 2
+    OverrideMaterial: {fileID: -876546973899608171, guid: b73f840679d593a4a9d1e5c5b5317a9d, type: 3}
+    BlitMaterial: {fileID: -876546973899608171, guid: 5a8ad38e9909e014fb7c26538673d9cc, type: 3}
+    ClearDepth: 0
+  MaterialSettings:
+    OutlineScale: 0.3
+    RobertsCrossMultiplier: 100
+    DepthThreshold: 10
+    NormalThreshold: 0.1
+    SteepAngleThreshold: 4.18
+    SteepAngleMultiplier: 25
+    OutlineColor: {r: 1, g: 1, b: 1, a: 1}

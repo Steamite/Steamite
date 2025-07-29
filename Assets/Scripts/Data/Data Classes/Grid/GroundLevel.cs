@@ -557,7 +557,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             vein.id = idCounter++;
             for (int j = 0; j < vein.xSize; j++)
                 for (int k = 0; k < vein.zSize; k++)
-                    save.gridSave[level].grid[x + j, z + k] = new();
+                    save.gridSave[level].grid[x + j, z + k] = new() { id = -1};
             return vein.Save() as VeinSave;
         }).ToList();
         veinList.AddRange(save.objectsSave.veins);

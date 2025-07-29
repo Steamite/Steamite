@@ -496,6 +496,7 @@ public class GridTiles : MonoBehaviour
     void AddPipe(GridPos pos, Transform pipes)
     {
         Pipe pipe = Instantiate(blueprintPrefab as Pipe, pos.ToVec(ClickableObjectFactory.PIPE_OFFSET), Quaternion.identity, pipes);
+        pipe.maximalProgress = pipe.CalculateMaxProgress();
         pipe.GetRenderComponents();
         pipe.ChangeRenderMode(true);
         HighLight(pipe.CanPlace(false) && MyRes.CanAfford(pipe.Cost * (tempMarkedTiles.Count + 1 + markedTiles.SelectMany(q => q).Count())) ? Color.blue : Color.red, pipe.gameObject);
@@ -529,23 +530,7 @@ public class GridTiles : MonoBehaviour
             .Union(toBeChanged.GetComponentsInChildren<SkinnedMeshRenderer>()
             .Where(q => q).SelectMany(q => q.materials)))
         {
-            LightUp(c, material);
-        }
-    }
-
-    /// <summary>
-    /// Sets highlight to m, or disables it if c is black(0,0,0,N).
-    /// </summary>
-    /// <param name="c"></param>
-    /// <param name="m"></param>
-    void LightUp(Color c, Material m)
-    {
-        if (c.r == 0 && c.g == 0 && c.b == 0)
-            m.DisableKeyword("_EMISSION");
-        else
-        {
-            m.SetColor("_EmissionColor", c);
-            m.EnableKeyword("_EMISSION");
+            material.SetColor("_EmissionColor", c);
         }
     }
     #endregion

@@ -87,7 +87,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 53b082ebb47dbf642aca567c53d62751, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -122,18 +122,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: 
-  selected: 0
   id: -1
   objectName: Dummy
   localRes:
-    stored:
-      capacity: -1
-      type: 
-      ammount: 
+    types: 
+    ammounts: 
+    capacity:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
     requests: []
     carriers: []
     mods: 
-  myColor: []
+  meshRenderers: []
+  buildingCategories: 0
   blueprint:
     size:
       x: 0
@@ -149,9 +153,20 @@ MonoBehaviour:
       y: 0
     itemList: []
   cost:
-    capacity: -1
-    type: 
-    ammount: 
+    types: 
+    ammounts: 
+    baseResource:
+      types: 
+      ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
+    money:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0

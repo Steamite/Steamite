@@ -1,7 +1,9 @@
+using System;
 using System.Data;
 using System.Linq;
 using Unity.Properties;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Makes up most of the map, holds valuable resources. <br/>
@@ -26,6 +28,8 @@ public class Rock : ClickableObject
 
     /// <summary>Prefab to replace.</summary>
     public string assetPath;
+
+    bool hidden = true;
     #endregion
 
     #region Properties
@@ -66,6 +70,15 @@ public class Rock : ClickableObject
             transform.position.z);
     }
     #endregion Basic Operations
+
+    #region Mouse Events
+
+    public override void OnPointerDown(PointerEventData eventData)
+    {
+        if(hidden != true)
+            base.OnPointerDown(eventData);
+    }
+    #endregion
 
     #region Window
     /// <summary>
@@ -137,8 +150,7 @@ public class Rock : ClickableObject
     /// <summary>Colors dirt, based on integrity.</summary>
     public void ColorWithIntegrity()
     {
-        float f = 1;
-        Color c = gameObject.GetComponent<MeshRenderer>().material.color;
+        float f;
         switch (originalIntegrity)
         {
             case < 2:
@@ -157,8 +169,24 @@ public class Rock : ClickableObject
                 f = 0.2f;
                 break;
         }
-        gameObject.GetComponent<MeshRenderer>().material.color = c * f;
+        gameObject.GetComponent<MeshRenderer>().material
+            .SetFloat("_Hadrness", f); 
     }
 
+    public void Hide()
+    {
+        Material material = GetComponent<MeshRenderer>().material;
+        material.SetFloat("_isHidden", 1);
+        material.EnableKeyword("_SPECULARHIGHLIGHTS_OFF");
+        hidden = true;
+    }
+
+    public void Unhide()
+    {
+        Material material = GetComponent<MeshRenderer>().material;
+        material.SetFloat("_isHidden", 0);
+        material.DisableKeyword("_SPECULARHIGHLIGHTS_OFF");
+        hidden = false;
+    }
     #endregion
 }
