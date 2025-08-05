@@ -1,0 +1,195 @@
+using System;
+using System.Data;
+using System.Linq;
+using Unity.Properties;
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+/// <summary>
+/// Makes up most of the map, holds valuable resources. <br/>
+/// Can be Dug out.
+/// </summary>
+public class Rock : ClickableObject
+{
+    #region Variables
+    /// <summary>Data about the rock(set).</summary>
+    public Resource rockYield;
+
+    /// <summary>Remaining rock integrity.</summary>
+    [SerializeField] float integrity;
+    public float originalIntegrity;
+
+
+    /// <summary>Assigned <see cref="Human"/>.</summary>
+    Human assigned;
+
+    /// <summary>Is marked to be digged out.</summary>
+    public bool toBeDug;
+
+    /// <summary>Prefab to replace.</summary>
+    public string assetPath;
+
+    bool hidden = true;
+    public bool isQuest = false;
+    #endregion
+
+    #region Properties
+    /// <inheritdoc cref="integrity"/>
+    [CreateProperty]
+    public float Integrity
+    {
+        get { return integrity; }
+        set
+        {
+            integrity = value;
+        }
+    }
+
+    /// <inheritdoc cref="assigned"/>
+    [CreateProperty]
+    public Human Assigned
+    {
+        get { return assigned; }
+        set
+        {
+            assigned = value;
+            UIUpdate(nameof(Assigned));
+        }
+    }
+    #endregion
+
+    #region Basic Operations
+    /// <summary>Creates a list from all Rocks on the same level.</summary>
+    public override void UniqueID() => CreateNewId(transform.parent.GetComponentsInChildren<Rock>().Select(q => q.id).ToList());
+
+    /// <inheritdoc/>
+    public override GridPos GetPos()
+    {
+        return new GridPos(
+            transform.position.x,
+            (transform.position.y - ClickableObjectFactory.ROCK_OFFSET) / ClickableObjectFactory.LEVEL_HEIGHT,
+            transform.position.z);
+    }
+    #endregion Basic Operations
+
+    #region Mouse Events
+
+    public override void OnPointerDown(PointerEventData eventData)
+    {
+        if(hidden != true)
+            base.OnPointerDown(eventData);
+    }
+    #endregion
+
+    #region Window
+    /// <summary>
+    /// <inheritdoc/>
+    /// And opens the info window with <see cref="InfoMode.Rock"/>.
+    /// </summary>
+    /// <returns><inheritdoc/></returns>
+    public override InfoWindow OpenWindow()
+    {
+        InfoWindow info = base.OpenWindow();
+        info.Open(this, InfoMode.Rock);
+        return info;
+    }
+    #endregion Window
+
+    #region Saving
+    /// <inheritdoc/>
+    public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
+    {
+        if (clickable == null)
+            clickable = new RockSave();
+        if (rockYield?.types.Count == 0)
+            (clickable as RockSave).yeild = null;
+        else
+            (clickable as RockSave).yeild = rockYield;
+        (clickable as RockSave).integrity = integrity;
+        (clickable as RockSave).originalIntegrity = originalIntegrity;
+        (clickable as RockSave).toBeDug = toBeDug;
+        return base.Save(clickable);
+    }
+
+    /// <inheritdoc/>
+    public override void Load(ClickableObjectSave save)
+    {
+        integrity = (save as RockSave).integrity;
+        originalIntegrity = (save as RockSave).originalIntegrity;
+        toBeDug = (save as RockSave).toBeDug;
+        rockYield = (save as RockSave).yeild;
+        base.Load(save);
+    }
+    #endregion Saving
+
+    #region Rock actions
+    /// <summary>
+    /// Lowers <see cref="integrity"/>, and if reaches zero the rock is destroyed. <br/>
+    /// Updates UI.
+    /// </summary>
+    /// <param name="damage">Damage to integrity</param>
+    /// <returns>If the rock is destroyed.</returns>
+    public bool DamageRock(float damage)
+    {
+        Integrity -= damage;
+        if (Integrity <= 0)
+        {
+            if (rockYield?.Sum() > 0)
+            {
+                Chunk chunk = SceneRefs.ObjectFactory.CreateChunk(GetPos(), rockYield, true);
+                chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material.color
+                    = GetComponent<MeshRenderer>().material.color;
+            }
+            SceneRefs.ObjectFactory.CreateRoad(GetPos(), true);
+            if (isQuest)
+                SceneRefs.QuestController.DigRock(this);
+            MyGrid.UnsetRock(this);
+            return true;
+        }
+        UIUpdate(nameof(Integrity));
+        return false;
+    }
+
+    /// <summary>Colors dirt, based on integrity.</summary>
+    public void ColorWithIntegrity()
+    {
+        float f;
+        switch (originalIntegrity)
+        {
+            case < 2:
+                f = 1f;
+                break;
+            case < 4:
+                f = 0.8f;
+                break;
+            case < 6:
+                f = 0.6f;
+                break;
+            case < 11:
+                f = 0.4f;
+                break;
+            default:
+                f = 0.2f;
+                break;
+        }
+        gameObject.GetComponent<MeshRenderer>().material
+            .SetFloat("_Hadrness", f); 
+    }
+
+    public void Hide()
+    {
+        Material material = GetComponent<MeshRenderer>().material;
+        material.SetFloat("_isHidden", 1);
+        material.EnableKeyword("_SPECULARHIGHLIGHTS_OFF");
+        hidden = true;
+    }
+
+    public void Unhide()
+    {
+        Material material = GetComponent<MeshRenderer>().material;
+        material.SetFloat("_isHidden", 0);
+        material.DisableKeyword("_SPECULARHIGHLIGHTS_OFF");
+        hidden = false;
+    }
+    #endregion
+}

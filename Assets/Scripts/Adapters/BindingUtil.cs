@@ -26,7 +26,7 @@ public static class BindingUtil
     public static DataBinding CreateBindingTest(this string str)
         => new DataBinding() { dataSourcePath = new PropertyPath(str), bindingMode = BindingMode.ToTarget };
 
-    public static DataBinding SetBinding(this VisualElement element, string sourceProp, string targetProp, ConverterGroup group = null, object dataSource = null, bool check = false)
+    public static DataBinding SetBinding(this VisualElement element, string sourceProp, string targetProp, ConverterGroup group = null, object dataSource = null)
     {
         DataBinding dataBinding = sourceProp.CreateBindingTest();
         if (dataSource != null)
@@ -34,13 +34,11 @@ public static class BindingUtil
         if (group != null)
             dataBinding.ApplyConverterGroupToUI(group);
         element.SetBinding(targetProp, dataBinding);
-        if (check)
-        {
-            BindingResult result;
-            element.TryGetLastBindingToUIResult(targetProp, out result);
-            if (result.status == BindingStatus.Failure)
-                Debug.LogError($"{sourceProp}, {targetProp}:\n {result.message}");
-        }
+#if UNITY_EDITOR // check if binding was succesfull, when in editor
+        element.TryGetLastBindingToUIResult(targetProp, out BindingResult result);
+        if (result.status == BindingStatus.Failure)
+            Debug.LogError($"{sourceProp}, {targetProp}:\n {result.message}");
+#endif
         if (dataSource != null)
             ((IUpdatable)dataSource).UIUpdate(sourceProp);
 

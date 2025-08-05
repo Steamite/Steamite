@@ -1,0 +1,21 @@
+{
+    "name": "ToolkitUI",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f7b814d0c428bc946b5c41a662b35884",
+        "GUID:eec6b33f4459498449813ad7dd0a5e61",
+        "GUID:db2861fd4b998d2498152c60c92f83ea",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:113eef093018d984083e3f6cec948ef0",
+        "GUID:7e11bb69b2308f14d9119fdbedd0254b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

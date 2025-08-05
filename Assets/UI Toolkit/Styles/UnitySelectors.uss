@@ -168,8 +168,10 @@ ________________ {
     min-width: 145px;
 }
 
-VisualElement {
+:root{
     color: rgb(161, 148, 59);
+}
+VisualElement {
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;

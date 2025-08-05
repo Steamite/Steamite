@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ea83d587cab1154288e5e9edaeab4dd, type: 3}
+  m_Name: QuestData
+  m_EditorClassIdentifier: 
+  Categories:
+  - Name: A
+    Objects:
+    - Name: ABCD
+      id: 1660223813
+      description: 
+      state: 0
+      rewards: []
+      objectives:
+      - rid: 7966940435101253930
+    Icon: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 7966940435101253930
+      type: {class: ExcavationObjective, ns: Objectives, asm: Quests}
+      data:
+        maxProgress: 0
+        needToRemove:
+        - x: 15
+          z: 0
+          y: 5

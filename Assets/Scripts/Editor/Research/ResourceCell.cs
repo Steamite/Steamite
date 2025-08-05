@@ -80,7 +80,7 @@ public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
             evt =>
             {
                 allowRemove = true;
-                SetSelection(GetRowIndex((VisualElement)evt.target));
+                SetSelection(evt.target.GetRowIndex(false));
                 evt.StopPropagation();
             });
         return visualElement;
@@ -119,22 +119,13 @@ public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
     #endregion
 
     #region Value Updates
-    int GetRowIndex(VisualElement element)
-    {
-        while (!element.ClassListContains("unity-list-view__item"))
-        {
-            element = element.parent;
-        }
-        return element.parent.IndexOf(element);
-    }
-
     /// <summary>
     /// Changes the ammount of a given type (<paramref name="evt"/>).
     /// </summary>
     /// <param name="evt">Event with the new value and changed element.</param>
     private void ChangeType(ChangeEvent<Enum> evt)
     {
-        int i = GetRowIndex((VisualElement)evt.target);
+        int i = evt.target.GetRowIndex(false);
         int j = resource.types.IndexOf((TEnum)(object)evt.newValue);
         if (j > -1 && i != j)
         {
@@ -154,7 +145,7 @@ public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
     /// <param name="evt">Event with the new value and changed element.</param>
     private void ChangeVal(ChangeEvent<int> evt)
     {
-        int i = GetRowIndex((VisualElement)evt.target);
+        int i = evt.target.GetRowIndex(false);
         resource.ammounts[i] = evt.newValue;
         EditorUtility.SetDirty(whatToSave);
     }

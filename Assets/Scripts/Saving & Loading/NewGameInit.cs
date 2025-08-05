@@ -1,4 +1,5 @@
 using ResearchUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +14,6 @@ public class NewGameInit : MonoBehaviour
     [SerializeField] int numberOfDays = 6;
     [SerializeField] int dayTime = 6 * 60;
     [SerializeField] List<JobState> priority;
-    //[SerializeField] List<Color> hatMaterial = new List<Color> { Color.azure, Color.forestGreen, Color.crimson };
 
     #region Grid
     public void CreateGrid(List<GroundLevel> mainLevel, out WorldSave save)
@@ -30,9 +30,9 @@ public class NewGameInit : MonoBehaviour
 
     #endregion
     #region Gane State
-    public TradeSave CreateTrade(int selectedColony)
+    public async Task<TradeSave> CreateTrade(int selectedColony)
     {
-        TradeHolder tradeHolder = Resources.Load<TradeHolder>($"Holders/Data/Colony Locations/{baseLocation}");
+        TradeHolder tradeHolder = await Addressables.LoadAssetAsync<TradeHolder>($"Assets/Game Data/Colony Locations/{baseLocation}.asset").Task;
         TradeSave save = new TradeSave()
         {
             colonyLocation = tradeHolder.startingLocation.name,
@@ -93,6 +93,17 @@ public class NewGameInit : MonoBehaviour
             numberOfDays = numberOfDays,
             priorities = priority
         };
+    }
+
+    public async Task<QuestsSave> InitQuests()
+    {
+        QuestHolder quest = await Addressables.LoadAssetAsync<QuestHolder>("Assets/Game Data/UI/QuestData.asset").Task;
+        QuestsSave questSave = new()
+        {
+            activeQuests = new() { new(quest.Categories[0].Objects[0]) },
+            finishedQuests = new()
+        };
+        return questSave;
     }
     #endregion
 }

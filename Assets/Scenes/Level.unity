@@ -515,6 +515,7 @@ GameObject:
   - component: {fileID: 897350250}
   - component: {fileID: 897350251}
   - component: {fileID: 897350252}
+  - component: {fileID: 897350253}
   m_Layer: 0
   m_Name: Bottom Bar
   m_TagString: Untagged
@@ -568,6 +569,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50892ef2b5235ba40902ef079f75e2f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &897350253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897350249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3f6ea6d40a3f84998a0407ca167dc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  extractionIcon: {fileID: 3810939084706079344, guid: f1f937d768fd8dc42b817757e8284b7e, type: 3}
+  quest:
+    Name: Test
+    id: 15
+    description: dsadas
+    state: 1
+  data: {fileID: 0}
 --- !u!114 &1068071213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1549,6 +1569,7 @@ MonoBehaviour:
   _infoWindow: {fileID: 225780445}
   _cameraSceneMover: {fileID: 1068071213}
   _researchAdapter: {fileID: 8150810313726245686}
+  _questController: {fileID: 897350253}
   afterLoads:
   - {fileID: 8150810313726245683}
   - {fileID: 7072378217534680772}
