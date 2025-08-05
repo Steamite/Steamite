@@ -39,7 +39,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
     protected virtual void AddEntry(BaseListView _)
     {
         dataGrid.RefreshItems();
-        EditorUtility.SetDirty(data);
+        EditorUtility.SetDirty(holder);
     }
     protected void RemoveEntry(BaseListView _) => RemoveEntry(_.selectedItem as DATA_TYPE, true);
     protected virtual void RemoveEntry(DATA_TYPE wrapper, bool removeFromGrid)
@@ -54,18 +54,6 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
 
 
     #region Collumns
-    /// <summary>Goes up the hierarchy to find index of the <paramref name="element"/>.</summary>
-    /// <param name="element">Element that is to be found.</param>
-    /// <returns>Index of the entry.</returns>
-    protected int GetRowIndex(VisualElement element)
-    {
-        while (element.name != "unity-multi-column-view__row-container")
-        {
-            element = element.parent;
-        }
-        return element.parent.IndexOf(element);
-    }
-
     /// <summary>Function for creating and binding the columns.</summary>
     protected virtual void CreateColumns()
     {
@@ -124,11 +112,11 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
             field.value = value;
         }
 
-        int i = GetRowIndex((VisualElement)ev.target);
+        int i = ((VisualElement)ev.target).GetRowIndex();
         if (((DATA_TYPE)dataGrid.itemsSource[i]).Name != value)
         {
             ((DATA_TYPE)dataGrid.itemsSource[i]).Name = value;
-            EditorUtility.SetDirty(data);
+            EditorUtility.SetDirty(holder);
         }
     }
     #endregion

@@ -1,0 +1,32 @@
+.group {
+    width: 100%;
+    min-height: 0;
+    height: 50px;
+}
+
+.objective-element {
+    flex-direction: row;
+    flex-grow: 1;
+    width: 100%;
+    padding-right: 10px;
+}
+
+.objective-integer {
+    min-width: 33%;
+    max-width: 33%;
+}
+
+.objective-integer > Label {
+    min-width: 20px;
+    max-width: 20px;
+}
+
+.objective-slider {
+    min-width: 33%;
+    max-width: 33%;
+}
+
+.objective-slider > Label {
+    min-width: 20px;
+    max-width: 20px;
+}

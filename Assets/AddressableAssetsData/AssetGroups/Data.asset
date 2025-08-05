@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c9cd03303710874483b6853cad69cb7
+    m_Address: Assets/Game Data/Colony Locations
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6ee198ecedba89642a9145722bc073de
     m_Address: Assets/Game Data/UI/InfoWindowControlHolder.asset
     m_ReadOnly: 0

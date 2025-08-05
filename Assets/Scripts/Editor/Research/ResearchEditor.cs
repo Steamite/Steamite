@@ -38,7 +38,7 @@ namespace EditorWindows.Research
         {
             activeNode = null;
             showCreateButtons = false;
-            data = AssetDatabase.LoadAssetAtPath<ResearchData>(
+            holder = AssetDatabase.LoadAssetAtPath<ResearchData>(
                 "Assets/Game Data/Research && Building/Research Data.asset");
             buildingData = AssetDatabase.LoadAssetAtPath<BuildingData>(
                 "Assets/Game Data/Research && Building/Build Data.asset");
@@ -116,15 +116,15 @@ namespace EditorWindows.Research
 
         }
 
-        void RecalculateAvailableObjects<T_H, T_C, T_O>(T_H holder, NodeType type)
+        void RecalculateAvailableObjects<T_H, T_C, T_O>(T_H data, NodeType type)
             where T_H : DataHolder<T_C, T_O>
             where T_C : DataCategory<T_O>
             where T_O : DataObject
         {
-            List<ResearchNode> nodes = data.Categories.SelectMany(q => q.Objects).ToList();
-            for (int i = 0; i < holder.Categories.Count; i++)
+            List<ResearchNode> nodes = holder.Categories.SelectMany(q => q.Objects).ToList();
+            for (int i = 0; i < data.Categories.Count; i++)
             {
-                T_C categ = holder.Categories[i];
+                T_C categ = data.Categories[i];
                 categ.availableObjects = new();
                 List<ResearchNode> categoryNodes = nodes.Where(q => q.nodeType == type && q.nodeCategory == i).ToList();
                 for (int j = 0; j < categ.Objects.Count; j++)
@@ -152,7 +152,7 @@ namespace EditorWindows.Research
                 Button addButton = new Button(plus,
                     () =>
                     {
-                        ((ResearchCategory)selectedCategory).AddNode(level, (ResearchData)data);
+                        ((ResearchCategory)selectedCategory).AddNode(level, (ResearchData)holder);
                         RepaintRow(level);
                     });
                 addButton.AddToClassList("add-button");
@@ -168,7 +168,7 @@ namespace EditorWindows.Research
             int levelIndex = 0, lineCount = 0;
             foreach (ResearchNode node in selectedCategory.Objects.Where(q => q.level == level))
             {
-                tree[level][1].Insert(levelIndex, new ResearchNodeElem(node, this, (ResearchData)data));
+                tree[level][1].Insert(levelIndex, new ResearchNodeElem(node, this, (ResearchData)holder));
                 if (node.unlockedBy.Count > 0)
                 {
                     for (int j = 0; j < node.unlockedBy.Count; j++)

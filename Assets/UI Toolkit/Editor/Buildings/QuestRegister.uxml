@@ -1,0 +1,24 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Editor/BuildingRegistry.uss?fileID=7433441132597879392&amp;guid=7da3695369fc8224bbfb78f99cde7d67&amp;type=3#BuildingRegistry" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Editor/QuestEditor.uss?fileID=7433441132597879392&amp;guid=e92837107943fbd429b12e6169648b9e&amp;type=3#QuestEditor" />
+    <engine:VisualElement name="VisualElement" style="flex-grow: 0; flex-direction: row;">
+        <engine:Button text="Delete Category" name="Category-Remover" enabled="false" />
+        <engine:DropdownField name="Category-Selctor" style="flex-grow: 1;" />
+    </engine:VisualElement>
+    <engine:VisualElement name="Top" style="flex-grow: 0; flex-direction: row; margin-top: 10px; padding-left: 25px; padding-right: 25px; margin-bottom: 10px;">
+        <engine:VisualElement name="Icon-Image" style="flex-grow: 0; width: 100px; height: 100px; margin-right: 10px;" />
+        <engine:VisualElement style="flex-grow: 1;">
+            <engine:VisualElement name="Category-Settings" style="flex-grow: 1; flex-direction: row; height: 25px; align-self: flex-start; max-height: 25px;">
+                <editor:ObjectField label="Category Icon" name="Icon-Changer" type="UnityEngine.Texture2D, UnityEngine.CoreModule" style="-unity-text-align: middle-left; margin-right: 10px;" />
+                <engine:TextField label="Category Name" placeholder-text="filler text" name="Category-Name" style="flex-grow: 1; margin-right: 4px;" />
+            </engine:VisualElement>
+            <engine:Button text="Create category" name="Category-Create" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+    <engine:MultiColumnListView show-foldout-header="false" show-add-remove-footer="true" name="Data" reorderable="true" sorting-mode="Custom" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None" fixed-item-height="144">
+        <engine:Columns resize-preview="false" reorderable="false">
+            <engine:Column name="id" title="ID" stretchable="false" resizable="true" width="20px" sortable="true" />
+            <engine:Column name="name" title="Name" stretchable="true" max-width="200px" />
+        </engine:Columns>
+    </engine:MultiColumnListView>
+</engine:UXML>

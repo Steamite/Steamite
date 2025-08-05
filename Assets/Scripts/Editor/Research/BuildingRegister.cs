@@ -41,7 +41,7 @@ namespace EditorWindows.Windows
         protected override void CreateGUI()
         {
             buildingTypes = TypeCache.GetTypesDerivedFrom(typeof(Building)).ToList();
-            data = AssetDatabase.LoadAssetAtPath<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
+            holder = AssetDatabase.LoadAssetAtPath<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
 
             #region Grid
             base.CreateGUI();
@@ -60,7 +60,7 @@ namespace EditorWindows.Windows
                             Building building = selectedCategory.Objects[i].building;
                             if (building != null)
                             {
-                                byte categID = (byte)data.Categories.FindIndex(q => q.Name == selectedCategory.Name);
+                                byte categID = (byte)holder.Categories.FindIndex(q => q.Name == selectedCategory.Name);
                                 ResearchNode node = nodes.FirstOrDefault(q => q.nodeCategory == building.categoryID && q.id == building.wrapperID);
                                 if (node != null)
                                     node.nodeCategory = categID;
@@ -70,7 +70,7 @@ namespace EditorWindows.Windows
                             }
                         }
                         EditorUtility.SetDirty(researchData);
-                        EditorUtility.SetDirty(data);
+                        EditorUtility.SetDirty(holder);
                     }
                 };
             categorySelector.index = 0;
@@ -117,7 +117,7 @@ namespace EditorWindows.Windows
                 {
                     ((BuildCategWrapper)selectedCategory).columnStates.Add(dataGrid.columns[i].visible);
                 }
-                EditorUtility.SetDirty((BuildingData)data);
+                EditorUtility.SetDirty((BuildingData)holder);
             }
         }
 
@@ -149,7 +149,7 @@ namespace EditorWindows.Windows
         #region Entry managment
         protected override void AddEntry(BaseListView _)
         {
-            BuildingWrapper wrapper = new(data.UniqueID());
+            BuildingWrapper wrapper = new(holder.UniqueID());
             int choice = EditorUtility.DisplayDialogComplex("Register a new building",
                 "Do you want to fill the new entry or create an empty one?",
                 "Filled", "Cancel", "Empty");
@@ -167,7 +167,7 @@ namespace EditorWindows.Windows
                 PrefabUtility.SaveAsPrefabAsset(gameObj, $"{s}{BUILD_NAME}");
                 wrapper.SetBuilding(
                     AssetDatabase.LoadAssetAtPath<Building>($"{s}{BUILD_NAME}"),
-                    (byte)data.Categories.FindIndex(q => q.Name == selectedCategory.Name),
+                    (byte)holder.Categories.FindIndex(q => q.Name == selectedCategory.Name),
                     s.Split('/')[^1]);
                 wrapper.preview = GetPrefabPreview($"{s}");
                 DestroyImmediate(gameObj);
@@ -601,8 +601,8 @@ namespace EditorWindows.Windows
         #region Base
         void AssetChange(ChangeEvent<Object> ev)
         {
-            int i = GetRowIndex((VisualElement)ev.target);
-            if (changedType || ((BuildingData)data).ContainsBuilding((Building)ev.newValue) == false)
+            int i = ev.target.GetRowIndex();
+            if (changedType || ((BuildingData)holder).ContainsBuilding((Building)ev.newValue) == false)
             {
                 Building b = ev.newValue as Building;
                 if (b != null && !changedType)
@@ -644,10 +644,10 @@ namespace EditorWindows.Windows
 
                 ((BuildingWrapper)dataGrid.itemsSource[i]).SetBuilding(
                     b,
-                    (byte)data.Categories.FindIndex(q => q.Name == selectedCategory.Name));
+                    (byte)holder.Categories.FindIndex(q => q.Name == selectedCategory.Name));
                 changedType = false;
                 dataGrid.RefreshItem(i);
-                EditorUtility.SetDirty((BuildingData)data);
+                EditorUtility.SetDirty((BuildingData)holder);
             }
             else
             {
@@ -707,7 +707,7 @@ namespace EditorWindows.Windows
                 field.value = value;
             }
 
-            int i = GetRowIndex((VisualElement)ev.target);
+            int i = ev.target.GetRowIndex();
             if (((BuildingWrapper)dataGrid.itemsSource[i]).building.objectName != value)
             {
                 string oldPath = AssetDatabase.GetAssetPath(
@@ -744,7 +744,7 @@ namespace EditorWindows.Windows
 
         void TypeChange(ChangeEvent<string> ev)
         {
-            int i = GetRowIndex((VisualElement)ev.target);
+            int i = ev.target.GetRowIndex();
             Building prev = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
             if (prev != null)
             {
@@ -758,7 +758,7 @@ namespace EditorWindows.Windows
                     building.Clone(prev);
                     DestroyImmediate(prev, true);
                     EditorUtility.SetDirty(building.gameObject);
-                    ((BuildingWrapper)dataGrid.itemsSource[i]).SetBuilding(building, ((byte)data.Categories.FindIndex(q => q.Name == selectedCategory.Name)));
+                    ((BuildingWrapper)dataGrid.itemsSource[i]).SetBuilding(building, ((byte)holder.Categories.FindIndex(q => q.Name == selectedCategory.Name)));
                     changedType = true;
                     dataGrid.RefreshItem(i);
                 }
@@ -767,7 +767,7 @@ namespace EditorWindows.Windows
 
         void BlueprintEvent(ClickEvent ev)
         {
-            int i = GetRowIndex((VisualElement)ev.target);
+            int i = ev.target.GetRowIndex();
             BuildEditor.ShowWindow(((BuildingWrapper)dataGrid.itemsSource[i]).building);
         }
 
@@ -775,13 +775,13 @@ namespace EditorWindows.Windows
         {
             if (ev.clickCount == 2)
             {
-                int i = GetRowIndex((VisualElement)ev.target);
+                int i = ev.target.GetRowIndex();
                 BuildingWrapper wrapper = dataGrid.itemsSource[i] as BuildingWrapper;
                 if (wrapper.building)
                 {
                     wrapper.preview =
                         GetPrefabPreview(Path.GetDirectoryName(AssetDatabase.GetAssetPath(wrapper.building)));
-                    EditorUtility.SetDirty(data);
+                    EditorUtility.SetDirty(holder);
                     dataGrid.RefreshItem(i);
                 }
             }
@@ -789,7 +789,7 @@ namespace EditorWindows.Windows
 
         void CategoryChange(ChangeEvent<int> ev)
         {
-            int i = GetRowIndex((VisualElement)ev.target);
+            int i = ev.target.GetRowIndex();
             Building prev = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
             if (prev != null)
             {
@@ -802,7 +802,7 @@ namespace EditorWindows.Windows
         }
         void StorageCapacityChanged(ChangeEvent<int> ev)
         {
-            int i = GetRowIndex((VisualElement)ev.target);
+            int i = ev.target.GetRowIndex();
             if (((BuildingWrapper)dataGrid.itemsSource[i]).building != null)
             {
                 ((BuildingWrapper)dataGrid.itemsSource[i]).building.LocalRes.capacity.BaseValue = ev.newValue;
@@ -814,14 +814,14 @@ namespace EditorWindows.Windows
         #region Special
         void AssignChange(ChangeEvent<int> ev)
         {
-            int i = GetRowIndex((VisualElement)ev.target);
+            int i = ev.target.GetRowIndex();
             ((IAssign)((BuildingWrapper)dataGrid.itemsSource[i]).building).AssignLimit.BaseValue = ev.newValue;
             EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
         }
 
         void ProdTimeChange(ChangeEvent<int> ev)
         {
-            int i = GetRowIndex((VisualElement)ev.target);
+            int i = ev.target.GetRowIndex();
             ((IProduction)((BuildingWrapper)dataGrid.itemsSource[i]).building).ProdTime = ev.newValue;
             EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
         }
@@ -829,7 +829,7 @@ namespace EditorWindows.Windows
 
         void CanStoreFluidsChange(ChangeEvent<int> ev)
         {
-            int i = GetRowIndex((VisualElement)ev.target);
+            int i = ev.target.GetRowIndex();
             Building prev = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
             if (prev != null)
             {

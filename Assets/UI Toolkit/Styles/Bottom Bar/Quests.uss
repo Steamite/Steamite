@@ -1,0 +1,37 @@
+QuestGroup {
+    background-color: rgba(0, 0, 0, 0.62);
+    width: 300px;
+    position: relative;
+    top: 8%;
+    max-height: 500px;
+    flex-grow: 0;
+    max-width: 300px;
+    min-width: 300px;
+}
+
+QuestElement {
+    padding-left: 5px;
+}
+
+.quest-name {
+    font-size: 30px;
+    -unity-font-style: normal;
+    -unity-text-generator: advanced;
+    text-shadow: 1px 1px 0 rgb(0, 0, 0);
+}
+
+.quest-description {
+    font-size: 25px;
+    text-overflow: clip;
+    max-width: 100%;
+    white-space: normal;
+}
+
+.quest-objective-group {
+    flex-direction: row;
+}
+
+.quest-objective {
+    font-size: 16px;
+    -unity-font-style: normal;
+}

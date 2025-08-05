@@ -5,6 +5,17 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public struct Save
+{
+    public WorldSave world;
+    public GameStateSave gameState;
+    public HumanSave[] humans;
+    public ResearchSave research;
+    public TradeSave trade;
+    public QuestsSave quests;
+}
+
+
 /// <summary>Unities Saving.</summary>
 public class SaveController : MonoBehaviour, IAfterLoad
 {

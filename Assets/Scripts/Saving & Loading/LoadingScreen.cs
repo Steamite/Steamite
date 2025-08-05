@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -63,14 +64,14 @@ public class LoadingScreen : MonoBehaviour
             newGameInit.CreateGrid(testLevels, out save);
         }
 
-        ResearchSave researchSave = await newGameInit.InitResearch();
         StartCoroutine(StartLoading(_folderName, _folderName,
             new Save()
             {
                 gameState = newGameInit.SetNewGameState(),
-                trade = newGameInit.CreateTrade(0),
-                research = researchSave,
+                trade = await newGameInit.CreateTrade(0),
+                research = await newGameInit.InitResearch(),
                 humans = newGameInit.InitHumans(size),
+                quests = await newGameInit.InitQuests(),
                 world = save
             }));
     }
@@ -157,6 +158,7 @@ public class LoadingScreen : MonoBehaviour
         HumanSave[] humanSaves = save.humans;
         ResearchSave researchSave = save.research;
         TradeSave tradeSave = save.trade;
+        QuestsSave questSave = save.quests;
 
         // create progress val for loading slider
         int maxprogress = 0;
@@ -171,15 +173,12 @@ public class LoadingScreen : MonoBehaviour
         {
             loadingSlider.value = value;
         });
-        LoadMap(progress, worldSave);
-        yield return new();
-        LoadGameState(progress, gameState);
-        yield return new();
-        LoadHumans(progress, humanSaves);
-        yield return new();
-        LoadResearches(progress, researchSave);
-        yield return new();
-        LoadTrade(progress, tradeSave);
+        yield return LoadMap(progress, worldSave);
+        yield return LoadGameState(progress, gameState);
+        yield return LoadHumans(progress, humanSaves);
+        yield return LoadResearches(progress, researchSave);
+        yield return LoadTrade(progress, tradeSave);
+        yield return LoadQuests(progress, questSave);
     }
 
 
@@ -189,7 +188,7 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="worldSave"></param>
-    void LoadMap(IProgress<int> progress, WorldSave worldSave)
+    Task LoadMap(IProgress<int> progress, WorldSave worldSave)
     {
         actionText.text = "Loading grid";
         LoadGrid(progress, worldSave.gridSave);
@@ -199,6 +198,7 @@ public class LoadingScreen : MonoBehaviour
         LoadChunks(progress, worldSave.objectsSave.chunks);
         actionText.text = "Constructing buildings";
         LoadBuildings(progress, worldSave.objectsSave.buildings);
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -264,10 +264,11 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="humanSaves"></param>
-    void LoadHumans(IProgress<int> progress, HumanSave[] humanSaves)
+    Task LoadHumans(IProgress<int> progress, HumanSave[] humanSaves)
     {
         actionText.text = "Kidnaping workers";
         SceneRefs.Humans.LoadHumans(progress, humanSaves, ref humanActivation, HUMAN_WEIGHT, ref progressGlobal);
+        return Task.CompletedTask;
     }
     #endregion Model Loading
 
@@ -278,10 +279,11 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="gameState"></param>
-    void LoadGameState(IProgress<int> progress, GameStateSave gameState)
+    Task LoadGameState(IProgress<int> progress, GameStateSave gameState)
     {
         SceneRefs.JobQueue.priority = gameState.priorities;
         SceneRefs.Tick.Load(gameState);
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -289,10 +291,10 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="researchSave"></param>
-    void LoadResearches(IProgress<int> progress, ResearchSave researchSave)
+    async Task LoadResearches(IProgress<int> progress, ResearchSave researchSave)
     {
         actionText.text = "Remembering research";
-        UIRefs.ResearchWindow.LoadGame(researchSave);
+        await UIRefs.ResearchWindow.LoadState(researchSave);
     }
 
     /// <summary>
@@ -300,10 +302,16 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="tradeSave"></param>
-    void LoadTrade(IProgress<int> progress, TradeSave tradeSave)
+    async Task LoadTrade(IProgress<int> progress, TradeSave tradeSave)
     {
         actionText.text = "Making Deals";
-        UIRefs.TradingWindow.LoadGame(tradeSave);
+        await UIRefs.TradingWindow.LoadState(tradeSave);
+    }
+
+    async Task LoadQuests(IProgress<int> progress, QuestsSave questSave)
+    {
+        QuestController controller = SceneRefs.QuestController as QuestController;
+        await controller.LoadState(questSave);
     }
     #endregion UI loading
     #endregion Loading Game State

@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 
 public class BuildingSerialization
-{
+{/*
     private static HttpClient client = null;
     //const string connection = "http://localhost:301/";
     const string connection = "https://steamite-api.slavetraders.tech";
@@ -65,5 +65,5 @@ public class BuildingSerialization
             }
         }
 
-    }
+    }*/
 }
