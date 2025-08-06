@@ -4,14 +4,15 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class EmptyEditorWindow : EditorWindow
+public class EmptyEditorWindow : EditorWindow 
 {
     
 }
 public class GridPosList : ListView
 {
     QuestHolder holder;
-    
+    Action<int> countChange;
+
     public GridPosList() : base()
     {
         style.flexGrow = 1;
@@ -76,6 +77,7 @@ public class GridPosList : ListView
             itemsSource.Add(new GridPos());
             EditorUtility.SetDirty(holder);
             RefreshItems();
+            countChange?.Invoke(itemsSource.Count);
         };
 
         onRemove = (list) =>
@@ -86,6 +88,7 @@ public class GridPosList : ListView
                 itemsSource.RemoveAt(list.itemsSource.Count - 1);
             EditorUtility.SetDirty(holder);
             RefreshItems();
+            countChange?.Invoke(itemsSource.Count);
         };
         allowAdd = true;
         allowRemove = true;
@@ -93,10 +96,11 @@ public class GridPosList : ListView
 
     }
     
-    public void Bind(QuestHolder _holder, ref List<GridPos> _itemsSource)
+    public void Bind(QuestHolder _holder, ref List<GridPos> _itemsSource, Action<int> _countChange)
     {
         holder = _holder;
         itemsSource = _itemsSource;
+        countChange = _countChange;
     }
 
     void ChangeValue(ChangeEvent<int> ev)

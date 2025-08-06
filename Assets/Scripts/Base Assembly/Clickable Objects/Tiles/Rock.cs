@@ -141,8 +141,7 @@ public class Rock : ClickableObject
                     = GetComponent<MeshRenderer>().material.color;
             }
             SceneRefs.ObjectFactory.CreateRoad(GetPos(), true);
-            if (isQuest)
-                SceneRefs.QuestController.DigRock(this);
+            SceneRefs.QuestController.DigRock(this);
             MyGrid.UnsetRock(this);
             return true;
         }

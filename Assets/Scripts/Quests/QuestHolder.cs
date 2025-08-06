@@ -1,7 +1,9 @@
 using Objectives;
 using System;
 using System.Collections.Generic;
+using Unity.Properties;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum QuestState
 {
@@ -13,15 +15,19 @@ public enum QuestState
 
 
 [Serializable]
-public class Quest : DataObject
+public class Quest : DataObject, IUpdatable
 {
     [SerializeField] public string description;
     [SerializeField] public QuestState state = QuestState.Hidden;
+    [SerializeField] int timeToFail;
+    [CreateProperty] public int TimeToFail { get => timeToFail; set => timeToFail = value; }
     [SerializeReference] public List<QuestReward> rewards = new();
     [SerializeReference] public List<QuestPenalty> penalties = new();
     [SerializeReference] public List<Objective> objectives = new();
 
-    public virtual void Complete(bool success)
+    public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
+
+    public virtual void Complete(bool success, QuestController controller)
     {
         state = success ? QuestState.Completed: QuestState.Failed;
         if (success)
@@ -34,6 +40,34 @@ public class Quest : DataObject
             foreach (var penalty in penalties)
                 penalty.GetPenalty();
         }
+        controller.activeQuests.Remove(this);
+        controller.finishedQuests.Add(this);
+    }
+
+    public void Load(QuestSave save, QuestController controller)
+    {
+        for (int i = 0; i < objectives.Count; i++)
+        {
+            objectives[i].Load(save.currentProgress[i], this, controller);
+        }
+    }
+
+    public void DecreaseTimeToFail(QuestController controller)
+    {
+        if (timeToFail > -1)
+        {
+            timeToFail--;
+            UIUpdate(nameof(TimeToFail));
+            if (timeToFail == 0)
+            {
+                Complete(false, controller);
+            }
+        }
+    }
+
+    public void UIUpdate(string property = "")
+    {
+        propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
 
     public Quest() { }
@@ -45,6 +79,7 @@ public class Quest : DataObject
     {
         id = quest.id;
         Name = quest.Name;
+        timeToFail = quest.timeToFail;
         description = quest.description;
         state = quest.state;
         rewards = quest.rewards;
@@ -59,14 +94,16 @@ public class StoryQuest : Quest
 {
     public List<Quest> nextQuests;
 
-    public override void Complete(bool success)
+    public override void Complete(bool success, QuestController controller)
     {
-        base.Complete(success);
+        base.Complete(success, controller);
         foreach (var quest in nextQuests)
         {
             quest.state = QuestState.Active;
         }
     }
+    public StoryQuest() { }
+    public StoryQuest(Quest quest) : base(quest) { }
 }
 
 [Serializable]

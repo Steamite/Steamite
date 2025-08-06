@@ -1,9 +1,12 @@
 using System;
 
 [Serializable]
-public abstract class QuestReward
+public class QuestReward : IQuestCompositor
 {
-    public abstract void ObtainReward();
+    public virtual void ObtainReward()
+    {
+        throw new NotImplementedException();
+    }
 }
 
 [Serializable]
@@ -13,6 +16,8 @@ public class QuestResourceReward : QuestReward
 
     public override void ObtainReward()
     {
+        resource.Init();
         MyRes.DeliverToElevator(resource);
+        MyRes.ManageMoneyGlobal(+resource.Money);
     }
 }

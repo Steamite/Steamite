@@ -16,6 +16,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
     List<Type> questTypes;
     List<Type> objectiveTypes;
     List<Type> rewardTypes;
+    List<Type> penaltyTypes;
 
     /// <summary>Opens the window, if it's already opened close it.</summary>
     [MenuItem("Custom Editors/Building Quest Register %j", priority = 16)]
@@ -32,6 +33,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
         questTypes = TypeCache.GetTypesDerivedFrom(typeof(Quest)).ToList();
         objectiveTypes = TypeCache.GetTypesDerivedFrom(typeof(Objective)).ToList();
         rewardTypes = TypeCache.GetTypesDerivedFrom(typeof(QuestReward)).ToList();
+        penaltyTypes = TypeCache.GetTypesDerivedFrom(typeof(QuestPenalty)).ToList();
 
         holder = AssetDatabase.LoadAssetAtPath<QuestHolder>("Assets/Game Data/UI/QuestData.asset");
         base.CreateGUI();
@@ -64,6 +66,26 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
     {
         base.CreateColumns();
 
+
+        dataGrid.columns.Add(new Column()
+        {
+            name = "timeToFail",
+            title = "Duration (Ticks)",
+            makeCell = () => new IntegerField(),
+            bindCell = (el, i) =>
+            {
+                IntegerField field = el as IntegerField;
+                field.value = ((Quest)dataGrid.itemsSource[i]).TimeToFail;
+                field.RegisterValueChangedCallback(TimeToFailChange);
+            },
+            unbindCell = (el, i) =>
+            {
+                IntegerField field = el as IntegerField;
+                field.UnregisterValueChangedCallback(TimeToFailChange);
+            },
+            resizable = false,
+            width = 100,
+        });
         dataGrid.columns.Add(new Column()
         {
             name = "type",
@@ -81,27 +103,79 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
                 DropdownField field = el as DropdownField;
                 field.UnregisterValueChangedCallback(QuestTypeChange);
             },
-            resizable = true,
+            resizable = false,
+            width = 200,
+        });
+        dataGrid.columns.Add(new Column()
+        {
+            name = "description",
+            title = "Description",
+            makeCell = () => new TextField() { multiline = true, style = { whiteSpace = WhiteSpace.Normal } },
+            bindCell = (el, i) =>
+            {
+                TextField field = el as TextField;
+                field.value = ((Quest)dataGrid.itemsSource[i]).description;
+                field.RegisterValueChangedCallback(DescriptionChange);
+            },
+            unbindCell = (el, i) =>
+            {
+                TextField field = el as TextField;
+                field.UnregisterValueChangedCallback(DescriptionChange);
+            },
+            resizable = false,
             width = 100,
         });
-
         dataGrid.columns.Add(new Column()
         {
 
             name = "objective",
             title = "Objective",
-            stretchable = true,
-            makeCell = () => new QuestObjective(),
+            makeCell = () => new ObjectiveGridEditor(),
             bindCell = (el, i) =>
             {
-                (el as QuestObjective).Bind(
+                (el as ObjectiveGridEditor).Bind(
                         holder as QuestHolder,
                         dataGrid.itemsSource[i] as Quest,
                         objectiveTypes);
             },
             resizable = true,
-            width = 100,
+            width = 600,
             
+        });
+        dataGrid.columns.Add(new Column()
+        {
+
+            name = "reward",
+            title = "Reward",
+            makeCell = () => new QuestRewardEditor(),
+            bindCell = (el, i) =>
+            {
+                (el as QuestRewardEditor).Bind(
+                        holder as QuestHolder,
+                        dataGrid.itemsSource[i] as Quest,
+                        rewardTypes);
+            },
+            resizable = true,
+            width = 600,
+
+        });
+
+        dataGrid.columns.Add(new Column()
+        {
+
+            name = "penalty",
+            title = "Penalty",
+            makeCell = () => new QuestPenaltyEditor(),
+            bindCell = (el, i) =>
+            {
+                (el as QuestPenaltyEditor).Bind(
+                        holder as QuestHolder,
+                        dataGrid.itemsSource[i] as Quest,
+                        penaltyTypes);
+            },
+            resizable = true,
+            width = 600,
+
         });
     }
 
@@ -119,6 +193,26 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
                 EditorUtility.SetDirty(holder);
                 dataGrid.RefreshItem(i);
             }
+        }
+    }
+    void TimeToFailChange(ChangeEvent<int> ev)
+    {
+        int i = ev.target.GetRowIndex();
+        if (ev.previousValue != ev.newValue)
+        {
+            Quest quest = dataGrid.itemsSource[i] as Quest;
+            quest.TimeToFail = ev.newValue;
+            EditorUtility.SetDirty(holder);
+        }
+    }
+    void DescriptionChange(ChangeEvent<string> ev)
+    {
+        int i = ev.target.GetRowIndex();
+        if (ev.previousValue != ev.newValue)
+        {
+            Quest quest = dataGrid.itemsSource[i] as Quest;
+            quest.description = ev.newValue;
+            EditorUtility.SetDirty(holder);
         }
     }
     #endregion

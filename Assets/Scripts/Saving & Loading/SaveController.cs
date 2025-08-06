@@ -154,6 +154,11 @@ public class SaveController : MonoBehaviour, IAfterLoad
                jsonSerializer,
                new TradeSave(UIRefs.TradingWindow));
 
+            WriteSave(
+               $"{tmpPath}/Quests.json",
+               jsonSerializer,
+               new QuestsSave(SceneRefs.QuestController as QuestController));
+
             if (autoSave)
                 saveName = "autosave";
             AfterSave(tmpPath, saveName, autoSave);

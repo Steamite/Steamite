@@ -1,10 +1,15 @@
 ﻿using System;
 
-public abstract class QuestPenalty
+[Serializable]
+public class QuestPenalty : IQuestCompositor
 {
-    public abstract void GetPenalty();
+    public virtual void GetPenalty()
+    {
+        throw new NotImplementedException();
+    }
 }
 
+[Serializable]
 public class QuestMoneyPenalty : QuestPenalty
 {
     /// <summary>Make it positive, this value is going to be subtracted.</summary>

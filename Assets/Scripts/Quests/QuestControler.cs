@@ -9,16 +9,16 @@ using UnityEngine.UIElements;
 
 public class QuestController : MonoBehaviour, IQuestController, IGameDataController<QuestsSave>
 {
-    [SerializeField] GameObject extractionIcon;
-    [SerializeField] Quest quest;
+    [SerializeField] public GameObject ExcavationIcon;
     public QuestHolder data;
 
-    [CreateProperty] public IEnumerable<DataObject> ActiveQuests { get => activeQuests; }
-    List<Quest> finishedQuests;
-    List<Quest> activeQuests;
+    //[CreateProperty] public IEnumerable<DataObject> ActiveQuests { get => activeQuests; }
+    public List<Quest> finishedQuests;
+    public List<Quest> activeQuests;
 
     List<Objective> objectives;
-    List<ExcavationObjective> excavationObjectives = new();
+    public List<ExcavationObjective> ExcavationObjectives = new();
+    public List<AnyExcavationObjective> AnyExcavationObjectives = new();
 
     public void BuildBuilding(object obj)
     {
@@ -27,10 +27,14 @@ public class QuestController : MonoBehaviour, IQuestController, IGameDataControl
 
     public void DigRock(object obj)
     {
-        for (int i = excavationObjectives.Count - 1; i > - 1; i--)
+        for (int i = ExcavationObjectives.Count - 1; i > -1; i--)
         {
-            excavationObjectives[i].UpdateProgress(obj);
-        }       
+            ExcavationObjectives[i].UpdateProgress(obj, this);
+        }
+        for (int i = AnyExcavationObjectives.Count - 1; i > -1; i--)
+        {
+            AnyExcavationObjectives[i].UpdateProgress(obj, this);
+        }
     }
     public void ResChange()
     {
@@ -42,28 +46,14 @@ public class QuestController : MonoBehaviour, IQuestController, IGameDataControl
         activeQuests = new();
         finishedQuests = new();
 
-
         QuestHolder questHolder = Instantiate(await Addressables.LoadAssetAsync<QuestHolder>("Assets/Game Data/UI/QuestData.asset").Task);
-        foreach (Quest quest in questHolder.Categories.SelectMany(q=> q.Objects))
+        List<Quest> quests = questHolder.Categories.SelectMany(q => q.Objects).ToList();
+        foreach (Quest quest in quests)
         {
             QuestSave save;
             if((save = saveData.activeQuests.FirstOrDefault(q => q.questId == quest.id)) != null)
             {
-                for (int i = 0; i < quest.objectives.Count; i++)
-                {
-                    quest.objectives[i].CurrentProgress = save.currentProgress[i];
-                    if (quest.objectives[i] is ExcavationObjective excavation)
-                    {
-                        foreach (var item in excavation.needToRemove)
-                        {
-                            if (MyGrid.GetGridItem(item) is Rock rock)
-                            {
-                                Instantiate(extractionIcon, item.ToVec(3), Quaternion.identity, rock.transform);
-                                rock.isQuest = true;
-                            }
-                        }
-                    }
-                }
+                quest.Load(save, this);
                 activeQuests.Add(quest);
             }
             else if((save = saveData.finishedQuests.FirstOrDefault(q => q.questId == quest.id)) != null)
@@ -72,13 +62,15 @@ public class QuestController : MonoBehaviour, IQuestController, IGameDataControl
                 finishedQuests.Add(quest);
             }
         }
-        /*
-        activeQuests = new() { quest };
-        ExcavationObjective objective = new ExcavationObjective(new() { new(9, 0, 5), new(10, 0, 5), new(9, 0, 6), new(10, 0, 6) }, quest);
-        
-        quest.objectives.Add(objective);
-        excavationObjectives.Add(objective);
+        ((IUIElement)GetComponent<UIDocument>().rootVisualElement[3]).Open(this);
+        SceneRefs.Tick.SubscribeToEvent(UpdateTimers, Tick.TimeEventType.Ticks);
+    }
 
-        ((IUIElement)GetComponent<UIDocument>().rootVisualElement[3]).Open(this);*/
+    public void UpdateTimers()
+    {
+        for (int i = activeQuests.Count-1; i > -1; i--)
+        {
+            activeQuests[i].DecreaseTimeToFail(this);
+        }
     }
 }
