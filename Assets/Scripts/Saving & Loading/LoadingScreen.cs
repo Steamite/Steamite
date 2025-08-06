@@ -141,6 +141,10 @@ public class LoadingScreen : MonoBehaviour
         jsonReader = new(new StreamReader($"{_folderName}/Trade.json"));
         save.trade = jsonSerializer.Deserialize<TradeSave>(jsonReader);
         jsonReader.Close();
+        // for quests
+        jsonReader = new(new StreamReader($"{_folderName}/Quests.json"));
+        save.quests = jsonSerializer.Deserialize<QuestsSave>(jsonReader);
+        jsonReader.Close();
         return save;
     }
 
@@ -211,7 +215,7 @@ public class LoadingScreen : MonoBehaviour
         foreach (ChunkSave chunkSave in chunks)
         {
             SceneRefs.ObjectFactory
-                .CreateChunk(chunkSave.gridPos, chunkSave.resSave, true)
+                .CreateChunk(chunkSave.gridPos, chunkSave.resSave, false)
                 .Load(chunkSave);
             progress.Report(progressGlobal += CHUNK_WEIGHT);
         }
@@ -311,10 +315,19 @@ public class LoadingScreen : MonoBehaviour
     async Task LoadQuests(IProgress<int> progress, QuestsSave questSave)
     {
         QuestController controller = SceneRefs.QuestController as QuestController;
-        await controller.LoadState(questSave);
+        try
+        {
+            Task task = controller.LoadState(questSave);
+            await task;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+        }
     }
     #endregion UI loading
     #endregion Loading Game State
+
 
     IEnumerator BeforeLevelLoad()
     {

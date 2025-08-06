@@ -581,13 +581,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3f6ea6d40a3f84998a0407ca167dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  extractionIcon: {fileID: 3810939084706079344, guid: f1f937d768fd8dc42b817757e8284b7e, type: 3}
-  quest:
-    Name: Test
-    id: 15
-    description: dsadas
-    state: 1
+  ExcavationIcon: {fileID: 3810939084706079344, guid: f1f937d768fd8dc42b817757e8284b7e, type: 3}
   data: {fileID: 0}
+  finishedQuests: []
+  activeQuests: []
+  ExcavationObjectives: []
+  AnyExcavationObjectives: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &1068071213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1547,6 +1549,7 @@ MonoBehaviour:
   timeInMinutes: 4
   numberOfDays: 5
   lastTick: 0
+  pauseSpeed: 0
 --- !u!114 &8150810313726245685
 MonoBehaviour:
   m_ObjectHideFlags: 0

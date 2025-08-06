@@ -25,8 +25,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6ee198ecedba89642a9145722bc073de
-    m_Address: Assets/Game Data/UI/InfoWindowControlHolder.asset
+  - m_GUID: ad404bf258fcc5a40b6ebf5cfebeac1c
+    m_Address: Assets/Game Data/UI
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

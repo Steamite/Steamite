@@ -6286,6 +6286,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: cost.types.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: cost.ammounts.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: localRes.type.Array.size
       value: 5
       objectReference: {fileID: 0}
@@ -9274,6 +9282,14 @@ PrefabInstance:
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: build.constructed
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: cost.types.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: cost.ammounts.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: localRes.type.Array.size
@@ -25437,6 +25453,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: cost.types.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: cost.ammounts.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: localRes.type.Array.size
       value: 5
       objectReference: {fileID: 0}
@@ -30039,6 +30063,14 @@ PrefabInstance:
     - target: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
       propertyPath: build.constructed
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
+      propertyPath: cost.types.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
+      propertyPath: cost.ammounts.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7295340286965014690, guid: f13d54c177aeb26438817d736c69c281, type: 3}
       propertyPath: m_Layer

@@ -57,6 +57,10 @@ public static class MyRes
                 globalStorageSpace += _s.LocalResources.capacity - _s.LocalResources.Sum();
                 resDataSource.GlobalResources.Manage(_s.LocalResources, true);
             }
+            foreach(Chunk chunk in MyGrid.chunks)
+            {
+                resDataSource.GlobalResources.Manage(chunk.LocalRes, true);
+            }
             resDataSource.UIUpdate(nameof(ResourceDisplay.GlobalResources));
             resDataSource.UIUpdate(nameof(ResourceDisplay.Money));
         }

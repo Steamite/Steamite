@@ -60,6 +60,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6791377539885752213, guid: b3fa70b0fcbeb1d4d943c47296918b60, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 20f9974544fa35d4eb40e2393b185a5b, type: 3}
+    - target: {fileID: 776046731749314290, guid: b3fa70b0fcbeb1d4d943c47296918b60, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 20f9974544fa35d4eb40e2393b185a5b, type: 3}
     - target: {fileID: 919132149155446097, guid: b3fa70b0fcbeb1d4d943c47296918b60, type: 3}
       propertyPath: m_Name
       value: Chunk
@@ -124,10 +132,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2419386309167281551}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -157,14 +165,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: 
-  selected: 0
   id: 0
   objectName: Chunk
   localRes:
-    stored:
-      capacity: -1
-      type: 
-      ammount: 
+    types: 
+    ammounts: 
+    capacity:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
     requests: []
     carriers: []
     mods: 

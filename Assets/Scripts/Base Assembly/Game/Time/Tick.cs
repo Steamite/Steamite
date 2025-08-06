@@ -33,7 +33,8 @@ public class Tick : MonoBehaviour
     /// </seealso>
     [Header("Tick speed")][SerializeField] float ticksPerHour = 4;
     /// <summary>Progresses time by this(60/<see cref="ticksPerHour"/>).</summary>
-    int minutesPerTick = 0;
+    private int minutesPerTick;
+    public int MinutesPerTick => (int)(60f / ticksPerHour);
 
     /// <summary>Current time of the day(counts as hours when starting a new game).</summary>
     public int timeInMinutes = 4;
@@ -60,6 +61,9 @@ public class Tick : MonoBehaviour
     [HideInInspector] public uint lastTick = 0;
 
     bool running = false;
+
+    [SerializeField]float pauseSpeed = 0.1f;
+    public static float LastSpeed { get; private set; }
     #endregion
 
     #region Events
@@ -148,12 +152,13 @@ public class Tick : MonoBehaviour
     #region Init
     public void InitTicks()
     {
-        minutesPerTick = (int)(60f / ticksPerHour);
+        minutesPerTick = MinutesPerTick;
         TicksInDay = 1440 / minutesPerTick;
         if (timeInMinutes < 6 * 60 || timeInMinutes > 21 * 60)
             nightStart?.Invoke();
 
-        Time.timeScale = 1;
+        Time.timeScale = pauseSpeed;
+        LastSpeed = 1f;
     }
     #endregion
 
@@ -162,7 +167,9 @@ public class Tick : MonoBehaviour
     {
         if (_speed == 0 && running == false)
         {
+            Time.timeScale = LastSpeed;
             StartTicks();
+            Debug.Log("Can't get here");
         }
         else if (_speed > 0)
         {
@@ -180,6 +187,8 @@ public class Tick : MonoBehaviour
     #region Starting and Ending ticks
     public void StopTicks()
     {
+        LastSpeed = Time.timeScale;
+        Time.timeScale = pauseSpeed;
         if (running == false)
         {
             Debug.LogWarning("Not ticking, cannot stop ticks.");

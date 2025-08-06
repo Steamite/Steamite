@@ -11,9 +11,9 @@ public class QuestsSave
 
     public QuestsSave(QuestController controller) 
     {
-        
+        finishedQuests = controller.finishedQuests.Select(q => new QuestSave(q)).ToList();
+        activeQuests = controller.activeQuests.Select(q => new QuestSave(q)).ToList();
     }
-
 }
 
 public class QuestSave

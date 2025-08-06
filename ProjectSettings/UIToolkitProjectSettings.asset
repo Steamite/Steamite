@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EnableAdvancedText: 1
+  m_EnableLowLevelDebugger: 0

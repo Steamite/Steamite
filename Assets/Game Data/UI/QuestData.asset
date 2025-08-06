@@ -13,24 +13,61 @@ MonoBehaviour:
   m_Name: QuestData
   m_EditorClassIdentifier: 
   Categories:
-  - Name: A
+  - Name: Story
     Objects:
     - Name: ABCD
-      id: 1660223813
-      description: 
+      id: 189123574
+      description: Mine the rocks before the timer runs out!
       state: 0
-      rewards: []
+      timeToFail: 10
+      rewards:
+      - rid: 2978320954781073485
+      penalties:
+      - rid: 2978320954781073490
       objectives:
-      - rid: 7966940435101253930
-    Icon: {fileID: 0}
+      - rid: 2978320954781073482
+      - rid: 2978320954781073484
+    Icon: {fileID: 2800000, guid: 2b61dc557efa942428ac194cfa787fd7, type: 3}
   references:
     version: 2
     RefIds:
-    - rid: 7966940435101253930
+    - rid: 2978320954781073482
+      type: {class: AnyExcavationObjective, ns: Objectives, asm: Quests}
+      data:
+        maxProgress: 4
+    - rid: 2978320954781073484
       type: {class: ExcavationObjective, ns: Objectives, asm: Quests}
       data:
         maxProgress: 0
         needToRemove:
-        - x: 15
-          z: 0
-          y: 5
+        - x: 9
+          z: 6
+          y: 0
+        - x: 10
+          z: 6
+          y: 0
+        - x: 11
+          z: 6
+          y: 0
+    - rid: 2978320954781073485
+      type: {class: QuestResourceReward, ns: , asm: Quests}
+      data:
+        resource:
+          types: 
+          ammounts: 
+          baseResource:
+            types: 0200000003000000
+            ammounts: 0a00000005000000
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 54
+            currentValue: 54
+            mod:
+              percentMod: 1
+              absoluteMod: 0
+    - rid: 2978320954781073490
+      type: {class: QuestMoneyPenalty, ns: , asm: Quests}
+      data:
+        penaltyAmmount: 50

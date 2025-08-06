@@ -84,7 +84,6 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     void Update()
     {
         mod = isMod.IsInProgress() ? 2 : 1;
-        mod *= Time.timeScale;
 
         Move();
         RotZoom();
@@ -236,7 +235,7 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     void Zoom(float zoom)
     {
         //print(zoom);
-        zoom = zoom * 200 * Time.deltaTime / mod;
+        zoom = zoom * 200 * Time.unscaledDeltaTime / mod;
         Transform cam = transform.GetChild(0);
         if (zoom > 0 && cam.localPosition.y > minY)
         {
@@ -264,22 +263,18 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     /// <returns>Value to move by.</returns>
     float GetSpeed(ref float currentMovement, float add, float remove, int max, float input)
     {
-        float f = Time.deltaTime / mod * generalSpeed;
+        float f = Time.unscaledDeltaTime * generalSpeed;
+        float fMod = f / mod;
         switch (input)
         {
+            // input (speed up to a max)
             case > 0:
-                if (currentMovement + add * f < max)
-                    currentMovement += add * f;
-                else
-                    currentMovement = max;
+                currentMovement = Mathf.Clamp(currentMovement + add * fMod, -max, max);
                 break;
             case < 0:
-                if (currentMovement - add * f > -max)
-                    currentMovement -= add * f;
-                else
-                    currentMovement = -max;
-
+                currentMovement = Mathf.Clamp(currentMovement - add * fMod, -max, max);
                 break;
+            // no input (slowing down)
             case 0:
                 switch (currentMovement)
                 {

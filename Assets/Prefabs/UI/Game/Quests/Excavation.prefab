@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8181247507270422624}
   - component: {fileID: 3413701018285143956}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Excavation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
