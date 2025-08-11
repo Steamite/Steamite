@@ -12,6 +12,8 @@ using UnityEngine.UIElements;
 public class QuestController : MonoBehaviour, IQuestController, IGameDataController<QuestsSave>
 {
     [SerializeField] public GameObject ExcavationIcon;
+    [SerializeField] UIDocument questCatalog;
+    [SerializeField] UIDocument questInteface;
     public QuestHolder data;
 
     public List<Quest> finishedQuests;
@@ -68,8 +70,9 @@ public class QuestController : MonoBehaviour, IQuestController, IGameDataControl
                 finishedQuests.Add(quest);
             }
         }
-        ((IUIElement)GetComponent<UIDocument>().rootVisualElement[3]).Open(this);
         SceneRefs.Tick.SubscribeToEvent(UpdateTimers, Tick.TimeEventType.Ticks);
+        ((IUIElement)questInteface.rootVisualElement[3]).Open(this);
+        (questCatalog.rootVisualElement[0][0] as IUIElement).Open(this);
     }
 
     public void UpdateTimers()

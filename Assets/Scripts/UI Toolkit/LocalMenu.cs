@@ -27,6 +27,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
     {
         menu = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Menu");
         menu.pickingMode = PickingMode.Ignore;
+        menu.style.display = DisplayStyle.None;
         ToolkitUtils.localMenu = this;
         header = menu.ElementAt(0) as Label;
         secondHeader = menu.ElementAt(1) as Label;

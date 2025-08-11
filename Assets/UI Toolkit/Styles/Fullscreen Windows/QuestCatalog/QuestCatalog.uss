@@ -1,0 +1,55 @@
+QuestCatalog {
+    max-width: 30%;
+    min-width: 30%;
+    border-right-width: 3px;
+    border-left-color: rgb(161, 148, 59);
+    border-right-color: rgb(161, 148, 59);
+    border-top-color: rgb(161, 148, 59);
+    border-bottom-color: rgb(161, 148, 59);
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+QuestInfo {
+    margin-left: 10px;
+    flex-grow: 1;
+}
+
+.quest-header {
+    font-size: 75px;
+}
+
+.quest-description {
+    white-space: normal;
+}
+
+.end-group {
+    border-top-width: 4px;
+    border-top-color: rgb(181, 166, 66);
+    margin-top: 10px;
+}
+
+.bottom-row {
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.bottom-list {
+    width: 50%;
+}
+
+.bot-temp-list {
+    min-width: 40%;
+    max-width: 40%;
+}
+
+.temp-label {
+    -unity-text-align: upper-center;
+}
+
+#unity-content-container {
+    min-width: 100%;
+    max-width: 100%;
+}
