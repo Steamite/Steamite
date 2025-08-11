@@ -20,4 +20,9 @@ public class QuestResourceReward : QuestReward
         MyRes.DeliverToElevator(resource);
         MyRes.ManageMoneyGlobal(+resource.Money);
     }
+
+    public override string ToString()
+    {
+        return $"Obtain: {resource}";
+    }
 }

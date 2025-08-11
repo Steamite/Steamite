@@ -609,8 +609,8 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    types: 
-    ammounts: 
+    types: 02000000
+    ammounts: 0a000000
     baseResource:
       types: 02000000
       ammounts: 0a000000

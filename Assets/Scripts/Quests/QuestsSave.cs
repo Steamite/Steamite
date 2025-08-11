@@ -21,6 +21,7 @@ public class QuestSave
     public int questId;
     public List<int> currentProgress;
     public QuestState state;
+    public int timeToFail;
 
     public QuestSave() { }
     public QuestSave(Quest quest)
@@ -28,5 +29,6 @@ public class QuestSave
         questId = quest.id;
         currentProgress = quest.objectives.Select(q => q.CurrentProgress).ToList();
         state = quest.state;
+        timeToFail = quest.TimeToFail;
     }
 }
