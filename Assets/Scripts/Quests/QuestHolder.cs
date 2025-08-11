@@ -39,13 +39,17 @@ public class Quest : DataObject, IUpdatable
         {
             foreach (var penalty in penalties)
                 penalty.GetPenalty();
+            foreach (Objective objective in objectives)
+                objective.Cancel(controller);
         }
         controller.activeQuests.Remove(this);
         controller.finishedQuests.Add(this);
+        controller.AddDummy();
     }
 
     public void Load(QuestSave save, QuestController controller)
     {
+        timeToFail = save.timeToFail;
         for (int i = 0; i < objectives.Count; i++)
         {
             objectives[i].Load(save.currentProgress[i], this, controller);
@@ -68,6 +72,16 @@ public class Quest : DataObject, IUpdatable
     public void UIUpdate(string property = "")
     {
         propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
+    }
+
+    public string GetRewPenText()
+    {
+        string s = "";
+        foreach (QuestReward item in rewards)
+            s += item.ToString();
+        foreach (QuestPenalty item in penalties)
+            s += item.ToString();
+        return s;
     }
 
     public Quest() { }

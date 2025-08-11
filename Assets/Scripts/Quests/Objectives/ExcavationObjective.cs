@@ -2,18 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 namespace Objectives
 {
     [Serializable]
     public class ExcavationObjective : Objective
     {
+        public override string Descr => "Dig out marked rocks:";
         public List<GridPos> needToRemove = new();
+
+        #region Constructors
         public ExcavationObjective() { }
         public ExcavationObjective(List<GridPos> toRemove, Quest _quest)
         {
             needToRemove = toRemove.ToList();
             maxProgress = toRemove.Count;
         }
+        #endregion
 
         public override bool UpdateProgress(object data, QuestController controller)
         {
@@ -22,7 +27,7 @@ namespace Objectives
             {
                 res = base.UpdateProgress(data, controller);
                 if (res)
-                    controller.ExcavationObjectives.Remove(this);
+                    Cancel(controller);
             }
             return res; 
         }
@@ -41,16 +46,33 @@ namespace Objectives
             controller.ExcavationObjectives.Add(this);
             base.Load(_currentProgress, _quest, controller);
         }
+
+        public override void Cancel(QuestController controller)
+        {
+            controller.ExcavationObjectives.Remove(this);
+            foreach (var item in needToRemove)
+            {
+                if(MyGrid.GetGridItem(item) is Rock rock)
+                {
+                    rock.isQuest = false;
+                    GameObject.Destroy(rock.transform.GetChild(0).gameObject);
+                }
+            }
+        }
+
     }
 
     [Serializable]
     public class AnyExcavationObjective : Objective
     {
+        public override string Descr => "Dig out rocks:";
+        #region Constructors
         public AnyExcavationObjective() { }
         public AnyExcavationObjective(int toRemove)
         {
             maxProgress = toRemove;
         }
+        #endregion
 
         public override bool UpdateProgress(object data, QuestController controller)
         {
@@ -59,14 +81,20 @@ namespace Objectives
             {
                 res = base.UpdateProgress(data, controller);
                 if (res)
-                    controller.AnyExcavationObjectives.Remove(this);
+                    Cancel(controller);
             }
             return res;
         }
+
         public override void Load(int _currentProgress, Quest _quest, QuestController controller)
         {
             base.Load(_currentProgress, _quest, controller);
             controller.AnyExcavationObjectives.Add(this);
+        }
+
+        public override void Cancel(QuestController controller)
+        {
+            controller.AnyExcavationObjectives.Remove(this);
         }
     }
 }

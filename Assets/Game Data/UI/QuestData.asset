@@ -19,7 +19,7 @@ MonoBehaviour:
       id: 189123574
       description: Mine the rocks before the timer runs out!
       state: 0
-      timeToFail: 10
+      timeToFail: 40
       rewards:
       - rid: 2978320954781073485
       penalties:
@@ -27,6 +27,16 @@ MonoBehaviour:
       objectives:
       - rid: 2978320954781073482
       - rid: 2978320954781073484
+    - Name: CD
+      id: 628004855
+      description: Construct a new building
+      state: 0
+      timeToFail: -1
+      rewards:
+      - rid: 7966940479640043670
+      penalties: []
+      objectives:
+      - rid: 7966940479640043668
     Icon: {fileID: 2800000, guid: 2b61dc557efa942428ac194cfa787fd7, type: 3}
   references:
     version: 2
@@ -71,3 +81,26 @@ MonoBehaviour:
       type: {class: QuestMoneyPenalty, ns: , asm: Quests}
       data:
         penaltyAmmount: 50
+    - rid: 7966940479640043668
+      type: {class: BuildingObjective, ns: , asm: Quests}
+      data:
+        maxProgress: 1
+        _buildingTypeName: FluidTank
+    - rid: 7966940479640043670
+      type: {class: QuestResourceReward, ns: , asm: Quests}
+      data:
+        resource:
+          types: 
+          ammounts: 
+          baseResource:
+            types: 
+            ammounts: 
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 0
+            currentValue: 0
+            mod:
+              percentMod: 1
+              absoluteMod: 0

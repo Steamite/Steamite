@@ -7,17 +7,20 @@ using UnityEngine.UIElements;
 namespace Objectives
 {
     [Serializable]
-    public class Objective : IUpdatable, IQuestCompositor
+    public abstract class Objective : IUpdatable, IQuestCompositor
     {
         [SerializeField, InspectorName("max")] protected int maxProgress;
         [NonSerialized] protected int currentProgress;
         [NonSerialized] protected Quest quest;
 
+        [CreateProperty]
+        public abstract string Descr { get; }
 
         [CreateProperty]
         public int CurrentProgress
         {
             get => currentProgress;
+            set => currentProgress = value;
         }
 
         [CreateProperty]
@@ -30,15 +33,14 @@ namespace Objectives
                 UIUpdate(nameof(MaxProgress));
             }
         }
-
-
-
+        #region Updates
         public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
+
         public void UIUpdate(string property = "")
         {
             propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
         }
-
+        #endregion
         public virtual bool UpdateProgress(object data, QuestController controller) 
         {
             currentProgress++;
@@ -56,6 +58,18 @@ namespace Objectives
         {
             quest = _quest;
             currentProgress = _currentProgress;
+        }
+
+        public abstract void Cancel(QuestController controller);
+    }
+
+    public class DummyObjective : Objective
+    {
+        public override string Descr => throw new NotImplementedException();
+
+        public override void Cancel(QuestController controller)
+        {
+            throw new NotImplementedException();
         }
     }
 }

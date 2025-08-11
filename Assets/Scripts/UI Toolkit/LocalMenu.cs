@@ -69,8 +69,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
         width = 300;
         switch (data)
         {
-            case ColonyStat:
-                ColonyStat stat = data as ColonyStat;
+            case ColonyStat stat:
                 header.text = stat.name;
                 if (element is Label)
                 {
@@ -83,8 +82,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                     description.text = stat.GetText(element.parent.IndexOf(element) + 1);
                 }
                 break;
-            case ResearchNode:
-                ResearchNode node = data as ResearchNode;
+            case ResearchNode node:
                 header.text = node.Name;
                 secondHeader.style.display = DisplayStyle.Flex;
                 menu.style.width = 400;
@@ -109,8 +107,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 }
                 description.text = node.description.Replace('$', ' ');
                 break;
-            case BuildingWrapper:
-                BuildingWrapper wrapper = data as BuildingWrapper;
+            case BuildingWrapper wrapper:
                 Building building = wrapper.building;
                 header.text = building.objectName;
 
@@ -126,29 +123,30 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 }
                 description.text = "";
                 break;
-            case TradeLocation:
-                TradeLocation location = data as TradeLocation;
-                header.text = location.name;
+            case TradeLocation tradeLocation:
+                header.text = tradeLocation.name;
                 secondHeader.text = "trade location";
                 List<TradeConvoy> convoyList = UIRefs.TradingWindow.GetConvoys();
-                TradeConvoy convoy = convoyList.FirstOrDefault(q => q.tradeLocation == UIRefs.TradingWindow.tradeLocations.IndexOf(location));
+                TradeConvoy convoy = convoyList.FirstOrDefault(q => q.tradeLocation == UIRefs.TradingWindow.tradeLocations.IndexOf(tradeLocation));
                 if (convoy != null)
                     description.text = convoy.ToString();
                 else
                     description.text = "";
                     break;
-            case ColonyLocation:
-                ColonyLocation colonyLocation = data as ColonyLocation;
+            case ColonyLocation colonyLocation:
                 header.text = colonyLocation.name;
                 secondHeader.text = "colony";
                 secondHeader.style.display = DisplayStyle.Flex;
                 break;
-            case Outpost:
+            case Outpost outpost:
                 width = 200;
-                Outpost outpost = data as Outpost;
                 header.text = outpost.name;
                 secondHeader.text = "outpost";
                 secondHeader.style.display = DisplayStyle.Flex;
+                break;
+            case Quest quest:
+                header.text = quest.Name;
+                description.text = quest.GetRewPenText();
                 break;
         }
         if (onlyUpdate == false)
@@ -171,6 +169,15 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
         costList.ClearBindings();
         isOpen = false;
         menu.RegisterCallbackOnce<TransitionEndEvent>(
+            (q) =>
+            {
+                if (isOpen == false)
+                {
+                    menu.style.display = DisplayStyle.None;
+                    anchor = null;
+                }
+            });
+        menu.RegisterCallbackOnce<TransitionCancelEvent>(
             (q) =>
             {
                 if (isOpen == false)

@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/UnitySelectors.uss?fileID=7433441132597879392&amp;guid=3468915a4f8821544854e970a313de3c&amp;type=3#UnitySelectors" />
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Save%20window.uss?fileID=7433441132597879392&amp;guid=eca73d8699a9e1c41a8dd8849b9c0de9&amp;type=3#Save window" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/UnitySelectors.uss?fileID=7433441132597879392&amp;guid=3468915a4f8821544854e970a313de3c&amp;type=3#UnitySelectors" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Save%20window.uss?fileID=7433441132597879392&amp;guid=eca73d8699a9e1c41a8dd8849b9c0de9&amp;type=3#Save window" />
     <ui:VisualElement name="Load-Menu" enabled="true" style="flex-grow: 0; display: flex; -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;); color: rgb(181, 166, 66); width: 80%; height: 80%; left: 10%; top: 10%; background-color: rgb(46, 29, 14);">
         <ui:VisualElement name="Background" class="menu-view" style="width: 100%; position: relative;">
             <ui:VisualElement name="Header-Bar" class="bar" style="flex-grow: 0; width: 100%; height: 10%; max-height: 10%; flex-direction: row; align-content: auto; align-items: auto; justify-content: space-between; flex-shrink: 0;">

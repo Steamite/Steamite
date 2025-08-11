@@ -34,7 +34,7 @@ public class Tick : MonoBehaviour
     [Header("Tick speed")][SerializeField] float ticksPerHour = 4;
     /// <summary>Progresses time by this(60/<see cref="ticksPerHour"/>).</summary>
     private int minutesPerTick;
-    public int MinutesPerTick => (int)(60f / ticksPerHour);
+    public int MinutesPerTick = 15;
 
     /// <summary>Current time of the day(counts as hours when starting a new game).</summary>
     public int timeInMinutes = 4;
@@ -152,7 +152,7 @@ public class Tick : MonoBehaviour
     #region Init
     public void InitTicks()
     {
-        minutesPerTick = MinutesPerTick;
+        minutesPerTick = (int)(60f / ticksPerHour);
         TicksInDay = 1440 / minutesPerTick;
         if (timeInMinutes < 6 * 60 || timeInMinutes > 21 * 60)
             nightStart?.Invoke();

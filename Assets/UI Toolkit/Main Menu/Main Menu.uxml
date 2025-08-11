@@ -1,10 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:Template name="Load-Menu" src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Main%20Menu/Load%20Menu.uxml?fileID=9197481963319205126&amp;guid=87550cde01cc7fa4a83489895c6bf595&amp;type=3#Load Menu" />
     <ui:Template name="New-Menu" src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Main%20Menu/New%20Menu.uxml?fileID=9197481963319205126&amp;guid=a21b2d24a7ce6d4418e0be14f77b541e&amp;type=3#New Menu" />
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Save%20window.uss?fileID=7433441132597879392&amp;guid=eca73d8699a9e1c41a8dd8849b9c0de9&amp;type=3#Save window" />
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Main%20Menu.uss?fileID=7433441132597879392&amp;guid=91ba141990bab14419ef28afeec0dc78&amp;type=3#Main Menu" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Save%20window.uss?fileID=7433441132597879392&amp;guid=eca73d8699a9e1c41a8dd8849b9c0de9&amp;type=3#Save window" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Main%20Menu.uss?fileID=7433441132597879392&amp;guid=91ba141990bab14419ef28afeec0dc78&amp;type=3#Main Menu" />
     <ui:VisualElement name="Background" class="Empty" style="-unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;); font-size: 50px; overflow: hidden; visibility: visible; display: flex; background-color: rgb(46, 29, 14);">
         <ui:VisualElement name="Elements" class="menu" style="flex-grow: 1;">
             <ui:Instance template="Load-Menu" name="Load-Menu" class="window" style="display: flex; position: absolute; flex-grow: 1; width: 100%; height: 100%; translate: 0 100%;" />

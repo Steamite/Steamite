@@ -1,5 +1,5 @@
 QuestGroup {
-    background-color: rgba(0, 0, 0, 0.62);
+    background-color: rgba(0, 0, 0, 0.32);
     width: 300px;
     position: relative;
     top: 8%;
@@ -11,6 +11,8 @@ QuestGroup {
 
 QuestElement {
     padding-left: 5px;
+    background-color: rgba(0, 0, 0, 0);
+    transition-duration: 2s;
 }
 
 .quest-name {
@@ -18,6 +20,12 @@ QuestElement {
     -unity-font-style: normal;
     -unity-text-generator: advanced;
     text-shadow: 1px 1px 0 rgb(0, 0, 0);
+    white-space: normal;
+    margin-right: 5px;
+}
+
+.quest-time {
+    font-size: 25px;
 }
 
 .quest-description {
@@ -31,7 +39,32 @@ QuestElement {
     flex-direction: row;
 }
 
+.quest-objective-descr {
+    margin-right: 5px;
+    font-size: 22px;
+}
+
 .quest-objective {
-    font-size: 16px;
+    font-size: 22px;
     -unity-font-style: normal;
+}
+
+.failed {
+    color: rgb(253, 0, 24);
+    transition-duration: 3s, 2.5s;
+    translate: -100% 0;
+    transition-property: color, translate;
+    transition-delay: 0s, 0.5s;
+}
+
+.completed {
+    color: rgb(89, 255, 0);
+    transition-duration: 3s, 2.5s;
+    translate: -100% 0;
+    transition-property: color, translate;
+    transition-delay: 0s, 0.5s;
+}
+
+.quest-header {
+    flex-direction: row;
 }

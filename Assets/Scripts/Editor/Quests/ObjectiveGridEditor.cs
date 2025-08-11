@@ -10,6 +10,7 @@ using UnityEngine.UIElements;
 [UxmlElement]
 public partial class ObjectiveGridEditor : QuestCompositorList<Objective>
 {
+    List<Type> buildingTypes = TypeCache.GetTypesDerivedFrom(typeof(Building)).ToList();
     public ObjectiveGridEditor() : base() 
     {
         columns.Add(new Column()
@@ -49,37 +50,44 @@ public partial class ObjectiveGridEditor : QuestCompositorList<Objective>
 
         columns.Add(new Column()
         {
-            title = "Positions",
+            title = "Special",
             width = 150,
             resizable = false,
             stretchable = true,
-            makeCell = () => new Button() { text = "Set Positions" },
+            makeCell = () => new VisualElement() { style = { flexGrow = 1 } },
             bindCell = (el, i) =>
             {
-                if (itemsSource[i] is ExcavationObjective objective)
+                el.Clear();
+                switch (itemsSource[i])
                 {
-                    Button button = el as Button;
-                    button.style.display = DisplayStyle.Flex;
-                    GridPosList list = new GridPosList();
-                    button.clicked += () => ButtonClick(i, list);
-                    list.Bind(holder, ref objective.needToRemove, (x) => RefreshItem(i));
+                    case ExcavationObjective excavation:
+                        Button button = new Button() { text = "set positions" };// style = { flexGrow = 1 } };
+                        el.Add(button);
+                        button.style.display = DisplayStyle.Flex;
 
+                        GridPosList list = new GridPosList();
+                        button.clicked += () => ButtonClick(i, list);
+                        list.Bind(holder, ref excavation.needToRemove, (x) => RefreshItem(i));
+                        break;
+                    case BuildingObjective building:
+                        DropdownField field = new();
+                        el.Add(field);
+                        field.choices = buildingTypes.Select(q => q.Name).ToList();
+                        field.value = building.BuildingTypeName;
+                        field.RegisterValueChangedCallback(BuildingTypeChange);
+                        break;
                 }
-                else
-                    el.style.display = DisplayStyle.None;
             },
             unbindCell = (el, i) =>
             {
-                Button button = el as Button;
-                GridPosList list = new GridPosList();
-                button.clicked -= () => ButtonClick(i, list);
+                el.Clear();
             }
 
         });
 
         onAdd = (list) =>
         {
-            data.objectives.Add(new Objective());
+            data.objectives.Add(new DummyObjective());
             EditorUtility.SetDirty(holder);
             RefreshItems();
         };
@@ -104,6 +112,15 @@ public partial class ObjectiveGridEditor : QuestCompositorList<Objective>
         if(ev.newValue != ev.previousValue)
         {
             (itemsSource[i] as Objective).MaxProgress = ev.newValue;
+            EditorUtility.SetDirty(holder);
+        }
+    }
+    void BuildingTypeChange(ChangeEvent<string> ev)
+    {
+        int i = ev.target.GetRowIndex();
+        if (ev.newValue != ev.previousValue)
+        {
+            (itemsSource[i] as BuildingObjective).BuildingTypeName = ev.newValue;
             EditorUtility.SetDirty(holder);
         }
     }

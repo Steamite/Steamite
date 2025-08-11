@@ -19,4 +19,9 @@ public class QuestMoneyPenalty : QuestPenalty
     {
         MyRes.ManageMoneyGlobal(-penaltyAmmount);
     }
+
+    public override string ToString()
+    {
+        return penaltyAmmount.ToString();
+    }
 }

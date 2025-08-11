@@ -1,5 +1,7 @@
 using Objectives;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Properties;
@@ -12,17 +14,21 @@ public class QuestController : MonoBehaviour, IQuestController, IGameDataControl
     [SerializeField] public GameObject ExcavationIcon;
     public QuestHolder data;
 
-    //[CreateProperty] public IEnumerable<DataObject> ActiveQuests { get => activeQuests; }
     public List<Quest> finishedQuests;
-    public List<Quest> activeQuests;
+    public ObservableCollection<Quest> activeQuests;
+
 
     List<Objective> objectives;
     public List<ExcavationObjective> ExcavationObjectives = new();
     public List<AnyExcavationObjective> AnyExcavationObjectives = new();
+    public List<BuildingObjective> buildingObjectives = new();
 
     public void BuildBuilding(object obj)
     {
-        throw new System.NotImplementedException();
+        for (int i = buildingObjectives.Count - 1; i > -1; i--)
+        {
+            buildingObjectives[i].UpdateProgress(obj, this);
+        }
     }
 
     public void DigRock(object obj)
@@ -46,8 +52,8 @@ public class QuestController : MonoBehaviour, IQuestController, IGameDataControl
         activeQuests = new();
         finishedQuests = new();
 
-        QuestHolder questHolder = Instantiate(await Addressables.LoadAssetAsync<QuestHolder>("Assets/Game Data/UI/QuestData.asset").Task);
-        List<Quest> quests = questHolder.Categories.SelectMany(q => q.Objects).ToList();
+        data = Instantiate(await Addressables.LoadAssetAsync<QuestHolder>("Assets/Game Data/UI/QuestData.asset").Task);
+        List<Quest> quests = data.Categories.SelectMany(q => q.Objects).ToList();
         foreach (Quest quest in quests)
         {
             QuestSave save;
@@ -72,5 +78,22 @@ public class QuestController : MonoBehaviour, IQuestController, IGameDataControl
         {
             activeQuests[i].DecreaseTimeToFail(this);
         }
+    }
+
+    public void AddDummy()
+    {
+        Quest quest = new Quest();
+        quest.Name = "Dummy";
+        quest.description = "persistent quest";
+        quest.objectives.Add(new AnyExcavationObjective(3));
+        QuestSave save = new()
+        {
+            questId = -5,
+            state = QuestState.Active,
+            currentProgress = new() { 0 },
+            timeToFail = 30
+        };
+        quest.Load(save, this);
+        activeQuests.Add(quest);
     }
 }

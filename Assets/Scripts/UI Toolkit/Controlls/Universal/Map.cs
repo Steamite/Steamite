@@ -101,7 +101,7 @@ namespace AbstractControls
                 {
                     if (actions.actionMaps[3].actions[0].inProgress && !ignoreNextDelta)
                     {
-                        Move(eve.mouseDelta * moveSpeed * Time.deltaTime * zoom / Time.timeScale);
+                        Move(eve.mouseDelta * moveSpeed * Time.unscaledDeltaTime * zoom);
                         #region Mouse warp
                         Vector2 newMousePos = eve.mousePosition;
                         if (eve.mouseDelta.x > 0 && eve.mousePosition.x >= boundBox.xMax - 10)
@@ -180,7 +180,7 @@ namespace AbstractControls
             {
                 int zoomMod = wheelEvent.delta.y > 0 ? -1 : 1;
                 float oldZ = zoom;
-                zoom = Mathf.Clamp(zoom + (0.1f * zoomMod) * zoomSpeed * Time.deltaTime / Time.timeScale, resolvedStyle.width / baseWidth, 2);
+                zoom = Mathf.Clamp(zoom + (0.1f * zoomMod) * zoomSpeed * Time.unscaledDeltaTime, resolvedStyle.width / baseWidth, 2);
 
                 if (oldZ != zoom)
                 {

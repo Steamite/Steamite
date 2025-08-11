@@ -221,6 +221,7 @@ public class Building : StorageObject
             constructed = true;
             if (this is not IStorage)
                 localRes.Dump();
+            SceneRefs.QuestController.BuildBuilding(this);
         }
         
         if (selected)

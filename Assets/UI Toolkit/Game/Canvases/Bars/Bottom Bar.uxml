@@ -19,5 +19,5 @@
         </engine:VisualElement>
     </engine:VisualElement>
     <LevelButtons style="position: absolute; bottom: 175px; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px;" />
-    <QuestGroup />
+    <QuestGroup virtualization-method="DynamicHeight" selection-type="None" allow-add="false" allow-remove="false" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
 </engine:UXML>
