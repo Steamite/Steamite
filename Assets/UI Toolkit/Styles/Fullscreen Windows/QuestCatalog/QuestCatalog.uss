@@ -9,12 +9,17 @@ QuestCatalog {
     margin-top: 10px;
     margin-right: 10px;
     margin-bottom: 10px;
-    margin-left: 10px;
+    margin-left: 0;
 }
 
 QuestInfo {
     margin-left: 10px;
     flex-grow: 1;
+}
+
+#unity-content-container {
+    min-width: 100%;
+    max-width: 100%;
 }
 
 .quest-header {
@@ -29,27 +34,105 @@ QuestInfo {
     border-top-width: 4px;
     border-top-color: rgb(181, 166, 66);
     margin-top: 10px;
+    padding-top: 20px;
 }
 
 .bottom-row {
     flex-direction: row;
     justify-content: space-around;
+    margin-top: 15px;
+    align-content: flex-start;
+    align-items: flex-start;
+}
+
+.list-title {
+    -unity-text-align: upper-center;
+    margin-top: 10px;
+    border-left-color: rgb(91, 58, 28);
+    border-right-color: rgb(91, 58, 28);
+    border-top-color: rgb(91, 58, 28);
+    border-bottom-color: rgb(91, 58, 28);
+    border-bottom-width: 5px;
+}
+
+.list-label {
+    background-color: rgba(0, 0, 0, 0);
+    -unity-text-align: upper-center;
+    white-space: normal;
+    color: rgb(161, 148, 59);
+}
+
+TitleListView {
+    background-color: rgb(46, 29, 14);
+    border-left-color: rgb(114, 73, 35);
+    border-right-color: rgb(114, 73, 35);
+    border-top-color: rgb(114, 73, 35);
+    border-bottom-color: rgb(114, 73, 35);
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding-bottom: 5px;
+}
+
+.objective-list {
+    min-width: 90%;
+    max-width: 90%;
+    align-self: center;
 }
 
 .bottom-list {
-    width: 50%;
-}
-
-.bot-temp-list {
     min-width: 40%;
     max-width: 40%;
 }
 
-.temp-label {
-    -unity-text-align: upper-center;
+#unity-checkmark {
+    -unity-background-image-tint-color: rgb(181, 166, 66);
 }
 
-#unity-content-container {
-    min-width: 100%;
-    max-width: 100%;
+.category {
+    background-color: rgb(46, 29, 14);
+    color: rgb(161, 148, 59);
+    border-bottom-width: 2px;
+    border-bottom-color: rgb(28, 28, 28);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-left-color: rgb(28, 28, 28);
+    border-right-color: rgb(28, 28, 28);
+    border-top-color: rgb(28, 28, 28);
+}
+
+.tree-content {
+    background-color: rgb(68, 44, 21);
+    color: rgb(161, 148, 59);
+    border-bottom-width: 2px;
+    border-bottom-color: rgb(28, 28, 28);
+    border-left-width: 0;
+    border-right-width: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 10px;
+    border-left-color: rgb(28, 28, 28);
+    border-right-color: rgb(28, 28, 28);
+    border-top-color: rgb(28, 28, 28);
+}
+
+.tree-content:checked {
+    color: rgb(181, 166, 66);
+    background-color: rgb(137, 87, 42);
+}
+
+#unity-tab__content-container {
+    flex-grow: 1;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.unity-repeat-button {
+    display: none;
 }

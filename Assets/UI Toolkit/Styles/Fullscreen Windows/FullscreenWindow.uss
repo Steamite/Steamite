@@ -53,3 +53,6 @@ RepeatButton {
     scale: 1.05 1.05;
     background-color: rgb(68, 44, 21);
 }
+
+#unity-tab-view__header-container {
+}

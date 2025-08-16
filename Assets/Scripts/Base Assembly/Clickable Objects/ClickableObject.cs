@@ -102,6 +102,7 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <param name="eventData">Mouse data</param>
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
+        Debug.Log(this);
         SceneRefs.GridTiles.Enter(this);
         if (SceneRefs.GridTiles.drag)
             eventData.pointerPress = gameObject;

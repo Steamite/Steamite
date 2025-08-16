@@ -22,6 +22,6 @@ public class QuestMoneyPenalty : QuestPenalty
 
     public override string ToString()
     {
-        return penaltyAmmount.ToString();
+        return $"Money: {penaltyAmmount}";
     }
 }

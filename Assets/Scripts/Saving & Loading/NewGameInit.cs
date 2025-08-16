@@ -100,7 +100,7 @@ public class NewGameInit : MonoBehaviour
         QuestHolder quest = await Addressables.LoadAssetAsync<QuestHolder>("Assets/Game Data/UI/QuestData.asset").Task;
         QuestsSave questSave = new()
         {
-            activeQuests = new() { new(quest.Categories[0].Objects[1]) },
+            activeQuests = new() { new(quest.Categories[0].Objects[0]) {state = QuestState.Active } },
             finishedQuests = new()
         };
         return questSave;

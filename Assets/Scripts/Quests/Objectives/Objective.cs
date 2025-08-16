@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Unity.Properties;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -61,6 +62,11 @@ namespace Objectives
         }
 
         public abstract void Cancel(QuestController controller);
+
+        public override string ToString()
+        {
+            return $"{Descr} {currentProgress}/{maxProgress}";
+        }
     }
 
     public class DummyObjective : Objective

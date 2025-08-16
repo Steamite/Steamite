@@ -35,7 +35,7 @@ public class MoneyResource : ModifiableResource
     }
     public override string ToString()
     {
-        string s = $"{money} Money";
+        string s = $"{money} Money,";
         for (int i = 0; i < types.Count; i++)
         {
             s += $"{ammounts[i]} {types[i]}{((i < types.Count - 1) ? ", ": ".")}";

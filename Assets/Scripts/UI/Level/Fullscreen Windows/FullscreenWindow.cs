@@ -26,13 +26,16 @@ public abstract class FullscreenWindow : MonoBehaviour
     /// <summary>Opening the window, disables shortcuts and hides info window.</summary>
     public virtual void OpenWindow()
     {
-        isOpen = true;
-        SceneRefs.GridTiles.MarkPipeCheckpoint();
-        SceneRefs.GridTiles.DeselectObjects();
-        MainShortcuts.DisableInput();
-        SceneRefs.InfoWindow?.Close();
-        window.style.display = DisplayStyle.Flex;
-        SceneRefs.Tick.UIWindowToggle(false);
+        if (UIRefs.FullscreenConstraint())
+        {
+            isOpen = true;
+            SceneRefs.GridTiles.MarkPipeCheckpoint();
+            SceneRefs.GridTiles.DeselectObjects();
+            MainShortcuts.DisableInput();
+            SceneRefs.InfoWindow?.Close();
+            window.style.display = DisplayStyle.Flex;
+            SceneRefs.Tick.UIWindowToggle(false);
+        }
     }
 
     /// <summary>Closing the window, enables shortcuts.</summary>

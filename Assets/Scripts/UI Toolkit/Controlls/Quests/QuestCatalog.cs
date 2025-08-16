@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 [UxmlElement]
@@ -16,6 +14,8 @@ public partial class QuestCatalog : TreeView, IUIElement
             if (quest != null)
             {
                 (el as Label).text = quest.Name;
+                el.parent.parent.AddToClassList("tree-content");
+
             }
             else
             {
@@ -34,7 +34,19 @@ public partial class QuestCatalog : TreeView, IUIElement
                         break;
                 }
                 (el as Label).text = s;
+                el.parent.parent.AddToClassList("category");
+
+                el.userData = id;
+                el.UnregisterCallback<ClickEvent>(ExpandEvent);
+                el.RegisterCallback<ClickEvent>(ExpandEvent);
             }
+        };
+
+        unbindItem = (el, i) =>
+        {
+            int id = GetIdForIndex(i);
+            el.parent.parent.RemoveFromClassList("category");
+            el.parent.parent.RemoveFromClassList("tree-content");
         };
 
         selectionChanged += (items) => 
@@ -46,6 +58,7 @@ public partial class QuestCatalog : TreeView, IUIElement
                 break;
             }
         };
+        autoExpand = true;
     }
 
     public void Open(object data)
@@ -59,7 +72,32 @@ public partial class QuestCatalog : TreeView, IUIElement
             activeQuests.Add(new(item.id, item));
         }
         items.Add(new(-1, null, activeQuests));
+
+        var finishedQuests = new List<TreeViewItemData<Quest>>();
+        foreach (Quest item in controller.finishedQuests)
+        {
+            finishedQuests.Add(new(item.id, item));
+        }
+        items.Add(new(-2, null, finishedQuests));
+
         SetRootItems(items);
         Rebuild();
+
+        selectedIndex = -1;
+        (parent[1] as QuestInfo).Open(null);
+    }
+
+    public void ExpandEvent(ClickEvent ev)
+    {
+        if (ev.clickCount == 2)
+        {
+            int id = (int)(ev.target as VisualElement).userData;
+            if (IsExpanded(id))
+                CollapseItem(id);
+            else
+                ExpandItem(id);
+            ev.StopPropagation();
+        }
+        ev.StopImmediatePropagation();
     }
 }

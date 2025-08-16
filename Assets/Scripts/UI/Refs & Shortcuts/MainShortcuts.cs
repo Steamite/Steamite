@@ -13,6 +13,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
     InputAction shift;
     InputAction research;
     InputAction trade;
+    InputAction quests;
 
     [SerializeField] public InputActionAsset inputAsset;
     public static bool handleGrid;
@@ -28,6 +29,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
         shift = bindingMap.FindAction("Shift");
         research = bindingMap.FindAction("Research");
         trade = bindingMap.FindAction("Trade");
+        quests = bindingMap.FindAction("Quests");
         enabled = true;
         EnableInput();
     }
@@ -127,20 +129,16 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
         {
             if (research.triggered)
             {
-                if (UIRefs.TradingWindow.isOpen)
-                    UIRefs.TradingWindow.CloseWindow();
                 UIRefs.ResearchWindow.ToggleWindow();
             }
             else if (trade.triggered)
             {
-                if (UIRefs.ResearchWindow.isOpen)
-                    UIRefs.ResearchWindow.CloseWindow();
                 UIRefs.TradingWindow.ToggleWindow();
             }
-            /*else if(UIRefs.trading.isOpen && )
+            else if (quests.triggered)
             {
-                
-            }*/
+                UIRefs.Quests.ToggleWindow();
+            }
         }
         // opens ingame menu
         if (menu.triggered)

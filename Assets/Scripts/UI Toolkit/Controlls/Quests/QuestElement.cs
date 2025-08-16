@@ -60,6 +60,7 @@ public partial class QuestElement : VisualElement
         objectives.Clear();
         for (int i = 0; i < quest.objectives.Count; i++)
         {
+            var obj = quest.objectives[i];
             VisualElement elemGroup = new();
             elemGroup.AddToClassList("quest-objective-group");
 
@@ -74,7 +75,18 @@ public partial class QuestElement : VisualElement
             label.SetBinding(
                 nameof(Objective.CurrentProgress),
                 "text",
-                (ref int x) => $"{x}/",
+                (ref int x) =>
+                {
+                    if(x == obj.MaxProgress && elemGroup.parent.childCount > 1)
+                    {
+                        elemGroup.AddToClassList("completed");
+                        elemGroup.RegisterCallbackOnce<TransitionEndEvent>((_ev) =>
+                        {
+                            elemGroup.parent.Remove(elemGroup);
+                        });
+                    }
+                    return $"{x}/";
+                },
                 quest.objectives[i]);
             elemGroup.Add(label);
 

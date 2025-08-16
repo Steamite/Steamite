@@ -30,3 +30,12 @@
     min-width: 20px;
     max-width: 20px;
 }
+
+NextQuestList DropdownField {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-top: 0;
+    padding-bottom: 0;
+}

@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.Analytics.IAnalytic;
 
 public class QuestRegister : DataGridWindow<QuestCategory, Quest>
 {
@@ -32,14 +34,46 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
     {
         questTypes = TypeCache.GetTypesDerivedFrom(typeof(Quest)).ToList();
         objectiveTypes = TypeCache.GetTypesDerivedFrom(typeof(Objective)).ToList();
+        objectiveTypes.Remove(typeof(DummyObjective));
         rewardTypes = TypeCache.GetTypesDerivedFrom(typeof(QuestReward)).ToList();
         penaltyTypes = TypeCache.GetTypesDerivedFrom(typeof(QuestPenalty)).ToList();
 
         holder = AssetDatabase.LoadAssetAtPath<QuestHolder>("Assets/Game Data/UI/QuestData.asset");
+        RecalculateAvailableObjects();
+
         base.CreateGUI();
         categorySelector.index = 0;
     }
 
+    void RecalculateAvailableObjects()
+    {
+        IEnumerable<Quest> _quests = holder.Categories.SelectMany(q => q.Objects);
+        Dictionary<int, List<int>> takenQuests = new();
+        foreach (var item in _quests)
+        {
+            foreach (var nextQuest in item.nextQuests)
+            {
+                if (takenQuests.ContainsKey(nextQuest.categIndex))
+                    takenQuests[nextQuest.categIndex].Add(nextQuest.questId);
+                else
+                    takenQuests.Add(nextQuest.categIndex, new() { nextQuest.questId});
+            }
+        }
+        for (int i = 0; i < holder.Categories.Count; i++)
+        {
+            QuestCategory category = holder.Categories[i];
+            category.availableObjects = category.Objects.ToList();
+            if (takenQuests.ContainsKey(i))
+            {
+                foreach (var item in category.Objects)
+                {
+                    if (takenQuests[i].Contains(item.id))
+                        category.availableObjects.Remove(item);
+                }
+            }
+            
+        }
+    }
     protected override bool LoadCategData(int index)
     {
         bool boo = base.LoadCategData(index);
@@ -55,7 +89,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
     }
     #endregion
 
-
+    Action onNextQuestChange;
     protected override void AddEntry(BaseListView _)
     {
         selectedCategory.Objects.Add(new Quest(holder.UniqueID()));
@@ -65,8 +99,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
     protected override void CreateColumns()
     {
         base.CreateColumns();
-
-
+        onNextQuestChange = null;
         dataGrid.columns.Add(new Column()
         {
             name = "timeToFail",
@@ -90,18 +123,31 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
         {
             name = "type",
             title = "Type",
-            makeCell = () => new DropdownField(),
+            makeCell = () => 
+            {
+                VisualElement element = new();
+                element.Add(new DropdownField());
+
+                NextQuestList list = new NextQuestList(holder as QuestHolder);
+                element.Add(list);
+                return element;
+            },
+            
             bindCell = (el, i) =>
             {
-                DropdownField field = el as DropdownField;
+                DropdownField field = el[0] as DropdownField;
                 field.choices = questTypes.Select(q => q.Name).ToList();
-                field.value = ((Quest)dataGrid.itemsSource[i]).GetType().ToString();
+                field.value = selectedCategory.Objects[i].GetType().ToString();
+                field.userData = i;
                 field.RegisterValueChangedCallback(QuestTypeChange);
+
+                NextQuestList list = el[1] as NextQuestList;
+                list.Bind(selectedCategory.Objects[i], ref onNextQuestChange, () => onNextQuestChange?.Invoke());
             },
             unbindCell = (el, i) =>
             {
-                DropdownField field = el as DropdownField;
-                field.UnregisterValueChangedCallback(QuestTypeChange);
+                (el[0] as DropdownField).UnregisterValueChangedCallback(QuestTypeChange);
+                (el[1] as NextQuestList).CustomUnbind(ref onNextQuestChange);
             },
             resizable = false,
             width = 200,
@@ -127,7 +173,6 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
         });
         dataGrid.columns.Add(new Column()
         {
-
             name = "objective",
             title = "Objective",
             makeCell = () => new ObjectiveGridEditor(),
@@ -182,7 +227,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
     #region Change
     void QuestTypeChange(ChangeEvent<string> ev)
     {
-        int i = ev.target.GetRowIndex();
+        int i = (int)(ev.target as VisualElement).userData;
         Quest prev = dataGrid.itemsSource[i] as Quest;
         if (prev != null)
         {
@@ -195,6 +240,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
             }
         }
     }
+
     void TimeToFailChange(ChangeEvent<int> ev)
     {
         int i = ev.target.GetRowIndex();

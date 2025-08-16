@@ -27,17 +27,64 @@ MonoBehaviour:
       objectives:
       - rid: 2978320954781073482
       - rid: 2978320954781073484
+      nextQuests:
+      - categIndex: 0
+        questId: 628004855
     - Name: CD
       id: 628004855
       description: Construct a new building
       state: 0
-      timeToFail: -1
+      timeToFail: 5
       rewards:
       - rid: 7966940479640043670
       penalties: []
       objectives:
       - rid: 7966940479640043668
+      nextQuests:
+      - categIndex: 1
+        questId: 1848021280
+    - Name: DE
+      id: 338399657
+      description: dsaidashnbdouiwqbfqwoibeipowqe
+      state: 0
+      timeToFail: -1
+      rewards:
+      - rid: 7966940654120992840
+      penalties:
+      - rid: 7966940654120992841
+      objectives:
+      - rid: 7966940654120992842
+      nextQuests:
+      - categIndex: 0
+        questId: -1
     Icon: {fileID: 2800000, guid: 2b61dc557efa942428ac194cfa787fd7, type: 3}
+  - Name: Test
+    Objects:
+    - Name: 51
+      id: 1848021280
+      description: 4894465
+      state: 0
+      timeToFail: 0
+      rewards: []
+      penalties: []
+      objectives:
+      - rid: 7966940658384502857
+      nextQuests:
+      - categIndex: 0
+        questId: 338399657
+    Icon: {fileID: 0}
+  - Name: Orders
+    Objects:
+    - Name: First Order
+      id: 1458943430
+      description: 
+      state: 0
+      timeToFail: 0
+      rewards: []
+      penalties: []
+      objectives: []
+      nextQuests: []
+    Icon: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -93,14 +140,45 @@ MonoBehaviour:
           types: 
           ammounts: 
           baseResource:
-            types: 
-            ammounts: 
+            types: 0200000003000000
+            ammounts: 3200000028000000
           mod:
             percentMod: 1
             absoluteMod: 0
           money:
-            baseValue: 0
-            currentValue: 0
+            baseValue: 50
+            currentValue: 50
             mod:
               percentMod: 1
               absoluteMod: 0
+    - rid: 7966940654120992840
+      type: {class: QuestResourceReward, ns: , asm: Quests}
+      data:
+        resource:
+          types: 
+          ammounts: 
+          baseResource:
+            types: 05000000
+            ammounts: 05000000
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 45
+            currentValue: 45
+            mod:
+              percentMod: 1
+              absoluteMod: 0
+    - rid: 7966940654120992841
+      type: {class: QuestMoneyPenalty, ns: , asm: Quests}
+      data:
+        penaltyAmmount: 50
+    - rid: 7966940654120992842
+      type: {class: BuildingObjective, ns: , asm: Quests}
+      data:
+        maxProgress: 2
+        _buildingTypeName: House
+    - rid: 7966940658384502857
+      type: {class: AnyExcavationObjective, ns: Objectives, asm: Quests}
+      data:
+        maxProgress: 5

@@ -4,16 +4,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Unity.Properties;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
-public class QuestController : MonoBehaviour, IQuestController, IGameDataController<QuestsSave>
+public class QuestController : FullscreenWindow, IQuestController, IGameDataController<QuestsSave>
 {
     [SerializeField] public GameObject ExcavationIcon;
-    [SerializeField] UIDocument questCatalog;
-    [SerializeField] UIDocument questInteface;
+    [SerializeField] UIDocument _questCatalog;
+    IUIElement questCatalog;
+    [SerializeField] UIDocument _questInteface;
+    IUIElement questInteface;
+
     public QuestHolder data;
 
     public List<Quest> finishedQuests;
@@ -61,18 +63,20 @@ public class QuestController : MonoBehaviour, IQuestController, IGameDataControl
             QuestSave save;
             if((save = saveData.activeQuests.FirstOrDefault(q => q.questId == quest.id)) != null)
             {
-                quest.Load(save, this);
-                activeQuests.Add(quest);
+                quest.Load(this, save);
             }
             else if((save = saveData.finishedQuests.FirstOrDefault(q => q.questId == quest.id)) != null)
             {
-                quest.state = save.state;
-                finishedQuests.Add(quest);
+                quest.Load(this, save);
             }
         }
         SceneRefs.Tick.SubscribeToEvent(UpdateTimers, Tick.TimeEventType.Ticks);
-        ((IUIElement)questInteface.rootVisualElement[3]).Open(this);
-        (questCatalog.rootVisualElement[0][0] as IUIElement).Open(this);
+
+        questInteface = _questInteface.rootVisualElement[3] as IUIElement;
+        questInteface.Open(this);
+
+        questCatalog = _questCatalog.rootVisualElement[0][0].Q("QuestCatalog") as IUIElement;
+        GetWindow();
     }
 
     public void UpdateTimers()
@@ -85,18 +89,25 @@ public class QuestController : MonoBehaviour, IQuestController, IGameDataControl
 
     public void AddDummy()
     {
-        Quest quest = new Quest();
-        quest.Name = "Dummy";
-        quest.description = "persistent quest";
-        quest.objectives.Add(new AnyExcavationObjective(3));
-        QuestSave save = new()
-        {
-            questId = -5,
-            state = QuestState.Active,
-            currentProgress = new() { 0 },
-            timeToFail = 30
-        };
-        quest.Load(save, this);
-        activeQuests.Add(quest);
+        AnyExcavationObjective objective = new AnyExcavationObjective(3);
+        Quest quest = new Quest("Dummy", "persistent quest", objective, -5, 30);
+        quest.Load(this);
     }
+
+    #region Window
+    public override void GetWindow()
+    {
+        base.GetWindow();
+    }
+    public override void OpenWindow()
+    {
+        base.OpenWindow();
+        questCatalog.Open(this);
+    }
+
+    public override void CloseWindow()
+    {
+        base.CloseWindow();
+    }
+    #endregion
 }

@@ -158,12 +158,13 @@ namespace EditorWindows.Windows
                 string s = AssetDatabase.GUIDToAssetPath(AssetDatabase.CreateFolder($"{BUILDING_PATH}{selectedCategory.Name}", "Dummy"));
 
                 GameObject gameObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                gameObj.AddComponent<SortingGroup>();
-                gameObj.GetComponent<SortingGroup>().sortingLayerName = "Blueprint";
-                gameObj.GetComponent<SortingGroup>().sortingOrder = 10;
+                SortingGroup sortGroup = gameObj.AddComponent<SortingGroup>();
+                sortGroup.sortingLayerName = "Blueprint";
+                sortGroup.sortingOrder = 10;
                 gameObj.layer = 2;
 
                 gameObj.AddComponent<Building>();
+                gameObj.GetComponent<BoxCollider>().isTrigger = true;
                 PrefabUtility.SaveAsPrefabAsset(gameObj, $"{s}{BUILD_NAME}");
                 wrapper.SetBuilding(
                     AssetDatabase.LoadAssetAtPath<Building>($"{s}{BUILD_NAME}"),

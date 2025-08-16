@@ -458,6 +458,11 @@ public class Building : StorageObject
         {
             fluidWork.PlacePipes();
         }
+        foreach (var collider in gameObject.GetComponentsInChildren<Collider>())
+        {
+            collider.enabled = false;
+            collider.enabled = true;
+        }
     }
 
     public virtual void InitModifiers()

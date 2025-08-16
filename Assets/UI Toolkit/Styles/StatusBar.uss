@@ -128,3 +128,34 @@
     justify-content: space-between;
     background-color: rgb(40, 37, 15);
 }
+
+#unity-progress-bar > VisualElement {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    background-color: rgb(46, 29, 14);
+}
+
+#unity-progress-bar > VisualElement > VisualElement {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    border-top-left-radius: 1px;
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    border-bottom-left-radius: 1px;
+}
+
+#unity-progress-bar > .unity-progress-bar__background > .unity-progress-bar__progress {
+    background-color: rgb(114, 73, 35);
+}
