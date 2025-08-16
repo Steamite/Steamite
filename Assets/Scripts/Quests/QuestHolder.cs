@@ -1,6 +1,7 @@
 using Objectives;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,6 +14,18 @@ public enum QuestState
     Completed
 }
 
+[Serializable]
+public class QuestLink
+{
+    [SerializeField] public int categIndex;
+    [SerializeField] public int questId;
+    public QuestLink(int _categIndex, int _questId)
+    {
+        categIndex = _categIndex;
+        questId = _questId;
+    }
+
+}
 
 [Serializable]
 public class Quest : DataObject, IUpdatable
@@ -24,6 +37,8 @@ public class Quest : DataObject, IUpdatable
     [SerializeReference] public List<QuestReward> rewards = new();
     [SerializeReference] public List<QuestPenalty> penalties = new();
     [SerializeReference] public List<Objective> objectives = new();
+    [SerializeField] public List<QuestLink> nextQuests = new();
+
 
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
@@ -44,17 +59,43 @@ public class Quest : DataObject, IUpdatable
         }
         controller.activeQuests.Remove(this);
         controller.finishedQuests.Add(this);
-        controller.AddDummy();
+
+        int i = 0;
+        for (; i < nextQuests.Count; i++)
+        {
+            controller.data.Categories[nextQuests[i].categIndex]
+                .Objects.FirstOrDefault(q => q.id == nextQuests[i].questId).Load(controller);
+        }
+        if(i == 0)
+            controller.AddDummy();
     }
 
-    public void Load(QuestSave save, QuestController controller)
+
+    public void Load(QuestController controller, QuestSave save = null)
     {
-        timeToFail = save.timeToFail;
+        if(save != null)
+            timeToFail = save.timeToFail;
         for (int i = 0; i < objectives.Count; i++)
         {
-            objectives[i].Load(save.currentProgress[i], this, controller);
+            objectives[i].Load(save != null ? save.currentProgress[i] : 0, this, controller);
+        }
+        for (int i = 0; i < rewards.Count; i++)
+        {
+            rewards[i].Init();
+        }
+
+        if (save == null || save.state == QuestState.Active)
+        {
+            controller.activeQuests.Add(this);
+            state = QuestState.Active;
+        }
+        else
+        {
+            controller.finishedQuests.Add(this);
+            state = save.state;
         }
     }
+
 
     public void DecreaseTimeToFail(QuestController controller)
     {
@@ -84,7 +125,33 @@ public class Quest : DataObject, IUpdatable
         return s;
     }
 
+    public override bool Equals(object obj)
+    {
+        if(obj is Quest quest)
+        {
+            return quest.id == id;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        HashCode hash = new HashCode();
+        hash.Add(Name);
+        hash.Add(id);
+        hash.Add(description);
+        hash.Add(state);
+        hash.Add(timeToFail);
+        hash.Add(TimeToFail);
+        hash.Add(rewards);
+        hash.Add(penalties);
+        hash.Add(objectives);
+        hash.Add(nextQuests);
+        return hash.ToHashCode();
+    }
+
     public Quest() { }
+
     public Quest(int id) : base(id)
     {
 
@@ -101,21 +168,30 @@ public class Quest : DataObject, IUpdatable
 
         objectives = quest.objectives;
     }
+
+    public Quest(string _name, string _description, Objective _objective, int _id, int _timeToFail)
+    {
+        Name = _name;
+        description = _description;
+        objectives.Add(_objective);//; = new() { objective },
+        id = -5;
+        TimeToFail = 30;
+    }
 }
 
 [Serializable]
 public class StoryQuest : Quest
 {
-    public List<Quest> nextQuests;
+    
 
-    public override void Complete(bool success, QuestController controller)
+    /*public override void Complete(bool success, QuestController controller)
     {
         base.Complete(success, controller);
         foreach (var quest in nextQuests)
         {
-            quest.state = QuestState.Active;
+            quest.Start(controller);
         }
-    }
+    }*/
     public StoryQuest() { }
     public StoryQuest(Quest quest) : base(quest) { }
 }

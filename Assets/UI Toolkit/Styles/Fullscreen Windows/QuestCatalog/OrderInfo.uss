@@ -1,0 +1,3 @@
+#unity-progress-bar {
+    min-height: 50px;
+}

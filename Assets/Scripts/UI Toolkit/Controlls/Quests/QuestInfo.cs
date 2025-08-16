@@ -1,6 +1,9 @@
 using Objectives;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.UIElements;
 
 [UxmlElement]
@@ -14,7 +17,6 @@ public partial class QuestInfo : ScrollView
 
     TitleListView penaltyList;
     TitleListView rewardList;
-
 
     public QuestInfo()
     {
@@ -39,17 +41,25 @@ public partial class QuestInfo : ScrollView
 
     public void Open(Quest quest)
     {
-        header.text = quest.Name;
-        description.text = quest.description;
-        objectiveList.itemSource = quest.objectives;
-        penaltyList.itemSource = quest.penalties;
-        rewardList.itemSource = quest.rewards;
+        if(quest == null)
+            style.display = DisplayStyle.None;
+        else
+        {
+            style.display = DisplayStyle.Flex;
+            header.text = quest.Name;
+            description.text = quest.description;
+
+            objectiveList.Open(quest.objectives, quest.state == QuestState.Failed ? Color.red : null);
+            penaltyList.Open(quest.penalties, quest.state == QuestState.Failed ? Color.red : null);
+            rewardList.Open(quest.rewards, quest.state == QuestState.Completed ? Color.green : null);
+        }
     }
 
     class TitleListView : VisualElement
     {
         public Label title;
         ListView listView;
+        Color? color;
         public IList itemSource { set => listView.itemsSource = value; }
         public TitleListView() : base() 
         {
@@ -58,37 +68,49 @@ public partial class QuestInfo : ScrollView
         public TitleListView(string titleText, string className)
         {
             Add(title = new Label(titleText));
-            title.AddToClassList("temp-label");
+            title.AddToClassList("list-title");
             AddToClassList(className);
             Add(listView = new()
             {
-                makeItem = () => new Label(),
-                bindItem = (el, i) => (el as Label).text = listView.itemsSource[i].ToString(),
-                virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight
+                makeItem = () =>
+                {
+                    Label label = new Label();
+                    label.AddToClassList("list-label");
+                    return label;
+                },
+                bindItem = (el, i) =>
+                {
+                    (el as Label).text = listView.itemsSource[i].ToString();
+                    if (listView.itemsSource[i] is Objective objective)
+                    {
+                        if (objective.CurrentProgress == objective.MaxProgress)
+                        {
+                            el.style.color = Color.green;
+                            return;
+                        }
+                    }
+
+                    if (color == null)
+                        el.style.color = StyleKeyword.Null;
+                    else
+                        el.style.color = (Color)color;
+                },
+                virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
+                selectionType = SelectionType.None
             });
+            
         }
 
-
-        void Bind(VisualElement element, int i)
+        public void Open<T>(List<T> list, Color? _color)
         {
-            /*element.Clear();
-            switch (itemsSource[i])
-            {
-                case Objective objective:
-                    element.Add(new Label(objective.ToString()));
-                    break;
-                case QuestPenalty penalty:
-                    element.Add(new Label(penalty.ToString()));
-                    break;
-                case QuestReward reward:
-                    element.Add(new Label(reward.ToString()));
-                    break;
-            }*/
-        }
-        void BindObjective(VisualElement element, Objective objective)
-        {
-        }
+            color = _color;
+            itemSource = null;
+            itemSource = list;
 
-        //void BindPenalty
+            if (color == null)
+                title.style.color = StyleKeyword.Null;
+            else
+                title.style.color = (Color)color;
+        }
     }
 }

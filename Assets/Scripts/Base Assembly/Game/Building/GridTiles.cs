@@ -23,6 +23,7 @@ public enum ControlMode
 public class GridTiles : MonoBehaviour
 {
     #region Variables
+    bool buildingPlaced = false;
     /// <summary>Raycast mask for building.</summary>
     public LayerMask buildingMask;
     /// <summary>Default raycast mask for the rest of time.</summary>
@@ -368,6 +369,7 @@ public class GridTiles : MonoBehaviour
                                 else
                                     b.DestoyBuilding();
                             }
+                            buildingPlaced = true;
                             markedTiles.Clear();
                             tempMarkedTiles.Clear();
                             BlueprintInstance = null;
@@ -378,7 +380,6 @@ public class GridTiles : MonoBehaviour
                 else if (blueprintInstance.CanPlace())
                 {
                     blueprintInstance.PlaceBuilding();
-
                     if (shiftKey.IsInProgress() && MyRes.CanAfford(blueprintPrefab.Cost))
                     {
                         Blueprint();

@@ -58,7 +58,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -122,18 +122,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: 
-  selected: 0
   id: -1
   objectName: DUM
   localRes:
-    stored:
-      capacity: -1
-      type: 
-      ammount: 
+    types: 
+    ammounts: 
+    capacity:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
     requests: []
     carriers: []
     mods: 
-  myColor: []
+  meshRenderers: []
+  buildingCategories: 0
   blueprint:
     size:
       x: 1
@@ -159,13 +163,29 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    capacity: -1
-    type: 
-    ammount: 
+    types: 
+    ammounts: 
+    baseResource:
+      types: 
+      ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
+    money:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 0
   categoryID: 1
   wrapperID: 1472558132
-  assignLimit: 1
+  assignLimit:
+    baseValue: 0
+    currentValue: 0
+    mod:
+      percentMod: 1
+      absoluteMod: 0

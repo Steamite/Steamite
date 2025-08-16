@@ -70,6 +70,7 @@ namespace Objectives
         public AnyExcavationObjective() { }
         public AnyExcavationObjective(int toRemove)
         {
+            currentProgress = 0;
             maxProgress = toRemove;
         }
         #endregion
