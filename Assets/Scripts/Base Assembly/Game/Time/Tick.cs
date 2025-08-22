@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 /// <summary>Handles the game clock.</summary>
@@ -34,7 +35,7 @@ public class Tick : MonoBehaviour
     [Header("Tick speed")][SerializeField] float ticksPerHour = 4;
     /// <summary>Progresses time by this(60/<see cref="ticksPerHour"/>).</summary>
     private int minutesPerTick;
-    public int MinutesPerTick = 15;
+    public static int MinutesPerTick = 15;
 
     /// <summary>Current time of the day(counts as hours when starting a new game).</summary>
     public int timeInMinutes = 4;
@@ -236,6 +237,7 @@ public class Tick : MonoBehaviour
                 lastTick = 0;
             else
                 lastTick++;
+            //MyRes.resDataSource.Trust++;
         }
     }
 
@@ -269,6 +271,16 @@ public class Tick : MonoBehaviour
                 dayStart?.Invoke();
                 break;
         }
+    }
+
+    public static string RemainingTime(int time)
+    {
+        TimeSpan span = TimeSpan.FromMinutes(time * MinutesPerTick);
+        if (span.Days < 1)
+        {
+            return $"({span.Hours} h {span.Minutes}m)";
+        }
+        return $"({span.Days} d)";
     }
     #endregion
 

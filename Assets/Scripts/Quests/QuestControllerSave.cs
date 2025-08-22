@@ -2,17 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class QuestsSave
+public class QuestControllerSave
 {
     public List<QuestSave> finishedQuests;
     public List<QuestSave> activeQuests;
-    public QuestsSave() { }
+    public QuestSave order;
+    public QuestControllerSave() { }
 
-
-    public QuestsSave(QuestController controller) 
+    public QuestControllerSave(QuestController controller) 
     {
         finishedQuests = controller.finishedQuests.Select(q => new QuestSave(q)).ToList();
         activeQuests = controller.activeQuests.Select(q => new QuestSave(q)).ToList();
+        order = new (controller.order);
     }
 }
 

@@ -43,12 +43,7 @@ public partial class QuestElement : VisualElement
                 nameof(Label.text), 
                 (ref int time) =>
                 {
-                    TimeSpan span = TimeSpan.FromMinutes(time * SceneRefs.Tick.MinutesPerTick);
-                    if (span.Days < 1)
-                    {
-                        return $"({span.Hours} h {span.Minutes}m)";
-                    }
-                    return $"({span.Days} d)";
+                    return Tick.RemainingTime(time);
                 },
                 quest);
         }

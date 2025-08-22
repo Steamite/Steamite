@@ -32,7 +32,7 @@ public class Quest : DataObject, IUpdatable
 {
     [SerializeField] public string description;
     [SerializeField] public QuestState state = QuestState.Hidden;
-    [SerializeField] int timeToFail;
+    [SerializeField] protected int timeToFail;
     [CreateProperty] public int TimeToFail { get => timeToFail; set => timeToFail = value; }
     [SerializeReference] public List<QuestReward> rewards = new();
     [SerializeReference] public List<QuestPenalty> penalties = new();
@@ -71,7 +71,7 @@ public class Quest : DataObject, IUpdatable
     }
 
 
-    public void Load(QuestController controller, QuestSave save = null)
+    public virtual void Load(QuestController controller, QuestSave save = null)
     {
         if(save != null)
             timeToFail = save.timeToFail;
@@ -95,6 +95,7 @@ public class Quest : DataObject, IUpdatable
             state = save.state;
         }
     }
+
 
 
     public void DecreaseTimeToFail(QuestController controller)
@@ -179,27 +180,51 @@ public class Quest : DataObject, IUpdatable
     }
 }
 
-[Serializable]
-public class StoryQuest : Quest
+public class Order : Quest
 {
-    
+    public int originalTimeToFail;
+    public ResourceObjective orderObjective;
 
-    /*public override void Complete(bool success, QuestController controller)
+    public override void Load(QuestController controller, QuestSave save = null)
     {
-        base.Complete(success, controller);
-        foreach (var quest in nextQuests)
+        originalTimeToFail = TimeToFail;
+        if (save != null)
+            timeToFail = save.timeToFail;
+        objectives[0].Load(save != null ? save.currentProgress[0] : 0, this, controller);
+        orderObjective = objectives[0] as ResourceObjective;
+
+        for (int i = 0; i < rewards.Count; i++)
         {
-            quest.Start(controller);
+            rewards[i].Init();
         }
-    }*/
-    public StoryQuest() { }
-    public StoryQuest(Quest quest) : base(quest) { }
+    }
+
+    public override void Complete(bool success, QuestController controller)
+    {
+        state = success ? QuestState.Completed : QuestState.Failed;
+        if (success)
+        {
+            foreach (var reward in rewards)
+                reward.ObtainReward();
+        }
+        else
+        {
+            foreach (var penalty in penalties)
+                penalty.GetPenalty();
+        }
+        controller.order = null;
+    }
+    public Order() : base() { }
+
+    public Order(Quest quest) : base(quest)
+    {
+
+    }
 }
 
 [Serializable]
 public class QuestCategory : DataCategory<Quest>
 {
-
 }
 
 [CreateAssetMenu(fileName = "QuestData", menuName = "UI Data/Quests", order = 2)]

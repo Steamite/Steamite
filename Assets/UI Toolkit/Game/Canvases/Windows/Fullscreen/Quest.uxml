@@ -2,21 +2,13 @@
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/FullscreenWindow.uss?fileID=7433441132597879392&amp;guid=a3688b27adecf6140830a84a444aaec7&amp;type=3#FullscreenWindow" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/QuestCatalog/QuestCatalog.uss?fileID=7433441132597879392&amp;guid=780a5617cf23c334995b7fc7083b4c92&amp;type=3#QuestCatalog" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/QuestCatalog/OrderInfo.uss?fileID=7433441132597879392&amp;guid=3b1c5baaef0c8bb4a9ccc391fa5ab108&amp;type=3#OrderInfo" />
-    <ui:VisualElement name="Root" class="window" style="display: none;">
+    <ui:VisualElement name="Root" class="window" style="display: flex;">
         <ui:TabView style="min-width: 100%;">
             <ui:Tab label="Quests" name="Quests" style="min-height: 100%;">
                 <QuestCatalog virtualization-method="DynamicHeight" selection-type="Single" name="QuestCatalog" />
                 <QuestInfo style="padding-right: 10px; padding-top: 10px; padding-bottom: 10px;" />
             </ui:Tab>
-            <ui:Tab label="Order" name="Order" style="flex-grow: 1;">
-                <ui:VisualElement name="OrderInfo" style="align-items: center; align-self: center; flex-direction: column; width: 45%; padding-top: 2%; padding-bottom: 2%; justify-content: space-between; height: 100%;">
-                    <ui:Label text="Order Header" style="-unity-text-align: middle-center;" />
-                    <ui:ProgressBar value="22" title="xx d xx h" style="position: relative; width: 100%; margin-bottom: 50px;" />
-                    <InfoWindowElements.DoubleResList style="width: 100%;" />
-                    <ui:Button text="Button" style="width: 100%;" />
-                </ui:VisualElement>
-                <InfoWindowElements.ResList style="position: absolute; right: 0; width: 20%; height: 100%;" />
-            </ui:Tab>
+            <OrderInterface name="OrderInterface" />
         </ui:TabView>
     </ui:VisualElement>
 </ui:UXML>

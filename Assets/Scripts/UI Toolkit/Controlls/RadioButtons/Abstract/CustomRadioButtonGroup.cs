@@ -61,7 +61,7 @@ namespace AbstractControls
             }
         }
 
-        public void AddButton(CustomRadioButton button)
+        public virtual void AddButton(CustomRadioButton button)
         {
             buttons.Add(button);
         }

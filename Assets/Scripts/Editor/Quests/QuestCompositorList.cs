@@ -28,12 +28,12 @@ public class QuestCompositorList<T> : MultiColumnListView where T : IQuestCompos
                 return new DropdownField()
                 {
                     name = "type",
-                    choices = types.Select(q => q.Name).ToList(),
                 };
             },
             bindCell = (el, i) =>
             {
                 DropdownField dropdownField = el as DropdownField;
+                dropdownField.choices = types.Select(q => q.Name).ToList();
                 dropdownField.SetValueWithoutNotify(itemsSource[i].GetType().Name);
                 dropdownField.RegisterValueChangedCallback(TypeChange);
             },

@@ -1,3 +1,86 @@
 #unity-progress-bar {
     min-height: 50px;
 }
+
+OrderInterface > #unity-tab__content-container {
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.order-title {
+    -unity-text-align: middle-center;
+}
+
+.order-bar {
+    position: relative;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.order-bar-background {
+    background-color: rgb(46, 29, 14);
+    border-left-color: rgb(28, 28, 28);
+    border-right-color: rgb(28, 28, 28);
+    border-top-color: rgb(28, 28, 28);
+    border-bottom-color: rgb(28, 28, 28);
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.order-bar-progress {
+    background-color: rgb(80, 74, 29);
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+.order-cost {
+    width: 100%;
+}
+
+.order-button {
+    width: 100%;
+    background-color: rgb(46, 29, 14);
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-left-color: rgb(28, 28, 28);
+    border-right-color: rgb(28, 28, 28);
+    border-top-color: rgb(28, 28, 28);
+    border-bottom-color: rgb(28, 28, 28);
+    transition-duration: 0.2s;
+}
+
+.order-button:hover {
+    background-color: rgb(161, 148, 59);
+    transition-duration: 0.2s;
+    color: rgb(46, 29, 14);
+}
+
+.order-container {
+    align-items: center;
+    align-self: center;
+    flex-direction: column;
+    width: 45%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.none-label {
+    align-self: center;
+    font-size: 50px;
+}

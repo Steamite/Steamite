@@ -9,6 +9,7 @@ public class Resource : ResAmmount<ResourceType>
     public Resource(ResAmmount<ResourceType> resAmmount) : base(resAmmount) { }
     public Resource(List<ResourceType> types, List<int> ammounts) : base(types, ammounts) { }
     #endregion
+
     /// <summary>Removes empty resources.</summary>
     public void RemoveEmpty()
     {

@@ -143,7 +143,7 @@ public class LoadingScreen : MonoBehaviour
         jsonReader.Close();
         // for quests
         jsonReader = new(new StreamReader($"{_folderName}/Quests.json"));
-        save.quests = jsonSerializer.Deserialize<QuestsSave>(jsonReader);
+        save.quests = jsonSerializer.Deserialize<QuestControllerSave>(jsonReader);
         jsonReader.Close();
         return save;
     }
@@ -162,7 +162,7 @@ public class LoadingScreen : MonoBehaviour
         HumanSave[] humanSaves = save.humans;
         ResearchSave researchSave = save.research;
         TradeSave tradeSave = save.trade;
-        QuestsSave questSave = save.quests;
+        QuestControllerSave questSave = save.quests;
 
         // create progress val for loading slider
         int maxprogress = 0;
@@ -312,7 +312,7 @@ public class LoadingScreen : MonoBehaviour
         await UIRefs.TradingWindow.LoadState(tradeSave);
     }
 
-    async Task LoadQuests(IProgress<int> progress, QuestsSave questSave)
+    async Task LoadQuests(IProgress<int> progress, QuestControllerSave questSave)
     {
         QuestController controller = SceneRefs.QuestController as QuestController;
         try

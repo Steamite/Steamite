@@ -92,7 +92,7 @@ namespace TradeWindowElements
                 slider.AddToClassList("map-slider");
                 Vector2 dif = locationPos - basePos;
                 float f = Mathf.Atan(dif.y / dif.x);
-                slider.transform.rotation = Quaternion.Euler(new Vector3(0, 0, dif.x > 0 ? (180 * f / Mathf.PI) : -180 + (180 * f / Mathf.PI)));
+                slider.style.rotate = Quaternion.Euler(new Vector3(0, 0, dif.x > 0 ? (180 * f / Mathf.PI) : -180 + (180 * f / Mathf.PI)));
 
                 VisualElement el = new();
                 sliderGroup.Add(el);

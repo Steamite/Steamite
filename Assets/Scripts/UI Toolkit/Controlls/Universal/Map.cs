@@ -162,7 +162,7 @@ namespace AbstractControls
             else
                 arrow.style.bottom = vertical.Item2;
 
-            arrow.transform.rotation = Quaternion.Euler(0, 0, rotation);
+            arrow.style.rotate = Quaternion.Euler(0, 0, rotation);
 
             Add(arrow);
             return arrow;
@@ -201,7 +201,7 @@ namespace AbstractControls
         /// <param name="moveBy">Direction and value to move by.</param>
         protected virtual void Move(Vector2 moveBy)
         {
-            Vector3 position = mapElem.transform.position;
+            Vector3 position = mapElem.resolvedStyle.translate;
             float clamp;
 
             clamp = Mathf.Clamp(resolvedStyle.width - mapElem.style.minWidth.value.value - mapElem.resolvedStyle.marginLeft - mapElem.resolvedStyle.marginRight, -5000, 0);
@@ -221,7 +221,7 @@ namespace AbstractControls
             arrowTop.style.display = position.y == 0 ? DisplayStyle.None : DisplayStyle.Flex;
             arrowBottom.style.display = position.y == clamp ? DisplayStyle.None : DisplayStyle.Flex;
 
-            mapElem.transform.position = position;
+            mapElem.style.translate = position;
             ToolkitUtils.localMenu.Move();
         }
         #endregion

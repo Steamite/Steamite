@@ -26,13 +26,14 @@ public partial class ObjectiveGridEditor : QuestCompositorList<Objective>
             },
             bindCell = (el, i) =>
             {
-                
                 IntegerField intField = el as IntegerField;
                 if (itemsSource[i] is ExcavationObjective excavation)
                 {
                     intField.SetValueWithoutNotify((itemsSource[i] as ExcavationObjective).needToRemove.Count);
                     intField.isReadOnly = true;
                 }
+                else if (itemsSource[i] is ResourceObjective resource)
+                    intField.isReadOnly = true;
                 else
                 {
                     intField.SetValueWithoutNotify((itemsSource[i] as Objective).MaxProgress);
@@ -69,6 +70,15 @@ public partial class ObjectiveGridEditor : QuestCompositorList<Objective>
                         button.clicked += () => ButtonClick(i, list);
                         list.Bind(holder, ref excavation.needToRemove, (x) => RefreshItem(i));
                         break;
+                    case ResourceObjective objective:
+                        ResCell cell = new();
+                        Button resButton;
+                        el.Add(resButton = new Button() { text = "set Resource" });
+                        resButton.clicked += () => ButtonClick(i, cell);
+                        if (objective.resource == null)
+                            objective.resource = new();
+                        cell.Open(objective.resource, holder, true);
+                        break;
                     case BuildingObjective building:
                         DropdownField field = new();
                         el.Add(field);
@@ -84,6 +94,7 @@ public partial class ObjectiveGridEditor : QuestCompositorList<Objective>
             }
 
         });
+        
 
         onAdd = (list) =>
         {
@@ -102,6 +113,11 @@ public partial class ObjectiveGridEditor : QuestCompositorList<Objective>
 
     public override void Bind(QuestHolder _holder, Quest _data, List<Type> _types)
     {
+        if (_data.GetType() == typeof(Order))
+        {
+            _types = new() {typeof(ResourceObjective)};
+        }
+
         base.Bind(_holder, _data, _types);
         itemsSource = _data.objectives;
     }

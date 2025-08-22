@@ -16,6 +16,8 @@ public class TradeSave
     public List<TradeConvoy> convoys;
     public List<Outpost> outposts;
     public int money;
+    public int trust;
+
     public TradeSave(TradingWindow trading)
     {
         colonyLocation = trading.colonyLocation.name;
@@ -25,6 +27,7 @@ public class TradeSave
         convoys = trading.GetConvoys();
         outposts = trading.outposts;
         money = MyRes.Money;
+        trust = MyRes.resDataSource.Trust;
     }
     public TradeSave()
     {

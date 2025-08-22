@@ -31,6 +31,18 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
         levelButtons = bottomBar.Q<LevelButtons>();
         levelButtons.Start();
 
+        ProgressBar trustBar = bottomBar.Q<ProgressBar>("Trust");
+        trustBar.SetBinding(
+            nameof(ResourceDisplay.Trust), 
+            nameof(ProgressBar.value), 
+            (ref int i) => 
+            {
+                trustBar.title = $"{i}/100";
+                //trustBar[0][0][0].style.color
+                return (float)i;
+            }, 
+            MyRes.resDataSource);
+
         enabled = true;
     }
 

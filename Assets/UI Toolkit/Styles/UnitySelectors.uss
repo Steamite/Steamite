@@ -1,14 +1,36 @@
+:root {
+    --background: rgb(72, 72, 72);
+    --interactable: rgb(184, 115, 51);
+    --selectable: rgb(212, 175, 55);
+    --disabled: rgb(92, 64, 51);
+    --finished: rgb(67, 179, 174);
+    --remove: rgb(138, 51, 36);
+    --border: rgb(92, 64, 51);
+    --text-primary: rgb(255, 255, 240);
+    --text-secondary: rgb(184, 115, 51);
+    --text-disabled: rgb(112, 66, 20);
+    --text-alert: rgb(138, 51, 36);
+    color: var(--text-primary);
+    border-left-color: rgb(92, 64, 51);
+    border-right-color: rgb(92, 64, 51);
+    border-top-color: rgb(92, 64, 51);
+    border-bottom-color: rgb(92, 64, 51);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 #unity-text-input {
-    --unity-cursor-color: rgb(249, 233, 141);
     background-color: rgb(28, 28, 28);
     border-left-color: rgba(0, 0, 0, 0);
     border-top-color: rgba(0, 0, 0, 0);
     border-right-color: rgba(0, 0, 0, 0);
     border-bottom-color: rgba(0, 0, 0, 0);
-}
-
-.unity-base-text-field__input {
-    --unity-selection-color: rgba(255, 255, 0, 0.5);
 }
 
 #unity-tab__header {
@@ -28,6 +50,8 @@
     color: rgb(161, 148, 59);
     align-content: stretch;
     align-self: stretch;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
 }
 
 #unity-tab__header:hover {
@@ -72,7 +96,6 @@
 }
 
 #unity-high-button {
-    --unity-cursor-color: rgb(249, 233, 141);
     background-color: rgba(28, 28, 28, 0);
     border-left-color: rgba(0, 0, 0, 0);
     border-top-color: rgba(0, 0, 0, 0);
@@ -83,7 +106,6 @@
 }
 
 #unity-low-button {
-    --unity-cursor-color: rgb(249, 233, 141);
     background-color: rgba(28, 28, 28, 0);
     border-left-color: rgba(0, 0, 0, 0);
     border-top-color: rgba(0, 0, 0, 0);
@@ -122,9 +144,6 @@
 .radial-progress {
     min-width: 26px;
     min-height: 20px;
-    --track-color: rgb(130, 130, 130);
-    --progress-color: rgb(46, 132, 24);
-    --percentage-color: white;
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 5px;
@@ -148,40 +167,6 @@ ________________ {
     -unity-background-image-tint-color: rgba(0, 0, 0, 0);
 }
 
-.small-window {
-    position: absolute;
-    background-color: rgb(46, 29, 14);
-    align-self: center;
-    top: 7%;
-    border-top-width: 3px;
-    border-right-width: 3px;
-    border-bottom-width: 3px;
-    border-left-width: 3px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-left-color: rgb(198, 131, 70);
-    border-right-color: rgb(198, 131, 70);
-    border-top-color: rgb(198, 131, 70);
-    border-bottom-color: rgb(198, 131, 70);
-    min-width: 145px;
-}
-
-:root{
-    color: rgb(161, 148, 59);
-}
-VisualElement {
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-}
-
 .unity-label {
     margin-top: 0;
     margin-right: 0;
@@ -191,4 +176,13 @@ VisualElement {
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
+}
+
+Label:disabled {
+    background-color: var(--text-disabled);
+}
+
+.unity-ui-document__root {
+    width: 100%;
+    height: 100%;
 }
