@@ -120,17 +120,23 @@ TitleListView {
     border-left-color: rgb(28, 28, 28);
     border-right-color: rgb(28, 28, 28);
     border-top-color: rgb(28, 28, 28);
+    transition-duration: 0.2s;
+}
+
+.tree-content:hover {
+    background-color: rgb(114, 73, 35);
+    transition-duration: 0.2s;
 }
 
 .tree-content:checked {
     color: rgb(181, 166, 66);
     background-color: rgb(137, 87, 42);
+    transition-duration: 0.2s;
 }
 
 #unity-tab__content-container {
     flex-grow: 1;
     flex-direction: row;
-    justify-content: center;
 }
 
 .unity-repeat-button {

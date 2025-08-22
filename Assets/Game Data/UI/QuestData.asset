@@ -15,84 +15,45 @@ MonoBehaviour:
   Categories:
   - Name: Story
     Objects:
-    - Name: ABCD
-      id: 189123574
-      description: Mine the rocks before the timer runs out!
+    - Name: ABC
+      id: 1243577587
+      description: dsadsa
       state: 0
-      timeToFail: 40
+      timeToFail: 20
       rewards:
-      - rid: 2978320954781073485
+      - rid: 7966940744893857880
       penalties:
-      - rid: 2978320954781073490
+      - rid: 7966940744893857881
       objectives:
-      - rid: 2978320954781073482
-      - rid: 2978320954781073484
-      nextQuests:
-      - categIndex: 0
-        questId: 628004855
-    - Name: CD
-      id: 628004855
-      description: Construct a new building
-      state: 0
-      timeToFail: 5
-      rewards:
-      - rid: 7966940479640043670
-      penalties: []
-      objectives:
-      - rid: 7966940479640043668
-      nextQuests:
-      - categIndex: 1
-        questId: 1848021280
-    - Name: DE
-      id: 338399657
-      description: dsaidashnbdouiwqbfqwoibeipowqe
-      state: 0
-      timeToFail: -1
-      rewards:
-      - rid: 7966940654120992840
-      penalties:
-      - rid: 7966940654120992841
-      objectives:
-      - rid: 7966940654120992842
+      - rid: 7966940744893857878
+      - rid: 7966940744893857882
       nextQuests:
       - categIndex: 0
         questId: -1
     Icon: {fileID: 2800000, guid: 2b61dc557efa942428ac194cfa787fd7, type: 3}
   - Name: Test
-    Objects:
-    - Name: 51
-      id: 1848021280
-      description: 4894465
-      state: 0
-      timeToFail: 0
-      rewards: []
-      penalties: []
-      objectives:
-      - rid: 7966940658384502857
-      nextQuests:
-      - categIndex: 0
-        questId: 338399657
+    Objects: []
     Icon: {fileID: 0}
   - Name: Orders
     Objects:
-    - Name: First Order
-      id: 1458943430
-      description: 
+    - Name: AD
+      id: 2046668337
+      description: ORDER
       state: 0
-      timeToFail: 0
+      timeToFail: 10
       rewards: []
-      penalties: []
-      objectives: []
-      nextQuests: []
+      penalties:
+      - rid: 7966940814333444216
+      objectives:
+      - rid: 7966940744893857883
+      nextQuests:
+      - categIndex: -1
+        questId: -1
     Icon: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: 2978320954781073482
-      type: {class: AnyExcavationObjective, ns: Objectives, asm: Quests}
-      data:
-        maxProgress: 4
-    - rid: 2978320954781073484
+    - rid: 7966940744893857878
       type: {class: ExcavationObjective, ns: Objectives, asm: Quests}
       data:
         maxProgress: 0
@@ -100,85 +61,61 @@ MonoBehaviour:
         - x: 9
           z: 6
           y: 0
+        - x: 9
+          z: 5
+          y: 0
         - x: 10
           z: 6
           y: 0
-        - x: 11
-          z: 6
+        - x: 10
+          z: 5
           y: 0
-    - rid: 2978320954781073485
+    - rid: 7966940744893857880
       type: {class: QuestResourceReward, ns: , asm: Quests}
       data:
         resource:
           types: 
           ammounts: 
           baseResource:
-            types: 0200000003000000
-            ammounts: 0a00000005000000
+            types: 
+            ammounts: 
           mod:
             percentMod: 1
             absoluteMod: 0
           money:
-            baseValue: 54
-            currentValue: 54
+            baseValue: 57
+            currentValue: 57
             mod:
               percentMod: 1
               absoluteMod: 0
-    - rid: 2978320954781073490
+    - rid: 7966940744893857881
       type: {class: QuestMoneyPenalty, ns: , asm: Quests}
       data:
-        penaltyAmmount: 50
-    - rid: 7966940479640043668
-      type: {class: BuildingObjective, ns: , asm: Quests}
-      data:
-        maxProgress: 1
-        _buildingTypeName: FluidTank
-    - rid: 7966940479640043670
-      type: {class: QuestResourceReward, ns: , asm: Quests}
-      data:
-        resource:
-          types: 
-          ammounts: 
-          baseResource:
-            types: 0200000003000000
-            ammounts: 3200000028000000
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-          money:
-            baseValue: 50
-            currentValue: 50
-            mod:
-              percentMod: 1
-              absoluteMod: 0
-    - rid: 7966940654120992840
-      type: {class: QuestResourceReward, ns: , asm: Quests}
-      data:
-        resource:
-          types: 
-          ammounts: 
-          baseResource:
-            types: 05000000
-            ammounts: 05000000
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-          money:
-            baseValue: 45
-            currentValue: 45
-            mod:
-              percentMod: 1
-              absoluteMod: 0
-    - rid: 7966940654120992841
-      type: {class: QuestMoneyPenalty, ns: , asm: Quests}
-      data:
-        penaltyAmmount: 50
-    - rid: 7966940654120992842
-      type: {class: BuildingObjective, ns: , asm: Quests}
-      data:
-        maxProgress: 2
-        _buildingTypeName: House
-    - rid: 7966940658384502857
+        penaltyAmmount: 80
+    - rid: 7966940744893857882
       type: {class: AnyExcavationObjective, ns: Objectives, asm: Quests}
       data:
-        maxProgress: 5
+        maxProgress: 3
+    - rid: 7966940744893857883
+      type: {class: ResourceObjective, ns: Objectives, asm: Quests}
+      data:
+        maxProgress: 0
+        resource:
+          types: 
+          ammounts: 
+          baseResource:
+            types: 0200000004000000
+            ammounts: 5000000046000000
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 450
+            currentValue: 450
+            mod:
+              percentMod: 1
+              absoluteMod: 0
+    - rid: 7966940814333444216
+      type: {class: TrustPenalty, ns: , asm: Quests}
+      data:
+        penaltyAmmount: 40

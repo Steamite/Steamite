@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 [UxmlElement]
 public partial class QuestCatalog : TreeView, IUIElement
 {
+    int oldSelectionId;
     public QuestCatalog()
     {
         makeItem = () => new Label();
@@ -53,8 +54,13 @@ public partial class QuestCatalog : TreeView, IUIElement
         {
             foreach (var item in items)
             {
-                if(item != null)
+                if (item != null)
+                {
+                    oldSelectionId = (item as Quest).id;
                     (parent[1] as QuestInfo).Open(item as Quest);
+                }
+                else
+                    SetSelectionByIdWithoutNotify(new List<int>(){ oldSelectionId });
                 break;
             }
         };

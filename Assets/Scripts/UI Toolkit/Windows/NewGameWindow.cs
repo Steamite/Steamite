@@ -14,7 +14,7 @@ namespace StartMenu
         VisualElement menu;
 
         Button startButton;
-        WorldRadioList worlds;
+        WorldRadioGroup worlds;
 
         int selectedOption;
         string worldName;
@@ -36,8 +36,8 @@ namespace StartMenu
         {
             menu = _root.Q<VisualElement>("New-Menu");
             startButton = menu.Q<Button>("Start");
-            worlds = menu.Q<WorldRadioList>("Worlds");
-            worlds.Init(
+            worlds = menu.Q<WorldRadioGroup>("Worlds");
+            worlds.SetChangeCallback(
                 (i) =>
                 {
                     selectedOption = i;

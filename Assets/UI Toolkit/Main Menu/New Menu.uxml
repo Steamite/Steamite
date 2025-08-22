@@ -1,9 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Main%20Menu.uss?fileID=7433441132597879392&amp;guid=91ba141990bab14419ef28afeec0dc78&amp;type=3#Main Menu" />
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/UnitySelectors.uss?fileID=7433441132597879392&amp;guid=3468915a4f8821544854e970a313de3c&amp;type=3#UnitySelectors" />
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
-    <Style src="project://database/Assets/Standard%20Assets/UI%20Toolkit/Styles/EnumFields.uss?fileID=7433441132597879392&amp;guid=ac7089baa58760749b4c48a5a9265607&amp;type=3#EnumFields" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Main%20Menu.uss?fileID=7433441132597879392&amp;guid=91ba141990bab14419ef28afeec0dc78&amp;type=3#Main Menu" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/EnumFields.uss?fileID=7433441132597879392&amp;guid=ac7089baa58760749b4c48a5a9265607&amp;type=3#EnumFields" />
     <ui:VisualElement enabled="true" name="New-Menu" class="def-label" style="width: 100%; height: 100%; color: rgb(181, 166, 66); -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;);">
         <ui:VisualElement name="Header-Bar" class="bar" style="align-items: auto; align-self: auto; align-content: auto; justify-content: space-between;">
             <ui:Button text="Close" tooltip="Close" name="New-Close-Button" class="main-button close-button" style="width: 14%; height: 80%; flex-shrink: 0; min-width: auto; margin-left: 5%; font-size: 60px;" />
@@ -13,7 +12,7 @@
             <ui:VisualElement name="Left-Bar" style="flex-grow: 0; width: 25%; height: 91%; margin-left: 2.5%; margin-right: 2.5%; margin-top: 1%; margin-bottom: 2%; flex-direction: row; flex-shrink: 0; overflow: visible;">
                 <ui:VisualElement style="flex-grow: 0; overflow: visible; align-self: flex-end; align-items: auto; height: 100%; align-content: auto; max-height: 100%;">
                     <ui:Label text="World Selection" style="font-size: 40px; -unity-text-align: upper-center; align-content: auto; align-items: flex-start; align-self: flex-start;" />
-                    <RadioGroups.WorldRadioList fixed-item-height="100" binding-source-selection-mode="AutoAssign" selection-type="None" allow-add="false" allow-remove="false" name="Worlds" virtualization-method="FixedHeight" style="flex-grow: 1; max-height: 700px; width: 100%; justify-content: flex-start; margin-top: 50px;" />
+                    <RadioGroups.WorldRadioGroup fixed-item-height="100" binding-source-selection-mode="AutoAssign" selection-type="None" allow-add="false" allow-remove="false" name="Worlds" virtualization-method="FixedHeight" style="flex-grow: 1; max-height: 700px; width: 100%; justify-content: flex-start; margin-top: 50px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="VisualElement" style="flex-grow: 0; width: 5px; height: 90%; background-color: rgb(141, 129, 51); position: relative; align-self: center; display: flex; margin-top: 0;" />

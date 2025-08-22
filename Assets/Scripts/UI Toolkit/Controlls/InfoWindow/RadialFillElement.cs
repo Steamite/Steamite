@@ -121,12 +121,12 @@ namespace InfoWindowElements
             #endregion
 
             radialFill.Add(overlayImage);
-            radialFill.transform.rotation = Quaternion.Euler(0, 0, angleOffset);
+            radialFill.style.rotate = Quaternion.Euler(0, 0, angleOffset);
             radialFill.generateVisualContent += OnGenerateVisualContent;
 
             overlayImage.style.scale = new Scale(new Vector2(overlayImageScale, overlayImageScale));
             overlayImage.style.backgroundImage = null;
-            overlayImage.transform.rotation = Quaternion.Euler(0, 0, -angleOffset);
+            overlayImage.style.rotate = Quaternion.Euler(0, 0, -angleOffset);
 
             value = 0.5f;
             fillColor = new(1, 1, 1, 1);

@@ -7,7 +7,6 @@ public static class ToolkitUtils
 {
     public static LocalMenu localMenu;
     public static ResourceSkins resSkins;
-    public static readonly Color textColor = new(0.6313726f, 0.5803922f, 0.2313726f, 1);
 
     const string MULTY_COLUMN = "unity-multi-column-view__row-container";
     const string LIST_VIEW = "unity-list-view__item";

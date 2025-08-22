@@ -8,24 +8,24 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
-public class QuestController : FullscreenWindow, IQuestController, IGameDataController<QuestsSave>
+public class QuestController : FullscreenWindow, IQuestController, IGameDataController<QuestControllerSave>
 {
     [SerializeField] public GameObject ExcavationIcon;
     [SerializeField] UIDocument _questCatalog;
     IUIElement questCatalog;
     [SerializeField] UIDocument _questInteface;
     IUIElement questInteface;
-
+    IUIElement orderInterface;
     public QuestHolder data;
 
     public List<Quest> finishedQuests;
     public ObservableCollection<Quest> activeQuests;
 
 
-    List<Objective> objectives;
     public List<ExcavationObjective> ExcavationObjectives = new();
     public List<AnyExcavationObjective> AnyExcavationObjectives = new();
     public List<BuildingObjective> buildingObjectives = new();
+    public Order order;
 
     public void BuildBuilding(object obj)
     {
@@ -51,7 +51,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         throw new System.NotImplementedException();
     }
 
-    public async Task LoadState(QuestsSave saveData)
+    public async Task LoadState(QuestControllerSave saveData)
     {
         activeQuests = new();
         finishedQuests = new();
@@ -70,12 +70,16 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
                 quest.Load(this, save);
             }
         }
+        order = new(data.Categories[2].Objects.FirstOrDefault(q => q.id == saveData.order.questId));
+        order.Load(this, saveData.order);
         SceneRefs.Tick.SubscribeToEvent(UpdateTimers, Tick.TimeEventType.Ticks);
 
-        questInteface = _questInteface.rootVisualElement[3] as IUIElement;
+        questInteface = _questInteface.rootVisualElement.Q("QuestGroup") as IUIElement;
         questInteface.Open(this);
 
         questCatalog = _questCatalog.rootVisualElement[0][0].Q("QuestCatalog") as IUIElement;
+
+        orderInterface = _questCatalog.rootVisualElement[0][0].Q("OrderInterface") as IUIElement;
         GetWindow();
     }
 
@@ -85,6 +89,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         {
             activeQuests[i].DecreaseTimeToFail(this);
         }
+        order.DecreaseTimeToFail(this);
     }
 
     public void AddDummy()
@@ -103,6 +108,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
     {
         base.OpenWindow();
         questCatalog.Open(this);
+        orderInterface.Open(this);
     }
 
     public override void CloseWindow()

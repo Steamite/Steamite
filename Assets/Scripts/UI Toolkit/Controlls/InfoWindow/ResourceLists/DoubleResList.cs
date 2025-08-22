@@ -1,4 +1,5 @@
 using InfoWindowElements;
+using Objectives;
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -20,11 +21,10 @@ namespace InfoWindowElements
             DataBinding mainBinding = null;
             switch (data)
             {
-                case Building:
-                    Building b = (Building)data;
-                    if (b.id == -1)
+                case Building building:
+                    if (building.id == -1)
                     {
-                        mainBinding = SetupResTypes(b.Cost, nameof(ResourceDisplay.GlobalResources));
+                        mainBinding = SetupResTypes(building.Cost, nameof(ResourceDisplay.GlobalResources));
                         mainBinding.sourceToUiConverters.AddConverter((ref MoneyResource storage) => ToUIRes(storage));
                         data = SceneRefs.Stats.GetComponent<ResourceDisplay>();
                         dataSource = data;
@@ -66,8 +66,7 @@ namespace InfoWindowElements
                     }
                     break;
 
-                case LevelInfo:
-                    LevelInfo tab = (LevelInfo)data;
+                case LevelInfo tab:
                     Resource resource = tab.LevelData.costs[tab.SelectedLevel];
 
                     if (cost)
@@ -85,13 +84,15 @@ namespace InfoWindowElements
                     dataSource = data;
                     break;
 
-                case Resource:
-                    Resource res = (Resource)data;
+                case Resource res:
 
                     if (cost && !useBindings)
                     {
                         SetResWithoutBinding(res);
                     }
+                    return;
+                case Order order:
+                    SetResWithoutBinding((order.objectives[0] as ResourceObjective).resource);
                     return;
                 default:
                     style.display = DisplayStyle.None;

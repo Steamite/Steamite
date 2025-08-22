@@ -18,7 +18,7 @@
             </engine:VisualElement>
         </engine:VisualElement>
     </engine:VisualElement>
-    <engine:ProgressBar value="75" title="50/100" style="position: absolute; bottom: 179px; left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 5px; width: 220px;" />
+    <engine:ProgressBar value="75" title="50/100" name="Trust" style="position: absolute; bottom: 179px; left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 5px; width: 220px;" />
     <LevelButtons style="position: absolute; bottom: 210px; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; left: 0;" />
-    <QuestGroup virtualization-method="DynamicHeight" selection-type="None" allow-add="false" allow-remove="false" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+    <QuestGroup virtualization-method="DynamicHeight" selection-type="None" allow-add="false" allow-remove="false" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" name="QuestGroup" />
 </engine:UXML>

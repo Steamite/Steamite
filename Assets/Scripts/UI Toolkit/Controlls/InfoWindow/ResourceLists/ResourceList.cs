@@ -144,7 +144,6 @@ namespace InfoWindowElements
         {
             el.RemoveFromClassList("unity-collection-view__item");
             Color c = ToolkitUtils.resSkins.GetResourceColor(((UIResource<TEnum>)itemsSource[i]).type);
-            el.Q<Label>("Value").style.color = ToolkitUtils.textColor;
 
             el.Q<Label>("Value").text = ConvertString((UIResource<TEnum>)itemsSource[i]);
             el.Q<VisualElement>("Icon").style.unityBackgroundImageTintColor = c;

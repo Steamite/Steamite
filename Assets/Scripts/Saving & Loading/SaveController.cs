@@ -12,7 +12,7 @@ public struct Save
     public HumanSave[] humans;
     public ResearchSave research;
     public TradeSave trade;
-    public QuestsSave quests;
+    public QuestControllerSave quests;
 }
 
 
@@ -157,7 +157,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
             WriteSave(
                $"{tmpPath}/Quests.json",
                jsonSerializer,
-               new QuestsSave(SceneRefs.QuestController as QuestController));
+               new QuestControllerSave(SceneRefs.QuestController as QuestController));
 
             if (autoSave)
                 saveName = "autosave";

@@ -45,6 +45,23 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
             UIUpdate(nameof(GlobalResources));
         }
     }
+    /// <summary>Company's trust in your leadership, if it falls to zero you lose.</summary>
+    int trust;
+    /// <inheritdoc cref="trust"/>
+    [CreateProperty]
+    public int Trust
+    {
+        get => trust;
+        set 
+        {
+            trust = value;
+            UIUpdate(nameof(Trust));
+            if (trust <= 0)
+            {
+                Debug.LogWarning("Game over");
+            }
+        }
+    }
     #endregion
 
     #region Init

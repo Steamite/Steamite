@@ -125,29 +125,18 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
             title = "Type",
             makeCell = () => 
             {
-                VisualElement element = new();
-                element.Add(new DropdownField());
-
                 NextQuestList list = new NextQuestList(holder as QuestHolder);
-                element.Add(list);
-                return element;
+                return list;
             },
             
             bindCell = (el, i) =>
             {
-                DropdownField field = el[0] as DropdownField;
-                field.choices = questTypes.Select(q => q.Name).ToList();
-                field.value = selectedCategory.Objects[i].GetType().ToString();
-                field.userData = i;
-                field.RegisterValueChangedCallback(QuestTypeChange);
-
-                NextQuestList list = el[1] as NextQuestList;
+                NextQuestList list = el as NextQuestList;
                 list.Bind(selectedCategory.Objects[i], ref onNextQuestChange, () => onNextQuestChange?.Invoke());
             },
             unbindCell = (el, i) =>
             {
-                (el[0] as DropdownField).UnregisterValueChangedCallback(QuestTypeChange);
-                (el[1] as NextQuestList).CustomUnbind(ref onNextQuestChange);
+                (el as NextQuestList).CustomUnbind(ref onNextQuestChange);
             },
             resizable = false,
             width = 200,
@@ -225,21 +214,6 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
     }
 
     #region Change
-    void QuestTypeChange(ChangeEvent<string> ev)
-    {
-        int i = (int)(ev.target as VisualElement).userData;
-        Quest prev = dataGrid.itemsSource[i] as Quest;
-        if (prev != null)
-        {
-            Type t = questTypes.FirstOrDefault(q => q.Name == ev.newValue);
-            if (t != null && prev.GetType() != t)
-            {
-                dataGrid.itemsSource[i] = Activator.CreateInstance(t, prev);
-                EditorUtility.SetDirty(holder);
-                dataGrid.RefreshItem(i);
-            }
-        }
-    }
 
     void TimeToFailChange(ChangeEvent<int> ev)
     {

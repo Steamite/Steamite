@@ -39,6 +39,7 @@ public class NewGameInit : MonoBehaviour
             convoys = new(),
             tradeLocations = tradeHolder.tradeLocations,
             money = 2000,
+            trust = 50,
             prodLevels = tradeHolder.startingLocation.config.production.Select(q => q.min).ToList(),
             statLevels = tradeHolder.startingLocation.config.stats.Select(q => q.min).ToList(),
             outposts = new()
@@ -95,13 +96,15 @@ public class NewGameInit : MonoBehaviour
         };
     }
 
-    public async Task<QuestsSave> InitQuests()
+    public async Task<QuestControllerSave> InitQuests()
     {
         QuestHolder quest = await Addressables.LoadAssetAsync<QuestHolder>("Assets/Game Data/UI/QuestData.asset").Task;
-        QuestsSave questSave = new()
+        QuestControllerSave questSave = new()
         {
-            activeQuests = new() { new(quest.Categories[0].Objects[0]) {state = QuestState.Active } },
-            finishedQuests = new()
+            activeQuests = new() { new(quest.Categories[0].Objects[0]) { state = QuestState.Active } },
+            finishedQuests = new(),
+            order = new(quest.Categories[2].Objects[0]) { state = QuestState.Active}
+
         };
         return questSave;
     }

@@ -60,6 +60,7 @@ public partial class QuestInfo : ScrollView
         public Label title;
         ListView listView;
         Color? color;
+        Label none;
         public IList itemSource { set => listView.itemsSource = value; }
         public TitleListView() : base() 
         {
@@ -95,6 +96,11 @@ public partial class QuestInfo : ScrollView
                     else
                         el.style.color = (Color)color;
                 },
+                makeNoneElement = () =>
+                {
+                    none = new("Empty") { style = { color = color != null ? (Color)color : StyleKeyword.Null } };
+                    return none;
+                },
                 virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
                 selectionType = SelectionType.None
             });
@@ -108,9 +114,13 @@ public partial class QuestInfo : ScrollView
             itemSource = list;
 
             if (color == null)
+            {
                 title.style.color = StyleKeyword.Null;
+            }
             else
+            {
                 title.style.color = (Color)color;
+            }
         }
     }
 }

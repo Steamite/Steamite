@@ -10,20 +10,20 @@ public class QuestPenaltyEditor : QuestCompositorList<QuestPenalty>
     {
         columns.Add(new Column()
         {
-            name = "cost",
-            title = "Cost",
+            name = "ammount",
+            title = "Ammount",
             makeCell = () => new IntegerField(),
             bindCell = (el, i) =>
             {
-                if (itemsSource[i] is QuestMoneyPenalty moneyPenalty)
+                IntegerField field = el as IntegerField;
+                if (itemsSource[i] is QuestPenalty penalty)
                 {
-                    el.style.display = DisplayStyle.Flex;
-                    IntegerField field = el as IntegerField;
-                    field.value = moneyPenalty.penaltyAmmount;
+                    field.style.display = DisplayStyle.Flex;
+                    field.value = penalty.penaltyAmmount;
                     field.RegisterValueChangedCallback(AmmountChange);
                 }
                 else
-                    el.style.display = DisplayStyle.None;
+                    field.style.display = DisplayStyle.None;
             },
             unbindCell = (el, i) =>
             {
@@ -60,7 +60,7 @@ public class QuestPenaltyEditor : QuestCompositorList<QuestPenalty>
         int i = ev.target.GetRowIndex();
         if (ev.previousValue != ev.newValue)
         {
-            QuestMoneyPenalty penalty = itemsSource[i] as QuestMoneyPenalty;
+            QuestPenalty penalty = itemsSource[i] as QuestPenalty;
             penalty.penaltyAmmount = ev.newValue;
             EditorUtility.SetDirty(holder);
         }
