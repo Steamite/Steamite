@@ -1,6 +1,5 @@
 .state-button {
-    flex-grow: 1;
-    background-color: rgb(114, 73, 35);
+    flex-grow: 0;
     width: 100%;
     margin-top: 0;
     margin-right: 0;
@@ -14,26 +13,30 @@
     border-right-width: 0;
     border-bottom-width: 1px;
     border-left-width: 0;
-    border-left-color: rgb(28, 28, 28);
-    border-right-color: rgb(28, 28, 28);
-    border-top-color: rgb(28, 28, 28);
-    border-bottom-color: rgb(28, 28, 28);
+    background-color: var(--disabled);
+    border-bottom-color: var(--border);
+    border-top-color: var(--border);
+    min-height: 40px;
+    max-height: 40px;
 }
 
 .available {
-    background-color: rgb(161, 148, 59);
+    background-color: var(--interactable);
+    transition-duration: 0.2s;
 }
 
 .available:hover {
-    background-color: rgb(141, 129, 51);
+    background-color: var(--hover);
+    transition-duration: 0.2s;
 }
 
 .completed {
-    background-color: rgb(80, 74, 29);
+    background-color: var(--finished);
 }
 
 .locked {
-    background-color: rgb(28, 28, 28);
+    background-color: var(--background);
+    display: none;
 }
 
 .stat {
@@ -47,21 +50,20 @@
     padding-right: 0;
     -unity-text-align: upper-center;
     white-space: pre-wrap;
-    background-color: rgb(114, 73, 35);
     padding-top: 2.5%;
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-left-color: rgb(28, 28, 28);
-    border-right-color: rgb(28, 28, 28);
-    border-top-color: rgb(28, 28, 28);
-    border-bottom-color: rgb(28, 28, 28);
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     max-width: 25%;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
 }
 
 ColonyView > VisualElement {
@@ -70,6 +72,7 @@ ColonyView > VisualElement {
 
 ColonyView {
     flex-grow: 1;
+    padding-bottom: 20px;
 }
 
 ColonyView > VisualElement > Label {
@@ -88,4 +91,24 @@ ColonyView > VisualElement > Label {
     height: 100%;
     flex-direction: row;
     justify-content: center;
+}
+
+.container {
+    flex-grow: 0;
+    align-self: center;
+    width: 40%;
+    flex-direction: column-reverse;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+    margin-bottom: 5%;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
 }

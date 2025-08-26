@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -269,13 +270,10 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     }
     #endregion Loading Game
 
-    public IEnumerator Init()
+    public async Task Init()
     {
         CenterElevatorIds = new();
-        AsyncOperationHandle<BuildingData> buttons = Addressables.LoadAssetAsync<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
-        if (!buttons.IsDone)
-            yield return buttons;
-        buildPrefabs = buttons.Result;
+        buildPrefabs = await Addressables.LoadAssetAsync<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset").Task;
         buildPrefabs.Categories.SelectMany(q => q.Objects).ToList().ForEach(q =>
         {
             q.building.InitModifiers();

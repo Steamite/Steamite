@@ -4,7 +4,6 @@
     -unity-text-align: middle-center;
     flex-grow: 1;
     font-size: 20px;
-    background-color: rgb(35, 32, 2);
     padding-left: 5px;
     padding-right: 5px;
     padding-top: 2px;
@@ -18,29 +17,23 @@
     border-right-width: 1px;
     border-bottom-width: 1px;
     border-left-width: 1px;
-    border-left-color: rgb(0, 0, 0);
-    border-right-color: rgb(0, 0, 0);
-    border-top-color: rgb(0, 0, 0);
-    border-bottom-color: rgb(0, 0, 0);
 }
 
 .rotator {
     background-image: url("project://database/Assets/Sprites/Textures/1filled%20cog@2x.png?fileID=2800000&guid=5a869fc421e59114e9ecac48c51af2ed&type=3#1filled cog@2x");
     flex-grow: 1;
-    transition-duration: 0.2s;
     width: 100%;
     height: 100%;
-    -unity-background-image-tint-color: rgb(140, 140, 140);
+    -unity-background-image-tint-color: var(--disabled);
+    transition-duration: 1ms;
+    transition-property: rotate;
+    rotate: 0;
+    color: var(--text-disabled);
 }
 
 .research-button {
     width: 125px;
     height: 125px;
-    background-color: rgba(0, 0, 0, 0);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
     min-width: 125px;
     min-height: 125px;
     max-height: 125px;
@@ -48,22 +41,16 @@
     transition-duration: 0.5s;
 }
 
+.research-button-selected {
+    width: 125px;
+    height: 125px;
+}
+
 .research-button-selected > .rotator {
     width: 100%;
     height: 100%;
     scale: 1.075 1.075;
-    transition-duration: 0.2s;
-    -unity-background-image-tint-color: rgb(121, 111, 44);
-}
-
-.research-button-selected {
-    width: 125px;
-    height: 125px;
-    background-color: rgba(0, 0, 0, 0);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: var(--selected);
 }
 
 .research-button-background {
@@ -85,18 +72,19 @@
     -unity-background-image-tint-color: rgb(200, 151, 59);
 }
 
-.available:hover > .rotator {
-    transition-duration: 0.3s;
-    -unity-background-image-tint-color: rgb(226, 152, 18);
-}
-
 .available:hover {
     transition-duration: 0.3s;
     scale: 1.1 1.1;
+    color: var(--text-hover);
+}
+
+.available:hover > .rotator {
+    transition-duration: 0.3s;
+    -unity-background-image-tint-color: var(--hover);
 }
 
 .researched > .rotator {
-    -unity-background-image-tint-color: rgb(27, 231, 161);
+    -unity-background-image-tint-color: var(--finished);
 }
 
 .found {

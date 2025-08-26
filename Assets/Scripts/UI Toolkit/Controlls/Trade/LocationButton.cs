@@ -7,7 +7,6 @@ public partial class LocationButton : CustomRadioButton
 {
     public const int elementSize = 150;
     protected Vector2 pos;
-    VisualElement backgroundElem;
 
     #region Constructors
     public LocationButton()
@@ -19,8 +18,8 @@ public partial class LocationButton : CustomRadioButton
     {
         pos = _pos;
 
-        backgroundElem = new();
-        Add(backgroundElem);
+        rotator = new();
+        Add(rotator);
     }
     #endregion
 
@@ -36,15 +35,11 @@ public partial class LocationButton : CustomRadioButton
     protected override bool SelectChange(bool UpdateGroup)
     {
         base.SelectChange(UpdateGroup);
-        backgroundElem.RegisterCallback<TransitionEndEvent>((_) => ToggleInClassList("rotate"));
-        AddToClassList("rotate");
         return true;
     }
 
     public override void Deselect(bool triggerTransition = true)
     {
         base.Deselect(triggerTransition);
-        backgroundElem.UnregisterCallback<TransitionEndEvent>((_) => ToggleInClassList("rotate"));
-        RemoveFromClassList("rotate");
     }
 }

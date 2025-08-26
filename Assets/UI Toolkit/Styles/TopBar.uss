@@ -28,17 +28,13 @@
     justify-content: flex-start;
     max-height: 60px;
     min-height: 60px;
-    max-width: 180px;
-    min-width: 180px;
+    max-width: 165px;
+    min-width: 165px;
     flex-grow: 1;
     border-top-width: 3px;
     border-right-width: 3px;
     border-bottom-width: 3px;
     border-left-width: 3px;
-    border-left-color: var(--border);
-    border-right-color: var(--border);
-    border-top-color: var(--border);
-    border-bottom-color: var(--border);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -48,12 +44,7 @@
 }
 
 .topBar .unity-list-view__item #ResText {
-    max-height: 50px;
-    min-height: 50px;
-    padding-left: 0;
-    padding-right: 5px;
-    padding-top: 5px;
-    padding-bottom: 0;
+    
 }
 
 .topBar .unity-list-view__item #Value {
@@ -67,7 +58,7 @@
 }
 
 .topBar .unity-list-view__item #Icon {
-    margin-top: -3px;
+    margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
@@ -79,11 +70,11 @@
     left: 0;
     right: 0;
     bottom: 0;
+    align-self: center;
 }
 
 .topBar {
     flex-grow: 0;
-    background-color: var(--background);
     font-size: 64px;
     -unity-text-align: middle-left;
     align-self: stretch;
@@ -93,11 +84,9 @@
     margin-top: 0;
     padding-top: 0.5%;
     height: 8%;
-    border-left-color: var(--border);
-    border-right-color: var(--border);
-    border-top-color: var(--border);
+    border-bottom-width: 5px;
     border-bottom-color: var(--border);
-    border-bottom-width: 3px;
+    background-color: var(--background);
 }
 
 .money {
@@ -111,20 +100,19 @@
 
 .small-window {
     position: absolute;
-    background-color: var(--background);
     align-self: center;
-    top: 83px;
+    top: 81px;
     border-top-width: 0;
-    border-right-width: 3px;
-    border-bottom-width: 3px;
-    border-left-width: 3px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
+    min-width: 145px;
+    border-bottom-color: var(--border);
     border-left-color: var(--border);
     border-right-color: var(--border);
-    border-bottom-color: var(--border);
-    min-width: 145px;
-    border-top-color: var(--border);
+    background-color: var(--background);
 }

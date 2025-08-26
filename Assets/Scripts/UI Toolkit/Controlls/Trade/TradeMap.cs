@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 namespace TradeWindowElements
 {
     [UxmlElement]
-    public partial class TradeMap : Map, IInitiableUI, IUIElement
+    public partial class TradeMap : Map, IInitiableUI, IFullScreenWindowElem
     {
         const float DISTANCE_MOD = 2;
         List<LocationButton> locationButtons = new();
@@ -78,6 +78,7 @@ namespace TradeWindowElements
                 slider.style.height = 50;
                 slider.focusable = false;
                 slider.fill = true;
+                //slider.enabledSelf = false;
                 int j = convoys.FindIndex(q => q.tradeLocation == i);
                 if (j > -1)
                 {
@@ -175,7 +176,7 @@ namespace TradeWindowElements
 
         public void Open(object data)
         {
-            ((LocationButton)ElementAt(0).ElementAt(1).ElementAt(0)).Select();
+            locationButtons[0].Select();
             convoyLabel.text = $"{UIRefs.TradingWindow.AvailableConvoy}/{UIRefs.TradingWindow.maxConvoy} Convoyes";
 
             Slider slider;
@@ -199,6 +200,11 @@ namespace TradeWindowElements
                 return true;
             }
             return false;
+        }
+
+        public void Close()
+        {
+            locationGroup.Select(-1);
         }
 
         #endregion

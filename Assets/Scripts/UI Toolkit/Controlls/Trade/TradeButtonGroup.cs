@@ -58,6 +58,8 @@ namespace TradeWindowElements
                     break;
             }
             string headerText = "";
+            if (index == -1)
+                return;
             if(index == 0)
             {
                 headerText = colonyView.Open();

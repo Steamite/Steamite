@@ -25,10 +25,6 @@ namespace ResearchUI
         public ResearchDownLine lineDown;
         /// <summary>Line from the button up.</summary>
         public ResearchLine lineUp;
-
-        /// <summary>Background image.</summary>
-        VisualElement background;
-
         /// <summary>Research state of the button.</summary>
         ButtonState state;
 
@@ -49,9 +45,9 @@ namespace ResearchUI
                 return;
             }
 
-            background = new();
-            background.AddToClassList("rotator");
-            Add(background);
+            rotator = new();
+            rotator.AddToClassList("rotator");
+            Add(rotator);
 
             if (node.researched == true)
             {
@@ -64,6 +60,7 @@ namespace ResearchUI
             }
 
             VisualElement preview = new();
+            preview.style.rotate = new Rotate(0);
             preview.AddToClassList("research-button-background");
             BuildCategWrapper cat = SceneRefs.ObjectFactory.buildPrefabs.Categories[node.nodeCategory];
             building = cat.Objects.FindIndex(q => q.id == node.nodeAssignee);

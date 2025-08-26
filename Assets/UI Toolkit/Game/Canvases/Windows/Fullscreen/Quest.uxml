@@ -10,5 +10,6 @@
             </ui:Tab>
             <OrderInterface name="OrderInterface" />
         </ui:TabView>
+        <ui:Button class="close-button" />
     </ui:VisualElement>
 </ui:UXML>

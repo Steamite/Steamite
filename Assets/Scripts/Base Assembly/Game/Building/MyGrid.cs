@@ -272,7 +272,7 @@ public static class MyGrid
         return gridSave;
     }
 
-    public static void Load(GridSave gridSave, GroundLevel templateLevel, int i, List<MinableRes> rockData, Material dirtMat)
+    public static int Load(GridSave gridSave, GroundLevel templateLevel, int i, List<MinableRes> rockData, Material dirtMat)
     {
         GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickableObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.GridTiles.transform);
         levels[i] = groundLevel;
@@ -312,6 +312,7 @@ public static class MyGrid
         {
             road.RevealRocks();
         }
+        return gridSave.width * gridSave.height;
     }
     #endregion
 }

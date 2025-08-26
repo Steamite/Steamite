@@ -64,7 +64,7 @@ public class Quest : DataObject, IUpdatable
         for (; i < nextQuests.Count; i++)
         {
             controller.data.Categories[nextQuests[i].categIndex]
-                .Objects.FirstOrDefault(q => q.id == nextQuests[i].questId).Load(controller);
+                .Objects.FirstOrDefault(q => q.id == nextQuests[i].questId)?.Load(controller);
         }
         if(i == 0)
             controller.AddDummy();
@@ -121,6 +121,7 @@ public class Quest : DataObject, IUpdatable
         string s = "";
         foreach (QuestReward item in rewards)
             s += item.ToString();
+        s += "\n";
         foreach (QuestPenalty item in penalties)
             s += item.ToString();
         return s;

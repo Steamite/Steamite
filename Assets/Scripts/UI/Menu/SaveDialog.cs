@@ -61,12 +61,12 @@ public class SaveDialog : MonoBehaviour, IGridMenu
         if (saveName.Length > 0)
         {
             saveButton.RemoveFromClassList("disabled-button");
-            saveButton.AddToClassList("enabled-button");
+            saveButton.AddToClassList("confirm-button");
         }
         else
         {
             saveButton.AddToClassList("disabled-button");
-            saveButton.RemoveFromClassList("enabled-button");
+            saveButton.RemoveFromClassList("confirm-button");
         }
     }
 

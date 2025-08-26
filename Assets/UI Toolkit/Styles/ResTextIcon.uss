@@ -1,13 +1,15 @@
 #ResText {
     flex-direction: row;
-    padding-top: 5%;
-    padding-bottom: 5%;
-    padding-right: 5%;
     max-width: 100%;
     flex-grow: 1;
     justify-content: center;
-    padding-left: 10%;
-    background-color: rgba(0, 0, 0, 0);
+    padding-left: 10px;
+    max-height: 54px;
+    min-height: 54px;
+    padding-left: 10px;
+    padding-bottom: 0;
+    padding-right: 5px;
+    background-color: var(--clear);
 }
 
 #ResText > #Value {
@@ -31,6 +33,7 @@
     max-height: 50px;
     background-image: url("project://database/Assets/Sprites/Icons/Info%20window/ResIcon@4x.png?fileID=2800000&guid=9c948cd08b1522c4a95a3a66fe6242d4&type=3#ResIcon@4x");
     justify-content: flex-start;
+    align-self: center;
     -unity-background-image-tint-color: rgb(255, 255, 255);
     flex-shrink: 0;
     min-width: 50px;

@@ -1,0 +1,39 @@
+.worker-button {
+    flex-grow: 1;
+    height: 50px;
+    margin-left: 1%;
+    opacity: 1;
+    margin-right: 1%;
+    flex-direction: row;
+    align-self: auto;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transition-property: all;
+    transition-duration: 0.2s;
+    -unity-text-align: middle-left;
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    background-color: var(--interactable);
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+}
+
+.worker-button:hover {
+    flex-grow: 1;
+    height: 50px;
+    margin-left: 1%;
+    opacity: 1;
+    margin-right: 1%;
+    flex-direction: row;
+    align-self: auto;
+    scale: 1.01 1.05;
+    background-color: var(--hover);
+    color: var(--text-hover);
+    transition-duration: 0.2s;
+}

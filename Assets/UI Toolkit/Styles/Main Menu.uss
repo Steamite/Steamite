@@ -27,7 +27,6 @@
     visibility: visible;
     overflow: visible;
     display: flex;
-    color: rgb(249, 233, 141);
     translate: 105% 0;
     transition-duration: 2s;
     transition-timing-function: ease-out;

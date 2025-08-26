@@ -1,0 +1,62 @@
+.menu {
+    flex-grow: 1;
+    position: absolute;
+    width: 30%;
+    height: 75%;
+    margin-left: 0;
+    left: 35%;
+    top: 10%;
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+    display: flex;
+    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
+    background-color: var(--background);
+    border-top-color: var(--border);
+    border-left-color: var(--border);
+    border-bottom-color: var(--border);
+    border-right-color: var(--border);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.save-dialog {
+    flex-grow: 1;
+    position: absolute;
+    max-width: none;
+    width: 40%;
+    max-height: none;
+    height: 30%;
+    left: 30%;
+    top: 30%;
+    display: flex;
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color: var(--background);
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+}
+
+.save-header {
+    margin-top: 4px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    margin-left: 4px;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    font-size: 66px;
+    -unity-text-align: upper-center;
+}

@@ -66,9 +66,14 @@ namespace InfoWindowElements
             element.Add(capacityLabel);
             Add(element);
 
-            storageScroll = new ScrollView(ScrollViewMode.Vertical);
-            storageScroll.verticalScrollerVisibility = ScrollerVisibility.AlwaysVisible;
-            storageScroll.style.minHeight = new(new Length(100, LengthUnit.Percent));
+            storageScroll = new ScrollView() 
+            {
+                mode = ScrollViewMode.Vertical,
+                //verticalScrollerVisibility = ScrollerVisibility.AlwaysVisible,
+                horizontalScrollerVisibility = ScrollerVisibility.Hidden,
+                touchScrollBehavior = ScrollView.TouchScrollBehavior.Clamped,
+            };
+
             Add(storageScroll);
         }
         #endregion
@@ -80,6 +85,7 @@ namespace InfoWindowElements
         public override void Open(object _storage)
         {
             storage = (IStorage)_storage;
+
             DataBinding binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource store) => ToUIRes(store));
             SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, storage);
@@ -177,7 +183,6 @@ namespace InfoWindowElements
             storageElems.Add(storageElem);
             UpdateGroup(x);
             lastRow.Add(element);
-
         }
         #endregion
 

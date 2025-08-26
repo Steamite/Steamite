@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/LoadingScreen.uss?fileID=7433441132597879392&amp;guid=f191755a9f3d283439c9307354b81860&amp;type=3#LoadingScreen" />
+    <ui:VisualElement class="loading-screen" style="align-content: flex-end; justify-content: flex-end; font-size: 100px; display: none;">
+        <ui:Label text="Label" name="Title" style="-unity-text-align: middle-center;" />
+        <ui:ProgressBar value="22" name="Progress" style="height: 80px; width: 80%; align-self: center;" />
+    </ui:VisualElement>
+</ui:UXML>

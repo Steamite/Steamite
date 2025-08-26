@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class MaterialChanger : MonoBehaviour, IBeforeLoad
@@ -9,9 +10,9 @@ public class MaterialChanger : MonoBehaviour, IBeforeLoad
 
     public static Material Opaque => instance.opaqueMaterial;
     public static Material Transparent => instance.transparentMaterial;
-    public IEnumerator Init()
+    public Task Init()
     {
         instance = this;
-        yield return null;
+        return Task.CompletedTask;
     }
 }

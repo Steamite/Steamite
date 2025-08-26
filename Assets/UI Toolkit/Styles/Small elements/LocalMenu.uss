@@ -42,10 +42,6 @@
 .local-menu {
     position: absolute;
     width: 70%;
-    border-left-color: rgb(28, 28, 28);
-    border-right-color: rgb(28, 28, 28);
-    border-top-color: rgb(28, 28, 28);
-    border-bottom-color: rgb(28, 28, 28);
     border-top-width: 5px;
     border-right-width: 5px;
     border-bottom-width: 5px;
@@ -54,13 +50,17 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    background-color: rgb(46, 29, 14);
     height: auto;
     flex-grow: 0;
     max-height: none;
     transition-duration: 0.2s;
     transition-property: all;
     opacity: 0;
+    background-color: var(--background);
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
 }
 
 .show {

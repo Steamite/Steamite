@@ -1,0 +1,4 @@
+.loading-screen {
+    flex-grow: 1;
+    background-color: var(--background);
+}

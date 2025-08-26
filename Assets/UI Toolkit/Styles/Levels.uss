@@ -36,10 +36,6 @@ LevelUnlocker {
     align-content: auto;
     justify-content: flex-start;
     flex-shrink: 0;
-    border-left-color: rgb(28, 28, 28);
-    border-right-color: rgb(28, 28, 28);
-    border-top-color: rgb(28, 28, 28);
-    border-bottom-color: rgb(28, 28, 28);
     border-top-width: 4px;
     border-right-width: 4px;
     border-bottom-width: 4px;
@@ -53,25 +49,26 @@ LevelUnlocker {
     transition-duration: 0.2s;
     opacity: 1;
     text-shadow: 1px 1px 0 rgb(35, 32, 2);
-    color: rgb(101, 92, 37);
     min-width: 80px;
     min-height: 80px;
     max-width: 80px;
     max-height: 80px;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+    background-color: var(--disabled);
 }
 
 LevelUnlocker:disabled {
-    background-color: rgb(68, 44, 21);
     opacity: 0.5;
     scale: 0.8 0.8;
 }
 
 .Level-Available {
-    background-color: rgb(35, 32, 2);
 }
 
 .Level-Available:hover {
-    background-color: rgb(60, 55, 22);
     scale: 1.05 1.05;
 }
 
@@ -86,19 +83,14 @@ LevelUnlocker:disabled {
     height: 75px;
     width: 75px;
     flex-shrink: 0;
-    border-left-color: rgb(28, 28, 28);
-    border-right-color: rgb(28, 28, 28);
-    border-top-color: rgb(28, 28, 28);
-    border-bottom-color: rgb(28, 28, 28);
-    background-color: rgba(141, 129, 51, 0.84);
     opacity: 1;
     scale: 1 1;
-    color: rgb(80, 74, 29);
+    background-color: var(--clear);
 }
 
 .Level-Can-Unlock:hover {
     scale: 1.05 1.05;
-    background-color: rgb(161, 148, 59);
+    background-color: var(--hover);
 }
 
 .Level-Opened {
@@ -114,9 +106,8 @@ LevelUnlocker:disabled {
     flex-shrink: 0;
     opacity: 1;
     scale: 1 1;
-    background-color: rgb(46, 29, 14);
-    color: rgb(80, 74, 29);
     text-shadow: 1px 1px 0 rgb(35, 32, 2);
+    background-color: var(--interactable);
 }
 
 .Level-Opened:hover {
@@ -130,30 +121,26 @@ LevelUnlocker:disabled {
     height: 75px;
     width: 75px;
     flex-shrink: 0;
-    background-color: rgb(114, 73, 35);
     opacity: 1;
     scale: 1.05 1.05;
-    color: rgb(161, 148, 59);
+    background-color: var(--hover);
 }
 
 .Level-Selected {
     scale: 1.15 1.15;
-    color: rgb(217, 7, 15);
     text-shadow: 1px 1px 0 rgb(80, 74, 29);
+    background-color: var(--selected);
 }
 
 .Level-Selected:hover {
     scale: 1.15 1.15;
-    color: rgb(217, 7, 15);
     text-shadow: 1px 1px 0 rgb(80, 74, 29);
+    background-color: var(--selected);
 }
 
 .Level-Active {
-    border-left-color: rgb(255, 0, 0);
-    border-right-color: rgb(255, 0, 0);
-    border-top-color: rgb(255, 0, 0);
-    border-bottom-color: rgb(255, 0, 0);
     max-height: 82.5px;
+    color: var(--text-secondary);
 }
 
 ________________ {

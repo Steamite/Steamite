@@ -14,7 +14,7 @@ public class SplashScreen : MonoBehaviour
         Application.targetFrameRate = -1;
         await SceneManager.LoadSceneAsync(1);
 
-        LoadingScreen screen = GameObject.Find("Loading Screen").transform.GetChild(0).GetComponent<LoadingScreen>();
+        LoadingScreen screen = GameObject.Find("Loading Screen").GetComponent<LoadingScreen>();
         if (loadNewGame)
             screen.StartNewGame("test - TopGun");
         else

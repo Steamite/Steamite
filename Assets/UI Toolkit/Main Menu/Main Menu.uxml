@@ -5,16 +5,16 @@
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Save%20window.uss?fileID=7433441132597879392&amp;guid=eca73d8699a9e1c41a8dd8849b9c0de9&amp;type=3#Save window" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Main%20Menu.uss?fileID=7433441132597879392&amp;guid=91ba141990bab14419ef28afeec0dc78&amp;type=3#Main Menu" />
-    <ui:VisualElement name="Background" class="Empty" style="-unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;); font-size: 50px; overflow: hidden; visibility: visible; display: flex; background-color: rgb(46, 29, 14);">
+    <ui:VisualElement name="Background" class="Empty" style="-unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;); font-size: 50px; overflow: hidden; visibility: visible; display: flex; ">
         <ui:VisualElement name="Elements" class="menu" style="flex-grow: 1;">
             <ui:Instance template="Load-Menu" name="Load-Menu" class="window" style="display: flex; position: absolute; flex-grow: 1; width: 100%; height: 100%; translate: 0 100%;" />
             <ui:VisualElement name="Main-Page" style="flex-grow: 1; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; justify-content: space-between; transition-property: translate; overflow: visible;">
-                <ui:Label text="STEAMITE" name="STEAMITE" style="-unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;); color: rgb(181, 166, 66); -unity-text-align: upper-center; font-size: 210px; -unity-font-style: normal; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 75px; padding-right: 50px; padding-bottom: 0; padding-left: 50px; letter-spacing: 5px; text-shadow: 20px 20px 1px rgb(40, 37, 15);" />
+                <ui:Label text="STEAMITE" name="STEAMITE" style="-unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;); -unity-text-align: upper-center; font-size: 210px; -unity-font-style: normal; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 75px; padding-right: 50px; padding-bottom: 0; padding-left: 50px; letter-spacing: 5px; text-shadow: 20px 20px 1px rgb(40, 37, 15);" />
                 <ui:VisualElement name="Menu" style="flex-grow: 1; max-width: 40%; align-self: flex-start; left: 30%; right: 35px; justify-content: flex-start; align-content: auto; max-height: 70%; align-items: auto; min-height: auto;">
                     <ui:VisualElement name="Menu" style="flex-grow: 1; height: 20%; min-height: auto; max-height: 100%; align-content: center; align-items: center; justify-content: flex-start; margin-top: 0; margin-left: 5%; margin-right: 5%; margin-bottom: 0; align-self: center; padding-top: 2%;">
-                        <ui:Button text="Continue" name="Continue-Button" class="disabled-button" style="width: 100%; height: 18%; font-size: 90px; margin-top: 1%; padding-top: 0; padding-right: 0; padding-left: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-bottom: 0; border-top-color: rgba(255, 255, 255, 0); border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;);" />
+                        <ui:Button text="Continue" name="Continue-Button" class="disabled-button" style="width: 100%; height: 18%; font-size: 90px; margin-top: 1%; padding-top: 0; padding-right: 0; padding-left: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-bottom: 0;     -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/assets/Alpha-Slab-One&apos;);" />
                         <ui:Button text="New Game" name="New-Game-Button" selectable="false" class="main-button" style="margin-top: 1%;" />
-                        <ui:Button text="Load Game" name="Load-Game-Button" class="disabled-button" style="width: 100%; height: 18%; margin-top: 1%; padding-top: 0; padding-right: 0; padding-left: 0; margin-left: 0; margin-right: 0; margin-bottom: 0; border-top-color: rgba(255, 255, 255, 0); border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); font-size: 90px;" />
+                        <ui:Button text="Load Game" name="Load-Game-Button" class="disabled-button" style="width: 100%; height: 18%; margin-top: 1%; padding-top: 0; padding-right: 0; padding-left: 0; margin-left: 0; margin-right: 0; margin-bottom: 0;     font-size: 90px;" />
                         <ui:Button text="Settings" name="Settings-Button" class="main-button" style="margin-top: 1%; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
                         <ui:Button text="Exit" name="Exit-Button" class="main-button" style="margin-top: 1%; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
                     </ui:VisualElement>
@@ -27,6 +27,6 @@
             </ui:VisualElement>
             <ui:Instance template="New-Menu" name="New-Menu" class="window" style="translate: 100% 0; overflow: hidden;" />
         </ui:VisualElement>
-        <ui:VisualElement name="Main-Blocker" class="blocker" style="flex-grow: 1; display: none; background-color: rgba(0, 0, 0, 0);" />
+        <ui:VisualElement name="Main-Blocker" class="blocker" style="flex-grow: 1; display: none; " />
     </ui:VisualElement>
 </ui:UXML>

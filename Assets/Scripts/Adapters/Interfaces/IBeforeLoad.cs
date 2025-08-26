@@ -1,6 +1,7 @@
 using System.Collections;
+using System.Threading.Tasks;
 
 public interface IBeforeLoad
 {
-    public IEnumerator Init();
+    public Task Init();
 }

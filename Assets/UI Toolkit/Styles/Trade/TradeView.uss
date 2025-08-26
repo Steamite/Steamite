@@ -14,10 +14,6 @@
 .trade-categ > #Header > #Label {
     -unity-text-align: middle-left;
     border-bottom-width: 5px;
-    border-left-color: rgb(161, 148, 59);
-    border-right-color: rgb(161, 148, 59);
-    border-top-color: rgb(161, 148, 59);
-    border-bottom-color: rgb(161, 148, 59);
     margin-top: 2%;
     margin-right: 2%;
     margin-bottom: 0;
@@ -90,77 +86,12 @@
     max-height: 30%;
 }
 
-#Deal > #Slider {
-    width: 50%;
-    margin-left: 3%;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-}
-
-#Deal > #Slider #unity-text-field {
-    width: 32%;
-    -unity-text-align: upper-center;
-    max-width: 33%;
-}
-
-#Deal #unity-tracker {
-    background-color: rgb(182, 116, 56);
-    border-left-color: rgb(35, 32, 2);
-    border-right-color: rgb(35, 32, 2);
-    border-top-color: rgb(35, 32, 2);
-    border-bottom-color: rgb(35, 32, 2);
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 2px;
-    height: 20%;
-    margin-top: 0;
-    top: 40%;
-}
-
-#Deal #unity-tracker > #unity-fill {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-    background-color: rgb(181, 166, 66);
-}
-
-#Deal #unity-dragger {
-    background-color: rgb(121, 111, 44);
-    border-left-color: rgb(35, 32, 2);
-    border-right-color: rgb(35, 32, 2);
-    border-top-color: rgb(35, 32, 2);
-    border-bottom-color: rgb(35, 32, 2);
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 2px;
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    height: 50%;
-    top: 47%;
-    width: 6%;
-}
-
 #unity-text-input {
     padding-top: 0;
     padding-right: 5%;
     padding-bottom: 0;
     padding-left: 0;
     -unity-text-align: middle-right;
-    background-color: rgb(46, 29, 14);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
 }
 
 TradeView > #Summary {

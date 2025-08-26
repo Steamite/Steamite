@@ -14,6 +14,8 @@ namespace AbstractControls
 
         CustomRadioButtonGroup buttonGroup = null;
         CustomRadioButtonList buttonList = null;
+        protected VisualElement rotator;
+
         public CustomRadioButton()
         {
             styleClass = "save-radio-button";
@@ -82,10 +84,15 @@ namespace AbstractControls
             if (UpdateGroup)
             {
                 VisualElement el = this;
+                if (rotator != null)
+                {
+                    RegisterCallback<TransitionEndEvent>(Rotate);
+                    Rotate(null);
+                }
                 if (buttonList != null)
-                    buttonList.Select(selIndex);
+                    return buttonList.Select(selIndex);
                 else
-                    buttonGroup.Select(selIndex);
+                    return buttonGroup.Select(selIndex);
             }
             return true;
         }
@@ -109,11 +116,19 @@ namespace AbstractControls
             {
                 ToolkitUtils.ChangeClassWithoutTransition(styleClass + "-selected", styleClass, this);
             }
+            if (rotator != null)
+            {
+                UnregisterCallback<TransitionEndEvent>(Rotate);
+                Rotate(null);
+            }
         }
-        protected void Rotate(TransitionEndEvent _)
+
+        void Rotate(TransitionEndEvent ev)
         {
-            Debug.Log(ClassListContains("rotate"));
-            ToggleInClassList("rotate");
+            if (ev == null || ev.stylePropertyNames.Contains("rotate"))
+            {
+                ToggleInClassList("rotate");
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ public class HumanUtil : MonoBehaviour
 {
     #region Variables
     /// <summary>List of all <see cref="Human"/>s in game.</summary>
-    [SerializeField] List<Human> humans;
+    [SerializeField] List<Human> humans = new();
     /// <summary>Efficiency modifiers for all humans.</summary>
     public EfficencyModifiers modifiers;
     /// <summary>Mainly for testing, contains different colors for hats.</summary>
@@ -32,16 +32,11 @@ public class HumanUtil : MonoBehaviour
     /// Loads all Humans.
     /// </summary>
     /// <param name="progress">NOT USED.</param>
-    /// <param name="humanSaves">Humans to load.</param>
+    /// <param name="humanSave">Humans to load.</param>
     /// <param name="humanActivation">Action to link.</param>
-    public void LoadHumans(IProgress<int> progress, HumanSave[] humanSaves, ref Action humanActivation, int HumanWeight, ref int currentProg)
+    public void LoadHuman(HumanSave humanSave, ref Action humanActivation)
     {
-        humans = new();
-        foreach (HumanSave hSave in humanSaves)
-        {
-            AddHuman(SceneRefs.ObjectFactory.CreateSavedHuman(hSave), ref humanActivation);
-            progress.Report(currentProg += HumanWeight);
-        }
+        AddHuman(SceneRefs.ObjectFactory.CreateSavedHuman(humanSave), ref humanActivation);
     }
 
     /// <summary>
