@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -55,12 +56,12 @@ public class SceneRefs : MonoBehaviour
     static void ReloadDomain() => instance = null;
 
     /// <summary>Registers the <see cref="instance"/></summary>
-    public IEnumerator BeforeLoad()
+    public async Task BeforeLoad()
     {
         instance = this;
 
         foreach (IBeforeLoad beforeLoad in instance.beforeLoads)
-            yield return beforeLoad.Init();
+            await beforeLoad.Init();
         beforeLoads = null;
     }
 

@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12323, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: A
+  m_EditorClassIdentifier: UnityEditor.dll::UnityEditor.ColorPresetLibrary
+  m_Presets:
+  - m_Name: Background
+    m_Color: {r: 0.248, g: 0.12808791, b: 0.02997802, a: 1}
+  - m_Name: Second
+    m_Color: {r: 0.5882353, g: 0.26666668, b: 0.019607844, a: 1}
+  - m_Name: Text
+    m_Color: {r: 0.9843137, g: 0.8745098, b: 0.6862745, a: 1}
+  - m_Name: Second Background
+    m_Color: {r: 0.56078434, g: 0.34901962, b: 0.13725491, a: 1}
+  - m_Name: Light
+    m_Color: {r: 0.77254903, g: 0.6039216, b: 0.3882353, a: 1}
+  - m_Name: Active
+    m_Color: {r: 0.47058824, g: 0.16862746, b: 0.003921569, a: 1}
+  - m_Name: Active
+    m_Color: {r: 0.92941177, g: 0.5019608, b: 0.09019608, a: 1}
+  - m_Name: Base
+    m_Color: {r: 0.3529412, g: 0.19607843, b: 0.06666667, a: 1}
+  - m_Name: Test
+    m_Color: {r: 0.8392157, g: 0.5254902, b: 0.19215687, a: 1}
+  - m_Name: Done second
+    m_Color: {r: 0.0627451, g: 0.2784314, b: 0.36862746, a: 1}
+  - m_Name: Done
+    m_Color: {r: 0.23921569, g: 0.44313726, b: 0.49411765, a: 1}
+  - m_Name: Done third
+    m_Color: {r: 0.043137256, g: 0.15686275, b: 0.22352941, a: 1}
+  - m_Name: A
+    m_Color: {r: 0.9843137, g: 0.47058824, b: 0.023529412, a: 1}
+  - m_Name: B
+    m_Color: {r: 0.7921569, g: 0.26666668, b: 0.0627451, a: 1}
+  - m_Name: Border
+    m_Color: {r: 0.011764706, g: 0.05882353, b: 0.09803922, a: 1}
+  - m_Name: Remove
+    m_Color: {r: 1, g: 0, b: 0.05047798, a: 1}

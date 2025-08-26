@@ -22,7 +22,7 @@ public class QuestMoneyPenalty : QuestPenalty
 
     public override string ToString()
     {
-        return $"Money: {penaltyAmmount}";
+        return $"Lose: {penaltyAmmount} Money";
     }
 }
 

@@ -26,18 +26,6 @@ public partial class ResearchInfo : InfoWindowControl
         progress = new();
         progress.AddToClassList("res-progress");
         progress.title = "000/###";
-        progress.lowValue = 0;
-        progress.value = 0;
-        progress.highValue = 999;
-        progress[0][0].style.borderBottomLeftRadius = 5;
-        progress[0][0].style.borderBottomRightRadius = 5;
-        progress[0][0].style.borderTopLeftRadius = 5;
-        progress[0][0].style.borderTopRightRadius = 5;
-        progress[0][0].style.borderBottomColor = Color.black;
-        progress[0][0].style.borderRightColor = Color.black;
-        progress[0][0].style.borderLeftColor = Color.black;
-        progress[0][0].style.borderTopColor = Color.black;
-        progress[0][0].style.backgroundColor = Color.grey;
         Add(progress);
     }
 
@@ -76,7 +64,7 @@ public partial class ResearchInfo : InfoWindowControl
         {
             image.style.backgroundImage = StyleKeyword.Null;
             title.text = "None set";
-            progress.title = "";
+            progress.title = "0/0";
             progress.value = 0;
         }
     }

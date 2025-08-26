@@ -238,7 +238,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
         else
         {
         }
-        GameObject.Find("Loading Screen").transform.GetChild(0)
+        await GameObject.Find("Loading Screen")
             .GetComponent<LoadingScreen>().LoadGame(saves[selectedSave].path, worlds[selectedWorld].ToString());
     }
     #endregion

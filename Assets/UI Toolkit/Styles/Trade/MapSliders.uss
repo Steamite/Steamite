@@ -17,14 +17,10 @@
 }
 
 .map-slider #unity-tracker {
-    border-left-color: rgb(35, 32, 2);
-    border-right-color: rgb(35, 32, 2);
-    border-top-color: rgb(35, 32, 2);
-    border-bottom-color: rgb(35, 32, 2);
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
@@ -36,6 +32,10 @@
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
 }
 
 .map-slider #unity-tracker > #unity-fill {
@@ -51,18 +51,13 @@
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
+    -unity-slice-scale: 0.6px;
 }
 
 .map-slider #unity-dragger {
     height: 30px;
     top: 44%;
     width: 30px;
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-    background-color: rgba(0, 0, 0, 0);
-    background-image: url("project://database/Assets/Sprites/Textures/Circle.png?fileID=2800000&guid=5228e8ecb6e2a4d448697e7dcece5ee1&type=3#Circle");
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
@@ -71,32 +66,38 @@
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
+    background-image: url("project://database/Assets/Sprites/Textures/2x/Asset%201@2x.png?fileID=2800000&guid=94b32eda2d348bf4eaeb678476cb010f&type=3#Asset 1@2x");
+    background-color: var(--clear);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
 }
 
 .free #unity-tracker {
-    background-color: rgb(159, 102, 49);
+    background-color: var(--interactable);
 }
 
 .trading #unity-tracker {
-    background-color: rgb(68, 44, 21);
+    background-color: var(--disabled);
 }
 
 .trading #unity-tracker > #unity-fill {
-    background-color: rgb(181, 166, 66);
+    background-color: var(--hover);
 }
 
 .trading #unity-dragger {
-    -unity-background-image-tint-color: rgb(141, 129, 51);
+    -unity-background-image-tint-color: var(--hover);
 }
 
 .retreat #unity-tracker {
-    background-color: rgb(181, 166, 66);
+    background-color: var(--hover);
 }
 
 .retreat #unity-tracker > #unity-fill {
-    background-color: rgb(68, 44, 21);
+    background-color: var(--disabled);
 }
 
 .retreat #unity-dragger {
-    -unity-background-image-tint-color: rgb(114, 73, 35);
+    -unity-background-image-tint-color: var(--hover);
 }

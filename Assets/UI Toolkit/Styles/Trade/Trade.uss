@@ -21,3 +21,18 @@
     height: 100%;
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
+
+.left-bar {
+    width: 35%;
+    height: 100%;
+    border-right-width: 5px;
+    border-top-width: 0;
+    border-right-color: var(--border);
+}
+
+.header {
+    height: 7%;
+    width: 100%;
+    border-bottom-width: 5px;
+    border-bottom-color: var(--border);
+}

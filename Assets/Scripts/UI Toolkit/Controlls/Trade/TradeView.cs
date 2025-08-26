@@ -75,6 +75,7 @@ namespace TradeWindowElements
             #endregion
             Add(categ);
         }
+        
         void CreateSummary()
         {
             VisualElement summary, temp;
@@ -146,7 +147,8 @@ namespace TradeWindowElements
                 deals.ElementAt(i).name = "Deal";
                 var x = i;
                 var y = categIndex;
-                deals.ElementAt(i).Q<SliderInt>().RegisterValueChangedCallback(
+                SliderInt slider = deals.ElementAt(i).Q<SliderInt>();
+                slider.RegisterValueChangedCallback(
                     (eve) => UpdateSummary(eve.newValue, y, x));
             }
         }
@@ -234,7 +236,8 @@ namespace TradeWindowElements
                 for (int i = 0; i < selectedLocation.Buy.Count; i++)
                 {
                     deal = GetDeal(categoryIndex, i);
-                    ((SliderInt)deal.ElementAt(1)).highValue = TradingWindow.CONVOY_STORAGE_LIMIT - (_totalCount - ((SliderInt)deal.ElementAt(1)).value);
+                    ((SliderInt)deal.ElementAt(1)).highValue = 
+                        TradingWindow.CONVOY_STORAGE_LIMIT - (_totalCount - ((SliderInt)deal.ElementAt(1)).value);
                 }
                 BuyMoney = _totalCost;
                 BuyCount = _totalCount;

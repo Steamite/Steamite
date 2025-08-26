@@ -26,9 +26,9 @@ public class BuildingObjective : Objective
         return res;
     }
 
-    public override void Load(int _currentProgress, Quest _quest, QuestController controller)
+    public override void Load(int _currentProgressGlobal, Quest _quest, QuestController controller)
     {
-        base.Load(_currentProgress, _quest, controller);
+        base.Load(_currentProgressGlobal, _quest, controller);
         controller.buildingObjectives.Add(this);
     }
 

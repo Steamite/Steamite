@@ -122,15 +122,9 @@ namespace InfoWindowElements
             VisualElement element = itemTemplate.CloneTree();
             if (element[0].name == "ResText")
             {
-                element.ElementAt(0).style.paddingTop = new Length(verticalPadding, LengthUnit.Percent);
-                element.ElementAt(0).style.paddingBottom = new Length(verticalPadding, LengthUnit.Percent);
-                element.ElementAt(0).style.paddingLeft = new Length(leftPadding, LengthUnit.Pixel);
+                element.AddToClassList("resource-info");
             }
             element.ElementAt(0).ElementAt(0).style.fontSize = 40 * iconSize / ICON_SIZE;
-            element.ElementAt(0).ElementAt(0).style.paddingRight = 5 * iconSize / ICON_SIZE;
-            element.ElementAt(0).ElementAt(1).style.width = iconSize;
-            element.ElementAt(0).ElementAt(1).style.height = iconSize;
-            element.ElementAt(0).ElementAt(1).style.height = iconSize;
 
             return element;
         }

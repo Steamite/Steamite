@@ -1,32 +1,3 @@
-#Load-Menu #unity-tracker {
-    --unity-cursor-color: rgb(249, 233, 141);
-    background-color: rgba(28, 28, 28, 0);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-}
-
-#Load-Menu #unity-dragger-border {
-    --unity-cursor-color: rgb(249, 233, 141);
-    background-color: rgb(28, 28, 28);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-}
-
-#Load-Menu #unity-dragger {
-    --unity-cursor-color: rgb(249, 233, 141);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-    background-image: none;
-    -unity-background-image-tint-color: rgb(255, 255, 255);
-    background-color: rgb(70, 49, 27);
-}
-
 .game-window {
     flex-grow: 1;
     position: absolute;
@@ -37,6 +8,19 @@
     visibility: visible;
     overflow: visible;
     display: flex;
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color: var(--background);
+    border-top-color: var(--border);
+    border-left-color: var(--border);
+    border-bottom-color: var(--border);
+    border-right-color: var(--border);
 }
 
 .menu-view {
@@ -56,21 +40,15 @@ ___________________________________ {
 
 .save-radio-button {
     font-size: 40px;
-    background-color: rgb(60, 55, 22);
     background-image: none;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     transition-duration: 0.2s, 0.4s;
-    width: 90%;
+    width: 95%;
     align-items: center;
     align-self: center;
-    color: rgb(161, 148, 59);
-    border-left-color: rgb(114, 73, 35);
-    border-right-color: rgb(114, 73, 35);
-    border-top-color: rgb(114, 73, 35);
-    border-bottom-color: rgb(114, 73, 35);
     border-top-width: 5px;
     border-right-width: 5px;
     border-bottom-width: 5px;
@@ -83,26 +61,27 @@ ___________________________________ {
     transition-property: background-color, scale;
     max-height: 98.3px;
     min-height: 98.3px;
+    background-color: var(--interactable);
+    border-top-color: var(--border);
+    border-left-color: var(--border);
+    border-bottom-color: var(--border);
+    border-right-color: var(--border);
 }
 
 .save-radio-button:hover {
-    background-color: rgb(40, 37, 15);
     background-image: none;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
     transition-duration: 0.2s, 0.2s;
     scale: 1.05 1.05;
     height: 98.3px;
     font-size: 40px;
     transition-property: background-color, scale;
+    background-color: var(--hover);
+    color: var(--text-hover);
 }
 
 .save-radio-button-selected {
     font-size: 40px;
     height: 98.3px;
-    background-color: rgb(35, 32, 2);
     background-image: none;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -112,11 +91,6 @@ ___________________________________ {
     width: 90%;
     align-items: center;
     align-self: center;
-    color: rgb(161, 148, 59);
-    border-left-color: rgb(114, 73, 35);
-    border-right-color: rgb(114, 73, 35);
-    border-top-color: rgb(114, 73, 35);
-    border-bottom-color: rgb(114, 73, 35);
     border-top-width: 5px;
     border-right-width: 5px;
     border-bottom-width: 5px;
@@ -128,6 +102,12 @@ ___________________________________ {
     scale: 1.1 1.1;
     margin-top: 5px;
     transition-property: background-color, scale;
+    background-color: var(--selected);
+    color: var(--text-secondary);
+    border-top-color: var(--border);
+    border-left-color: var(--border);
+    border-bottom-color: var(--border);
+    border-right-color: var(--border);
 }
 
 .world-list {
@@ -136,20 +116,21 @@ ___________________________________ {
     margin-top: 0;
     height: 100%;
     margin-bottom: 0;
-    width: 90%;
+    width: 95%;
     align-self: center;
     transition-duration: 0s;
-    border-left-color: rgb(91, 58, 28);
-    border-right-color: rgb(91, 58, 28);
-    border-top-color: rgb(91, 58, 28);
-    border-bottom-color: rgb(91, 58, 28);
-    background-color: rgb(35, 32, 2);
-    border-top-width: 5px;
-    border-right-width: 5px;
-    border-bottom-width: 5px;
-    border-left-width: 5px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
+    border-top-color: var(--border);
+    border-left-color: var(--border);
+    border-bottom-color: var(--border);
+    border-right-color: var(--border);
+    padding-left: 15px;
+    padding-right: 15px;
 }

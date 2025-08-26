@@ -1,3 +1,4 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <InfoWindowElements.StorageInfo elem-pref="project://database/Assets/Resources/UI%20Toolkit/Storage%20Element.uxml?fileID=9197481963319205126&amp;guid=3afc604fdd1fdb5469e1e2b3ce449c47&amp;type=3#Storage Element" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Storage.uss?fileID=7433441132597879392&amp;guid=dd112799686f6d0499122341a665d436&amp;type=3#Storage" />
+    <InfoWindowElements.StorageInfo elem-pref="project://database/Assets/Resources/UI%20Toolkit/Storage%20Element.uxml?fileID=9197481963319205126&amp;guid=3afc604fdd1fdb5469e1e2b3ce449c47&amp;type=3#Storage Element" style="position: relative; max-height: 535px; height: 535px;" />
 </ui:UXML>

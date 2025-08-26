@@ -94,7 +94,6 @@ namespace TradeWindowElements
                     el.AddToClassList("available");
                     el.RegisterCallback<MouseDownEvent, ColonyStat>(UpgradeStat, stat);
                 }
-
                 el.RegisterCallback<MouseEnterEvent, ColonyStat>(ShowMenu, stat);
                 el.RegisterCallback<MouseLeaveEvent>(HideMenu);
             }

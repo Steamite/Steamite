@@ -81,6 +81,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
 
         orderInterface = _questCatalog.rootVisualElement[0][0].Q("OrderInterface") as IUIElement;
         GetWindow();
+        (_questCatalog.rootVisualElement[0][1] as Button).clicked += CloseWindow;
     }
 
     public void UpdateTimers()
@@ -89,7 +90,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         {
             activeQuests[i].DecreaseTimeToFail(this);
         }
-        order.DecreaseTimeToFail(this);
+        order?.DecreaseTimeToFail(this);
     }
 
     public void AddDummy()

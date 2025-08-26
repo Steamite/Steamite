@@ -32,7 +32,7 @@ namespace Objectives
             return res; 
         }
 
-        public override void Load(int _currentProgress, Quest _quest, QuestController controller)
+        public override void Load(int _currentProgressGlobal, Quest _quest, QuestController controller)
         {
             maxProgress = needToRemove.Count;
             foreach (var item in needToRemove)
@@ -44,7 +44,7 @@ namespace Objectives
                 }
             }
             controller.ExcavationObjectives.Add(this);
-            base.Load(_currentProgress, _quest, controller);
+            base.Load(_currentProgressGlobal, _quest, controller);
         }
 
         public override void Cancel(QuestController controller)
@@ -87,9 +87,9 @@ namespace Objectives
             return res;
         }
 
-        public override void Load(int _currentProgress, Quest _quest, QuestController controller)
+        public override void Load(int _currentProgressGlobal, Quest _quest, QuestController controller)
         {
-            base.Load(_currentProgress, _quest, controller);
+            base.Load(_currentProgressGlobal, _quest, controller);
             controller.AnyExcavationObjectives.Add(this);
         }
 

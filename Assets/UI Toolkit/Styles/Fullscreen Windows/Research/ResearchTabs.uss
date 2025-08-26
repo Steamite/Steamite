@@ -11,7 +11,9 @@ RepeatButton {
     transform-origin: left top;
     rotate: 90deg;
     translate: 58px 0;
-    max-width: 994.25px;
+    max-width: 994px;
+    border-right-width: 5px;
+    border-right-color: var(--border);
 }
 
 #unity-tab__header-image {
@@ -51,18 +53,13 @@ RepeatButton {
     flex-grow: 1;
     border-left-width: 3px;
     border-right-width: 3px;
-    border-left-color: rgb(137, 87, 42);
-    border-right-color: rgb(137, 87, 42);
-    border-top-color: rgb(137, 87, 42);
-    border-bottom-color: rgb(137, 87, 42);
 }
 
 #unity-tab-view__content-container {
-    position: relative;
-    left: 62px;
-    flex-grow: 1;
-    top: -62px;
-    height: 995px;
+    left: 58px;
+    top: -63px;
+    min-height: 994px;
+    max-height: 994px;
 }
 
 #unity-tab__content-container {
@@ -71,13 +68,12 @@ RepeatButton {
 
 .unity-tab {
     flex-grow: 1;
-    height: 995px;
-    min-height: 995px;
-    max-height: 995px;
+    height: 964px;
+    min-height: 994px;
+    max-height: 994px;
     width: 1855px;
     min-width: 1855px;
     max-width: 1855px;
-    background-color: rgb(68, 44, 21);
 }
 
 ResearchRadioButtonGroup {
@@ -87,25 +83,22 @@ ResearchRadioButtonGroup {
 #Row {
     flex-grow: 1;
     flex-direction: row;
-    height: 200px;
+    height: 182px;
 }
 
 #Row > Label {
-    width: 60px;
+    width: 65px;
     height: 100%;
     font-size: 50px;
     -unity-text-align: middle-center;
-    padding-right: 0;
+    padding-right: 10px;
     padding-left: 10px;
     border-top-width: 0;
-    border-right-width: 2px;
-    border-bottom-width: 3px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
     border-left-width: 0;
-    border-left-color: rgb(0, 0, 0);
-    border-right-color: rgb(0, 0, 0);
-    border-top-color: rgb(0, 0, 0);
-    border-bottom-color: rgb(0, 0, 0);
-    background-color: rgb(46, 29, 14);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
 }
 
 #Row > VisualElement {
@@ -125,10 +118,16 @@ ResearchRadioButtonGroup {
 
 .line {
     position: absolute;
-    background-color: rgb(142, 142, 142);
+    background-color: var(--interactable);
 }
 
 .line-filled {
-    background-color: rgb(236, 131, 0);
     position: absolute;
+    background-color: var(--finished);
+}
+
+.background-line {
+    height: 5px;
+    width: 100%;
+    background-color: var(--border);
 }

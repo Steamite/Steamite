@@ -4,7 +4,7 @@
     min-width: 40%;
     margin-right: 4%;
     background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=c23bbc337457b514697754b60fba36ea&type=3#Button");
-    background-color: rgba(0, 0, 0, 0);
+    background-color: var(--clear);
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
@@ -14,7 +14,6 @@
     align-items: auto;
     align-content: auto;
     -unity-background-image-tint-color: rgb(60, 55, 22);
-    color: rgb(161, 148, 59);
     transition-duration: 0.2s;
 }
 
@@ -24,7 +23,6 @@
     transition-timing-function: ease-out;
     transition-property: all;
     -unity-background-image-tint-color: rgb(40, 37, 15);
-    color: rgb(181, 166, 66);
 }
 
 .cancel-button {
@@ -33,7 +31,7 @@
     min-width: 40%;
     margin-right: 4%;
     background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=c23bbc337457b514697754b60fba36ea&type=3#Button");
-    background-color: rgba(0, 0, 0, 0);
+    background-color: var(--clear);
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
@@ -43,7 +41,6 @@
     align-items: auto;
     align-content: auto;
     -unity-background-image-tint-color: rgb(68, 44, 21);
-    color: rgb(182, 116, 56);
     transition-duration: 0.2s;
 }
 
@@ -53,12 +50,10 @@
     transition-timing-function: ease-out;
     transition-property: all;
     -unity-background-image-tint-color: rgb(46, 29, 14);
-    color: rgb(198, 131, 70);
 }
 
 .resize-window {
     flex-grow: 0;
-    background-color: rgb(70, 49, 27);
     width: 100%;
     left: 35%;
     height: auto;
@@ -72,4 +67,19 @@
     flex-basis: auto;
     display: flex;
     position: absolute;
+    background-color: var(--background);
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+    padding-top: 10px;
+    padding-bottom: 5px;
 }

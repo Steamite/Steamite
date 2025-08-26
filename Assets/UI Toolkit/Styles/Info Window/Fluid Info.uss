@@ -1,6 +1,6 @@
 #container {
     flex-grow: 0;
-    background-color: rgb(255, 255, 255);
+    
     border-top-left-radius: 360px;
     border-top-right-radius: 360px;
     border-bottom-right-radius: 360px;
@@ -8,10 +8,10 @@
     width: 50px;
     height: 50px;
     overflow: hidden;
-    border-left-color: rgb(0, 0, 0);
-    border-right-color: rgb(0, 0, 0);
-    border-top-color: rgb(0, 0, 0);
-    border-bottom-color: rgb(0, 0, 0);
+    
+    
+    
+    
     border-top-width: 4px;
     border-right-width: 4px;
     border-bottom-width: 4px;
@@ -21,7 +21,7 @@
 
 #empty-mask {
     flex-grow: 1;
-    background-color: rgb(101, 101, 101);
+    
 }
 
 #empty-label {
@@ -31,13 +31,12 @@
     -unity-text-align: middle-center;
     top: -4px;
     left: -4px;
-    color: rgb(161, 148, 59);
     font-size: 38px;
 }
 
 #filled-mask {
     flex-grow: 0;
-    background-color: rgb(69, 0, 255);
+    
     height: 22px;
     overflow: hidden;
 }
@@ -50,7 +49,6 @@
     height: 100px;
     -unity-text-align: middle-center;
     font-size: 38px;
-    color: rgb(182, 116, 56);
     -unity-font-style: normal;
 }
 

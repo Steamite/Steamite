@@ -5,15 +5,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 /// <summary>Handles scene transitions.</summary>
-public class LoadingScreen : MonoBehaviour
+public class LoadingScreen : MonoBehaviour, IUpdatable
 {
     #region Variables
     /// <summary>Save name.</summary>
@@ -26,18 +27,38 @@ public class LoadingScreen : MonoBehaviour
     const int RES_WEIGHT = 2;
 
     /// <summary>Load progress for the load bar.</summary>
-    int progressGlobal = 0;
+    int _progress = 0;
+    [CreateProperty]
+    int ProgressGlobal
+    {
+        get => _progress;
+        set
+        {
+            _progress = value; 
+            UIUpdate(nameof(ProgressGlobal));
+        }
+    }
+
+    string _actionText = "Loading";
+    [CreateProperty]
+    string ActionText
+    {
+        get => _actionText;
+        set
+        {
+            _actionText = value;
+            UIUpdate(nameof(ActionText));
+        }
+    }
+
 
     [SerializeField] List<GroundLevel> testLevels;
     /// <summary>Empty template level.</summary>
     [SerializeField] GroundLevel templateLevel;
 
-    /// <summary>Text showing the task at hand.</summary>
-    [SerializeField] TMP_Text actionText;
-    /// <summary>Bar showing the loading progress.</summary>
-    [SerializeField] Slider loadingSlider;
     /// <summary>Action that is triggered after loading everything(Let's humans listen to ticks).</summary>
     public event Action humanActivation;
+    public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
     #endregion
 
     #region Scene Managment
@@ -45,7 +66,6 @@ public class LoadingScreen : MonoBehaviour
     public async void OpenMainMenu()
     {
         await SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
-        transform.GetChild(0).gameObject.SetActive(false);
     }
 
 
@@ -64,7 +84,7 @@ public class LoadingScreen : MonoBehaviour
             newGameInit.CreateGrid(testLevels, out save);
         }
 
-        StartCoroutine(StartLoading(_folderName, _folderName,
+        await StartLoading(_folderName, _folderName,
             new Save()
             {
                 gameState = newGameInit.SetNewGameState(),
@@ -73,14 +93,14 @@ public class LoadingScreen : MonoBehaviour
                 humans = newGameInit.InitHumans(size),
                 quests = await newGameInit.InitQuests(),
                 world = save
-            }));
+            });
     }
     #endregion
 
     #region Loading Game State
-    public void LoadGame(string _folderName, string _worldName)
+    public async Task LoadGame(string _folderName, string _worldName)
     {
-        StartCoroutine(StartLoading(_folderName, _worldName, LoadSavedData(_folderName)));
+        await StartLoading(_folderName, _worldName, LoadSavedData(_folderName));
     }
     /// <summary>
     /// Assigns parameters and shows loading screen.<br/>
@@ -88,15 +108,29 @@ public class LoadingScreen : MonoBehaviour
     /// After that loads "Level" scene.
     /// </summary>
     /// <param name="_folderName">Current folder name.</param>
-    IEnumerator StartLoading(string _folderName, string _worldName, Save save)
+    async Task StartLoading(string _folderName, string _worldName, Save save)
     {
         worldName = _worldName;
-        transform.GetChild(0).gameObject.SetActive(true);
-        transform.GetChild(0).GetChild(2).GetComponent<TMP_Text>().text = _folderName;
-        transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
+        VisualElement loadingScreenWindow = transform.GetComponent<UIDocument>().rootVisualElement;
+        loadingScreenWindow[0].style.display = DisplayStyle.Flex;
 
-        yield return BeforeLevelLoad();
-        yield return LoadWorldData(save);
+        Label actionText = loadingScreenWindow.Q<Label>("Title");
+        ActionText = "Loading";
+        actionText.SetBinding(nameof(ActionText), "text", this);
+
+        ProgressBar progressBar = loadingScreenWindow.Q<ProgressBar>();
+        progressBar.value = 0;
+        progressBar.SetBinding(
+            nameof(ProgressGlobal), 
+            "value", 
+            (ref int i) => 
+            {
+                return (float)i;
+            }, 
+            this);
+
+        await BeforeLevelLoad();
+        await LoadWorldData(save, progressBar);
 
         AfterLevelLoad(false);
     }
@@ -154,7 +188,7 @@ public class LoadingScreen : MonoBehaviour
     /// Preps <see cref="SceneRefs"/>, <see cref="SceneRefs"/> and loads saved data.
     /// </summary>
     /// <param name="obj"></param>
-    IEnumerator LoadWorldData(Save save)
+    async Task LoadWorldData(Save save, ProgressBar bar)
     {
         MyGrid.worldName = worldName;
         WorldSave worldSave = save.world;
@@ -172,17 +206,14 @@ public class LoadingScreen : MonoBehaviour
         maxprogress += worldSave.objectsSave.chunks.Length * CHUNK_WEIGHT;
         maxprogress += humanSaves.Length * HUMAN_WEIGHT;
         maxprogress += researchSave.count * RES_WEIGHT;
-        loadingSlider.maxValue = maxprogress;
-        IProgress<int> progress = new Progress<int>(value =>
-        {
-            loadingSlider.value = value;
-        });
-        yield return LoadMap(progress, worldSave);
-        yield return LoadGameState(progress, gameState);
-        yield return LoadHumans(progress, humanSaves);
-        yield return LoadResearches(progress, researchSave);
-        yield return LoadTrade(progress, tradeSave);
-        yield return LoadQuests(progress, questSave);
+        bar.highValue = maxprogress;
+
+        await LoadMap(worldSave);
+        await LoadGameState(gameState);
+        await LoadHumans(humanSaves);
+        await LoadResearches(researchSave);
+        await LoadTrade(tradeSave);
+        await LoadQuests(questSave);
     }
 
 
@@ -192,16 +223,16 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="worldSave"></param>
-    Task LoadMap(IProgress<int> progress, WorldSave worldSave)
+    Task LoadMap(WorldSave worldSave)
     {
-        actionText.text = "Loading grid";
-        LoadGrid(progress, worldSave.gridSave);
-        actionText.text = "Filling Veins";
-        LoadVeins(progress, worldSave.objectsSave.veins);
-        actionText.text = "Spawning chunks";
-        LoadChunks(progress, worldSave.objectsSave.chunks);
-        actionText.text = "Constructing buildings";
-        LoadBuildings(progress, worldSave.objectsSave.buildings);
+        ActionText = "Loading grid";
+        LoadGrid(worldSave.gridSave);
+        ActionText = "Filling Veins";
+        LoadVeins(worldSave.objectsSave.veins);
+        ActionText = "Spawning chunks";
+        LoadChunks( worldSave.objectsSave.chunks);
+        ActionText = "Constructing buildings";
+        LoadBuildings(worldSave.objectsSave.buildings);
         return Task.CompletedTask;
     }
 
@@ -210,14 +241,14 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="chunks"></param>
-    void LoadChunks(IProgress<int> progress, ChunkSave[] chunks)
+    void LoadChunks( ChunkSave[] chunks)
     {
         foreach (ChunkSave chunkSave in chunks)
         {
             SceneRefs.ObjectFactory
                 .CreateChunk(chunkSave.gridPos, chunkSave.resSave, false)
                 .Load(chunkSave);
-            progress.Report(progressGlobal += CHUNK_WEIGHT);
+            ProgressGlobal += CHUNK_WEIGHT;
         }
     }
 
@@ -226,21 +257,21 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="buildings"></param>
-    void LoadBuildings(IProgress<int> progress, BuildingSave[] buildings)
+    void LoadBuildings( BuildingSave[] buildings)
     {
         foreach (BuildingSave save in buildings) // for each saved building
         {
             SceneRefs.ObjectFactory.CreateSavedBuilding(save);
-            progress.Report(progressGlobal += BUILD_WEIGHT);
+            ProgressGlobal += BUILD_WEIGHT;
         }
     }
 
-    void LoadVeins(IProgress<int> progress, VeinSave[] veins)
+    void LoadVeins( VeinSave[] veins)
     {
         foreach (VeinSave save in veins) // for each saved building
         {
             SceneRefs.ObjectFactory.CreateSavedVein(save);
-            progress.Report(progressGlobal += BUILD_WEIGHT);
+            ProgressGlobal += BUILD_WEIGHT;
         }
     }
 
@@ -249,7 +280,7 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="gridSave"></param>
-    void LoadGrid(IProgress<int> progress, GridSave[] gridSave)
+    void LoadGrid(GridSave[] gridSave)
     {
         // Empties grid
         MyGrid.PrepGridLists();
@@ -258,8 +289,12 @@ public class LoadingScreen : MonoBehaviour
         MapGen mapGen = gameObject.GetComponent<MapGen>();
         for (int i = 0; i < gridSave.Length; i++)
         {
-            MyGrid.Load(gridSave[i], templateLevel, i, mapGen.minableResources, mapGen.dirt);
-            progress.Report(progressGlobal += TILE_WEIGHT);
+            ProgressGlobal += TILE_WEIGHT * MyGrid.Load(
+                gridSave[i], 
+                templateLevel, 
+                i, 
+                mapGen.minableResources,
+                mapGen.dirt);
         }
     }
 
@@ -268,10 +303,15 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="humanSaves"></param>
-    Task LoadHumans(IProgress<int> progress, HumanSave[] humanSaves)
+    Task LoadHumans( HumanSave[] humanSaves)
     {
-        actionText.text = "Kidnaping workers";
-        SceneRefs.Humans.LoadHumans(progress, humanSaves, ref humanActivation, HUMAN_WEIGHT, ref progressGlobal);
+        ActionText = "Kidnaping workers";
+        //SceneRefs.Humans.
+        foreach (HumanSave save in humanSaves)
+        {
+            SceneRefs.Humans.LoadHuman(save, ref humanActivation);
+            ProgressGlobal += HUMAN_WEIGHT;//SceneRefs.Humans.LoadHumans(humanSaves, ref humanActivation, );
+        }
         return Task.CompletedTask;
     }
     #endregion Model Loading
@@ -283,7 +323,7 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="gameState"></param>
-    Task LoadGameState(IProgress<int> progress, GameStateSave gameState)
+    Task LoadGameState( GameStateSave gameState)
     {
         SceneRefs.JobQueue.priority = gameState.priorities;
         SceneRefs.Tick.Load(gameState);
@@ -295,9 +335,9 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="researchSave"></param>
-    async Task LoadResearches(IProgress<int> progress, ResearchSave researchSave)
+    async Task LoadResearches( ResearchSave researchSave)
     {
-        actionText.text = "Remembering research";
+        ActionText = "Remembering research";
         await UIRefs.ResearchWindow.LoadState(researchSave);
     }
 
@@ -306,13 +346,13 @@ public class LoadingScreen : MonoBehaviour
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="tradeSave"></param>
-    async Task LoadTrade(IProgress<int> progress, TradeSave tradeSave)
+    async Task LoadTrade( TradeSave tradeSave)
     {
-        actionText.text = "Making Deals";
+        ActionText = "Making Deals";
         await UIRefs.TradingWindow.LoadState(tradeSave);
     }
 
-    async Task LoadQuests(IProgress<int> progress, QuestControllerSave questSave)
+    async Task LoadQuests( QuestControllerSave questSave)
     {
         QuestController controller = SceneRefs.QuestController as QuestController;
         try
@@ -329,12 +369,12 @@ public class LoadingScreen : MonoBehaviour
     #endregion Loading Game State
 
 
-    IEnumerator BeforeLevelLoad()
+    async Task BeforeLevelLoad()
     {
         if (GameObject.Find("Main Menu"))
-            yield return SceneManager.UnloadSceneAsync("Main Menu");
-        yield return SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
-        yield return GameObject.Find("Scene").GetComponent<SceneRefs>().BeforeLoad();
+            await SceneManager.UnloadSceneAsync("Main Menu");
+        await SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
+        await GameObject.Find("Scene").GetComponent<SceneRefs>().BeforeLoad();
         GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
         MyRes.PreLoad();
     }
@@ -349,7 +389,7 @@ public class LoadingScreen : MonoBehaviour
 
         MyRes.ActivateResources();
 
-        actionText.text = "Press any button";
+        ActionText = "Press any button";
         InputSystem.onAnyButtonPress.CallOnce(
             (action) => StartCoroutine(CancelInput()));
     }
@@ -390,5 +430,10 @@ public class LoadingScreen : MonoBehaviour
         UIRefs.TimeDisplay.GetComponent<IToolkitController>().Init(UIRefs.TimeDisplay.rootVisualElement);
         UIRefs.ToolkitShortcuts.Init(UIRefs.TimeDisplay.rootVisualElement);
 
+    }
+
+    public void UIUpdate(string property = "")
+    {
+        propertyChanged?.Invoke(this, new(property));
     }
 }

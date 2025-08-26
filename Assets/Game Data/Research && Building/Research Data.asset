@@ -22,14 +22,20 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 100
       reseachCost:
-        type: 
-        ammount: 
+        types: 
+        ammounts: 
         baseResource:
-          type: 
-          ammount: 
+          types: 
+          ammounts: 
+        mod:
+          percentMod: 1
+          absoluteMod: 0
         money:
           baseValue: 0
           currentValue: 0
+          mod:
+            percentMod: 1
+            absoluteMod: 0
       nodeType: 0
       nodeCategory: -1
       nodeAssignee: -1
@@ -44,14 +50,20 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 10
       reseachCost:
-        type: 03000000
-        ammount: 02000000
+        types: 
+        ammounts: 
         baseResource:
-          type: 
-          ammount: 
+          types: 
+          ammounts: 
+        mod:
+          percentMod: 1
+          absoluteMod: 0
         money:
           baseValue: 50
           currentValue: 50
+          mod:
+            percentMod: 1
+            absoluteMod: 0
       nodeType: 2
       nodeCategory: 2
       nodeAssignee: 1580670160
@@ -68,14 +80,20 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 15
       reseachCost:
-        type: 02000000
-        ammount: 32000000
+        types: 
+        ammounts: 
         baseResource:
-          type: 
-          ammount: 
+          types: 
+          ammounts: 
+        mod:
+          percentMod: 1
+          absoluteMod: 0
         money:
           baseValue: 0
           currentValue: 0
+          mod:
+            percentMod: 1
+            absoluteMod: 0
       nodeType: 2
       nodeCategory: 1
       nodeAssignee: 1197943099
@@ -90,14 +108,20 @@ MonoBehaviour:
       currentTime: 0
       researchTime: 5
       reseachCost:
-        type: 01000000
-        ammount: 05000000
+        types: 
+        ammounts: 
         baseResource:
-          type: 
-          ammount: 
+          types: 
+          ammounts: 
+        mod:
+          percentMod: 1
+          absoluteMod: 0
         money:
           baseValue: 0
           currentValue: 0
+          mod:
+            percentMod: 1
+            absoluteMod: 0
       nodeType: 1
       nodeCategory: 0
       nodeAssignee: 2090065767
@@ -129,14 +153,20 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 15
       reseachCost:
-        type: 
-        ammount: 
+        types: 
+        ammounts: 
         baseResource:
-          type: 
-          ammount: 
+          types: 
+          ammounts: 
+        mod:
+          percentMod: 1
+          absoluteMod: 0
         money:
           baseValue: 0
           currentValue: 0
+          mod:
+            percentMod: 1
+            absoluteMod: 0
       nodeType: 1
       nodeCategory: 0
       nodeAssignee: 1873593032
@@ -155,14 +185,20 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 12
       reseachCost:
-        type: 02000000
-        ammount: 0f000000
+        types: 
+        ammounts: 
         baseResource:
-          type: 
-          ammount: 
+          types: 
+          ammounts: 
+        mod:
+          percentMod: 1
+          absoluteMod: 0
         money:
           baseValue: 0
           currentValue: 0
+          mod:
+            percentMod: 1
+            absoluteMod: 0
       nodeType: 2
       nodeCategory: 1
       nodeAssignee: 1472558132
@@ -170,7 +206,7 @@ MonoBehaviour:
       unlocks: 
       description: 
       lineColor: {r: 0.1870589, g: 0.6698113, b: 0.27058825, a: 0.49019608}
-    Icon: {fileID: 2800000, guid: ebd657dbff7382b49ac208b65a2fc976, type: 3}
+    Icon: {fileID: 2800000, guid: 786e99add6b74e346b59e4e32bfaf262, type: 3}
   - Name: Production
     Objects:
     - Name: 
@@ -180,14 +216,20 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 100
       reseachCost:
-        type: 
-        ammount: 
+        types: 
+        ammounts: 
         baseResource:
-          type: 
-          ammount: 
+          types: 
+          ammounts: 
+        mod:
+          percentMod: 1
+          absoluteMod: 0
         money:
           baseValue: 0
           currentValue: 0
+          mod:
+            percentMod: 1
+            absoluteMod: 0
       nodeType: 2
       nodeCategory: 1
       nodeAssignee: -1
@@ -202,14 +244,20 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 200
       reseachCost:
-        type: 
-        ammount: 
+        types: 
+        ammounts: 
         baseResource:
-          type: 
-          ammount: 
+          types: 
+          ammounts: 
+        mod:
+          percentMod: 1
+          absoluteMod: 0
         money:
           baseValue: 0
           currentValue: 0
+          mod:
+            percentMod: 1
+            absoluteMod: 0
       nodeType: 2
       nodeCategory: -1
       nodeAssignee: -1
@@ -224,14 +272,20 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 200
       reseachCost:
-        type: 
-        ammount: 
+        types: 
+        ammounts: 
         baseResource:
-          type: 
-          ammount: 
+          types: 
+          ammounts: 
+        mod:
+          percentMod: 1
+          absoluteMod: 0
         money:
           baseValue: 0
           currentValue: 0
+          mod:
+            percentMod: 1
+            absoluteMod: 0
       nodeType: 2
       nodeCategory: -1
       nodeAssignee: -1
@@ -246,14 +300,20 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 300
       reseachCost:
-        type: 
-        ammount: 
+        types: 
+        ammounts: 
         baseResource:
-          type: 
-          ammount: 
+          types: 
+          ammounts: 
+        mod:
+          percentMod: 1
+          absoluteMod: 0
         money:
           baseValue: 0
           currentValue: 0
+          mod:
+            percentMod: 1
+            absoluteMod: 0
       nodeType: 2
       nodeCategory: -1
       nodeAssignee: -1
@@ -261,4 +321,4 @@ MonoBehaviour:
       unlocks: 
       description: 
       lineColor: {r: 1, g: 0, b: 0, a: 1}
-    Icon: {fileID: 2800000, guid: 31a2fc60fcb027a45869f7484256409a, type: 3}
+    Icon: {fileID: 2800000, guid: 0a64256dbb3187142a217b36d4257949, type: 3}

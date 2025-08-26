@@ -17,32 +17,34 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-left-color: rgb(68, 44, 21);
-    border-right-color: rgb(68, 44, 21);
-    border-top-color: rgb(68, 44, 21);
-    border-bottom-color: rgb(68, 44, 21);
-    background-color: rgb(159, 102, 49);
-    color: rgb(246, 236, 140);
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
     -unity-text-align: middle-center;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+    background-color: var(--interactable);
 }
 
 .status-bar-button:hover {
     scale: 1.1 1.1;
-    background-color: rgb(114, 73, 35);
+    background-color: var(--hover);
+    color: var(--text-hover);
 }
 
 .status-bar-button:disabled {
     scale: 0.9 0.9;
-    background-color: rgba(137, 87, 42, 0.58);
-    color: rgb(101, 93, 41);
+    background-color: var(--background);
+    color: var(--text-disabled);
 }
 
 .status-bar-button:disabled:hover {
-    scale: 1 1;
+    scale: 0.9 0.9;
+    background-color: var(--background);
+    color: var(--text-disabled);
 }
 
 .status-bar-button-selected {
@@ -68,13 +70,9 @@
     border-right-width: 2px;
     border-bottom-width: 2px;
     border-left-width: 2px;
-    border-left-color: rgb(68, 44, 21);
-    border-right-color: rgb(68, 44, 21);
-    border-top-color: rgb(68, 44, 21);
-    border-bottom-color: rgb(68, 44, 21);
-    background-color: rgb(68, 44, 21);
-    color: rgb(246, 236, 140);
     -unity-text-align: middle-center;
+    background-color: var(--selected);
+    color: var(--text-secondary);
 }
 
 #Current > Label {
@@ -88,11 +86,6 @@
     border-right-width: 3px;
     border-bottom-width: 3px;
     border-left-width: 3px;
-    border-left-color: rgb(68, 44, 21);
-    border-right-color: rgb(68, 44, 21);
-    border-top-color: rgb(68, 44, 21);
-    border-bottom-color: rgb(68, 44, 21);
-    background-color: rgb(159, 102, 49);
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
@@ -103,7 +96,10 @@
     padding-left: 0;
     font-size: 35px;
     -unity-text-align: middle-center;
-    color: rgb(0, 0, 0);
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
 }
 
 #Current {
@@ -126,36 +122,29 @@
     padding-bottom: 5px;
     padding-left: 5px;
     justify-content: space-between;
-    background-color: rgb(40, 37, 15);
 }
 
-#unity-progress-bar > VisualElement {
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-    border-left-color: rgb(0, 0, 0);
-    border-right-color: rgb(0, 0, 0);
-    border-top-color: rgb(0, 0, 0);
-    border-bottom-color: rgb(0, 0, 0);
-    background-color: rgb(46, 29, 14);
-}
-
-#unity-progress-bar > VisualElement > VisualElement {
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    border-top-left-radius: 1px;
-    border-top-right-radius: 1px;
-    border-bottom-right-radius: 1px;
-    border-bottom-left-radius: 1px;
-}
-
-#unity-progress-bar > .unity-progress-bar__background > .unity-progress-bar__progress {
-    background-color: rgb(114, 73, 35);
+.time {
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    height: 170px;
+    width: 220px;
+    align-content: flex-end;
+    flex-direction: column-reverse;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    background-color: var(--background);
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
 }

@@ -16,7 +16,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
     #endregion
 
     #region Variables
-    public IUIElement map;
+    public IFullScreenWindowElem map;
 
     [SerializeField] List<TradeConvoy> convoys;
 
@@ -50,7 +50,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
         SceneRefs.Stats.GetComponent<ResourceDisplay>().Trust = tradeSave.trust;
         GetWindow();
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
-        map = (IUIElement)root.Q<VisualElement>("Map");
+        map = (IFullScreenWindowElem)root.Q<VisualElement>("Map");
         ((IInitiableUI)map).Init();
         ((IInitiableUI)root.Q<VisualElement>("Colony")).Init();
 
@@ -79,6 +79,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
     public override void CloseWindow()
     {
         base.CloseWindow();
+        map.Close();
     }
     #endregion
 

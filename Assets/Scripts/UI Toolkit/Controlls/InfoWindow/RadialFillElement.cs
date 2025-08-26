@@ -98,24 +98,18 @@ namespace InfoWindowElements
         #region Constructor
         public RadialFillElement()
         {
-            name = "radial-fill-element";
+            AddToClassList("radial-element");
             Clear();
-            width = 125;
-            height = 125;
+            width = 120;
+            height = 120;
 
-            radialFill = new VisualElement() { name = "radial-fill" };
+            radialFill = new VisualElement();
+            radialFill.AddToClassList("radial-fill");
             overlayImage = new VisualElement() { name = "overlay-image" };
 
-            style.height = new(new Length(100, LengthUnit.Percent));
-            style.width = new(new Length(100, LengthUnit.Percent));
-            style.justifyContent = Justify.FlexEnd;
-            style.alignSelf = Align.Stretch;
-            style.flexGrow = 1;
-
             #region Boundary
-            VisualElement radialBoundary = new VisualElement() { name = "radial-boundary" };
-            radialBoundary.style.height = height;
-            radialBoundary.style.width = width;
+            VisualElement radialBoundary = new VisualElement();
+            radialBoundary.AddToClassList("radial-boundary");
             radialBoundary.Add(radialFill);
             Add(radialBoundary);
             #endregion
@@ -129,7 +123,8 @@ namespace InfoWindowElements
             overlayImage.style.rotate = Quaternion.Euler(0, 0, -angleOffset);
 
             value = 0.5f;
-            fillColor = new(1, 1, 1, 1);
+
+            fillColor = new(11/255f, 40 / 255f, 57 / 255f);
         }
         #endregion
 

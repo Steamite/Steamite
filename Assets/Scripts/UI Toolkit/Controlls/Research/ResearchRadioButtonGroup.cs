@@ -18,10 +18,8 @@ namespace ResearchUI
             {
                 VisualElement l = new();
                 l.name = j.ToString();
-                l.style.top = j * 196;
-                l.style.backgroundColor = Color.black;
-                l.style.width = new Length(100, LengthUnit.Percent);
-                l.style.height = 3;
+                l.AddToClassList("background-line");
+                l.style.top = j * 194;
                 rowLines.Add(l);
             }
             lines.Add(rowLines);

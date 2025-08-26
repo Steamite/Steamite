@@ -1,5 +1,4 @@
 .location-button {
-    background-color: rgba(0, 0, 0, 0);
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
@@ -25,22 +24,22 @@
     flex-grow: 1;
     transition-property: scale, -unity-background-image-tint-color;
     transition-duration: 0.2s, 0.2s;
+    -unity-background-image-tint-color: var(--interactable);
 }
 
 .location-button:hover > VisualElement {
     scale: 1.05 1.05;
     transition-property: scale, -unity-background-image-tint-color;
     transition-duration: 0.2s, 0.2s;
-    -unity-background-image-tint-color: rgb(181, 166, 66);
+    -unity-background-image-tint-color: var(--hover);
 }
 
-.location-button:disabled:hover > VisualElement {
-    -unity-background-image-tint-color: rgb(255, 255, 255);
+.location-button:disabled > VisualElement {
+    -unity-background-image-tint-color: var(--disabled);
     scale: 1 1;
 }
 
 .location-button-selected {
-    background-color: rgba(0, 0, 0, 0);
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
@@ -53,7 +52,7 @@
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
-    -unity-background-image-tint-color: rgb(121, 111, 44);
+    -unity-background-image-tint-color: var(--selected);
     transition-duration: 1ms, 0.2s, 0.2s;
     transition-property: rotate, scale, -unity-background-image-tint-color;
     transition-timing-function: linear, ease, ease;
@@ -64,13 +63,6 @@
 }
 
 ____ {
-}
-
-.rotate > VisualElement {
-    rotate: 360deg;
-    transition-duration: 4s;
-    transition-property: rotate;
-    transition-timing-function: linear;
 }
 
 .convoy-label {
@@ -92,7 +84,6 @@ _____ {
     bottom: 0;
     right: 0;
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.13);
     flex-direction: row-reverse;
     height: 120px;
     align-self: center;

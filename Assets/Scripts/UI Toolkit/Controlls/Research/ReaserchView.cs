@@ -24,7 +24,10 @@ namespace ResearchUI
             for (int i = 0; i < data.Categories.Count; i++)
             {
                 ResearchCategory category = data.Categories[i];
-                Tab tab = new(category.Name, category.Icon);
+                Tab tab = new(category.Name);
+                VisualElement element;
+                tab.tabHeader.Insert(0, element = new VisualElement() { style = {backgroundImage = category.Icon}});
+                element.AddToClassList("tab-icon");
 
                 ResearchRadioButtonGroup group = new ResearchRadioButtonGroup(category);
                 group.SetChangeCallback(
@@ -33,7 +36,6 @@ namespace ResearchUI
                         if (nodeIndex > -1)
                             OpenButton(category.Objects[nodeIndex], group);
                     });
-
                 groups.Add(group);
                 tab.Add(group);
                 Add(tab);

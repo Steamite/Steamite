@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -85,24 +86,18 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     #endregion
 
     /// <summary>Fills all control references.</summary>
-    public IEnumerator Init()
+    public async Task Init()
     {
         //activeBindings = new();
         lastInfo = InfoMode.None;
         window = gameObject.GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Info-Window");
         windowBody = window[1];
-        AsyncOperationHandle<InfoWindowControlHolder> op = Addressables.LoadAssetAsync<InfoWindowControlHolder>("Assets/Game Data/UI/InfoWindowControlHolder.asset");
-        if (!op.IsDone)
-            yield return op;
-        controls = op.Result;
-
-
+        controls = await Addressables.LoadAssetAsync<InfoWindowControlHolder>("Assets/Game Data/UI/InfoWindowControlHolder.asset").Task;
 
         window.style.display = DisplayStyle.None;
 
         header = window.Q<Label>("Header");
         header.parent.Q<Button>("Close").RegisterCallback<ClickEvent>((_) => SceneRefs.GridTiles.DeselectObjects());
-        yield return null;
     }
 
     #region Reseting Bindings
