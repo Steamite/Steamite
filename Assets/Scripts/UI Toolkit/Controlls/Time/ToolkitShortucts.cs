@@ -33,7 +33,7 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
 
         ProgressBar trustBar = bottomBar.Q<ProgressBar>("Trust");
         trustBar.SetBinding(
-            nameof(ResourceDisplay.Trust), 
+            nameof(QuestController.Trust), 
             nameof(ProgressBar.value), 
             (ref int i) => 
             {
@@ -41,7 +41,7 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
                 //trustBar[0][0][0].style.color
                 return (float)i;
             }, 
-            MyRes.resDataSource);
+            SceneRefs.QuestController);
 
         enabled = true;
     }

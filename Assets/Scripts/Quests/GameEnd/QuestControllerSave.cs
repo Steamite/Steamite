@@ -7,13 +7,15 @@ public class QuestControllerSave
     public List<QuestSave> finishedQuests;
     public List<QuestSave> activeQuests;
     public QuestSave order;
+    public int trust;
     public QuestControllerSave() { }
 
     public QuestControllerSave(QuestController controller) 
     {
         finishedQuests = controller.finishedQuests.Select(q => new QuestSave(q)).ToList();
         activeQuests = controller.activeQuests.Select(q => new QuestSave(q)).ToList();
-        order = new (controller.order);
+        order = new (controller.orderController.Order);
+        trust = controller.Trust;
     }
 }
 

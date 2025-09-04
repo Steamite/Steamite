@@ -4,6 +4,7 @@
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Save%20window.uss?fileID=7433441132597879392&amp;guid=eca73d8699a9e1c41a8dd8849b9c0de9&amp;type=3#Save window" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/PauseMenu.uss?fileID=7433441132597879392&amp;guid=14dc753a7bc22a44f8a17f23cbc723e4&amp;type=3#PauseMenu" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Save%20window.uss?fileID=7433441132597879392&amp;guid=eca73d8699a9e1c41a8dd8849b9c0de9&amp;type=3#Save window" />
     <ui:VisualElement name="Container" style="flex-grow: 1; display: none;">
         <ui:VisualElement name="Menu" class="menu">
             <ui:Label text="Pause Menu" style="font-size: 61px; -unity-text-align: upper-center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />

@@ -4,19 +4,22 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
-public class QuestController : FullscreenWindow, IQuestController, IGameDataController<QuestControllerSave>
+public class QuestController : FullscreenWindow, IQuestController, IGameDataController<QuestControllerSave>, IUpdatable
 {
     [SerializeField] public GameObject ExcavationIcon;
     [SerializeField] UIDocument _questCatalog;
     IUIElement questCatalog;
     [SerializeField] UIDocument _questInteface;
     IUIElement questInteface;
-    IUIElement orderInterface;
     public QuestHolder data;
+    public GameObject endMenu;
+
+    public OrderController orderController;
 
     public List<Quest> finishedQuests;
     public ObservableCollection<Quest> activeQuests;
@@ -25,7 +28,28 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
     public List<ExcavationObjective> ExcavationObjectives = new();
     public List<AnyExcavationObjective> AnyExcavationObjectives = new();
     public List<BuildingObjective> buildingObjectives = new();
-    public Order order;
+
+    public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
+
+    /// <summary>Company's trust in your leadership, if it falls to zero you lose.</summary>
+    int trust;
+
+    /// <inheritdoc cref="trust"/>
+    [CreateProperty]
+    public int Trust
+    {
+        get => trust;
+        set
+        {
+            trust = value;
+            UIUpdate(nameof(Trust));
+            if (trust <= 0)
+            {
+                /// EndMenu.cs
+                endMenu.GetComponent<IUIElement>().Open(false); 
+            }
+        }
+    }
 
     public void BuildBuilding(object obj)
     {
@@ -53,6 +77,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
 
     public async Task LoadState(QuestControllerSave saveData)
     {
+        trust = saveData.trust;
         activeQuests = new();
         finishedQuests = new();
 
@@ -70,8 +95,11 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
                 quest.Load(this, save);
             }
         }
-        order = new(data.Categories[2].Objects.FirstOrDefault(q => q.id == saveData.order.questId));
-        order.Load(this, saveData.order);
+        orderController = new(
+                this, 
+                _questCatalog, 
+                new(data.Categories[2].Objects.FirstOrDefault(q => q.id == saveData.order.questId)),
+                saveData);
         SceneRefs.Tick.SubscribeToEvent(UpdateTimers, Tick.TimeEventType.Ticks);
 
         questInteface = _questInteface.rootVisualElement.Q("QuestGroup") as IUIElement;
@@ -79,9 +107,10 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
 
         questCatalog = _questCatalog.rootVisualElement[0][0].Q("QuestCatalog") as IUIElement;
 
-        orderInterface = _questCatalog.rootVisualElement[0][0].Q("OrderInterface") as IUIElement;
+        
         GetWindow();
         (_questCatalog.rootVisualElement[0][1] as Button).clicked += CloseWindow;
+
     }
 
     public void UpdateTimers()
@@ -90,7 +119,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         {
             activeQuests[i].DecreaseTimeToFail(this);
         }
-        order?.DecreaseTimeToFail(this);
+        orderController.UpdateTimers();
     }
 
     public void AddDummy()
@@ -99,6 +128,8 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         Quest quest = new Quest("Dummy", "persistent quest", objective, -5, 30);
         quest.Load(this);
     }
+
+    
 
     #region Window
     public override void GetWindow()
@@ -109,12 +140,17 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
     {
         base.OpenWindow();
         questCatalog.Open(this);
-        orderInterface.Open(this);
+        orderController.OpenWindow();
     }
 
     public override void CloseWindow()
     {
         base.CloseWindow();
+    }
+
+    public void UIUpdate(string property = "")
+    {
+        propertyChanged?.Invoke(this, new(property));
     }
     #endregion
 }

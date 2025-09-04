@@ -47,7 +47,6 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
         convoys = tradeSave.convoys;
         outposts = tradeSave.outposts;
         SceneRefs.Stats.GetComponent<ResourceDisplay>().Money = tradeSave.money;
-        SceneRefs.Stats.GetComponent<ResourceDisplay>().Trust = tradeSave.trust;
         GetWindow();
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
         map = (IFullScreenWindowElem)root.Q<VisualElement>("Map");

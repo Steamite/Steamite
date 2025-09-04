@@ -59,6 +59,7 @@ namespace Objectives
             quest = _quest;
             currentProgress = _currentProgress;
         }
+        public virtual void Load(){}
 
         public abstract void Cancel(QuestController controller);
 

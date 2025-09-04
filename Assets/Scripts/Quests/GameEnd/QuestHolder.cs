@@ -42,8 +42,9 @@ public class Quest : DataObject, IUpdatable
 
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
-    public virtual void Complete(bool success, QuestController controller)
+    public virtual void Complete(bool success, object _controller)
     {
+        QuestController questController = _controller as QuestController;
         state = success ? QuestState.Completed: QuestState.Failed;
         if (success)
         {
@@ -55,29 +56,30 @@ public class Quest : DataObject, IUpdatable
             foreach (var penalty in penalties)
                 penalty.GetPenalty();
             foreach (Objective objective in objectives)
-                objective.Cancel(controller);
+                objective.Cancel(questController);
         }
-        controller.activeQuests.Remove(this);
-        controller.finishedQuests.Add(this);
+        questController.activeQuests.Remove(this);
+        questController.finishedQuests.Add(this);
 
         int i = 0;
         for (; i < nextQuests.Count; i++)
         {
-            controller.data.Categories[nextQuests[i].categIndex]
-                .Objects.FirstOrDefault(q => q.id == nextQuests[i].questId)?.Load(controller);
+            questController.data.Categories[nextQuests[i].categIndex]
+                .Objects.FirstOrDefault(q => q.id == nextQuests[i].questId)?.Load(questController);
         }
         if(i == 0)
-            controller.AddDummy();
+            questController.AddDummy();
     }
 
 
-    public virtual void Load(QuestController controller, QuestSave save = null)
+    public virtual void Load(object controller, QuestSave save = null)
     {
+        QuestController questController = controller as QuestController;
         if(save != null)
             timeToFail = save.timeToFail;
         for (int i = 0; i < objectives.Count; i++)
         {
-            objectives[i].Load(save != null ? save.currentProgress[i] : 0, this, controller);
+            objectives[i].Load(save != null ? save.currentProgress[i] : 0, this, questController);
         }
         for (int i = 0; i < rewards.Count; i++)
         {
@@ -86,19 +88,19 @@ public class Quest : DataObject, IUpdatable
 
         if (save == null || save.state == QuestState.Active)
         {
-            controller.activeQuests.Add(this);
+            questController.activeQuests.Add(this);
             state = QuestState.Active;
         }
         else
         {
-            controller.finishedQuests.Add(this);
+            questController.finishedQuests.Add(this);
             state = save.state;
         }
     }
 
 
 
-    public void DecreaseTimeToFail(QuestController controller)
+    public void DecreaseTimeToFail(object controller)
     {
         if (timeToFail > -1)
         {
@@ -169,6 +171,7 @@ public class Quest : DataObject, IUpdatable
         penalties = quest.penalties;
 
         objectives = quest.objectives;
+        nextQuests = quest.nextQuests;
     }
 
     public Quest(string _name, string _description, Objective _objective, int _id, int _timeToFail)
@@ -186,21 +189,29 @@ public class Order : Quest
     public int originalTimeToFail;
     public ResourceObjective orderObjective;
 
-    public override void Load(QuestController controller, QuestSave save = null)
+    public override void Load(object controller, QuestSave save = null)
     {
-        originalTimeToFail = TimeToFail;
-        if (save != null)
-            timeToFail = save.timeToFail;
-        objectives[0].Load(save != null ? save.currentProgress[0] : 0, this, controller);
-        orderObjective = objectives[0] as ResourceObjective;
-
-        for (int i = 0; i < rewards.Count; i++)
+        state = save.state;
+        if(state == QuestState.Active)
         {
-            rewards[i].Init();
+            originalTimeToFail = TimeToFail;
+            if (save != null)
+                timeToFail = save.timeToFail;
+            objectives[0].Load();
+            orderObjective = objectives[0] as ResourceObjective;
+
+            for (int i = 0; i < rewards.Count; i++)
+            {
+                rewards[i].Init();
+            }
+        }
+        else
+        {
+            (controller as OrderController).CreateOrderChoice(this);
         }
     }
 
-    public override void Complete(bool success, QuestController controller)
+    public override void Complete(bool success, object controller)
     {
         state = success ? QuestState.Completed : QuestState.Failed;
         if (success)
@@ -213,7 +224,7 @@ public class Order : Quest
             foreach (var penalty in penalties)
                 penalty.GetPenalty();
         }
-        controller.order = null;
+        (controller as OrderController).CreateOrderChoice(this);
     }
     public Order() : base() { }
 

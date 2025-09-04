@@ -55,3 +55,59 @@ OrderInterface > #unity-tab__content-container {
     align-self: center;
     font-size: 50px;
 }
+
+OrderSelectionList {
+    flex-grow: 1;
+}
+
+.header {
+    -unity-text-align: middle-center;
+    font-size: 50px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.selections-container {
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: space-around;
+    padding-bottom: 50px;
+    padding-top: 10px;
+}
+
+.order-card {
+    width: 500px;
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+.order-card Button {
+    height: 75px;
+    font-size: 50px;
+    -unity-font-style: normal;
+}
+
+.order-card-header {
+    -unity-text-align: middle-center;
+}
+
+.order-card-time {
+}
+
+.order-card DoubleResList {
+    margin-top: 30px;
+}

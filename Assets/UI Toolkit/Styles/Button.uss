@@ -14,15 +14,10 @@
 
 .delete-button {
     background-image: url("project://database/Assets/Sprites/Icons/Info%20window/Cancel.png?fileID=2800000&guid=a038df6f8c235ab42ac4da953bbda40d&type=3#Cancel");
-    
     border-top-width: 2px;
     border-right-width: 2px;
     border-bottom-width: 2px;
     border-left-width: 2px;
-    
-    
-    
-    
     top: 15px;
     right: 15px;
     align-items: auto;
@@ -42,15 +37,10 @@
 
 .delete-button:hover {
     background-image: url("project://database/Assets/Sprites/Icons/Info%20window/Cancel.png?fileID=2800000&guid=a038df6f8c235ab42ac4da953bbda40d&type=3#Cancel");
-    
     border-top-width: 2px;
     border-right-width: 2px;
     border-bottom-width: 2px;
     border-left-width: 2px;
-    
-    
-    
-    
     top: 15px;
     right: 15px;
     align-items: auto;
@@ -95,16 +85,12 @@
     margin-left: 0;
     font-size: 90px;
     background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=c23bbc337457b514697754b60fba36ea&type=3#Button");
-    -unity-background-image-tint-color: rgb(60, 55, 22);
+    -unity-background-image-tint-color: var(--interactable);
     background-color: var(--clear);
     background-size: 100% 100%;
     height: 18%;
     width: auto;
     -unity-text-align: middle-center;
-    
-    
-    
-    
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
@@ -119,8 +105,9 @@
     transition-duration: 0.2s;
     transition-timing-function: ease-out;
     transition-property: all;
-    -unity-background-image-tint-color: rgb(40, 37, 15);
+    -unity-background-image-tint-color: var(--hover);
     background-color: var(--clear);
+    color: var(--text-hover);
 }
 
 .main-button:active {
@@ -140,20 +127,16 @@
     font-size: 90px;
     min-width: 100%;
     background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=c23bbc337457b514697754b60fba36ea&type=3#Button");
-    -unity-background-image-tint-color: rgb(35, 32, 2);
-    
+    -unity-background-image-tint-color: var(--selected);
     background-size: 100% 100%;
     height: 18%;
     width: 100%;
     -unity-text-align: middle-center;
-    
-    
-    
-    
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
     transition-duration: 0.1s;
     scale: 1.1 1.1;
+    color: var(--text-secondary);
 }

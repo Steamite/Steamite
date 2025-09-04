@@ -63,7 +63,7 @@ public class Tick : MonoBehaviour
 
     bool running = false;
 
-    [SerializeField]float pauseSpeed = 0.1f;
+    [SerializeField] float pauseSpeed = 0.1f;
     public static float LastSpeed { get; private set; }
     #endregion
 
@@ -186,7 +186,7 @@ public class Tick : MonoBehaviour
     #endregion
 
     #region Starting and Ending ticks
-    public void StopTicks()
+    void StopTicks()
     {
         LastSpeed = Time.timeScale;
         Time.timeScale = pauseSpeed;
@@ -201,7 +201,7 @@ public class Tick : MonoBehaviour
         }
     }
 
-    public void StartTicks()
+    void StartTicks()
     {
         if (running == true)
         {
@@ -214,13 +214,13 @@ public class Tick : MonoBehaviour
         }
     }
 
+    // Directly stop/start clock, because time could have been stoped by the player before, so we can't use Stop and Start Ticks.
     public void UIWindowToggle(bool enable)
     {
         if (!enable)
             StopAllCoroutines();
         else if (running)
             StartCoroutine(DoTick());
-
     }
     #endregion
 
@@ -274,13 +274,16 @@ public class Tick : MonoBehaviour
     }
 
     public static string RemainingTime(int time)
+        => $"({RemainingTimeWithoutBrackets(time)})";
+
+    public static string RemainingTimeWithoutBrackets(int time)
     {
         TimeSpan span = TimeSpan.FromMinutes(time * MinutesPerTick);
         if (span.Days < 1)
         {
-            return $"({span.Hours} h {span.Minutes}m)";
+            return $"{span.Hours} h {span.Minutes}m";
         }
-        return $"({span.Days} d)";
+        return $"{span.Days} d";
     }
     #endregion
 

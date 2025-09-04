@@ -2,6 +2,7 @@
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/FullscreenWindow.uss?fileID=7433441132597879392&amp;guid=a3688b27adecf6140830a84a444aaec7&amp;type=3#FullscreenWindow" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/QuestCatalog/QuestCatalog.uss?fileID=7433441132597879392&amp;guid=780a5617cf23c334995b7fc7083b4c92&amp;type=3#QuestCatalog" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/QuestCatalog/OrderInfo.uss?fileID=7433441132597879392&amp;guid=3b1c5baaef0c8bb4a9ccc391fa5ab108&amp;type=3#OrderInfo" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
     <ui:VisualElement name="Root" class="window" style="display: flex;">
         <ui:TabView style="min-width: 100%;">
             <ui:Tab label="Quests" name="Quests" style="min-height: 100%;">
