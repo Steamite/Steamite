@@ -30,7 +30,7 @@ public class NewGameInit : MonoBehaviour
 
     #endregion
     #region Gane State
-    public async Task<TradeSave> CreateTrade(int selectedColony)
+    public async Task<TradeSave> InitTrade(int selectedColony)
     {
         TradeHolder tradeHolder = await Addressables.LoadAssetAsync<TradeHolder>($"Assets/Game Data/Colony Locations/{baseLocation}.asset").Task;
         TradeSave save = new TradeSave()
@@ -39,7 +39,6 @@ public class NewGameInit : MonoBehaviour
             convoys = new(),
             tradeLocations = tradeHolder.tradeLocations,
             money = 2000,
-            trust = 50,
             prodLevels = tradeHolder.startingLocation.config.production.Select(q => q.min).ToList(),
             statLevels = tradeHolder.startingLocation.config.stats.Select(q => q.min).ToList(),
             outposts = new()
@@ -103,8 +102,8 @@ public class NewGameInit : MonoBehaviour
         {
             activeQuests = new() { new(quest.Categories[0].Objects[0]) { state = QuestState.Active } },
             finishedQuests = new(),
-            order = new(quest.Categories[2].Objects[0]) { state = QuestState.Active}
-
+            order = new(quest.Categories[2].Objects[0]) { state = QuestState.Active },
+            trust = 40,
         };
         return questSave;
     }

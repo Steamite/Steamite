@@ -107,6 +107,8 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
 
         UpdateGrids();
         ToggleStyleButton(loadMenuButton, worlds != null && worlds.Length > 0);
+        if (!isMainMenu)
+            CloseWindow();
     }
 
     #region Window Logic
@@ -203,7 +205,7 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
 
 
     #region Loading Logic
-    void Continue(ClickEvent _)
+    public void Continue(ClickEvent _)
     {
         if (worlds.Length > 0)
         {
@@ -288,4 +290,11 @@ public class LoadGameMenu : MonoBehaviour, IToolkitController, IGridMenu
         }
     }
     #endregion Save deletion
+
+    #region EndMenu
+    public void Test()
+    {
+        OpenWindow();
+    }
+    #endregion
 }

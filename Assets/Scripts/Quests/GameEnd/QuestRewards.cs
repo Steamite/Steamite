@@ -34,3 +34,11 @@ public class QuestResourceReward : QuestReward
         return $"Obtain: {resource}";
     }
 }
+
+public class GameWinReward : QuestReward
+{
+    public override void ObtainReward()
+    {
+        ((QuestController)SceneRefs.QuestController).endMenu.GetComponent<IUIElement>().Open(true);
+    }
+}

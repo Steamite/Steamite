@@ -31,7 +31,7 @@ public class TrustPenalty : QuestPenalty
 {
     public override void GetPenalty()
     {
-        MyRes.resDataSource.Trust -= penaltyAmmount;
+        SceneRefs.QuestController.Trust -= penaltyAmmount;
     }
 
     public override string ToString()

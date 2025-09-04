@@ -88,7 +88,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
             new Save()
             {
                 gameState = newGameInit.SetNewGameState(),
-                trade = await newGameInit.CreateTrade(0),
+                trade = await newGameInit.InitTrade(0),
                 research = await newGameInit.InitResearch(),
                 humans = newGameInit.InitHumans(size),
                 quests = await newGameInit.InitQuests(),

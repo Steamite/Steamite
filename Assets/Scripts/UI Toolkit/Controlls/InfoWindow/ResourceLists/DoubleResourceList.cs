@@ -99,7 +99,7 @@ namespace InfoWindowElements
         protected void SetResWithoutBinding(Resource res)
         {
             List<UIResource<TEnum>> temp = new List<UIResource<TEnum>>();
-            if (res is MoneyResource && showMoney && ((MoneyResource)res).Money > -1)
+            if (res is MoneyResource && showMoney && ((MoneyResource)res).Money > 0)
                 temp.Add(new DoubleUIResource<TEnum>(MyRes.Money, +((MoneyResource)res).Money));
             for (int i = 0; i < res.types.Count; i++)
             {

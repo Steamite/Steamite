@@ -1,0 +1,12 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
+    <ui:VisualElement name="LoseWindow" class="game-window" style="flex-grow: 1; padding-top: 150px;">
+        <ui:Label text="Game Over" style="-unity-text-align: middle-center; font-size: 50px;" />
+        <ui:Label text="You were replaced, because of your inadequate results!" name="Label" style="align-self: center; margin-top: 50px; font-size: 45px;" />
+        <ui:VisualElement style="flex-direction: row; justify-content: space-around; height: 80px; bottom: 0; position: absolute; width: 100%; padding-bottom: 10px;">
+            <ui:Button text="Reload Last Save" name="Last-Save" class="main-button" style="min-width: auto; height: auto; font-size: 28px; width: 308px;" />
+            <ui:Button text="Load" name="Load" class="main-button" style="min-width: auto; height: auto; font-size: 40px; width: 308px;" />
+            <ui:Button text="Main Menu" name="Main-Menu" class="main-button" style="min-width: auto; height: auto; font-size: 40px; width: 308px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

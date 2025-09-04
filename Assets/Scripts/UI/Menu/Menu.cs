@@ -10,7 +10,7 @@ public class Menu : MonoBehaviour
 
     [SerializeField] UIDocument uiDocument;
 
-    VisualElement menuContainer;
+    public VisualElement menuContainer;
 
     public void Init(Action<string> save, ref Action afterSave)
     {

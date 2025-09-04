@@ -1,3 +1,29 @@
+.game-window {
+    flex-grow: 1;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    visibility: visible;
+    overflow: visible;
+    display: flex;
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color: var(--background);
+    border-top-color: var(--border);
+    border-left-color: var(--border);
+    border-bottom-color: var(--border);
+    border-right-color: var(--border);
+    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
+}
+
 .unity-scroller {
     --unity-cursor-color: rgb(249, 233, 141);
     background-color: var(--background);

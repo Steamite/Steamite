@@ -47,8 +47,34 @@ MonoBehaviour:
       objectives:
       - rid: 7966940744893857883
       nextQuests:
-      - categIndex: -1
-        questId: -1
+      - categIndex: 2
+        questId: 1940834208
+      - categIndex: 2
+        questId: 2103426518
+    - Name: B
+      id: 1940834208
+      description: 
+      state: 0
+      timeToFail: 50
+      rewards:
+      - rid: 7966940927005295013
+      penalties:
+      - rid: 7966940927005295014
+      objectives:
+      - rid: 7966940927005295015
+      nextQuests: []
+    - Name: C
+      id: 2103426518
+      description: 
+      state: 0
+      timeToFail: 40
+      rewards:
+      - rid: 7966940927005295016
+      penalties:
+      - rid: 7966940927005295017
+      objectives:
+      - rid: 7966940927005295018
+      nextQuests: []
     Icon: {fileID: 0}
   references:
     version: 2
@@ -118,4 +144,56 @@ MonoBehaviour:
     - rid: 7966940814333444216
       type: {class: TrustPenalty, ns: , asm: Quests}
       data:
-        penaltyAmmount: 40
+        penaltyAmmount: 30
+    - rid: 7966940927005295013
+      type: {class: GameWinReward, ns: , asm: Quests}
+      data: 
+    - rid: 7966940927005295014
+      type: {class: TrustPenalty, ns: , asm: Quests}
+      data:
+        penaltyAmmount: 50
+    - rid: 7966940927005295015
+      type: {class: ResourceObjective, ns: Objectives, asm: Quests}
+      data:
+        maxProgress: 0
+        resource:
+          types: 
+          ammounts: 
+          baseResource:
+            types: 02000000
+            ammounts: 32000000
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 0
+            currentValue: 0
+            mod:
+              percentMod: 1
+              absoluteMod: 0
+    - rid: 7966940927005295016
+      type: {class: GameWinReward, ns: , asm: Quests}
+      data: 
+    - rid: 7966940927005295017
+      type: {class: TrustPenalty, ns: , asm: Quests}
+      data:
+        penaltyAmmount: 100
+    - rid: 7966940927005295018
+      type: {class: ResourceObjective, ns: Objectives, asm: Quests}
+      data:
+        maxProgress: 0
+        resource:
+          types: 
+          ammounts: 
+          baseResource:
+            types: 05000000
+            ammounts: 64000000
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 0
+            currentValue: 0
+            mod:
+              percentMod: 1
+              absoluteMod: 0

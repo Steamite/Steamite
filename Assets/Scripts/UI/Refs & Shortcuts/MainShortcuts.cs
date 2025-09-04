@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,6 +20,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
     [SerializeField] public InputActionAsset inputAsset;
     public static bool handleGrid;
     static bool handleWindows;
+    static GameObject instance;
 
     public void Init()
     {
@@ -31,6 +34,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
         trade = bindingMap.FindAction("Trade");
         quests = bindingMap.FindAction("Quests");
         enabled = true;
+        instance = gameObject;
         EnableInput();
     }
 
@@ -144,6 +148,25 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
         if (menu.triggered)
         {
             UIRefs.PauseMenu.Toggle();
+        }
+    }
+
+    public static void DisableAll()
+    {
+        IAfterLoad[] load = instance.GetComponents<IAfterLoad>();
+        foreach (var item in load)
+        {
+            (item as MonoBehaviour).enabled = false;
+        }
+        UIRefs.LevelCamera.enabled = false;
+    }
+
+    public static void EnableAll()
+    {
+        IAfterLoad[] load = instance.GetComponents<IAfterLoad>();
+        foreach (var item in load)
+        {
+            (item as MonoBehaviour).enabled = true;
         }
     }
 }
