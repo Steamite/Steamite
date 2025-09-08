@@ -43,3 +43,20 @@ _______________ {
     left: 0;
     top: 0;
 }
+
+.main-menu-header {
+    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
+    -unity-text-align: upper-center;
+    font-size: 210px;
+    -unity-font-style: normal;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 75px;
+    padding-right: 50px;
+    padding-bottom: 0;
+    padding-left: 50px;
+    letter-spacing: 5px;
+    text-shadow: 15px 15px 1px rgb(90, 50, 17);
+}

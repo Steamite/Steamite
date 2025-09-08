@@ -8,6 +8,8 @@ using UnityEngine;
 [Serializable]
 public class GridPos
 {
+
+
     /// <summary>X coord on grid.</summary>
     [SerializeField] public float x;
     /// <summary>Y coord on grid.</summary>

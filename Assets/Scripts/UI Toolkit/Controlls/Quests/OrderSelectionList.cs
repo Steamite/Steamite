@@ -40,8 +40,19 @@ public partial class OrderSelectionList : VisualElement, IUIElement
 
         card.Add(label = new Label($"Time: {Tick.RemainingTimeWithoutBrackets(order.TimeToFail)}"));
         label.AddToClassList("order-card-time");
+
+        card.Add(label = new Label($"Reward: {order.rewards[0]}"));
+        label.AddToClassList("order-card-time");
+
+        card.Add(label = new Label($"Penalty: {order.penalties[0]}"));
+        label.AddToClassList("order-card-time");
+
+        card.Add(label = new Label($"{order.orderDifficulty}"));
+        label.AddToClassList("order-card-header");
+
         DoubleResList list;
         card.Add(list = new DoubleResList(true, ""));
+        list.Q<VisualElement>("unity-content-container").style.justifyContent = Justify.FlexStart;
         list.Open(order);
         Button button;
         card.Add(button = new Button(() => SelectOrder(i)) { text = "Select" });
@@ -54,9 +65,9 @@ public partial class OrderSelectionList : VisualElement, IUIElement
     {
         Order order = controller.orderChoice[i];
         order.state = QuestState.Active;
-        order.orderObjective = order.objectives[0] as ResourceObjective;
+        order.Load(controller);
 
-        controller.Order = order;
+        controller.CurrentOrder = order;
         
         controller.orderChoice.Clear();
         orderInterface.Open(controller);

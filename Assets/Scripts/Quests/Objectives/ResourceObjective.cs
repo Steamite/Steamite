@@ -6,6 +6,11 @@ namespace Objectives
     {
         [SerializeField]public MoneyResource resource;
 
+        public ResourceObjective()
+        {
+            resource = new();
+        }
+
         public override string Descr => "";
         public override void Cancel(QuestController controller) { }
         public override void Load(int _currentProgressGlobal, Quest _quest, QuestController controller)

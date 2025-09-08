@@ -41,21 +41,18 @@ MonoBehaviour:
       description: ORDER
       state: 0
       timeToFail: 10
-      rewards: []
+      rewards:
+      - rid: 8959859900619423897
       penalties:
       - rid: 7966940814333444216
       objectives:
       - rid: 7966940744893857883
-      nextQuests:
-      - categIndex: 2
-        questId: 1940834208
-      - categIndex: 2
-        questId: 2103426518
+      nextQuests: []
     - Name: B
       id: 1940834208
       description: 
       state: 0
-      timeToFail: 50
+      timeToFail: 5
       rewards:
       - rid: 7966940927005295013
       penalties:
@@ -67,7 +64,7 @@ MonoBehaviour:
       id: 2103426518
       description: 
       state: 0
-      timeToFail: 40
+      timeToFail: 4
       rewards:
       - rid: 7966940927005295016
       penalties:
@@ -197,3 +194,7 @@ MonoBehaviour:
             mod:
               percentMod: 1
               absoluteMod: 0
+    - rid: 8959859900619423897
+      type: {class: TrustReward, ns: , asm: Quests}
+      data:
+        gainAmmount: 15

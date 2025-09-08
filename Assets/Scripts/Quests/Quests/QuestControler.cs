@@ -18,6 +18,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
     IUIElement questInteface;
     public QuestHolder data;
     public GameObject endMenu;
+    public static int difficulty = 1;
 
     public OrderController orderController;
 
@@ -70,6 +71,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
             AnyExcavationObjectives[i].UpdateProgress(obj, this);
         }
     }
+
     public void ResChange()
     {
         throw new System.NotImplementedException();
