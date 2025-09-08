@@ -254,10 +254,10 @@ public class Tick : MonoBehaviour
                 if (numberOfDays % 7 == 0)
                 {
                     weekStart?.Invoke();
-                    if (numberOfDays % 28 == 0)
+                    if (numberOfDays % 30 == 0)
                     {
                         monthStart?.Invoke();
-                        if (numberOfDays % 336 == 0)
+                        if (numberOfDays % 360 == 0)
                         {
                             yearStart?.Invoke();
                         }

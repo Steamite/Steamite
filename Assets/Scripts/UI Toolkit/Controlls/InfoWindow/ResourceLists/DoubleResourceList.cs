@@ -72,7 +72,6 @@ namespace InfoWindowElements
         public DoubleResourceList(bool _cost, string _name, bool _useBindings = false) : base()
         {
             style.height = 85;
-            style.flexGrow = 0;
             style.alignContent = Align.Center;
             VisualElement content = this.Q<VisualElement>("unity-content-container");
             content.style.flexGrow = 1;

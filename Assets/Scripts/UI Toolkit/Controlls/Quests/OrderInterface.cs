@@ -5,16 +5,21 @@ using UnityEngine.UIElements;
 [UxmlElement]
 public partial class OrderInterface : Tab, IUIElement
 {
-    VisualElement container;
-    Label header;
-    ProgressBar bar;
-    DoubleResList cost;
-    Button button;
+    readonly VisualElement container;
+    readonly Label header;
+    readonly ProgressBar bar;
+    
+    readonly Label rewardLabel;
+    readonly Label penaltyLabel;
+    
+    readonly DoubleResList cost;
+    readonly Button button;
+    
 
-    OrderSelectionList orderSelection;
+    readonly OrderSelectionList orderSelection;
 
 
-    Label noneLabel;
+    readonly Label noneLabel;
 
     Order order;
     OrderController orderController;
@@ -33,6 +38,12 @@ public partial class OrderInterface : Tab, IUIElement
         bar.value = 50;
         bar[0][0].AddToClassList("order-bar-background");
         bar[0][0][0].AddToClassList("order-bar-progress");
+
+        VisualElement element = new();
+        element.Add(rewardLabel = new("+ ### Trust"));
+        element.Add(penaltyLabel = new("- ### Trust"));
+        element.AddToClassList("order-row-between");
+        container.Add(element);
 
         container.Add(cost = new());
         cost.AddToClassList("order-cost");
@@ -59,7 +70,7 @@ public partial class OrderInterface : Tab, IUIElement
     {
         button.clicked -= OrderFinish;
         orderController = data as OrderController;
-        order = orderController.Order;
+        order = orderController.CurrentOrder;
         if(order != null)
         {
             if(order.state == QuestState.Active)
@@ -73,6 +84,9 @@ public partial class OrderInterface : Tab, IUIElement
                 bar.highValue = order.originalTimeToFail;
                 bar.value = order.originalTimeToFail - order.TimeToFail;
                 bar.title = Tick.RemainingTime(order.TimeToFail);
+
+                rewardLabel.text = $"{order.rewards[0]}";
+                penaltyLabel.text = $"{order.penalties[0]}";
 
                 cost.Open(order);
                 if (MyRes.CanAfford(

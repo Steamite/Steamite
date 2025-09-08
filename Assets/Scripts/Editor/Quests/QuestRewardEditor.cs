@@ -14,19 +14,39 @@ public class QuestRewardEditor : QuestCompositorList<QuestReward>
             name = "resource",
             title = "Resource",
             width = 200,
-            makeCell = () => new Button() { text = "Set Reward"},
+            makeCell = () => new(),
             bindCell = (el, i) =>
             {
                 if (itemsSource[i] is QuestResourceReward resourceReward)
                 {
                     el.style.display = DisplayStyle.Flex;
                     ResCell cell = new ResCell();
-                    (el as Button).clicked += () => ButtonClick(i, cell);
+                    Button button;
+                    el.Add(button = new() { text = "Set Reward" });
+                    button.clicked += () => ButtonClick(i, cell);
+
                     cell.Open(resourceReward.resource, holder, true);
+                }
+                else if (itemsSource[i] is TrustReward trustReward)
+                {
+                    el.style.display = DisplayStyle.Flex;
+                    IntegerField integerField;
+                    el.Add(integerField = new());
+                    integerField.value = trustReward.gainAmmount;
+                    integerField.RegisterValueChangedCallback<int>(ev =>
+                    {
+                        trustReward.gainAmmount = ev.newValue;
+                        EditorUtility.SetDirty(holder);
+                    });
                 }
                 else
                     el.style.display = DisplayStyle.None;
+            },
+            unbindCell = (el, i) =>
+            {
+                el.Clear();
             }
+            
         });
         onAdd = (list) =>
         {

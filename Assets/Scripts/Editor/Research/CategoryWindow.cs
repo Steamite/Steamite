@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Orders;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace EditorWindows
         protected DropdownField categorySelector;
         public int categIndex => categorySelector.choices.IndexOf(categorySelector.value);
         protected TextField categoryNameField;
+        ObjectField orderConfigField;
         Button createCategory;
         Button categoryRemover;
         VisualElement iconElement;
@@ -90,6 +92,10 @@ namespace EditorWindows
         {
             createCategory = rootVisualElement.Q<Button>("Category-Create");
             createCategory.SetEnabled(false);
+
+            orderConfigField = rootVisualElement.Q<ObjectField>("Order-Config");
+            orderConfigField.value = AssetDatabase.LoadAssetAtPath<OrderGenConfig>("Assets/Game Data/UI/OrderGenConfig.asset");
+            orderConfigField.enabledSelf = false;
 
             iconElement = rootVisualElement.Q<VisualElement>("Icon-Image");
             iconSelector = rootVisualElement.Q<ObjectField>("Icon-Changer");

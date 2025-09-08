@@ -69,9 +69,10 @@
     border-top-width: 0;
     border-bottom-width: 0;
     background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=c23bbc337457b514697754b60fba36ea&type=3#Button");
-    -unity-background-image-tint-color: rgba(33, 28, 7, 0.69);
+    -unity-background-image-tint-color: var(--disabled);
     background-color: var(--clear);
     font-size: 50px;
+    color: var(--text-disabled);
 }
 
 .main-button {

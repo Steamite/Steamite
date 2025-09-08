@@ -99,6 +99,7 @@ OrderSelectionList {
     height: 75px;
     font-size: 50px;
     -unity-font-style: normal;
+    align-content: flex-end;
 }
 
 .order-card-header {
@@ -110,4 +111,12 @@ OrderSelectionList {
 
 .order-card DoubleResList {
     margin-top: 30px;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.order-row-between {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
 }

@@ -29,6 +29,12 @@ public class QuestMoneyPenalty : QuestPenalty
 [Serializable]
 public class TrustPenalty : QuestPenalty
 {
+    public TrustPenalty() : base(){ }
+    public TrustPenalty(int i) : base()
+    { 
+        penaltyAmmount = i; 
+    }
+
     public override void GetPenalty()
     {
         SceneRefs.QuestController.Trust -= penaltyAmmount;
@@ -36,6 +42,6 @@ public class TrustPenalty : QuestPenalty
 
     public override string ToString()
     {
-        return $"Lose trust: {penaltyAmmount}";
+        return $"- {penaltyAmmount} trust";
     }
 }

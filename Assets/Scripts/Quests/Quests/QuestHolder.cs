@@ -184,14 +184,24 @@ public class Quest : DataObject, IUpdatable
     }
 }
 
+public enum OrderDifficulty
+{
+    Easy,
+    Average,
+    Difficult,
+    Impossible
+}
+
 public class Order : Quest
 {
     public int originalTimeToFail;
     public ResourceObjective orderObjective;
+    public OrderDifficulty orderDifficulty;
 
     public override void Load(object controller, QuestSave save = null)
     {
-        state = save.state;
+        if(save != null)
+            state = save.state;
         if(state == QuestState.Active)
         {
             originalTimeToFail = TimeToFail;

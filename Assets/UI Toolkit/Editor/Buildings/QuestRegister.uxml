@@ -13,6 +13,7 @@
                 <engine:TextField label="Category Name" placeholder-text="filler text" name="Category-Name" style="flex-grow: 1; margin-right: 4px;" />
             </engine:VisualElement>
             <engine:Button text="Create category" name="Category-Create" />
+            <editor:ObjectField label="Object Field" name="Order-Config" />
         </engine:VisualElement>
     </engine:VisualElement>
     <engine:MultiColumnListView show-foldout-header="false" show-add-remove-footer="true" name="Data" reorderable="true" sorting-mode="Custom" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None" fixed-item-height="144">

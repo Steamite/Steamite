@@ -22,6 +22,13 @@ public static class BindingUtil
         };
 
     }
+    public static Vector2Int ToInt(this Vector2 vec)
+        => new Vector2Int(Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.y));
+
+    public static int Random(this Vector2Int vec)
+        => Mathf.RoundToInt(UnityEngine.Random.Range(vec.x, vec.y));
+    public static int Random(this Vector2 vec)
+        => Mathf.RoundToInt(UnityEngine.Random.Range(vec.x, vec.y));
 
     public static DataBinding CreateBindingTest(this string str)
         => new DataBinding() { dataSourcePath = new PropertyPath(str), bindingMode = BindingMode.ToTarget };

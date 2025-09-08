@@ -122,13 +122,13 @@ public class ResAmmount<T> : ResAmmountBase where T : System.Enum
             ManageSimple(resAmmount.types[i], resAmmount.ammounts[i], add, mod, removeEmpty);
     }
 
-    public void ManageSimple(T type, int ammount, bool add, int mod = 1, bool removeEmpty = false)
+    public void ManageSimple(T type, float ammount, bool add, float mod = 1, bool removeEmpty = false)
     {
         if (add)
-            Add(type, ammount * mod);
+            Add(type, Mathf.RoundToInt(ammount * mod));
         else
         {
-            Remove(type, ammount * mod);
+            Remove(type, Mathf.RoundToInt(ammount * mod));
             if (removeEmpty)
             {
                 int i = types.IndexOf(type);
