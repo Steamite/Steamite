@@ -38,6 +38,5 @@ public partial class OutpostButton : CustomRadioButton
     public override void Deselect(bool triggerTransition = true)
     {
         base.Deselect(triggerTransition);
-        Debug.LogWarning("dasdsadasdsa");
     }
 }

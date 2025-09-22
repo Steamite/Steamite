@@ -1,4 +1,5 @@
 ﻿using AbstractControls;
+using System.Reflection.Emit;
 using UnityEngine.UIElements;
 
 namespace TradeWindowElements
@@ -19,6 +20,8 @@ namespace TradeWindowElements
         TradeView tradeView;
         OutpostView outpostView;
 
+        TextFieldLabel label;
+
         ViewType prevView = ViewType.None;
         public int tradeLocationCount;
 
@@ -31,12 +34,15 @@ namespace TradeWindowElements
             leftBar = ToolkitUtils.GetRoot(elem).Q<VisualElement>("LeftBar");
             if (leftBar != null)
             {
-                colonyView = (ColonyView)leftBar.ElementAt(1);
-                tradeView = (TradeView)leftBar.ElementAt(2);
-                outpostView = (OutpostView)leftBar.ElementAt(3);
+                label = leftBar[0][0] as TextFieldLabel;
+                colonyView = leftBar.Q<ColonyView>();
+                tradeView = leftBar.Q<TradeView>();
+                outpostView = leftBar.Q<OutpostView>();
+                outpostView.map = elem as TradeMap;
 
                 colonyView.Hide();
                 tradeView.Hide();
+                outpostView.Hide();
                 SetChangeCallback(SwitchViews);
             }
             tradeLocationCount = _tradeLocationCount;
@@ -57,25 +63,25 @@ namespace TradeWindowElements
                     outpostView.Hide();
                     break;
             }
-            string headerText = "";
+            object inspectedObject;
             if (index == -1)
                 return;
             if(index == 0)
             {
-                headerText = colonyView.Open();
+                inspectedObject = colonyView.Open();
                 prevView = ViewType.Colony;
             }
             else if(index <= tradeLocationCount)
             {
-                headerText = tradeView.Open(index - 1);
+                inspectedObject = tradeView.Open(index - 1);
                 prevView = ViewType.Trade;
             }
             else
             {
-                headerText = outpostView.Open(index - tradeLocationCount);
+                inspectedObject = outpostView.Open(index - (tradeLocationCount + 1));
                 prevView = ViewType.Outpost;
             }
-            ((Label)leftBar.ElementAt(0).ElementAt(0)).text = headerText;
+            label.Open(inspectedObject);
         }
     }
 }

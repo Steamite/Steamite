@@ -36,7 +36,13 @@ public class HumanUtil : MonoBehaviour
     /// <param name="humanActivation">Action to link.</param>
     public void LoadHuman(HumanSave humanSave, ref Action humanActivation)
     {
-        AddHuman(SceneRefs.ObjectFactory.CreateSavedHuman(humanSave), ref humanActivation);
+        Human human = SceneRefs.ObjectFactory.CreateSavedHuman(humanSave);
+        AddHuman(human, ref humanActivation);
+        
+        if(humanSave.gridPos.y != 0)
+        {
+            human.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>

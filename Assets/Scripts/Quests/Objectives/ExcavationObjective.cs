@@ -35,15 +35,18 @@ namespace Objectives
         public override void Load(int _currentProgressGlobal, Quest _quest, QuestController controller)
         {
             maxProgress = needToRemove.Count;
-            foreach (var item in needToRemove)
+            if(_quest.state == QuestState.Active)
             {
-                if (MyGrid.GetGridItem(item) is Rock rock)
+                foreach (var item in needToRemove)
                 {
-                    GameObject.Instantiate(controller.ExcavationIcon, item.ToVec(3), Quaternion.identity, rock.transform);
-                    rock.isQuest = true;
+                    if (MyGrid.GetGridItem(item) is Rock rock)
+                    {
+                        GameObject.Instantiate(controller.ExcavationIcon, item.ToVec(3), Quaternion.identity, rock.transform);
+                        rock.isQuest = true;
+                    }
                 }
+                controller.ExcavationObjectives.Add(this);
             }
-            controller.ExcavationObjectives.Add(this);
             base.Load(_currentProgressGlobal, _quest, controller);
         }
 

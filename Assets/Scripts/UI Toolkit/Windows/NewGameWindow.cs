@@ -120,9 +120,9 @@ namespace StartMenu
                         Directory.Delete(Application.persistentDataPath + "/saves/" + worldName, true);
                     Directory.CreateDirectory(Application.persistentDataPath + "/saves/" + worldName);
                     if (selectedOption == 0)
-                        GameObject.Find("Canvas").GetComponent<LoadingScreen>().StartNewGame(worldName);
+                        GameObject.Find("Loading Screen").GetComponent<LoadingScreen>().StartNewGame(worldName);
                     else
-                        GameObject.Find("Canvas").GetComponent<LoadingScreen>().StartNewGame(worldName, gameObject.GetComponent<MapGeneration>().Seed);
+                        GameObject.Find("Loading Screen").GetComponent<LoadingScreen>().StartNewGame(worldName, gameObject.GetComponent<MapGeneration>().Seed);
                 }
                 else
                 {

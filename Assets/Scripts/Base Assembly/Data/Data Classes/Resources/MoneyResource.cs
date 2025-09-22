@@ -17,6 +17,13 @@ public class MoneyResource : ModifiableResource
             money = new(mon.money.currentValue);
     }
     public MoneyResource(List<ResourceType> types, List<int> ammounts) : base(types, ammounts) { }
+    public MoneyResource(List<ResourceType> types, List<int> ammounts, int _money)
+    {
+        baseResource.types = types;
+        baseResource.ammounts = ammounts;
+        money.BaseValue = _money;
+        Init();
+    }
 
     public static MoneyResource operator *(MoneyResource res, int multiplier)
     {

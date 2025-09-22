@@ -46,7 +46,7 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
 
     float mod;
 
-    public void Init()
+    public void AfterInit()
     {
         transform.GetChild(0).LookAt(transform);
         cameraMap = mainShortcuts?.inputAsset.actionMaps[0];
@@ -61,9 +61,9 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
 
 
         SceneRefs.CameraSceneMover.SetRaycastMask(SceneRefs.GridTiles.defaultMask);
-        mainCamera.GetComponent<PhysicsRaycaster>().enabled = true;
+        SceneRefs.CameraSceneMover.Toggle(true);
         //mainCamera.GetComponent<Physics2DRaycaster>().enabled = true;
-        mainCamera.GetComponent<AudioListener>().enabled = true;
+        ///mainCamera.GetComponent<AudioListener>().enabled = true;
 
         enabled = true;
     }
@@ -186,7 +186,11 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     void RotZoom()
     {
         float rot = rotate.ReadValue<float>();
-        float zoomVal = zoom.ReadValue<Vector2>().y;
+
+        float zoomVal = 0;
+        if (InfoWindow.CanZoom)
+            zoomVal = zoom.ReadValue<Vector2>().y;
+
         if (Mathf.Abs(rot) < Mathf.Abs(zoomVal))
             rot = 0;
         else

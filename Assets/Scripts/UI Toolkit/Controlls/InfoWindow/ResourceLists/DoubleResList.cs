@@ -9,8 +9,8 @@ namespace InfoWindowElements
     public partial class DoubleResList : DoubleResourceList<Resource, ResourceType>
     {
         public DoubleResList() : base() { }
-        public DoubleResList(bool _cost, string _name, bool _useBindings = false)
-            : base(_cost, _name, _useBindings)
+        public DoubleResList(bool _cost, string _name, bool _useBindings = false, bool center = false)
+            : base(_cost, _name, _useBindings, center)
         {
             style.marginTop = new Length(9, LengthUnit.Percent);
         }
@@ -85,7 +85,6 @@ namespace InfoWindowElements
                     break;
 
                 case Resource res:
-
                     if (cost && !useBindings)
                     {
                         SetResWithoutBinding(res);

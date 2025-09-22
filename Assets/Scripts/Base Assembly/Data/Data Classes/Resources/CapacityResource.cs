@@ -1,12 +1,15 @@
+using Newtonsoft.Json;
 using System;
 using Unity.Properties;
 using UnityEngine;
 
+[Serializable]
 public class CapacityResource : Resource
 {
     /// <summary>Capacity in this resource (-1 means there's no limit)</summary>
     [SerializeField][CreateProperty] public ModifiableInteger capacity;
 
+    [JsonIgnore]
     public int FreeSpace
     {
         get

@@ -20,4 +20,9 @@ public class CameraSceneMovement : MonoBehaviour
     {
         raycaster.eventMask = mask;
     }
+
+    public void Toggle(bool enable)
+    {
+        raycaster.enabled = enable;
+    }
 }

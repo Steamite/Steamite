@@ -6,6 +6,10 @@ namespace Objectives
     {
         [SerializeField]public MoneyResource resource;
 
+        public ResourceObjective(MoneyResource _resource)
+        {
+            resource = _resource;
+        }
         public ResourceObjective()
         {
             resource = new();

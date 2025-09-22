@@ -3,6 +3,8 @@
 @import url("/Assets/UI Toolkit/Styles/Global/UnitySelectors.uss");
 @import url("/Assets/UI Toolkit/Styles/Global/Tabs.uss");
 @import url("/Assets/UI Toolkit/Styles/Global/Bars.uss");
+@import url("/Assets/UI Toolkit/Styles/EnumFields.uss");
+
 
 
 

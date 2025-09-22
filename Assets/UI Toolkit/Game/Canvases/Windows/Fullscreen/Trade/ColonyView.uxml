@@ -1,0 +1,4 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Trade/ColonyView.uss?fileID=7433441132597879392&amp;guid=1ce140d3955f6004eb61469ffcbe8a93&amp;type=3#ColonyView" />
+    <TradeWindowElements.ColonyView stat-asset="project://database/Assets/UI%20Toolkit/Game/Elements/Colony%20Stat.uxml?fileID=9197481963319205126&amp;guid=f4b520a2944a9344e8ef56091c9f7d50&amp;type=3#Colony Stat" />
+</ui:UXML>

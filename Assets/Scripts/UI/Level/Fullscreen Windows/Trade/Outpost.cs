@@ -1,109 +1,169 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using TradeData.Locations;
 using UnityEngine;
 
-[Serializable]
-public class Outpost
+namespace Outposts
 {
     public struct UpgradeCost
     {
-        public int money;
         public int timeInTicks;
-        public Resource resource;
+        public MoneyResource resource;
 
-        public UpgradeCost(int _money, float _timeInHours, Resource _resource)
+        public UpgradeCost(float _timeInHours, MoneyResource _resource)
         {
-            money = _money;
             timeInTicks = Mathf.RoundToInt(_timeInHours * 4);
             resource = _resource;
         }
     }
 
-    public static Dictionary<ResourceType, int> resourceCosts = new()
+    [Serializable]
+    public class Outpost : Location
     {
-        { ResourceType.Coal,  1 },
-        { ResourceType.Metal, 2 },
-        { ResourceType.Stone, 1 },
-        { ResourceType.Food,  1 },
-    };
-
-    public static Dictionary<ResourceType, int> resourceAmmount = new()
-    {
-        { ResourceType.Coal, 10 },
-        { ResourceType.Metal, 7 },
-        { ResourceType.Stone, 5 },
-        { ResourceType.Food, 10 },
-    };
-
-    public static List<UpgradeCost> upgradeCosts = new()
-    {
-        new(1000, 7, new(
-            new(){ResourceType.Metal},
-            new(){10})),
-        new(2000, 5, new(
-            new(){ResourceType.Metal},
-            new(){40})),
-        new(4000, 4, new(
-            new(){ResourceType.Metal, ResourceType.Stone},
-            new(){60, 15})),
-    };
-
-    public string name;
-    public int level;
-    /// <summary>
-    /// <para>If <see cref="constructed"/> is false marks start date of production, <br/>
-    /// else shows how much time is left until finishing the upgrade.</para>
-    /// </summary>
-    public int timeToFinish;
-    public bool constructed;
-    public Resource production;
-
-    public Outpost(string _name, ResourceType type)
-    {
-        name = _name;
-        level = 0;
-        production = new(
-            new() { type },
-            new() { 0 });
-        StartUpgrade();
-    }
-    public Outpost()
-    {
-        name = "";
-        level = 0;
-        production = new();
-        constructed = false;
-        timeToFinish = -1;
-    }
-
-    /// <summary>
-    /// Starts the upgrade process.
-    /// </summary>
-    public void StartUpgrade()
-    {
-        constructed = false;
-        timeToFinish = upgradeCosts[level].timeInTicks;
-        MyRes.PayCostGlobal(upgradeCosts[level].resource, upgradeCosts[level].money);
-        if (level == 0)
+        public static Dictionary<ResourceType, int> resourceCosts = new()
         {
-            /*Trade trade = UIRefs.trade;
-            Button button = trade.AddOutpostButton(trade.transform.GetChild(0).GetChild(2), trade.outposts.Count+1);*/
-        }
-    }
+            { ResourceType.Coal,  1 },
+            { ResourceType.Metal, 2 },
+            { ResourceType.Stone, 1 },
+            { ResourceType.Food,  1 },
+        };
 
-    /// <summary>
-    /// Ends the upgrade process and marks when it finished.
-    /// </summary>
-    public void Upgrade()
-    {
-        constructed = true;
-        if (level == 0)
+        public static Dictionary<ResourceType, int> resourceAmmount = new()
         {
-            /*Trade trade = UIRefs.trade;
-            trade.transform.GetChild(0).GetChild(2).GetChild(trade.outposts.Count-1).GetChild(0).GetComponent<Image>().color = trade.availableColor;*/
+            { ResourceType.Coal, 10 },
+            { ResourceType.Metal, 7 },
+            { ResourceType.Stone, 5 },
+            { ResourceType.Food, 10 },
+            { ResourceType.Wood, 10 },
+        };
+
+        public static List<UpgradeCost> upgradeCosts = new()
+        {
+            new
+            (
+                2,
+                new
+                (
+                    new(){ResourceType.Metal},
+                    new(){10},
+                    1000
+                )
+            ),
+            new
+            (
+                3,
+                new
+                (
+                    new(){ResourceType.Metal},
+                    new(){25},
+                    500
+                )
+            ),
+            new
+            (
+                4,
+                new
+                (
+                    new(){ResourceType.Metal},
+                    new(){40},
+                    750
+                )
+            ),
+        };
+
+        public const int MAX_LEVEL = 3;
+
+        public int level;
+        /// <summary>
+        /// <para>If <see cref="exists"/> is false marks start date of production, <br/>
+        /// else shows how much time is left until finishing the upgrade.</para>
+        /// </summary>
+        public int timeToFinish;
+        public bool exists;
+        public bool buildInProgress;
+        public Resource production;
+        public ResourceType[] outpostLevels;
+
+        public CapacityResource storedResources = new();
+
+        [JsonIgnore]
+        public Action OnUpgrade { get => onUpgrade; set => onUpgrade = value; }
+        [JsonIgnore]
+        Action onUpgrade;
+
+        public Outpost() { }
+        public Outpost(string _name)
+        {
+            Name = _name;
+            level = 0;
+            outpostLevels = new ResourceType[MAX_LEVEL];
+            production = new();
+            exists = false;
+            buildInProgress = false;
+            timeToFinish = -1;
         }
-        level++;
-        timeToFinish = SceneRefs.Tick.GetWeekTime(); // marks the finished time
-        production.ammounts[0] += resourceAmmount[production.types[0]]; // upgrades the production
+
+        /// <summary>
+        /// Starts the upgrade process and pays the cost.
+        /// </summary>
+        public void StartUpgrade(ResourceType selectedType)
+        {
+            buildInProgress = true;
+            timeToFinish = upgradeCosts[level].timeInTicks;
+            MyRes.PayCostGlobal(upgradeCosts[level].resource);
+            outpostLevels[level] = selectedType;
+
+            if (level == 0)
+            {
+                /*Trade trade = UIRefs.trade;
+                Button button = trade.AddOutpostButton(trade.transform.GetChild(0).GetChild(2), trade.outposts.Count+1);*/
+            }
+            SceneRefs.Tick.SubscribeToEvent(ProgressBuilding, Tick.TimeEventType.Ticks);
+        }
+
+        /// <summary>
+        /// Ends the upgrade process and marks when it finished.
+        /// </summary>
+        public void FinishUpgrade()
+        {
+            SceneRefs.Tick.UnsubscribeToEvent(ProgressBuilding, Tick.TimeEventType.Ticks);
+            exists = true;
+            buildInProgress = false;
+            if (level == 0)
+            {
+                onUpgrade();
+                storedResources = new(10);
+                /*Trade trade = UIRefs.trade;
+                trade.transform.GetChild(0).GetChild(2).GetChild(trade.outposts.Count-1).GetChild(0).GetComponent<Image>().color = trade.availableColor;*/
+            }
+            else
+                storedResources.capacity.BaseValue = (level + 1) * 10;
+
+            production.ManageSimple(outpostLevels[level], resourceAmmount[outpostLevels[level]], true); // upgrades the production
+            level++;
+            timeToFinish = SceneRefs.Tick.GetWeekTime(); // marks the finished time
+            SceneRefs.Tick.SubscribeToEvent(MakeWeekProduction, Tick.TimeEventType.Week);
+        }
+
+        public bool CanAffordUpgrade()
+        {
+            return MyRes.CanAfford(upgradeCosts[level].resource);
+        }
+
+        public void ProgressBuilding()
+        {
+            timeToFinish--;
+            if(timeToFinish == 0)
+            {
+                FinishUpgrade();
+            }
+        }
+
+        public void MakeWeekProduction()
+        {
+            int mod = SceneRefs.Tick.GetWeekTimeFull();
+            storedResources.Manage(production, true, (mod - timeToFinish) / (float)mod);
+        }
     }
 }

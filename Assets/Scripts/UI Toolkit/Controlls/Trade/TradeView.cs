@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 namespace TradeWindowElements
 {
     [UxmlElement]
-    public partial class TradeView : VisualElement
+    public partial class TradeView : TradeMapViewBase
     {
         #region Variables
         VisualTreeAsset dealAsset;
@@ -70,6 +70,7 @@ namespace TradeWindowElements
             temp = new();
             temp.name = "Deals";
             categ.Add(temp);
+
             if (DealAsset != null)
                 CreateDeals(i);
             #endregion
@@ -155,10 +156,15 @@ namespace TradeWindowElements
         #endregion
 
         #region View switch
-        public string Open(int index)
+        public override object Open(int i)
         {
-            selectedLocation = UIRefs.TradingWindow.tradeLocations[index];
-            selectedLocationIndex = index;
+#if UNITY_EDITOR
+            if(DealAsset == null)
+                Debug.LogError("no asset");
+#endif
+            base.Open();
+            selectedLocation = UIRefs.TradingWindow.tradeLocations[i];
+            selectedLocationIndex = i;
 
             BuyMoney = 0;
             SellMoney = 0;
@@ -169,7 +175,6 @@ namespace TradeWindowElements
             SetDeals(1, selectedLocation.Sell);
             UpdateConfirmButton();
 
-            style.display = DisplayStyle.Flex;
             float time = (2 * selectedLocation.distance) / (TradingWindow.CONVOY_SPEED * Tick.TicksInDay);
             if (time > 1)
                 dateLabel.text = $"{time:F1} d";
@@ -177,7 +182,7 @@ namespace TradeWindowElements
                 dateLabel.text = $"{time*24:F1} h";
             if (map == null)
                 map = parent.parent[1][0] as TradeMap;
-            return selectedLocation.name;
+            return selectedLocation;
         }
 
         void SetDeals(int categ, List<TradeDeal> tradeDeals)
@@ -215,11 +220,6 @@ namespace TradeWindowElements
             deals = ElementAt(categ).ElementAt(0);
             ((Label)deals.ElementAt(1)).text = $"(0/{TradingWindow.CONVOY_STORAGE_LIMIT})";
             ((Label)deals.ElementAt(2)).text = $"0 £";
-        }
-
-        public void Hide()
-        {
-            style.display = DisplayStyle.None;
         }
         #endregion
 

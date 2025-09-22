@@ -10,6 +10,7 @@ public partial class LevelButtons : CustomRadioButtonGroup
     [UxmlAttribute] List<int> levels = new() { 1, 2, 3, 4, 5 };
     public LevelButtons() : base()
     {
+        buttons = new();
         for (int i = 0; i < levels?.Count; i++)
         {
             CustomRadioButton button = new("status-bar-button", i, this);
@@ -25,7 +26,7 @@ public partial class LevelButtons : CustomRadioButtonGroup
     {
         SelectedChoice = 0;
         SetChangeCallback((i) => MyGrid.ChangeGridLevel(i));
-        ((CustomRadioButton)ElementAt(0)).SelectWithoutTransition(false);
+        buttons[0].SelectWithoutTransition(false);
         MyGrid.AddToGridChange(OutsideTrigger);
         object level;
         for (int i = 0; i < levels.Count; i++)
@@ -40,7 +41,7 @@ public partial class LevelButtons : CustomRadioButtonGroup
 
     public void OutsideTrigger(int old, int newI)
     {
-        if(SelectedChoice != newI)
-            ((CustomRadioButton)ElementAt(newI)).Select();
+        if(SelectedChoice != newI)// && MyGrid.IsUnlocked(newI))
+            buttons[newI].Select();
     }
 }

@@ -92,7 +92,6 @@ namespace Params
             if (childCount > 0)
                 RemoveAt(0);
             EnumField enumField = new EnumField("Label", GetEnumValue(1));
-            enumField.ElementAt(1).AddToClassList("enum-style");
             enumField.RegisterCallback<ChangeEvent<Enum>>(EnumChange);
             enumField.focusable = false;
             enumField.AddToClassList("Empty");

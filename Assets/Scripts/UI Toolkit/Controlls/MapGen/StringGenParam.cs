@@ -58,7 +58,7 @@ namespace Params
             TextField textField = new TextField();
             textField.maxLength = 8;
             textField.style.flexGrow = 1;
-            textField.style.maxWidth = 150;
+            textField.style.maxWidth = 180;
             textField.RegisterValueChangedCallback<string>((str) =>
             {
                 TextValue = str.newValue;

@@ -30,9 +30,9 @@ public class QuestMoneyPenalty : QuestPenalty
 public class TrustPenalty : QuestPenalty
 {
     public TrustPenalty() : base(){ }
-    public TrustPenalty(int i) : base()
+    public TrustPenalty(int penalty) : base()
     { 
-        penaltyAmmount = i; 
+        penaltyAmmount = penalty; 
     }
 
     public override void GetPenalty()

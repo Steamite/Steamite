@@ -1,0 +1,51 @@
+EnumField {
+    align-self: center;
+    width: 250px;
+    margin-top: 0;
+}
+
+#cost {
+    flex-grow: 1;
+    width: 90%;
+    max-width: 90%;
+    margin-top: 20px;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+.view {
+    flex-grow: 1;
+    align-items: center;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+#cost #unity-content-container {
+    justify-content: flex-start;
+}
+
+.level-label {
+    -unity-text-align: middle-center;
+}
+
+.construction-bar {
+    align-self: center;
+    max-width: 90%;
+}
+
+.row {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+TabView {
+    flex-grow: 1;
+}
+
+Tab {
+    flex-grow: 1;
+}

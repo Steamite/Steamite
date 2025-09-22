@@ -428,8 +428,6 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         humanActivation = null;
         SceneRefs.Tick.InitTicks();
         UIRefs.TimeDisplay.GetComponent<IToolkitController>().Init(UIRefs.TimeDisplay.rootVisualElement);
-        UIRefs.ToolkitShortcuts.Init(UIRefs.TimeDisplay.rootVisualElement);
-
     }
 
     public void UIUpdate(string property = "")

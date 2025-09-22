@@ -1,4 +1,4 @@
-.enum-style {
+.unity-enum-field__input {
     flex-direction: row;
     flex-grow: 1;
     max-width: 250px;
@@ -12,18 +12,19 @@
     padding-left: 10px;
     -unity-font-style: normal;
     font-size: 35px;
-    
-    
-    
-    
-    
     border-top-width: 3px;
     border-right-width: 3px;
     border-bottom-width: 3px;
     border-left-width: 3px;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+    background-color: var(--interactable);
+    transition-duration: 0.5s;
 }
 
-.enum-style:hover {
+EnumField:hover > .unity-enum-field__input {
     flex-direction: row;
     flex-grow: 1;
     max-width: 250px;
@@ -37,19 +38,23 @@
     padding-left: 10px;
     -unity-font-style: normal;
     font-size: 35px;
-    
-    
-    
-    
-    
     border-top-width: 3px;
     border-right-width: 3px;
     border-bottom-width: 3px;
     border-left-width: 3px;
+    background-color: var(--hover);
+    transition-duration: 0.5s;
+    color: var(--text-hover);
+}
+
+EnumField:hover .unity-enum-field__arrow {
+    -unity-background-image-tint-color: var(--text-hover);
+    transition-duration: 0.5s;
 }
 
 .unity-enum-field__arrow {
-    -unity-background-image-tint-color: rgb(145, 133, 53);
+    -unity-background-image-tint-color: var(--text-primary);
+    transition-duration: 0.5s;
 }
 
 .unity-base-dropdown__container-outer {
@@ -57,15 +62,10 @@
     border-right-width: 5px;
     border-bottom-width: 5px;
     border-left-width: 5px;
-    
-    
-    
-    
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .unity-base-dropdown__container-inner {
@@ -73,19 +73,11 @@
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    
-    
-    
-    
-    
     padding-top: 0;
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
+    background-color: var(--interactable);
 }
 
 .unity-base-dropdown__item {
@@ -93,16 +85,8 @@
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    
-    
-    
-    
-    
-    --unity-selection-color: rgba(255, 255, 0, 0.5);
+    background-color: var(--interactable);
+    padding-left: 10px;
 }
 
 .unity-base-dropdown__item:hover:enabled {
@@ -114,11 +98,13 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    
-    
-    
-    
-    
+    background-color: var(--hover);
+    color: var(--text-hover);
+}
+
+.unity-base-dropdown__item:checked {
+    background-color: var(--selected);
+    color: var(--text-secondary);
 }
 
 .unity-base-dropdown__checkmark {
@@ -130,11 +116,6 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    
-    
-    
-    
-    
     display: none;
     visibility: hidden;
     overflow: hidden;
@@ -158,4 +139,8 @@
     margin-right: 0;
     margin-top: 0;
     margin-bottom: 0;
+}
+
+.unity-base-dropdown__item:hover:enabled > .unity-base-dropdown__item-content > .unity-base-dropdown__label {
+    color: var(--text-hover);
 }

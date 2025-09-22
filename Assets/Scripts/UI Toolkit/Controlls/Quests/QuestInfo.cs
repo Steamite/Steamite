@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 [UxmlElement]
@@ -47,7 +48,7 @@ public partial class QuestInfo : ScrollView
         {
             style.display = DisplayStyle.Flex;
             header.text = quest.Name;
-            description.text = quest.description;
+            description.text = MainShortcuts.ParseDescription(quest.description);
 
             objectiveList.Open(quest.objectives, quest.state == QuestState.Failed ? Color.red : null);
             penaltyList.Open(quest.penalties, quest.state == QuestState.Failed ? Color.red : null);

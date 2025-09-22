@@ -110,7 +110,7 @@ public class Building : StorageObject
         if (clickable == null)
             clickable = new BuildingSave();
         BuildingSave save = (clickable as BuildingSave);
-        save.prefabName = objectName;
+        save.Name = objectName;
         save.rotationY = transform.rotation.eulerAngles.y;
 
         save.blueprint = blueprint;
@@ -126,7 +126,7 @@ public class Building : StorageObject
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-        objectName = (save as BuildingSave).prefabName;
+        objectName = (save as BuildingSave).Name;
         blueprint = (save as BuildingSave).blueprint;
         constructed = (save as BuildingSave).constructed;
         deconstructing = (save as BuildingSave).deconstructing;

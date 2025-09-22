@@ -1,4 +1,6 @@
+using Outposts;
 using ResearchUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,9 +27,10 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
     public List<Outpost> outposts;
 
     [HideInInspector] public float distance; 
-    [SerializeField] string baseLocation = "Highlands";
+    //[SerializeField] string baseLocation = "Highlands";
 
     public int outpostLimit = 3;
+
     #endregion
 
     #region Properties
@@ -39,7 +42,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
 
     public async Task LoadState(TradeSave tradeSave)
     {
-        TradeHolder tradeHolder = await Addressables.LoadAssetAsync<TradeHolder>($"Assets/Game Data/Colony Locations/{tradeSave.colonyLocation}.asset").Task;
+        TradeHolder tradeHolder = Instantiate(await Addressables.LoadAssetAsync<TradeHolder>($"Assets/Game Data/Colony Locations/{tradeSave.colonyLocation}.asset").Task);
         colonyLocation = tradeHolder.startingLocation;
         colonyLocation.LoadGame(tradeSave.prodLevels, tradeSave.statLevels);
 
@@ -51,7 +54,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
         map = (IFullScreenWindowElem)root.Q<VisualElement>("Map");
         ((IInitiableUI)map).Init();
-        ((IInitiableUI)root.Q<VisualElement>("Colony")).Init();
+        ((IInitiableUI)root.Q<VisualElement>("Colony")[0]).Init();
 
 
         //Moves all convoys each tick.
@@ -62,6 +65,20 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
                     convoys[i].Move(CONVOY_SPEED);
             },
            Tick.TimeEventType.Ticks);
+
+        foreach (var item in outposts)
+        {
+            if (item.buildInProgress)
+            {
+                SceneRefs.Tick.SubscribeToEvent(
+                    () =>
+                    {
+                        item.ProgressBuilding();
+                    },
+                    Tick.TimeEventType.Ticks);
+            }
+        }
+
 
         SceneRefs.Tick.SubscribeToEvent(
             colonyLocation.DoProduction,

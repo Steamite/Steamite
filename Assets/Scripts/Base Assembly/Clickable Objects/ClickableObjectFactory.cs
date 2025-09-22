@@ -270,7 +270,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     }
     #endregion Loading Game
 
-    public async Task Init()
+    public async Task BeforeInit()
     {
         CenterElevatorIds = new();
         buildPrefabs = await Addressables.LoadAssetAsync<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset").Task;

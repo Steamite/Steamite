@@ -162,7 +162,7 @@ public class ChunkSave : StorageObjectSave
 public class BuildingSave : StorageObjectSave
 {
     ///public Build build;
-    public string prefabName;
+    public string Name;
     public float rotationY;
 
     public BuildingGrid blueprint;

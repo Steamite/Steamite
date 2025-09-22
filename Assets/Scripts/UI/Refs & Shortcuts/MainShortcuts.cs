@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MainShortcuts : MonoBehaviour, IAfterLoad
+public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
 {
     InputActionMap bindingMap => inputAsset.actionMaps[1];
 
@@ -20,9 +22,9 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
     [SerializeField] public InputActionAsset inputAsset;
     public static bool handleGrid;
     static bool handleWindows;
-    static GameObject instance;
+    static MainShortcuts instance;
 
-    public void Init()
+    public Task BeforeInit()
     {
         buildMenu = bindingMap.FindAction("Build Menu");
         dig = bindingMap.FindAction("Dig");
@@ -33,8 +35,13 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
         research = bindingMap.FindAction("Research");
         trade = bindingMap.FindAction("Trade");
         quests = bindingMap.FindAction("Quests");
+        instance = this;
+        return Task.CompletedTask;
+    }
+
+    public void AfterInit()
+    {
         enabled = true;
-        instance = gameObject;
         EnableInput();
     }
 
@@ -85,15 +92,11 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
             if (dig.triggered)
             {
                 gt.ChangeSelMode(ControlMode.dig);
-                gt.Exit(gt.activeObject);
-                gt.Enter(gt.activeObject);
             }
             // toggle deconstruct
             else if (deconstruction.triggered)
             {
                 gt.ChangeSelMode(ControlMode.deconstruct);
-                gt.Exit(gt.activeObject);
-                gt.Enter(gt.activeObject);
             }
             // rotates building
             else if (buildRotate.triggered)
@@ -112,7 +115,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
                     {
                         building.transform.Rotate(new Vector3(0, -90, 0));
                     }
-                    if(building is IFluidWork fluid)
+                    if (building is IFluidWork fluid)
                     {
                         fluid.AttachedPipes.ForEach(q => q.RecalculatePipeTransform());
                     }
@@ -169,4 +172,31 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad
             (item as MonoBehaviour).enabled = true;
         }
     }
+
+    public static string ParseDescription(string description)
+    {
+        foreach (var action in instance.GetActions())
+        {
+            string newString = action.controls.First().displayName.Replace(":", "");
+            description = description.Replace(action.name, $"\"{newString}\"");
+        }
+        return description;
+    }
+
+    List<InputAction> GetActions()
+    {
+        List<InputAction> inputActions = new()
+        {
+            buildMenu,
+            dig,
+            deconstruction,
+            buildRotate,
+            menu,
+            shift,
+            research,
+            trade,
+            quests,
+        };
+        return inputActions;
+    } 
 }

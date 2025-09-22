@@ -34,7 +34,7 @@ public partial class QuestElement : VisualElement
     public void Open(Quest quest)
     {
         nameLabel.text = $"<u>{quest.Name}";
-        descriptionLabel.text = quest.description;
+        descriptionLabel.text = MainShortcuts.ParseDescription(quest.description);
         timeLabel.ClearBindings();
         if (quest.TimeToFail != -1)
         {

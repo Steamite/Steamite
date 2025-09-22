@@ -1,5 +1,4 @@
-﻿using GD.MinMaxSlider;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
@@ -23,12 +22,12 @@ namespace Orders
     [CreateAssetMenu(fileName = "OrderGenConfig", menuName = "OrderGenConfig", order = 1)]
     public class OrderGenConfig : ScriptableObject
     {
-        [MinMaxSlider(5, 80)]public Vector2Int timeToFail = new(5, 10);
-        [MinMaxSlider(5, 80)]public Vector2Int trustLoss = new(40, 60);
-        [MinMaxSlider(5, 40)]public Vector2Int trustGain = new(10, 15);
+        public Vector2Int timeToFail = new(5, 10);
+        public Vector2Int trustLoss = new(40, 60);
+        public Vector2Int trustGain = new(10, 15);
 
         public List<ResourceGen> resourceGens = new();
-
+#if UNITY_EDITOR
         private void OnValidate()
         {
             bool dirty = false;
@@ -54,5 +53,6 @@ namespace Orders
             if(dirty)
                 EditorUtility.SetDirty(this);
         }
+#endif
     }
 }

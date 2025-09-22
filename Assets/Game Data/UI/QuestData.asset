@@ -17,7 +17,7 @@ MonoBehaviour:
     Objects:
     - Name: ABC
       id: 1243577587
-      description: dsadsa
+      description: Use Dig to enter dig selection and select rocks.
       state: 0
       timeToFail: 20
       rewards:

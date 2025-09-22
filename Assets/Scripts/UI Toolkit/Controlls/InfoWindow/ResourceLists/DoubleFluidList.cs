@@ -7,8 +7,8 @@ namespace InfoWindowElements
     public partial class DoubleFluidList : DoubleResourceList<Fluid, FluidType>
     {
         public DoubleFluidList() : base() { }
-        public DoubleFluidList(bool _cost, string _name, bool _useBindings = false)
-            : base(_cost, _name, _useBindings)
+        public DoubleFluidList(bool _cost, string _name, bool _useBindings = false, bool center = false)
+            : base(_cost, _name, _useBindings, center)
         { }
 
         public override void Open(object data)

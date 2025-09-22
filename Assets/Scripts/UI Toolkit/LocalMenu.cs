@@ -1,4 +1,5 @@
 ﻿using InfoWindowElements;
+using Outposts;
 using ResearchUI;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
     bool isOpen;
 
     int width = 300;
-    public void Init()
+    public void AfterInit()
     {
         menu = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Menu");
         menu.pickingMode = PickingMode.Ignore;
@@ -125,7 +126,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 description.text = "";
                 break;
             case TradeLocation tradeLocation:
-                header.text = tradeLocation.name;
+                header.text = tradeLocation.Name;
                 secondHeader.text = "trade location";
                 List<TradeConvoy> convoyList = UIRefs.TradingWindow.GetConvoys();
                 TradeConvoy convoy = convoyList.FirstOrDefault(q => q.tradeLocation == UIRefs.TradingWindow.tradeLocations.IndexOf(tradeLocation));
@@ -135,13 +136,13 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                     description.text = "";
                     break;
             case ColonyLocation colonyLocation:
-                header.text = colonyLocation.name;
+                header.text = colonyLocation.Name;
                 secondHeader.text = "colony";
                 secondHeader.style.display = DisplayStyle.Flex;
                 break;
             case Outpost outpost:
                 width = 200;
-                header.text = outpost.name;
+                header.text = outpost.Name;
                 secondHeader.text = "outpost";
                 secondHeader.style.display = DisplayStyle.Flex;
                 break;

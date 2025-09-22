@@ -1,3 +1,4 @@
+using Outposts;
 using System;
 using System.Collections.Generic;
 using Unity.Properties;
@@ -84,8 +85,11 @@ namespace InfoWindowElements
         #endregion
 
         #region Variables
+        /// <summary>Display as x/y or x (y).</summary>
+        [UxmlAttribute] public bool cost;
+
         /// <summary>If disabled hides resources with 0.</summary>
-        protected bool showEmpty = false;
+        [UxmlAttribute] public bool showEmpty = false;
 
         public const int ICON_SIZE = 60;
         [UxmlAttribute] public int iconSize = 60;
@@ -205,11 +209,6 @@ namespace InfoWindowElements
                     showEmpty = true;
                     break;
                 case Vein:
-                    /*hierarchy[i].SetBinding(
-                nameof(GroundLevel.Unlocked),
-                nameof(enabledSelf),
-                dataSource: level,
-                check: true);*/
                     binding = BindingUtil.CreateBinding(nameof(Vein.Storing));
                     binding.sourceToUiConverters.AddConverter((ref Resource stored) => ToUIRes(stored as T));
                     SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
@@ -234,6 +233,16 @@ namespace InfoWindowElements
                     res.Add(new(storage.ammounts[i], storage.types[i]));
             }
             return res;
+        }
+
+
+        protected virtual void SetResWithoutBinding(T res)
+        {
+            List<UIResource<TEnum>> temp = new List<UIResource<TEnum>>();
+            temp = ToUIRes(res);
+            if (res is MoneyResource money && money.Money > 0)
+                temp.Insert(0, new UIResource<TEnum>(+money.Money));
+            resources = temp;
         }
 
         /// <summary>

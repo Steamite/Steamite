@@ -1,4 +1,5 @@
 using AbstractControls;
+using Outposts;
 using System;
 using System.Collections.Generic;
 using TradeData.Locations;
@@ -18,6 +19,8 @@ namespace TradeWindowElements
         public Label convoyLabel;
         TradeButtonGroup locationGroup;
         VisualElement outpostElement;
+
+        List<OutpostButton> outpostButtons = new();
 
         int index;
         public TradeMap() : base()
@@ -116,7 +119,7 @@ namespace TradeWindowElements
                 {
                     location = UIRefs.TradingWindow.colonyLocation;
                     locationButton = new (location.pos.ToVecUI(), 0, locationGroup);
-                    locationButton.style.unityBackgroundImageTintColor = Color.blue;
+                    locationButton.AddToClassList("colony-button");
                 }
                 else
                 {
@@ -152,12 +155,16 @@ namespace TradeWindowElements
         public void CreateOutpost(int i)
         {
             OutpostButton outpostButton = new(locationGroup, index);
-            if (i > 0 && !UIRefs.TradingWindow.outposts[i - 1].constructed)
+            outpostButtons.Add(outpostButton);
+            Outpost outpost = UIRefs.TradingWindow.outposts[i];
+            outpost.OnUpgrade = () => EnableOutpost(i + 1);
+
+            if (i > 0 && !UIRefs.TradingWindow.outposts[i - 1].exists)
                 outpostButton.enabledSelf = false;
 
             outpostButton.RegisterCallback<MouseEnterEvent>(
                 q => ToolkitUtils.localMenu.UpdateContent(
-                    UIRefs.TradingWindow.outposts[i],
+                    outpost,
                     q.target as VisualElement));
 
             outpostButton.RegisterCallback<MouseLeaveEvent>(
@@ -168,8 +175,7 @@ namespace TradeWindowElements
 
         public void EnableOutpost(int i)
         {
-            OutpostButton outpostButton = locationGroup.buttons[locationGroup.tradeLocationCount] as OutpostButton;
-            outpostButton.enabledSelf = true;
+            outpostButtons[i].enabledSelf = true; 
         }
 
         #region Updates
