@@ -3,7 +3,6 @@ using Orders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
@@ -27,8 +26,13 @@ public class OrderController
         orderInterface = _questCatalog.rootVisualElement[0][0].Q("OrderInterface") as IUIElement;
         currentOrder = _order;
         finishedOrdersCount = saveData.finishedOrdersCount;
-        _order.Load(this, saveData.order);
+        
         orderChoice = new();
+        foreach (var item in saveData.orderChoiceSaves)
+        {
+            orderChoice.Add(new(item));
+        }
+        _order.Load(this, saveData.order);
 
         LoadOrderConfig();
     }

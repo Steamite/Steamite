@@ -10,6 +10,9 @@ namespace ResearchUI
         {
             minX = rect.xMin;
             maxX = rect.xMax;
+
+            style.borderTopWidth = 2;
+            style.borderBottomWidth = 2;
         }
 
         public void Resize(float newPos)
@@ -25,7 +28,7 @@ namespace ResearchUI
             }
             else
                 return;
-            style.width = maxX - minX;
+            style.width = maxX - minX + WIDTH;
         }
 
     }

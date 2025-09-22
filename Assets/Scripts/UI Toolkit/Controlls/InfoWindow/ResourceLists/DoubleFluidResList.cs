@@ -12,9 +12,9 @@ public partial class DoubleFluidResList : VisualElement
     {
         style.width = new Length(100, LengthUnit.Percent);
         style.flexGrow = 1;
-        resList = new(_cost, _name, _useBindings) { leftPadding = _leftPadding, style = { flexGrow = 1 } };
+        resList = new(_cost, _name, _useBindings, true) { leftPadding = _leftPadding, style = { flexGrow = 1 } };
         Add(resList);
-        fluidList = new(_cost, _name, _useBindings) { leftPadding = _leftPadding, style = { flexGrow = 1 } };
+        fluidList = new(_cost, _name, _useBindings, true) { leftPadding = _leftPadding, style = { flexGrow = 1 } };
         Add(fluidList);
         style.flexDirection = FlexDirection.Column;
     }

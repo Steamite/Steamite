@@ -1,4 +1,4 @@
 ﻿public interface IAfterLoad
 {
-    public void Init();
+    public void AfterInit();
 }

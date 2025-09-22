@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+using Objectives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,7 @@ public class QuestControllerSave
     public QuestSave order;
     public int trust;
     public int finishedOrdersCount;
+    public List<OrderChoiceSave> orderChoiceSaves;
 
     public QuestControllerSave() { }
 
@@ -19,6 +22,24 @@ public class QuestControllerSave
         order = new (controller.orderController.CurrentOrder);
         trust = controller.Trust;
         finishedOrdersCount = controller.orderController.finishedOrdersCount;
+        orderChoiceSaves = controller.orderController.orderChoice.Select(q => new OrderChoiceSave(q)).ToList();
+    }
+}
+
+public class OrderChoiceSave
+{
+    public int timeToFail;
+    public MoneyResource resources;
+    public int gain;
+    public int penalty;
+
+    public OrderChoiceSave() { }
+    public OrderChoiceSave(Order order)
+    {
+        timeToFail = order.TimeToFail;
+        resources = (order.objectives[0] as ResourceObjective).resource;
+        gain = (order.rewards[0] as TrustReward).gainAmmount;
+        penalty = (order.penalties[0] as TrustPenalty).penaltyAmmount;
     }
 }
 

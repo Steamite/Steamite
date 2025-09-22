@@ -61,14 +61,14 @@ public class SceneRefs : MonoBehaviour
         instance = this;
 
         foreach (IBeforeLoad beforeLoad in instance.beforeLoads)
-            await beforeLoad.Init();
+            await beforeLoad.BeforeInit();
         beforeLoads = null;
     }
 
     public static void FinishLoad()
     {
         foreach (IAfterLoad afterLoad in instance.afterLoads.Cast<IAfterLoad>())
-            afterLoad.Init();
+            afterLoad.AfterInit();
         instance.afterLoads = null;
         MyGrid.Init();
     }

@@ -1,5 +1,6 @@
 using BuildingStats;
 using Objectives;
+using Orders;
 using ResearchUI;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using static UnityEngine.Analytics.IAnalytic;
 public class QuestRegister : DataGridWindow<QuestCategory, Quest>
 {
     #region Opening
+    ObjectField orderConfigField;
 
     List<Type> questTypes;
     List<Type> objectiveTypes;
@@ -45,6 +47,13 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
         categorySelector.index = 0;
     }
 
+    protected override void TopBar(out ObjectField iconSelector)
+    {
+        base.TopBar(out iconSelector);
+        orderConfigField = rootVisualElement.Q<ObjectField>("Order-Config");
+        orderConfigField.value = AssetDatabase.LoadAssetAtPath<OrderGenConfig>("Assets/Game Data/UI/OrderGenConfig.asset");
+        orderConfigField.enabledSelf = false;
+    }
     void RecalculateAvailableObjects()
     {
         IEnumerable<Quest> _quests = holder.Categories.SelectMany(q => q.Objects);

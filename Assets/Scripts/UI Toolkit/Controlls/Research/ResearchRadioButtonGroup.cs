@@ -120,8 +120,8 @@ namespace ResearchUI
                     new(
                         Mathf.Min(topPos, botPos),
                         horPos,
-                        Mathf.Abs(topPos - botPos),
-                        3
+                        Mathf.Abs(topPos - botPos + ResearchLine.WIDTH),
+                        ResearchLine.WIDTH
                     ));
 
                 this[0][1].Add(horizontalLine);
@@ -131,8 +131,8 @@ namespace ResearchUI
                 ResearchDownLine lineDown = new(
                     new(
                         topPos,
-                        topButton.worldBound.y + topButton.worldBound.height / 2 - this[0].worldBound.y,
-                        3,
+                        topButton.worldBound.y + topButton.worldBound.height / 2 - this[0].worldBound.y + ResearchLine.BORDER,
+                        ResearchLine.WIDTH,
                         height),
                     horizontalLine);
 
@@ -154,8 +154,8 @@ namespace ResearchUI
                 ResearchLine line = new(
                     new(
                         botPos,
-                        horPos,
-                        3,
+                        horPos + ResearchLine.WIDTH-ResearchLine.BORDER,
+                        ResearchLine.WIDTH,
                         (sLevel - eLevel - 1) * 200 + height));
                 this[0][1].Add(line);
                 if (botButton.node.researched)

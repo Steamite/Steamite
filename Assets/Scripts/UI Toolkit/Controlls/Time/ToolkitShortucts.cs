@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-public class ToolkitShortucts : MonoBehaviour, IToolkitController
+public class ToolkitShortucts : MonoBehaviour, IAfterLoad
 {
     [SerializeField] public InputActionAsset inputAsset;
     public TimeButtons timeButtons;
@@ -17,8 +17,11 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
     InputAction level;
     InputAction buildMenu;
 
-    public void Init(VisualElement bottomBar)
+
+
+    public void AfterInit()
     {
+        VisualElement bottomBar = UIRefs.TimeDisplay.rootVisualElement;
         shift = inputAsset.actionMaps[1].FindAction("Shift");
 
         gameSpeed = smallShortcuts.FindAction("Game Speed");
@@ -33,14 +36,14 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
 
         ProgressBar trustBar = bottomBar.Q<ProgressBar>("Trust");
         trustBar.SetBinding(
-            nameof(QuestController.Trust), 
-            nameof(ProgressBar.value), 
-            (ref int i) => 
+            nameof(QuestController.Trust),
+            nameof(ProgressBar.value),
+            (ref int i) =>
             {
                 trustBar.title = $"{i}/100";
                 //trustBar[0][0][0].style.color
                 return (float)i;
-            }, 
+            },
             SceneRefs.QuestController);
 
         enabled = true;
@@ -84,5 +87,4 @@ public class ToolkitShortucts : MonoBehaviour, IToolkitController
             }
         }
     }
-
 }

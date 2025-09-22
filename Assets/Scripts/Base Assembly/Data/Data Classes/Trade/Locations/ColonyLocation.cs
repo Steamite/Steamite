@@ -34,16 +34,5 @@ namespace TradeData.Locations
             for (int i = 0; i < production.Count; i++)
                 production[i].LoadState(prodLevels[i], config.production[i].max);
         }
-
-        public void NewGame()
-        {
-            stats = Resources.LoadAll<ColonyStat>("Holders/Data/Stats").ToList();
-            for (int i = 0; i < stats.Count; i++)
-                stats[i].LoadState(config.stats[i].min, config.stats[i].max);
-
-            production = Resources.LoadAll<ColonyStat>("Holders/Data/Prods").ToList();
-            for (int i = 0; i < production.Count; i++)
-                production[i].LoadState(config.production[i].min, config.production[i].max);
-        }
     }
 }

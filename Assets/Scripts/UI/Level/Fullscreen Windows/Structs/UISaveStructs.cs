@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TradeData.Locations;
-
+using Outposts;
 
 
 [Serializable]
@@ -19,7 +19,7 @@ public class TradeSave
 
     public TradeSave(TradingWindow trading)
     {
-        colonyLocation = trading.colonyLocation.name;
+        colonyLocation = trading.colonyLocation.Name;
         prodLevels = trading.colonyLocation.production.Select(q => q.CurrentState).ToList();
         statLevels = trading.colonyLocation.stats.Select(q => q.CurrentState).ToList();
         tradeLocations = trading.tradeLocations;

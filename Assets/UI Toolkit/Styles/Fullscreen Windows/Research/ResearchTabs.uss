@@ -119,11 +119,19 @@ ResearchRadioButtonGroup {
 .line {
     position: absolute;
     background-color: var(--interactable);
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
 }
 
 .line-filled {
     position: absolute;
     background-color: var(--finished);
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
 }
 
 .background-line {

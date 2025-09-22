@@ -23,7 +23,7 @@ public enum ControlMode
 public class GridTiles : MonoBehaviour
 {
     #region Variables
-    bool buildingPlaced = false;
+    //bool buildingPlaced = false;
     /// <summary>Raycast mask for building.</summary>
     public LayerMask buildingMask;
     /// <summary>Default raycast mask for the rest of time.</summary>
@@ -369,7 +369,7 @@ public class GridTiles : MonoBehaviour
                                 else
                                     b.DestoyBuilding();
                             }
-                            buildingPlaced = true;
+                            //buildingPlaced = true;
                             markedTiles.Clear();
                             tempMarkedTiles.Clear();
                             BlueprintInstance = null;
@@ -565,6 +565,12 @@ public class GridTiles : MonoBehaviour
     /// </summary>
     public void DeselectObjects()
     {
+        if (activeObject)
+        {
+            var a = activeObject;
+            Exit(activeObject);
+            activeObject = a;
+        }
         if (clickedObject)
         {
             clickedObject.selected = false;
@@ -651,10 +657,12 @@ public class GridTiles : MonoBehaviour
                 case ControlMode.deconstruct:
                     cur = cursors[0];
                     vec = new(15f, 15f);
+                    Enter(activeObject);
                     break;
                 case ControlMode.dig:
                     cur = cursors[1];
                     vec = new(1, 16f);
+                    Enter(activeObject);
                     break;
                 case ControlMode.build:
                     cur = default;

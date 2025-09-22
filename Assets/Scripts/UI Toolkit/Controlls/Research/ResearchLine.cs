@@ -6,6 +6,8 @@ namespace ResearchUI
     [UxmlElement]
     public partial class ResearchLine : VisualElement
     {
+        public const int WIDTH = 7;
+        public const int BORDER = 2;
         public const string FILLED_LINE_CLASS = "line-filled";
         public ResearchLine() { }
         public ResearchLine(Rect rect)
@@ -15,6 +17,9 @@ namespace ResearchUI
             style.top = rect.y;
             style.width = rect.width;
             style.height = rect.height;
+
+            style.borderLeftWidth = 2;
+            style.borderRightWidth = 2;
         }
 
 

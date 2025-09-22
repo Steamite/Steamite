@@ -109,14 +109,15 @@ public class ResAmmount<T> : ResAmmountBase where T : System.Enum
         int i = types.IndexOf(type);
         if (i == -1)
         {
-            Debug.LogError($"{type} not present in this fluid: {this}, adding");
+            Debug.LogWarning($"{type} not present in this res: {this}");
+            return 0;
         }
         else
             ammounts[i] -= change;
         return change;
     }
 
-    public void Manage(ResAmmount<T> resAmmount, bool add, int mod = 1, bool removeEmpty = false)
+    public void Manage(ResAmmount<T> resAmmount, bool add, float mod = 1, bool removeEmpty = false)
     {
         for (int i = resAmmount.types.Count - 1; i > -1; i--)
             ManageSimple(resAmmount.types[i], resAmmount.ammounts[i], add, mod, removeEmpty);

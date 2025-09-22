@@ -9,13 +9,9 @@ namespace ResearchUI
         public ResearchHorizontalLine horizontalLine;
         public ResearchDownLine() { }
 
-        public ResearchDownLine(Rect rect, ResearchHorizontalLine _horizontalLine)
+        public ResearchDownLine(Rect rect, ResearchHorizontalLine _horizontalLine) : base(rect)
         {
             AddToClassList("line");
-            style.left = rect.x;
-            style.top = rect.y;
-            style.width = rect.width;
-            style.height = rect.height;
             horizontalLine = _horizontalLine;
         }
         public override void Fill()

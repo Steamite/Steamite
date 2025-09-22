@@ -32,7 +32,7 @@ public class Tick : MonoBehaviour
     /// <seealso href="../../../Documentation/Time scale.xlsx">
     /// Time scale table.
     /// </seealso>
-    [Header("Tick speed")][SerializeField] float ticksPerHour = 4;
+    [Header("Tick speed")][SerializeField] int ticksPerHour = 4;
     /// <summary>Progresses time by this(60/<see cref="ticksPerHour"/>).</summary>
     private int minutesPerTick;
     public static int MinutesPerTick = 15;
@@ -146,7 +146,12 @@ public class Tick : MonoBehaviour
     /// <returns>Time since the start of the week.</returns>
     public int GetWeekTime()
     {
-        return (numberOfDays % 7 * 1440) + timeInMinutes;
+        return ((numberOfDays % 7 * 24) + timeInMinutes / 60) * ticksPerHour;
+    }
+
+    public int GetWeekTimeFull()
+    {
+        return ((7 * 24) + timeInMinutes / 60) * ticksPerHour;
     }
     #endregion
 

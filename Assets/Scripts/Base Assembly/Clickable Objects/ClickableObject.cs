@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,11 @@ using UnityEngine.UIElements;
 //[RequireComponent(typeof(Rigidbody))]
 public abstract class ClickableObject : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler,
-    IPointerDownHandler, IPointerUpHandler, IUpdatable
+    IPointerDownHandler, IPointerUpHandler, IUpdatable, INameChangable
 {
     [HideInInspector]
     [Obsolete("Use objectName not name", true)]
+    [JsonIgnore]
     public new string name;
 
     /// <summary>Bind event for updating.</summary>
@@ -28,6 +30,7 @@ public abstract class ClickableObject : MonoBehaviour,
 
     public string objectName;
 
+    public string Name { get => objectName; set => objectName = value; }
     #region Object Operations
     /// <summary>
     /// Compares by <see cref="id"/> and name.
@@ -152,7 +155,7 @@ public abstract class ClickableObject : MonoBehaviour,
         if (selected)
         {
             InfoWindow info = SceneRefs.InfoWindow;
-            info.header.text = objectName;
+            info.header.Open(this);
             return info;
         }
         Debug.LogWarning($"Object \"{this}\" not selected, why open window?");

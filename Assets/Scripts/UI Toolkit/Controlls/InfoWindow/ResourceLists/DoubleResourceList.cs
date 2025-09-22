@@ -52,8 +52,6 @@ namespace InfoWindowElements
         where TEnum : Enum
     {
         [CreateProperty] List<UIResource<TEnum>> secondResource;
-        /// <summary>Display as x/y or x (y).</summary>
-        [UxmlAttribute] public bool cost;
 
         [UxmlAttribute] public bool useBindings;
 
@@ -69,13 +67,16 @@ namespace InfoWindowElements
             useBindings = true;
         }
 
-        public DoubleResourceList(bool _cost, string _name, bool _useBindings = false) : base()
+        public DoubleResourceList(bool _cost, string _name, bool _useBindings = false, bool center = true) : base()
         {
             style.height = 85;
             style.alignContent = Align.Center;
             VisualElement content = this.Q<VisualElement>("unity-content-container");
-            content.style.flexGrow = 1;
-            content.style.justifyContent = Justify.Center;
+            if (center)
+            {
+                content.style.flexGrow = 1;
+                content.style.justifyContent = Justify.Center;
+            }
             cost = _cost;
             name = _name;
             useBindings = _useBindings;
@@ -94,16 +95,15 @@ namespace InfoWindowElements
         protected Label noneLabel;
 
         #region Init
-
-        protected void SetResWithoutBinding(Resource res)
+        protected override void SetResWithoutBinding(T res)
         {
             List<UIResource<TEnum>> temp = new List<UIResource<TEnum>>();
-            if (res is MoneyResource && showMoney && ((MoneyResource)res).Money > 0)
-                temp.Add(new DoubleUIResource<TEnum>(MyRes.Money, +((MoneyResource)res).Money));
+            if (res is MoneyResource money && showMoney && money.Money > 0)
+                temp.Add(new DoubleUIResource<TEnum>(MyRes.Money, +money.Money));
             for (int i = 0; i < res.types.Count; i++)
             {
                 temp.Add(new DoubleUIResource<TEnum>(
-                    MyRes.resDataSource.GlobalResources[res.types[i]], res.ammounts[i], (TEnum)(object)res.types[i]));
+                    MyRes.resDataSource.GlobalResources[(ResourceType)(object)res.types[i]], res.ammounts[i], (TEnum)(object)res.types[i]));
             }
             resources = temp;
         }

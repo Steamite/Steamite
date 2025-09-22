@@ -76,7 +76,19 @@ public class Quest : DataObject, IUpdatable
     {
         QuestController questController = controller as QuestController;
         if(save != null)
+        {
             timeToFail = save.timeToFail;
+            if (save.state == QuestState.Active)
+            {
+                questController.activeQuests.Add(this);
+                state = QuestState.Active;
+            }
+            else
+            {
+                questController.finishedQuests.Add(this);
+                state = save.state;
+            }
+        }
         for (int i = 0; i < objectives.Count; i++)
         {
             objectives[i].Load(save != null ? save.currentProgress[i] : 0, this, questController);
@@ -84,17 +96,6 @@ public class Quest : DataObject, IUpdatable
         for (int i = 0; i < rewards.Count; i++)
         {
             rewards[i].Init();
-        }
-
-        if (save == null || save.state == QuestState.Active)
-        {
-            questController.activeQuests.Add(this);
-            state = QuestState.Active;
-        }
-        else
-        {
-            questController.finishedQuests.Add(this);
-            state = save.state;
         }
     }
 
@@ -217,7 +218,7 @@ public class Order : Quest
         }
         else
         {
-            (controller as OrderController).CreateOrderChoice(this);
+            timeToFail = -1;
         }
     }
 
@@ -241,6 +242,13 @@ public class Order : Quest
     public Order(Quest quest) : base(quest)
     {
 
+    }
+    public Order(OrderChoiceSave save)
+    {
+        TimeToFail = save.timeToFail;
+        objectives.Add(new ResourceObjective(save.resources));
+        penalties.Add(new TrustPenalty(save.penalty));
+        rewards.Add(new TrustReward(save.gain));
     }
 }
 

@@ -1,0 +1,7 @@
+.unty-enum-field__input {
+    background-color: var(--interactable);
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+}

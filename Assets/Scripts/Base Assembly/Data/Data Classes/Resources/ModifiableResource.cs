@@ -11,7 +11,7 @@ using UnityEngine;
 public class ModifiableResource : Resource, IModifiable
 {
     /// <summary>Template resource</summary>
-    [SerializeField] Resource baseResource = new Resource();
+    [SerializeField] protected Resource baseResource = new Resource();
 
 #if UNITY_EDITOR
     /// <inheritdoc cref="baseResource"/>

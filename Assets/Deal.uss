@@ -32,7 +32,7 @@ SliderInt #unity-tracker {
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
-    top: 22px;
+    top: 11px;
 }
 
 SliderInt #unity-fill {
@@ -52,14 +52,14 @@ SliderInt #unity-dragger {
     border-right-width: 2px;
     border-bottom-width: 2px;
     border-left-width: 2px;
-    height: 50%;
+    height: 26px;
     width: 6%;
     background-color: var(--interactable);
     border-top-color: var(--border);
     border-right-color: var(--border);
     border-bottom-color: var(--border);
     border-left-color: var(--border);
-    top: 29px;
+    top: 20px;
 }
 
 SliderInt #unity-dragger:hover {

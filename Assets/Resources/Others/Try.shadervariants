@@ -7,4 +7,22 @@ ShaderVariantCollection:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Try
-  m_Shaders: {}
+  m_Shaders:
+  - first: {fileID: -6465566751694194690, guid: f63d574838ccfb44f84acc05fed0af48, type: 3}
+    second:
+      variants: []
+  - first: {fileID: -6465566751694194690, guid: 7b613dda5d1296a45b2575d0d6486d1d, type: 3}
+    second:
+      variants: []
+  - first: {fileID: -6465566751694194690, guid: 8267f3a9ee43d344b91e3517f901cc0b, type: 3}
+    second:
+      variants: []
+  - first: {fileID: -6465566751694194690, guid: 20f9974544fa35d4eb40e2393b185a5b, type: 3}
+    second:
+      variants: []
+  - first: {fileID: -6465566751694194690, guid: 85633e5e0f6bdcf4682f71d41277f1d4, type: 3}
+    second:
+      variants: []
+  - first: {fileID: -6465566751694194690, guid: d6c276380a27bac4fa186376d146f372, type: 3}
+    second:
+      variants: []

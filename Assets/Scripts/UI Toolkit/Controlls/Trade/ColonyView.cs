@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using TradeData.Locations;
 using TradeData.Stats;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace TradeWindowElements
 {
     [UxmlElement]
-    public partial class ColonyView : VisualElement, IInitiableUI
+    public partial class ColonyView : TradeMapViewBase, IInitiableUI
     {
         #region Variables
         VisualTreeAsset statAsset;
@@ -34,13 +35,15 @@ namespace TradeWindowElements
         {
             CreateStats(0, UIRefs.TradingWindow.colonyLocation.stats);
             CreateStats(1, UIRefs.TradingWindow.colonyLocation.production);
-            style.display = DisplayStyle.None;
         }
 
         void CreateStats(int i, List<ColonyStat> stats)
         {
             if (statAsset == null)
+            {
+                Debug.LogError("NO Asset");
                 return;
+            }
             VisualElement statGroup = ElementAt(i).ElementAt(1);
             statGroup.AddToClassList("stat-group");
 
@@ -111,12 +114,12 @@ namespace TradeWindowElements
             RefreshStates();
         }
 
-        public string Open()
+        public override object Open(int _ = 0)
         {
-            style.display = DisplayStyle.Flex;
+            base.Open();
             RefreshStates();
 
-            return UIRefs.TradingWindow.colonyLocation.name;
+            return UIRefs.TradingWindow.colonyLocation;
         }
 
         void RefreshStates()
@@ -126,16 +129,11 @@ namespace TradeWindowElements
             VisualElement statGroup = ElementAt(0).ElementAt(1);
 
             int i = 0;
-            location.stats.ForEach(q => RefreshStat(q, statGroup.ElementAt(i++).ElementAt(0).ElementAt(1), q.CanAfford()));
+            location.stats.ForEach(q => RefreshStat(q, statGroup[i++][0][1], q.CanAfford()));
 
             statGroup = ElementAt(1).ElementAt(1);
             i = 0;
-            location.production.ForEach(q => RefreshStat(q, statGroup.ElementAt(i++).ElementAt(0).ElementAt(1), q.CanAfford()));
-        }
-
-        public void Hide()
-        {
-            style.display = DisplayStyle.None;
+            location.production.ForEach(q => RefreshStat(q, statGroup[i++][0][1], q.CanAfford()));
         }
     }
 }

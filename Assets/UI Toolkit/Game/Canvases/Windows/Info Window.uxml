@@ -4,8 +4,9 @@
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Info%20window.uss?fileID=7433441132597879392&amp;guid=4aace8491f3a9d54d9fc0b08e0d01660&amp;type=3#Info window" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
     <engine:VisualElement name="Info-Window" class="info-window">
-        <engine:VisualElement name="Bar" style="flex-grow: 1; height: 10%; flex-direction: row; border-top-left-radius: 3px; border-top-right-radius: 3px; max-height: 10%;">
-            <engine:Label text="Research Tower" name="Header" style="-unity-text-align: middle-center; width: 85%; height: 100%; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 45px; letter-spacing: 0; white-space: pre-wrap; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+        <engine:VisualElement name="Bar" style="flex-grow: 1; height: 10%; flex-direction: row; border-top-left-radius: 3px; border-top-right-radius: 3px; max-height: 10%; justify-content: space-between;">
+            <TextFieldLabel style="width: 85%; display: flex;" />
+            <engine:Label text="Research Tower" name="Header" style="-unity-text-align: middle-center; width: 85%; height: 100%; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 45px; letter-spacing: 0; white-space: pre-wrap; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; display: none;" />
             <engine:Button icon-image="project://database/Assets/Sprites/Icons/Info%20window/Cancel.png?fileID=2800000&amp;guid=a038df6f8c235ab42ac4da953bbda40d&amp;type=3#Cancel" name="Close" class="close-button" />
         </engine:VisualElement>
         <engine:VisualElement name="Body" style="flex-grow: 1; justify-content: flex-start; -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/fonts/OpenSans/OpenSans-Bold&apos;); display: flex;" />

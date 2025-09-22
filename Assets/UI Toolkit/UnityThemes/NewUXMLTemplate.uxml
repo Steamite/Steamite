@@ -1,4 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/Styles/UnitySelectors.uss?fileID=7433441132597879392&amp;guid=3468915a4f8821544854e970a313de3c&amp;type=3#UnitySelectors" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Global/UnitySelectors.uss?fileID=7433441132597879392&amp;guid=3468915a4f8821544854e970a313de3c&amp;type=3#UnitySelectors" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Global/Tabs.uss?fileID=7433441132597879392&amp;guid=4c79c96faa59f9648bdf9637cb8b9b65&amp;type=3#Tabs" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Global/Bars.uss?fileID=7433441132597879392&amp;guid=37573887a41b64b4cb432a706b996a31&amp;type=3#Bars" />
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/EnumFields.uss?fileID=7433441132597879392&amp;guid=ac7089baa58760749b4c48a5a9265607&amp;type=3#EnumFields" />
 </ui:UXML>

@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UIElements;
 
 /// <summary>All groups of objects that can be inspected. For switching info window views.</summary>
@@ -61,13 +59,14 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     //public ResourceSkins resourceSkins;
 
     /// <summary>Info window text header.</summary>
-    public Label header;
+    public IUIElement header;
     /// <summary>Info window itself.</summary>
     public VisualElement window;
     public VisualElement windowBody;
 
-
     TabView buildingTabView;
+
+    public static bool CanZoom = true;
 
     #region Construction View
     Label constructionStateLabel;
@@ -86,7 +85,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     #endregion
 
     /// <summary>Fills all control references.</summary>
-    public async Task Init()
+    public async Task BeforeInit()
     {
         //activeBindings = new();
         lastInfo = InfoMode.None;
@@ -96,8 +95,9 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
 
         window.style.display = DisplayStyle.None;
 
-        header = window.Q<Label>("Header");
-        header.parent.Q<Button>("Close").RegisterCallback<ClickEvent>((_) => SceneRefs.GridTiles.DeselectObjects());
+        VisualElement bar = window[0];
+        header = bar[0] as IUIElement;
+        bar.Q<Button>("Close").RegisterCallback<ClickEvent>((_) => SceneRefs.GridTiles.DeselectObjects());
     }
 
     #region Reseting Bindings
@@ -107,6 +107,10 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     /// <param name="hide">Defauly true, if true hide the window.</param>
     public void Close(bool hide = true)
     {
+        window.UnregisterCallback<MouseEnterEvent>(MyOnMouseEnter);
+        window.UnregisterCallback<MouseLeaveEvent>(MyOnMouseExit);
+        CanZoom = true;
+
         if (hide)
             window.style.display = DisplayStyle.None;
         windowBody.Clear();
@@ -139,6 +143,8 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                 break;
 
             case InfoMode.Building:
+                window.RegisterCallback<MouseEnterEvent>(MyOnMouseEnter);
+                window.RegisterCallback<MouseLeaveEvent>(MyOnMouseExit);
                 Building building = (Building)dataSource;
                 if (!building.constructed || building.deconstructing)
                 {
@@ -173,6 +179,18 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                 Close();
                 break;
         }
+    }
+
+    private void MyOnMouseEnter(MouseEnterEvent evt)
+    {
+        CanZoom = false;
+        Debug.Log("Cant " + evt.currentTarget);
+    }
+
+    private void MyOnMouseExit(MouseLeaveEvent evt)
+    {
+        CanZoom = true;
+        Debug.Log("Can " + evt.currentTarget);
     }
 
     public void CreateBuildingControls(Dictionary<string, List<string>> controlsToCreate, Building building)
