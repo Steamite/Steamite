@@ -38,7 +38,7 @@ public static class MyRes
         resDataSource = SceneRefs.Stats.GetComponent<ResourceDisplay>();
     }
     /// <summary>
-    /// Starting function for the resource system.
+    /// Starting function for the resource system, fills the display resources from storages, chunks and human Inventories.
     /// </summary>
     /// <param name="setupStorages"></param>
     public static void ActivateResources()
@@ -60,6 +60,10 @@ public static class MyRes
             foreach(Chunk chunk in MyGrid.chunks)
             {
                 resDataSource.GlobalResources.Manage(chunk.LocalRes, true);
+            }
+            foreach(Human human in SceneRefs.Humans.GetHumen())
+            {
+                resDataSource.GlobalResources.Manage(human.Inventory, true);
             }
             resDataSource.UIUpdate(nameof(ResourceDisplay.GlobalResources));
             resDataSource.UIUpdate(nameof(ResourceDisplay.Money));

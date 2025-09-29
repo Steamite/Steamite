@@ -236,7 +236,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         Human human = Instantiate(
             specialPrefabs.GetPrefab<Human>("Human"),
             save.gridPos.ToVec(HUMAN_OFFSET),
-            Quaternion.identity,
+            Quaternion.Euler(0, save.rotation, 0),
             SceneRefs.Humans.transform.GetChild(parent));
         human.Load(save);
         return human;

@@ -66,6 +66,10 @@ public static class HumanActions
             if (job.interest != null)
                 Rotate(h, job.interest.GetPos());
             h.Decide();
+            if (h.Job.path.Count == 0 && h.Job.job != JobState.Free)
+            {
+                h.DoRepetableAction();
+            }
         }
     }
 
