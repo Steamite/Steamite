@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 [UxmlElement]
 public partial class TimeButtons : CustomRadioButtonGroup
 {
-    [UxmlAttribute] List<int> speedStates = new() { 0, 1, 2, 3 };
+    List<int> speedStates = new() { 0, 1, 2, 5 };
     [UxmlAttribute][Range(0, 3)] int startState;
     public TimeButtons() : base()
     {
@@ -24,19 +24,20 @@ public partial class TimeButtons : CustomRadioButtonGroup
             }
             Add(button);
         }
-        SetChangeCallback((i) => SceneRefs.Tick.ChangeGameSpeed(speedStates[SelectedChoice]));
+        SetChangeCallback(
+            (i) => SceneRefs.Tick.ChangeGameSpeed(speedStates[SelectedChoice]));
     }
 
     public void Start()
     {
         SelectedChoice = 0;
-        ((CustomRadioButton)ElementAt(startState)).SelectWithoutTransition(false);
+        buttons[startState].SelectWithoutTransition(false);
     }
 
     public void OutsideTrigger(int i)
     {
         if (SelectedChoice == 0 && i == 0)
             i = speedStates.IndexOf(Convert.ToInt32(Tick.LastSpeed));
-        ((CustomRadioButton)ElementAt(i)).Select();
+        buttons[i].Select();
     }
 }

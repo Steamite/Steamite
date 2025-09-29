@@ -7,6 +7,7 @@ namespace AbstractControls
     public partial class CustomRadioButton : Button
     {
         public bool IsSelected { get; protected set; }
+        /// <summary>Can be deselected</summary>
         bool toggle;
         public int selIndex;
 

@@ -19,7 +19,6 @@ namespace RadioGroups
         }
         public override void AddButton(CustomRadioButton button)
         {
-            Add(button);
             button.style.fontSize = 65;
             button.style.height = new Length(14, LengthUnit.Percent);
             base.AddButton(button);

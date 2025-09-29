@@ -4,11 +4,14 @@ using UnityEngine.UIElements;
 using Outposts;
 using TradeWindowElements;
 using System.Linq;
+using AbstractControls;
 
 [UxmlElement]
 public partial class OutpostView : TradeMapViewBase
 {
+    [UxmlAttribute] Texture2D resetIcon;
     Outpost outpost;
+
     int outpostIndex;
     public TradeMap map;
     public OutpostView()
@@ -76,12 +79,8 @@ public partial class OutpostView : TradeMapViewBase
         view.Add(tab = new("Stored"));
         container = tab.contentContainer;
         container.AddToClassList("view");
-        container.Add(costListLabel = new($"Storage ({outpost.storedResources.Sum()}/{outpost.storedResources.capacity})"));
-        costListLabel.AddToClassList("level-label");
-        container.Add(resourceList = new() { name = "stored", cost = false, showEmpty = true });
-        resourceList.Open(outpost);
-
-
+        container.Add(new OutpostTradeElem(outpost, resetIcon));
+        
         Add(view);
     }
 
@@ -130,12 +129,14 @@ public partial class OutpostView : TradeMapViewBase
             {
                 if ((ResourceType)(object)ev.newValue == 0)
                 {
+                    unlockButton.RemoveFromClassList("main-button");
                     unlockButton.AddToClassList("disabled-button");
                     unlockButton.enabledSelf = false;
                 }
                 else
                 {
                     unlockButton.AddToClassList("main-button");
+                    unlockButton.RemoveFromClassList("disabled-button");
                     unlockButton.enabledSelf = true;
                 }
             });

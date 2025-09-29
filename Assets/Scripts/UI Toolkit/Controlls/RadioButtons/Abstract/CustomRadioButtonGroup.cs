@@ -63,6 +63,7 @@ namespace AbstractControls
 
         public virtual void AddButton(CustomRadioButton button)
         {
+            Add(button);
             buttons.Add(button);
         }
         #endregion

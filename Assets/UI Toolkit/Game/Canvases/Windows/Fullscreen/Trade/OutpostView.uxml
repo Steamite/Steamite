@@ -1,4 +1,4 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/OutpostView.uss?fileID=7433441132597879392&amp;guid=dcef004934bfded4884ee8c163dfd1b3&amp;type=3#OutpostView" />
-    <OutpostView style="flex-grow: 1;" />
+    <OutpostView reset-icon="project://database/Assets/Sprites/Icons/research/cogwheal.png?fileID=2800000&amp;guid=0a64256dbb3187142a217b36d4257949&amp;type=3#cogwheal" style="flex-grow: 1;" />
 </ui:UXML>

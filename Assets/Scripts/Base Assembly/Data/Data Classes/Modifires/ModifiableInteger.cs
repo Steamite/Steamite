@@ -65,4 +65,10 @@ public class ModifiableInteger : IModifiable
     {
         return base.GetHashCode();
     }
+
+    public void ChangeBaseVal(int v)
+    {
+        baseValue = v;
+        RecalculateMod();
+    }
 }

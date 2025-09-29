@@ -14,7 +14,17 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
     #region Const
     public const int CONVOY_STORAGE_LIMIT = 50;
     public const int CONVOY_SPEED = 10;
-    public int maxConvoy = 3;
+    public int MAX_CONVOYS = 3;
+
+    public readonly static Dictionary<ResourceType, int> RESOURCE_COSTS = new()
+    {
+        {ResourceType.None, 0},
+        {ResourceType.Coal, 3},
+        {ResourceType.Metal, 7},
+        {ResourceType.Stone, 10},
+        {ResourceType.Food, 15},
+        {ResourceType.Wood, 12},        
+    };
     #endregion
 
     #region Variables
@@ -34,7 +44,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
     #endregion
 
     #region Properties
-    public int AvailableConvoy => maxConvoy - convoys.Count;
+    public int AvailableConvoy => MAX_CONVOYS - convoys.Count;
     public bool ConvoyOnRoute(int locationIndex) => convoys.Count(q => q.tradeLocation == locationIndex) == 1;
     public void RemoveConvoy(TradeConvoy convoy) => convoys.Remove(convoy);
     public List<TradeConvoy> GetConvoys() => convoys;
@@ -71,12 +81,14 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
             if (item.buildInProgress)
             {
                 SceneRefs.Tick.SubscribeToEvent(
-                    () =>
-                    {
-                        item.ProgressBuilding();
-                    },
+                    item.ProgressBuilding,
                     Tick.TimeEventType.Ticks);
             }
+            else if(item.exists && item.production.Sum() != 0)
+            {
+                SceneRefs.Tick.SubscribeToEvent(item.MakeWeekProduction, Tick.TimeEventType.Week);
+            }
+
         }
 
 
