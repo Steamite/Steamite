@@ -58,15 +58,14 @@ public static class PathFinder
         if (plan.index > -1)
         {
             ClickableObject interest = objects[plan.index];
-            Building b = interest.GetComponent<Building>();
-            if (b)
+            if (interest is Building b && interest is not Pipe)
             {
-                if (interest is not Pipe && (MyGrid.GetGridItem(_start).id != b.id && plan.foundNormaly))
+                // creates last building step(uses start pos if there are no path nodes)
+                if (MyGrid.GetGridItem(_start) != b && plan.foundNormaly)
                     plan.path.Add(BuildingStep(plan.path.Count > 0 ? plan.path[^1] : _start, b.gameObject, 1));
             }
-            else
+            else if(interest is Rock rock)
             {
-                Rock rock = interest.GetComponent<Rock>();
                 if (rock)
                 {
                     plan.path.RemoveAt(plan.path.Count - 1);

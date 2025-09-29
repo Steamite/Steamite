@@ -188,6 +188,7 @@ public class Human : ClickableObject
             clickable = new HumanSave();
         (clickable as HumanSave).color = new(transform.GetChild(1).GetComponent<MeshRenderer>().material.color); // saves color of hat
         (clickable as HumanSave).gridPos = GetPos();
+        (clickable as HumanSave).rotation = transform.rotation.eulerAngles.y;
         (clickable as HumanSave).jobSave = new(jData, destination);
         (clickable as HumanSave).jobSave.destinationID = destination ? destination.id : -1;
         //(clickable as HumanSave).jobSave.destType = ;// = destination ? destination.id : -1;
@@ -209,6 +210,7 @@ public class Human : ClickableObject
         Inventory = new(20);
         SetJob(new JobData(s.jobSave, this));
         Inventory.Manage(s.inventory, true);
+
         specialization = s.specs;
         // house assigment
         if (s.houseID != -1)

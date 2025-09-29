@@ -245,6 +245,7 @@ public class HumanSave : ClickableObjectSave
     // Data mainly for loading
     public MyColor color;
     public GridPos gridPos;
+    public float rotation;
     // Job use
     public JobSave jobSave;
     public Resource inventory;
