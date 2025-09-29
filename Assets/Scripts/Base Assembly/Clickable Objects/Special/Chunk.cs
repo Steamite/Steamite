@@ -1,4 +1,6 @@
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -38,7 +40,29 @@ public class Chunk : StorageObject
         if (gameObject)
         {
             (clickable as ChunkSave).resColor = new MyColor(transform.GetChild(1).GetComponent<MeshRenderer>().material.color);
-            return base.Save(clickable);
+            base.Save(clickable);
+            /*ChunkSave save = clickable as ChunkSave;
+            if (save.resSave.Requests.Count > 0)
+            {
+                Resource resource = new();
+                foreach (var item in save.resSave.Requests[0].types)
+                {
+                    resource.ManageSimple(item, save.resSave.Requests[0][item], true);
+                }
+                //save.resSave.ammounts[0] -= 1;
+                save.resSave.Requests[0] = new(save.resSave.Requests[0].types.ToList(), save.resSave.Requests[0].ammounts.Select(q => q).ToList());
+                try
+                {
+                    Debug.Log(JsonConvert.SerializeObject(save.resSave.Requests, Formatting.Indented));
+                }
+                catch(Exception e)
+                {
+                    Debug.LogError("can't serialize: " + e);
+                }
+            }*/
+
+            Debug.Log((clickable as StorageObjectSave).resSave.Requests.Count);
+            return clickable;
         }
         return null;
     }
@@ -99,12 +123,13 @@ public class Chunk : StorageObject
     /// <inheritdoc/>
     /// Also updates UI.
     /// </summary>
-    /// <param name="request"><inheritdoc/></param>
+    /// <param name="resource"><inheritdoc/></param>
     /// <param name="h"><inheritdoc/></param>
     /// <param name="mod"><inheritdoc/></param>
-    public override void RequestRes(Resource request, Human h, int mod)
+    public override void RequestRes(Resource resource, Human h, int mod)
     {
-        base.RequestRes(request, h, mod);
+        resource = new Resource(resource);
+        base.RequestRes(resource, h, mod);
         UIUpdate(nameof(LocalRes));
     }
 

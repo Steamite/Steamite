@@ -1,7 +1,8 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-[Serializable]
+[Serializable, JsonObject]
 public class Resource : ResAmmount<ResourceType>
 {
     #region Constructors
@@ -37,5 +38,17 @@ public class Resource : ResAmmount<ResourceType>
         resource.Manage(bonusInventory, true);
         Resource a = resource.Diff(cost);
         return a;
+    }
+
+    public override bool Equals(object _resource)
+    {
+        if (_resource is not Resource)
+            return false;
+        return base.Equals(_resource);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(base.GetHashCode(), types, ammounts);
     }
 }

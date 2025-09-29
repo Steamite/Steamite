@@ -1,7 +1,9 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,6 +15,45 @@ public struct Save
     public ResearchSave research;
     public TradeSave trade;
     public QuestControllerSave quests;
+}
+
+class LoggingResolver : DefaultContractResolver
+{
+    protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+    {
+        var prop = base.CreateProperty(member, memberSerialization);
+        if(prop.PropertyName == "requests")
+        {
+            Debug.Log($"Property: {prop.PropertyName}, Ignored: {prop.Ignored}");
+            var originalProvider = prop.ValueProvider;
+            prop.ValueProvider = new LoggingValueProvider(originalProvider, prop.PropertyName);
+
+        }
+        return prop;
+    }
+}
+class LoggingValueProvider : IValueProvider
+{
+    private readonly IValueProvider _original;
+    private readonly string _name;
+
+    public LoggingValueProvider(IValueProvider original, string name)
+    {
+        _original = original;
+        _name = name;
+    }
+
+    public object GetValue(object target)
+    {
+        var value = _original.GetValue(target);
+        Debug.Log($"Serializing '{_name}': value = {value}");
+        return value;
+    }
+
+    public void SetValue(object target, object value)
+    {
+        _original.SetValue(target, value);
+    }
 }
 
 
@@ -58,8 +99,13 @@ public class SaveController : MonoBehaviour, IAfterLoad
         JsonSerializer jsonSerializer = new();
         jsonSerializer.TypeNameHandling = TypeNameHandling.All;
         jsonSerializer.Formatting = Formatting.Indented;
-        jsonSerializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        // Check inheritance and Equals, it can mess thing us a bit.
+        // If object A has a field of type B : A, and Equals is returns true, newtonsoft detects a self reference.
+        jsonSerializer.ReferenceLoopHandling = ReferenceLoopHandling.Error;
         jsonSerializer.DefaultValueHandling = DefaultValueHandling.Include;
+        jsonSerializer.NullValueHandling = NullValueHandling.Include;
+
+        jsonSerializer.ContractResolver = new LoggingResolver();
         return jsonSerializer;
     }
     #endregion

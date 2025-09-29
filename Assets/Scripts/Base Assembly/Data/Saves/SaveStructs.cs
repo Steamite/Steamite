@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -261,7 +262,8 @@ public class HumanSave : ClickableObjectSave
 [Serializable]
 public class StorageResSave : Resource
 {
-    public List<Resource> requests;
+    [JsonProperty, JsonRequired] public List<Resource> Requests { get; set; }
+
     public List<int> carriers;
     public List<int> mod;
 
@@ -269,13 +271,24 @@ public class StorageResSave : Resource
     {
         types = storageResource.types.ToList();
         ammounts = storageResource.ammounts.ToList();
-        requests = storageResource.requests.ToList();
+        Requests = storageResource.requests.ToList();
         carriers = storageResource.carriers.Select(q => q.id).ToList();
         mod = storageResource.mods.ToList();
     }
     public StorageResSave()
     {
 
+    }
+    public override bool Equals(object _resource)
+    {
+        if (_resource is not StorageResSave)
+            return false;
+        return base.Equals(_resource);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(base.GetHashCode(), types, ammounts, Requests, carriers, mod);
     }
 }
 [Serializable]

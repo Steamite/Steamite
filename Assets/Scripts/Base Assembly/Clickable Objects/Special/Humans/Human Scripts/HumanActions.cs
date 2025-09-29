@@ -237,7 +237,7 @@ public static class HumanActions
                 List<Building> missingProgress = new();
                 foreach (var building in jobQueue.constructions)
                 {
-                    if (!building.LocalRes.Future().Equals(building.Cost) && building.constructed == false)
+                    if (!building.LocalRes.Future().Same(building.Cost) && building.constructed == false)
                     {
                         missingResoucerces.Add(building);
                     }

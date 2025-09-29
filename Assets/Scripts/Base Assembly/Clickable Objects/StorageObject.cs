@@ -61,9 +61,9 @@ public abstract class StorageObject : ClickableObject
     }
 
     /// <inheritdoc cref="StorageResource.AddRequest(Resource, Human, int)"/>
-    public virtual void RequestRes(Resource request, Human human, int mod)
+    public virtual void RequestRes(Resource resource, Human human, int mod)
     {
-        localRes.AddRequest(request, human, mod);
+        localRes.AddRequest(resource, human, mod);
     }
     /// <inheritdoc cref="StorageResource.LinkHuman(Human)"/>
     public virtual void TryLink(Human h)

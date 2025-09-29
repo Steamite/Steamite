@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,14 +7,14 @@ using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
 /// <summary>Game resources.</summary>
-[Serializable]
+[Serializable, JsonObject]
 public class ResAmmount<T> : ResAmmountBase where T : System.Enum
 {
     #region Variables
     /// <summary>Resource types here, coresponds to the <see cref="ammounts"/>.</summary>
-    public List<T> types;
+    [JsonProperty, JsonRequired] public List<T> types;
     /// <summary>Resource ammounts here, coresponds to the <see cref="types"/>.</summary>
-    public List<int> ammounts;
+    [JsonProperty, JsonRequired] public List<int> ammounts;
     #endregion
 
     #region Constructors
@@ -57,6 +58,25 @@ public class ResAmmount<T> : ResAmmountBase where T : System.Enum
         }
         return true;
     }
+
+    /// <summary>
+    /// Checks if the types and ammounts in two resources are the same, using insed of Equals because of types.
+    /// </summary>
+    /// <param name="resAmmount">Resource to Compare.</param>
+    /// <returns>If the types and ammounts are identical.</returns>
+    public bool Same(ResAmmount<T> resAmmount)
+    {
+        for (int i = 0; i < types.Count; i++)
+        {
+            int x = resAmmount.types.IndexOf(types[i]);
+            if (x == -1)
+                return false;
+            if (ammounts[i] != resAmmount.ammounts[x])
+                return false;
+        }
+        return true;
+    }
+
     public override int GetHashCode() { return base.GetHashCode(); }
     public override string ToString()
     {

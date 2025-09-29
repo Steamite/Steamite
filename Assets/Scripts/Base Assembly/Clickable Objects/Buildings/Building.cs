@@ -178,7 +178,7 @@ public class Building : StorageObject
         UIUpdate(nameof(LocalRes));
         if (localRes.requests[index].Sum() == 0)
         {
-            if (!constructed && localRes.Equals(cost))
+            if (!constructed && localRes.Same(cost))
             {
                 human.SetJob(JobState.Constructing);
                 localRes.mods[index] = 0;
