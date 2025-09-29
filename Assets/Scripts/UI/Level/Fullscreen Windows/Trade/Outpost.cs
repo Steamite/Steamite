@@ -76,8 +76,8 @@ namespace Outposts
 
         public int level;
         /// <summary>
-        /// <para>If <see cref="exists"/> is false marks start date of production, <br/>
-        /// else shows how much time is left until finishing the upgrade.</para>
+        /// If <see cref="exists"/> is false marks start date of production, <br/>
+        /// else shows how much time is left until finishing the upgrade.
         /// </summary>
         public int timeToFinish;
         public bool exists;
@@ -138,10 +138,15 @@ namespace Outposts
                 trade.transform.GetChild(0).GetChild(2).GetChild(trade.outposts.Count-1).GetChild(0).GetComponent<Image>().color = trade.availableColor;*/
             }
             else
-                storedResources.capacity.BaseValue = (level + 1) * 10;
+                storedResources.capacity.ChangeBaseVal((level + 1) * 10);
 
             production.ManageSimple(outpostLevels[level], resourceAmmount[outpostLevels[level]], true); // upgrades the production
             level++;
+            for (int i = 0; i < level; i++)
+            {
+                if (!storedResources.types.Contains(outpostLevels[i]))
+                    storedResources.ManageSimple(outpostLevels[i], 0, true);
+            }
             timeToFinish = SceneRefs.Tick.GetWeekTime(); // marks the finished time
             SceneRefs.Tick.SubscribeToEvent(MakeWeekProduction, Tick.TimeEventType.Week);
         }

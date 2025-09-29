@@ -49,3 +49,66 @@ TabView {
 Tab {
     flex-grow: 1;
 }
+
+OutpostTradeElem {
+    flex-grow: 1;
+    width: 100%;
+    align-items: center;
+}
+
+#button-group {
+    flex-direction: row;
+    justify-content: center;
+    min-width: 100%;
+    flex-grow: 0;
+    align-items: flex-start;
+    align-self: flex-start;
+}
+
+.choice-button {
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: var(--border);
+    border-right-color: var(--border);
+    border-top-color: var(--border);
+    border-bottom-color: var(--border);
+    background-color: var(--interactable);
+    transition-duration: 0.2s;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 55px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    min-width: 55px;
+    -unity-background-image-tint-color: var(--text-primary);
+    padding-top: 0;
+    padding-bottom: 0;
+    background-size: 75% 75%;
+}
+
+.choice-button:hover {
+    background-color: var(--hover);
+    color: var(--text-hover);
+    transition-duration: 0.2s;
+    -unity-background-image-tint-color: var(--text-hover);
+}
+
+.choice-button-selected {
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: var(--border);
+    border-right-color: var(--border);
+    border-top-color: var(--border);
+    border-bottom-color: var(--border);
+    background-color: var(--selected);
+    color: var(--text-secondary);
+    transition-duration: 0.2s;
+    padding-right: 5px;
+    padding-left: 5px;
+}

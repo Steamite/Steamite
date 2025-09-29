@@ -343,7 +343,7 @@ namespace TradeWindowElements
                     BuyMoney);
                 Open(selectedLocationIndex);
 
-                map.convoyLabel.text = $"{UIRefs.TradingWindow.AvailableConvoy}/{UIRefs.TradingWindow.maxConvoy} Convoyes";
+                map.convoyLabel.text = $"{UIRefs.TradingWindow.AvailableConvoy}/{UIRefs.TradingWindow.MAX_CONVOYS} Convoyes";
                 slider.RemoveFromClassList("free");
                 slider.AddToClassList("trading");
             }

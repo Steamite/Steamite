@@ -102,7 +102,7 @@ namespace InfoWindowElements
         {
             itemTemplate = Resources.Load<VisualTreeAsset>("UI Toolkit/Resource Text Icon");
             itemsSource = new List<UIResource<TEnum>>();
-            focusable = false;
+            //focusable = false;
 
             makeItem = MakeItem;
             bindItem = BindItem;

@@ -9,6 +9,9 @@ using UnityEngine.UIElements;
 public class SceneRefs : MonoBehaviour
 {
     #region Variables
+
+    [SerializeField] DictionaryTest test;
+
     public static bool isInit => instance != null;
     static SceneRefs instance;
     [Header("GridObjects")]

@@ -179,13 +179,12 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             Quaternion.identity,
             MyGrid.FindLevelRocks(gp.y));
         rock.Load(save);
-        if (rock.rockYield != null)
+        if (rock.rockYield != null && rock.rockYield.Sum() > 0)
         {
             MinableRes res = resData.FirstOrDefault(q => q.name == save.objectName);
-            if (res != null)
-                rock.GetComponent<MeshRenderer>().material.SetColor("_Normal_Color", res.color);
-            else
-                rock.GetComponent<MeshRenderer>().material = dirtMat;
+            if (res == null)
+                res = resData.FirstOrDefault(q => q.name == rock.rockYield.types[rock.rockYield.ammounts.IndexOf(rock.rockYield.ammounts.Max())].ToString());
+            rock.GetComponent<MeshRenderer>().material.SetColor("_Normal_Color", res.color);
         }
         else
             rock.ColorWithIntegrity();

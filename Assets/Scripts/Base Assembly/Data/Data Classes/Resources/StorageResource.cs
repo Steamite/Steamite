@@ -9,6 +9,7 @@ public class StorageResource : CapacityResource
     #region Variables
     Resource futureCashe;
     bool casheValid = false;
+    //public DictionaryTest requests;
     /// <summary>All resources that were requested(store && take).</summary>
     public List<Resource> requests;
     /// <summary>All carriers for resouces.</summary>

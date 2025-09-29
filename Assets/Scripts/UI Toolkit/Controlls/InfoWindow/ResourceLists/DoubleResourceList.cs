@@ -135,13 +135,13 @@ namespace InfoWindowElements
                     resource.ammounts[i],
                     resource.types[i]));
 
-            return BindingUtil.CreateBinding(propName);
+            return propName.CreateBinding();
         }
 
         protected DataBinding SetupResTypes(T resource, string secondPropName, string propName, object data)
         {
             DataBinding mainBind = SetupResTypes(resource, propName);
-            DataBinding dataBinding = BindingUtil.CreateBinding(secondPropName);
+            DataBinding dataBinding = secondPropName.CreateBinding();
             dataBinding.sourceToUiConverters.AddConverter((ref ModifiableResource secRes) => UpdateSecondResource(secRes));
             SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(secondResource)), dataBinding, data);
             return mainBind;

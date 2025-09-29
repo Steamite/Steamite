@@ -13,15 +13,9 @@ public static class BindingUtil
     /// </summary>
     /// <param name="varName">Name of property on source.</param>
     /// <returns>Created binding.</returns>
-    public static DataBinding CreateBinding(string varName)
-    {
-        return new DataBinding
-        {
-            dataSourcePath = new PropertyPath(varName),
-            bindingMode = BindingMode.ToTarget
-        };
+    public static DataBinding CreateBinding(this string str)
+        => new DataBinding() { dataSourcePath = new PropertyPath(str), bindingMode = BindingMode.ToTarget };
 
-    }
     public static Vector2Int ToInt(this Vector2 vec)
         => new Vector2Int(Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.y));
 
@@ -30,12 +24,9 @@ public static class BindingUtil
     public static int Random(this Vector2 vec)
         => Mathf.RoundToInt(UnityEngine.Random.Range(vec.x, vec.y));
 
-    public static DataBinding CreateBindingTest(this string str)
-        => new DataBinding() { dataSourcePath = new PropertyPath(str), bindingMode = BindingMode.ToTarget };
-
     public static DataBinding SetBinding(this VisualElement element, string sourceProp, string targetProp, object dataSource = null)
     {
-        DataBinding dataBinding = sourceProp.CreateBindingTest();
+        DataBinding dataBinding = sourceProp.CreateBinding();
         if (dataSource != null)
             element.dataSource = dataSource;
         element.SetBinding(targetProp, dataBinding);
@@ -52,7 +43,7 @@ public static class BindingUtil
 
     public static DataBinding SetBinding<TSource,TDestination>(this VisualElement element, string sourceProp, string targetProp, TypeConverter<TSource, TDestination> convertor, object dataSource = null)
     {
-        DataBinding dataBinding = sourceProp.CreateBindingTest();
+        DataBinding dataBinding = sourceProp.CreateBinding();
         if (dataSource != null)
             element.dataSource = dataSource;
 

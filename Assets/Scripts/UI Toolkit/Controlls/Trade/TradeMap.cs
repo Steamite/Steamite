@@ -183,7 +183,7 @@ namespace TradeWindowElements
         public void Open(object data)
         {
             locationButtons[0].Select();
-            convoyLabel.text = $"{UIRefs.TradingWindow.AvailableConvoy}/{UIRefs.TradingWindow.maxConvoy} Convoyes";
+            convoyLabel.text = $"{UIRefs.TradingWindow.AvailableConvoy}/{UIRefs.TradingWindow.MAX_CONVOYS} Convoyes";
 
             Slider slider;
             foreach (TradeConvoy tradeConvoy in (List<TradeConvoy>)data)
