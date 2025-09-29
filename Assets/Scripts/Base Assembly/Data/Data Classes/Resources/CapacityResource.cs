@@ -7,7 +7,7 @@ using UnityEngine;
 public class CapacityResource : Resource
 {
     /// <summary>Capacity in this resource (-1 means there's no limit)</summary>
-    [SerializeField][CreateProperty] public ModifiableInteger capacity;
+    [SerializeField, CreateProperty] public ModifiableInteger capacity;
 
     [JsonIgnore]
     public int FreeSpace
@@ -30,5 +30,17 @@ public class CapacityResource : Resource
     {
         capacity = new(baseCapacity);
         ((IModifiable)capacity).Init();
+    }
+
+    public override bool Equals(object _resource)
+    {
+        if (_resource is not CapacityResource)
+            return false;
+        return base.Equals(_resource);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(base.GetHashCode(), types, ammounts, capacity, FreeSpace);
     }
 }

@@ -9,7 +9,6 @@ public class StorageResource : CapacityResource
     #region Variables
     Resource futureCashe;
     bool casheValid = false;
-    //public DictionaryTest requests;
     /// <summary>All resources that were requested(store && take).</summary>
     public List<Resource> requests;
     /// <summary>All carriers for resouces.</summary>
@@ -135,14 +134,7 @@ public class StorageResource : CapacityResource
         int index = carrierIDs.FindIndex(q => q == h.id);
         if (index > -1)
         {
-            if (carriers.Count <= index)
-            {
-                carriers.Add(h);
-            }
-            else
-            {
-                carriers.Insert(index, h);
-            }
+            carriers[index] = h;
         }
     }
 
@@ -150,12 +142,16 @@ public class StorageResource : CapacityResource
     {
         types = resSave.types;
         ammounts = resSave.ammounts;
-        requests = resSave.requests;
+        requests = resSave.Requests;
         mods = resSave.mod;
-        if (mods.Count == 1 && requests.Count == 0)
+        if (mods.Count == 1 && mods[0] == 0 && requests.Count == 0)
             requests.Add(new());
-        carriers = new();
         carrierIDs = resSave.carriers.ToList();
+        carriers = new();
+        for (int i = 0; i < carrierIDs.Count; i++)
+        {
+            carriers.Add(null);
+        }
     }
 
     public void Dump()
@@ -164,7 +160,47 @@ public class StorageResource : CapacityResource
         ammounts.Clear();
     }
 
-    public bool HasNoCarriers() 
+    public bool HasNoCarriers()
         => mods.Count == 0;
     #endregion
+
+    public override bool Equals(object _resource)
+    {
+        if(_resource is not StorageResource _res)
+            return false;
+
+        foreach (var item in _res.requests)
+        {
+            if (!requests.Contains(item))
+                return false;
+        }
+        foreach (var item in _res.carriers)
+        {
+            if (!carriers.Contains(item))
+                return false;
+        }
+        foreach (var item in _res.mods)
+        {
+            if (!mods.Contains(item))
+                return false;
+        }
+        return base.Equals(_resource);
+    }
+
+    public override int GetHashCode()
+    {
+        HashCode hash = new HashCode();
+        hash.Add(base.GetHashCode());
+        hash.Add(types);
+        hash.Add(ammounts);
+        hash.Add(capacity);
+        hash.Add(FreeSpace);
+        hash.Add(futureCashe);
+        hash.Add(casheValid);
+        hash.Add(requests);
+        hash.Add(carriers);
+        hash.Add(carrierIDs);
+        hash.Add(mods);
+        return hash.ToHashCode();
+    }
 }

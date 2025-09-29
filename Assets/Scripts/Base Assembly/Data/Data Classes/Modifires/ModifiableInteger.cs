@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using UnityEngine;
 
@@ -6,13 +7,13 @@ using UnityEngine;
 public class ModifiableInteger : IModifiable
 {
 #if UNITY_EDITOR
-    public int BaseValue { get => baseValue; set => baseValue = value; }
+    [JsonIgnore] public int BaseValue { get => baseValue; set => baseValue = value; }
 #endif
-    [SerializeField] protected int baseValue;
+    [SerializeField, JsonProperty] protected int baseValue;
 
     public int currentValue;
-    public ModValue Modifier { get => mod; set => mod = value; }
-    [SerializeField] ModValue mod;
+    [JsonIgnore] public ModValue Modifier { get => mod; set => mod = value; }
+    [SerializeField, JsonProperty] ModValue mod;
 
     public override string ToString()
     {

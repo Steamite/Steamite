@@ -61,7 +61,6 @@ public static class PathFinder
             Building b = interest.GetComponent<Building>();
             if (b)
             {
-                Pipe p = interest.GetComponent<Pipe>();
                 if (interest is not Pipe && (MyGrid.GetGridItem(_start).id != b.id && plan.foundNormaly))
                     plan.path.Add(BuildingStep(plan.path.Count > 0 ? plan.path[^1] : _start, b.gameObject, 1));
             }
