@@ -5,15 +5,20 @@ using Outposts;
 using TradeWindowElements;
 using System.Linq;
 using AbstractControls;
+using System;
 
 [UxmlElement]
 public partial class OutpostView : TradeMapViewBase
 {
     [UxmlAttribute] Texture2D resetIcon;
+    [UxmlAttribute] VisualTreeAsset resText;
     Outpost outpost;
 
     int outpostIndex;
     public TradeMap map;
+    VisualElement lvlBonus; 
+    Button unlockButton;
+    
     public OutpostView()
     {
     }
@@ -37,7 +42,7 @@ public partial class OutpostView : TradeMapViewBase
         constructionView.Add(progress = new());
         progress.AddToClassList("construction-bar");
         progress.lowValue = 0;
-        int time = Outpost.upgradeCosts[outpost.level].timeInTicks;
+        int time = Outpost.UpgradeCosts[outpost.level].timeInTicks;
         progress.highValue = time;
         time -= outpost.timeToFinish;
         progress.value = time;
@@ -71,7 +76,7 @@ public partial class OutpostView : TradeMapViewBase
         container.AddToClassList("view");
         container.Add(costListLabel = new("Production per week"));
         costListLabel.AddToClassList("level-label");
-        container.Add(resourceList = new() { name = "cost", cost = true});
+        container.Add(resourceList = new() { name = "cost", cost = true, style = { flexGrow = 0 } });
         resourceList.Open(outpost);
         CreateUpgradeOutpost(container);
 
@@ -88,7 +93,7 @@ public partial class OutpostView : TradeMapViewBase
     {
         EnumField enumField;
         DoubleResList costList;
-        Button unlockButton;
+        
 
         VisualElement newView = new() 
         {
@@ -104,7 +109,17 @@ public partial class OutpostView : TradeMapViewBase
 
 
         newView.Add(costList = new(true, "cost") { showMoney = true });
-        costList.Open(Outpost.upgradeCosts[outpost.level].resource);
+        costList.Open(Outpost.UpgradeCosts[outpost.level].resource);
+
+
+        resText.CloneTree(newView);
+        lvlBonus = newView.Q<VisualElement>("ResText");
+        lvlBonus.style.position = Position.Absolute;
+        lvlBonus.style.bottom = 150;
+        lvlBonus.style.maxHeight = StyleKeyword.None;
+        lvlBonus.style.minWidth = new Length(82, LengthUnit.Percent);
+        enumField.RegisterValueChangedCallback(BonusTextUpdate);
+        BonusTextUpdate(null);
 
         newView.Add(unlockButton = new()
         {
@@ -125,21 +140,7 @@ public partial class OutpostView : TradeMapViewBase
         unlockButton.AddToClassList("disabled-button");
         if (outpost.CanAffordUpgrade())
         {
-            enumField.RegisterValueChangedCallback((ev) =>
-            {
-                if ((ResourceType)(object)ev.newValue == 0)
-                {
-                    unlockButton.RemoveFromClassList("main-button");
-                    unlockButton.AddToClassList("disabled-button");
-                    unlockButton.enabledSelf = false;
-                }
-                else
-                {
-                    unlockButton.AddToClassList("main-button");
-                    unlockButton.RemoveFromClassList("disabled-button");
-                    unlockButton.enabledSelf = true;
-                }
-            });
+            enumField.RegisterValueChangedCallback(UnlockButtonUpdates);
             unlockButton.clicked += () => CreateOutpost(enumField);
             unlockButton.text = "Construct";
         }
@@ -149,6 +150,45 @@ public partial class OutpostView : TradeMapViewBase
         }
 
         newView.style.display = DisplayStyle.Flex;
+    }
+
+    void BonusTextUpdate(ChangeEvent<Enum> ev)
+    {
+        Label l = lvlBonus.Q<Label>("Value");
+        VisualElement el = lvlBonus.Q<VisualElement>("Icon");
+        ResourceType type = ResourceType.None;
+        if (ev != null)
+            type = (ResourceType)(object)ev.newValue;
+        l.style.flexGrow = 1;
+        if (type == ResourceType.None)
+        {
+            l.text = "Chose an upgrade!";
+            l.style.unityTextAlign = TextAnchor.MiddleCenter;
+            el.style.display = DisplayStyle.None;
+        }
+        else
+        {
+            l.text = $"{Outpost.ResourceAmmount[type]} per week";
+            l.style.unityTextAlign = TextAnchor.MiddleLeft;
+            el.style.unityBackgroundImageTintColor = ToolkitUtils.resSkins.GetResourceColor(type);
+            el.style.display = DisplayStyle.Flex;
+        }
+    }
+
+    void UnlockButtonUpdates(ChangeEvent<Enum> ev)
+    {
+        if ((ResourceType)(object)ev.newValue == 0)
+        {
+            unlockButton.RemoveFromClassList("main-button");
+            unlockButton.AddToClassList("disabled-button");
+            unlockButton.enabledSelf = false;
+        }
+        else
+        {
+            unlockButton.AddToClassList("main-button");
+            unlockButton.RemoveFromClassList("disabled-button");
+            unlockButton.enabledSelf = true;
+        }
     }
 
     public override object Open(int i)

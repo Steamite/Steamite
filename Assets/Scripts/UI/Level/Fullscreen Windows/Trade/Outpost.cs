@@ -21,7 +21,7 @@ namespace Outposts
     [Serializable]
     public class Outpost : Location
     {
-        public static Dictionary<ResourceType, int> resourceCosts = new()
+        public static Dictionary<ResourceType, int> ResourceCosts = new()
         {
             { ResourceType.Coal,  1 },
             { ResourceType.Metal, 2 },
@@ -29,7 +29,7 @@ namespace Outposts
             { ResourceType.Food,  1 },
         };
 
-        public static Dictionary<ResourceType, int> resourceAmmount = new()
+        public static Dictionary<ResourceType, int> ResourceAmmount = new()
         {
             { ResourceType.Coal, 10 },
             { ResourceType.Metal, 7 },
@@ -38,7 +38,7 @@ namespace Outposts
             { ResourceType.Wood, 10 },
         };
 
-        public static List<UpgradeCost> upgradeCosts = new()
+        public static List<UpgradeCost> UpgradeCosts = new()
         {
             new
             (
@@ -110,8 +110,8 @@ namespace Outposts
         public void StartUpgrade(ResourceType selectedType)
         {
             buildInProgress = true;
-            timeToFinish = upgradeCosts[level].timeInTicks;
-            MyRes.PayCostGlobal(upgradeCosts[level].resource);
+            timeToFinish = UpgradeCosts[level].timeInTicks;
+            MyRes.PayCostGlobal(UpgradeCosts[level].resource);
             outpostLevels[level] = selectedType;
 
             if (level == 0)
@@ -140,7 +140,7 @@ namespace Outposts
             else
                 storedResources.capacity.ChangeBaseVal((level + 1) * 10);
 
-            production.ManageSimple(outpostLevels[level], resourceAmmount[outpostLevels[level]], true); // upgrades the production
+            production.ManageSimple(outpostLevels[level], ResourceAmmount[outpostLevels[level]], true); // upgrades the production
             level++;
             for (int i = 0; i < level; i++)
             {
@@ -153,7 +153,7 @@ namespace Outposts
 
         public bool CanAffordUpgrade()
         {
-            return MyRes.CanAfford(upgradeCosts[level].resource);
+            return MyRes.CanAfford(UpgradeCosts[level].resource);
         }
 
         public void ProgressBuilding()
