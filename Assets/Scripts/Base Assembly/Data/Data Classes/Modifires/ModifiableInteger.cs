@@ -22,6 +22,7 @@ public class ModifiableInteger : IModifiable
 
     public void RecalculateMod()
     {
+        Modifier ??= new();
         currentValue = Mathf.RoundToInt(baseValue * Modifier.percentMod) + Modifier.absoluteMod;
     }
     public ModifiableInteger() { }

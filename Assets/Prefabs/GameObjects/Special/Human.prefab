@@ -57,6 +57,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -78,6 +80,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -452,7 +455,25 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7391123706670551783, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: -6804469265102284190, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: -3464447691518478215, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: -3768335451558095894, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: 4684390326973862164, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: -7051163082655987573, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: 1862683380592654404, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: -1736294561448580372, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: 3182244660871480619, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: 8658824473193787452, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: 408049022270894267, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: 7620017723207915458, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: -3580291308652068606, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: 5632671735974963340, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: 577170780505423089, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: -808966925217029657, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: -3551323520603649674, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+    - {fileID: -6884044502620614228, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
@@ -465,6 +486,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1473993148650924280}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2061501062767528191}
     - targetCorrespondingSourceObject: {fileID: -5317621499353570459, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2852740110440792222}
@@ -529,6 +553,38 @@ MonoBehaviour:
   lookingForAJob: 0
   home: {fileID: 0}
   destination: {fileID: 0}
+  inventory:
+    types: 
+    ammounts: 
+    capacity:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
+--- !u!136 &2061501062767528191
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5575513171907906685}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 1.2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &8616891365706748489 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5317621499353570459, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
@@ -611,14 +667,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
-  m_LightLayerMask: 1
-  m_RenderingLayers: 1
   m_CustomShadowLayers: 0
-  m_ShadowLayerMask: 1
-  m_ShadowRenderingLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
