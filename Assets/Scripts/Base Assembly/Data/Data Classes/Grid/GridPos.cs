@@ -98,5 +98,11 @@ public class GridPos
             Debug.LogError("Probably wrong assigment");
         return new(x, z);
     }
+
+    public static GridPos operator +(GridPos a, GridPos b)
+        => new GridPos(a.x + b.x, a.z + b.z);
+
+    public static GridPos operator -(GridPos a, GridPos b)
+        => new GridPos(a.x - b.x, a.z - b.z);
     #endregion
 }

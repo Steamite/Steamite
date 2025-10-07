@@ -106,7 +106,9 @@ public class Chunk : StorageObject
                 }
                 else
                 {
-                    if (HumanActions.HandleJobTypes(SceneRefs.JobQueue, h, JobState.Cleanup))
+                    // If no other chunks were found try to find a storage.
+                    // Else collect the other chunks.
+                    if (!HumanActions.HandleJobTypes(SceneRefs.JobQueue, h, JobState.Cleanup))
                         FindS(h);
                 }
             }

@@ -23,6 +23,10 @@ MonoBehaviour:
       id: 15011832
       b: {fileID: -4896197024522523346, guid: 83179e38183e2cf4280bd1d2d0600fe8, type: 3}
       preview: {fileID: 21300000, guid: 032dbbcad04145d4ab75a1c8aa050db4, type: 3}
+    - Name: 
+      id: 277555999
+      b: {fileID: 2608198296355501892, guid: 72c10e4b0dc8a754fa35ae545bdfda96, type: 3}
+      preview: {fileID: 21300000, guid: 844559dcf93745c499f6f30a2b1dd430, type: 3}
     Icon: {fileID: 5923138177525885446, guid: e9d58580ef70b7744addd1ff255f07aa, type: 3}
   - Name: Production
     Objects:
