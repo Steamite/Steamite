@@ -39,7 +39,6 @@ public interface IAssign
                     human.SetJob(JobState.FullTime, job.interest);
                 human.Decide();
                 human.lookingForAJob = false;
-
             }
             else
             {

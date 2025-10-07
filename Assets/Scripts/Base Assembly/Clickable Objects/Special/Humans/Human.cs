@@ -208,10 +208,6 @@ public class Human : ClickableObject
         id = save.id;
         objectName = save.objectName;
         Inventory = new(20);
-        SetJob(new JobData(s.jobSave, this));
-        Inventory.Manage(s.inventory, true);
-
-        specialization = s.specs;
         // house assigment
         if (s.houseID != -1)
             MyGrid.Buildings.Where(q => q.id == s.houseID).
@@ -221,6 +217,11 @@ public class Human : ClickableObject
         if (s.workplaceId != -1)
             MyGrid.Buildings.Where(q => q.id == s.workplaceId).
                 SingleOrDefault().GetComponent<IAssign>().ManageAssigned(this, true);
+        SetJob(new JobData(s.jobSave, this));
+        Inventory.Manage(s.inventory, true);
+        specialization = s.specs;
+
+        
 
         base.Load(save);
     }
@@ -269,7 +270,10 @@ public class Human : ClickableObject
         switch (jData.job)
         {
             case JobState.Free:
-                HumanActions.LookForNew(this);
+                if (workplace != null)
+                    Idle();
+                else
+                    HumanActions.LookForNew(this);
                 break;
             case JobState.Digging:
                 ChangeAction(HumanActions.Dig);
@@ -299,25 +303,57 @@ public class Human : ClickableObject
     /// <summary>Gets the Main <see cref="Elevator"/> and if the Human isn't there move to it, else set free state.</summary>
     public void Idle()
     {
-        GridPos pos = GetPos();
-        ClickableObject el = MyGrid.GetLevelElevator(pos.y);// ClickableObject el = Elevator.main;
-        if (!el.GetPos().Equals(pos)) // if not standing on the elevator
+        if(workplace == null)
         {
-            JobData data = PathFinder.FindPath(new() { el }, this);
-            data.job = JobState.Free;
-            if (data.interest != null)
+            GridPos pos = GetPos();
+            Elevator el = MyGrid.GetLevelElevator(pos.y);// ClickableObject el = Elevator.main;
+            if (!el.IsInside(pos)) // if not standing on the elevator
             {
-                data.interest = null;
-                SetJob(data);
+                JobData data = PathFinder.FindPath(new() { el }, this);
+                data.job = JobState.Free;
+                if (data.interest != null)
+                {
+                    data.interest = null;
+                    SetJob(data);
+                }
+                return;
             }
-            return;
+            if (jData.job != JobState.Free)
+            {
+                SetJob(JobState.Free, path: new());
+            }
+            else
+                ChangeAction(null);
         }
-        if (jData.job != JobState.Free)
+        else if (workplace is AssignHut hut)
         {
-            SetJob(JobState.Free, path: new());
+            if(hut is DiggerHut)
+            {
+                if (!HumanActions.FindRockToDig(this))
+                {
+                    if (!hut.IsInside(GetPos()))
+                    {
+                        JobData data = PathFinder.FindPath(new() { hut }, this);
+                        data.job = JobState.FullTime;
+                        if (data.interest != null)
+                        {
+                            data.interest = null;
+                            SetJob(data);
+                        }
+                        Debug.Log("Going home!");
+                    }
+                    else
+                    {
+                        ChangeAction((_) => Idle());
+                    }
+                }
+            }
+            else if(hut is BuilderHut)
+            {
+                //if()
+            }
+            
         }
-        else
-            ChangeAction(null);
     }
     #endregion
 

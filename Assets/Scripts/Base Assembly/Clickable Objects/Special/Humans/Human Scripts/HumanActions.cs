@@ -99,10 +99,11 @@ public static class HumanActions
     /// <param name="h"><inheritdoc cref="Move(Human)"/></param>
     public static void Dig(Human h)
     {
-        if (h.Job.interest.GetComponent<Rock>().DamageRock(digSpeed * h.Efficiency))
+        if ((h.Job.interest as Rock).DamageRock(digSpeed * h.Efficiency))
         {
             SceneRefs.JobQueue.CancelJob(JobState.Digging, h.Job.interest); // removes job order
-            h.SetJob(JobState.Free);
+            if(FindRockToDig(h) == false)
+                h.SetJob(JobState.Free);
         }
     }
     #endregion
@@ -114,9 +115,9 @@ public static class HumanActions
     /// <param name="h"></param>
     public static void DoProduction(Human h)
     {
-        if (h.workplace != null)
+        if (h.workplace is IProduction prod)
         {
-            ((IProduction)h.workplace).ProgressProduction(h.Efficiency * productionSpeed);
+            prod.ProgressProduction(h.Efficiency * productionSpeed);
         }
         else
         {
@@ -201,7 +202,7 @@ public static class HumanActions
             // go throuh the jobs according to priority
             foreach (JobState j in jobQueue.priority)
             {
-                if (!HandleJobTypes(jobQueue, h, j))
+                if (HandleJobTypes(jobQueue, h, j))
                     return;
             }
         }
@@ -221,19 +222,13 @@ public static class HumanActions
     /// <param name="jobQueue"></param>
     /// <param name="h"></param>
     /// <param name="j"></param>
-    /// <returns></returns>
+    /// <returns>True if job was found and assigned.</returns>
     public static bool HandleJobTypes(JobQueue jobQueue, Human h, JobState j)
     {
         switch (j)
         {
             case JobState.Digging:
-                // find toBeDug with no assigned workers
-                if (FindInterests(jobQueue.toBeDug.Where(q => q.Assigned == null), h, j)) // if found
-                {
-                    h.Job.interest.GetComponent<Rock>().Assigned = h;
-                    return false;
-                }
-                break;
+                return FindRockToDig(h);
             case JobState.Constructing:
                 if (jobQueue.constructions.Count == 0)
                     break;
@@ -253,7 +248,7 @@ public static class HumanActions
                 if (FindInterests(missingProgress, h, j))
                 {
                     h.Job.interest.GetComponent<Building>().RequestRes(new(), h, 0);
-                    return false;
+                    return true;
                 }
 
                 // builds that are missing resources to progress further
@@ -266,7 +261,7 @@ public static class HumanActions
                 if (FindInterests(jobQueue.deconstructions.Where(q => q.LocalRes.carriers.Count == 0), h, j))
                 {
                     h.Job.interest.GetComponent<Building>().RequestRes(new(), h, 0);
-                    return false;
+                    return true;
                 }
                 break;
             case JobState.Pickup:
@@ -288,13 +283,13 @@ public static class HumanActions
                         {
                             h.destination.RequestRes(r, h, 1);
                             pickupObject.RequestRes(r, h, -1);
-                            return false;
+                            return true;
                         }
                     }
                 break;
             case JobState.Supply:
                 if (FilterBuilds(jobQueue.supplyNeeded.Select(q => (Building)q), h, j))
-                    return false;
+                    return true;
                 break;
             case JobState.Cleanup:
                 if (MyRes.globalStorageSpace == 0)
@@ -313,7 +308,7 @@ public static class HumanActions
                             chunkStorage,
                             h.Inventory.capacity - h.Inventory.Sum());
                         chunk.RequestRes(toMove, h, -1);
-                        return false;
+                        return true;
                     }
                 }
                 break;
@@ -321,7 +316,7 @@ public static class HumanActions
             default:
                 break;
         }
-        return true;
+        return false;
     }
 
     static bool FilterBuilds(IEnumerable<Building> constructions, Human h, JobState j)
@@ -335,20 +330,36 @@ public static class HumanActions
     }
 
     /// <summary>
+    /// Tries to find a rock that's available for digging.
+    /// </summary>
+    /// <param name="h">Human that's looking.</param>
+    /// <returns>If the a rock was found and assigned to the human.</returns>
+    public static bool FindRockToDig(Human h)
+    {
+        // find toBeDug with no assigned workers
+        if (FindInterests(SceneRefs.JobQueue.toBeDug.Where(q => q.Assigned == null), h, JobState.Digging)) // if found
+        {
+            (h.Job.interest as Rock).Assigned = h;
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
     /// finds the closest build
     /// </summary>
     /// <param name="constructions"></param>
     /// <param name="h"></param>
-    /// <param name="jobs"></param>
+    /// <param name="job"></param>
     /// <returns></returns>
-    static bool FindInterests(IEnumerable<ClickableObject> interests, Human h, JobState jobs)
+    static bool FindInterests(IEnumerable<ClickableObject> interests, Human h, JobState job)
     {
         if (interests.Count() > 0)
         {
             JobData data = PathFinder.FindPath(interests.ToList(), h);
             if (data.interest)
             {
-                data.job = jobs;
+                data.job = job;
                 h.SetJob(data);
                 h.lookingForAJob = false;
                 return true;

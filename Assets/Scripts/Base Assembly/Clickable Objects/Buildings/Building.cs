@@ -57,7 +57,7 @@ public class Building : StorageObject
     /// <summary>Creates a new unique id not present in <see cref="MyGrid.buildings"/></summary>
     public override void UniqueID() => CreateNewId(MyGrid.Buildings.Select(q => q.id).ToList());
     /// <summary>
-    /// Calculates positio using the anchor from <see cref="blueprint"/>.
+    /// Calculates anchor position (<see cref="blueprint"/>).
     /// </summary>
     /// <returns><inheritdoc/></returns>
     public override GridPos GetPos()
@@ -68,6 +68,25 @@ public class Building : StorageObject
             (transform.position.y - 1) / 2,
             transform.position.z - pos.z);
     }
+
+    public virtual bool IsInside(GridPos pos)
+    {
+        GridPos buildAnchor = GetPos();
+        pos = pos - buildAnchor;
+        for (int i = 0; i < blueprint.itemList.Count; i++)
+        {
+            NeededGridItem item = blueprint.itemList[i];
+            if (item.itemType == GridItemType.Road || item.itemType == GridItemType.Anchor)
+            {
+                GridPos tileOffset = MyGrid.Rotate(item.pos, transform.rotation.eulerAngles.y);
+                if (tileOffset.x == pos.x && tileOffset.z == pos.z)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     #endregion
 
     #region Window
@@ -76,7 +95,7 @@ public class Building : StorageObject
     /// Also toggle contsructed view, and other child elements.
     /// </summary>
     /// <returns><inheritdoc/></returns>
-    public override InfoWindow OpenWindow()
+    public sealed override InfoWindow OpenWindow()
     {
         // DEBUG_Binding Common init
         // Opens the info window (if selected) and switches what is displayed.
