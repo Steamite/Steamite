@@ -340,7 +340,7 @@ public class Human : ClickableObject
                             data.interest = null;
                             SetJob(data);
                         }
-                        Debug.Log("Going home!");
+                        Debug.Log("Going to work(dig)!");
                     }
                     else
                     {
@@ -350,7 +350,24 @@ public class Human : ClickableObject
             }
             else if(hut is BuilderHut)
             {
-                //if()
+                if (!HumanActions.FindBuildingsToConstruct(this))
+                {
+                    if (!hut.IsInside(GetPos()))
+                    {
+                        JobData data = PathFinder.FindPath(new() { hut }, this);
+                        data.job = JobState.FullTime;
+                        if (data.interest != null)
+                        {
+                            data.interest = null;
+                            SetJob(data);
+                        }
+                        Debug.Log("Going to work(construct)!");
+                    }
+                    else
+                    {
+                        ChangeAction((_) => Idle());
+                    }
+                }
             }
             
         }

@@ -228,33 +228,12 @@ public static class HumanActions
         switch (j)
         {
             case JobState.Digging:
-                return FindRockToDig(h);
+                Debug.Log("nope - can't Dig");
+                //return FindRockToDig(h);
+                break;
             case JobState.Constructing:
-                if (jobQueue.constructions.Count == 0)
-                    break;
-                List<Building> missingResoucerces = new();
-                List<Building> missingProgress = new();
-                foreach (var building in jobQueue.constructions)
-                {
-                    if (!building.LocalRes.Future().Same(building.Cost) && building.constructed == false)
-                    {
-                        missingResoucerces.Add(building);
-                    }
-                    else if (building.LocalRes.HasNoCarriers())
-                        missingProgress.Add(building);
-                }
-
-                // builds that are only missing progress not resources
-                if (FindInterests(missingProgress, h, j))
-                {
-                    h.Job.interest.GetComponent<Building>().RequestRes(new(), h, 0);
-                    return true;
-                }
-
-                // builds that are missing resources to progress further
-                if (FilterBuilds(missingResoucerces, h, j))
-                    return false;
-
+                Debug.Log("nope - can't construct");
+                //return FindBuildingsToConstruct(h);
                 break;
             case JobState.Deconstructing:
                 // deconstructions with no workers assigned
@@ -333,7 +312,7 @@ public static class HumanActions
     /// Tries to find a rock that's available for digging.
     /// </summary>
     /// <param name="h">Human that's looking.</param>
-    /// <returns>If the a rock was found and assigned to the human.</returns>
+    /// <returns>If a rock was found and assigned to the human.</returns>
     public static bool FindRockToDig(Human h)
     {
         // find toBeDug with no assigned workers
@@ -342,6 +321,41 @@ public static class HumanActions
             (h.Job.interest as Rock).Assigned = h;
             return true;
         }
+        return false;
+    }
+
+    /// <summary>
+    /// Tries to find a builing that needs resources or to be build.
+    /// </summary>
+    /// <param name="h">Human that's looking.</param>
+    /// <returns>If a suitable Building was found and assigned.</returns>
+    public static bool FindBuildingsToConstruct(Human h)
+    {
+        JobQueue jobQueue = SceneRefs.JobQueue;
+        if (jobQueue.constructions.Count == 0)
+            return false;
+        List<Building> missingResoucerces = new();
+        List<Building> missingProgress = new();
+        foreach (var building in jobQueue.constructions)
+        {
+            if (!building.Cost.Same(building.LocalRes.Future()) && building.constructed == false)
+            {
+                missingResoucerces.Add(building);
+            }
+            else if (building.LocalRes.HasNoCarriers())
+                missingProgress.Add(building);
+        }
+
+        // builds that are only missing progress not resources
+        if (FindInterests(missingProgress, h, JobState.Constructing))
+        {
+            (h.Job.interest as Building).RequestRes(new(), h, 0);
+            return true;
+        }
+
+        // builds that are missing resources to progress further
+        if (FilterBuilds(missingResoucerces, h, JobState.Constructing))
+            return true;
         return false;
     }
 

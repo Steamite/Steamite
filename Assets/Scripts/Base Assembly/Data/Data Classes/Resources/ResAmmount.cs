@@ -66,15 +66,19 @@ public class ResAmmount<T> : ResAmmountBase where T : System.Enum
     /// <returns>If the types and ammounts are identical.</returns>
     public bool Same(ResAmmount<T> resAmmount)
     {
-        for (int i = 0; i < types.Count; i++)
+        if(types.Count == resAmmount.types.Count)
         {
-            int x = resAmmount.types.IndexOf(types[i]);
-            if (x == -1)
-                return false;
-            if (ammounts[i] != resAmmount.ammounts[x])
-                return false;
+            for (int i = 0; i < types.Count; i++)
+            {
+                int x = resAmmount.types.IndexOf(types[i]);
+                if (x == -1)
+                    return false;
+                if (ammounts[i] != resAmmount.ammounts[x])
+                    return false;
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     public override int GetHashCode() { return base.GetHashCode(); }

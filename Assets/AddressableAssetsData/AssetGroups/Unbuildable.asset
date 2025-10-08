@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Unbuildable
   m_GUID: fa8b07218e3cbdb43a8ce56bea5e7713
   m_SerializeEntries:
+  - m_GUID: 536a01e898b1b0447a4eec2490ee9b55
+    m_Address: Builder
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 71bc824f1e11fc64c845f79a3091520d
     m_Address: Dummy
     m_ReadOnly: 0
