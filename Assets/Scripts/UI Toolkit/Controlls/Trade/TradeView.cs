@@ -181,7 +181,7 @@ namespace TradeWindowElements
             else
                 dateLabel.text = $"{time*24:F1} h";
             if (map == null)
-                map = parent.parent[1][0] as TradeMap;
+                map = parent.parent.parent.Q<TradeMap>();
             return selectedLocation;
         }
 
@@ -201,7 +201,7 @@ namespace TradeWindowElements
                 else
                 {
                     deal = deal.ElementAt(0);
-                    deal.ElementAt(0).style.unityBackgroundImageTintColor = ToolkitUtils.resSkins.GetResourceColor(tradeDeals[i].type);
+                    deal.ElementAt(0).style.unityBackgroundImageTintColor = tradeDeals[i].type.color;
 
                     SliderInt slider = (SliderInt)deal.ElementAt(1);
                     slider.SetValueWithoutNotify(0);

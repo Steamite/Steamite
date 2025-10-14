@@ -1,3 +1,29 @@
+.unity-base-popup-field__input {
+    flex-direction: row;
+    flex-grow: 1;
+    max-width: 250px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 5px;
+    padding-bottom: 0;
+    padding-left: 10px;
+    -unity-font-style: normal;
+    font-size: 35px;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+    background-color: var(--interactable);
+    transition-duration: 0.5s;
+}
+
 .unity-enum-field__input {
     flex-direction: row;
     flex-grow: 1;
@@ -21,6 +47,38 @@
     border-bottom-color: var(--border);
     border-left-color: var(--border);
     background-color: var(--interactable);
+    transition-duration: 0.5s;
+}
+
+.unity-base-popup-field:hover:enabled > .unity-base-popup-field__input {
+    flex-direction: row;
+    flex-grow: 1;
+    max-width: 250px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 5px;
+    padding-bottom: 0;
+    padding-left: 10px;
+    -unity-font-style: normal;
+    font-size: 35px;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    background-color: var(--hover);
+    transition-duration: 0.5s;
+    color: var(--text-hover);
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+}
+
+DropdownField:hover .unity-base-popup-field__arrow {
+    -unity-background-image-tint-color: var(--text-hover);
     transition-duration: 0.5s;
 }
 
@@ -49,6 +107,11 @@ EnumField:hover > .unity-enum-field__input {
 
 EnumField:hover .unity-enum-field__arrow {
     -unity-background-image-tint-color: var(--text-hover);
+    transition-duration: 0.5s;
+}
+
+.unity-base-popup-field__arrow {
+    -unity-background-image-tint-color: var(--text-primary);
     transition-duration: 0.5s;
 }
 
@@ -134,7 +197,7 @@ EnumField:hover .unity-enum-field__arrow {
     position: absolute;
 }
 
-.unity-enum-field__text {
+.unity-popup-field__text {
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
@@ -143,4 +206,56 @@ EnumField:hover .unity-enum-field__arrow {
 
 .unity-base-dropdown__item:hover:enabled > .unity-base-dropdown__item-content > .unity-base-dropdown__label {
     color: var(--text-hover);
+}
+
+.unity-base-popup-field:active:enabled > .unity-base-popup-field__input {
+    flex-direction: row;
+    flex-grow: 1;
+    max-width: 250px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 5px;
+    padding-bottom: 0;
+    padding-left: 10px;
+    -unity-font-style: normal;
+    font-size: 35px;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+    background-color: var(--interactable);
+    transition-duration: 0.5s;
+}
+
+.unity-base-popup-field:focus:enabled > .unity-base-popup-field__input {
+    flex-direction: row;
+    flex-grow: 1;
+    max-width: 250px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 5px;
+    padding-bottom: 0;
+    padding-left: 10px;
+    -unity-font-style: normal;
+    font-size: 35px;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+    background-color: var(--interactable);
+    transition-duration: 0.5s;
 }

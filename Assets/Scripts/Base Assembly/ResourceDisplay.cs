@@ -55,20 +55,16 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
     /// <returns>Empty Resources of all types.</returns>
     public Resource InitializeResources()
     {
-        string[] names = Enum.GetNames(typeof(ResourceType));
-        for (int i = 1; i < names.Length; i++)
+        resources.types = ResFluidTypes.GetResList();
+        for (int i = 0; i < resources.types.Count; i++)
         {
-            resources.types.Add((ResourceType)i);
             resources.ammounts.Add(0);
         }
 
         VisualElement root = gameObject.GetComponent<UIDocument>().rootVisualElement;
 
         moneyLabel = root.Q<Label>("Money-Value");
-        DataBinding binding = BindingUtil.CreateBinding(nameof(Money));
-        binding.sourceToUiConverters.AddConverter((ref int _Money) => $"{Money} <color=#FFD700>" + (char)163 + "</color>");
-        moneyLabel.SetBinding("text", binding);
-        moneyLabel.dataSource = this;
+        moneyLabel.SetBinding(nameof(Money), nameof(Label.text), (ref int _Money) => $"{Money} <color=#FFD700>" + (char)163 + "</color>",  this);
 
         resourceList = root.Q<ListView>("Resources") as IUIElement;
         resourceList.Open(this);

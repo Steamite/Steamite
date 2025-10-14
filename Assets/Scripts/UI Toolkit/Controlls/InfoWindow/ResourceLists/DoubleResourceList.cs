@@ -7,36 +7,14 @@ using UnityEngine.UIElements;
 
 namespace InfoWindowElements
 {
-
-    public class DoubleUIFluid : DoubleUIResource<FluidType>
-    {
-        public DoubleUIFluid(int _ammount, int _secondAmmount) : base(_ammount, _secondAmmount)
-        {
-        }
-
-        public DoubleUIFluid(int _ammount, int _secondAmmount, FluidType _type) : base(_ammount, _secondAmmount, _type)
-        {
-        }
-    }
-    public class DoubleUIRes : DoubleUIResource<ResourceType>
-    {
-        public DoubleUIRes(int _ammount, int _secondAmmount) : base(_ammount, _secondAmmount)
-        {
-        }
-
-        public DoubleUIRes(int _ammount, int _secondAmmount, ResourceType _type) : base(_ammount, _secondAmmount, _type)
-        {
-        }
-    }
-
     /// <summary>
     /// <inheritdoc/> <br\>
     /// Adds a second ammount.(for costs)
     /// </summary>
-    public class DoubleUIResource<TEnum> : UIResource<TEnum> where TEnum : Enum
+    public class DoubleUIResource : UIResource
     {
         public int secondAmmount;
-        public DoubleUIResource(int _ammount, int _secondAmmount, TEnum _type) : base(_ammount, _type)
+        public DoubleUIResource(int _ammount, int _secondAmmount, ResourceType _type) : base(_ammount, _type)
         {
             secondAmmount = _secondAmmount;
         }
@@ -47,11 +25,9 @@ namespace InfoWindowElements
     }
 
     [UxmlElement]
-    public partial class DoubleResourceList<T, TEnum> : ResourceList<T, TEnum>
-        where T : ResAmmount<TEnum>
-        where TEnum : Enum
+    public partial class DoubleResourceList : ResourceList
     {
-        [CreateProperty] List<UIResource<TEnum>> secondResource;
+        [CreateProperty] List<UIResource> secondResource;
 
         [UxmlAttribute] public bool useBindings;
 
@@ -87,7 +63,7 @@ namespace InfoWindowElements
         protected override void BindItem(VisualElement el, int i)
         {
             base.BindItem(el, i);
-            if (cost && resources[i].ammount < ((DoubleUIResource<TEnum>)resources[i]).secondAmmount)
+            if (cost && resources[i].ammount < ((DoubleUIResource)resources[i]).secondAmmount)
                 el.Q<Label>("Value").style.color = Color.red;
         }
         #endregion
@@ -95,15 +71,15 @@ namespace InfoWindowElements
         protected Label noneLabel;
 
         #region Init
-        protected override void SetResWithoutBinding(T res)
+        protected override void SetResWithoutBinding(Resource res)
         {
-            List<UIResource<TEnum>> temp = new List<UIResource<TEnum>>();
+            List<UIResource> temp = new List<UIResource>();
             if (res is MoneyResource money && showMoney && money.Money > 0)
-                temp.Add(new DoubleUIResource<TEnum>(MyRes.Money, +money.Money));
+                temp.Add(new DoubleUIResource(MyRes.Money, +money.Money, ResFluidTypes.Money));
             for (int i = 0; i < res.types.Count; i++)
             {
-                temp.Add(new DoubleUIResource<TEnum>(
-                    MyRes.resDataSource.GlobalResources[(ResourceType)(object)res.types[i]], res.ammounts[i], (TEnum)(object)res.types[i]));
+                temp.Add(new DoubleUIResource(
+                    MyRes.resDataSource.GlobalResources[(ResourceType)(object)res.types[i]], res.ammounts[i], res.types[i]));
             }
             resources = temp;
         }
@@ -114,7 +90,7 @@ namespace InfoWindowElements
         /// <param name="resource">Cost resource.</param>
         /// <param name="propName">Name of the datasource property.</param>
         /// <returns></returns>
-        protected DataBinding SetupResTypes(T resource, string propName)
+        protected DataBinding SetupResTypes(Resource resource, string propName)
         {
             resources = new();
             hasMoney = false;
@@ -123,14 +99,15 @@ namespace InfoWindowElements
                 if (_money.Money > 0)
                 {
                     hasMoney = true;
-                    resources.Add(new DoubleUIResource<TEnum>(
+                    resources.Add(new DoubleUIResource(
                         MyRes.Money,
-                        +_money.Money));
+                        +_money.Money,
+                        ResFluidTypes.Money));
                 }
             }
 
             for (int i = 0; i < resource.types.Count; i++)
-                resources.Add(new DoubleUIResource<TEnum>(
+                resources.Add(new DoubleUIResource(
                     0,
                     resource.ammounts[i],
                     resource.types[i]));
@@ -138,7 +115,7 @@ namespace InfoWindowElements
             return propName.CreateBinding();
         }
 
-        protected DataBinding SetupResTypes(T resource, string secondPropName, string propName, object data)
+        protected DataBinding SetupResTypes(Resource resource, string secondPropName, string propName, object data)
         {
             DataBinding mainBind = SetupResTypes(resource, propName);
             DataBinding dataBinding = secondPropName.CreateBinding();
@@ -147,11 +124,11 @@ namespace InfoWindowElements
             return mainBind;
         }
 
-        protected virtual List<UIResource<TEnum>> UpdateSecondResource(Resource resource)
+        protected virtual List<UIResource> UpdateSecondResource(Resource resource)
         {
             Debug.Log(resource);
             for (int i = 0; i < resource.types.Count; i++)
-                ((DoubleUIResource<TEnum>)resources[i]).secondAmmount = resource.ammounts[i];
+                ((DoubleUIResource)resources[i]).secondAmmount = resource.ammounts[i];
             resources = resources;
             return resources;
         }
@@ -159,7 +136,7 @@ namespace InfoWindowElements
 
         #region Convertors
         /// <inheritdoc/>
-        protected override List<UIResource<TEnum>> ToUIRes(T storage)
+        protected override List<UIResource> ToUIRes(Resource storage)
         {
             if (hasMoney)
             {
@@ -179,12 +156,12 @@ namespace InfoWindowElements
         /// </summary>
         /// <param name="resource">Data.</param>
         /// <returns>Based on <see cref="cost"/></returns>
-        protected override string ConvertString(UIResource<TEnum>resource)
+        protected override string ConvertString(UIResource resource)
         {
             if (cost)
-                return $"{resource.ammount}/{((DoubleUIResource<TEnum>)resource).secondAmmount}";
+                return $"{resource.ammount}/{((DoubleUIResource)resource).secondAmmount}";
             else
-                return ((DoubleUIResource<TEnum>)resource).secondAmmount > 0 ? $"{((DoubleUIResource<TEnum>)resource).secondAmmount}({resource.ammount})" : "";
+                return ((DoubleUIResource)resource).secondAmmount > 0 ? $"{((DoubleUIResource)resource).secondAmmount}({resource.ammount})" : "";
         }
         #endregion
 

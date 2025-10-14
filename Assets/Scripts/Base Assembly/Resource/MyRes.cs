@@ -3,17 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-/// <summary>All available resource types.</summary>
-public enum ResourceType
-{
-    None,
-    Coal,
-    Metal,
-    Stone,
-    Food,
-    Wood,
-}
-
 /// <summary>A util library for resource operations</summary>
 public static class MyRes
 {
@@ -362,11 +351,12 @@ public static class MyRes
     /// <param name="human">Human that is effected by result.</param>
     public static void EatFood(Human human)
     {
-        IStorage store = storage.FirstOrDefault(q => q.LocalResources.ammounts[q.LocalResources.Future(true).types.IndexOf(ResourceType.Food)] > 0);
+        ResourceType food = ResFluidTypes.GetResByName("Food");
+        IStorage store = storage.FirstOrDefault(q => q.LocalResources.ammounts[q.LocalResources.Future(true).types.IndexOf(food)] > 0);
         if (store != null)
         {
-            store.DestroyResource(ResourceType.Food, 1);
-            UpdateResource(new Resource(new() { ResourceType.Food }, new() { 1 }), false);
+            store.DestroyResource(food, 1);
+            UpdateResource(new Resource(new() { food }, new() { 1 }), false);
             human.ModifyEfficiency(ModType.Food, true);
         }
         else

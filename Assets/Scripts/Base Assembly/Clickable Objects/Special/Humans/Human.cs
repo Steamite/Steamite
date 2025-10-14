@@ -193,7 +193,7 @@ public class Human : ClickableObject
         (clickable as HumanSave).jobSave.destinationID = destination ? destination.id : -1;
         //(clickable as HumanSave).jobSave.destType = ;// = destination ? destination.id : -1;
 
-        (clickable as HumanSave).inventory = inventory;
+        (clickable as HumanSave).inventory = new(inventory);
         (clickable as HumanSave).specs = specialization;
         (clickable as HumanSave).houseID = home ? home.id : -1;
         (clickable as HumanSave).workplaceId = workplace != null ? ((ClickableObject)workplace).id : -1;
@@ -218,7 +218,7 @@ public class Human : ClickableObject
             MyGrid.Buildings.Where(q => q.id == s.workplaceId).
                 SingleOrDefault().GetComponent<IAssign>().ManageAssigned(this, true);
         SetJob(new JobData(s.jobSave, this));
-        Inventory.Manage(s.inventory, true);
+        Inventory.Manage(new(s.inventory), true);
         specialization = s.specs;
 
         

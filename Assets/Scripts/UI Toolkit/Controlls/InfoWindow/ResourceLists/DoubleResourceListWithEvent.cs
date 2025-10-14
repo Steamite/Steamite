@@ -32,7 +32,7 @@ namespace InfoWindowElements
             }
         }
 
-        protected override List<UIResource<ResourceType>> ToUIRes(Resource storage)
+        protected override List<UIResource> ToUIRes(Resource storage)
         {
             bool canAfford = true;
             for (int i = 0; i < resources.Count; i++)

@@ -232,7 +232,7 @@ public static class HumanActions
                 //return FindRockToDig(h);
                 break;
             case JobState.Constructing:
-                Debug.Log("nope - can't construct");
+                //Debug.Log("nope - can't construct");
                 //return FindBuildingsToConstruct(h);
                 break;
             case JobState.Deconstructing:

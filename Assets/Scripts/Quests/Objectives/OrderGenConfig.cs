@@ -12,7 +12,7 @@ namespace Orders
     [Serializable]
     public class ResourceGen
     {
-        public int id;
+        public ResourceType type;
         /// <summary>In percent.</summary>
         public int typeChance = 50;
         public Vector2 ammountRange = new(5, 20);
@@ -27,31 +27,40 @@ namespace Orders
         public Vector2Int trustGain = new(10, 15);
 
         public List<ResourceGen> resourceGens = new();
+
 #if UNITY_EDITOR
         private void OnValidate()
         {
             bool dirty = false;
-            List<string> strings = Enum.GetNames(typeof(ResourceType)).Skip(1).ToList();
-            while (resourceGens.Count < strings.Count)
+            try
             {
-                resourceGens.Add(new());
-                dirty = true;
-            }
-            while(resourceGens.Count > strings.Count)
-            {
-                resourceGens.RemoveAt(resourceGens.Count - 1);
-                dirty = true;
-            }
-            for (int i = 0; i < resourceGens.Count; i++)
-            {
-                if (resourceGens[i].id != i+1)
+                List<string> strings = ResFluidTypes.GetResNamesList();
+
+                while (resourceGens.Count < strings.Count)
                 {
-                    resourceGens[i].id = i+1;
+                    resourceGens.Add(new());
                     dirty = true;
                 }
+                while (resourceGens.Count > strings.Count)
+                {
+                    resourceGens.RemoveAt(resourceGens.Count - 1);
+                    dirty = true;
+                }
+                for (int i = 0; i < resourceGens.Count - 1; i++)
+                {
+                    if (resourceGens[i].type != ResFluidTypes.GetResByIndex(i + 1))
+                    {
+                        resourceGens[i].type = ResFluidTypes.GetResByIndex(i + 1);
+                        dirty = true;
+                    }
+                }
+                if (dirty)
+                    EditorUtility.SetDirty(this);
             }
-            if(dirty)
-                EditorUtility.SetDirty(this);
+            catch
+            {
+
+            }
         }
 #endif
     }

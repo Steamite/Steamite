@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TradeData.Locations;
 using UnityEngine;
 
@@ -23,19 +24,19 @@ namespace Outposts
     {
         public static Dictionary<ResourceType, int> ResourceCosts = new()
         {
-            { ResourceType.Coal,  1 },
-            { ResourceType.Metal, 2 },
-            { ResourceType.Stone, 1 },
-            { ResourceType.Food,  1 },
+            { ResFluidTypes.GetResByName("Coal"),  1 },
+            { ResFluidTypes.GetResByName("Metal"), 2 },
+            { ResFluidTypes.GetResByName("Stone"), 1 },
+            { ResFluidTypes.GetResByName("Food"),  1 },
         };
 
         public static Dictionary<ResourceType, int> ResourceAmmount = new()
         {
-            { ResourceType.Coal, 10 },
-            { ResourceType.Metal, 7 },
-            { ResourceType.Stone, 5 },
-            { ResourceType.Food, 10 },
-            { ResourceType.Wood, 10 },
+            { ResFluidTypes.GetResByName("Coal"), 10 },
+            { ResFluidTypes.GetResByName("Stone"), 7 },
+            { ResFluidTypes.GetResByName("Metal"), 5 },
+            { ResFluidTypes.GetResByName("Wood"), 10 },
+            { ResFluidTypes.GetResByName("Food"), 10 },
         };
 
         public static List<UpgradeCost> UpgradeCosts = new()
@@ -45,7 +46,7 @@ namespace Outposts
                 2,
                 new
                 (
-                    new(){ResourceType.Metal},
+                    new(){ResFluidTypes.GetResByName("Metal")},
                     new(){10},
                     1000
                 )
@@ -55,7 +56,7 @@ namespace Outposts
                 3,
                 new
                 (
-                    new(){ResourceType.Metal},
+                    new(){ResFluidTypes.GetResByName("Metal")},
                     new(){25},
                     500
                 )
@@ -65,7 +66,7 @@ namespace Outposts
                 4,
                 new
                 (
-                    new(){ResourceType.Metal},
+                    new(){ResFluidTypes.GetResByName("Metal")},
                     new(){40},
                     750
                 )
@@ -93,15 +94,15 @@ namespace Outposts
         Action onUpgrade;
 
         public Outpost() { }
-        public Outpost(string _name)
+        public Outpost(OutpostSave outpost)
         {
-            Name = _name;
-            level = 0;
-            outpostLevels = new ResourceType[MAX_LEVEL];
-            production = new();
-            exists = false;
-            buildInProgress = false;
-            timeToFinish = -1;
+            level = outpost.level;
+            timeToFinish = outpost.timeToFinish;
+            exists = outpost.exists;
+            buildInProgress = outpost.buildInProgress;
+            production = new(outpost.production);
+            outpostLevels = outpost.outpostLevels.Select(q => ResFluidTypes.GetResByIndex(q)).ToArray();
+            storedResources = new(outpost.storedResources, level * 10);// (level * 10)
         }
 
         /// <summary>

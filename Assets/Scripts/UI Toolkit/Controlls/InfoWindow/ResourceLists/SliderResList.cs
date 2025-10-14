@@ -62,7 +62,7 @@ public partial class SliderResList : DoubleResList, IUpdatable
         field[0][0].pickingMode = PickingMode.Ignore;
 
         slider.lowValue = 0;
-        slider.value = (resources[i] as DoubleUIRes).secondAmmount;
+        slider.value = (resources[i] as DoubleUIResource).secondAmmount;
         slider.highValue = resources[i].ammount;
         slider.RegisterValueChangedCallback(ev => OnSliderChange(ev, i));
 
@@ -74,10 +74,10 @@ public partial class SliderResList : DoubleResList, IUpdatable
             var x = i;
             label.SetBinding(
                 nameof(resources), nameof(Label.text),
-                (ref List<UIResource<ResourceType>> res) =>
+                (ref List<UIResource> res) =>
                 {
                     int cost = TradingWindow.RESOURCE_COSTS[resources[i].type];
-                    return $"* {cost} = {(res[x] as DoubleUIRes).secondAmmount * cost}";
+                    return $"* {cost} = {(res[x] as DoubleUIResource).secondAmmount * cost}";
                 },
                 this);
         }
@@ -87,19 +87,19 @@ public partial class SliderResList : DoubleResList, IUpdatable
         }
     }
 
-    protected override string ConvertString(UIResource<ResourceType> resource)
+    protected override string ConvertString(UIResource resource)
     {
         return $" / {resource.ammount}";
     }
 
     protected override void SetResWithoutBinding(Resource res)
     {
-        List<UIResource<ResourceType>> temp = new List<UIResource<ResourceType>>();
+        List<UIResource> temp = new List<UIResource>();
         if (res is MoneyResource money && showMoney && money.Money > 0)
-            temp.Add(new DoubleUIRes(MyRes.Money, +money.Money));
+            temp.Add(new DoubleUIResource(MyRes.Money, +money.Money));
         for (int i = 0; i < res.types.Count; i++)
         {
-            temp.Add(new DoubleUIRes(
+            temp.Add(new DoubleUIResource(
                 res.ammounts[i], 0, res.types[i]));
         }
         resources = temp;
@@ -107,7 +107,7 @@ public partial class SliderResList : DoubleResList, IUpdatable
 
     void OnSliderChange(ChangeEvent<int> ev, int index)
     {
-        (resources[index] as DoubleUIRes).secondAmmount = ev.newValue;
+        (resources[index] as DoubleUIResource).secondAmmount = ev.newValue;
         onSliderMove(GetVals());
         UIUpdate(nameof(resources));
     }
@@ -116,7 +116,7 @@ public partial class SliderResList : DoubleResList, IUpdatable
     {
         for (int i = 0; i < resources.Count; i++)
         {
-            (resources[i] as DoubleUIRes).secondAmmount = 0;
+            (resources[i] as DoubleUIResource).secondAmmount = 0;
         }
         resources = resources;
         onSliderMove(GetVals());
@@ -129,7 +129,7 @@ public partial class SliderResList : DoubleResList, IUpdatable
     }
    
     public List<int> GetVals()
-        => resources.Select(q => (q as DoubleUIRes).secondAmmount).ToList();
+        => resources.Select(q => (q as DoubleUIResource).secondAmmount).ToList();
 
     public void UIUpdate(string property = "")
     {

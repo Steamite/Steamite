@@ -38,12 +38,12 @@ public class Water : TileSource
     {
         if (clickable == null)
             clickable = new WaterSave();
-        (clickable as WaterSave).fluid = Storing as Fluid;
+        (clickable as WaterSave).fluid = new(Storing);
         return base.Save(clickable);
     }
     public override void Load(ClickableObjectSave save)
     {
-        Storing = (save as WaterSave).fluid;
+        Storing = new((save as WaterSave).fluid);
         HasResources = Storing.Sum() > 0;
         base.Load(save);
     }

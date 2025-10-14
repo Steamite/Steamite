@@ -16,15 +16,8 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
     public const int CONVOY_SPEED = 10;
     public int MAX_CONVOYS = 3;
 
-    public readonly static Dictionary<ResourceType, int> RESOURCE_COSTS = new()
-    {
-        {ResourceType.None, 0},
-        {ResourceType.Coal, 3},
-        {ResourceType.Metal, 7},
-        {ResourceType.Stone, 10},
-        {ResourceType.Food, 15},
-        {ResourceType.Wood, 12},        
-    };
+    public static Dictionary<ResourceType, int> RESOURCE_COSTS = new();
+    /**/
     #endregion
 
     #region Variables
@@ -52,13 +45,22 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
 
     public async Task LoadState(TradeSave tradeSave)
     {
+        RESOURCE_COSTS = new()
+        {
+            { ResFluidTypes.None, 0},
+            { ResFluidTypes.GetResByName("Coal"), 3},
+            { ResFluidTypes.GetResByName("Metal"), 7},
+            { ResFluidTypes.GetResByName("Stone"), 10},
+            { ResFluidTypes.GetResByName("Food"), 15},
+            { ResFluidTypes.GetResByName("Wood"), 12},        
+        };
         TradeHolder tradeHolder = Instantiate(await Addressables.LoadAssetAsync<TradeHolder>($"Assets/Game Data/Colony Locations/{tradeSave.colonyLocation}.asset").Task);
         colonyLocation = tradeHolder.startingLocation;
         colonyLocation.LoadGame(tradeSave.prodLevels, tradeSave.statLevels);
 
-        tradeLocations = tradeSave.tradeLocations;
-        convoys = tradeSave.convoys;
-        outposts = tradeSave.outposts;
+        tradeLocations = tradeSave.tradeLocations.Select(q => new TradeLocation(q)).ToList();
+        convoys = tradeSave.convoys.Select(q => new TradeConvoy(q)).ToList();
+        outposts = tradeSave.outposts.Select(q=> new Outpost(q)).ToList();
         SceneRefs.Stats.GetComponent<ResourceDisplay>().Money = tradeSave.money;
         GetWindow();
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;

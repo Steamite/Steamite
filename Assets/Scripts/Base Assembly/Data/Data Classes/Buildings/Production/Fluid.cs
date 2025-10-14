@@ -3,27 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum FluidType
-{
-    Water,
-    Steam,
-}
-
 [Serializable]
-public class Fluid : ResAmmount<FluidType>
+public class Fluid : Resource
 {
     public List<int> capacities = new();
 
     #region Constructor
     public Fluid() { }
     public Fluid(Fluid fluid) : base(fluid) { }
-    public Fluid(List<FluidType> _type, List<int> _ammount, List<int> _capacity) 
+    public Fluid(List<ResourceType> _type, List<int> _ammount, List<int> _capacity) 
         : base(_type, _ammount)
     {
         capacities = _capacity;
     }
+    public Fluid(ResourceSave save) : base(save) { }
 
-    public Fluid(IEnumerable<FluidType> _types, int currentValue)
+    public Fluid(IEnumerable<ResourceType> _types, int currentValue)
     {
         foreach (var item in _types)
         {
@@ -35,7 +30,7 @@ public class Fluid : ResAmmount<FluidType>
     #endregion
 
     #region Adding
-    protected override void Add(FluidType type, int ammount)
+    protected override void Add(ResourceType type, int ammount)
     {
         int i = types.IndexOf(type);
         if (i == -1)
@@ -49,7 +44,7 @@ public class Fluid : ResAmmount<FluidType>
     }
     #endregion
 
-    protected override int Remove(FluidType type, int change)
+    protected override int Remove(ResourceType type, int change)
     {
         int i = types.IndexOf(type);
         if (i == -1)
@@ -69,7 +64,7 @@ public class Fluid : ResAmmount<FluidType>
 
 
 
-    public bool HasSpace(FluidType type, int ammount)
+    public bool HasSpace(ResourceType type, int ammount)
     {
         int i = types.IndexOf(type);
         if (i > -1)

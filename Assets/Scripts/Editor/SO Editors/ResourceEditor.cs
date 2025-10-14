@@ -87,12 +87,12 @@ public class ResourceEditor : PropertyDrawer
             (elem, i) =>
             {
                 elem = elem.ElementAt(0);
-                ((EnumField)elem.ElementAt(0)).value = ((Resource)property.boxedValue).types[i];
-                ((EnumField)elem.ElementAt(0)).RegisterValueChangedCallback(
+                ((DropdownField)elem.ElementAt(0)).value = ((Resource)property.boxedValue).types[i].ToString();
+                ((DropdownField)elem.ElementAt(0)).RegisterValueChangedCallback(
                     (enu) =>
                     {
                         property.FindPropertyRelative(
-                            nameof(Resource.types)).GetArrayElementAtIndex(i).enumValueIndex = (int)(ResourceType)enu.newValue;
+                            nameof(Resource.types)).GetArrayElementAtIndex(i).objectReferenceValue = ResFluidTypes.GetResByName(enu.newValue);
                         serializedObject.ApplyModifiedProperties();
                     });
 
@@ -116,7 +116,7 @@ public class ResourceEditor : PropertyDrawer
                     .InsertArrayElementAtIndex(i);
                 property.serializedObject.ApplyModifiedProperties();
 
-                listView.itemsSource.Add(ResourceType.Coal);
+                listView.itemsSource.Add(ResFluidTypes.GetResByName("Coal"));
             };
 
         listView.onRemove =

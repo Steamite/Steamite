@@ -7,7 +7,7 @@
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Trade/LocationButtons.uss?fileID=7433441132597879392&amp;guid=f55da17455af1544e8631d1cffe9df00&amp;type=3#LocationButtons" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Trade/MapSliders.uss?fileID=7433441132597879392&amp;guid=4bab7792dac3c2947a03cb7b1e10126b&amp;type=3#MapSliders" />
     <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/FullscreenWindow.uss?fileID=7433441132597879392&amp;guid=a3688b27adecf6140830a84a444aaec7&amp;type=3#FullscreenWindow" />
-    <engine:VisualElement name="Root" class="window">
+    <engine:VisualElement name="Root" class="window" style="display: flex;">
         <engine:VisualElement name="LeftBar" class="left-bar">
             <engine:VisualElement name="Header" class="header">
                 <TextFieldLabel name="Header" />

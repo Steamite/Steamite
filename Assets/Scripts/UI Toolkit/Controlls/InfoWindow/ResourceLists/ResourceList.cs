@@ -8,17 +8,7 @@ using UnityEngine.UIElements;
 
 namespace InfoWindowElements
 {
-    public class UIFluid : UIResource<FluidType>
-    {
-        public UIFluid(int _ammount) : base(_ammount)
-        {
-        }
-
-        public UIFluid(int _ammount, FluidType _type) : base(_ammount, _type)
-        {
-        }
-    }
-    public class UIRes : UIResource<ResourceType>
+    public class UIRes : UIResource
     {
         public UIRes(int _ammount) : base(_ammount)
         {
@@ -31,19 +21,19 @@ namespace InfoWindowElements
 
     /// <summary>Parsed data used directly for displaying.<br/>
     /// Parsed using binding convertors.</summary>
-    public class UIResource<TEnum>
+    public class UIResource
     {
         /// <summary>Resource ammount.</summary>
         public int ammount;
         /// <summary>Resource type.</summary>
-        public TEnum type;
+        public ResourceType type;
 
         /// <summary>
         /// For resources.
         /// </summary>
         /// <param name="_ammount"></param>
         /// <param name="_type"></param>
-        public UIResource(int _ammount, TEnum _type)
+        public UIResource(int _ammount, ResourceType _type)
         {
             ammount = _ammount;
             type = _type;
@@ -56,7 +46,7 @@ namespace InfoWindowElements
         public UIResource(int _ammount)
         {
             ammount = _ammount;
-            type = (TEnum)(object)0;
+            type = ResFluidTypes.None;
         }
     }
 
@@ -65,16 +55,14 @@ namespace InfoWindowElements
     /// Can hide empty ones.
     /// </summary>
     [UxmlElement("Resource-List")]
-    public partial class ResourceList<T, TEnum> : ListView, IUIElement
-        where T : ResAmmount<TEnum>
-        where TEnum : Enum
+    public partial class ResourceList : ListView, IUIElement
     {
         #region Properties
         /// <summary>Binding link(_itemSource)</summary>
         [CreateProperty]
-        protected List<UIResource<TEnum>> resources
+        protected List<UIResource> resources
         {
-            get { return (List<UIResource<TEnum>>)itemsSource; }
+            get { return (List<UIResource>)itemsSource; }
             set
             {
                 itemsSource = value;
@@ -101,7 +89,7 @@ namespace InfoWindowElements
         public ResourceList()
         {
             itemTemplate = Resources.Load<VisualTreeAsset>("UI Toolkit/Resource Text Icon");
-            itemsSource = new List<UIResource<TEnum>>();
+            itemsSource = new List<UIResource>();
             //focusable = false;
 
             makeItem = MakeItem;
@@ -141,9 +129,9 @@ namespace InfoWindowElements
         protected virtual void BindItem(VisualElement el, int i)
         {
             el.RemoveFromClassList("unity-collection-view__item");
-            Color c = ToolkitUtils.resSkins.GetResourceColor(((UIResource<TEnum>)itemsSource[i]).type);
+            Color c = ((UIResource)itemsSource[i]).type.color;
 
-            el.Q<Label>("Value").text = ConvertString((UIResource<TEnum>)itemsSource[i]);
+            el.Q<Label>("Value").text = ConvertString((UIResource)itemsSource[i]);
             el.Q<VisualElement>("Icon").style.unityBackgroundImageTintColor = c;
         }
 
@@ -177,14 +165,14 @@ namespace InfoWindowElements
             {
                 case StorageObject:
                     binding = BindingUtil.CreateBinding(nameof(StorageObject.LocalRes));
-                    binding.sourceToUiConverters.AddConverter((ref StorageResource stored) => ToUIRes(stored as T));
+                    binding.sourceToUiConverters.AddConverter((ref StorageResource stored) => ToUIRes(stored));
                     SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Rock:
                     if (((Rock)data).rockYield != null)
                     {
                         binding = BindingUtil.CreateBinding(nameof(Rock.rockYield));
-                        binding.sourceToUiConverters.AddConverter((ref Resource yeild) => ToUIRes(yeild as T));
+                        binding.sourceToUiConverters.AddConverter((ref Resource yeild) => ToUIRes(yeild));
                         SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     }
                     else
@@ -194,14 +182,13 @@ namespace InfoWindowElements
                     break;
                 case Human:
                     binding = BindingUtil.CreateBinding(nameof(Human.Inventory));
-                    binding.sourceToUiConverters.AddConverter((ref CapacityResource inventory) => ToUIRes(inventory as T));
+                    binding.sourceToUiConverters.AddConverter((ref CapacityResource inventory) => ToUIRes(inventory));
                     SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case ResourceDisplay:
-                    ToolkitUtils.Init();
 
                     binding = BindingUtil.CreateBinding(nameof(ResourceDisplay.GlobalResources));
-                    binding.sourceToUiConverters.AddConverter((ref MoneyResource globalRes) => ToUIRes(globalRes as T));
+                    binding.sourceToUiConverters.AddConverter((ref MoneyResource globalRes) => ToUIRes(globalRes));
                     SetBinding("resources", binding);
                     dataSource = data;
                     ((IUpdatable)data).UIUpdate(binding.dataSourcePath.ToString());
@@ -210,7 +197,7 @@ namespace InfoWindowElements
                     break;
                 case Vein:
                     binding = BindingUtil.CreateBinding(nameof(Vein.Storing));
-                    binding.sourceToUiConverters.AddConverter((ref Resource stored) => ToUIRes(stored as T));
+                    binding.sourceToUiConverters.AddConverter((ref Resource stored) => ToUIRes(stored));
                     SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 default:
@@ -220,13 +207,13 @@ namespace InfoWindowElements
 
         #region Convertors
         /// <summary>
-        /// Splits and parses <paramref name="storage"/> by each each <see cref="ResourceType"/>.
+        /// Splits and parses <paramref name="storage"/> by each each <see cref="Resource"/>.
         /// </summary>
         /// <param name="storage">Resources from the datasource.</param>
         /// <returns></returns>
-        protected virtual List<UIResource<TEnum>> ToUIRes(T storage)
+        protected virtual List<UIResource> ToUIRes(Resource storage)
         {
-            List<UIResource<TEnum>> res = new();
+            List<UIResource> res = new();
             for (int i = 0; i < storage.types.Count; i++)
             {
                 if (showEmpty || storage.ammounts[i] > 0)
@@ -236,12 +223,12 @@ namespace InfoWindowElements
         }
 
 
-        protected virtual void SetResWithoutBinding(T res)
+        protected virtual void SetResWithoutBinding(Resource res)
         {
-            List<UIResource<TEnum>> temp = new List<UIResource<TEnum>>();
+            List<UIResource> temp = new List<UIResource>();
             temp = ToUIRes(res);
             if (res is MoneyResource money && money.Money > 0)
-                temp.Insert(0, new UIResource<TEnum>(+money.Money));
+                temp.Insert(0, new UIResource(+money.Money));
             resources = temp;
         }
 
@@ -250,7 +237,7 @@ namespace InfoWindowElements
         /// </summary>
         /// <param name="resource">What to parse</param>
         /// <returns>Just the resource ammount.</returns>
-        protected virtual string ConvertString(UIResource<TEnum>resource)
+        protected virtual string ConvertString(UIResource resource)
         {
             return $"{resource.ammount}";
         }

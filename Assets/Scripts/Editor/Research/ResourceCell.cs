@@ -6,11 +6,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
-public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
-    where T: ResAmmount<TEnum> 
-    where TEnum : Enum
+public partial class ResourceCell : ResourceList
 {
-    T resource;
+    Resource resource;
     MoneyResource moneyResource;
     public Object whatToSave;
     IntegerField capacityField;
@@ -24,7 +22,7 @@ public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
         onAdd =
             (_) =>
             {
-                resource.types.Add((TEnum)(object)0);
+                resource.types.Add(ResFluidTypes.GetResByIndex(0));
                 resource.ammounts.Add(0);
                 itemsSource = ToUIRes(resource);
                 EditorUtility.SetDirty(whatToSave);
@@ -70,7 +68,7 @@ public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
         VisualElement visualElement = new();
         visualElement.style.flexDirection = FlexDirection.Row;
         visualElement.focusable = true;
-        EnumField dropField = new((TEnum)(object)0);
+        DropdownField dropField = new();
         dropField.style.width = new Length(100, LengthUnit.Pixel);
         IntegerField integerField = new();
         integerField.style.flexGrow = 1;
@@ -88,24 +86,26 @@ public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
 
     protected override void BindItem(VisualElement el, int i)
     {
+
         el.RemoveFromClassList("unity-collection-view__item");
-        EnumField type = el.Q<EnumField>();
-        type.value = ((UIResource<TEnum>)itemsSource[i]).type;
-        type.RegisterValueChangedCallback<Enum>(ChangeType);
+        DropdownField type = el.Q<DropdownField>();
+        type.choices = ResFluidTypes.GetResNamesList();
+        type.value = ((UIResource)itemsSource[i]).type.Name;
+        type.RegisterValueChangedCallback(ChangeType);
         type.style.marginRight = 10;
 
         IntegerField value = el.Q<IntegerField>();
-        value.value = ((UIResource<TEnum>)itemsSource[i]).ammount;
-        value.RegisterValueChangedCallback<int>(ChangeVal);
+        value.value = ((UIResource)itemsSource[i]).ammount;
+        value.RegisterValueChangedCallback(ChangeVal);
     }
 
     private void UnbindItem(VisualElement el, int i)
     {
-        EnumField type = el.Q<EnumField>();
-        type.UnregisterValueChangedCallback<Enum>(ChangeType);
+        DropdownField type = el.Q<DropdownField>();
+        type.UnregisterValueChangedCallback(ChangeType);
 
         IntegerField value = el.Q<IntegerField>();
-        value.UnregisterValueChangedCallback<int>(ChangeVal);
+        value.UnregisterValueChangedCallback(ChangeVal);
     }
 
     protected override VisualElement MakeNoneElement()
@@ -123,10 +123,10 @@ public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
     /// Changes the ammount of a given type (<paramref name="evt"/>).
     /// </summary>
     /// <param name="evt">Event with the new value and changed element.</param>
-    private void ChangeType(ChangeEvent<Enum> evt)
+    private void ChangeType(ChangeEvent<string> evt)
     {
         int i = evt.target.GetRowIndex(false);
-        int j = resource.types.IndexOf((TEnum)(object)evt.newValue);
+        int j = resource.types.IndexOf(ResFluidTypes.GetResByName(evt.newValue));
         if (j > -1 && i != j)
         {
             resource.ammounts[j] += resource.ammounts[i];
@@ -135,7 +135,7 @@ public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
             itemsSource = ToUIRes(resource);
         }
         else
-            resource.types[i] = (TEnum)evt.newValue;
+            resource.types[i] = ResFluidTypes.GetResByName(evt.newValue);
         EditorUtility.SetDirty(whatToSave);
     }
 
@@ -157,7 +157,7 @@ public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
     /// <param name="_resource">Editing resource.</param>
     /// <param name="_whatToSave">Object containing the resource.</param>
     /// <param name="_cost">Is it a cost resource?</param>
-    public void Open(T _resource, Object _whatToSave, bool _cost)
+    public void Open(Resource _resource, Object _whatToSave, bool _cost)
     {
         whatToSave = _whatToSave;
         if (_resource != null)
@@ -168,7 +168,7 @@ public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
             {
                 moneyResource = _moneyRes;
                 capacityField.value = +_moneyRes.Money.BaseValue;
-                resource = _moneyRes.EditorResource as T;
+                resource = _moneyRes.EditorResource;
             }
             else
             {
@@ -183,7 +183,7 @@ public partial class ResourceCell<T, TEnum> : ResourceList <T, TEnum>
         {
             resource = null;
             showAddRemoveFooter = false;
-            itemsSource = new List<UIResource<TEnum>>();
+            itemsSource = new List<UIResource>();
             noneLabel.text = "Nothing";
             style.display = DisplayStyle.None;
         }

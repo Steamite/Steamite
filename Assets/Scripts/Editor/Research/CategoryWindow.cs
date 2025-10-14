@@ -8,7 +8,9 @@ using Object = UnityEngine.Object;
 
 namespace EditorWindows
 {
-    public class CategoryWindow<CATEG_TYPE, DATA_TYPE> : EditorWindow where CATEG_TYPE : DataCategory<DATA_TYPE> where DATA_TYPE : DataObject
+    public class CategoryWindow<CATEG_TYPE, DATA_TYPE> : EditorWindow 
+        where CATEG_TYPE : DataCategory<DATA_TYPE> 
+        where DATA_TYPE : DataObject
     {
         public DataCategory<DATA_TYPE> selectedCategory;
         protected DataHolder<CATEG_TYPE, DATA_TYPE> holder;
@@ -160,8 +162,6 @@ namespace EditorWindows
             return false;
         }
         #endregion
-
-
         #endregion
     }
 }

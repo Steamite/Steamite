@@ -28,7 +28,7 @@ public interface IStorage
         {
             if((mask & 1) == 1)
             {
-                LocalResources.types.Add((ResourceType)i);
+                LocalResources.types.Add(ResFluidTypes.GetResByIndex(i));
                 LocalResources.ammounts.Add(ammount);
                 CanStore.Add(true);
             }

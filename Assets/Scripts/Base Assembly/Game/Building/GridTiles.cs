@@ -10,13 +10,13 @@ using UnityEngine.InputSystem;
 public enum ControlMode
 {
     /// <summary>Basic inspection mode.</summary>
-    nothing,
+    Nothing,
     /// <summary>Building deconstruction mode.</summary>
-    deconstruct,
+    Deconstruct,
     /// <summary>Rock digging mode.(If started on marked Rocks, unmarks insted)</summary>
-    dig,
+    Dig,
     /// <summary>Building placement mode.</summary>
-    build
+    Build
 }
 
 /// <summary>Handles Input on the game Grid.</summary>
@@ -31,7 +31,7 @@ public class GridTiles : MonoBehaviour
     public LayerMask pipeMask;
 
     /// <summary>Current active control mode.</summary>
-    public ControlMode activeControl { get; private set; } = ControlMode.nothing;
+    public ControlMode activeControl { get; private set; } = ControlMode.Nothing;
     [SerializeField] InputAction shiftKey;
 
     /// <summary>Last mouse position.</summary>
@@ -60,10 +60,10 @@ public class GridTiles : MonoBehaviour
             if (value == null)
             {
                 if (blueprintInstance != null)
-                    ChangeSelMode(ControlMode.nothing);
+                    ChangeSelMode(ControlMode.Nothing);
             }
             else
-                ChangeSelMode(ControlMode.build);
+                ChangeSelMode(ControlMode.Build);
         }
     }
 
@@ -79,7 +79,7 @@ public class GridTiles : MonoBehaviour
             if (value == null)
             {
                 DeselectBuildingButton?.Invoke();
-                ChangeSelMode(ControlMode.nothing);
+                ChangeSelMode(ControlMode.Nothing);
             }
         }
     }
@@ -119,13 +119,13 @@ public class GridTiles : MonoBehaviour
         if (enterObject == null)
             return;
         Color c = new();
-        if (activeControl == ControlMode.nothing && activeObject != null)
+        if (activeControl == ControlMode.Nothing && activeObject != null)
             Exit(activeObject);
         activeObject = enterObject;
         activePos = enterObject.GetPos();
         switch (activeControl)
         {
-            case ControlMode.nothing:
+            case ControlMode.Nothing:
 
                 if (activeObject.selected)// if active
                     c = highlight * 3; // WHITE
@@ -147,7 +147,7 @@ public class GridTiles : MonoBehaviour
                     }
                 }
                 break;
-            case ControlMode.deconstruct:
+            case ControlMode.Deconstruct:
                 Building _b = enterObject.GetComponent<Building>();
                 if (_b)
                     if (_b.deconstructing)
@@ -157,7 +157,7 @@ public class GridTiles : MonoBehaviour
                 else
                     return;
                 break;
-            case ControlMode.dig:
+            case ControlMode.Dig:
                 Rock _r = enterObject.GetComponent<Rock>();
                 if (drag)
                 {
@@ -176,7 +176,7 @@ public class GridTiles : MonoBehaviour
                     }
                 }
                 break;
-            case ControlMode.build:
+            case ControlMode.Build:
                 if (drag)
                 {
                     CalcPipes();
@@ -212,7 +212,7 @@ public class GridTiles : MonoBehaviour
         Color c = new();
         switch (activeControl)
         {
-            case ControlMode.nothing:
+            case ControlMode.Nothing:
                 Rock r = exitObject.GetComponent<Rock>();
                 Building b = exitObject.GetComponent<Building>();
                 Pipe pipe = exitObject.GetComponent<Pipe>();
@@ -233,14 +233,14 @@ public class GridTiles : MonoBehaviour
                 if (exitObject == activeObject)
                     activeObject = null;
                 break;
-            case ControlMode.deconstruct:
+            case ControlMode.Deconstruct:
                 Building _b = exitObject.GetComponent<Building>();
                 if (_b && _b.deconstructing)
                     c = Color.red * 0.75f;
                 else
                     c = new();
                 break;
-            case ControlMode.dig:
+            case ControlMode.Dig:
                 Rock _r = exitObject.GetComponent<Rock>();
                 if (_r)
                 {
@@ -252,7 +252,7 @@ public class GridTiles : MonoBehaviour
                         c = new();
                 }
                 break;
-            case ControlMode.build:
+            case ControlMode.Build:
                 return;
         }
         HighLight(c, exitObject.gameObject);
@@ -276,7 +276,7 @@ public class GridTiles : MonoBehaviour
         Material[] m = activeObject.GetComponentsInChildren<MeshRenderer>().Where(q => q != null).Select(q => q.material).ToArray();
         switch (activeControl)
         {
-            case ControlMode.nothing:
+            case ControlMode.Nothing:
                 Rock r = activeObject.GetComponent<Rock>();
                 if (clickedObject)
                 {
@@ -302,7 +302,7 @@ public class GridTiles : MonoBehaviour
                 Selection.activeObject = clickedObject.gameObject;
 #endif
                 break;
-            case ControlMode.deconstruct:
+            case ControlMode.Deconstruct:
                 Building b = activeObject.GetComponent<Building>();
                 if (b)
                 {
@@ -314,7 +314,7 @@ public class GridTiles : MonoBehaviour
                     HighLight(c, b.gameObject);
                 }
                 break;
-            case ControlMode.dig:
+            case ControlMode.Dig:
                 Rock _r = activeObject.GetComponent<Rock>();
                 if (_r)
                 {
@@ -324,7 +324,7 @@ public class GridTiles : MonoBehaviour
                     tempMarkedTiles = new() { _r };
                 }
                 break;
-            case ControlMode.build:
+            case ControlMode.Build:
                 
                 break;
         }
@@ -337,11 +337,11 @@ public class GridTiles : MonoBehaviour
     {
         switch (activeControl)
         {
-            case ControlMode.nothing:
-            case ControlMode.deconstruct:
+            case ControlMode.Nothing:
+            case ControlMode.Deconstruct:
                 // nothing
                 break;
-            case ControlMode.build:
+            case ControlMode.Build:
                 if (blueprintPrefab is Pipe && (blueprintInstance == null || blueprintInstance.CanPlace()))
                 {
                     if(drag == false)
@@ -394,7 +394,7 @@ public class GridTiles : MonoBehaviour
                     Debug.LogWarning("Can't place here!!");
                 }
                 break;
-            case ControlMode.dig:
+            case ControlMode.Dig:
                 PrepDig();
                 tempMarkedTiles = new();
                 break;
@@ -507,7 +507,7 @@ public class GridTiles : MonoBehaviour
 
     public void MarkPipeCheckpoint()
     {
-        if(activeControl == ControlMode.build && drag == true && tempMarkedTiles.Count > 1)
+        if(activeControl == ControlMode.Build && drag == true && tempMarkedTiles.Count > 1)
         {
             markedTiles.Add(tempMarkedTiles.ToList());
             tempMarkedTiles.Clear();
@@ -555,7 +555,7 @@ public class GridTiles : MonoBehaviour
         }
         else
         {
-            ChangeSelMode(ControlMode.nothing);
+            ChangeSelMode(ControlMode.Nothing);
             drag = false;
         }
     }
@@ -588,13 +588,13 @@ public class GridTiles : MonoBehaviour
     /// <param name="mode"></param>
     public void ChangeSelMode(ControlMode mode)
     {
-        if (mode == activeControl && mode != ControlMode.nothing)
+        if (mode == activeControl && mode != ControlMode.Nothing)
         {
-            if (activeControl == ControlMode.build)
+            if (activeControl == ControlMode.Build)
             {
                 if (blueprintPrefab.objectName == blueprintInstance.objectName)
                 {
-                    ChangeSelMode(ControlMode.nothing);
+                    ChangeSelMode(ControlMode.Nothing);
                 }
                 else
                 {
@@ -603,16 +603,16 @@ public class GridTiles : MonoBehaviour
                     return;
                 }
             }
-            ChangeSelMode(ControlMode.nothing);
+            ChangeSelMode(ControlMode.Nothing);
         }
         else
         {
             switch (activeControl)
             {
-                case ControlMode.deconstruct:
-                    activeControl = ControlMode.nothing;
+                case ControlMode.Deconstruct:
+                    activeControl = ControlMode.Nothing;
                     break;
-                case ControlMode.dig:
+                case ControlMode.Dig:
                     foreach (Rock r in tempMarkedTiles)
                     {
                         HighLight(new(), r.gameObject);
@@ -620,9 +620,9 @@ public class GridTiles : MonoBehaviour
                     tempMarkedTiles = new();
                     startPos = null;
                     drag = false;
-                    activeControl = ControlMode.nothing;
+                    activeControl = ControlMode.Nothing;
                     break;
-                case ControlMode.build:
+                case ControlMode.Build:
                     SceneRefs.CameraSceneMover.SetRaycastMask(defaultMask);
                     if (drag)
                     {
@@ -649,22 +649,22 @@ public class GridTiles : MonoBehaviour
             activeControl = mode;
             switch (mode)
             {
-                case ControlMode.nothing:
+                case ControlMode.Nothing:
                     cur = default;
                     vec = Vector2.zero;
                     Enter(activeObject);
                     break;
-                case ControlMode.deconstruct:
+                case ControlMode.Deconstruct:
                     cur = cursors[0];
                     vec = new(15f, 15f);
                     Enter(activeObject);
                     break;
-                case ControlMode.dig:
+                case ControlMode.Dig:
                     cur = cursors[1];
                     vec = new(1, 16f);
                     Enter(activeObject);
                     break;
-                case ControlMode.build:
+                case ControlMode.Build:
                     cur = default;
                     vec = Vector2.zero;
                     if(blueprintPrefab is Pipe)

@@ -39,18 +39,21 @@ public class Vein : TileSource
         if (clickable == null)
             clickable = new VeinSave();
         (clickable as VeinSave).gridPos = this.GetPos();
-        (clickable as VeinSave).resource = Storing;
+        (clickable as VeinSave).resource = new(Storing);
         (clickable as VeinSave).sizeX = xSize;
         (clickable as VeinSave).sizeZ = zSize;
+        (clickable as VeinSave).veinColor = new(GetComponent<MeshRenderer>().sharedMaterial.color);
 
         return base.Save(clickable);
     }
     public override void Load(ClickableObjectSave save)
     {
-        Storing = (save as VeinSave).resource;
+        Storing = new((save as VeinSave).resource);
         xSize = (save as VeinSave).sizeX;
         zSize = (save as VeinSave).sizeZ;
         HasResources = Storing.Sum() > 0;
+        GetComponent<MeshRenderer>().material.color = (save as VeinSave).veinColor.ConvertColor();
+
         MyGrid.veins.Add(this);
         base.Load(save);
     }

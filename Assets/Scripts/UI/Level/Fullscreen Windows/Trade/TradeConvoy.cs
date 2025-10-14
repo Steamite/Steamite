@@ -22,6 +22,16 @@ public class TradeConvoy
         maxprogress = _distance;
     }
 
+    public TradeConvoy(TradeConvoySave save)
+    {
+        firstPhase = save.firstPhase;
+        tradeLocation = save.tradeLocation;
+        currentprogress = save.currentprogress;
+        maxprogress = save.maxprogress;
+        buying = new(save.buying);
+        reward = save.reward;
+    }
+
     void FinishFirstPart()
     {
         currentprogress = 2 * maxprogress - currentprogress;

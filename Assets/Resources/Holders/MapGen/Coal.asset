@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7722ad94548d554479222b9c47c9a556, type: 3}
   m_Name: Coal
   m_EditorClassIdentifier: 
-  resource: 1
+  resource: {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
   hardness: 2
   color: {r: 0, g: 0, b: 0, a: 1}
   richness:

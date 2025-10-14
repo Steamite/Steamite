@@ -120,7 +120,7 @@ public class OrderController
             int resAmmount = selType.ammountRange.Random();
             objective.resource
                 .ManageSimple(
-                    (ResourceType)selType.id,
+                    selType.type,
                     resAmmount,
                     true,
                     mod);

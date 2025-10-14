@@ -37,7 +37,7 @@ public class NewGameInit : MonoBehaviour
         {
             colonyLocation = tradeHolder.startingLocation.Name,
             convoys = new(),
-            tradeLocations = tradeHolder.tradeLocations,
+            tradeLocations = tradeHolder.tradeLocations.Select(q=> new TradeLocationSave(q)).ToList(),
             money = 2000,
             prodLevels = tradeHolder.startingLocation.config.production.Select(q => q.min).ToList(),
             statLevels = tradeHolder.startingLocation.config.stats.Select(q => q.min).ToList(),

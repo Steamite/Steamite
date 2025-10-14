@@ -87,7 +87,7 @@ public class Elevator : Building, IStorage
             Resource transferRes = new();
             for (int i = 0; i < request.types.Count && spaceToStore > 0; i++)
             {
-                if (CanStore[(int)request.types[i]])
+                if (CanStore[ResFluidTypes.GetResourceIndex(request.types[i])])
                 {
                     transferRes.types.Add(request.types[i]);
                     if (spaceToStore > request.ammounts[i])

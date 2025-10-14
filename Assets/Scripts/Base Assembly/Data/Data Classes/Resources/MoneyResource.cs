@@ -11,7 +11,7 @@ public class MoneyResource : ModifiableResource
     [CreateProperty] public ModifiableInteger Money { get => money; set => money = value; }
 
     public MoneyResource() : base() { }
-    public MoneyResource(ResAmmount<ResourceType> resAmmount) : base(resAmmount) 
+    public MoneyResource(Resource resAmmount) : base(resAmmount) 
     {
         if (resAmmount is MoneyResource mon)
             money = new(mon.money.currentValue);

@@ -140,9 +140,9 @@ public class StorageResource : CapacityResource
 
     public void Load(StorageResSave resSave)
     {
-        types = resSave.types;
+        types = resSave.types.Select(q => ResFluidTypes.GetResByIndex(q)).ToList();
         ammounts = resSave.ammounts;
-        requests = resSave.Requests;
+        requests = resSave.Requests.Select(q=> new Resource(q)).ToList();
         mods = resSave.mod;
         if (mods.Count == 1 && mods[0] == 0 && requests.Count == 0)
             requests.Add(new());

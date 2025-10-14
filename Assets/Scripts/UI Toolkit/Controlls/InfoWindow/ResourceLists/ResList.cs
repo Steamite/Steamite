@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace InfoWindowElements
 {
     [UxmlElement]
-    public partial class ResList : ResourceList<Resource, ResourceType> 
+    public partial class ResList : ResourceList
     { 
         public override void Open(object data)
         {

@@ -102,13 +102,13 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IFluidWork
     {
         if (clickable == null)
             clickable = new FluidResProductionSave();
-        (clickable as FluidResProductionSave).fluidSave = StoredFluids;
+        (clickable as FluidResProductionSave).fluidSave = new(StoredFluids);
         return base.Save(clickable);
     }
 
     public override void Load(ClickableObjectSave save)
     {
-        StoredFluids = (save as FluidResProductionSave).fluidSave;
+        StoredFluids = new((save as FluidResProductionSave).fluidSave);
         base.Load(save);
     }
     #endregion
