@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TradeData.Locations;
 using UnityEngine;
 
 [Serializable]
@@ -111,7 +112,7 @@ public class ClickableObjectSave
 [Serializable]
 public class RockSave : ClickableObjectSave
 {
-    public Resource yeild;
+    public ResourceSave yeild;
     // use for loading correct integrity colors
     public float originalIntegrity;
     public float integrity;
@@ -121,7 +122,7 @@ public class RockSave : ClickableObjectSave
 
     public RockSave(Resource yeild, float originalIntegrity, float integrity, bool toBeDug, string _name)
     {
-        this.yeild = yeild;
+        this.yeild = new(yeild);
         this.originalIntegrity = originalIntegrity;
         this.integrity = integrity;
         this.toBeDug = toBeDug;
@@ -132,16 +133,17 @@ public class RockSave : ClickableObjectSave
 [Serializable]
 public class WaterSave : ClickableObjectSave
 {
-    public Fluid fluid;
+    public ResourceSave fluid;
 }
 
 [Serializable]
 public class VeinSave : ClickableObjectSave
 {
     public GridPos gridPos;
-    public Resource resource;
+    public ResourceSave resource;
     public int sizeX;
     public int sizeZ;
+    public MyColor veinColor;
 }
 
 ////////////////////////////////////////////////////////////
@@ -186,9 +188,9 @@ public class StorageBSave : BuildingSave
         constructed = true;
         isMain = true;
         int i = 1;
-        foreach (var item in Enum.GetNames(typeof(ResourceType)).Skip(1))
+        foreach (var item in ResFluidTypes.GetResList())
         {
-            resSave.types.Add((ResourceType)i);
+            resSave.types.Add(0);
             resSave.ammounts.Add(100);
             canStore.Add(true);
             i++;
@@ -222,19 +224,19 @@ public class PipeBSave : BuildingSave
 
 public class TankBSave : BuildingSave
 {
-    public Fluid fluidSave;
+    public ResourceSave fluidSave;
 }
 
 public class FluidResProductionSave : ResProductionBSave
 {
-    public Fluid fluidSave;
+    public ResourceSave fluidSave;
 }
 
 
 [Serializable]
 public class FluidProdBSave : ProductionBSave
 {
-    public Fluid fluidSave;
+    public ResourceSave fluidSave;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -248,7 +250,7 @@ public class HumanSave : ClickableObjectSave
     public float rotation;
     // Job use
     public JobSave jobSave;
-    public Resource inventory;
+    public ResourceSave inventory;
     // statuses
     public float sleep;
     // specializations
@@ -261,22 +263,20 @@ public class HumanSave : ClickableObjectSave
     }
 }
 [Serializable]
-public class StorageResSave : Resource
+public class StorageResSave : ResourceSave
 {
-    [JsonProperty, JsonRequired] public List<Resource> Requests { get; set; }
+    [JsonProperty, JsonRequired] public List<ResourceSave> Requests { get; set; }
 
     public List<int> carriers;
     public List<int> mod;
 
-    public StorageResSave(StorageResource storageResource)
+    public StorageResSave(StorageResource storageResource) : base(storageResource)
     {
-        types = storageResource.types.ToList();
-        ammounts = storageResource.ammounts.ToList();
-        Requests = storageResource.requests.ToList();
+        Requests = storageResource.requests.Select(q => new ResourceSave(q)).ToList();
         carriers = storageResource.carriers.Select(q => q.id).ToList();
         mod = storageResource.mods.ToList();
     }
-    public StorageResSave()
+    public StorageResSave() : base()
     {
 
     }
@@ -321,3 +321,66 @@ public class MyColor
         return new(r / 255, g / 255, b / 255, a / 255);
     }
 }
+
+public class ResourceSave
+{
+    public List<int> types;
+    public List<int> ammounts;
+
+    public ResourceSave(Resource res)
+    {
+        types = res.types.Select(q => ResFluidTypes.GetResourceIndex(q)).ToList();
+        ammounts = res.ammounts.ToList();
+    }
+    public ResourceSave()
+    {
+        types = new();
+        ammounts = new();
+    }
+}
+
+public class TradeDealSave
+{
+    public int type;
+    public int cost;
+
+    public TradeDealSave(int _type, int _cost)
+    {
+        type = _type;
+        cost = _cost;
+    }
+    public TradeDealSave() { }
+}
+
+public class LocationSave
+{
+    public GridPos position;
+    public string name;
+    
+    public LocationSave(Location location)
+    {
+        position = location.pos;
+        name = location.Name;
+    }
+
+    public LocationSave() { }
+}
+
+public class TradeLocationSave : LocationSave
+{
+    public List<TradeDealSave> tradeDealsSell;
+    public List<TradeDealSave> tradeDealsBuy;
+
+    public float distance;
+
+    public TradeLocationSave(TradeLocation location) : base(location)
+    {
+        tradeDealsSell = location.Sell?.Select(q => new TradeDealSave(ResFluidTypes.GetResourceIndex(q.type), q.cost)).ToList();
+        tradeDealsBuy = location.Buy?.Select(q => new TradeDealSave(ResFluidTypes.GetResourceIndex(q.type), q.cost)).ToList();
+
+        distance = location.distance;
+    }
+
+    public TradeLocationSave() : base() { }
+}
+

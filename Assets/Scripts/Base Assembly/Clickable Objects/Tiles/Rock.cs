@@ -76,8 +76,10 @@ public class Rock : ClickableObject
 
     public override void OnPointerDown(PointerEventData eventData)
     {
-        if(hidden != true)
-            base.OnPointerDown(eventData);
+        if (hidden && SceneRefs.GridTiles.activeControl == ControlMode.Nothing)
+            return;
+        base.OnPointerDown(eventData);
+
     }
     #endregion
 
@@ -89,6 +91,8 @@ public class Rock : ClickableObject
     /// <returns><inheritdoc/></returns>
     public override InfoWindow OpenWindow()
     {
+        if (hidden)
+            return null;
         InfoWindow info = base.OpenWindow();
         info.Open(this, InfoMode.Rock);
         return info;
@@ -102,9 +106,9 @@ public class Rock : ClickableObject
         if (clickable == null)
             clickable = new RockSave();
         if (rockYield?.types.Count == 0)
-            (clickable as RockSave).yeild = null;
+            (clickable as RockSave).yeild = new();
         else
-            (clickable as RockSave).yeild = rockYield;
+            (clickable as RockSave).yeild = new(rockYield);
         (clickable as RockSave).integrity = integrity;
         (clickable as RockSave).originalIntegrity = originalIntegrity;
         (clickable as RockSave).toBeDug = toBeDug;
@@ -117,7 +121,7 @@ public class Rock : ClickableObject
         integrity = (save as RockSave).integrity;
         originalIntegrity = (save as RockSave).originalIntegrity;
         toBeDug = (save as RockSave).toBeDug;
-        rockYield = (save as RockSave).yeild;
+        rockYield = new((save as RockSave).yeild);
         base.Load(save);
     }
     #endregion Saving

@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 namespace InfoWindowElements
 {
     [UxmlElement]
-    public partial class DoubleFluidList : DoubleResourceList<Fluid, FluidType>
+    public partial class DoubleFluidList : DoubleResourceList
     {
         public DoubleFluidList() : base() { }
         public DoubleFluidList(bool _cost, string _name, bool _useBindings = false, bool center = false)

@@ -97,11 +97,12 @@ MonoBehaviour:
       type: {class: QuestResourceReward, ns: , asm: Quests}
       data:
         resource:
-          types: 
+          types: []
           ammounts: 
           baseResource:
-            types: 
-            ammounts: 
+            types:
+            - {fileID: 11400000, guid: 8fc4cf8feaad5a648bd0c87ee4ff2ca6, type: 2}
+            ammounts: 00000000
           mod:
             percentMod: 1
             absoluteMod: 0
@@ -124,10 +125,10 @@ MonoBehaviour:
       data:
         maxProgress: 0
         resource:
-          types: 
+          types: []
           ammounts: 
           baseResource:
-            types: 0200000004000000
+            types: []
             ammounts: 5000000046000000
           mod:
             percentMod: 1
@@ -154,10 +155,10 @@ MonoBehaviour:
       data:
         maxProgress: 0
         resource:
-          types: 
+          types: []
           ammounts: 
           baseResource:
-            types: 02000000
+            types: []
             ammounts: 32000000
           mod:
             percentMod: 1
@@ -180,10 +181,10 @@ MonoBehaviour:
       data:
         maxProgress: 0
         resource:
-          types: 
+          types: []
           ammounts: 
           baseResource:
-            types: 05000000
+            types: []
             ammounts: 64000000
           mod:
             percentMod: 1

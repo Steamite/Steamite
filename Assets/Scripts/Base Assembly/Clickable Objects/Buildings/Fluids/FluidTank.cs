@@ -19,7 +19,7 @@ public class FluidTank : Building, IFluidWork
         {
             if((byt & 1) == 1 || byt == -1)
             {
-                storedFluid.types.Add((FluidType)i);
+                storedFluid.types.Add(ResFluidTypes.GetFluidByIndex(i));
                 storedFluid.ammounts.Add(0);
                 storedFluid.capacities.Add(localRes.capacity.currentValue);
             }
@@ -46,12 +46,12 @@ public class FluidTank : Building, IFluidWork
     {
         if (clickable == null)
             clickable = new TankBSave();
-        (clickable as TankBSave).fluidSave = storedFluid;
+        (clickable as TankBSave).fluidSave = new(storedFluid);
         return base.Save(clickable);
     }
     public override void Load(ClickableObjectSave save)
     {
-        StoredFluids = (save as TankBSave).fluidSave;
+        StoredFluids = new((save as TankBSave).fluidSave);
         base.Load(save);
     }
     #endregion

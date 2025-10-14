@@ -26,8 +26,8 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
 
     #region Prefabs
     public BuildingData buildPrefabs;
-    public ResourceHolder tilePrefabs;
-    public ResourceHolder specialPrefabs;
+    public PrefabHolder tilePrefabs;
+    public PrefabHolder specialPrefabs;
     public PipePart PipeConnectionPrefab;
     #endregion
     Material pipeMaterial;

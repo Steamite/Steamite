@@ -141,7 +141,7 @@ MonoBehaviour:
   id: -1
   objectName: Digger
   localRes:
-    types: 
+    types: []
     ammounts: 
     capacity:
       baseValue: 200
@@ -199,10 +199,10 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    types: 
+    types: []
     ammounts: 
     baseResource:
-      types: 
+      types: []
       ammounts: 
     mod:
       percentMod: 1

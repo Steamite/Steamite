@@ -89,7 +89,7 @@ class ResourceTester : IPreprocessBuildWithReport
 
     static bool CheckResource(Resource testRes, string objectName, string categName, string problemName)
     {
-        if (testRes.types.Contains(ResourceType.None))
+        if (!testRes.types.Any(q => q.Name == "None"))
         {
             /*if (handle == null)
                 handle = EditorUtility.DisplayDialog("None resources detected", "Do you want to fail the build, or remove all NONE types?", , );*/

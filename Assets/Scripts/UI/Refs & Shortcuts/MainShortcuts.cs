@@ -91,18 +91,18 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
             // toggle dig
             if (dig.triggered)
             {
-                gt.ChangeSelMode(ControlMode.dig);
+                gt.ChangeSelMode(ControlMode.Dig);
             }
             // toggle deconstruct
             else if (deconstruction.triggered)
             {
-                gt.ChangeSelMode(ControlMode.deconstruct);
+                gt.ChangeSelMode(ControlMode.Deconstruct);
             }
             // rotates building
             else if (buildRotate.triggered)
             {
                 float axis = buildRotate.ReadValue<float>();
-                if (SceneRefs.GridTiles.activeControl == ControlMode.build)
+                if (SceneRefs.GridTiles.activeControl == ControlMode.Build)
                 {
                     Building building = SceneRefs.GridTiles.BlueprintInstance;
                     if (building is Pipe)
@@ -126,7 +126,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
 
         if (shift.inProgress)
         {
-            if (gt.activeControl == ControlMode.deconstruct)
+            if (gt.activeControl == ControlMode.Deconstruct)
             {
                 gt.Enter(gt.activeObject);
             }

@@ -207,13 +207,19 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         maxprogress += humanSaves.Length * HUMAN_WEIGHT;
         maxprogress += researchSave.count * RES_WEIGHT;
         bar.highValue = maxprogress;
-
-        await LoadMap(worldSave);
-        await LoadGameState(gameState);
-        await LoadHumans(humanSaves);
-        await LoadResearches(researchSave);
-        await LoadTrade(tradeSave);
-        await LoadQuests(questSave);
+        try
+        {
+            await LoadMap(worldSave);
+            await LoadGameState(gameState);
+            await LoadHumans(humanSaves);
+            await LoadResearches(researchSave);
+            await LoadTrade(tradeSave);
+            await LoadQuests(questSave);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Failed to load:" + e);
+        }
     }
 
 
@@ -246,7 +252,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         foreach (ChunkSave chunkSave in chunks)
         {
             SceneRefs.ObjectFactory
-                .CreateChunk(chunkSave.gridPos, chunkSave.resSave, false)
+                .CreateChunk(chunkSave.gridPos, new(chunkSave.resSave), false)
                 .Load(chunkSave);
             ProgressGlobal += CHUNK_WEIGHT;
         }

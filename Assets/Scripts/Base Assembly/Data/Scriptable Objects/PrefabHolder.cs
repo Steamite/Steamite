@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>Holds prefabs for Factory instantialization.</summary>
-[CreateAssetMenu(fileName = "Resource holder", menuName = "ScriptableObjects/Resource Holder", order = 1)]
-public class ResourceHolder : ScriptableObject
+[CreateAssetMenu(fileName = "Prefab holder", menuName = "ScriptableObjects/Prefab Holder", order = 1)]
+public class PrefabHolder : ScriptableObject
 {
     /// <summary>Registered prefabs</summary>
     [SerializeField] List<ClickableObject> prefabs = new();

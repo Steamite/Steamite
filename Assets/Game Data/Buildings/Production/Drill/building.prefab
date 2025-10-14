@@ -85,6 +85,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -106,6 +108,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -138,7 +141,7 @@ MonoBehaviour:
   id: -1
   objectName: Drill
   localRes:
-    types: 
+    types: []
     ammounts: 
     capacity:
       baseValue: -1
@@ -206,10 +209,10 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    types: 
+    types: []
     ammounts: 
     baseResource:
-      types: 
+      types: []
       ammounts: 
     mod:
       percentMod: 1
@@ -240,33 +243,33 @@ MonoBehaviour:
       percentMod: 1
       absoluteMod: 0
   resourceCost:
-    types: 
+    types: []
     ammounts: 
     baseResource:
-      types: 
+      types: []
       ammounts: 
     mod:
       percentMod: 1
       absoluteMod: 0
   resourceYield:
-    types: 
+    types: []
     ammounts: 
     baseResource:
-      types: 
+      types: []
       ammounts: 
     mod:
       percentMod: 1
       absoluteMod: 0
   fluidCost:
-    types: 01000000
+    types: []
     ammounts: 01000000
     capacities: 
   fluidYeild:
-    types: 
+    types: []
     ammounts: 
     capacities: 
   storedFluids:
-    types: 
+    types: []
     ammounts: 
     capacities: 
   ammountPerCycle: 3

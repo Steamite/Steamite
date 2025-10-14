@@ -172,7 +172,7 @@ namespace InfoWindowElements
             storageElem.canStore.Q<Button>("Not-Store").RegisterCallback<ClickEvent>((_) => ToggleCanStore(false, x));
             try
             {
-                storageElem.icon.style.unityBackgroundImageTintColor = ToolkitUtils.resSkins.GetResourceColor(uiResource.type);
+                storageElem.icon.style.unityBackgroundImageTintColor = uiResource.type.color;
             }
             catch
             {

@@ -32,6 +32,12 @@ public class CapacityResource : Resource
         ((IModifiable)capacity).Init();
     }
 
+    public CapacityResource(ResourceSave save, int _capacity) : base(save)
+    {
+        capacity = new(_capacity);
+        ((IModifiable)capacity).Init();
+    }
+
     public override bool Equals(object _resource)
     {
         if (_resource is not CapacityResource)

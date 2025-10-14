@@ -24,7 +24,7 @@ public class Road : ClickableObject
     /// <inheritdoc/>
     public override void OnPointerDown(PointerEventData eventData)
     {
-        if ((SceneRefs.GridTiles.tempMarkedTiles.Count > 0 || SceneRefs.GridTiles.activeControl == ControlMode.build))
+        if ((SceneRefs.GridTiles.tempMarkedTiles.Count > 0 || SceneRefs.GridTiles.activeControl == ControlMode.Build))
             base.OnPointerDown(eventData);
     }
 
@@ -34,7 +34,7 @@ public class Road : ClickableObject
     /// <param name="eventData"><inheritdoc/></param>
     public override void OnPointerUp(PointerEventData eventData)
     {
-        if (SceneRefs.GridTiles.tempMarkedTiles.Count > 0 || SceneRefs.GridTiles.activeControl == ControlMode.build)
+        if (SceneRefs.GridTiles.tempMarkedTiles.Count > 0 || SceneRefs.GridTiles.activeControl == ControlMode.Build)
         {
             base.OnPointerUp(eventData);
         }

@@ -47,8 +47,8 @@ public partial class FluidInfo : InfoWindowControl
                 dataSource = data;
                 for (int i = 0; i < fluid.types.Count; i++)
                 {
-                    FluidType type = fluid.types[i];
-                    containers.Add(CreateFluidIcon(ToolkitUtils.resSkins.GetResourceColor(type)));
+                    ResourceType type = fluid.types[i];
+                    containers.Add(CreateFluidIcon(type.color));
 
                     var t = type;
                     var container = containers[i];

@@ -91,7 +91,7 @@ public partial class OutpostView : TradeMapViewBase
 
     void CreateUpgradeOutpost(VisualElement root)
     {
-        EnumField enumField;
+        DropdownField dropdownField;
         DoubleResList costList;
         
 
@@ -105,8 +105,8 @@ public partial class OutpostView : TradeMapViewBase
             }
         };
         root.Add(newView);
-        newView.Add(enumField = new(ResourceType.None));
-
+        newView.Add(dropdownField = new() { choices = ResFluidTypes.GetResNamesList()});
+        dropdownField.index = 0;
 
         newView.Add(costList = new(true, "cost") { showMoney = true });
         costList.Open(Outpost.UpgradeCosts[outpost.level].resource);
@@ -118,7 +118,7 @@ public partial class OutpostView : TradeMapViewBase
         lvlBonus.style.bottom = 150;
         lvlBonus.style.maxHeight = StyleKeyword.None;
         lvlBonus.style.minWidth = new Length(82, LengthUnit.Percent);
-        enumField.RegisterValueChangedCallback(BonusTextUpdate);
+        dropdownField.RegisterValueChangedCallback(BonusTextUpdate);
         BonusTextUpdate(null);
 
         newView.Add(unlockButton = new()
@@ -140,8 +140,8 @@ public partial class OutpostView : TradeMapViewBase
         unlockButton.AddToClassList("disabled-button");
         if (outpost.CanAffordUpgrade())
         {
-            enumField.RegisterValueChangedCallback(UnlockButtonUpdates);
-            unlockButton.clicked += () => CreateOutpost(enumField);
+            dropdownField.RegisterValueChangedCallback(UnlockButtonUpdates);
+            unlockButton.clicked += () => CreateOutpost(dropdownField);
             unlockButton.text = "Construct";
         }
         else
@@ -152,15 +152,15 @@ public partial class OutpostView : TradeMapViewBase
         newView.style.display = DisplayStyle.Flex;
     }
 
-    void BonusTextUpdate(ChangeEvent<Enum> ev)
+    void BonusTextUpdate(ChangeEvent<string> ev)
     {
         Label l = lvlBonus.Q<Label>("Value");
         VisualElement el = lvlBonus.Q<VisualElement>("Icon");
-        ResourceType type = ResourceType.None;
+        ResourceType type = ResFluidTypes.None;
         if (ev != null)
-            type = (ResourceType)(object)ev.newValue;
+            type = ResFluidTypes.GetResByName(ev.newValue);
         l.style.flexGrow = 1;
-        if (type == ResourceType.None)
+        if (type == ResFluidTypes.None)
         {
             l.text = "Chose an upgrade!";
             l.style.unityTextAlign = TextAnchor.MiddleCenter;
@@ -170,14 +170,14 @@ public partial class OutpostView : TradeMapViewBase
         {
             l.text = $"{Outpost.ResourceAmmount[type]} per week";
             l.style.unityTextAlign = TextAnchor.MiddleLeft;
-            el.style.unityBackgroundImageTintColor = ToolkitUtils.resSkins.GetResourceColor(type);
+            el.style.unityBackgroundImageTintColor = type.color;
             el.style.display = DisplayStyle.Flex;
         }
     }
 
-    void UnlockButtonUpdates(ChangeEvent<Enum> ev)
+    void UnlockButtonUpdates(ChangeEvent<string> ev)
     {
-        if ((ResourceType)(object)ev.newValue == 0)
+        if (ev.newValue == "None")
         {
             unlockButton.RemoveFromClassList("main-button");
             unlockButton.AddToClassList("disabled-button");
@@ -215,9 +215,9 @@ public partial class OutpostView : TradeMapViewBase
         return outpost;
     }
 
-    void CreateOutpost(EnumField field)
+    void CreateOutpost(DropdownField field)
     {
-        outpost.StartUpgrade((ResourceType)field.value);
+        outpost.StartUpgrade(ResFluidTypes.GetResByName(field.value));
         Open(outpostIndex);
     }
 }

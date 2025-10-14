@@ -6,7 +6,6 @@ using UnityEngine.UIElements;
 public static class ToolkitUtils
 {
     public static LocalMenu localMenu;
-    public static ResourceSkins resSkins;
 
     const string MULTY_COLUMN = "unity-multi-column-view__row-container";
     const string LIST_VIEW = "unity-list-view__item";
@@ -55,11 +54,6 @@ public static class ToolkitUtils
         element.style.transitionDuration = new List<TimeValue> { new TimeValue(0, TimeUnit.Second) };
         action();
         element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
-    }
-
-    public static void Init()
-    {
-        resSkins = Resources.Load<ResourceSkins>("Holders/Data/Resource Skin");
     }
 
     public static VisualElement GetRoot(VisualElement element)

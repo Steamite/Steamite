@@ -169,7 +169,7 @@ MonoBehaviour:
   id: -1
   objectName: Elevator
   localRes:
-    types: 
+    types: []
     ammounts: 
     capacity:
       baseValue: 2000
@@ -207,11 +207,14 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    types: 02000000
-    ammounts: 50000000
+    types:
+    - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+    - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+    ammounts: 500000000000000000000000
     baseResource:
-      types: 02000000
-      ammounts: 50000000
+      types:
+      - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
+      ammounts: 5000000000000000
     mod:
       percentMod: 1
       absoluteMod: 0

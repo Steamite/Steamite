@@ -24,7 +24,7 @@ public class ModifiableResource : Resource, IModifiable
 
 
     public ModifiableResource() : base() { }
-    public ModifiableResource(ResAmmount<ResourceType> resAmmount) : base(resAmmount) { }
+    public ModifiableResource(Resource resAmmount) : base(resAmmount) { }
     public ModifiableResource(List<ResourceType> types, List<int> ammounts) : base(types, ammounts) { }
 
     /// <summary>Cycles though the base resource and recalculates the current resource.</summary>

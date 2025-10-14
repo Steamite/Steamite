@@ -3,9 +3,36 @@
     width: 100%;
     margin-bottom: 50px;
 }
+
 .unity-progress-bar__container {
     min-height: 100%;
     max-height: 100%;
+}
+
+.unity-popup-field__input {
+    flex-direction: row;
+    flex-grow: 1;
+    max-width: 250px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 5px;
+    padding-bottom: 0;
+    padding-left: 10px;
+    -unity-font-style: normal;
+    font-size: 35px;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+    background-color: var(--interactable);
+    transition-duration: 0.5s;
 }
 
 .unity-progress-bar__background {

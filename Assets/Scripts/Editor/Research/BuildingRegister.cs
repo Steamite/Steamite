@@ -519,7 +519,7 @@ namespace EditorWindows.Windows
                     if (building is IStorage storage)
                     {
                         el.style.display = DisplayStyle.Flex;
-                        List<string> choices = Enum.GetNames(typeof(ResourceType)).ToList();
+                        List<string> choices = ResFluidTypes.GetResNamesList();
                         field.choices = choices;
                         field.value = storage.CanStoreMask;
                         field.RegisterValueChangedCallback(CanStoreFluidsChange);
@@ -527,7 +527,7 @@ namespace EditorWindows.Windows
                     else if (building is FluidTank tank)
                     {
                         el.style.display = DisplayStyle.Flex;
-                        List<string> choices = Enum.GetNames(typeof(FluidType)).ToList();
+                        List<string> choices = ResFluidTypes.GetFluidNames();
                         field.choices = choices;
                         field.value = tank.TypesToStore;
                         field.RegisterValueChangedCallback(CanStoreFluidsChange);

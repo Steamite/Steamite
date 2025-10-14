@@ -35,32 +35,28 @@ MonoBehaviour:
       z: 1702
       y: 0
     Buy:
-    - name: 
-      type: 1
+    - type: {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
       cost: 3
-    - name: 
-      type: 2
+    - type: {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
       cost: 5
     Sell:
-    - name: 
-      type: 3
+    - type: {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
       cost: 1
-    - name: 
-      type: 4
+    - type: {fileID: 11400000, guid: 373fd337df8db3b4abb922168bbf5647, type: 2}
       cost: 2
+    distance: 387.21216
   - name: Wye valley
     pos:
       x: 496
       z: 987
       y: 0
     Buy:
-    - name: 
-      type: 1
+    - type: {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
       cost: 3
-    - name: 
-      type: 2
+    - type: {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
       cost: 5
     Sell: []
+    distance: 152.13892
   - name: Scottish Highlands
     pos:
       x: 896
@@ -68,25 +64,23 @@ MonoBehaviour:
       y: 0
     Buy: []
     Sell:
-    - name: 
-      type: 1
+    - type: {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
       cost: 3
-    - name: 
-      type: 2
+    - type: {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
       cost: 5
+    distance: 280.14282
   - name: test1
     pos:
       x: 300
       z: 1700
       y: 0
     Buy:
-    - name: 
-      type: 1
+    - type: {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
       cost: 3
-    - name: 
-      type: 2
+    - type: {fileID: 11400000, guid: 373fd337df8db3b4abb922168bbf5647, type: 2}
       cost: 5
     Sell: []
+    distance: 430.11627
   - name: test1
     pos:
       x: 1000
@@ -94,9 +88,8 @@ MonoBehaviour:
       y: 0
     Buy: []
     Sell:
-    - name: 
-      type: 1
+    - type: {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
       cost: 3
-    - name: 
-      type: 2
+    - type: {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
       cost: 5
+    distance: 141.42136
