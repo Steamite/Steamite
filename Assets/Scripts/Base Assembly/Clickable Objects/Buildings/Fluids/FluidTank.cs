@@ -8,16 +8,16 @@ public class FluidTank : Building, IFluidWork
 
     [SerializeField] Fluid storedFluid;
     [CreateProperty] public Fluid StoredFluids { get => storedFluid; set => storedFluid = value; }
-    public int TypesToStore;
+    public ulong TypesToStore;
     public override void FinishBuild()
     {
         storedFluid = new();
 
-        int byt = TypesToStore;
+        ulong byt = TypesToStore;
         int i = 0;
         while(byt != 0) 
         {
-            if((byt & 1) == 1 || byt == -1)
+            if((byt & 1) == 1)
             {
                 storedFluid.types.Add(ResFluidTypes.GetFluidByIndex(i));
                 storedFluid.ammounts.Add(0);

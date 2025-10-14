@@ -65,6 +65,7 @@ namespace EditorWindows
                 categoryRemover.SetEnabled(true);
                 createCategory.text = "Rename";
                 createCategory.clicked -= CreateCateg;
+                createCategory.clicked -= RenameCateg;
                 createCategory.clicked += RenameCateg;
 
                 iconElement.style.backgroundImage = selectedCategory.Icon;
@@ -78,8 +79,9 @@ namespace EditorWindows
 
                 categoryRemover.SetEnabled(false);
                 createCategory.text = "Create new category";
-                createCategory.clicked += CreateCateg;
                 createCategory.clicked -= RenameCateg;
+                createCategory.clicked -= CreateCateg;
+                createCategory.clicked += CreateCateg;
 
                 iconElement.style.backgroundImage = null;
                 iconSelector.value = null;
@@ -118,6 +120,7 @@ namespace EditorWindows
 
         void NameChange(ChangeEvent<string> ev)
         {
+            // The category needs to never be null, even when creating a new one
             createCategory.SetEnabled(
                 ev.newValue.Length > 0 &&
                 selectedCategory.Name != ev.newValue &&

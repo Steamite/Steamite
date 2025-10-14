@@ -209,12 +209,11 @@ MonoBehaviour:
   cost:
     types:
     - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
-    - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
-    ammounts: 500000000000000000000000
+    ammounts: 3200000000000000
     baseResource:
       types:
-      - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
-      ammounts: 5000000000000000
+      - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+      ammounts: 3200000000000000
     mod:
       percentMod: 1
       absoluteMod: 0
@@ -230,4 +229,4 @@ MonoBehaviour:
   maximalProgress: 0
   categoryID: 0
   wrapperID: 1122905122
-  canStoreInt: 62
+  canStoreInt: 68719476735

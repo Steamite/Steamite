@@ -351,7 +351,7 @@ public static class MyRes
     /// <param name="human">Human that is effected by result.</param>
     public static void EatFood(Human human)
     {
-        ResourceType food = ResFluidTypes.GetResByName("Food");
+        ResourceType food = ResFluidTypes.GetResByName("Meat");
         IStorage store = storage.FirstOrDefault(q => q.LocalResources.ammounts[q.LocalResources.Future(true).types.IndexOf(food)] > 0);
         if (store != null)
         {

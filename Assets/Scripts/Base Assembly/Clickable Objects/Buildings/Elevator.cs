@@ -12,8 +12,8 @@ public class Elevator : Building, IStorage
     [CreateProperty] public List<bool> CanStore { get; set; } = new();
     public StorageResource LocalResources => localRes;
 
-    public int CanStoreMask { get => canStoreInt; set => canStoreInt = value; }
-    [SerializeField] int canStoreInt; 
+    public ulong CanStoreMask { get => canStoreInt; set => canStoreInt = value; }
+    [SerializeField] ulong canStoreInt; 
     #endregion
 
     public override void UniqueID()

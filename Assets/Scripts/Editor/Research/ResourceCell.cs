@@ -90,7 +90,7 @@ public partial class ResourceCell : ResourceList
         el.RemoveFromClassList("unity-collection-view__item");
         DropdownField type = el.Q<DropdownField>();
         type.choices = ResFluidTypes.GetResNamesList();
-        type.value = ((UIResource)itemsSource[i]).type.Name;
+        type.value = ((UIResource)itemsSource[i]).type?.Name;
         type.RegisterValueChangedCallback(ChangeType);
         type.style.marginRight = 10;
 

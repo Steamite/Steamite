@@ -24,6 +24,7 @@ public class ModifiableResource : Resource, IModifiable
 
 
     public ModifiableResource() : base() { }
+    public ModifiableResource(ResourceSave save) : base(save) { }
     public ModifiableResource(Resource resAmmount) : base(resAmmount) { }
     public ModifiableResource(List<ResourceType> types, List<int> ammounts) : base(types, ammounts) { }
 

@@ -92,7 +92,7 @@ public class ResourceEditor : PropertyDrawer
                     (enu) =>
                     {
                         property.FindPropertyRelative(
-                            nameof(Resource.types)).GetArrayElementAtIndex(i).objectReferenceValue = ResFluidTypes.GetResByName(enu.newValue);
+                            nameof(Resource.types)).GetArrayElementAtIndex(i).managedReferenceValue = ResFluidTypes.GetResByName(enu.newValue);
                         serializedObject.ApplyModifiedProperties();
                     });
 

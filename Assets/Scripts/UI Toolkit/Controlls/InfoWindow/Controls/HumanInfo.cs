@@ -54,25 +54,27 @@ public partial class HumanInfo : InfoWindowControl
         element = new() { name = "Group" };
         element.Add(new Label("Job") { name = "Header" });
 
-        secElement = new() { name = "Line-Container", style = { marginLeft = new Length(5, LengthUnit.Percent) } }; ;
+        secElement = new() { name = "Line-Container", style = { marginLeft = new Length(5, LengthUnit.Percent) } };
         secElement.Add(new Label("Type"));
         secElement.Add(jobType = new Label("Unknown") { name = "Type" });
         element.Add(secElement);
 
-        secElement = new() { name = "Line-Container", style = { marginLeft = new Length(5, LengthUnit.Percent) } }; ;
+        secElement = new() { name = "Line-Container", style = { marginLeft = new Length(5, LengthUnit.Percent) } };
         secElement.Add(new Label("Position"));
         secElement.Add(jobPosition = new Label("Unknown") { name = "Position" });
         element.Add(secElement);
 
-        secElement = new() { name = "Line-Container", style = { marginLeft = new Length(5, LengthUnit.Percent) } }; ;
+        secElement = new() { name = "Line-Container", style = { marginLeft = new Length(5, LengthUnit.Percent) } };
         secElement.Add(new Label("Object"));
         secElement.Add(jobObject = new Label("Unknown") { name = "Object" });
         element.Add(secElement);
         Add(element);
 
         //inventory
-        Add(new Label("Inventory") { name = "Resource-Header" });
-        Add(inventory = new ResList());
+        element = new() { name = "Group" };
+        element.Add(new Label("Inventory") { name = "Resource-Header" });
+        element.Add(inventory = new ResList());
         inventory.verticalPadding = 2;
+        Add(element);
     }
 }

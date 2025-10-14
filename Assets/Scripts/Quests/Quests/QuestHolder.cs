@@ -246,7 +246,7 @@ public class Order : Quest
     public Order(OrderChoiceSave save)
     {
         TimeToFail = save.timeToFail;
-        objectives.Add(new ResourceObjective(save.resources));
+        objectives.Add(new ResourceObjective(new(save.resources, save.money)));
         penalties.Add(new TrustPenalty(save.penalty));
         rewards.Add(new TrustReward(save.gain));
     }

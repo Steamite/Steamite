@@ -29,15 +29,17 @@ public class QuestControllerSave
 public class OrderChoiceSave
 {
     public int timeToFail;
-    public MoneyResource resources;
+    public ResourceSave resources;
     public int gain;
     public int penalty;
+    public int money;
 
     public OrderChoiceSave() { }
     public OrderChoiceSave(Order order)
     {
         timeToFail = order.TimeToFail;
-        resources = (order.objectives[0] as ResourceObjective).resource;
+        resources = new((order.objectives[0] as ResourceObjective).resource);
+        money = +(order.objectives[0] as ResourceObjective).resource.Money;
         gain = (order.rewards[0] as TrustReward).gainAmmount;
         penalty = (order.penalties[0] as TrustPenalty).penaltyAmmount;
     }

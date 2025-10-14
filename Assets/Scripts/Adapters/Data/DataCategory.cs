@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class DataCategory<T>
+public abstract class DataCategory<T> where T : DataObject
 {
     [SerializeField] public string Name;
     [SerializeField] public List<T> Objects;

@@ -572,7 +572,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             if (!q.constructed)
                 q.maximalProgress = q.CalculateMaxProgress();
             if (q is IStorage)
-                ((IStorage)q).SetupStorage(100);
+                ((IStorage)q).SetupStorage(50);
 
             BuildingSave bSave = q.Save() as BuildingSave;
             bSave.gridPos.y = level;
