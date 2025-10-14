@@ -31,6 +31,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - resources
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5706a7d6b23b9154b8e49dfd5130f5ec
+    m_Address: Assets/Game Data/ResourceData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ad404bf258fcc5a40b6ebf5cfebeac1c
     m_Address: Assets/Game Data/UI
     m_ReadOnly: 0

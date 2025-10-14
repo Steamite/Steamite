@@ -511,10 +511,10 @@ namespace EditorWindows.Windows
                 title = "Can store",
                 resizable = true,
                 width = 150,
-                makeCell = () => new MaskField(),
+                makeCell = () => new Mask64Field(),
                 bindCell = (el, i) =>
                 {
-                    MaskField field = (MaskField)el;
+                    Mask64Field field = (Mask64Field)el;
                     Building building = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
                     if (building is IStorage storage)
                     {
@@ -539,7 +539,7 @@ namespace EditorWindows.Windows
                 },
                 unbindCell = (el, i) =>
                 {
-                    MaskField field = (MaskField)el;
+                    Mask64Field field = (Mask64Field)el;
                     field.UnregisterValueChangedCallback(CanStoreFluidsChange);
                 },
             });
@@ -828,7 +828,7 @@ namespace EditorWindows.Windows
         }
 
 
-        void CanStoreFluidsChange(ChangeEvent<int> ev)
+        void CanStoreFluidsChange(ChangeEvent<ulong> ev)
         {
             int i = ev.target.GetRowIndex();
             Building prev = ((BuildingWrapper)dataGrid.itemsSource[i]).building;

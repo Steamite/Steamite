@@ -10,12 +10,11 @@ public interface IStorage
     /// <summary>List containing which resources can be stored.</summary>
     public List<bool> CanStore { get; set; }
     public StorageResource LocalResources { get; }
-    public int CanStoreMask { get; set; }
+    public ulong CanStoreMask { get; set; }
 
     /// <summary>
     /// Assigns all resource types and setups base storage resources.
     /// </summary>
-    /// <param name="jQ">Reference to register this object to global storage list.</param>
     public void SetupStorage(int ammount = 0)
     {
         LocalResources.types = new();
@@ -23,7 +22,7 @@ public interface IStorage
         CanStore = new();
 
         int i = 0;
-        int mask = CanStoreMask;
+        ulong mask = CanStoreMask;
         while (mask != 0)
         {
             if((mask & 1) == 1)

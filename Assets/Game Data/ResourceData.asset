@@ -1,0 +1,165 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc0bacc9113037b41afa0dc11a5da75f, type: 3}
+  m_Name: ResourceData
+  m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Data.Scriptable_Objects.ResourceData
+  Categories:
+  - Name: Hidden
+    Objects:
+    - Name: None
+      id: 960019026
+      data: {fileID: 11400000, guid: 8fc4cf8feaad5a648bd0c87ee4ff2ca6, type: 2}
+    - Name: Money
+      id: 1681478910
+      data: {fileID: 11400000, guid: c1f62f9e2918d7e44adacadc45cfec2e, type: 2}
+    Icon: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - Name: Ores
+    Objects:
+    - Name: Magnetite
+      id: 1523384999
+      data: {fileID: 11400000, guid: e523913a9c6ce8d4fb05048da649cfc5, type: 2}
+    - Name: Chalcopyrit
+      id: 1562962152
+      data: {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
+    - Name: Sphalerite
+      id: 1148646705
+      data: {fileID: 11400000, guid: 18096b245d628204cba4870671dc9616, type: 2}
+    - Name: Cassiterite
+      id: 1062789367
+      data: {fileID: 11400000, guid: 2041a4d797e915a4db26715015bb6e3f, type: 2}
+    - Name: Quartz
+      id: 229774721
+      data: {fileID: 11400000, guid: 476987d8701b79b42acf9d04564a5ac0, type: 2}
+    - Name: Gold
+      id: 398967671
+      data: {fileID: 11400000, guid: 6f13f7cede6861645a353535afb233de, type: 2}
+    - Name: Argentite
+      id: 1693152194
+      data: {fileID: 11400000, guid: cce725a6a24c0cf49ab46fca0bc08325, type: 2}
+    - Name: Coal
+      id: 483160313
+      data: {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+    - Name: Crocidolite
+      id: 683333578
+      data: {fileID: 11400000, guid: 805781cfa333b674d931c9d7619402df, type: 2}
+    - Name: Gems
+      id: 401659008
+      data: {fileID: 11400000, guid: 6d9ae494b146c3941ad8b8f8c8b0ed8e, type: 2}
+    - Name: Sand
+      id: 1757689281
+      data: {fileID: 11400000, guid: 4ea054a86f63a0347b8df6c4c567b716, type: 2}
+    Icon: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - Name: Alloys
+    Objects:
+    - Name: Brass
+      id: 313979134
+      data: {fileID: 11400000, guid: 1347ef2c9f2b3c44cb6f5e843e1d55bb, type: 2}
+    - Name: Bronze
+      id: 1825339902
+      data: {fileID: 11400000, guid: 1d2e942eab98fe943ab9432e5e945d79, type: 2}
+    - Name: Copper
+      id: 2106465080
+      data: {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
+    - Name: Iron
+      id: 875387763
+      data: {fileID: 11400000, guid: f9e61f1dd3b0f9d418d535915c9c5770, type: 2}
+    - Name: Steel
+      id: 288977939
+      data: {fileID: 11400000, guid: 9ac8915829687d440ae620920a3cb94e, type: 2}
+    Icon: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - Name: Building Materials
+    Objects:
+    - Name: Glass
+      id: 515236953
+      data: {fileID: 11400000, guid: e592b624b77a5da49a98b4964344738d, type: 2}
+    - Name: Metal
+      id: 326042394
+      data: {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
+    - Name: Stone
+      id: 1304900807
+      data: {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
+    - Name: Wood
+      id: 394545281
+      data: {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
+    Icon: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - Name: Food
+    Objects:
+    - Name: Meat
+      id: 639822093
+      data: {fileID: 11400000, guid: 373fd337df8db3b4abb922168bbf5647, type: 2}
+    - Name: Mushrooms
+      id: 1295931650
+      data: {fileID: 11400000, guid: 0a6313d780b942247a9feb75238dcfbc, type: 2}
+    Icon: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - Name: Basic parts
+    Objects:
+    - Name: Bolts
+      id: 959130990
+      data: {fileID: 11400000, guid: 5fcb622e948252c4fb2a7c663a71ea91, type: 2}
+    - Name: Cogwheel
+      id: 207532672
+      data: {fileID: 11400000, guid: 6fee85af489f377499eaab602df43f31, type: 2}
+    - Name: Leather
+      id: 1032147087
+      data: {fileID: 11400000, guid: b67063f5a7849e04d9d584cf9d03d1df, type: 2}
+    - Name: Pipes
+      id: 38592623
+      data: {fileID: 11400000, guid: f05e94de4a3c4604095e1c190f760e54, type: 2}
+    - Name: Rubber
+      id: 1659696399
+      data: {fileID: 11400000, guid: 74fa3538aa81f464baa5646b57334e05, type: 2}
+    - Name: Spring
+      id: 467632481
+      data: {fileID: 11400000, guid: 2e6ab3eb67a50cd489ed9f4797d756ba, type: 2}
+    Icon: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - Name: Advanced Parts
+    Objects:
+    - Name: Clocks
+      id: 1822603645
+      data: {fileID: 11400000, guid: 33453fe695958da479f24d952896dd80, type: 2}
+    - Name: Goggles
+      id: 185725194
+      data: {fileID: 11400000, guid: 14d84716ffa48524aaa648bd053e9828, type: 2}
+    - Name: Meter
+      id: 1250176966
+      data: {fileID: 11400000, guid: 486a54edf7f2a294a89325f5f8758bf7, type: 2}
+    - Name: Lens
+      id: 956024362
+      data: {fileID: 11400000, guid: 0225af04b98e951408452b14f0aab218, type: 2}
+    Icon: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - Name: Human Stuff
+    Objects:
+    - Name: Clothes
+      id: 1097593105
+      data: {fileID: 11400000, guid: f9678f0cb45b7034db19a8daa687f286, type: 2}
+    - Name: Tools
+      id: 1173801358
+      data: {fileID: 11400000, guid: ac2f30fb838ec384fb07c52c3f8f6aa8, type: 2}
+    Icon: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - Name: Fluids
+    Objects:
+    - Name: Water
+      id: 786902257
+      data: {fileID: 11400000, guid: 74b820c555e5e6a419fb4205c0a8eb86, type: 2}
+    - Name: Steam
+      id: 1221293458
+      data: {fileID: 11400000, guid: f8a2946e5edf5df46ae20f11393cd418, type: 2}
+    Icon: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}

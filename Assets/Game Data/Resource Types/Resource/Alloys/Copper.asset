@@ -15,4 +15,3 @@ MonoBehaviour:
   Name: Copper
   color: {r: 0.72156864, g: 0.4509804, b: 0.2, a: 1}
   image: {fileID: 0}
-  category: {fileID: 11400000, guid: 4d6c5914ac9fb354eadc5fd6a01d0b75, type: 2}

@@ -101,7 +101,11 @@ MonoBehaviour:
           ammounts: 
           baseResource:
             types:
-            - {fileID: 11400000, guid: 8fc4cf8feaad5a648bd0c87ee4ff2ca6, type: 2}
+            - Name: 
+              id: 0
+              color: {r: 0, g: 0, b: 0, a: 0}
+              image: {fileID: 0}
+              category: {fileID: 0}
             ammounts: 00000000
           mod:
             percentMod: 1
