@@ -12,9 +12,9 @@
             <engine:VisualElement name="Header" class="header">
                 <TextFieldLabel name="Header" />
             </engine:VisualElement>
-            <engine:Instance template="ColonyView" name="Colony" style="flex-grow: 1;" />
+            <engine:Instance template="ColonyView" name="Colony" style="flex-grow: 1; display: none;" />
             <engine:Instance template="TradeView" name="Trade" style="flex-grow: 1;" />
-            <engine:Instance template="OutpostView" name="Outpost" style="flex-grow: 1;" />
+            <engine:Instance template="OutpostView" name="Outpost" style="flex-grow: 1; display: none;" />
         </engine:VisualElement>
         <engine:VisualElement name="MapBar" style="flex-grow: 1; visibility: visible;">
             <TradeWindowElements.TradeMap move-speed="100" zoom-speed="150" name="Map" map-image="project://database/Assets/Sprites/Textures/2x/1Map@2x.png?fileID=2800000&amp;guid=28a73cfe08a9c3b4fa52554d18276801&amp;type=3#1Map@2x" arrow-image="project://database/Assets/Sprites/Icons/Info%20window/Play.png?fileID=2800000&amp;guid=eb36bdcec37eb0b4baf394a5a6679c2c&amp;type=3#Play" actions="project://database/Assets/Resources/Defaults/Control%20maps/DefaultKeyBinds.inputactions?fileID=-944628639613478452&amp;guid=ae7911b76ba3ad24387d6033d2c3e664&amp;type=3#DefaultKeyBinds" location-image="project://database/Assets/Sprites/Textures/1filled%20cog@2x.png?fileID=2800000&amp;guid=5a869fc421e59114e9ecac48c51af2ed&amp;type=3#1filled cog@2x" element-size="150" slider-height="50" enabled="true" style="overflow: hidden;" />
