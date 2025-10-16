@@ -244,12 +244,12 @@ namespace EditorWindows.Windows
 
             #region Cost
             dataGrid.columns["cost"].makeCell =
-                () => new ResCell();
+                () => new ResourceCell();
             dataGrid.columns["cost"].bindCell =
                 (el, i) =>
                 {
                     el.parent.focusable = true;
-                    ResCell cell = el.Q<ResCell>();
+                    ResourceCell cell = el.Q<ResourceCell>();
                     cell.Open(((BuildingWrapper)dataGrid.itemsSource[i]).building?.Cost, ((BuildingWrapper)dataGrid.itemsSource[i]).building, true);
                 };
             #endregion
@@ -416,15 +416,15 @@ namespace EditorWindows.Windows
                             flexDirection = FlexDirection.Column
                         }
                     };
-                    element.Add(new ResCell());
+                    element.Add(new ResourceCell());
                     element.Add(new Label("Fluid:") { name = "fluidLabel"});
-                    element.Add(new FluidCell());
+                    element.Add(new ResourceCell());
                     return element;
                 },
                 bindCell = (el, i) =>
                 {
                     el.parent.focusable = true;
-                    ResCell rCell = el.Q<ResCell>();
+                    ResourceCell rCell = el[0] as ResourceCell;
                     Building b = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
                     if (b is IResourceProduction resProd)
                         rCell.Open(
@@ -433,7 +433,7 @@ namespace EditorWindows.Windows
                     else
                         rCell.Open(null, null, false);
                     
-                    FluidCell fCell = el.Q<FluidCell>();
+                    ResourceCell fCell = el[2] as ResourceCell;
                     if (b is FluidResProductionBuilding fluidProd)
                     {
                         el.Q<Label>("fluidLabel").style.display = DisplayStyle.Flex;
@@ -468,15 +468,15 @@ namespace EditorWindows.Windows
                             flexDirection = FlexDirection.Column
                         }
                     };
-                    element.Add(new ResCell());
+                    element.Add(new ResourceCell());
                     element.Add(new Label("Fluid:") { name = "fluidLabel" });
-                    element.Add(new FluidCell());
+                    element.Add(new ResourceCell());
                     return element;
                 },
                 bindCell = (el, i) =>
                 {
                     el.parent.focusable = true;
-                    ResCell cell = el.Q<ResCell>();
+                    ResourceCell cell = el[0] as ResourceCell;
                     Building b = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
                     if (b is IResourceProduction)
                         cell.Open(
@@ -485,7 +485,7 @@ namespace EditorWindows.Windows
                     else
                         cell.Open(null, null, false);
 
-                    FluidCell fCell = el.Q<FluidCell>();
+                    ResourceCell fCell = el[2] as ResourceCell;
                     if (b is FluidResProductionBuilding fluidProd)
                     {
                         el.Q<Label>("fluidLabel").style.display = DisplayStyle.Flex;

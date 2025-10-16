@@ -16,18 +16,111 @@ MonoBehaviour:
   trustLoss: {x: 25, y: 40}
   trustGain: {x: 10, y: 15}
   resourceGens:
-  - id: 1
-    typeChance: 78
-    ammountRange: {x: 60, y: 76}
-  - id: 2
-    typeChance: 93
-    ammountRange: {x: 79, y: 94}
-  - id: 3
-    typeChance: 64
-    ammountRange: {x: 25, y: 40}
-  - id: 4
-    typeChance: 35
-    ammountRange: {x: 3, y: 10}
-  - id: 5
-    typeChance: 23
-    ammountRange: {x: 8, y: 15}
+  - type: {fileID: 11400000, guid: c1f62f9e2918d7e44adacadc45cfec2e, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: e523913a9c6ce8d4fb05048da649cfc5, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 18096b245d628204cba4870671dc9616, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 2041a4d797e915a4db26715015bb6e3f, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 476987d8701b79b42acf9d04564a5ac0, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 6f13f7cede6861645a353535afb233de, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: cce725a6a24c0cf49ab46fca0bc08325, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 805781cfa333b674d931c9d7619402df, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 6d9ae494b146c3941ad8b8f8c8b0ed8e, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 4ea054a86f63a0347b8df6c4c567b716, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 1347ef2c9f2b3c44cb6f5e843e1d55bb, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 1d2e942eab98fe943ab9432e5e945d79, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: f9e61f1dd3b0f9d418d535915c9c5770, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 9ac8915829687d440ae620920a3cb94e, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: e592b624b77a5da49a98b4964344738d, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 373fd337df8db3b4abb922168bbf5647, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 0a6313d780b942247a9feb75238dcfbc, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 5fcb622e948252c4fb2a7c663a71ea91, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 6fee85af489f377499eaab602df43f31, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: b67063f5a7849e04d9d584cf9d03d1df, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: f05e94de4a3c4604095e1c190f760e54, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 74fa3538aa81f464baa5646b57334e05, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 2e6ab3eb67a50cd489ed9f4797d756ba, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 33453fe695958da479f24d952896dd80, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 14d84716ffa48524aaa648bd053e9828, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 486a54edf7f2a294a89325f5f8758bf7, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: 0225af04b98e951408452b14f0aab218, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: f9678f0cb45b7034db19a8daa687f286, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 11400000, guid: ac2f30fb838ec384fb07c52c3f8f6aa8, type: 2}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}
+  - type: {fileID: 0}
+    typeChance: 50
+    ammountRange: {x: 5, y: 20}

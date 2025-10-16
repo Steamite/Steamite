@@ -10,6 +10,8 @@ using UnityEngine.AddressableAssets;
 [CreateAssetMenu(fileName = "ResourceType", menuName = "Resources/ResourceType")]
 public class ResourceType : ScriptableObject
 {
+    [Obsolete("Use Name", true)]
+    string name;
     public string Name;
     public Color color;
     public Texture2D image;

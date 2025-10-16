@@ -612,8 +612,10 @@ MonoBehaviour:
     types: []
     ammounts: 0a000000
     baseResource:
-      types: []
-      ammounts: 0a000000
+      types:
+      - {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
+      - {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
+      ammounts: 0a0000000a00000000000000
     mod:
       percentMod: 1
       absoluteMod: 0

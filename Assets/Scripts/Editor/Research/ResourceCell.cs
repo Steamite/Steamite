@@ -14,6 +14,8 @@ public partial class ResourceCell : ResourceList
     IntegerField capacityField;
     Label noneLabel;
 
+    [UxmlAttribute]
+    List<int> allowedCategories;
     public ResourceCell() : base()
     {
         focusable = true;
@@ -89,7 +91,7 @@ public partial class ResourceCell : ResourceList
 
         el.RemoveFromClassList("unity-collection-view__item");
         DropdownField type = el.Q<DropdownField>();
-        type.choices = ResFluidTypes.GetResNamesList();
+        type.choices = ResFluidTypes.GetResNamesList(allowedCategories);
         type.value = ((UIResource)itemsSource[i]).type?.Name;
         type.RegisterValueChangedCallback(ChangeType);
         type.style.marginRight = 10;
@@ -169,6 +171,9 @@ public partial class ResourceCell : ResourceList
                 moneyResource = _moneyRes;
                 capacityField.value = +_moneyRes.Money.BaseValue;
                 resource = _moneyRes.EditorResource;
+                allowedCategories = new List<int>() { 2, 3 };
+                capacityField.visible = true;
+
             }
             else
             {
@@ -178,6 +183,7 @@ public partial class ResourceCell : ResourceList
             itemsSource = ToUIRes(resource);
             noneLabel.text = "Empty";
             style.display = DisplayStyle.Flex;
+            capacityField.style.display = DisplayStyle.Flex;
         }
         else
         {
@@ -186,6 +192,7 @@ public partial class ResourceCell : ResourceList
             itemsSource = new List<UIResource>();
             noneLabel.text = "Nothing";
             style.display = DisplayStyle.None;
+            capacityField.style.display = DisplayStyle.None;
         }
     }
 }

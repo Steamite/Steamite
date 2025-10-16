@@ -12,16 +12,17 @@ using static UnityEditor.LightingExplorerTableColumn;
 
 public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWrapper>
 {
-    [MenuItem("Custom Editors/Resource register %n", priority = 14)]
+    //[MenuItem("Custom Editors/Resource register %n", priority = 14)]
     public static void Open()
     {
+        return;
         ResourceRegister wnd = GetWindow<ResourceRegister>();
         wnd.titleContent = new("Resource Register");
         wnd.minSize = new(800, 400);
     }
-
     protected override void CreateGUI()
     {
+        return;
         holder = AssetDatabase.LoadAssetAtPath<ResourceData>("Assets/Game Data/ResourceData.asset");
         base.CreateGUI();
         rootVisualElement.Q<Button>("Rebind-Create").clicked += async () => await ResFluidTypes.Init();

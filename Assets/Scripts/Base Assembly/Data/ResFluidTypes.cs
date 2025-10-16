@@ -1,12 +1,11 @@
-﻿using Nito.AsyncEx;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using static UnityEngine.Analytics.IAnalytic;
 
 public static class ResFluidTypes
 {
@@ -17,16 +16,12 @@ public static class ResFluidTypes
     public static ResourceType None;
 
     static List<ResourceType> resources;
-
     static List<ResourceType> Resources
     {
         get
         {
-            if (resources == null)
-            {
-                Debug.Log("Resources not ready");
-                AsyncContext.Run(() => Init());
-            }
+            if(resources == null)
+                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(RESOURCE_PATH));
             return resources;
         }
     }
@@ -37,14 +32,21 @@ public static class ResFluidTypes
         get
         {
             if (fluids == null)
-            {
-                Debug.Log("Fluids not ready");
-                Task.Run(Init);
-            }
+                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(RESOURCE_PATH));
             return fluids;
         }
     }
 
+    static List<ResourceTypeCategory> fullRes;
+    static List<ResourceTypeCategory> FullRes
+    {
+        get
+        {
+            if (fullRes == null)
+                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(RESOURCE_PATH));
+            return fullRes;
+        }
+    }
 #if UNITY_EDITOR
     [MenuItem("Custom Editors/Refresh Resource _&r", priority = 0)]
     [InitializeOnLoadMethod]
@@ -52,9 +54,15 @@ public static class ResFluidTypes
     public static async Task Init()
     {
         ResourceData data = await Addressables.LoadAssetAsync<ResourceData>(RESOURCE_PATH).Task;
-        resources = data.Categories.Where(q => q.Name != "Fluids").SelectMany(q => q.Objects).Select(q => q.data).ToList();
+        InitFill(data);
+    }
 
-        fluids = data.Categories.Where(q => q.Name == "Fluids").SelectMany(q => q.Objects).Select(q => q.data).ToList();
+    static void InitFill(ResourceData data)
+    {
+        fullRes = data.Categories;
+        resources = fullRes.Where(q => q.Name != "Fluids").SelectMany(q => q.Objects).Select(q => q.data).ToList();
+
+        fluids = fullRes.Where(q => q.Name == "Fluids").SelectMany(q => q.Objects).Select(q => q.data).ToList();
         None = resources[0];
         Money = resources[1];
     }
@@ -68,9 +76,20 @@ public static class ResFluidTypes
     public static ResourceType GetFluidByIndex(int index)
         => Fluids[index];
 
-
     public static List<string> GetResNamesList()
         => Resources.Select(q => q.Name).ToList();
+    public static List<string> GetResNamesList(List<int> allowedCategories)
+    {
+        if (allowedCategories == null || allowedCategories.Count == 0)
+            return GetResNamesList();
+        List<string> names = new();
+#if UNITY_EDITOR
+        names.Add(None.Name);
+#endif
+        foreach (int i in allowedCategories)
+            names.AddRange(FullRes[i].Objects.Select(q => q.Name));
+        return names;
+    }
     public static List<ResourceType> GetResList()
         => Resources.Skip(2).ToList();
 
