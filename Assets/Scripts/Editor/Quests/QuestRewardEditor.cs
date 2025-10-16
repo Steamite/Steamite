@@ -20,7 +20,7 @@ public class QuestRewardEditor : QuestCompositorList<QuestReward>
                 if (itemsSource[i] is QuestResourceReward resourceReward)
                 {
                     el.style.display = DisplayStyle.Flex;
-                    ResCell cell = new ResCell();
+                    ResourceCell cell = new ResourceCell();
                     Button button;
                     el.Add(button = new() { text = "Set Reward" });
                     button.clicked += () => ButtonClick(i, cell);

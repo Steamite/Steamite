@@ -71,7 +71,7 @@ public partial class ObjectiveGridEditor : QuestCompositorList<Objective>
                         list.Bind(holder, ref excavation.needToRemove, (x) => RefreshItem(i));
                         break;
                     case ResourceObjective objective:
-                        ResCell cell = new();
+                        ResourceCell cell = new();
                         Button resButton;
                         el.Add(resButton = new Button() { text = "set Resource" });
                         resButton.clicked += () => ButtonClick(i, cell);
