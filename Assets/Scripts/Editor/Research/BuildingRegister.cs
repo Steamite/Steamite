@@ -147,7 +147,7 @@ namespace EditorWindows.Windows
 
 
         #region Entry managment
-        protected override void AddEntry(BaseListView _)
+        protected override void AddEntry(BaseListView _, bool add = false)
         {
             BuildingWrapper wrapper = new(holder.UniqueID());
             int choice = EditorUtility.DisplayDialogComplex("Register a new building",
@@ -180,7 +180,7 @@ namespace EditorWindows.Windows
             else if (choice == 1)
                 return;
             selectedCategory.Objects.Add(wrapper);
-            base.AddEntry(_);
+            base.AddEntry(_, false);
         }
 
         protected override void RemoveEntry(BuildingWrapper wrapper, bool removeFromGrid)

@@ -1,4 +1,5 @@
 ﻿using Orders;
+using System;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -12,7 +13,7 @@ namespace EditorWindows
         where CATEG_TYPE : DataCategory<DATA_TYPE> 
         where DATA_TYPE : DataObject
     {
-        public DataCategory<DATA_TYPE> selectedCategory;
+        public CATEG_TYPE selectedCategory;
         protected DataHolder<CATEG_TYPE, DATA_TYPE> holder;
         [SerializeField] VisualTreeAsset windowAsset;
 
@@ -75,7 +76,7 @@ namespace EditorWindows
             else
             {
                 categoryExists = false;
-                selectedCategory = null;
+                selectedCategory = Activator.CreateInstance<CATEG_TYPE>();
 
                 categoryRemover.SetEnabled(false);
                 createCategory.text = "Create new category";

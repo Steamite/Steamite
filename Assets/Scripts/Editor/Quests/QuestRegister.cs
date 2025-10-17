@@ -82,7 +82,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
             }
             
         }
-    }
+    }/*
     protected override bool LoadCategData(int index)
     {
         bool boo = base.LoadCategData(index);
@@ -95,16 +95,10 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
             selectedCategory = new QuestCategory();
         }
         return boo;
-    }
+    }*/
     #endregion
 
     Action onNextQuestChange;
-    protected override void AddEntry(BaseListView _)
-    {
-        selectedCategory.Objects.Add(new Quest(holder.UniqueID()));
-        base.AddEntry(_);
-    }
-
     protected override void CreateColumns()
     {
         base.CreateColumns();

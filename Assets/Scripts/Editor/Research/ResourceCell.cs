@@ -24,7 +24,7 @@ public partial class ResourceCell : ResourceList
         onAdd =
             (_) =>
             {
-                resource.types.Add(ResFluidTypes.GetResByIndex(0));
+                resource.types.Add(ResFluidTypes.None);
                 resource.ammounts.Add(0);
                 itemsSource = ToUIRes(resource);
                 EditorUtility.SetDirty(whatToSave);
@@ -171,9 +171,7 @@ public partial class ResourceCell : ResourceList
                 moneyResource = _moneyRes;
                 capacityField.value = +_moneyRes.Money.BaseValue;
                 resource = _moneyRes.EditorResource;
-                allowedCategories = new List<int>() { 2, 3 };
                 capacityField.visible = true;
-
             }
             else
             {
