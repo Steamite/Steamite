@@ -44,12 +44,6 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
     #endregion
 
 
-    protected override void AddEntry(BaseListView _)
-    {
-        selectedCategory.Objects.Add(new Stat(holder.UniqueID()));
-        base.AddEntry(_);
-    }
-
     protected override void CreateColumns()
     {
         base.CreateColumns();

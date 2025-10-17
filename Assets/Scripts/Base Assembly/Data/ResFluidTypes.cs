@@ -60,16 +60,26 @@ public static class ResFluidTypes
     static void InitFill(ResourceData data)
     {
         fullRes = data.Categories;
-        resources = fullRes.Where(q => q.Name != "Fluids").SelectMany(q => q.Objects).Select(q => q.data).ToList();
+        resources = fullRes.Skip(1).SkipLast(1).SelectMany(q => q.Objects).Select(q => q.data).ToList();
 
-        fluids = fullRes.Where(q => q.Name == "Fluids").SelectMany(q => q.Objects).Select(q => q.data).ToList();
-        None = resources[0];
-        Money = resources[1];
+        fluids = fullRes[^1].Objects.Select(q => q.data).ToList();
+        None = fullRes[0].Objects.First(q=> q.Name == "None").data;
+        Money = fullRes[0].Objects.First(q => q.Name == "Money").data;
     }
 
 
     public static ResourceType GetResByName(string name)
-        => Resources.First(q => q.Name == name);
+    {
+        ResourceType type = Resources.FirstOrDefault(q => q.Name == name);
+        if (type == null)
+        {
+            if (name == "None")
+                return None;
+            else if (name == "Money")
+                return Money;
+        }
+        return type;
+    }
     public static ResourceType GetResByIndex(int i)
         => Resources[i];
 
@@ -80,14 +90,15 @@ public static class ResFluidTypes
         => Resources.Select(q => q.Name).ToList();
     public static List<string> GetResNamesList(List<int> allowedCategories)
     {
-        if (allowedCategories == null || allowedCategories.Count == 0)
-            return GetResNamesList();
         List<string> names = new();
 #if UNITY_EDITOR
         names.Add(None.Name);
 #endif
-        foreach (int i in allowedCategories)
-            names.AddRange(FullRes[i].Objects.Select(q => q.Name));
+        if (allowedCategories == null || allowedCategories.Count == 0)
+            names.AddRange(GetResNamesList());
+        else
+            foreach (int i in allowedCategories)
+                names.AddRange(FullRes[i].Objects.Select(q => q.Name));
         return names;
     }
     public static List<ResourceType> GetResList()

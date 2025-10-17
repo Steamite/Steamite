@@ -1,4 +1,5 @@
 using EditorWindows;
+using System;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -12,7 +13,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
     {
         base.CreateGUI();
         dataGrid = rootVisualElement.Q<MultiColumnListView>("Data");
-        dataGrid.onAdd = AddEntry;
+        dataGrid.onAdd = (el) => AddEntry(el);
         dataGrid.onRemove = RemoveEntry;
         CreateColumns();
     }
@@ -36,8 +37,10 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
 
 
     #region Entry managment
-    protected virtual void AddEntry(BaseListView _)
+    protected virtual void AddEntry(BaseListView _, bool add = true)
     {
+        if(add)
+            selectedCategory.Objects.Add((DATA_TYPE)Activator.CreateInstance(typeof(DATA_TYPE), holder.UniqueID()));
         dataGrid.RefreshItems();
         EditorUtility.SetDirty(holder);
     }
