@@ -57,10 +57,8 @@ namespace ResearchUI
 
         /// <summary>If the button is unlocking a building.</summary>
         [SerializeField] public NodeType nodeType;
-        /// <summary>Category of foreing elements that is assigned to.</summary>
-        [SerializeField] public int nodeCategory;
-        /// <summary>Element id from the category.</summary>
-        [SerializeField] public int nodeAssignee;
+        /// <summary>Category and ID of foreign elements that is assigned to.</summary>
+        [SerializeField] public DataAssign objectConnection;
         /// <summary>Prequisite needed nodes.</summary>
         [SerializeField] public List<int> unlockedBy;
         /// <summary>Next nodes.</summary>
@@ -108,8 +106,7 @@ namespace ResearchUI
             Name = node.Name;
             currentTime = node.currentTime;
             researchTime = node.researchTime;
-            nodeCategory = node.nodeCategory;
-            nodeAssignee = node.nodeAssignee;
+            objectConnection = new(objectConnection.categoryIndex, objectConnection.objectId);
             researched = node.researched;
             unlockedBy = node.unlockedBy;
             unlocks = node.unlocks;
@@ -143,8 +140,7 @@ namespace ResearchUI
 
             currentTime = 0;
             researched = false;
-            nodeCategory = -1;
-            nodeAssignee = -1;
+            objectConnection = new(-1, -1);
             unlockedBy = new();
             unlocks = new();
             reseachCost = new();
@@ -292,5 +288,6 @@ namespace ResearchUI
     [CreateAssetMenu(fileName = "ResearchData", menuName = "UI Data/Research Holder", order = 2)]
     public class ResearchData : DataHolder<ResearchCategory, ResearchNode>
     {
+        public new const string PATH = "Assets/Game Data/Research && Building/Research Data.asset";
     }
 }

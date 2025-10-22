@@ -141,12 +141,12 @@ namespace EditorWindows.Research
             EnumField stat = new(_nodeData.nodeType);
             DropdownField category = new(
                  editor.GetActiveCategories(_nodeData),
-                _nodeData.nodeCategory + 1);
+                _nodeData.objectConnection.categoryIndex + 1);
 
             DropdownField assignee = new(
                 editor.GetAvailable(_nodeData),
-                _nodeData.nodeAssignee == -1 ? 0 : 1);
-            assignee.SetEnabled(_nodeData.nodeCategory != -1);
+                _nodeData.objectConnection.objectId == -1 ? 0 : 1);
+            assignee.SetEnabled(_nodeData.objectConnection.categoryIndex != -1);
 
             // Stat
             stat.RegisterValueChangedCallback<Enum>(
@@ -158,7 +158,7 @@ namespace EditorWindows.Research
                         ToggleElements(newVal, body, topConnector, botConnector);
                         editor.RecalculateAvailableByNode(_nodeData);
                         _nodeData.nodeType = newVal;
-                        _nodeData.nodeCategory = -1;
+                        _nodeData.objectConnection.categoryIndex = -1;
                         editor.SaveValues();
                         category.choices = editor.GetActiveCategories(_nodeData);
                         category.value = "Select";
@@ -172,19 +172,19 @@ namespace EditorWindows.Research
             category.RegisterValueChangedCallback<string>(
                 (ev) =>
                 {
-                    if (_nodeData.nodeCategory != category.index - 1)
+                    if (_nodeData.objectConnection.categoryIndex != category.index - 1)
                     {
                         if (ev.newValue == "Select")
-                            _nodeData.nodeCategory = -1;
+                            _nodeData.objectConnection.categoryIndex = -1;
                         else
                         {
-                            _nodeData.nodeCategory = category.index - 1;
+                            _nodeData.objectConnection.categoryIndex = category.index - 1;
                             assignee.choices = editor.GetAvailable(_nodeData);
                         }
-                        _nodeData.nodeAssignee = -1;
+                        _nodeData.objectConnection.objectId = -1;
                         editor.SaveValues();
                         editor.RecalculateAvailableByNode(_nodeData);
-                        assignee.SetEnabled(_nodeData.nodeCategory != -1);
+                        assignee.SetEnabled(_nodeData.objectConnection.categoryIndex != -1);
                     }
                 });
             body.Add(category);
@@ -194,7 +194,7 @@ namespace EditorWindows.Research
                 (ev) =>
                 {
                     assignee.choices = editor.GetAvailable(_nodeData);
-                    assignee.SetValueWithoutNotify(assignee.choices[_nodeData.nodeAssignee == -1 ? 0 : 1]);
+                    assignee.SetValueWithoutNotify(assignee.choices[_nodeData.objectConnection.objectId == -1 ? 0 : 1]);
                 });
             body.Add(assignee);
 
@@ -203,16 +203,16 @@ namespace EditorWindows.Research
                 {
                     if (assignee.index == 0)
                     {
-                        if (_nodeData.nodeAssignee != -1)
+                        if (_nodeData.objectConnection.objectId != -1)
                         {
-                            _nodeData.nodeAssignee = -1;
+                            _nodeData.objectConnection.objectId = -1;
                             editor.RecalculateAvailableByNode(_nodeData);
                         }
-                        _nodeData.nodeAssignee = -1;
+                        _nodeData.objectConnection.objectId = -1;
                     }
                     else if (assignee.index == 1)
                     {
-                        if (_nodeData.nodeAssignee == -1)
+                        if (_nodeData.objectConnection.objectId == -1)
                         {
                             SetAssigne(_nodeData, ev.newValue, editor);
                         }
@@ -264,14 +264,14 @@ namespace EditorWindows.Research
                 case NodeType.Dummy:
                     return;
                 case NodeType.Building:
-                    _nodeData.nodeAssignee =
-                        editor.buildingData.Categories[_nodeData.nodeCategory]
+                    _nodeData.objectConnection.objectId =
+                        editor.buildingData.Categories[_nodeData.objectConnection.categoryIndex]
                         .availableObjects.FirstOrDefault(q => q.GetName() == newVal).id;
                     break;
                 case NodeType.Stat:
-                    BuildingStats.Stat stat = editor.statData.Categories[_nodeData.nodeCategory]
+                    BuildingStats.Stat stat = editor.statData.Categories[_nodeData.objectConnection.categoryIndex]
                         .availableObjects.FirstOrDefault(q => q.GetName() == newVal);
-                    _nodeData.nodeAssignee = stat.id;
+                    _nodeData.objectConnection.objectId = stat.id;
                     GetDescr(_nodeData, editor);
                     break;
             }
@@ -280,10 +280,10 @@ namespace EditorWindows.Research
 
         void GetDescr(ResearchNode _nodeData, ResearchEditor editor)
         {
-            if (_nodeData.nodeAssignee > -1)
+            if (_nodeData.objectConnection.objectId > -1)
             {
-                string descr = _nodeData.GetDescr(editor.statData.Categories[_nodeData.nodeCategory]
-                    .Objects.FirstOrDefault(q => q.id == _nodeData.nodeAssignee));
+                string descr = _nodeData.GetDescr(editor.statData.Categories[_nodeData.objectConnection.categoryIndex]
+                    .Objects.FirstOrDefault(q => q.id == _nodeData.objectConnection.objectId));
                 this.Q<TextField>(className: "description-field").value = descr;
             }
         }

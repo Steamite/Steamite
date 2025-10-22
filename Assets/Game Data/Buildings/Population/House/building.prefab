@@ -217,8 +217,9 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 20
-  categoryID: 2
-  wrapperID: 1580670160
+  prefabConnection:
+    categoryIndex: 2
+    objectId: 1580670160
   assignLimit:
     baseValue: 3
     currentValue: 3

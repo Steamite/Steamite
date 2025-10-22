@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 
@@ -18,6 +20,8 @@ public interface IResourceProduction : IProduction
 
     /// <summary>Production cycle yeild.</summary>
     [CreateProperty] ModifiableResource ResourceYield { get; set; }
+    List<ProductionRecipe> Recipes { get; set; }
+    List<DataAssign> RecipeAsssigment { get; set; }
     #endregion
 
     #region Storing
@@ -152,10 +156,14 @@ public interface IResourceProduction : IProduction
         }
     }
 
-    void Init(bool constructed)
+    void Init(bool constructed, ProductionRecipeHolder holder)
     {
         ProdStates.needsResources = ResourceCost.Sum() > 0;
-
+        Recipes = new();
+        foreach(var recip in RecipeAsssigment)
+        {
+            Recipes.Add(holder.GetObjectBySaveIndex(recip));//.Categories[recip.categoryIndex].Objects.FirstOrDefault(q => q.id == recip.objectId));
+        }
         if (constructed)
         {
             RequestRestock();
@@ -163,4 +171,16 @@ public interface IResourceProduction : IProduction
         }
     }
     #endregion
+
+    void SetRecipe(ProductionRecipe recipe)
+    {
+        ResourceCost = recipe.resourceCost;
+        ResourceYield = recipe.resourceYield;
+        ProdTime = recipe.timeInTicks;
+        CurrentTime = 0;
+        if (((Building)this).selected)
+        {
+            ((Building)this).OpenWindow();
+        }
+    }
 }

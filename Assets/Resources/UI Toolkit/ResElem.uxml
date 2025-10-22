@@ -1,6 +1,6 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:VisualElement style="flex-grow: 0; width: 100%; flex-direction: row; justify-content: space-between; border-bottom-width: 2px;     border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; padding-right: 5px; padding-left: 5px;">
-        <engine:EnumField value="Center" type="ResourceType, BaseAssembly" style="width: 50%;" />
+    <engine:VisualElement style="flex-grow: 0; width: 100%; flex-direction: row; justify-content: space-between; border-bottom-width: 2px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; padding-right: 5px; padding-left: 5px;">
+        <engine:DropdownField style="width: 50%;" />
         <engine:IntegerField value="0" style="width: 30%;" />
     </engine:VisualElement>
 </engine:UXML>

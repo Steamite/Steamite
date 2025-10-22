@@ -173,6 +173,8 @@ ResearchInfo {
     background-color: var(--background);
     border-top-color: var(--border);
     border-left-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
 }
 
 #Bar {

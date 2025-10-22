@@ -46,8 +46,7 @@ public class Building : StorageObject
     public int maximalProgress;
 
     [Header("Prefab info")]
-    public byte categoryID;
-    public int wrapperID;
+    [SerializeField] public DataAssign prefabConnection;
 
     bool isTransparent = false;
     #endregion
@@ -136,8 +135,7 @@ public class Building : StorageObject
         save.constructed = constructed;
         save.deconstructing = deconstructing;
         save.constructionProgress = constructionProgress;
-        save.categoryID = categoryID;
-        save.wrapperID = wrapperID;
+        save.prefabConnection = prefabConnection;
 
         return base.Save(save);
     }
@@ -154,7 +152,7 @@ public class Building : StorageObject
         localRes.Load((save as BuildingSave).resSave);
         GetRenderComponents();
 
-        InitModifiers();
+        InitPrefabData();
 
         gameObject.layer = 6;
         for (int i = 0; i < transform.childCount; i++)
@@ -168,14 +166,7 @@ public class Building : StorageObject
         }
 
         base.Load(save);
-        if (this is IFluidWork)
-        {
-            ((IFluidWork)this).CreatePipes(true);
-        }
-        if(this is IResourceProduction)
-        {
-            ((IResourceProduction)this).Init(constructed);
-        }
+
     }
     #endregion Saving
 
@@ -484,7 +475,7 @@ public class Building : StorageObject
         }
     }
 
-    public virtual void InitModifiers()
+    public virtual void InitPrefabData()
     {
         cost.Init();
         ((IModifiable)LocalRes.capacity).Init();

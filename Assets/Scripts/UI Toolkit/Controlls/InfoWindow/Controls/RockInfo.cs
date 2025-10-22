@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 public partial class RockInfo : InfoWindowControl
 {
     Label assigned, integrity;
-    ResList yeild;
+    ResourceList yeild;
 
     public override void Open(object data)
     {
@@ -40,7 +40,7 @@ public partial class RockInfo : InfoWindowControl
         //inventory
         element = new() { name = "Group" };
         element.Add(new Label("Yeild") { name = "Resource-Header" });
-        element.Add(yeild = new ResList());
+        element.Add(yeild = new ResourceList());
         Add(element);
         yeild.verticalPadding = 2;
     }

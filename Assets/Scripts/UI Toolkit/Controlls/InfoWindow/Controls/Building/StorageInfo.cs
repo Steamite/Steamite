@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Properties;
 using UnityEngine;
@@ -174,9 +175,9 @@ namespace InfoWindowElements
             {
                 storageElem.icon.style.unityBackgroundImageTintColor = uiResource.type.color;
             }
-            catch
+            catch (Exception e)
             {
-                Debug.LogError("Editor");
+                Debug.LogError("Editor: " + e);
             }
             storageElem.label.text = uiResource.ammount.ToString();
 

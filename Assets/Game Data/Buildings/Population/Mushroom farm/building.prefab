@@ -217,8 +217,9 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 0
-  categoryID: 2
-  wrapperID: 1632144239
+  prefabConnection:
+    categoryIndex: 2
+    objectId: 1632144239
   assignLimit:
     baseValue: 3
     currentValue: 3
@@ -250,6 +251,7 @@ MonoBehaviour:
     mod:
       percentMod: 1
       absoluteMod: 0
+  recipes: []
   fluidCost:
     types: []
     ammounts: 01000000

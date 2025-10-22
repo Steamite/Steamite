@@ -642,8 +642,9 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    types: []
-    ammounts: 
+    types:
+    - {fileID: 11400000, guid: 1d2e942eab98fe943ab9432e5e945d79, type: 2}
+    ammounts: 0a000000
     baseResource:
       types:
       - {fileID: 11400000, guid: 1d2e942eab98fe943ab9432e5e945d79, type: 2}
@@ -661,8 +662,9 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 30
-  categoryID: 1
-  wrapperID: 1472558132
+  prefabConnection:
+    categoryIndex: 1
+    objectId: 1472558132
   assignLimit:
     baseValue: 5
     currentValue: 5
@@ -700,3 +702,10 @@ MonoBehaviour:
     mod:
       percentMod: 1
       absoluteMod: 0
+  recipesAssigmnet:
+  - categoryIndex: 0
+    objectId: 94840154
+  - categoryIndex: 0
+    objectId: 1978748951
+  - categoryIndex: 0
+    objectId: 1881560667

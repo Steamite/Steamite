@@ -35,7 +35,7 @@ namespace EditorWindows
             categoryRemover.clicked += () => RemoveCateg();
 
             categorySelector = doc.Q<DropdownField>("Category-Selctor");
-            categorySelector.choices = holder.Choices();
+            categorySelector.choices = holder.CategoryChoices();
             categorySelector.choices.Add("Create new");
             #endregion
 

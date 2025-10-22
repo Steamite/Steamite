@@ -173,8 +173,7 @@ public class BuildingSave : StorageObjectSave
     public bool deconstructing;
     public float constructionProgress;
 
-    public int categoryID;
-    public int wrapperID;
+    public DataAssign prefabConnection;
 }
 
 [Serializable]
@@ -190,7 +189,7 @@ public class StorageBSave : BuildingSave
         int i = 1;
         foreach (var item in ResFluidTypes.GetResList())
         {
-            resSave.types.Add(0);
+            resSave.types.Add(new(0, 0));
             resSave.ammounts.Add(100);
             canStore.Add(true);
             i++;
@@ -324,12 +323,12 @@ public class MyColor
 
 public class ResourceSave
 {
-    public List<int> types;
+    public List<DataAssign> types;
     public List<int> ammounts;
 
     public ResourceSave(Resource res)
     {
-        types = res.types.Select(q => ResFluidTypes.GetResourceIndex(q)).ToList();
+        types = res.types.Select(q => ResFluidTypes.GetSaveIndex(q)).ToList();
         ammounts = res.ammounts.ToList();
     }
     public ResourceSave()

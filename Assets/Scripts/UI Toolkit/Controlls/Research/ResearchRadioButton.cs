@@ -39,7 +39,7 @@ namespace ResearchUI
             node = categ.Objects[i];
             name = node.Name;
 
-            if (node.nodeType == NodeType.Dummy || node.nodeAssignee == -1)
+            if (node.nodeType == NodeType.Dummy || node.objectConnection.objectId == -1)
             {
                 style.visibility = Visibility.Hidden;
                 return;
@@ -62,8 +62,8 @@ namespace ResearchUI
             VisualElement preview = new();
             preview.style.rotate = new Rotate(0);
             preview.AddToClassList("research-button-background");
-            BuildCategWrapper cat = SceneRefs.ObjectFactory.buildPrefabs.Categories[node.nodeCategory];
-            building = cat.Objects.FindIndex(q => q.id == node.nodeAssignee);
+            BuildCategWrapper cat = SceneRefs.ObjectFactory.buildPrefabs.Categories[node.objectConnection.categoryIndex];
+            building = cat.Objects.FindIndex(q => q.id == node.objectConnection.objectId);
             if (building > -1)
             {
                 node.preview = cat.Objects[building].preview;

@@ -11,4 +11,11 @@
         </engine:VisualElement>
         <engine:VisualElement name="Body" style="flex-grow: 1; justify-content: flex-start; -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/fonts/OpenSans/OpenSans-Bold&apos;); display: flex;" />
     </engine:VisualElement>
+    <engine:VisualElement name="Second-Window" class="info-window" style="flex-grow: 1; right: 27%; position: absolute; margin-right: 50px; bottom: auto; top: 40%; width: auto; height: auto; border-bottom-width: 5px; border-right-width: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; padding-top: 0; padding-bottom: 10px; padding-left: 0; padding-right: 0; display: none;">
+        <engine:VisualElement name="Bar" style="flex-direction: row; height: 65px;">
+            <engine:Label text="Label" style="-unity-text-align: middle-center; margin-left: 10px; margin-right: 10px;" />
+            <engine:Button icon-image="project://database/Assets/Sprites/Icons/Info%20window/Cancel.png?fileID=2800000&amp;guid=a038df6f8c235ab42ac4da953bbda40d&amp;type=3#Cancel" class="close-button" style="width: 50px; height: 50px; max-width: 50%;" />
+        </engine:VisualElement>
+        <engine:VisualElement style="flex-grow: 1;" />
+    </engine:VisualElement>
 </engine:UXML>

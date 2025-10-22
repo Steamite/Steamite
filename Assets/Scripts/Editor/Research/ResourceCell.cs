@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
+[UxmlElement]
 public partial class ResourceCell : ResourceList
 {
     Resource resource;

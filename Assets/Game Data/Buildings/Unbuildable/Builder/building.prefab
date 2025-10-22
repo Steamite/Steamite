@@ -141,7 +141,7 @@ MonoBehaviour:
   id: -1
   objectName: Builder
   localRes:
-    types: 
+    types: []
     ammounts: 
     capacity:
       baseValue: 100
@@ -199,10 +199,10 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    types: 
+    types: []
     ammounts: 
     baseResource:
-      types: 
+      types: []
       ammounts: 
     mod:
       percentMod: 1
@@ -217,5 +217,6 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 0
-  categoryID: 0
-  wrapperID: 635712276
+  prefabConnection:
+    categoryIndex: 0
+    objectId: 635712276

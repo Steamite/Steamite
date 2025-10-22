@@ -25,8 +25,7 @@ public class BuildingWrapper : DataObject
         {
             if (name != null)
                 b.objectName = name;
-            b.categoryID = categoryID;
-            b.wrapperID = id;
+            b.prefabConnection = new(categoryID, id);
             EditorUtility.SetDirty(b);
         }
     }
@@ -56,8 +55,10 @@ public class BuildCategWrapper : DataCategory<BuildingWrapper>
 
 ///<summary>Holds all buildable building, creates builds buttons from this, and is linked to research.</summary>
 [CreateAssetMenu(fileName = "BuildButtonCategory", menuName = "UI Data/BuildButton Holder", order = 1)]
-public class BuildingData : DataHolder<BuildCategWrapper, BuildingWrapper>
+public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapper>
 {
+    public new const string PATH = "Assets/Game Data/Research && Building/Build Data.asset";
+
     #region Editor
 #if UNITY_EDITOR
 
@@ -84,5 +85,17 @@ public class BuildingData : DataHolder<BuildCategWrapper, BuildingWrapper>
     public Pipe GetPipe()
     {
         return Categories[3].Objects.Find(q => q.id == 1082678288).building as Pipe;
+    }
+
+    public override void Init()
+    {
+        foreach (var category in Categories)
+        {
+            foreach (var obj in category.Objects)
+            {
+                obj.building.InitPrefabData();
+                obj.materials = obj.building.GetComponentsInChildren<Renderer>().Select(q => q.sharedMaterial).ToList();
+            }
+        }
     }
 }

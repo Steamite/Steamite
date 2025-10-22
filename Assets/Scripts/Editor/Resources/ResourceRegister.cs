@@ -21,7 +21,7 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
     }
     protected override void CreateGUI()
     {
-        holder = AssetDatabase.LoadAssetAtPath<ResourceData>("Assets/Game Data/ResourceData.asset");
+        holder = AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.PATH);
         base.CreateGUI();
         rootVisualElement.Q<Button>("Rebind-Create").clicked += async () => await ResFluidTypes.Init();
         categorySelector.index = 0;
