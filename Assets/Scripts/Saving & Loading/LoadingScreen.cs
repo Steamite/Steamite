@@ -218,7 +218,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         }
         catch (Exception e)
         {
-            Debug.Log("Failed to load:" + e);
+            Debug.LogWarning("Failed to load:" + e);
         }
     }
 

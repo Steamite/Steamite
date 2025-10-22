@@ -23,8 +23,8 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
     /// <summary>Fills the button style and recalculates head placement</summary>
     protected override void CreateGUI()
     {
-        holder = AssetDatabase.LoadAssetAtPath<StatData>("Assets/Game Data/Research && Building/Stats.asset");
-        researchData = AssetDatabase.LoadAssetAtPath<ResearchData>("Assets/Game Data/Research && Building/Research Data.asset");
+        researchData = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.PATH);
+        holder = AssetDatabase.LoadAssetAtPath<StatData>(StatData.PATH);
         base.CreateGUI();
         categorySelector.index = 0;
     }
@@ -166,8 +166,8 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
         researchData.Categories.SelectMany(q => q.Objects)
             .FirstOrDefault(q =>
                 q.nodeType == NodeType.Stat &&
-                q.nodeCategory == categIndex &&
-                q.nodeAssignee == stat.id).GetDescr(stat);
+                q.objectConnection.categoryIndex == categIndex &&
+                q.objectConnection.objectId == stat.id).GetDescr(stat);
 
     }
     void PairTypeChange(ChangeEvent<int> ev)

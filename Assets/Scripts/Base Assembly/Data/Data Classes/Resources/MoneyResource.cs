@@ -25,7 +25,7 @@ public class MoneyResource : ModifiableResource
     {
         baseResource.types = types;
         baseResource.ammounts = ammounts;
-        money.BaseValue = _money;
+        money = new(_money);//.BaseValue = _money;
         Init();
     }
 

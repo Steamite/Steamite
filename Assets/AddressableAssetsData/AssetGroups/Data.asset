@@ -41,6 +41,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: db1598235bbab6947a5097d2decd0e69
+    m_Address: Assets/Game Data/ProductionRecipeHolder.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: be3c5711981cd504e9b3bc254a09f527, type: 2}
   m_SchemaSet:

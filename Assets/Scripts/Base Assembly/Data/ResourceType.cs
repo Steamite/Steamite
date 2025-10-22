@@ -11,7 +11,7 @@ using UnityEngine.AddressableAssets;
 public class ResourceType : ScriptableObject
 {
     [Obsolete("Use Name", true)]
-    string name;
+    new string name;
     public string Name;
     public Color color;
     public Texture2D image;

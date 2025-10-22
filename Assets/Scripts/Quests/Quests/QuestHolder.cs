@@ -260,5 +260,7 @@ public class QuestCategory : DataCategory<Quest>
 [CreateAssetMenu(fileName = "QuestData", menuName = "UI Data/Quests", order = 2)]
 public class QuestHolder : DataHolder<QuestCategory, Quest>
 {
-
+#if UNITY_EDITOR
+    public new static string PATH = "Assets/Game Data/UI/QuestData.asset";
+#endif
 }

@@ -13,6 +13,8 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
 
     [SerializeField] ModifiableResource resourceCost = new();
     [SerializeField] ModifiableResource resourceYield = new();
+    [SerializeField] List<DataAssign> recipesAssigmnet = new();
+
     #endregion
 
     #region Properties
@@ -36,6 +38,8 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     [CreateProperty] public StorageResource InputResource { get; set; } = new();
     [CreateProperty] public ModifiableResource ResourceCost { get => resourceCost; set => resourceCost = value; }
     [CreateProperty] public ModifiableResource ResourceYield { get => resourceYield; set => resourceYield = value; }
+    [CreateProperty] public List<ProductionRecipe> Recipes { get; set; }
+    public List<DataAssign> RecipeAsssigment { get => recipesAssigmnet; set => recipesAssigmnet = value; }
     #endregion
 
     #endregion
@@ -138,7 +142,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
             ProdStates.needsResources = false;
             return;
         }
-        ((IResourceProduction)this).Init(constructed);
+        ((IResourceProduction)this).Init(constructed, SceneRefs.ObjectFactory.recipeData);
     }
 
 

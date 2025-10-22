@@ -38,12 +38,9 @@ namespace EditorWindows.Research
         {
             activeNode = null;
             showCreateButtons = false;
-            holder = AssetDatabase.LoadAssetAtPath<ResearchData>(
-                "Assets/Game Data/Research && Building/Research Data.asset");
-            buildingData = AssetDatabase.LoadAssetAtPath<BuildingData>(
-                "Assets/Game Data/Research && Building/Build Data.asset");
-            statData = AssetDatabase.LoadAssetAtPath<StatData>(
-                "Assets/Game Data/Research && Building/Stats.asset");
+            holder = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.PATH);
+            buildingData = AssetDatabase.LoadAssetAtPath<BuildingData>(BuildingData.PATH);
+            statData = AssetDatabase.LoadAssetAtPath<StatData>(StatData.PATH);
 
             base.CreateGUI();
 
@@ -126,10 +123,10 @@ namespace EditorWindows.Research
             {
                 T_C categ = data.Categories[i];
                 categ.availableObjects = new();
-                List<ResearchNode> categoryNodes = nodes.Where(q => q.nodeType == type && q.nodeCategory == i).ToList();
+                List<ResearchNode> categoryNodes = nodes.Where(q => q.nodeType == type && q.objectConnection.categoryIndex == i).ToList();
                 for (int j = 0; j < categ.Objects.Count; j++)
                 {
-                    if (categoryNodes.FindIndex(q => q.nodeAssignee == categ.Objects[j].id) == -1)
+                    if (categoryNodes.FindIndex(q => q.objectConnection.objectId == categ.Objects[j].id) == -1)
                     {
                         categ.availableObjects.Add(categ.Objects[j]);
                     }
@@ -290,7 +287,7 @@ namespace EditorWindows.Research
         /// <returns>Returns the a list of all possible choices.</returns>
         public List<string> GetAvailable(ResearchNode node)
         {
-            if (node.nodeCategory <= -1 && node.nodeAssignee == -1)
+            if (node.objectConnection.categoryIndex <= -1 && node.objectConnection.objectId == -1)
                 return new() { "Select" };
 
             switch (node.nodeType)
@@ -308,9 +305,12 @@ namespace EditorWindows.Research
             where T_OBJ : DataObject
         {
             List<string> str = new() { "Select" };
-            if (node.nodeAssignee > -1)
-                str.Add(dataHolder.Categories[node.nodeCategory].Objects.Find(q => q.id == node.nodeAssignee).GetName());
-            str.AddRange(dataHolder.Categories[node.nodeCategory].availableObjects.Select(q => q.GetName()));
+            if(node.objectConnection.categoryIndex > -1)
+            {
+                if (node.objectConnection.objectId > -1)
+                    str.Add(dataHolder.Categories[node.objectConnection.categoryIndex].Objects.Find(q => q.id == node.objectConnection.objectId)?.GetName());
+                str.AddRange(dataHolder.Categories[node.objectConnection.categoryIndex].availableObjects.Select(q => q.GetName()));
+            }
             return str;
         }
 

@@ -31,7 +31,7 @@ public class Resource
     }
     public Resource(ResourceSave save)
     {
-        types = save.types.Select(q => ResFluidTypes.GetResByIndex(q)).ToList();
+        types = ResFluidTypes.LoadTypeList(save.types);//..Select(q => ResFluidTypes.GetResByIndex(q)).ToList();
         ammounts = save.ammounts.ToList();
     }
     public Resource()

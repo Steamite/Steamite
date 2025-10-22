@@ -63,6 +63,9 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     /// <summary>Info window itself.</summary>
     public VisualElement window;
     public VisualElement windowBody;
+    public VisualElement secondWindow;
+    public VisualElement secondBody;
+    public VisualElement newWindow;
 
     TabView buildingTabView;
 
@@ -84,13 +87,30 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     InfoWindowControlHolder controls;
     #endregion
 
+    public void CreateSecondWindow(string labelTitle)
+    {
+        (secondWindow[0][0] as Label).text = labelTitle;
+        secondWindow.style.display = DisplayStyle.Flex;
+        window.RegisterCallback<MouseEnterEvent>(MyOnMouseEnter);
+        window.RegisterCallback<MouseLeaveEvent>(MyOnMouseExit);
+    }
+    public void CloseSecondWindow()
+    {
+        secondWindow.style.display = DisplayStyle.None;
+        secondBody.Clear();
+        window.UnregisterCallback<MouseEnterEvent>(MyOnMouseEnter);
+        window.UnregisterCallback<MouseLeaveEvent>(MyOnMouseExit);
+    }
     /// <summary>Fills all control references.</summary>
     public async Task BeforeInit()
     {
-        //activeBindings = new();
         lastInfo = InfoMode.None;
-        window = gameObject.GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Info-Window");
+        VisualElement root = gameObject.GetComponent<UIDocument>().rootVisualElement;
+        window = root.Q<VisualElement>("Info-Window");
         windowBody = window[1];
+        secondWindow = root[1];
+        secondBody = secondWindow[1];
+        (secondWindow[0][1] as Button).clicked += CloseSecondWindow;
         controls = await Addressables.LoadAssetAsync<InfoWindowControlHolder>("Assets/Game Data/UI/InfoWindowControlHolder.asset").Task;
 
         window.style.display = DisplayStyle.None;
@@ -114,6 +134,10 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         if (hide)
             window.style.display = DisplayStyle.None;
         windowBody.Clear();
+        
+        secondWindow.style.display = DisplayStyle.None;
+        secondBody.Clear();
+
         //activeBindings.Clear();
     }
     #endregion
@@ -131,6 +155,8 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         lastInfo = active;
         window.style.display = DisplayStyle.Flex;
         buildingTabView = null;
+        window.RegisterCallback<MouseEnterEvent>(MyOnMouseEnter);
+        window.RegisterCallback<MouseLeaveEvent>(MyOnMouseExit);
         switch (active)
         {
             case InfoMode.None:
@@ -143,8 +169,6 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                 break;
 
             case InfoMode.Building:
-                window.RegisterCallback<MouseEnterEvent>(MyOnMouseEnter);
-                window.RegisterCallback<MouseLeaveEvent>(MyOnMouseExit);
                 Building building = (Building)dataSource;
                 if (!building.constructed || building.deconstructing)
                 {

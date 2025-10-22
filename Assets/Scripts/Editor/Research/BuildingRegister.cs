@@ -41,7 +41,7 @@ namespace EditorWindows.Windows
         protected override void CreateGUI()
         {
             buildingTypes = TypeCache.GetTypesDerivedFrom(typeof(Building)).ToList();
-            holder = AssetDatabase.LoadAssetAtPath<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
+            holder = AssetDatabase.LoadAssetAtPath<BuildingData>(BuildingData.PATH);
 
             #region Grid
             base.CreateGUI();
@@ -53,7 +53,7 @@ namespace EditorWindows.Windows
                 {
                     if (EditorUtility.DisplayDialog("Building reload?", "Do you want to reload buildings", "rebuild", "cancel"))
                     {
-                        ResearchData researchData = AssetDatabase.LoadAssetAtPath<ResearchData>("Assets/Game Data/Research && Building/Research Data.asset");
+                        ResearchData researchData = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.PATH);
                         List<ResearchNode> nodes = researchData.Categories.SelectMany(q => q.Objects).Where(q => q.nodeType == NodeType.Building).ToList();
                         for (int i = 0; i < selectedCategory.Objects.Count; i++)
                         {
@@ -61,10 +61,11 @@ namespace EditorWindows.Windows
                             if (building != null)
                             {
                                 byte categID = (byte)holder.Categories.FindIndex(q => q.Name == selectedCategory.Name);
-                                ResearchNode node = nodes.FirstOrDefault(q => q.nodeCategory == building.categoryID && q.id == building.wrapperID);
+                                ResearchNode node = nodes.FirstOrDefault(q => q.objectConnection.categoryIndex == building.prefabConnection.categoryIndex && q.id == building.prefabConnection.objectId);
                                 if (node != null)
-                                    node.nodeCategory = categID;
+                                    node.objectConnection.categoryIndex = categID;
 
+                                building.prefabConnection = new(categID, selectedCategory.Objects[i].id);
                                 selectedCategory.Objects[i].SetBuilding(selectedCategory.Objects[i].building, categID);
                                 EditorUtility.SetDirty(selectedCategory.Objects[i].building);
                             }
@@ -370,6 +371,32 @@ namespace EditorWindows.Windows
             #endregion
 
             #region Production
+
+            ProductionRecipeHolder holder = AssetDatabase.LoadAssetAtPath<ProductionRecipeHolder>(ProductionRecipeHolder.PATH);
+            dataGrid.columns.Add(new()
+            {
+                name = "recipes",
+                title = "Recipes",
+                width = 150,
+                resizable = false,
+                makeCell = () => new RecipeCell(holder),
+                bindCell = (el, i) =>
+                {
+                    RecipeCell cell = el as RecipeCell;
+                    if (((BuildingWrapper)dataGrid.itemsSource[i]).building is IResourceProduction production)
+                    {
+                        cell.Open(production.RecipeAsssigment);
+                    }
+                    else
+                        cell.Open(null);
+                },
+                unbindCell = (el, i) =>
+                {
+                    IntegerField field = el.Q<IntegerField>();
+                    field.UnregisterValueChangedCallback(ProdTimeChange);
+                }
+            });
+            /*
             #region Time
             dataGrid.columns.Add(new()
             {
@@ -399,6 +426,7 @@ namespace EditorWindows.Windows
             #endregion
 
             #region Input
+
             dataGrid.columns.Add(new()
             {
                 name = "prodCost",
@@ -500,8 +528,9 @@ namespace EditorWindows.Windows
                     }
                 }
             });
+            
             #endregion
-
+            */
             #endregion
 
             #region Storing
@@ -544,6 +573,7 @@ namespace EditorWindows.Windows
                 },
             });
             #endregion
+
             #region Mask
             dataGrid.columns.Add(new()
             {

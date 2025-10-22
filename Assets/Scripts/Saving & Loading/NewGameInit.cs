@@ -53,7 +53,7 @@ public class NewGameInit : MonoBehaviour
 
     public async Task<ResearchSave> InitResearch()
     {
-        ResearchData researchData = Instantiate<ResearchData>(await Addressables.LoadAssetAsync<ResearchData>("Assets/Game Data/Research && Building/Research Data.asset").Task);
+        ResearchData researchData = Instantiate(await Addressables.LoadAssetAsync<ResearchData>(ResearchData.PATH).Task);
         return new ResearchSave(researchData);
     }
 

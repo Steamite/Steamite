@@ -19,7 +19,7 @@ public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, Productio
     }
     protected override void CreateGUI()
     {
-        holder = AssetDatabase.LoadAssetAtPath<ProductionRecipeHolder>("Assets/Game Data/ProductionRecipeHolder.asset");
+        holder = AssetDatabase.LoadAssetAtPath<ProductionRecipeHolder>(ProductionRecipeHolder.PATH);
         base.CreateGUI();
         rootVisualElement.Q<Button>("Rebind-Create").clicked += async () => await ResFluidTypes.Init();
         categorySelector.index = 0;

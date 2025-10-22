@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,7 @@ using static UnityEngine.Analytics.IAnalytic;
 
 public static class ResFluidTypes
 {
-    const string RESOURCE_PATH = "Assets/Game Data/ResourceData.asset";
-
+    static ResourceData data;
     public static ResourceType Money;
 
     public static ResourceType None;
@@ -20,8 +20,10 @@ public static class ResFluidTypes
     {
         get
         {
+#if UNITY_EDITOR
             if(resources == null)
-                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(RESOURCE_PATH));
+                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.PATH));
+#endif
             return resources;
         }
     }
@@ -31,8 +33,10 @@ public static class ResFluidTypes
     {
         get
         {
+#if UNITY_EDITOR
             if (fluids == null)
-                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(RESOURCE_PATH));
+                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.PATH));
+#endif
             return fluids;
         }
     }
@@ -42,8 +46,10 @@ public static class ResFluidTypes
     {
         get
         {
+#if UNITY_EDITOR
             if (fullRes == null)
-                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(RESOURCE_PATH));
+                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.PATH));
+#endif 
             return fullRes;
         }
     }
@@ -53,7 +59,7 @@ public static class ResFluidTypes
 #endif
     public static async Task Init()
     {
-        ResourceData data = await Addressables.LoadAssetAsync<ResourceData>(RESOURCE_PATH).Task;
+        data = await Addressables.LoadAssetAsync<ResourceData>(ResourceData.PATH).Task;
         InitFill(data);
     }
 
@@ -91,9 +97,9 @@ public static class ResFluidTypes
     public static List<string> GetResNamesList(List<int> allowedCategories)
     {
         List<string> names = new();
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
         names.Add(None.Name);
-#endif
+//#endif
         if (allowedCategories == null || allowedCategories.Count == 0)
             names.AddRange(GetResNamesList());
         else
@@ -109,4 +115,19 @@ public static class ResFluidTypes
 
     public static List<string> GetFluidNames()
         => Fluids.Select(q => q.Name).ToList();
+
+    public static List<ResourceType> LoadTypeList(List<DataAssign> types)
+    {
+        List<ResourceType> results = new();
+        foreach (var t in types)
+        {
+            results.Add(fullRes[t.categoryIndex].Objects.FirstOrDefault(q => q.id == t.objectId)?.data);
+        }
+        return results;
+    }
+
+    public static DataAssign GetSaveIndex(ResourceType q)
+    {
+        return data.GetSaveIndexByName(q.Name);
+    }
 }

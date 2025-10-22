@@ -13,7 +13,7 @@ public class ResearchWindow : FullscreenWindow, IGameDataController<ResearchSave
 
     public ResearchNode currentResearch { get; private set; }
     [HideInInspector] public ResearchData researchData;
-    [HideInInspector] public BuildingStats.StatData statData;
+    [HideInInspector] public StatData statData;
     public event Action<ResearchNode> researchCompletion;
 
     public override void GetWindow()
@@ -27,7 +27,7 @@ public class ResearchWindow : FullscreenWindow, IGameDataController<ResearchSave
 
     public async Task LoadState(ResearchSave researchSave)
     {
-        researchData = Instantiate<ResearchData>(await Addressables.LoadAssetAsync<ResearchData>("Assets/Game Data/Research && Building/Research Data.asset").Task);
+        researchData = Instantiate(await Addressables.LoadAssetAsync<ResearchData>(ResearchData.PATH).Task);
         List<ResearchNode> queue = new();
         for (int i = 0; i < researchSave.saveData.Count; i++)
         {
@@ -43,7 +43,7 @@ public class ResearchWindow : FullscreenWindow, IGameDataController<ResearchSave
         }
         if (queue.Count > 0)
             currentResearch = queue[0];
-        statData = Instantiate(await Addressables.LoadAssetAsync<BuildingStats.StatData>("Assets/Game Data/Research && Building/Stats.asset").Task);
+        statData = Instantiate(await Addressables.LoadAssetAsync<StatData>(StatData.PATH).Task);
         GetWindow();
         SceneRefs.ResearchAdapter.Init(DoResearch);
         ((IInitiableUI)UIRefs.BottomBar.Q<VisualElement>(className: "build-menu")).Init();
@@ -58,8 +58,8 @@ public class ResearchWindow : FullscreenWindow, IGameDataController<ResearchSave
             {
                 if (node.nodeType == NodeType.Stat)
                 {
-                    int i = statData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
-                    Stat stat = statData.Categories[node.nodeCategory].Objects[i];
+                    int i = statData.Categories[node.objectConnection.categoryIndex].Objects.FindIndex(q => q.id == node.objectConnection.objectId);
+                    Stat stat = statData.Categories[node.objectConnection.categoryIndex].Objects[i];
                     if (node.researched)
                     {
                         stat.AddEffect();
@@ -88,7 +88,7 @@ public class ResearchWindow : FullscreenWindow, IGameDataController<ResearchSave
             for (j = 0; j < cat.Objects.Count; j++)
             {
                 if (cat.Objects[j].nodeType == NodeType.Building
-                    && cat.Objects[j].nodeAssignee == wrapper.id)
+                    && cat.Objects[j].objectConnection.objectId == wrapper.id)
                 {
                     int x = cat.Objects.FindIndex(q => q.level == cat.Objects[j].level);
                     UI.Open((i, cat.Objects[j].level + 1, j - x));

@@ -12,6 +12,7 @@ public class ProductionRecipe : DataObject
     public int timeInTicks;
 
     public ProductionRecipe(int _id) : base(_id) { }
+    public ProductionRecipe() { }
 }
 
 [Serializable]

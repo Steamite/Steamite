@@ -86,7 +86,19 @@ namespace InfoWindowElements
         #endregion
 
         #region Constructors
-        public ResourceList()
+        public ResourceList() 
+        {
+            Create();
+            virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+        }
+        public ResourceList(int _iconSize = ICON_SIZE, string _name = "name")
+        {
+            Create();
+            name = _name;
+            iconSize = _iconSize;
+        }
+
+        void Create()
         {
             itemTemplate = Resources.Load<VisualTreeAsset>("UI Toolkit/Resource Text Icon");
             itemsSource = new List<UIResource>();
@@ -110,14 +122,20 @@ namespace InfoWindowElements
         /// <returns>The instantiated item.</returns>
         protected virtual VisualElement MakeItem()
         {
-            //Debug.Log($"Making item{name}, {itemsSource.Count}, {parent.name}/{name}");
             VisualElement element = itemTemplate.CloneTree();
             if (element[0].name == "ResText")
             {
                 element.AddToClassList("resource-info");
             }
-            element.ElementAt(0).ElementAt(0).style.fontSize = 40 * iconSize / ICON_SIZE;
+            element[0].style.minHeight = 54 * iconSize / ICON_SIZE;
+            element[0].style.maxHeight = 54 * iconSize / ICON_SIZE;
 
+            element[0][0].style.fontSize = 40 * iconSize / ICON_SIZE;
+            
+            element[0][1].style.minWidth = 50 * iconSize / ICON_SIZE;
+            element[0][1].style.minHeight = 50 * iconSize / ICON_SIZE;
+            element[0][1].style.maxWidth = 50 * iconSize / ICON_SIZE;
+            element[0][1].style.maxHeight = 50 * iconSize / ICON_SIZE;
             return element;
         }
 
@@ -128,6 +146,7 @@ namespace InfoWindowElements
         /// <param name="i">Index of the element.</param>
         protected virtual void BindItem(VisualElement el, int i)
         {
+            
             el.RemoveFromClassList("unity-collection-view__item");
             Color c = ((UIResource)itemsSource[i]).type.color;
 
@@ -200,6 +219,15 @@ namespace InfoWindowElements
                     binding.sourceToUiConverters.AddConverter((ref Resource stored) => ToUIRes(stored));
                     SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
+                case Outpost outpost:
+                    if (cost)
+                        SetResWithoutBinding(outpost.production);
+                    else
+                        SetResWithoutBinding(outpost.storedResources);
+                    return;
+                case MoneyResource res:
+                    SetResWithoutBinding(res);
+                    return;
                 default:
                     throw new NotImplementedException();
             }

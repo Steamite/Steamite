@@ -87,8 +87,10 @@ public class ResourceEditor : PropertyDrawer
             (elem, i) =>
             {
                 elem = elem.ElementAt(0);
-                ((DropdownField)elem.ElementAt(0)).value = ((Resource)property.boxedValue).types[i].ToString();
-                ((DropdownField)elem.ElementAt(0)).RegisterValueChangedCallback(
+                DropdownField field = (DropdownField)elem.ElementAt(0);
+                field.value = ((Resource)property.boxedValue).types[i].Name;
+                field.choices = ResFluidTypes.GetResNamesList(new());
+                field.RegisterValueChangedCallback(
                     (enu) =>
                     {
                         property.FindPropertyRelative(
@@ -96,8 +98,9 @@ public class ResourceEditor : PropertyDrawer
                         serializedObject.ApplyModifiedProperties();
                     });
 
-                ((IntegerField)elem.ElementAt(1)).value = ((Resource)property.boxedValue).ammounts[i];
-                ((IntegerField)elem.ElementAt(1)).RegisterValueChangedCallback(
+                IntegerField intField = (IntegerField)elem.ElementAt(1);
+                intField.value = ((Resource)property.boxedValue).ammounts[i];
+                intField.RegisterValueChangedCallback(
                     (val) =>
                     {
                         property.FindPropertyRelative(

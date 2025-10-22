@@ -44,7 +44,7 @@ class ResourceTester : IPreprocessBuildWithReport
     static void CheckBuildings()
     {
         bool succes = true;
-        BuildingData data = AssetDatabase.LoadAssetAtPath<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset");
+        BuildingData data = AssetDatabase.LoadAssetAtPath<BuildingData>(BuildingData.PATH);
         for (int i = 0; i < data.Categories.Count; i++)
         {
             for (int j = 0; j < data.Categories[i].Objects.Count; j++)
@@ -74,7 +74,7 @@ class ResourceTester : IPreprocessBuildWithReport
     static void CheckReseach()
     {
         bool succes = true;
-        ResearchData data = AssetDatabase.LoadAssetAtPath<ResearchData>("Assets/Game Data/Research && Building/Research Data.asset");
+        ResearchData data = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.PATH);
         for (int i = 0; i < data.Categories.Count; i++)
         {
             for (int j = 0; j < data.Categories[i].Objects.Count; j++)

@@ -36,18 +36,18 @@ namespace BottomBar.Building
             {
                 foreach (var node in categ.Objects)
                 {
-                    if (node.nodeType == NodeType.Building && node.nodeAssignee > -1 && node.researched == false)
+                    if (node.nodeType == NodeType.Building && node.objectConnection.objectId > -1 && node.researched == false)
                     {
-                        int i = buildingData.Categories[node.nodeCategory].Objects.FindIndex(q => q.id == node.nodeAssignee);
+                        int i = buildingData.Categories[node.objectConnection.categoryIndex].Objects.FindIndex(q => q.id == node.objectConnection.objectId);
                         if (i != -1)
                         {
-                            BuildingWrapper wrapper = buildingData.Categories[node.nodeCategory].Objects[i];
+                            BuildingWrapper wrapper = buildingData.Categories[node.objectConnection.categoryIndex].Objects[i];
                             if (wrapper != null)
                             {
                                 node.RegisterFinishCallback(() =>
                                 {
                                     wrapper.unlocked = true;
-                                    if (categGroup.SelectedChoice == node.nodeCategory)
+                                    if (categGroup.SelectedChoice == node.objectConnection.categoryIndex)
                                     {
                                         buildingList.UnlockActiveButton(i);
                                     }

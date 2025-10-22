@@ -217,5 +217,6 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 0
-  categoryID: 0
-  wrapperID: 277555999
+  prefabConnection:
+    categoryIndex: 0
+    objectId: 277555999

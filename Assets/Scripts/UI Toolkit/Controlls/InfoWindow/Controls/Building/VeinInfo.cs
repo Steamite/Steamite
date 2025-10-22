@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 [UxmlElement]
 public partial class VeinInfo : InfoWindowControl
 {
-    ResList stored;
+   ResourceList stored;
     public override void Open(object data)
     {
         stored.Open(data);
@@ -13,7 +13,7 @@ public partial class VeinInfo : InfoWindowControl
     public VeinInfo()
     {
         VisualElement element = new() { name = "Group" };
-        element.Add(stored = new ResList());
+        element.Add(stored = new ResourceList());
         Add(element);
     }
 }

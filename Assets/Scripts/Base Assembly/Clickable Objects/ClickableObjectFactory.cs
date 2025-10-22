@@ -29,6 +29,8 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     public PrefabHolder tilePrefabs;
     public PrefabHolder specialPrefabs;
     public PipePart PipeConnectionPrefab;
+
+    public ProductionRecipeHolder recipeData;
     #endregion
     Material pipeMaterial;
     public List<int> CenterElevatorIds { get; private set; }
@@ -162,11 +164,22 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     {
         GridPos rotate = MyGrid.Rotate(save.blueprint.moveBy, save.rotationY);
         Building b = Instantiate(
-            buildPrefabs.GetBuilding(save.categoryID, save.wrapperID),
+            buildPrefabs.GetBuilding(save.prefabConnection.categoryIndex, save.prefabConnection.objectId),
             new Vector3(save.gridPos.x + rotate.x, (save.gridPos.y * LEVEL_HEIGHT) + BUILD_OFFSET, save.gridPos.z + rotate.z),
             Quaternion.Euler(0, save.rotationY, 0),
             MyGrid.FindLevelBuildings(save.gridPos.y));
         b.Load(save);
+
+        if (b is IFluidWork fluid)
+        {
+            fluid.CreatePipes(true);
+        }
+        if (b is IResourceProduction prod)
+        {
+            prod.Init(b.constructed, recipeData);
+        }
+
+
         MyGrid.SetBuilding(b, true);
     }
 
@@ -272,18 +285,16 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     public async Task BeforeInit()
     {
         CenterElevatorIds = new();
-        buildPrefabs = await Addressables.LoadAssetAsync<BuildingData>("Assets/Game Data/Research && Building/Build Data.asset").Task;
-        buildPrefabs.Categories.SelectMany(q => q.Objects).ToList().ForEach(q =>
-        {
-            q.building.InitModifiers();
-            q.materials = q.building.GetComponentsInChildren<Renderer>().Select(q => q.sharedMaterial).ToList();
-        });
+        buildPrefabs = await Addressables.LoadAssetAsync<BuildingData>(BuildingData.PATH).Task;
+        buildPrefabs.Init();
+        recipeData = await Addressables.LoadAssetAsync<ProductionRecipeHolder>(ProductionRecipeHolder.PATH).Task;
+        recipeData.Init();
         pipeMaterial = buildPrefabs.GetBuilding(BuildPipe.BUILD_PIPE_PREF_NAME).GetComponent<Renderer>().sharedMaterial;
     }
 
     public List<Material> GetModelMaterials(Building building)
     {
-        return buildPrefabs.Categories[building.categoryID].Objects.FirstOrDefault(q => q.id == building.wrapperID).materials;
+        return buildPrefabs.Categories[building.prefabConnection.categoryIndex].Objects.FirstOrDefault(q => q.id == building.prefabConnection.objectId).materials;
     }
 
     public Material GetPipeMaterial()

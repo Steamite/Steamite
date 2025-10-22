@@ -208,7 +208,7 @@ MonoBehaviour:
       itemType: 3
   cost:
     types:
-    - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+    - {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
     ammounts: 3200000000000000
     baseResource:
       types:
@@ -227,6 +227,7 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 0
-  categoryID: 0
-  wrapperID: 1122905122
-  canStoreInt: 594176
+  prefabConnection:
+    categoryIndex: 0
+    objectId: 1122905122
+  canStoreInt: 16969858

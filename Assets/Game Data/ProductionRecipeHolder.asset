@@ -21,8 +21,10 @@ MonoBehaviour:
         types: []
         ammounts: 
         baseResource:
-          types: []
-          ammounts: 
+          types:
+          - {fileID: 11400000, guid: e523913a9c6ce8d4fb05048da649cfc5, type: 2}
+          - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+          ammounts: 0a00000002000000
         mod:
           percentMod: 1
           absoluteMod: 0
@@ -36,8 +38,9 @@ MonoBehaviour:
         types: []
         ammounts: 
         baseResource:
-          types: []
-          ammounts: 
+          types:
+          - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
+          ammounts: 0a000000
         mod:
           percentMod: 1
           absoluteMod: 0
@@ -47,15 +50,17 @@ MonoBehaviour:
           mod:
             percentMod: 1
             absoluteMod: 0
-      timeInTicks: 0
+      timeInTicks: 10
     - Name: Copper
       id: 1978748951
       resourceCost:
         types: []
         ammounts: 
         baseResource:
-          types: []
-          ammounts: 
+          types:
+          - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
+          - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+          ammounts: 0700000002000000
         mod:
           percentMod: 1
           absoluteMod: 0
@@ -69,8 +74,9 @@ MonoBehaviour:
         types: []
         ammounts: 
         baseResource:
-          types: []
-          ammounts: 
+          types:
+          - {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
+          ammounts: 0a000000
         mod:
           percentMod: 1
           absoluteMod: 0
@@ -80,7 +86,7 @@ MonoBehaviour:
           mod:
             percentMod: 1
             absoluteMod: 0
-      timeInTicks: 0
+      timeInTicks: 7
     - Name: Brass
       id: 1881560667
       resourceCost:

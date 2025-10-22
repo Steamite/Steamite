@@ -22,10 +22,10 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 100
       reseachCost:
-        types: 
+        types: []
         ammounts: 
         baseResource:
-          types: 
+          types: []
           ammounts: 
         mod:
           percentMod: 1
@@ -37,8 +37,9 @@ MonoBehaviour:
             percentMod: 1
             absoluteMod: 0
       nodeType: 0
-      nodeCategory: -1
-      nodeAssignee: -1
+      objectConnection:
+        categoryIndex: 0
+        objectId: 0
       unlockedBy: 
       unlocks: 
       description: 
@@ -50,10 +51,10 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 10
       reseachCost:
-        types: 
+        types: []
         ammounts: 
         baseResource:
-          types: 
+          types: []
           ammounts: 
         mod:
           percentMod: 1
@@ -65,8 +66,9 @@ MonoBehaviour:
             percentMod: 1
             absoluteMod: 0
       nodeType: 2
-      nodeCategory: 2
-      nodeAssignee: 1580670160
+      objectConnection:
+        categoryIndex: 0
+        objectId: 277555999
       unlockedBy: 
       unlocks: e006623a
       description: 'Random description
@@ -80,10 +82,10 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 15
       reseachCost:
-        types: 
+        types: []
         ammounts: 
         baseResource:
-          types: 
+          types: []
           ammounts: 
         mod:
           percentMod: 1
@@ -95,8 +97,9 @@ MonoBehaviour:
             percentMod: 1
             absoluteMod: 0
       nodeType: 2
-      nodeCategory: 1
-      nodeAssignee: 1197943099
+      objectConnection:
+        categoryIndex: 0
+        objectId: 635712276
       unlockedBy: 
       unlocks: e006623a
       description: 
@@ -108,10 +111,10 @@ MonoBehaviour:
       currentTime: 0
       researchTime: 5
       reseachCost:
-        types: 
+        types: []
         ammounts: 
         baseResource:
-          types: 
+          types: []
           ammounts: 
         mod:
           percentMod: 1
@@ -123,8 +126,9 @@ MonoBehaviour:
             percentMod: 1
             absoluteMod: 0
       nodeType: 1
-      nodeCategory: 0
-      nodeAssignee: 2090065767
+      objectConnection:
+        categoryIndex: 0
+        objectId: 2090065767
       unlockedBy: 
       unlocks: e006623a
       description: 'Improved metal casting.
@@ -144,7 +148,9 @@ MonoBehaviour:
         Production: ProdSpeed by 2
 
         Production:
-        ProductionYield 10%'
+        ProductionYield 10%
+
+        : ProdSpeed by -100'
       lineColor: {r: 1, g: 0, b: 0, a: 1}
     - Name: Extension
       id: 442275305
@@ -153,10 +159,10 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 15
       reseachCost:
-        types: 
+        types: []
         ammounts: 
         baseResource:
-          types: 
+          types: []
           ammounts: 
         mod:
           percentMod: 1
@@ -168,8 +174,9 @@ MonoBehaviour:
             percentMod: 1
             absoluteMod: 0
       nodeType: 1
-      nodeCategory: 0
-      nodeAssignee: 1873593032
+      objectConnection:
+        categoryIndex: 0
+        objectId: 1873593032
       unlockedBy: 
       unlocks: e006623a
       description: '
@@ -185,10 +192,10 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 12
       reseachCost:
-        types: 
+        types: []
         ammounts: 
         baseResource:
-          types: 
+          types: []
           ammounts: 
         mod:
           percentMod: 1
@@ -200,8 +207,9 @@ MonoBehaviour:
             percentMod: 1
             absoluteMod: 0
       nodeType: 2
-      nodeCategory: 1
-      nodeAssignee: 1472558132
+      objectConnection:
+        categoryIndex: 0
+        objectId: 1122905122
       unlockedBy: bd29a30ae9955c1ae429d52634caf053
       unlocks: 
       description: 
@@ -216,10 +224,10 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 100
       reseachCost:
-        types: 
+        types: []
         ammounts: 
         baseResource:
-          types: 
+          types: []
           ammounts: 
         mod:
           percentMod: 1
@@ -231,8 +239,9 @@ MonoBehaviour:
             percentMod: 1
             absoluteMod: 0
       nodeType: 2
-      nodeCategory: 1
-      nodeAssignee: -1
+      objectConnection:
+        categoryIndex: 0
+        objectId: 0
       unlockedBy: 
       unlocks: 1b67a65bef39f217
       description: 
@@ -244,10 +253,10 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 200
       reseachCost:
-        types: 
+        types: []
         ammounts: 
         baseResource:
-          types: 
+          types: []
           ammounts: 
         mod:
           percentMod: 1
@@ -259,8 +268,9 @@ MonoBehaviour:
             percentMod: 1
             absoluteMod: 0
       nodeType: 2
-      nodeCategory: -1
-      nodeAssignee: -1
+      objectConnection:
+        categoryIndex: 0
+        objectId: 0
       unlockedBy: 0de90f31
       unlocks: 
       description: 
@@ -272,10 +282,10 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 200
       reseachCost:
-        types: 
+        types: []
         ammounts: 
         baseResource:
-          types: 
+          types: []
           ammounts: 
         mod:
           percentMod: 1
@@ -287,8 +297,9 @@ MonoBehaviour:
             percentMod: 1
             absoluteMod: 0
       nodeType: 2
-      nodeCategory: -1
-      nodeAssignee: -1
+      objectConnection:
+        categoryIndex: 0
+        objectId: 0
       unlockedBy: 0de90f31
       unlocks: 
       description: 
@@ -300,10 +311,10 @@ MonoBehaviour:
       currentTime: -1
       researchTime: 300
       reseachCost:
-        types: 
+        types: []
         ammounts: 
         baseResource:
-          types: 
+          types: []
           ammounts: 
         mod:
           percentMod: 1
@@ -315,8 +326,9 @@ MonoBehaviour:
             percentMod: 1
             absoluteMod: 0
       nodeType: 2
-      nodeCategory: -1
-      nodeAssignee: -1
+      objectConnection:
+        categoryIndex: 0
+        objectId: 0
       unlockedBy: 
       unlocks: 
       description: 

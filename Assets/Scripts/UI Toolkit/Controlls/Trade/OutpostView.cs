@@ -58,7 +58,7 @@ public partial class OutpostView : TradeMapViewBase
         Label levelTitle;
         Label levelLabel;
         Label costListLabel;
-        ResList resourceList;
+       ResourceList resourceList;
 
         // level Label
         Add(container = new());

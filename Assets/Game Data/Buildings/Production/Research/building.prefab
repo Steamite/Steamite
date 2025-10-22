@@ -609,8 +609,10 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    types: []
-    ammounts: 0a000000
+    types:
+    - {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
+    - {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
+    ammounts: 0a0000000a00000000000000
     baseResource:
       types:
       - {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
@@ -629,8 +631,9 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 20
-  categoryID: 1
-  wrapperID: 1197943099
+  prefabConnection:
+    categoryIndex: 1
+    objectId: 1197943099
   assignLimit:
     baseValue: 1
     currentValue: 1

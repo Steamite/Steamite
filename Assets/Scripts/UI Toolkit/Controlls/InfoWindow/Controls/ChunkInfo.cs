@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 public partial class ChunkInfo : InfoWindowControl
 {
     Label assigned;
-    ResList contains;
+    ResourceList contains;
 
     public override void Open(object data)
     {
@@ -32,7 +32,7 @@ public partial class ChunkInfo : InfoWindowControl
 
         //inventory
         Add(new Label("Contains") { name = "Resource-Header" });
-        Add(contains = new ResList());
+        Add(contains = new ResourceList());
         contains.verticalPadding = 2;
     }
 }
