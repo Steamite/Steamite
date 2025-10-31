@@ -105,8 +105,6 @@ namespace EditorWindows
             categoryNameField = rootVisualElement.Q<TextField>("Category-Name");
             categoryNameField.UnregisterValueChangedCallback<string>(NameChange);
             categoryNameField.RegisterValueChangedCallback<string>(NameChange);
-
-
         }
 
         void IconChange(ChangeEvent<Object> ev)

@@ -130,4 +130,7 @@ public static class ResFluidTypes
     {
         return data.GetSaveIndexByName(q.Name);
     }
+
+    public static ResourceData GetData()
+        => data;
 }

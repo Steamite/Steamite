@@ -11,6 +11,7 @@
                 <editor:ObjectField label="Category Icon" name="Icon-Changer" type="UnityEngine.Texture2D, UnityEngine.CoreModule" style="-unity-text-align: middle-left; margin-right: 10px;" />
                 <engine:TextField label="Category Name" placeholder-text="filler text" name="Category-Name" style="flex-grow: 1; margin-right: 4px;" />
             </engine:VisualElement>
+            <editor:ColorField label="Color" value="#00FFFFFF" name="Color" />
             <engine:Button text="Create category" name="Category-Create" />
             <engine:Button text="Refresh all resources" name="Rebind-Create" />
         </engine:VisualElement>

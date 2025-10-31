@@ -79,8 +79,7 @@ namespace InfoWindowElements
         /// <summary>If disabled hides resources with 0.</summary>
         [UxmlAttribute] public bool showEmpty = false;
 
-        public const int ICON_SIZE = 60;
-        [UxmlAttribute] public int iconSize = 60;
+        [UxmlAttribute] public float scale = 1;
         [UxmlAttribute] public int verticalPadding = 2;
         [UxmlAttribute] public int leftPadding = 10;
         #endregion
@@ -91,16 +90,15 @@ namespace InfoWindowElements
             Create();
             virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
         }
-        public ResourceList(int _iconSize = ICON_SIZE, string _name = "name")
+        public ResourceList(float _scale = 1, string _name = "name")
         {
             Create();
             name = _name;
-            iconSize = _iconSize;
+            scale = _scale;
         }
 
         void Create()
         {
-            itemTemplate = Resources.Load<VisualTreeAsset>("UI Toolkit/Resource Text Icon");
             itemsSource = new List<UIResource>();
             //focusable = false;
 
@@ -121,23 +119,7 @@ namespace InfoWindowElements
         /// </summary>
         /// <returns>The instantiated item.</returns>
         protected virtual VisualElement MakeItem()
-        {
-            VisualElement element = itemTemplate.CloneTree();
-            if (element[0].name == "ResText")
-            {
-                element.AddToClassList("resource-info");
-            }
-            element[0].style.minHeight = 54 * iconSize / ICON_SIZE;
-            element[0].style.maxHeight = 54 * iconSize / ICON_SIZE;
-
-            element[0][0].style.fontSize = 40 * iconSize / ICON_SIZE;
-            
-            element[0][1].style.minWidth = 50 * iconSize / ICON_SIZE;
-            element[0][1].style.minHeight = 50 * iconSize / ICON_SIZE;
-            element[0][1].style.maxWidth = 50 * iconSize / ICON_SIZE;
-            element[0][1].style.maxHeight = 50 * iconSize / ICON_SIZE;
-            return element;
-        }
+            => new ResourceTextIcon(scale);
 
         /// <summary>
         /// Customizible function for binding data to items.
@@ -148,10 +130,8 @@ namespace InfoWindowElements
         {
             
             el.RemoveFromClassList("unity-collection-view__item");
-            Color c = ((UIResource)itemsSource[i]).type.color;
 
-            el.Q<Label>("Value").text = ConvertString((UIResource)itemsSource[i]);
-            el.Q<VisualElement>("Icon").style.unityBackgroundImageTintColor = c;
+            (el as ResourceTextIcon).SetTextIcon(ConvertString((UIResource)itemsSource[i]), ((UIResource)itemsSource[i]).type);
         }
 
         /// <summary>

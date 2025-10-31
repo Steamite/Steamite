@@ -139,7 +139,7 @@ namespace InfoWindowViews
                     
                     row = new() { style = { flexDirection = FlexDirection.Row } };
                     element.Add(row);
-                    ResourceList cost = new(30, "cost");
+                    ResourceList cost = new(0.5f, "cost");
                     row.Add(cost);
                     
                     VisualElement column = new() { style = { flexDirection = FlexDirection.Column } };
@@ -149,7 +149,7 @@ namespace InfoWindowViews
                     column.Add(arrowText);
                     row.Add(column);
                     
-                    ResourceList yield = new(30, "yield");
+                    ResourceList yield = new(0.5f, "yield");
                     row.Add(yield);
 
                     return element;

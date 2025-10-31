@@ -14,5 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: BaseAssembly::ResourceType
   Name: None
   color: {r: 1, g: 0, b: 0.69310665, a: 1}
-  image: {fileID: 0}
-  category: {fileID: 11400000, guid: 6f53c43e519beaa47bcb1aa0b01907fe, type: 2}
+  image: {fileID: 2800000, guid: 9c948cd08b1522c4a95a3a66fe6242d4, type: 3}

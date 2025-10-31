@@ -61,6 +61,10 @@ namespace AbstractControls
             }
         }
 
+        /// <summary>
+        /// DO NOT CALL FROM THE Group, creating buttons already adds them!!!
+        /// </summary>
+        /// <param name="button">Needs to be the button, and is called by the button!</param>
         public virtual void AddButton(CustomRadioButton button)
         {
             Add(button);

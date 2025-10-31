@@ -1,6 +1,7 @@
 
 using EditorWindows.Windows;
 using System;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -12,6 +13,7 @@ using static UnityEditor.LightingExplorerTableColumn;
 
 public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWrapper>
 {
+    ColorField colorField;
     [MenuItem("Custom Editors/Resource register %n", priority = 14)]
     public static void Open()
     {
@@ -23,8 +25,40 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
     {
         holder = AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.PATH);
         base.CreateGUI();
+        colorField = rootVisualElement.Q<ColorField>();
         rootVisualElement.Q<Button>("Rebind-Create").clicked += async () => await ResFluidTypes.Init();
         categorySelector.index = 0;
+    }
+
+    protected override bool LoadCategData(int index)
+    {
+        bool b = base.LoadCategData(index);
+        if (b)
+        {
+            colorField.value = selectedCategory.color;
+        }
+        else
+        {
+            colorField.value = new();
+        }
+
+        return b;
+    }
+
+    protected override void TopBar(out ObjectField iconSelector)
+    {
+        base.TopBar(out iconSelector);
+        colorField.UnregisterValueChangedCallback(CategoryColorChange);
+        colorField.RegisterValueChangedCallback(CategoryColorChange);
+    }
+
+    void CategoryColorChange(ChangeEvent<Color> ev)
+    {
+        if (selectedCategory != null && ev.newValue != new Color())
+        {
+            selectedCategory.color = ev.newValue;
+            EditorUtility.SetDirty(holder);
+        }
     }
 
     protected override void CreateColumns()

@@ -1,7 +1,7 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/Styles/TopBar.uss?fileID=7433441132597879392&amp;guid=4fe123aa2d844744b9e1a00d21362590&amp;type=3#TopBar" />
-    <engine:VisualElement name="TopBar" class="topBar">
-        <InfoWindowElements.ResourceList horizontal-scrolling="true" name="Resources" allow-add="false" allow-remove="false" style="margin-left: 2.5%; margin-right: 2.5%; max-height: 65px; font-size: 35px; min-height: 65px; align-self: center; align-content: center; margin-top: 0; margin-bottom: 0; align-items: center; justify-content: center;" />
+    <engine:VisualElement name="TopBar" class="topBar" style="overflow: visible;">
+        <ResourceOverview name="Resources" style="flex-direction: row; max-width: 60%; align-self: stretch;" />
     </engine:VisualElement>
     <engine:VisualElement name="Money-Background" class="small-window">
         <engine:Label text="##### &lt;color=#FFD700&gt;£&lt;/color&gt;" name="Money-Value" class="money" />

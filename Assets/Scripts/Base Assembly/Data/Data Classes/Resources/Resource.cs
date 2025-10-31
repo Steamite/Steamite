@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -249,6 +250,19 @@ public class Resource
 
 
     public int Sum() => ammounts.Sum();
+
+    public Resource FilterByType(List<ResourceWrapper> objects)
+    {
+        Resource resource = new();
+        for (int i = 0; i < objects.Count; i++)
+        {
+            ResourceType type = objects[i].data;
+            int j = types.FindIndex(q=> q == type);
+
+            resource.Add(type, j > -1 ? ammounts[j]  : 0);
+        }
+        return resource;
+    }
 
     public static Resource operator -(Resource a, Resource b)
     {

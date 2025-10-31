@@ -66,7 +66,7 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
         moneyLabel = root.Q<Label>("Money-Value");
         moneyLabel.SetBinding(nameof(Money), nameof(Label.text), (ref int _Money) => $"{Money} <color=#FFD700>" + (char)163 + "</color>",  this);
 
-        resourceList = root.Q<ListView>("Resources") as IUIElement;
+        resourceList = root.Q<VisualElement>("Resources") as IUIElement;
         resourceList.Open(this);
         return resources;
     }

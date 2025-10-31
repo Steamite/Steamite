@@ -10,14 +10,14 @@ public partial class DoubleFluidResList : VisualElement
 
     public DoubleFluidResList() { }
 
-    public DoubleFluidResList(bool _cost, string _name, bool _useBindings = false, int _leftPadding = 0, bool center = true, int iconSize = 60)
+    public DoubleFluidResList(bool _cost, string _name, bool _useBindings = false, int _leftPadding = 0, bool center = true, int scale = 1)
     {
         name = _name;
         style.width = new Length(100, LengthUnit.Percent);
         style.flexGrow = 1;
-        resList = new(_cost, _name, _useBindings, center) { leftPadding = _leftPadding, style = { flexGrow = 1 }, iconSize = iconSize };
+        resList = new(_cost, _name, _useBindings, center) { leftPadding = _leftPadding, style = { flexGrow = 1 }, scale = scale };
         Add(resList);
-        fluidList = new(_cost, _name, _useBindings, center) { leftPadding = _leftPadding, style = { flexGrow = 1 }, iconSize = iconSize };
+        fluidList = new(_cost, _name, _useBindings, center) { leftPadding = _leftPadding, style = { flexGrow = 1 }, scale = scale };
         Add(fluidList);
         style.flexDirection = FlexDirection.Column;
 
