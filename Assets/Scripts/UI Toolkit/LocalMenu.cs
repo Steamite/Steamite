@@ -150,6 +150,10 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 header.text = quest.Name;
                 description.text = quest.GetRewPenText();
                 break;
+            case ResourceType type:
+                header.text = type.Name;
+                description.text = "";
+                break;
         }
         if (onlyUpdate == false)
         {
@@ -208,8 +212,17 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 menu.style.left = StyleKeyword.Auto;
                 menu.style.right = 1920 - rect.x + ROFFSET; // = 1920 + OFFSET
             }
-            float f = (1080 - anchor.worldBound.y) - anchor.resolvedStyle.height / 2;
-            menu.style.bottom = f;
+            float f = (1080 - rect.y) - anchor.resolvedStyle.height / 2;
+            if (f < 1000)
+            {
+                menu.style.bottom = f;
+                menu.style.top = StyleKeyword.Auto;
+            }
+            else
+            {
+                menu.style.top = 0;
+                menu.style.bottom = StyleKeyword.Auto;
+            }
         }
     }
 }

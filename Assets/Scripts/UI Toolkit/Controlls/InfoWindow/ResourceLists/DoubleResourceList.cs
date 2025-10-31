@@ -64,7 +64,7 @@ namespace InfoWindowElements
         {
             base.BindItem(el, i);
             if (cost && resources[i].ammount < ((DoubleUIResource)resources[i]).secondAmmount)
-                el.Q<Label>("Value").style.color = Color.red;
+                (el as ResourceTextIcon).ColorText(Color.red);
         }
         #endregion
 

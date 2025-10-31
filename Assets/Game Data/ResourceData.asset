@@ -22,7 +22,7 @@ MonoBehaviour:
       id: 1681478910
       data: {fileID: 11400000, guid: c1f62f9e2918d7e44adacadc45cfec2e, type: 2}
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0.8867924, g: 0.16784933, b: 0.0292809, a: 1}
   - Name: Ores
     Objects:
     - Name: Magnetite
