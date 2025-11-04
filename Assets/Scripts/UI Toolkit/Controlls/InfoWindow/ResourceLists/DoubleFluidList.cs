@@ -1,4 +1,3 @@
-using InfoWindowElements;
 using UnityEngine.UIElements;
 
 namespace InfoWindowElements

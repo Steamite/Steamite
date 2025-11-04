@@ -154,7 +154,7 @@ namespace ResearchUI
                 ResearchLine line = new(
                     new(
                         botPos,
-                        horPos + ResearchLine.WIDTH-ResearchLine.BORDER,
+                        horPos + ResearchLine.WIDTH - ResearchLine.BORDER,
                         ResearchLine.WIDTH,
                         (sLevel - eLevel - 1) * 200 + height));
                 this[0][1].Add(line);

@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Stats
   m_EditorClassIdentifier: 
   Categories:
-  - Name: Stats
+  - id: 1
+    Name: Stats
     Objects:
     - Name: Extension
       id: 1873593032

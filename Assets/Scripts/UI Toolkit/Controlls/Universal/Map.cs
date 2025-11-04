@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -127,7 +126,7 @@ namespace AbstractControls
 
                         if (newMousePos != eve.mousePosition)
                         {
-                            if(newMousePos.x != eve.mousePosition.x)
+                            if (newMousePos.x != eve.mousePosition.x)
                                 newMousePos.y = Mathf.Abs(newMousePos.y - 1080);
                             Mouse.current.WarpCursorPosition(newMousePos * screenScale);
                             ignoreNextDelta = true;

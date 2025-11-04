@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
@@ -50,7 +49,7 @@ public partial class QuestCatalog : TreeView, IUIElement
             el.parent.parent.RemoveFromClassList("tree-content");
         };
 
-        selectionChanged += (items) => 
+        selectionChanged += (items) =>
         {
             foreach (var item in items)
             {
@@ -60,7 +59,7 @@ public partial class QuestCatalog : TreeView, IUIElement
                     (parent[1] as QuestInfo).Open(item as Quest);
                 }
                 else
-                    SetSelectionByIdWithoutNotify(new List<int>(){ oldSelectionId });
+                    SetSelectionByIdWithoutNotify(new List<int>() { oldSelectionId });
                 break;
             }
         };
@@ -71,7 +70,7 @@ public partial class QuestCatalog : TreeView, IUIElement
     {
         QuestController controller = data as QuestController;
         var items = new List<TreeViewItemData<Quest>>(10);
-        
+
         var activeQuests = new List<TreeViewItemData<Quest>>();
         foreach (Quest item in controller.activeQuests)
         {

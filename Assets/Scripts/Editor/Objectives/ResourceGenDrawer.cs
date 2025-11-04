@@ -15,13 +15,13 @@ public class ResourceGenDrawer : PropertyDrawer
         (el[0] as Label).text = Enum.GetNames(typeof(ResourceType))[property.FindPropertyRelative("id").intValue];
 
         (el[1] as SliderInt).BindProperty(property.FindPropertyRelative(nameof(ResourceGen.typeChance)));
-        
+
         (el[2] as MinMaxSlider).BindProperty(property.FindPropertyRelative(nameof(ResourceGen.ammountRange)));
-        
+
         Vector2Field field = el[3] as Vector2Field;
         field.BindProperty(property.FindPropertyRelative(nameof(ResourceGen.ammountRange)));
         field.RegisterValueChangedCallback(ev => field.value = ev.newValue.ToInt());
         return el;
     }
-    
+
 }

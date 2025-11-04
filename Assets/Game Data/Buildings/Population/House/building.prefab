@@ -218,7 +218,7 @@ MonoBehaviour:
   constructionProgress: 0
   maximalProgress: 20
   prefabConnection:
-    categoryIndex: 2
+    categoryId: 3
     objectId: 1580670160
   assignLimit:
     baseValue: 3

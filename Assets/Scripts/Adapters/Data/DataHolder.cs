@@ -34,7 +34,7 @@ public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CA
         List<string> objectNames = new();
         if (addNone)
             objectNames.Add("None");
-        objectNames.AddRange(Categories.SelectMany(q => q.Objects).Select(q=> q.Name).ToList());
+        objectNames.AddRange(Categories.SelectMany(q => q.Objects).Select(q => q.Name).ToList());
         return objectNames;
     }
     public int UniqueID()
@@ -42,8 +42,17 @@ public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CA
         int i;
         do
         {
-            i = UnityEngine.Random.Range(0, int.MaxValue);
+            i = UnityEngine.Random.Range(1, int.MaxValue);
         } while (Categories.SelectMany(q => q.Objects).Count(q => q.id == i) > 0);
+        return i;
+    }
+    public int UniqueCategID()
+    {
+        int i;
+        do
+        {
+            i = UnityEngine.Random.Range(1, int.MaxValue);
+        } while (Categories.Select(q => q.id).Count(q => q == i) > 0);
         return i;
     }
 #endif
@@ -53,9 +62,9 @@ public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CA
 
     public WRAPPER_T GetObjectBySaveIndex(DataAssign dataAssign)
     {
-        if (dataAssign.categoryIndex == -1)
+        if (dataAssign.categoryId < 1)
             return null;
-        return Categories[dataAssign.categoryIndex].Objects.FirstOrDefault(q => q.id == dataAssign.objectId);
+        return GetCategByID(dataAssign.categoryId)?.Objects.FirstOrDefault(q => q.id == dataAssign.objectId);
     }
 
     public DataAssign GetSaveIndexByName(string _name)
@@ -65,8 +74,25 @@ public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CA
         {
             wrapper = Categories[i].Objects.FirstOrDefault(q => q.Name == _name);
             if (wrapper != null)
-                return new(i, wrapper.id);
+                return new(Categories[i].id, wrapper.id);
         }
         return new(-1, -1);
+    }
+
+    public CATEG_T GetCategByID(int id)
+    {
+        return Categories.FirstOrDefault(q => q.id == id);
+    }
+
+    public int GetCategIndexById(int categoryId, bool addSelectionOffset = false)
+    {
+        return Categories.FindIndex(q => q.id == categoryId) + (addSelectionOffset ? 1 : 0);
+    }
+
+
+    public int GetCategIdFromName(string newValue)
+    {
+        CATEG_T cat = Categories.FirstOrDefault(q => q.Name == newValue);
+        return cat != null ? cat.id : -1;
     }
 }

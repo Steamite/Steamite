@@ -1,5 +1,4 @@
-﻿using Orders;
-using System;
+﻿using System;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -9,8 +8,8 @@ using Object = UnityEngine.Object;
 
 namespace EditorWindows
 {
-    public class CategoryWindow<CATEG_TYPE, DATA_TYPE> : EditorWindow 
-        where CATEG_TYPE : DataCategory<DATA_TYPE> 
+    public class CategoryWindow<CATEG_TYPE, DATA_TYPE> : EditorWindow
+        where CATEG_TYPE : DataCategory<DATA_TYPE>
         where DATA_TYPE : DataObject
     {
         public CATEG_TYPE selectedCategory;
@@ -141,7 +140,7 @@ namespace EditorWindows
             createCategory.SetEnabled(false);
             selectedCategory.Name = categoryNameField.value;
             selectedCategory.Objects = new();
-            holder.Categories.Add((CATEG_TYPE)selectedCategory);
+            holder.Categories.Add(selectedCategory);
             categorySelector.choices.Insert(holder.Categories.Count - 1, selectedCategory.Name);
             categorySelector.value = selectedCategory.Name;
             categorySelector.MarkDirtyRepaint();

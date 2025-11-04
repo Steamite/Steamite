@@ -6,7 +6,7 @@ using UnityEngine;
 public class TradeDeal
 {
     /// <summary>Resource type to trade.</summary>
-    [SerializeReference]public ResourceType type;
+    [SerializeReference] public ResourceType type;
     /// <summary>Cost for one unit.</summary>
     public int cost;
 

@@ -87,7 +87,7 @@ public static class ToolkitUtils
                 element = element.hierarchy.parent;
             return element.hierarchy.parent.IndexOf(element);
         }
-        
+
     }
 
     public static int GetRowIndex(this IEventHandler handler, bool multicolumn = true)

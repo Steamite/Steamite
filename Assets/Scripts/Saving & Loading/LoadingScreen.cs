@@ -4,10 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using TMPro;
 using Unity.Properties;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 using UnityEngine.SceneManagement;
@@ -34,7 +32,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         get => _progress;
         set
         {
-            _progress = value; 
+            _progress = value;
             UIUpdate(nameof(ProgressGlobal));
         }
     }
@@ -121,12 +119,12 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         ProgressBar progressBar = loadingScreenWindow.Q<ProgressBar>();
         progressBar.value = 0;
         progressBar.SetBinding(
-            nameof(ProgressGlobal), 
-            "value", 
-            (ref int i) => 
+            nameof(ProgressGlobal),
+            "value",
+            (ref int i) =>
             {
                 return (float)i;
-            }, 
+            },
             this);
 
         await BeforeLevelLoad();
@@ -236,7 +234,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         ActionText = "Filling Veins";
         LoadVeins(worldSave.objectsSave.veins);
         ActionText = "Spawning chunks";
-        LoadChunks( worldSave.objectsSave.chunks);
+        LoadChunks(worldSave.objectsSave.chunks);
         ActionText = "Constructing buildings";
         LoadBuildings(worldSave.objectsSave.buildings);
         return Task.CompletedTask;
@@ -247,7 +245,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="chunks"></param>
-    void LoadChunks( ChunkSave[] chunks)
+    void LoadChunks(ChunkSave[] chunks)
     {
         foreach (ChunkSave chunkSave in chunks)
         {
@@ -263,7 +261,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="buildings"></param>
-    void LoadBuildings( BuildingSave[] buildings)
+    void LoadBuildings(BuildingSave[] buildings)
     {
         foreach (BuildingSave save in buildings) // for each saved building
         {
@@ -272,7 +270,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         }
     }
 
-    void LoadVeins( VeinSave[] veins)
+    void LoadVeins(VeinSave[] veins)
     {
         foreach (VeinSave save in veins) // for each saved building
         {
@@ -296,9 +294,9 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         for (int i = 0; i < gridSave.Length; i++)
         {
             ProgressGlobal += TILE_WEIGHT * MyGrid.Load(
-                gridSave[i], 
-                templateLevel, 
-                i, 
+                gridSave[i],
+                templateLevel,
+                i,
                 mapGen.minableResources,
                 mapGen.dirt);
         }
@@ -309,7 +307,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="humanSaves"></param>
-    Task LoadHumans( HumanSave[] humanSaves)
+    Task LoadHumans(HumanSave[] humanSaves)
     {
         ActionText = "Kidnaping workers";
         //SceneRefs.Humans.
@@ -329,7 +327,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="gameState"></param>
-    Task LoadGameState( GameStateSave gameState)
+    Task LoadGameState(GameStateSave gameState)
     {
         SceneRefs.JobQueue.priority = gameState.priorities;
         SceneRefs.Tick.Load(gameState);
@@ -341,7 +339,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="researchSave"></param>
-    async Task LoadResearches( ResearchSave researchSave)
+    async Task LoadResearches(ResearchSave researchSave)
     {
         ActionText = "Remembering research";
         await UIRefs.ResearchWindow.LoadState(researchSave);
@@ -352,13 +350,13 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="tradeSave"></param>
-    async Task LoadTrade( TradeSave tradeSave)
+    async Task LoadTrade(TradeSave tradeSave)
     {
         ActionText = "Making Deals";
         await UIRefs.TradingWindow.LoadState(tradeSave);
     }
 
-    async Task LoadQuests( QuestControllerSave questSave)
+    async Task LoadQuests(QuestControllerSave questSave)
     {
         QuestController controller = SceneRefs.QuestController as QuestController;
         try
@@ -433,7 +431,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         humanActivation?.Invoke();
         humanActivation = null;
         SceneRefs.Tick.InitTicks();
-        UIRefs.TimeDisplay.GetComponent<IToolkitController>().Init(UIRefs.TimeDisplay.rootVisualElement);
+        UIRefs.TopBar.GetComponent<IToolkitController>().Init(UIRefs.TopBar.rootVisualElement);
     }
 
     public void UIUpdate(string property = "")

@@ -208,7 +208,7 @@ MonoBehaviour:
   constructionProgress: 0
   maximalProgress: 0
   prefabConnection:
-    categoryIndex: 3
+    categoryId: 4
     objectId: 2082713551
   assignLimit:
     baseValue: 2
@@ -241,7 +241,7 @@ MonoBehaviour:
     mod:
       percentMod: 1
       absoluteMod: 0
-  recipes: []
+  recipesAssigmnet: []
   fluidCost:
     types: []
     ammounts: 

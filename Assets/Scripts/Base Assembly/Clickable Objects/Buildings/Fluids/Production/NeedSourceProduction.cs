@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
 using Unity.Properties;
-using UnityEngine;
 
 public class NeedSourceProduction : FluidResProductionBuilding, IResourceProduction
 {
-    [CreateProperty]public TileSource Source 
-    { 
+    [CreateProperty]
+    public TileSource Source
+    {
         get => source;
-        set 
-        { 
+        set
+        {
             source = value;
             UpdateYields(false);
         }
@@ -32,7 +30,7 @@ public class NeedSourceProduction : FluidResProductionBuilding, IResourceProduct
             ProdStates.running = false;
             res = false;
         }
-        else 
+        else
             res = base.ManageInputRes();
 
         if (res == true)

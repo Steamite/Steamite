@@ -39,7 +39,7 @@ namespace ResearchUI
             node = categ.Objects[i];
             name = node.Name;
 
-            if (node.nodeType == NodeType.Dummy || node.objectConnection.objectId == -1)
+            if (node.nodeType == NodeType.Dummy || node.objectConnection.objectId < 1 || node.objectConnection.categoryId < 1)
             {
                 style.visibility = Visibility.Hidden;
                 return;
@@ -59,17 +59,25 @@ namespace ResearchUI
                 node.RegisterFinishCallback(FinishResearch);
             }
 
-            VisualElement preview = new();
-            preview.style.rotate = new Rotate(0);
-            preview.AddToClassList("research-button-background");
-            BuildCategWrapper cat = SceneRefs.ObjectFactory.buildPrefabs.Categories[node.objectConnection.categoryIndex];
-            building = cat.Objects.FindIndex(q => q.id == node.objectConnection.objectId);
-            if (building > -1)
+            if (node.nodeType == NodeType.Building)
             {
-                node.preview = cat.Objects[building].preview;
-                preview.style.backgroundImage = new(cat.Objects[building].preview);
+                VisualElement preview = new();
+                preview.style.rotate = new Rotate(0);
+                preview.AddToClassList("research-button-background");
+                BuildCategWrapper cat = SceneRefs.ObjectFactory.buildPrefabs.GetCategByID(node.objectConnection.categoryId);
+                building = cat.Objects.FindIndex(q => q.id == node.objectConnection.objectId);
+                if (building > -1)
+                {
+                    node.preview = cat.Objects[building].preview;
+                    preview.style.backgroundImage = new(cat.Objects[building].preview);
+                }
+                Add(preview);
             }
-            Add(preview);
+            else
+            {
+
+            }
+
 
             Label nameLabel = new();
             nameLabel.AddToClassList("name-label");

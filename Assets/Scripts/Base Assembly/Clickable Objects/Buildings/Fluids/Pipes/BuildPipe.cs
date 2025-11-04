@@ -62,8 +62,8 @@ public class BuildPipe : Pipe
         return null;
     }
 
-    public override void ChangeRenderMode(bool transparent){}
-    public override void GetRenderComponents() {}
+    public override void ChangeRenderMode(bool transparent) { }
+    public override void GetRenderComponents() { }
 
     protected override void AddRenderer(Renderer _renderer)
     {

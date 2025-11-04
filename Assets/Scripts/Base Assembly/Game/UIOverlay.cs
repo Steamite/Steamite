@@ -68,7 +68,7 @@ public class UIOverlay : MonoBehaviour
 
     public void MovePlacePipeOverlay(GridPos pos, bool init)
     {
-        if(init == true)
+        if (init == true)
         {
             overlayParent.anchoredPosition = new(0, 0);
             Image image = Instantiate(overlayTile, overlayParent);

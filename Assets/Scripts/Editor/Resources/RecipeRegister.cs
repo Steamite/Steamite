@@ -1,11 +1,4 @@
-﻿using EditorWindows.Windows;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor;
-using UnityEngine.Rendering;
+﻿using UnityEditor;
 using UnityEngine.UIElements;
 
 public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, ProductionRecipe>
@@ -42,7 +35,7 @@ public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, Productio
                 field.value = selectedCategory.Objects[i].timeInTicks;
                 field.RegisterValueChangedCallback(TimeChange);
             },
-            unbindCell =(el, i) =>
+            unbindCell = (el, i) =>
             {
                 ((IntegerField)el).UnregisterValueChangedCallback(TimeChange);
             }

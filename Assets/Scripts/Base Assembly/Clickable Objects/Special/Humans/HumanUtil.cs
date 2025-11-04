@@ -38,8 +38,8 @@ public class HumanUtil : MonoBehaviour
     {
         Human human = SceneRefs.ObjectFactory.CreateSavedHuman(humanSave);
         AddHuman(human, ref humanActivation);
-        
-        if(humanSave.gridPos.y != 0)
+
+        if (humanSave.gridPos.y != 0)
         {
             human.gameObject.SetActive(false);
         }

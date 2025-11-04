@@ -26,7 +26,7 @@ namespace ResearchUI
                 ResearchCategory category = data.Categories[i];
                 Tab tab = new(category.Name);
                 VisualElement element;
-                tab.tabHeader.Insert(0, element = new VisualElement() { style = {backgroundImage = category.Icon}});
+                tab.tabHeader.Insert(0, element = new VisualElement() { style = { backgroundImage = category.Icon } });
                 element.AddToClassList("tab-icon");
 
                 ResearchRadioButtonGroup group = new ResearchRadioButtonGroup(category);

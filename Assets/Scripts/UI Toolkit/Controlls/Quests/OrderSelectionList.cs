@@ -1,7 +1,4 @@
 using InfoWindowElements;
-using Objectives;
-using System.Linq;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 [UxmlElement]
@@ -68,7 +65,7 @@ public partial class OrderSelectionList : VisualElement, IUIElement
         order.Load(controller);
 
         controller.CurrentOrder = order;
-        
+
         controller.orderChoice.Clear();
         orderInterface.Open(controller);
     }

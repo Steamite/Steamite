@@ -1,11 +1,8 @@
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
 /// <summary>Game resources.</summary>
 [Serializable, JsonObject]
@@ -71,7 +68,7 @@ public class Resource
     /// <returns>If the types and ammounts are identical.</returns>
     public bool Same(Resource resAmmount)
     {
-        if(types.Count == resAmmount.types.Count)
+        if (types.Count == resAmmount.types.Count)
         {
             for (int i = 0; i < types.Count; i++)
             {
@@ -184,16 +181,16 @@ public class Resource
 
     public Resource GetResOfAmmount(Resource ret, int _ammount, bool remove)
     {
-        for (int i = types.Count -1; i > -1; i--)
+        for (int i = types.Count - 1; i > -1; i--)
         {
-            int x = (ammounts[i] < _ammount) 
-                ? ammounts[i] 
+            int x = (ammounts[i] < _ammount)
+                ? ammounts[i]
                 : _ammount;
             ret.ManageSimple(types[i], x, true);
-            if(remove)
+            if (remove)
                 ManageSimple(types[i], x, false, removeEmpty: true);
             _ammount -= x;
-            if(_ammount <= 0)
+            if (_ammount <= 0)
                 break;
         }
         return ret;
@@ -221,7 +218,7 @@ public class Resource
         }
     }
 
-    public Resource Diff(Resource cost) 
+    public Resource Diff(Resource cost)
     {
         Resource diff = new();
         BaseDiff(diff, cost);
@@ -251,15 +248,17 @@ public class Resource
 
     public int Sum() => ammounts.Sum();
 
-    public Resource FilterByType(List<ResourceWrapper> objects)
+    public Resource FilterByType(List<ResourceWrapper> objects, out int activeElem)
     {
         Resource resource = new();
+        activeElem = 0;
         for (int i = 0; i < objects.Count; i++)
         {
             ResourceType type = objects[i].data;
-            int j = types.FindIndex(q=> q == type);
+            int j = types.FindIndex(q => q == type);
 
-            resource.Add(type, j > -1 ? ammounts[j]  : 0);
+            resource.Add(type, j > -1 ? ammounts[j] : 0);
+            activeElem++;
         }
         return resource;
     }

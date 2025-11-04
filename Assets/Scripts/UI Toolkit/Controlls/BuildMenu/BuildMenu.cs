@@ -36,18 +36,19 @@ namespace BottomBar.Building
             {
                 foreach (var node in categ.Objects)
                 {
-                    if (node.nodeType == NodeType.Building && node.objectConnection.objectId > -1 && node.researched == false)
+                    if (node.nodeType == NodeType.Building && node.objectConnection.categoryId > 0 && node.objectConnection.objectId > 0 && node.researched == false)
                     {
-                        int i = buildingData.Categories[node.objectConnection.categoryIndex].Objects.FindIndex(q => q.id == node.objectConnection.objectId);
+                        BuildCategWrapper buildCateg = buildingData.GetCategByID(node.objectConnection.categoryId);
+                        int i = buildCateg.Objects.FindIndex(q => q.id == node.objectConnection.objectId);
                         if (i != -1)
                         {
-                            BuildingWrapper wrapper = buildingData.Categories[node.objectConnection.categoryIndex].Objects[i];
+                            BuildingWrapper wrapper = buildCateg.Objects[i];
                             if (wrapper != null)
                             {
                                 node.RegisterFinishCallback(() =>
                                 {
                                     wrapper.unlocked = true;
-                                    if (categGroup.SelectedChoice == node.objectConnection.categoryIndex)
+                                    if (buildingData.Categories[categGroup.SelectedChoice].id == node.objectConnection.categoryId)
                                     {
                                         buildingList.UnlockActiveButton(i);
                                     }
@@ -96,14 +97,12 @@ namespace BottomBar.Building
         {
             opened = true;
             style.display = DisplayStyle.Flex;
-            UIRefs.BottomBar[1].style.display = DisplayStyle.None;
         }
 
         void Close()
         {
             opened = false;
             style.display = DisplayStyle.None;
-            UIRefs.BottomBar[1].style.display = DisplayStyle.Flex;
             categGroup.Select(-1);
             BlueprintChange(-1);
         }

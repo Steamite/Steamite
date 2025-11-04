@@ -125,7 +125,7 @@ public partial class SliderResList : DoubleResList, IUpdatable
         showFinalMoney = showCost;
         RefreshItems();
     }
-   
+
     public List<int> GetVals()
         => resources.Select(q => (q as DoubleUIResource).secondAmmount).ToList();
 

@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 namespace EditorWindows.Research
 {
     /// <summary>Used for modifying <see cref="ResearchData"/>.</summary>
-    public class ResearchEditor : CategoryWindow<ResearchCategory, ResearchNode>
+    public class ResearchRegister : CategoryWindow<ResearchCategory, ResearchNode>
     {
         #region Variables
         [SerializeField] Texture2D plus;
@@ -29,7 +29,7 @@ namespace EditorWindows.Research
         [MenuItem("Custom Editors/Research Editor %t", priority = 15)]
         public static void Open()
         {
-            ResearchEditor wnd = GetWindow<ResearchEditor>();
+            ResearchRegister wnd = GetWindow<ResearchRegister>();
             wnd.titleContent = new GUIContent("Research Editor");
         }
 
@@ -123,7 +123,7 @@ namespace EditorWindows.Research
             {
                 T_C categ = data.Categories[i];
                 categ.availableObjects = new();
-                List<ResearchNode> categoryNodes = nodes.Where(q => q.nodeType == type && q.objectConnection.categoryIndex == i).ToList();
+                List<ResearchNode> categoryNodes = nodes.Where(q => q.nodeType == type && q.objectConnection.categoryId == i).ToList();
                 for (int j = 0; j < categ.Objects.Count; j++)
                 {
                     if (categoryNodes.FindIndex(q => q.objectConnection.objectId == categ.Objects[j].id) == -1)
@@ -149,7 +149,7 @@ namespace EditorWindows.Research
                 Button addButton = new Button(plus,
                     () =>
                     {
-                        ((ResearchCategory)selectedCategory).AddNode(level, (ResearchData)holder);
+                        selectedCategory.AddNode(level, (ResearchData)holder);
                         RepaintRow(level);
                     });
                 addButton.AddToClassList("add-button");
@@ -287,7 +287,7 @@ namespace EditorWindows.Research
         /// <returns>Returns the a list of all possible choices.</returns>
         public List<string> GetAvailable(ResearchNode node)
         {
-            if (node.objectConnection.categoryIndex <= -1 && node.objectConnection.objectId == -1)
+            if (node.objectConnection.categoryId <= 0 && node.objectConnection.objectId == -1)
                 return new() { "Select" };
 
             switch (node.nodeType)
@@ -305,11 +305,11 @@ namespace EditorWindows.Research
             where T_OBJ : DataObject
         {
             List<string> str = new() { "Select" };
-            if(node.objectConnection.categoryIndex > -1)
+            if (node.objectConnection.categoryId > 0)
             {
-                if (node.objectConnection.objectId > -1)
-                    str.Add(dataHolder.Categories[node.objectConnection.categoryIndex].Objects.Find(q => q.id == node.objectConnection.objectId)?.GetName());
-                str.AddRange(dataHolder.Categories[node.objectConnection.categoryIndex].availableObjects.Select(q => q.GetName()));
+                if (node.objectConnection.objectId > 0)
+                    str.Add(dataHolder.GetCategByID(node.objectConnection.categoryId).Objects.Find(q => q.id == node.objectConnection.objectId)?.GetName());
+                str.AddRange(dataHolder.GetCategByID(node.objectConnection.categoryId).availableObjects.Select(q => q.GetName()));
             }
             return str;
         }
@@ -362,6 +362,7 @@ namespace EditorWindows.Research
             int i = selectedCategory.Objects.FindIndex(q => q.id == id);
             return i - selectedCategory.Objects.FindIndex(q => q.level == selectedCategory.Objects[i].level);
         }
+
         #endregion
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -41,7 +40,7 @@ public static class BindingUtil
         return dataBinding;
     }
 
-    public static DataBinding SetBinding<TSource,TDestination>(this VisualElement element, string sourceProp, string targetProp, TypeConverter<TSource, TDestination> convertor, object dataSource = null)
+    public static DataBinding SetBinding<TSource, TDestination>(this VisualElement element, string sourceProp, string targetProp, TypeConverter<TSource, TDestination> convertor, object dataSource = null)
     {
         DataBinding dataBinding = sourceProp.CreateBinding();
         if (dataSource != null)

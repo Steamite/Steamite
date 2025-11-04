@@ -142,7 +142,7 @@ public class StorageResource : CapacityResource
     {
         types = ResFluidTypes.LoadTypeList(resSave.types);//.Select(q => ResFluidTypes.GetResByIndex(q)).ToList();
         ammounts = resSave.ammounts;
-        requests = resSave.Requests.Select(q=> new Resource(q)).ToList();
+        requests = resSave.Requests.Select(q => new Resource(q)).ToList();
         mods = resSave.mod;
         if (mods.Count == 1 && mods[0] == 0 && requests.Count == 0)
             requests.Add(new());
@@ -166,7 +166,7 @@ public class StorageResource : CapacityResource
 
     public override bool Equals(object _resource)
     {
-        if(_resource is not StorageResource _res)
+        if (_resource is not StorageResource _res)
             return false;
 
         foreach (var item in _res.requests)

@@ -27,11 +27,11 @@ namespace BottomBar
             researchOpen = new();
             tradeOpen = new();
 
-            Add(buildMenu);
-            Add(element);
             element.Add(buildOpen);
             element.Add(researchOpen);
             element.Add(tradeOpen);
+            Add(element);
+            Add(buildMenu);
         }
 
         public void Init()

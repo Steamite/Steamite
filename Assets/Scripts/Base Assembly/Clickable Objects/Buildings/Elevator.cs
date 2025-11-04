@@ -13,7 +13,7 @@ public class Elevator : Building, IStorage
     public StorageResource LocalResources => localRes;
 
     public ulong CanStoreMask { get => canStoreInt; set => canStoreInt = value; }
-    [SerializeField] ulong canStoreInt; 
+    [SerializeField] ulong canStoreInt;
     #endregion
 
     public override void UniqueID()

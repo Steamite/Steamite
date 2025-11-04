@@ -221,7 +221,7 @@ public class Human : ClickableObject
         Inventory.Manage(new(s.inventory), true);
         specialization = s.specs;
 
-        
+
 
         base.Load(save);
     }
@@ -303,7 +303,7 @@ public class Human : ClickableObject
     /// <summary>Gets the Main <see cref="Elevator"/> and if the Human isn't there move to it, else set free state.</summary>
     public void Idle()
     {
-        if(workplace == null)
+        if (workplace == null)
         {
             GridPos pos = GetPos();
             Elevator el = MyGrid.GetLevelElevator(pos.y);// ClickableObject el = Elevator.main;
@@ -327,7 +327,7 @@ public class Human : ClickableObject
         }
         else if (workplace is AssignHut hut)
         {
-            if(hut is DiggerHut)
+            if (hut is DiggerHut)
             {
                 if (!HumanActions.FindRockToDig(this))
                 {
@@ -348,7 +348,7 @@ public class Human : ClickableObject
                     }
                 }
             }
-            else if(hut is BuilderHut)
+            else if (hut is BuilderHut)
             {
                 if (!HumanActions.FindBuildingsToConstruct(this))
                 {
@@ -369,7 +369,7 @@ public class Human : ClickableObject
                     }
                 }
             }
-            
+
         }
     }
     #endregion

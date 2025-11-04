@@ -15,9 +15,9 @@ public class FluidTank : Building, IFluidWork
 
         ulong byt = TypesToStore;
         int i = 0;
-        while(byt != 0) 
+        while (byt != 0)
         {
-            if((byt & 1) == 1)
+            if ((byt & 1) == 1)
             {
                 storedFluid.types.Add(ResFluidTypes.GetFluidByIndex(i));
                 storedFluid.ammounts.Add(0);
@@ -31,7 +31,7 @@ public class FluidTank : Building, IFluidWork
 
     public override void DestoyBuilding()
     {
-        AttachedPipes.ForEach(q=> q.DestoyBuilding());
+        AttachedPipes.ForEach(q => q.DestoyBuilding());
         base.DestoyBuilding();
     }
 

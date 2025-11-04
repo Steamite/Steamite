@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: QuestData
   m_EditorClassIdentifier: 
   Categories:
-  - Name: Story
+  - id: 1
+    Name: Story
     Objects:
     - Name: ABC
       id: 1243577587
@@ -28,13 +29,15 @@ MonoBehaviour:
       - rid: 7966940744893857878
       - rid: 7966940744893857882
       nextQuests:
-      - categIndex: 0
-        questId: -1
+      - categoryId: 3
+        objectId: 1940834208
     Icon: {fileID: 2800000, guid: 2b61dc557efa942428ac194cfa787fd7, type: 3}
-  - Name: Test
+  - id: 2
+    Name: Test
     Objects: []
     Icon: {fileID: 0}
-  - Name: Orders
+  - id: 3
+    Name: Orders
     Objects:
     - Name: AD
       id: 2046668337

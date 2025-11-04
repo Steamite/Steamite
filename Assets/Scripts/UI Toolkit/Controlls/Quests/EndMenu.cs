@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -22,7 +21,7 @@ public class EndMenu : MonoBehaviour, IUIElement
 
         UIRefs.FullscreenConstraint();
         SceneRefs.Tick.UIWindowToggle(false);
-        if (result) 
+        if (result)
         {
             GameWon(doc.rootVisualElement[0]);
         }
@@ -42,7 +41,7 @@ public class EndMenu : MonoBehaviour, IUIElement
         element = element[2];
         Button button = element[0] as Button;
         button.text = "Continue";
-        button.clicked += () => 
+        button.clicked += () =>
         {
             Destroy(doc);
             MainShortcuts.EnableAll();

@@ -67,7 +67,7 @@ namespace InfoWindowElements
             element.Add(capacityLabel);
             Add(element);
 
-            storageScroll = new ScrollView() 
+            storageScroll = new ScrollView()
             {
                 mode = ScrollViewMode.Vertical,
                 //verticalScrollerVisibility = ScrollerVisibility.AlwaysVisible,

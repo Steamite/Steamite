@@ -1,10 +1,7 @@
 using Objectives;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 [UxmlElement]
@@ -42,7 +39,7 @@ public partial class QuestInfo : ScrollView
 
     public void Open(Quest quest)
     {
-        if(quest == null)
+        if (quest == null)
             style.display = DisplayStyle.None;
         else
         {
@@ -63,7 +60,7 @@ public partial class QuestInfo : ScrollView
         Color? color;
         Label none;
         public IList itemSource { set => listView.itemsSource = value; }
-        public TitleListView() : base() 
+        public TitleListView() : base()
         {
             hierarchy.Add(title = new Label("Title"));
         }
@@ -105,7 +102,7 @@ public partial class QuestInfo : ScrollView
                 virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
                 selectionType = SelectionType.None
             });
-            
+
         }
 
         public void Open<T>(List<T> list, Color? _color)

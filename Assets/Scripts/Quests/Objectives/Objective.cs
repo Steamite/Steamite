@@ -41,11 +41,11 @@ namespace Objectives
             propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
         }
         #endregion
-        public virtual bool UpdateProgress(object data, QuestController controller) 
+        public virtual bool UpdateProgress(object data, QuestController controller)
         {
             currentProgress++;
             UIUpdate(nameof(CurrentProgress));
-            if(currentProgress == maxProgress)
+            if (currentProgress == maxProgress)
             {
                 if (quest.objectives.All(q => q.maxProgress == q.currentProgress))
                     quest.Complete(true, controller);
@@ -59,7 +59,7 @@ namespace Objectives
             quest = _quest;
             currentProgress = _currentProgress;
         }
-        public virtual void Load(){}
+        public virtual void Load() { }
 
         public abstract void Cancel(QuestController controller);
 

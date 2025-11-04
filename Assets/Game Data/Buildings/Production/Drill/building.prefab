@@ -232,7 +232,7 @@ MonoBehaviour:
   constructionProgress: 0
   maximalProgress: 0
   prefabConnection:
-    categoryIndex: 1
+    categoryId: 2
     objectId: 1210278343
   assignLimit:
     baseValue: 2

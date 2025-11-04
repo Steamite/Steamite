@@ -121,7 +121,7 @@ namespace BottomBar.Building
             ((Button)element).text = "";
 
             DataBinding binding = BindingUtil.CreateBinding(nameof(ResourceDisplay.GlobalResources));
-            binding.sourceToUiConverters.AddConverter<MoneyResource, StyleEnum<DisplayStyle>>((ref MoneyResource res) => 
+            binding.sourceToUiConverters.AddConverter<MoneyResource, StyleEnum<DisplayStyle>>((ref MoneyResource res) =>
             {
                 if (wrappers[index].unlocked == false)
                     return DisplayStyle.None;
@@ -167,20 +167,25 @@ namespace BottomBar.Building
             if (SelectedChoice > -1)
                 ((CustomRadioButton)contentContainer.Children()
                     .FirstOrDefault(q => ((CustomRadioButton)q)?.selIndex == SelectedChoice))?.Deselect();
-            if (index == -1 || SelectedChoice == index || !MyRes.CanAfford(wrappers[index].building.Cost))
+            if (index == -1 || SelectedChoice == index)
             {
                 SelectedChoice = -1;
                 return false;
             }
-            else if (wrappers[index].unlocked)
-            {
-                SelectedChoice = index;
-                return true;
-            }
-            else
+            else if (!wrappers[index].unlocked)
             {
                 UIRefs.ResearchWindow.OpenWindow(wrappers[index]);
                 return false;
+            }
+            else if (!MyRes.CanAfford(wrappers[index].building.Cost))
+            {
+                SelectedChoice = -1;
+                return false;
+            }
+            else
+            {
+                SelectedChoice = index;
+                return true;
             }
         }
     }

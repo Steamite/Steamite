@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.UIElements;
 
-public class EmptyEditorWindow : EditorWindow 
+public class EmptyEditorWindow : EditorWindow
 {
-    
+
 }
 public class GridPosList : ListView
 {
@@ -84,7 +83,7 @@ public class GridPosList : ListView
         {
             if (list.selectedItem != null)
                 itemsSource.Remove(list.selectedItem);
-            else if(itemsSource.Count == 0)
+            else if (itemsSource.Count == 0)
                 itemsSource.RemoveAt(list.itemsSource.Count - 1);
             EditorUtility.SetDirty(holder);
             RefreshItems();
@@ -95,7 +94,7 @@ public class GridPosList : ListView
         showAddRemoveFooter = true;
 
     }
-    
+
     public void Bind(QuestHolder _holder, ref List<GridPos> _itemsSource, Action<int> _countChange)
     {
         holder = _holder;
@@ -109,7 +108,7 @@ public class GridPosList : ListView
         int x = (ev.target as VisualElement).parent.IndexOf(ev.target as VisualElement);
         if (ev.previousValue != ev.newValue)
         {
-            if(x == 0)
+            if (x == 0)
                 (itemsSource[i] as GridPos).x = ev.newValue;
             else if (x == 1)
                 (itemsSource[i] as GridPos).y = ev.newValue;

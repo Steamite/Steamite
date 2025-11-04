@@ -16,7 +16,7 @@ namespace EditorWindows.Research
             Add(new Label("no node data"));
         }
 
-        public ResearchNodeElem(ResearchNode _nodeData, ResearchEditor editor, ResearchData data)
+        public ResearchNodeElem(ResearchNode _nodeData, ResearchRegister editor, ResearchData data)
         {
             #region Top Connector
             Button topConnector = null;
@@ -141,12 +141,14 @@ namespace EditorWindows.Research
             EnumField stat = new(_nodeData.nodeType);
             DropdownField category = new(
                  editor.GetActiveCategories(_nodeData),
-                _nodeData.objectConnection.categoryIndex + 1);
+                 _nodeData.nodeType == NodeType.Building
+                    ? editor.buildingData.GetCategIndexById(_nodeData.objectConnection.categoryId, true)
+                    : editor.statData.GetCategIndexById(_nodeData.objectConnection.categoryId, true));
 
             DropdownField assignee = new(
                 editor.GetAvailable(_nodeData),
                 _nodeData.objectConnection.objectId == -1 ? 0 : 1);
-            assignee.SetEnabled(_nodeData.objectConnection.categoryIndex != -1);
+            assignee.SetEnabled(_nodeData.objectConnection.categoryId > 0);
 
             // Stat
             stat.RegisterValueChangedCallback<Enum>(
@@ -158,7 +160,7 @@ namespace EditorWindows.Research
                         ToggleElements(newVal, body, topConnector, botConnector);
                         editor.RecalculateAvailableByNode(_nodeData);
                         _nodeData.nodeType = newVal;
-                        _nodeData.objectConnection.categoryIndex = -1;
+                        _nodeData.objectConnection.categoryId = -1;
                         editor.SaveValues();
                         category.choices = editor.GetActiveCategories(_nodeData);
                         category.value = "Select";
@@ -172,19 +174,39 @@ namespace EditorWindows.Research
             category.RegisterValueChangedCallback<string>(
                 (ev) =>
                 {
-                    if (_nodeData.objectConnection.categoryIndex != category.index - 1)
+                    if (_nodeData.nodeType == NodeType.Building)
                     {
-                        if (ev.newValue == "Select")
-                            _nodeData.objectConnection.categoryIndex = -1;
-                        else
+                        if (editor.buildingData.GetCategByID(_nodeData.objectConnection.categoryId)?.Name != ev.newValue)
                         {
-                            _nodeData.objectConnection.categoryIndex = category.index - 1;
-                            assignee.choices = editor.GetAvailable(_nodeData);
+                            if (ev.newValue == "Select")
+                                _nodeData.objectConnection.categoryId = -1;
+                            else
+                            {
+                                _nodeData.objectConnection.categoryId = editor.buildingData.GetCategIdFromName(ev.newValue);
+                                assignee.choices = editor.GetAvailable(_nodeData);
+                            }
+                            _nodeData.objectConnection.objectId = -1;
+                            editor.SaveValues();
+                            editor.RecalculateAvailableByNode(_nodeData);
+                            assignee.SetEnabled(_nodeData.objectConnection.categoryId > 0);
                         }
-                        _nodeData.objectConnection.objectId = -1;
-                        editor.SaveValues();
-                        editor.RecalculateAvailableByNode(_nodeData);
-                        assignee.SetEnabled(_nodeData.objectConnection.categoryIndex != -1);
+                    }
+                    else
+                    {
+                        if (editor.statData.GetCategByID(_nodeData.objectConnection.categoryId)?.Name != ev.newValue)
+                        {
+                            if (ev.newValue == "Select")
+                                _nodeData.objectConnection.categoryId = -1;
+                            else
+                            {
+                                _nodeData.objectConnection.categoryId = editor.statData.GetCategIdFromName(ev.newValue);
+                                assignee.choices = editor.GetAvailable(_nodeData);
+                            }
+                            _nodeData.objectConnection.objectId = -1;
+                            editor.SaveValues();
+                            editor.RecalculateAvailableByNode(_nodeData);
+                            assignee.SetEnabled(_nodeData.objectConnection.categoryId > 0);
+                        }
                     }
                 });
             body.Add(category);
@@ -194,7 +216,8 @@ namespace EditorWindows.Research
                 (ev) =>
                 {
                     assignee.choices = editor.GetAvailable(_nodeData);
-                    assignee.SetValueWithoutNotify(assignee.choices[_nodeData.objectConnection.objectId == -1 ? 0 : 1]);
+                    if (_nodeData.objectConnection.categoryId > 0)
+                        assignee.SetValueWithoutNotify(assignee.choices[_nodeData.objectConnection.objectId == -1 ? 0 : 1]);
                 });
             body.Add(assignee);
 
@@ -257,7 +280,7 @@ namespace EditorWindows.Research
             ToggleElements(_nodeData.nodeType, body, topConnector, botConnector);
         }
 
-        void SetAssigne(ResearchNode _nodeData, string newVal, ResearchEditor editor)
+        void SetAssigne(ResearchNode _nodeData, string newVal, ResearchRegister editor)
         {
             switch (_nodeData.nodeType)
             {
@@ -265,11 +288,11 @@ namespace EditorWindows.Research
                     return;
                 case NodeType.Building:
                     _nodeData.objectConnection.objectId =
-                        editor.buildingData.Categories[_nodeData.objectConnection.categoryIndex]
+                        editor.buildingData.GetCategByID(_nodeData.objectConnection.categoryId)
                         .availableObjects.FirstOrDefault(q => q.GetName() == newVal).id;
                     break;
                 case NodeType.Stat:
-                    BuildingStats.Stat stat = editor.statData.Categories[_nodeData.objectConnection.categoryIndex]
+                    BuildingStats.Stat stat = editor.statData.GetCategByID(_nodeData.objectConnection.categoryId)
                         .availableObjects.FirstOrDefault(q => q.GetName() == newVal);
                     _nodeData.objectConnection.objectId = stat.id;
                     GetDescr(_nodeData, editor);
@@ -278,11 +301,11 @@ namespace EditorWindows.Research
             editor.RecalculateAvailableByNode(_nodeData);
         }
 
-        void GetDescr(ResearchNode _nodeData, ResearchEditor editor)
+        void GetDescr(ResearchNode _nodeData, ResearchRegister editor)
         {
             if (_nodeData.objectConnection.objectId > -1)
             {
-                string descr = _nodeData.GetDescr(editor.statData.Categories[_nodeData.objectConnection.categoryIndex]
+                string descr = _nodeData.GetDescr(editor.statData.GetCategByID(_nodeData.objectConnection.categoryId)
                     .Objects.FirstOrDefault(q => q.id == _nodeData.objectConnection.objectId));
                 this.Q<TextField>(className: "description-field").value = descr;
             }
@@ -313,7 +336,7 @@ namespace EditorWindows.Research
         /// <summary>Needs to have a previously selected node.</summary>
         /// <param name="nodeData">This node.</param>
         /// <param name="editor">Editor reference for getting the last selected and updating lines.</param>
-        void TopConnect(ClickEvent ev, ResearchNode nodeData, ResearchEditor editor)
+        void TopConnect(ClickEvent ev, ResearchNode nodeData, ResearchRegister editor)
         {
             Debug.Log("Top - clicked");
             if (editor.activeNode != null)
@@ -337,7 +360,7 @@ namespace EditorWindows.Research
         /// <summary>Marks the node for connecting.</summary>
         /// <param name="nodeData"></param>
         /// <param name="editor"></param>
-        void BottomConnect(ResearchNode nodeData, ResearchEditor editor)
+        void BottomConnect(ResearchNode nodeData, ResearchRegister editor)
         {
             Debug.Log("Bot - clicked");
             if (editor.activeNode != nodeData)

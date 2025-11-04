@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 [CreateAssetMenu(fileName = "ProductionRecipeHolder", menuName = "Resources/ProductionRecipeHolder", order = 0)]
 public class ProductionRecipeHolder : InitializableHolder<ProductionRecipeCategory, ProductionRecipe>

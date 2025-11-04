@@ -1,5 +1,4 @@
 using InfoWindowElements;
-using System;
 using System.Linq;
 using UnityEngine.UIElements;
 

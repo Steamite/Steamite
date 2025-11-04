@@ -47,33 +47,33 @@ namespace InfoWindowElements
         public void ToggleButtonStyle(LevelState state)
         {
             switch (state)
-                {
-                    case LevelState.Unavailable:
-                        enabledSelf = false;
-                        break;
-                    case LevelState.Available:
-                        enabledSelf = true;
-                        AddToClassList("Level-Available");
-                        break;
-                    case LevelState.CanUnlock:
-                        enabledSelf = true;
-                        AddToClassList("Level-Can-Unlock");
-                        break;
-                    case LevelState.Unlocked:
-                        enabledSelf = true;
-                        AddToClassList("Level-Opened");
-                        break;
-                    //case LevelState.Selected:
-                    default:
-                        throw new NotImplementedException();
-                }
+            {
+                case LevelState.Unavailable:
+                    enabledSelf = false;
+                    break;
+                case LevelState.Available:
+                    enabledSelf = true;
+                    AddToClassList("Level-Available");
+                    break;
+                case LevelState.CanUnlock:
+                    enabledSelf = true;
+                    AddToClassList("Level-Can-Unlock");
+                    break;
+                case LevelState.Unlocked:
+                    enabledSelf = true;
+                    AddToClassList("Level-Opened");
+                    break;
+                //case LevelState.Selected:
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         public void DeselectButton()
         {
             RemoveFromClassList("Level-Selected");
         }
-        public void SelectButton() 
+        public void SelectButton()
         {
             AddToClassList("Level-Selected");
         }

@@ -4,7 +4,7 @@ namespace Objectives
 {
     public class ResourceObjective : Objective
     {
-        [SerializeField]public MoneyResource resource;
+        [SerializeField] public MoneyResource resource;
 
         public ResourceObjective(MoneyResource _resource)
         {

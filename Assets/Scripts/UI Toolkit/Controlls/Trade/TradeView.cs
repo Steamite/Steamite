@@ -76,7 +76,7 @@ namespace TradeWindowElements
             #endregion
             Add(categ);
         }
-        
+
         void CreateSummary()
         {
             VisualElement summary, temp;
@@ -159,7 +159,7 @@ namespace TradeWindowElements
         public override object Open(int i)
         {
 #if UNITY_EDITOR
-            if(DealAsset == null)
+            if (DealAsset == null)
                 Debug.LogError("no asset");
 #endif
             base.Open();
@@ -179,7 +179,7 @@ namespace TradeWindowElements
             if (time > 1)
                 dateLabel.text = $"{time:F1} d";
             else
-                dateLabel.text = $"{time*24:F1} h";
+                dateLabel.text = $"{time * 24:F1} h";
             if (map == null)
                 map = parent.parent.parent.Q<TradeMap>();
             return selectedLocation;
@@ -236,7 +236,7 @@ namespace TradeWindowElements
                 for (int i = 0; i < selectedLocation.Buy.Count; i++)
                 {
                     deal = GetDeal(categoryIndex, i);
-                    ((SliderInt)deal.ElementAt(1)).highValue = 
+                    ((SliderInt)deal.ElementAt(1)).highValue =
                         TradingWindow.CONVOY_STORAGE_LIMIT - (_totalCount - ((SliderInt)deal.ElementAt(1)).value);
                 }
                 BuyMoney = _totalCost;
@@ -356,7 +356,7 @@ namespace TradeWindowElements
             for (int i = 0; i < deals.Count; i++)
             {
                 resource.ManageSimple(
-                    deals[i].type, 
+                    deals[i].type,
                     ((SliderInt)dealsElem.ElementAt(i).ElementAt(0).ElementAt(1)).value,
                     true);
             }

@@ -22,7 +22,7 @@ class LoggingResolver : DefaultContractResolver
     protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
     {
         var prop = base.CreateProperty(member, memberSerialization);
-        if(prop.PropertyName == "requests")
+        if (prop.PropertyName == "requests")
         {
             Debug.Log($"Property: {prop.PropertyName}, Ignored: {prop.Ignored}");
             var originalProvider = prop.ValueProvider;

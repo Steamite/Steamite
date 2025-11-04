@@ -1,6 +1,4 @@
 using Outposts;
-using ResearchUI;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +27,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
     public List<TradeLocation> tradeLocations;
     public List<Outpost> outposts;
 
-    [HideInInspector] public float distance; 
+    [HideInInspector] public float distance;
     //[SerializeField] string baseLocation = "Highlands";
 
     public int outpostLimit = 3;
@@ -52,7 +50,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
             { ResFluidTypes.GetResByName("Metal"), 7},
             { ResFluidTypes.GetResByName("Stone"), 10},
             { ResFluidTypes.GetResByName("Meat"), 15},
-            { ResFluidTypes.GetResByName("Wood"), 12},        
+            { ResFluidTypes.GetResByName("Wood"), 12},
         };
         TradeHolder tradeHolder = Instantiate(await Addressables.LoadAssetAsync<TradeHolder>($"Assets/Game Data/Colony Locations/{tradeSave.colonyLocation}.asset").Task);
         colonyLocation = tradeHolder.startingLocation;
@@ -60,7 +58,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
 
         tradeLocations = tradeSave.tradeLocations.Select(q => new TradeLocation(q)).ToList();
         convoys = tradeSave.convoys.Select(q => new TradeConvoy(q)).ToList();
-        outposts = tradeSave.outposts.Select(q=> new Outpost(q)).ToList();
+        outposts = tradeSave.outposts.Select(q => new Outpost(q)).ToList();
         SceneRefs.Stats.GetComponent<ResourceDisplay>().Money = tradeSave.money;
         GetWindow();
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
@@ -86,7 +84,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
                     item.ProgressBuilding,
                     Tick.TimeEventType.Ticks);
             }
-            else if(item.exists && item.production.Sum() != 0)
+            else if (item.exists && item.production.Sum() != 0)
             {
                 SceneRefs.Tick.SubscribeToEvent(item.MakeWeekProduction, Tick.TimeEventType.Week);
             }

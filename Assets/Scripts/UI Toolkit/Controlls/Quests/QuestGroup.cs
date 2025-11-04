@@ -1,7 +1,6 @@
 using Objectives;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using UnityEngine.UIElements;
 
 [UxmlElement]
@@ -27,8 +26,8 @@ public partial class QuestGroup : ScrollView, IUIElement
     public void Open(object data)
     {
         QuestController questController = data as QuestController;
-        questController.activeQuests.CollectionChanged += 
-            (obj, ev) => 
+        questController.activeQuests.CollectionChanged +=
+            (obj, ev) =>
             {
                 if (ev.Action == NotifyCollectionChangedAction.Add)
                 {
@@ -53,7 +52,7 @@ public partial class QuestGroup : ScrollView, IUIElement
                     }
                 }
             };
-        foreach(Quest quest in questController.activeQuests)
+        foreach (Quest quest in questController.activeQuests)
             CreateItem(quest);
     }
 

@@ -47,7 +47,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
             if (trust <= 0)
             {
                 /// EndMenu.cs
-                endMenu.GetComponent<IUIElement>().Open(false); 
+                endMenu.GetComponent<IUIElement>().Open(false);
             }
         }
     }
@@ -88,19 +88,19 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         foreach (Quest quest in quests)
         {
             QuestSave save;
-            if((save = saveData.activeQuests.FirstOrDefault(q => q.questId == quest.id)) != null)
+            if ((save = saveData.activeQuests.FirstOrDefault(q => q.objectId == quest.id)) != null)
             {
                 quest.Load(this, save);
             }
-            else if((save = saveData.finishedQuests.FirstOrDefault(q => q.questId == quest.id)) != null)
+            else if ((save = saveData.finishedQuests.FirstOrDefault(q => q.objectId == quest.id)) != null)
             {
                 quest.Load(this, save);
             }
         }
         orderController = new(
-                this, 
-                _questCatalog, 
-                new(data.Categories[2].Objects.FirstOrDefault(q => q.id == saveData.order.questId)),
+                this,
+                _questCatalog,
+                new(data.Categories[2].Objects.FirstOrDefault(q => q.id == saveData.order.objectId)),
                 saveData);
         SceneRefs.Tick.SubscribeToEvent(UpdateTimers, Tick.TimeEventType.Ticks);
 
@@ -109,7 +109,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
 
         questCatalog = _questCatalog.rootVisualElement[0][0].Q("QuestCatalog") as IUIElement;
 
-        
+
         GetWindow();
         (_questCatalog.rootVisualElement[0][1] as Button).clicked += CloseWindow;
 
@@ -117,7 +117,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
 
     public void UpdateTimers()
     {
-        for (int i = activeQuests.Count-1; i > -1; i--)
+        for (int i = activeQuests.Count - 1; i > -1; i--)
         {
             activeQuests[i].DecreaseTimeToFail(this);
         }
@@ -131,7 +131,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         quest.Load(this);
     }
 
-    
+
 
     #region Window
     public override void GetWindow()

@@ -124,7 +124,7 @@ namespace InfoWindowElements
 
             value = 0.5f;
 
-            fillColor = new(11/255f, 40 / 255f, 57 / 255f);
+            fillColor = new(11 / 255f, 40 / 255f, 57 / 255f);
         }
         #endregion
 

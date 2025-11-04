@@ -60,10 +60,10 @@ namespace EditorWindows.Windows
                             Building building = selectedCategory.Objects[i].building;
                             if (building != null)
                             {
-                                byte categID = (byte)holder.Categories.FindIndex(q => q.Name == selectedCategory.Name);
-                                ResearchNode node = nodes.FirstOrDefault(q => q.objectConnection.categoryIndex == building.prefabConnection.categoryIndex && q.id == building.prefabConnection.objectId);
+                                byte categID = (byte)holder.Categories.FirstOrDefault(q => q.Name == selectedCategory.Name).id;
+                                ResearchNode node = nodes.FirstOrDefault(q => q.objectConnection.categoryId == building.prefabConnection.categoryId && q.id == building.prefabConnection.objectId);
                                 if (node != null)
-                                    node.objectConnection.categoryIndex = categID;
+                                    node.objectConnection.categoryId = categID;
 
                                 building.prefabConnection = new(categID, selectedCategory.Objects[i].id);
                                 selectedCategory.Objects[i].SetBuilding(selectedCategory.Objects[i].building, categID);
@@ -113,10 +113,10 @@ namespace EditorWindows.Windows
         {
             if (selectedCategory != null)
             {
-                ((BuildCategWrapper)selectedCategory).columnStates = new();
+                selectedCategory.columnStates = new();
                 for (int i = 0; i < dataGrid.columns.Count; i++)
                 {
-                    ((BuildCategWrapper)selectedCategory).columnStates.Add(dataGrid.columns[i].visible);
+                    selectedCategory.columnStates.Add(dataGrid.columns[i].visible);
                 }
                 EditorUtility.SetDirty((BuildingData)holder);
             }
@@ -130,8 +130,8 @@ namespace EditorWindows.Windows
             if (boo)
             {
                 group = settings.FindGroup(selectedCategory.Name);
-                for (int i = 0; i < ((BuildCategWrapper)selectedCategory).columnStates?.Count; i++)
-                    dataGrid.columns[i].visible = ((BuildCategWrapper)selectedCategory).columnStates[i];
+                for (int i = 0; i < selectedCategory.columnStates?.Count; i++)
+                    dataGrid.columns[i].visible = selectedCategory.columnStates[i];
                 rebindButton.enabledSelf = true;
             }
             else
@@ -379,12 +379,13 @@ namespace EditorWindows.Windows
                 title = "Recipes",
                 width = 150,
                 resizable = false,
-                makeCell = () => new RecipeCell(holder),
+                makeCell = () => new RecipeCell(),
                 bindCell = (el, i) =>
                 {
                     RecipeCell cell = el as RecipeCell;
                     if (((BuildingWrapper)dataGrid.itemsSource[i]).building is IResourceProduction production)
                     {
+                        cell.userData = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
                         cell.Open(production.RecipeAsssigment);
                     }
                     else

@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 220867751}
   - component: {fileID: 220867755}
   - component: {fileID: 220867756}
+  - component: {fileID: 220867757}
   m_Layer: 5
   m_Name: Stats
   m_TagString: Untagged
@@ -189,6 +190,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ffc7b665c5741084eb6ad285b5f5b4c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &220867757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220867750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50892ef2b5235ba40902ef079f75e2f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &225780439
@@ -609,7 +622,6 @@ GameObject:
   m_Component:
   - component: {fileID: 897350250}
   - component: {fileID: 897350251}
-  - component: {fileID: 897350252}
   m_Layer: 0
   m_Name: Bottom Bar
   m_TagString: Untagged
@@ -655,18 +667,6 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
---- !u!114 &897350252
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 897350249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50892ef2b5235ba40902ef079f75e2f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1068071213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -856,6 +856,7 @@ MonoBehaviour:
   _pauseMenu: {fileID: 1708745677}
   _toolkitShotcuts: {fileID: 8277524054700303564}
   _bottomBar: {fileID: 897350251}
+  _topBar: {fileID: 220867755}
   _saveDialog: {fileID: 777753792}
   _loadMenu: {fileID: 405851069}
 --- !u!1 &1635941443
@@ -1408,6 +1409,7 @@ MonoBehaviour:
   tilePrefabs: {fileID: 11400000, guid: 8df949a33652dbf41967796a41eace3e, type: 2}
   specialPrefabs: {fileID: 11400000, guid: 5e85ccb93c567d64cb0f47d2049664b8, type: 2}
   PipeConnectionPrefab: {fileID: 6402951971433127325, guid: 5852de1a953b4494da398cd3d7d46e7a, type: 3}
+  recipeData: {fileID: 0}
 --- !u!114 &4967022013944964017
 MonoBehaviour:
   m_ObjectHideFlags: 0

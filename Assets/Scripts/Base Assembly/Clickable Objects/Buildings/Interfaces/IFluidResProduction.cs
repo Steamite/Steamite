@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Unity.Properties;
 /*
 public interface IFluidResProduction : IResourceProduction
 {

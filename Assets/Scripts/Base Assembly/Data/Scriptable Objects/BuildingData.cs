@@ -74,7 +74,7 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
 
     public Building GetBuilding(int categ, int id)
     {
-        return Categories[categ].Objects.Find(q => q.id == id).building;
+        return Categories.FirstOrDefault(q => q.id == categ).Objects.Find(q => q.id == id).building;
     }
 
     public Building GetBuilding(string name)

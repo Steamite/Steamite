@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using Unity.Hierarchy;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 /// <summary>Util class for managment of each different level.</summary>
 public class GroundLevel : MonoBehaviour, IUpdatable
@@ -394,7 +391,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         ClickableObject clickable = GetGridItem(pos);
         if (clickable != null && clickable is Road)
         {
-            if(GetGridItem(pos, true) == null)
+            if (GetGridItem(pos, true) == null)
             {
                 Road road = clickable as Road;
                 if (road.entryPoints.Count > 0)
@@ -412,7 +409,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
 
 
     void CheckWaterPresence(
-        GridPos pos, Image image, 
+        GridPos pos, Image image,
         Color baseColor, Color errColor, ref bool canBuild)
     {
         ClickableObject clickable = GetGridItem(pos);
@@ -426,8 +423,8 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     }
 
     void CheckVeinPresence(
-        GridPos pos, Image image, 
-        Color baseColor, Color errColor, 
+        GridPos pos, Image image,
+        Color baseColor, Color errColor,
         ref bool canBuild, ref Vein source)
     {
         ClickableObject clickable = GetGridItem(pos);
@@ -460,7 +457,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         {
             foreach (int i in road.entryPoints)
             {
-                    buildings.TryAdd(i, overlays.buildingOverlays.First(q => q.name == i.ToString()).GetComponentsInChildren<Image>().Where(q => q.enabled).Count());
+                buildings.TryAdd(i, overlays.buildingOverlays.First(q => q.name == i.ToString()).GetComponentsInChildren<Image>().Where(q => q.enabled).Count());
                 buildings[i]--;
                 if (buildings[i] == 0)
                 {
@@ -524,7 +521,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
 
     /// <summary>Registers all instantiated rocks.</summary>
     void CreateRocks(GridSave save)
-    { 
+    {
         for (int j = 0; j < rocks.childCount; j++)
         {
             Rock rock = rocks.GetChild(j).GetComponent<Rock>();
@@ -540,7 +537,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         for (int j = 0; j < waters.childCount; j++)
         {
             Water water = waters.GetChild(j).GetComponent<Water>();
-            water.id = j+1;
+            water.id = j + 1;
             GridPos vec = water.GetPos();
             save.grid[Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.z)] = water.Save();
         }
@@ -557,7 +554,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             vein.id = idCounter++;
             for (int j = 0; j < vein.xSize; j++)
                 for (int k = 0; k < vein.zSize; k++)
-                    save.gridSave[level].grid[x + j, z + k] = new() { id = -1};
+                    save.gridSave[level].grid[x + j, z + k] = new() { id = -1 };
             return vein.Save() as VeinSave;
         }).ToList();
         veinList.AddRange(save.objectsSave.veins);

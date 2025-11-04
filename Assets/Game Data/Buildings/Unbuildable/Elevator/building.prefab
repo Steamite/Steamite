@@ -228,6 +228,6 @@ MonoBehaviour:
   constructionProgress: 0
   maximalProgress: 0
   prefabConnection:
-    categoryIndex: 0
+    categoryId: 1
     objectId: 1122905122
   canStoreInt: 16969858

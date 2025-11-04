@@ -166,7 +166,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
         researchData.Categories.SelectMany(q => q.Objects)
             .FirstOrDefault(q =>
                 q.nodeType == NodeType.Stat &&
-                q.objectConnection.categoryIndex == categIndex &&
+                q.objectConnection.categoryId == categIndex &&
                 q.objectConnection.objectId == stat.id).GetDescr(stat);
 
     }

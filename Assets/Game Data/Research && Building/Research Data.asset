@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Research Data
   m_EditorClassIdentifier: 
   Categories:
-  - Name: Population
+  - id: 1
+    Name: Population
     Objects:
     - Name: 
       id: 1616741493
@@ -38,7 +39,7 @@ MonoBehaviour:
             absoluteMod: 0
       nodeType: 0
       objectConnection:
-        categoryIndex: 0
+        categoryId: 0
         objectId: 0
       unlockedBy: 
       unlocks: 
@@ -67,8 +68,8 @@ MonoBehaviour:
             absoluteMod: 0
       nodeType: 2
       objectConnection:
-        categoryIndex: 0
-        objectId: 277555999
+        categoryId: 4
+        objectId: 458707137
       unlockedBy: 
       unlocks: e006623a
       description: 'Random description
@@ -98,8 +99,8 @@ MonoBehaviour:
             absoluteMod: 0
       nodeType: 2
       objectConnection:
-        categoryIndex: 0
-        objectId: 635712276
+        categoryId: 3
+        objectId: 1580670160
       unlockedBy: 
       unlocks: e006623a
       description: 
@@ -127,7 +128,7 @@ MonoBehaviour:
             absoluteMod: 0
       nodeType: 1
       objectConnection:
-        categoryIndex: 0
+        categoryId: 1
         objectId: 2090065767
       unlockedBy: 
       unlocks: e006623a
@@ -175,7 +176,7 @@ MonoBehaviour:
             absoluteMod: 0
       nodeType: 1
       objectConnection:
-        categoryIndex: 0
+        categoryId: 1
         objectId: 1873593032
       unlockedBy: 
       unlocks: e006623a
@@ -208,14 +209,15 @@ MonoBehaviour:
             absoluteMod: 0
       nodeType: 2
       objectConnection:
-        categoryIndex: 0
-        objectId: 1122905122
+        categoryId: 2
+        objectId: 1472558132
       unlockedBy: bd29a30ae9955c1ae429d52634caf053
       unlocks: 
       description: 
       lineColor: {r: 0.1870589, g: 0.6698113, b: 0.27058825, a: 0.49019608}
     Icon: {fileID: 2800000, guid: 786e99add6b74e346b59e4e32bfaf262, type: 3}
-  - Name: Production
+  - id: 2
+    Name: Production
     Objects:
     - Name: 
       id: 823126285
@@ -240,8 +242,8 @@ MonoBehaviour:
             absoluteMod: 0
       nodeType: 2
       objectConnection:
-        categoryIndex: 0
-        objectId: 0
+        categoryId: 2
+        objectId: 1472558132
       unlockedBy: 
       unlocks: 1b67a65bef39f217
       description: 
@@ -269,8 +271,8 @@ MonoBehaviour:
             absoluteMod: 0
       nodeType: 2
       objectConnection:
-        categoryIndex: 0
-        objectId: 0
+        categoryId: 2
+        objectId: 1197943099
       unlockedBy: 0de90f31
       unlocks: 
       description: 
@@ -298,8 +300,8 @@ MonoBehaviour:
             absoluteMod: 0
       nodeType: 2
       objectConnection:
-        categoryIndex: 0
-        objectId: 0
+        categoryId: 2
+        objectId: 1210278343
       unlockedBy: 0de90f31
       unlocks: 
       description: 
@@ -327,7 +329,7 @@ MonoBehaviour:
             absoluteMod: 0
       nodeType: 2
       objectConnection:
-        categoryIndex: 0
+        categoryId: 0
         objectId: 0
       unlockedBy: 
       unlocks: 

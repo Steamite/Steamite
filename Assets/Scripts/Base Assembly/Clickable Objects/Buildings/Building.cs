@@ -4,7 +4,6 @@ using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.UIElements;
 
 public enum BuildingCategType
 {
@@ -233,7 +232,7 @@ public class Building : StorageObject
                 localRes.Dump();
             SceneRefs.QuestController.BuildBuilding(this);
         }
-        
+
         if (selected)
             OpenWindow();
 
@@ -261,7 +260,7 @@ public class Building : StorageObject
             else
             {
                 queue.CancelJob(JobState.Deconstructing, this);
-                if(constructionProgress == maximalProgress)
+                if (constructionProgress == maximalProgress)
                 {
                     deconstructing = false;
                     OpenWindow();
@@ -388,7 +387,7 @@ public class Building : StorageObject
             List<Material> materials = SceneRefs.ObjectFactory.GetModelMaterials(this);
             for (int i = 0; i < meshRenderers.Count; i++)
             {
-                if(i >= materials.Count)
+                if (i >= materials.Count)
                     UpdateRenderMode(i, SceneRefs.ObjectFactory.GetPipeMaterial());
                 else
                     UpdateRenderMode(i, materials[i]);
@@ -440,8 +439,8 @@ public class Building : StorageObject
     public virtual bool CanPlace(bool checkCost = true)
     {
         bool canPlace = (checkCost ? MyRes.CanAfford(cost) : true) && MyGrid.CanPlace(this);
-        
-        if(this is IFluidWork fluidWork)
+
+        if (this is IFluidWork fluidWork)
         {
             fluidWork.AttachedPipes.ForEach(q => q.FindConnections(canPlace));
         }
@@ -464,7 +463,7 @@ public class Building : StorageObject
         UniqueID();
         MyGrid.SetBuilding(this);
 
-        if(this is IFluidWork fluidWork)
+        if (this is IFluidWork fluidWork)
         {
             fluidWork.PlacePipes();
         }
@@ -486,7 +485,7 @@ public class Building : StorageObject
             ((IModifiable)assign.AssignLimit).Init();
         }
 
-        if(this is IProduction prod)
+        if (this is IProduction prod)
         {
             prod.ProdSpeed = new(1);
             if (this is IResourceProduction resProd)

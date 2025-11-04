@@ -355,7 +355,7 @@ public class LocationSave
 {
     public GridPos position;
     public string name;
-    
+
     public LocationSave(Location location)
     {
         position = location.pos;

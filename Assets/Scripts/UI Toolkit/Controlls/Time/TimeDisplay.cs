@@ -3,51 +3,45 @@ using UnityEngine.UIElements;
 
 public class TimeDisplay : MonoBehaviour, IToolkitController
 {
-    Label minutes;
-    Label hours;
-    Label days;
-    Label months;
-    Label years;
-
-    /*readonly int[] daysInMonths = 
-        {
-            31, 31, 31, 31,
-        };*/
+    Label hour;
+    Label minute;
+    Label month;
+    Label day;
+    Label year;
 
 
     public void Init(VisualElement root)
     {
-        root = root.Q<VisualElement>("Time");
-        minutes = root.Q<Label>("Minutes");
-        hours = root.Q<Label>("Hours");
-        days = root.Q<Label>("Days");
-        months = root.Q<Label>("Months");
-        years = root.Q<Label>("Years");
+        root = root.Q<VisualElement>("TimeDisplay");
+        hour = root.Q<Label>("Hour");
+        minute = root.Q<Label>("Minute");
+        day = root.Q<Label>("Day");
+        month = root.Q<Label>("Month");
+        year = root.Q<Label>("Year");
 
         SceneRefs.Tick.SubscribeToEvent(UpdateTime, Tick.TimeEventType.Ticks);
         SceneRefs.Tick.SubscribeToEvent(UpdateDay, Tick.TimeEventType.Day);
-        SceneRefs.Tick.SubscribeToEvent(UpdateMonth, Tick.TimeEventType.Month);
         SceneRefs.Tick.SubscribeToEvent(UpdateYear, Tick.TimeEventType.Year);
+
+
 
         UpdateTime();
         UpdateDay();
-        UpdateMonth();
         UpdateYear();
     }
 
     void UpdateTime()
     {
-        minutes.text = (SceneRefs.Tick.timeInMinutes % 60).ToString();
-        hours.text = (SceneRefs.Tick.timeInMinutes / 60).ToString();
-        //Debug.Log("Time:" + (SceneRefs.tick.timeInMinutes % 60).ToString());
+        hour.text = $"{SceneRefs.Tick.timeInMinutes / 60:00}";
+        minute.text = $"{SceneRefs.Tick.timeInMinutes % 60:00}";
     }
 
-    void UpdateDay() =>
-        days.text = ((SceneRefs.Tick.numberOfDays % 28) + 1).ToString();
-
-    void UpdateMonth() =>
-        months.text = (((SceneRefs.Tick.numberOfDays % 336) / 28) + 1).ToString();
+    void UpdateDay()
+    {
+        day.text = $"{(SceneRefs.Tick.numberOfDays % 28) + 1}.";
+        month.text = $"{(SceneRefs.Tick.numberOfDays / 28) + 1}.";
+    }
 
     void UpdateYear() =>
-        years.text = (1885 + (SceneRefs.Tick.numberOfDays / 336)).ToString();
+        year.text = (1885 + (SceneRefs.Tick.numberOfDays / 336)).ToString();
 }
