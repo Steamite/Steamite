@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.AddressableAssets;
-using static UnityEngine.Analytics.IAnalytic;
 
 public static class ResFluidTypes
 {
@@ -21,7 +17,7 @@ public static class ResFluidTypes
         get
         {
 #if UNITY_EDITOR
-            if(resources == null)
+            if (resources == null)
                 InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.PATH));
 #endif
             return resources;
@@ -69,7 +65,7 @@ public static class ResFluidTypes
         resources = fullRes.Skip(1).SkipLast(1).SelectMany(q => q.Objects).Select(q => q.data).ToList();
 
         fluids = fullRes[^1].Objects.Select(q => q.data).ToList();
-        None = fullRes[0].Objects.First(q=> q.Name == "None").data;
+        None = fullRes[0].Objects.First(q => q.Name == "None").data;
         Money = fullRes[0].Objects.First(q => q.Name == "Money").data;
     }
 
@@ -97,9 +93,9 @@ public static class ResFluidTypes
     public static List<string> GetResNamesList(List<int> allowedCategories)
     {
         List<string> names = new();
-//#if UNITY_EDITOR
+        //#if UNITY_EDITOR
         names.Add(None.Name);
-//#endif
+        //#endif
         if (allowedCategories == null || allowedCategories.Count == 0)
             names.AddRange(GetResNamesList());
         else
@@ -121,7 +117,7 @@ public static class ResFluidTypes
         List<ResourceType> results = new();
         foreach (var t in types)
         {
-            results.Add(fullRes[t.categoryIndex].Objects.FirstOrDefault(q => q.id == t.objectId)?.data);
+            results.Add(fullRes.FirstOrDefault(q => q.id == t.categoryId).Objects.FirstOrDefault(q => q.id == t.objectId)?.data);
         }
         return results;
     }

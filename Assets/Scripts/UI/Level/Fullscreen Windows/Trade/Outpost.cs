@@ -160,7 +160,7 @@ namespace Outposts
         public void ProgressBuilding()
         {
             timeToFinish--;
-            if(timeToFinish == 0)
+            if (timeToFinish == 0)
             {
                 FinishUpgrade();
             }

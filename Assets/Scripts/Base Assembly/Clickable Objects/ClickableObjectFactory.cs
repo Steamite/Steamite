@@ -1,12 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 /// <summary>Instantiates and fills new Clickable Objects.</summary>
 public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
@@ -164,7 +160,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     {
         GridPos rotate = MyGrid.Rotate(save.blueprint.moveBy, save.rotationY);
         Building b = Instantiate(
-            buildPrefabs.GetBuilding(save.prefabConnection.categoryIndex, save.prefabConnection.objectId),
+            buildPrefabs.GetObjectBySaveIndex(save.prefabConnection).building,
             new Vector3(save.gridPos.x + rotate.x, (save.gridPos.y * LEVEL_HEIGHT) + BUILD_OFFSET, save.gridPos.z + rotate.z),
             Quaternion.Euler(0, save.rotationY, 0),
             MyGrid.FindLevelBuildings(save.gridPos.y));
@@ -237,7 +233,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         {
             for (int z = 0; z < vein.zSize; z++)
             {
-                MyGrid.SetGridItem(new(posX+x, save.gridPos.y, posZ+z), vein);
+                MyGrid.SetGridItem(new(posX + x, save.gridPos.y, posZ + z), vein);
             }
         }
     }
@@ -294,7 +290,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
 
     public List<Material> GetModelMaterials(Building building)
     {
-        return buildPrefabs.Categories[building.prefabConnection.categoryIndex].Objects.FirstOrDefault(q => q.id == building.prefabConnection.objectId).materials;
+        return buildPrefabs.GetCategByID(building.prefabConnection.categoryId).Objects.FirstOrDefault(q => q.id == building.prefabConnection.objectId).materials;
     }
 
     public Material GetPipeMaterial()

@@ -1,11 +1,8 @@
 using InfoWindowElements;
-using UnityEngine;
-using UnityEngine.UIElements;
 using Outposts;
 using TradeWindowElements;
-using System.Linq;
-using AbstractControls;
-using System;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 [UxmlElement]
 public partial class OutpostView : TradeMapViewBase
@@ -16,9 +13,9 @@ public partial class OutpostView : TradeMapViewBase
 
     int outpostIndex;
     public TradeMap map;
-    VisualElement lvlBonus; 
+    VisualElement lvlBonus;
     Button unlockButton;
-    
+
     public OutpostView()
     {
     }
@@ -36,9 +33,9 @@ public partial class OutpostView : TradeMapViewBase
         VisualElement constructionView = new();
         Label labelLevel;
         ProgressBar progress;
-        constructionView.Add(labelLevel = new($"{outpost.level} >>> {outpost.level+1}"));
+        constructionView.Add(labelLevel = new($"{outpost.level} >>> {outpost.level + 1}"));
         labelLevel.AddToClassList("level-label");
-        
+
         constructionView.Add(progress = new());
         progress.AddToClassList("construction-bar");
         progress.lowValue = 0;
@@ -58,7 +55,7 @@ public partial class OutpostView : TradeMapViewBase
         Label levelTitle;
         Label levelLabel;
         Label costListLabel;
-       ResourceList resourceList;
+        ResourceList resourceList;
 
         // level Label
         Add(container = new());
@@ -85,7 +82,7 @@ public partial class OutpostView : TradeMapViewBase
         container = tab.contentContainer;
         container.AddToClassList("view");
         container.Add(new OutpostTradeElem(outpost, resetIcon));
-        
+
         Add(view);
     }
 
@@ -93,9 +90,9 @@ public partial class OutpostView : TradeMapViewBase
     {
         DropdownField dropdownField;
         DoubleResList costList;
-        
 
-        VisualElement newView = new() 
+
+        VisualElement newView = new()
         {
             style =
             {
@@ -105,7 +102,7 @@ public partial class OutpostView : TradeMapViewBase
             }
         };
         root.Add(newView);
-        newView.Add(dropdownField = new() { choices = ResFluidTypes.GetResNamesList()});
+        newView.Add(dropdownField = new() { choices = ResFluidTypes.GetResNamesList() });
         dropdownField.index = 0;
 
         newView.Add(costList = new(true, "cost") { showMoney = true });

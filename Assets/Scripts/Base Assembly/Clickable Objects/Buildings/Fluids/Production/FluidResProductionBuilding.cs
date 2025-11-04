@@ -59,7 +59,7 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IFluidWork
                 res = false;
         }
 
-        if(!fluidProd.fluidSpace)
+        if (!fluidProd.fluidSpace)
         {
             fluidProd.fluidSpace = ((IFluidWork)this).HasSpace(FluidYeild);
             if (fluidProd.fluidSpace == false)
@@ -92,7 +92,7 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IFluidWork
         if (ProdStates.needsResources)
             ProdStates.supplied = InputResource.Diff(ResourceCost).Sum() == 0;
         ProdStates.space = ResourceYield.Sum() <= LocalResource.FreeSpace;
-        
+
         ManageInputRes();
     }
     #endregion

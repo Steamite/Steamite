@@ -29,13 +29,13 @@ namespace Objectives
                 if (res)
                     Cancel(controller);
             }
-            return res; 
+            return res;
         }
 
         public override void Load(int _currentProgressGlobal, Quest _quest, QuestController controller)
         {
             maxProgress = needToRemove.Count;
-            if(_quest.state == QuestState.Active)
+            if (_quest.state == QuestState.Active)
             {
                 foreach (var item in needToRemove)
                 {
@@ -55,7 +55,7 @@ namespace Objectives
             controller.ExcavationObjectives.Remove(this);
             foreach (var item in needToRemove)
             {
-                if(MyGrid.GetGridItem(item) is Rock rock)
+                if (MyGrid.GetGridItem(item) is Rock rock)
                 {
                     rock.isQuest = false;
                     GameObject.Destroy(rock.transform.GetChild(0).gameObject);

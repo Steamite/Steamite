@@ -1,6 +1,5 @@
 using Objectives;
 using Orders;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,7 +25,7 @@ public class OrderController
         orderInterface = _questCatalog.rootVisualElement[0][0].Q("OrderInterface") as IUIElement;
         currentOrder = _order;
         finishedOrdersCount = saveData.finishedOrdersCount;
-        
+
         orderChoice = new();
         foreach (var item in saveData.orderChoiceSaves)
         {
@@ -45,24 +44,21 @@ public class OrderController
 
     public void CreateOrderChoice(Order order)
     {
-        if(order.nextQuests.Count > 0)
+        if (order.nextQuests.Count > 0)
         {
             int i = 0;
-            List<QuestLink> nextQuests = order.nextQuests;
+            List<DataAssign> nextQuests = order.nextQuests;
             if (nextQuests.Count == 1)
             {
-                order = new(
-                    data.Categories[nextQuests[i].categIndex]
-                    .Objects.FirstOrDefault(q => q.id == nextQuests[i].questId));
+                order = new(data.GetObjectBySaveIndex(nextQuests[i]));
             }
             else
             {
                 orderChoice = new();
                 for (; i < nextQuests.Count; i++)
                 {
-                    Order _order = new(
-                            data.Categories[nextQuests[i].categIndex]
-                            .Objects.FirstOrDefault(q => q.id == nextQuests[i].questId));
+                    Order _order = new(data.GetObjectBySaveIndex(nextQuests[i]));
+
                     _order.objectives.ForEach(q => q.Load());
                     orderChoice.Add(_order);
                 }
@@ -95,15 +91,15 @@ public class OrderController
         int minAmmount = Mathf.RoundToInt(1 * mod);
         int maxAmmount = Mathf.RoundToInt(2 * mod);
 
-        int resTypeCount = Random.Range(minAmmount, maxAmmount+1);
+        int resTypeCount = Random.Range(minAmmount, maxAmmount + 1);
 
         ResourceObjective objective = new();
         List<ResourceGen> gen = orderGenConfig.resourceGens.ToList();
-        
+
 
         for (int i = 0; i < resTypeCount; i++)
         {
-            int max = gen.Sum(q => q.typeChance)+1;
+            int max = gen.Sum(q => q.typeChance) + 1;
             int random = Random.Range(0, max);
             ResourceGen selType = null;
             foreach (var item in gen)
@@ -124,9 +120,9 @@ public class OrderController
                     resAmmount,
                     true,
                     mod);
-            orderDifficulty += (float)resAmmount / (float)selType.typeChance;
+            orderDifficulty += resAmmount / (float)selType.typeChance;
         }
-        
+
         Order order = new();
         order.orderDifficulty = (OrderDifficulty)Mathf.FloorToInt(orderDifficulty);
         order.TimeToFail = Mathf.RoundToInt(orderGenConfig.timeToFail.Random() * mod * orderDifficulty);

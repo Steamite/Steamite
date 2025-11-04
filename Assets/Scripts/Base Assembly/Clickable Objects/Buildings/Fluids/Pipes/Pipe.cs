@@ -31,7 +31,7 @@ public class Pipe : Building
                 }
             }
         }
-        else 
+        else
         {
             if (network.networkID == -1)
                 network = new(this);
@@ -43,7 +43,7 @@ public class Pipe : Building
     }
     public virtual void ConnectToNetwork(FluidNetwork _network)
     {
-        if(_network == network)
+        if (_network == network)
         {
             return;
         }
@@ -116,7 +116,7 @@ public class Pipe : Building
                 break;
             case 2:
                 pipePart.SetLocalPositionAndRotation(
-                    new(0, 0, (0.5f / transform.lossyScale.z) - pipeLenghtScale), 
+                    new(0, 0, (0.5f / transform.lossyScale.z) - pipeLenghtScale),
                     Quaternion.Euler(90, 0, 0));
                 if (canNext)
                     connectedPipe.ConnectPipe(connectionOrder[_case], this, false);
@@ -182,7 +182,7 @@ public class Pipe : Building
     protected virtual void AddRenderer(Renderer _renderer)
     {
         meshRenderers.Add(_renderer);
-        UpdateRenderMode(meshRenderers.Count-1, meshRenderers[0].material);
+        UpdateRenderMode(meshRenderers.Count - 1, meshRenderers[0].material);
     }
 
     protected virtual void RemoveRenderer(Renderer _renderer)
@@ -303,5 +303,5 @@ public class Pipe : Building
         }
     }
 
-    
+
 }

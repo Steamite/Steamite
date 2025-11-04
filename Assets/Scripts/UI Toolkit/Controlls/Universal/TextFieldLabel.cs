@@ -1,4 +1,3 @@
-using System.Runtime.ExceptionServices;
 using TradeData.Locations;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,7 +9,7 @@ public partial class TextFieldLabel : TextField, IUIElement
     bool canChange;
     public TextFieldLabel()
     {
-        value = "PlaceHolder";        
+        value = "PlaceHolder";
         pickingMode = PickingMode.Ignore;
         selectAllOnMouseUp = false;
         selectAllOnFocus = true;
@@ -25,7 +24,7 @@ public partial class TextFieldLabel : TextField, IUIElement
         element.style.borderTopWidth = 0;
         element.style.borderLeftWidth = 0;
         element.style.borderRightWidth = 0;
-        element.style.backgroundColor = new Color(0,0,0,0);
+        element.style.backgroundColor = new Color(0, 0, 0, 0);
         element.style.paddingBottom = 0;
         element.style.paddingTop = 0;
         element.style.paddingLeft = 0;
@@ -42,7 +41,7 @@ public partial class TextFieldLabel : TextField, IUIElement
     {
         inspectedObject = _inspectedObject as INameChangable;
         value = inspectedObject.Name;
-        
+
         canChange = _inspectedObject is not ColonyLocation;
         if (canChange)
         {
@@ -51,7 +50,7 @@ public partial class TextFieldLabel : TextField, IUIElement
 
     void Click(MouseDownEvent ev)
     {
-        if(ev.clickCount == 2 && canChange)
+        if (ev.clickCount == 2 && canChange)
         {
             RegisterCallback<FocusOutEvent>(OnChange);
             isReadOnly = false;
@@ -60,7 +59,7 @@ public partial class TextFieldLabel : TextField, IUIElement
             MainShortcuts.DisableAll();
         }
     }
-    
+
     void OnChange(FocusOutEvent focusOutEvent)
     {
         Debug.Log("change" + inspectedObject);

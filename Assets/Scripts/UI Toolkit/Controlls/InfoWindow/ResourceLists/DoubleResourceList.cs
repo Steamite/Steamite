@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using TradeData.Locations;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;

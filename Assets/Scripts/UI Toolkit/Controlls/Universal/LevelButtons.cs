@@ -1,7 +1,5 @@
 using AbstractControls;
-using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 [UxmlElement]
@@ -33,15 +31,15 @@ public partial class LevelButtons : CustomRadioButtonGroup
         {
             level = MyGrid.GetGroundLevelData(i);
             hierarchy[i].SetBinding(
-                nameof(GroundLevel.Unlocked), 
-                nameof(enabledSelf), 
+                nameof(GroundLevel.Unlocked),
+                nameof(enabledSelf),
                 dataSource: level);
         }
     }
 
     public void OutsideTrigger(int old, int newI)
     {
-        if(SelectedChoice != newI)// && MyGrid.IsUnlocked(newI))
+        if (SelectedChoice != newI)// && MyGrid.IsUnlocked(newI))
             buttons[newI].Select();
     }
 }

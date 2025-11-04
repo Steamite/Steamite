@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 
@@ -88,7 +87,7 @@ public interface IResourceProduction : IProduction
         ((IUpdatable)this).UIUpdate(nameof(Building.LocalRes));
         MyRes.UpdateResource(ResourceYield, true);
 
-        if(ProdStates.needsResources)
+        if (ProdStates.needsResources)
             ProdStates.supplied = InputResource.Diff(ResourceCost).Sum() == 0;
         ProdStates.space = ResourceYield.Sum() <= LocalResource.FreeSpace;
         ManageInputRes();
@@ -139,7 +138,7 @@ public interface IResourceProduction : IProduction
     /// <summary>Adds a <see cref="JobState.Supply"/> job order.</summary>
     void RequestRestock()
     {
-        if(ProdStates.needsResources && ProdStates.requestedSupply == false)
+        if (ProdStates.needsResources && ProdStates.requestedSupply == false)
         {
             ProdStates.requestedSupply = true;
             SceneRefs.JobQueue.AddJob(JobState.Supply, (ClickableObject)this);
@@ -160,7 +159,7 @@ public interface IResourceProduction : IProduction
     {
         ProdStates.needsResources = ResourceCost.Sum() > 0;
         Recipes = new();
-        foreach(var recip in RecipeAsssigment)
+        foreach (var recip in RecipeAsssigment)
         {
             Recipes.Add(holder.GetObjectBySaveIndex(recip));//.Categories[recip.categoryIndex].Objects.FirstOrDefault(q => q.id == recip.objectId));
         }

@@ -1,7 +1,6 @@
 using AbstractControls;
 using Outposts;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,7 +12,8 @@ public partial class TestList : ListView
     {
         //makeItem = () => new TextField() { style = { color = Color.red} };
         //bindItem = (el, i) => { (el as TextField).value = i.ToString(); };
-        makeItem = () => {
+        makeItem = () =>
+        {
             SliderInt slider = new SliderInt() { style = { color = Color.red } };
             slider.showInputField = true;
             return slider;
@@ -49,14 +49,14 @@ public partial class OutpostTradeElem : VisualElement
         Add(storageTitle = new($"Storage ({outpost.storedResources.Sum()}/{outpost.storedResources.capacity})"));
         storageTitle.AddToClassList("level-label");
 
-        group = new() { name = "button-group", style = {flexGrow = 0}};
+        group = new() { name = "button-group", style = { flexGrow = 0 } };
         group.SetChangeCallback(StorageControlChange);
         rButton = new("choice-button", 0, group) { text = "Sell" };
         rButton = new("choice-button", 1, group) { text = "Collect" };
 
-        Button button = new Button(ResetSliders) 
-        { 
-            style = 
+        Button button = new Button(ResetSliders)
+        {
+            style =
             {
                 maxWidth = 50,
                 backgroundImage = resetIcon
@@ -65,8 +65,9 @@ public partial class OutpostTradeElem : VisualElement
         button.AddToClassList("choice-button");
         group.Add(button);
         Add(group);
-        Add(sliderRes = new(false, "stored") { showEmpty = true});
-        Add(commitButton = new(Commit) {
+        Add(sliderRes = new(false, "stored") { showEmpty = true });
+        Add(commitButton = new(Commit)
+        {
             style =
             {
                 minWidth = new Length(75, LengthUnit.Percent),
@@ -81,7 +82,7 @@ public partial class OutpostTradeElem : VisualElement
         sliderRes.Open(this);
         //Add(new TestList());
         group.buttons[0].SelectWithoutTransition(true);
-        
+
     }
 
 
@@ -113,7 +114,7 @@ public partial class OutpostTradeElem : VisualElement
     {
         int sum = vals.Sum();
         Debug.Log(sum);
-        if(sum > 0)
+        if (sum > 0)
         {
             commitButton.AddToClassList("main-button");
             commitButton.RemoveFromClassList("disabled-button");
@@ -128,7 +129,7 @@ public partial class OutpostTradeElem : VisualElement
     void Commit()
     {
         List<int> selectedVals = sliderRes.GetVals();
-        if(selectedVals.Sum() > 0)
+        if (selectedVals.Sum() > 0)
         {
             if (group.SelectedChoice == 0)
             {

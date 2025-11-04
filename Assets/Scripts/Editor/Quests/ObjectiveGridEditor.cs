@@ -1,17 +1,15 @@
-using NUnit.Framework;
 using Objectives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 [UxmlElement]
 public partial class ObjectiveGridEditor : QuestCompositorList<Objective>
 {
     List<Type> buildingTypes = TypeCache.GetTypesDerivedFrom(typeof(Building)).ToList();
-    public ObjectiveGridEditor() : base() 
+    public ObjectiveGridEditor() : base()
     {
         columns.Add(new Column()
         {
@@ -94,7 +92,7 @@ public partial class ObjectiveGridEditor : QuestCompositorList<Objective>
             }
 
         });
-        
+
 
         onAdd = (list) =>
         {
@@ -115,7 +113,7 @@ public partial class ObjectiveGridEditor : QuestCompositorList<Objective>
     {
         if (_data.GetType() == typeof(Order))
         {
-            _types = new() {typeof(ResourceObjective)};
+            _types = new() { typeof(ResourceObjective) };
         }
 
         base.Bind(_holder, _data, _types);
@@ -125,7 +123,7 @@ public partial class ObjectiveGridEditor : QuestCompositorList<Objective>
     void MaxProgressChange(ChangeEvent<int> ev)
     {
         int i = ev.target.GetRowIndex();
-        if(ev.newValue != ev.previousValue)
+        if (ev.newValue != ev.previousValue)
         {
             (itemsSource[i] as Objective).MaxProgress = ev.newValue;
             EditorUtility.SetDirty(holder);

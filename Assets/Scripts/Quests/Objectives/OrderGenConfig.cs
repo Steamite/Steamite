@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Orders
 {
-    
+
     [Serializable]
     public class ResourceGen
     {

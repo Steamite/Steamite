@@ -3,7 +3,6 @@ using Outposts;
 using ResearchUI;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using TradeData.Locations;
 using TradeData.Stats;
 using UnityEngine;
@@ -134,7 +133,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                     description.text = convoy.ToString();
                 else
                     description.text = "";
-                    break;
+                break;
             case ColonyLocation colonyLocation:
                 header.text = colonyLocation.Name;
                 secondHeader.text = "colony";

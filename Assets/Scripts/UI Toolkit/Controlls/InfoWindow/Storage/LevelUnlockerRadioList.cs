@@ -84,7 +84,7 @@ namespace RadioGroups
             {
                 gridPos.y = i;
                 CheckLevel(gridPos, ref unlocked, levelData);
-            } 
+            }
 
             // check down
             unlocked = true;
@@ -114,7 +114,7 @@ namespace RadioGroups
             {
                 if (MyGrid.GetGridItem(gridPos) is Elevator)
                     SetStates(gridPos.y, LevelState.Unlocked);
-                else if(MyGrid.GetGridItem(gridPos) is Road)
+                else if (MyGrid.GetGridItem(gridPos) is Road)
                 {
                     unlocked = false;
                     if (MyRes.CanAfford(levelData.costs[gridPos.y]))

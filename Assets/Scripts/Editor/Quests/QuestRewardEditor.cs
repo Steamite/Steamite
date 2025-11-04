@@ -1,7 +1,5 @@
-﻿using Objectives;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -46,7 +44,7 @@ public class QuestRewardEditor : QuestCompositorList<QuestReward>
             {
                 el.Clear();
             }
-            
+
         });
         onAdd = (list) =>
         {
@@ -68,6 +66,6 @@ public class QuestRewardEditor : QuestCompositorList<QuestReward>
     }
 
     #region Changes
-    
+
     #endregion
 }

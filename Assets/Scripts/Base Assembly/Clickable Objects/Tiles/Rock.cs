@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using System.Linq;
 using Unity.Properties;
@@ -176,7 +175,7 @@ public class Rock : ClickableObject
                 break;
         }
         gameObject.GetComponent<MeshRenderer>().material
-            .SetFloat("_Hadrness", f); 
+            .SetFloat("_Hadrness", f);
     }
 
     public void Hide()

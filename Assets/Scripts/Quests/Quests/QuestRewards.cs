@@ -39,7 +39,7 @@ public class QuestResourceReward : QuestReward
 public class TrustReward : QuestReward
 {
     public int gainAmmount;
-    public TrustReward() : base(){ }
+    public TrustReward() : base() { }
     public TrustReward(int i) : base()
     {
         gainAmmount = i;
@@ -49,7 +49,7 @@ public class TrustReward : QuestReward
         SceneRefs.QuestController.Trust += gainAmmount;
     }
 
-    public override void Init() {}
+    public override void Init() { }
 
     public override string ToString()
     {

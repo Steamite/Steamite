@@ -218,7 +218,7 @@ MonoBehaviour:
   constructionProgress: 0
   maximalProgress: 0
   prefabConnection:
-    categoryIndex: 3
+    categoryId: 4
     objectId: 262182155
   storedFluid:
     types: []

@@ -97,13 +97,13 @@ namespace InfoWindowElements
             };
             element.Add(costList);
 
-            moveButton = new() 
-            { 
-                style = 
+            moveButton = new()
+            {
+                style =
                 {
                     minWidth = new Length(100, LengthUnit.Percent),
                     maxWidth = new Length(100, LengthUnit.Percent),
-                    marginBottom = 15, 
+                    marginBottom = 15,
                     marginTop = 0,
                     marginLeft = 0,
                     marginRight = 0,
@@ -154,7 +154,7 @@ namespace InfoWindowElements
             bodyLabel.text = LevelData.bodies[i];
             SelectedLevel = i;
 
-            
+
             LevelState state = levelGroup[i];
             switch (state)
             {
@@ -248,7 +248,7 @@ namespace InfoWindowElements
                             {
                                 GridPos pos = selectedElevator.GetPos();
                                 SceneRefs.ObjectFactory.CreateElevator(
-                                    new(pos.x, SelectedLevel, pos.z), 
+                                    new(pos.x, SelectedLevel, pos.z),
                                     Mathf.RoundToInt(selectedElevator.transform.eulerAngles.y));
                                 MyRes.PayCostGlobal(LevelData.costs[SelectedLevel]);
                                 MyGrid.ChangeGridLevel(SelectedLevel);
@@ -273,7 +273,7 @@ namespace InfoWindowElements
                             $"Do you want to unlock the {LevelData.headers[SelectedLevel]}?",
                             "Unlock",
                             "Cancel");
-                    } 
+                    }
                     break;
                 case LevelState.Unlocked:
                     MyGrid.ChangeGridLevel(SelectedLevel);

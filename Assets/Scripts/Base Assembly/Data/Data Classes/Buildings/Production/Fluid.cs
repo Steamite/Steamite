@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -11,7 +10,7 @@ public class Fluid : Resource
     #region Constructor
     public Fluid() { }
     public Fluid(Fluid fluid) : base(fluid) { }
-    public Fluid(List<ResourceType> _type, List<int> _ammount, List<int> _capacity) 
+    public Fluid(List<ResourceType> _type, List<int> _ammount, List<int> _capacity)
         : base(_type, _ammount)
     {
         capacities = _capacity;

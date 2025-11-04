@@ -102,8 +102,8 @@ public partial class FluidInfo : InfoWindowControl
         });
         container.Add(mask);
 
-        mask = new() 
-        { name = "filled-mask", style = { backgroundColor = filledColor} };
+        mask = new()
+        { name = "filled-mask", style = { backgroundColor = filledColor } };
         mask.Add(filledLabel = new Label("##")
         {
             name = "filled-label",

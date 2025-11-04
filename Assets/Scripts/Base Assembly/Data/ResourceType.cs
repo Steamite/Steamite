@@ -1,11 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 [CreateAssetMenu(fileName = "ResourceType", menuName = "Resources/ResourceType")]
 public class ResourceType : ScriptableObject
@@ -20,7 +14,7 @@ public class ResourceType : ScriptableObject
 [Serializable]
 public class ResourceWrapper : DataObject
 {
-    [SerializeField]public ResourceType data;
+    [SerializeField] public ResourceType data;
 
     public ResourceWrapper(int _id) : base(_id)
     {

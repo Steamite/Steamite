@@ -1,5 +1,4 @@
 using ResearchUI;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +19,7 @@ public class NewGameInit : MonoBehaviour
     {
         save = new();
         save.gridSave = new GridSave[5];
-        save.objectsSave = new(new BuildingSave[] { }, new ChunkSave[] { }, new VeinSave[] {});
+        save.objectsSave = new(new BuildingSave[] { }, new ChunkSave[] { }, new VeinSave[] { });
         for (int i = 0; i < 5; i++)
         {
             mainLevel[i].CreateGrid(save, i);
@@ -37,7 +36,7 @@ public class NewGameInit : MonoBehaviour
         {
             colonyLocation = tradeHolder.startingLocation.Name,
             convoys = new(),
-            tradeLocations = tradeHolder.tradeLocations.Select(q=> new TradeLocationSave(q)).ToList(),
+            tradeLocations = tradeHolder.tradeLocations.Select(q => new TradeLocationSave(q)).ToList(),
             money = 2000,
             prodLevels = tradeHolder.startingLocation.config.production.Select(q => q.min).ToList(),
             statLevels = tradeHolder.startingLocation.config.stats.Select(q => q.min).ToList(),

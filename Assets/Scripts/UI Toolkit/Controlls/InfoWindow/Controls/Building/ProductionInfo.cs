@@ -75,7 +75,7 @@ namespace InfoWindowViews
             };
             Add(visualElement);
 
-            changeRecipe = new() { text = "Change Recipe"};
+            changeRecipe = new() { text = "Change Recipe" };
             changeRecipe.AddToClassList("main-button");
             changeRecipe.style.width = 225;
             changeRecipe.style.maxWidth = StyleKeyword.None;
@@ -96,8 +96,8 @@ namespace InfoWindowViews
             radialElement.ElementAt(0).Add(button);
             #endregion
 
-            VisualElement bottomTextContainer = new() { style = { flexDirection = FlexDirection.Row, justifyContent = Justify.SpaceBetween} };
-            
+            VisualElement bottomTextContainer = new() { style = { flexDirection = FlexDirection.Row, justifyContent = Justify.SpaceBetween } };
+
             capacityLabel = new("Space:\n##/##");
             capacityLabel.style.unityTextAlign = TextAnchor.UpperCenter;
             capacityLabel.style.fontSize = 15;
@@ -120,7 +120,7 @@ namespace InfoWindowViews
         void ChangeRecipeClicked()
         {
             VisualElement window = SceneRefs.InfoWindow.secondWindow;
-            if(window.style.display == DisplayStyle.None)
+            if (window.style.display == DisplayStyle.None)
             {
                 SceneRefs.InfoWindow.CreateSecondWindow("Select Recipe");
                 ListView view = new()
@@ -130,25 +130,25 @@ namespace InfoWindowViews
                 view.makeItem = () =>
                 {
                     VisualElement element = new();
-                    
+
                     VisualElement row = new() { style = { flexDirection = FlexDirection.Row } };
                     element.Add(row);
                     Label label = new("ABC") { name = "title" };
                     Button button = new() { name = "button" };
                     row.Add(label);
-                    
+
                     row = new() { style = { flexDirection = FlexDirection.Row } };
                     element.Add(row);
                     ResourceList cost = new(0.5f, "cost");
                     row.Add(cost);
-                    
+
                     VisualElement column = new() { style = { flexDirection = FlexDirection.Column } };
                     VisualElement arrow = new VisualElement();
                     column.Add(arrow);
                     Label arrowText = new Label();
                     column.Add(arrowText);
                     row.Add(column);
-                    
+
                     ResourceList yield = new(0.5f, "yield");
                     row.Add(yield);
 

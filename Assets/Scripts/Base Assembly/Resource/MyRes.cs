@@ -46,11 +46,11 @@ public static class MyRes
                 globalStorageSpace += _s.LocalResources.capacity - _s.LocalResources.Sum();
                 resDataSource.GlobalResources.Manage(_s.LocalResources, true);
             }
-            foreach(Chunk chunk in MyGrid.chunks)
+            foreach (Chunk chunk in MyGrid.chunks)
             {
                 resDataSource.GlobalResources.Manage(chunk.LocalRes, true);
             }
-            foreach(Human human in SceneRefs.Humans.GetHumen())
+            foreach (Human human in SceneRefs.Humans.GetHumen())
             {
                 resDataSource.GlobalResources.Manage(human.Inventory, true);
             }
@@ -258,7 +258,7 @@ public static class MyRes
             for (int j = 0; j < r.types.Count; j++)
             {
                 int x = storages[i].LocalResources.types.IndexOf(r.types[j]);
-                if(x > -1)
+                if (x > -1)
                 {
                     if (storages[i].CanStore[x] == true)
                     {
@@ -273,7 +273,7 @@ public static class MyRes
                         }
                     }
                 }
-                
+
                 storages.RemoveAt(i);
                 break;
             }

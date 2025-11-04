@@ -29,10 +29,10 @@ public class QuestMoneyPenalty : QuestPenalty
 [Serializable]
 public class TrustPenalty : QuestPenalty
 {
-    public TrustPenalty() : base(){ }
+    public TrustPenalty() : base() { }
     public TrustPenalty(int penalty) : base()
-    { 
-        penaltyAmmount = penalty; 
+    {
+        penaltyAmmount = penalty;
     }
 
     public override void GetPenalty()

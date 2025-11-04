@@ -1,6 +1,4 @@
 using Objectives;
-using System;
-using System.Collections.Generic;
 using UnityEngine.UIElements;
 
 [UxmlElement]
@@ -16,17 +14,17 @@ public partial class QuestElement : VisualElement
         VisualElement header = new VisualElement();
         header.AddToClassList("quest-header");
         Add(header);
-        
+
         header.Add(nameLabel = new("<u>Name"));
         nameLabel.AddToClassList("quest-name");
 
         header.Add(timeLabel = new("###"));
         timeLabel.AddToClassList("quest-time");
 
-        
+
         Add(descriptionLabel = new("Lorem ipsum dolor sit amet"));
         descriptionLabel.AddToClassList("quest-description");
-        
+
         Add(objectives = new());
         objectives.AddToClassList("quest-objective-view");
     }
@@ -39,8 +37,8 @@ public partial class QuestElement : VisualElement
         if (quest.TimeToFail != -1)
         {
             timeLabel.SetBinding(
-                nameof(Quest.TimeToFail), 
-                nameof(Label.text), 
+                nameof(Quest.TimeToFail),
+                nameof(Label.text),
                 (ref int time) =>
                 {
                     return Tick.RemainingTime(time);
@@ -72,7 +70,7 @@ public partial class QuestElement : VisualElement
                 "text",
                 (ref int x) =>
                 {
-                    if(x == obj.MaxProgress && elemGroup.parent.childCount > 1)
+                    if (x == obj.MaxProgress && elemGroup.parent.childCount > 1)
                     {
                         elemGroup.AddToClassList("completed");
                         elemGroup.RegisterCallbackOnce<TransitionEndEvent>((_ev) =>

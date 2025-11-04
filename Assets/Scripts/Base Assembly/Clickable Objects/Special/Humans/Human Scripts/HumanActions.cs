@@ -102,7 +102,7 @@ public static class HumanActions
         if ((h.Job.interest as Rock).DamageRock(digSpeed * h.Efficiency))
         {
             SceneRefs.JobQueue.CancelJob(JobState.Digging, h.Job.interest); // removes job order
-            if(FindRockToDig(h) == false)
+            if (FindRockToDig(h) == false)
                 h.SetJob(JobState.Free);
         }
     }

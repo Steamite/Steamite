@@ -58,8 +58,7 @@ public class ResearchWindow : FullscreenWindow, IGameDataController<ResearchSave
             {
                 if (node.nodeType == NodeType.Stat)
                 {
-                    int i = statData.Categories[node.objectConnection.categoryIndex].Objects.FindIndex(q => q.id == node.objectConnection.objectId);
-                    Stat stat = statData.Categories[node.objectConnection.categoryIndex].Objects[i];
+                    Stat stat = statData.GetObjectBySaveIndex(node.objectConnection); //q => q.id == node.objectConnection.objectId);
                     if (node.researched)
                     {
                         stat.AddEffect();

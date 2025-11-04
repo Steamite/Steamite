@@ -12,6 +12,7 @@ public class UIRefs : MonoBehaviour
     [SerializeField] Menu _pauseMenu;
     [SerializeField] MonoBehaviour _toolkitShotcuts;
     [SerializeField] UIDocument _bottomBar;
+    [SerializeField] UIDocument _topBar;
 
     [SerializeField] SaveDialog _saveDialog;
     [SerializeReference] MonoBehaviour _loadMenu;
@@ -22,8 +23,10 @@ public class UIRefs : MonoBehaviour
     public static FullscreenWindow Quests => instance._quests;
     public static Menu PauseMenu => instance._pauseMenu;
     public static VisualElement BottomBar => instance._bottomBar.rootVisualElement[0];
-    public static UIDocument TimeDisplay => instance._bottomBar;
+    public static UIDocument TopBar => instance._topBar;
+
     public static IToolkitController ToolkitShortcuts => instance._toolkitShotcuts.GetComponent<IToolkitController>();
+
 
     public static SaveDialog SaveDialog => instance._saveDialog;
     public static MonoBehaviour LoadMenu => instance._loadMenu;

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Hierarchy;
 using UnityEngine;
 
 /// <summary>Basic highlight color(for selection).</summary>
@@ -245,7 +244,7 @@ public static class MyGrid
     public static GridSave Save(int i)
     {
         GroundLevel level = levels[i];
-        GridSave gridSave = new(level.height, level.width, level.ConnectingElevator ? level.ConnectingElevator.id :  -1);
+        GridSave gridSave = new(level.height, level.width, level.ConnectingElevator ? level.ConnectingElevator.id : -1);
         GridPos gp = new();
         for (int x = 0; x < gridSave.height; x++)
         {

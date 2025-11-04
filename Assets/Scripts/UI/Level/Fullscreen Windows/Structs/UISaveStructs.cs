@@ -3,8 +3,6 @@ using ResearchUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
-using TradeData.Locations;
 
 
 [Serializable]
@@ -25,7 +23,7 @@ public class TradeSave
         statLevels = trading.colonyLocation.stats.Select(q => q.CurrentState).ToList();
         tradeLocations = trading.tradeLocations.Select(q => new TradeLocationSave(q)).ToList();
         convoys = trading.GetConvoys().Select(q => new TradeConvoySave(q)).ToList();
-        outposts = trading.outposts.Select(q=> new OutpostSave(q)).ToList();
+        outposts = trading.outposts.Select(q => new OutpostSave(q)).ToList();
         money = MyRes.Money;
     }
     public TradeSave()
@@ -99,7 +97,7 @@ public class TradeConvoySave
     {
         firstPhase = convoy.firstPhase;
         tradeLocation = convoy.tradeLocation;
-        
+
         currentprogress = convoy.currentprogress;
         maxprogress = convoy.maxprogress;
 

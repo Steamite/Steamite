@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 /// <summary>Handles different control states for <see cref="GridTiles"/>.</summary>
@@ -325,7 +324,7 @@ public class GridTiles : MonoBehaviour
                 }
                 break;
             case ControlMode.Build:
-                
+
                 break;
         }
     }
@@ -344,7 +343,7 @@ public class GridTiles : MonoBehaviour
             case ControlMode.Build:
                 if (blueprintPrefab is Pipe && (blueprintInstance == null || blueprintInstance.CanPlace()))
                 {
-                    if(drag == false)
+                    if (drag == false)
                     {
                         MyGrid.GetOverlay().MovePlacePipeOverlay(activePos, true);
                         drag = true;
@@ -451,9 +450,9 @@ public class GridTiles : MonoBehaviour
         Transform pipes = MyGrid.FindLevelPipes(startPos.y / 2);
         List<GridPos> path = tempMarkedTiles.Select(q => q.GetPos()).ToList();
         int i = path.IndexOf(activePos);
-        if(i == -1)
+        if (i == -1)
         {
-            if(MyGrid.GetGridItem(activePos, true) == null && MyGrid.GetGridItem(activePos) is Road)
+            if (MyGrid.GetGridItem(activePos, true) == null && MyGrid.GetGridItem(activePos) is Road)
             {
                 GridPos lastPos = path[^1];
                 if (Math.Abs(lastPos.x - activePos.x) + Math.Abs(lastPos.z - activePos.z) > 1)
@@ -461,7 +460,7 @@ public class GridTiles : MonoBehaviour
                     List<GridPos> partPath = PathFinder.FindPath(lastPos, activePos, typeof(Road));
                     foreach (var tile in partPath)
                     {
-                        if(MyGrid.GetGridItem(tile, true) == null)
+                        if (MyGrid.GetGridItem(tile, true) == null)
                         {
                             AddPipe(tile, pipes);
                         }
@@ -470,7 +469,7 @@ public class GridTiles : MonoBehaviour
                             int j = path.IndexOf(tile);
                             if (j > -1)
                             {
-                                for (int k = tempMarkedTiles.Count-1; k > j; k--)
+                                for (int k = tempMarkedTiles.Count - 1; k > j; k--)
                                 {
                                     (tempMarkedTiles[k] as Building).DestoyBuilding();
                                     tempMarkedTiles.RemoveAt(k);
@@ -487,7 +486,7 @@ public class GridTiles : MonoBehaviour
         }
         else
         {
-            for(int j = tempMarkedTiles.Count-1; j > i; j--)
+            for (int j = tempMarkedTiles.Count - 1; j > i; j--)
             {
                 (tempMarkedTiles[j] as Building).DestoyBuilding();
                 tempMarkedTiles.RemoveAt(j);
@@ -507,7 +506,7 @@ public class GridTiles : MonoBehaviour
 
     public void MarkPipeCheckpoint()
     {
-        if(activeControl == ControlMode.Build && drag == true && tempMarkedTiles.Count > 1)
+        if (activeControl == ControlMode.Build && drag == true && tempMarkedTiles.Count > 1)
         {
             markedTiles.Add(tempMarkedTiles.ToList());
             tempMarkedTiles.Clear();
@@ -542,13 +541,13 @@ public class GridTiles : MonoBehaviour
     /// </summary>
     public void BreakAction(bool force = false)
     {
-        if(force == false && markedTiles.Count > 0)
+        if (force == false && markedTiles.Count > 0)
         {
             foreach (Building o in tempMarkedTiles.Skip(1))
             {
                 o.DestoyBuilding();
             }
-            MyGrid.GetOverlay().RemoveCheckPointTile(markedTiles.Count+1);
+            MyGrid.GetOverlay().RemoveCheckPointTile(markedTiles.Count + 1);
             tempMarkedTiles = markedTiles.Last();
             markedTiles.RemoveAt(markedTiles.Count - 1);
             SceneRefs.CameraSceneMover.MoveToPosition(tempMarkedTiles.Last().GetPos(), true);
@@ -667,7 +666,7 @@ public class GridTiles : MonoBehaviour
                 case ControlMode.Build:
                     cur = default;
                     vec = Vector2.zero;
-                    if(blueprintPrefab is Pipe)
+                    if (blueprintPrefab is Pipe)
                         SceneRefs.CameraSceneMover.SetRaycastMask(pipeMask);
                     else
                         SceneRefs.CameraSceneMover.SetRaycastMask(buildingMask);

@@ -1,6 +1,4 @@
 using AbstractControls;
-using TradeWindowElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 public partial class OutpostButton : CustomRadioButton
@@ -17,7 +15,7 @@ public partial class OutpostButton : CustomRadioButton
         Add(rotator);
     }
 
-    public OutpostButton(CustomRadioButtonGroup group, int i) 
+    public OutpostButton(CustomRadioButtonGroup group, int i)
         : base("location-button", i, group)
     {
         rotator = new();

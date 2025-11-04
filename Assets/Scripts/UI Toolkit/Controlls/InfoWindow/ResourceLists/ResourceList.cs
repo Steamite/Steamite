@@ -2,7 +2,6 @@ using Outposts;
 using System;
 using System.Collections.Generic;
 using Unity.Properties;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 
@@ -85,7 +84,7 @@ namespace InfoWindowElements
         #endregion
 
         #region Constructors
-        public ResourceList() 
+        public ResourceList()
         {
             Create();
             virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
@@ -128,7 +127,7 @@ namespace InfoWindowElements
         /// <param name="i">Index of the element.</param>
         protected virtual void BindItem(VisualElement el, int i)
         {
-            
+
             el.RemoveFromClassList("unity-collection-view__item");
 
             (el as ResourceTextIcon).SetTextIcon(ConvertString((UIResource)itemsSource[i]), ((UIResource)itemsSource[i]).type);
@@ -191,7 +190,7 @@ namespace InfoWindowElements
                     SetBinding("resources", binding);
                     dataSource = data;
                     ((IUpdatable)data).UIUpdate(binding.dataSourcePath.ToString());
-                    (hierarchy.ElementAt(0) as ScrollView).verticalScrollerVisibility = ScrollerVisibility.Hidden;
+                    (hierarchy.ElementAt(1) as ScrollView).verticalScrollerVisibility = ScrollerVisibility.Hidden;
                     showEmpty = true;
                     break;
                 case Vein:

@@ -9,7 +9,7 @@
             <engine:Label text="Research Tower" name="Header" style="-unity-text-align: middle-center; width: 85%; height: 100%; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 45px; letter-spacing: 0; white-space: pre-wrap; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; display: none;" />
             <engine:Button icon-image="project://database/Assets/Sprites/Icons/Info%20window/Cancel.png?fileID=2800000&amp;guid=a038df6f8c235ab42ac4da953bbda40d&amp;type=3#Cancel" name="Close" class="close-button" />
         </engine:VisualElement>
-        <engine:VisualElement name="Body" style="flex-grow: 1; justify-content: flex-start; -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/fonts/OpenSans/OpenSans-Bold&apos;); display: flex;" />
+        <engine:VisualElement name="Body" style="flex-grow: 1; justify-content: flex-start; -unity-font-definition: resource(&apos;Fonts &amp; Materials/custom fonts/fonts/OpenSans/OpenSans-Bold&apos;); display: flex; flex-direction: row;" />
     </engine:VisualElement>
     <engine:VisualElement name="Second-Window" class="info-window" style="flex-grow: 1; right: 27%; position: absolute; margin-right: 50px; bottom: auto; top: 40%; width: auto; height: auto; border-bottom-width: 5px; border-right-width: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; padding-top: 0; padding-bottom: 10px; padding-left: 0; padding-right: 0; display: none;">
         <engine:VisualElement name="Bar" style="flex-direction: row; height: 65px;">

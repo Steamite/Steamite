@@ -1,4 +1,3 @@
-using System;
 using Unity.Properties;
 
 public abstract class TileSource : ClickableObject

@@ -1,6 +1,5 @@
 using AbstractControls;
 using Outposts;
-using System;
 using System.Collections.Generic;
 using TradeData.Locations;
 using UnityEngine;
@@ -118,7 +117,7 @@ namespace TradeWindowElements
                 if (index == -1)
                 {
                     location = UIRefs.TradingWindow.colonyLocation;
-                    locationButton = new (location.pos.ToVecUI(), 0, locationGroup);
+                    locationButton = new(location.pos.ToVecUI(), 0, locationGroup);
                     locationButton.AddToClassList("colony-button");
                 }
                 else
@@ -128,7 +127,7 @@ namespace TradeWindowElements
                         location.pos.ToVecUI(),
                         index + 1,
                         (Slider)sliderGroup.ElementAt(index).ElementAt(0),
-                        UIRefs.TradingWindow.colonyLocation.pos.ToVecUI(), 
+                        UIRefs.TradingWindow.colonyLocation.pos.ToVecUI(),
                         locationGroup);
                 }
                 locationButton.RegisterCallback<MouseEnterEvent>(
@@ -175,7 +174,7 @@ namespace TradeWindowElements
 
         public void EnableOutpost(int i)
         {
-            outpostButtons[i].enabledSelf = true; 
+            outpostButtons[i].enabledSelf = true;
         }
 
         #region Updates

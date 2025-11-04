@@ -1,16 +1,9 @@
-
-using EditorWindows.Windows;
 using System;
-using System.Configuration;
-using System.IO;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.AddressableAssets;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.LightingExplorerTableColumn;
-
 public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWrapper>
 {
     ColorField colorField;
@@ -164,7 +157,7 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
     private void AssetChange(ChangeEvent<UnityEngine.Object> ev)
     {
         int i = ev.target.GetRowIndex();
-        if (holder.Categories.SelectMany(q => q.Objects).Select(q=> q.data).Contains(ev.newValue) == false)
+        if (holder.Categories.SelectMany(q => q.Objects).Select(q => q.data).Contains(ev.newValue) == false)
         {
             ((ResourceWrapper)dataGrid.itemsSource[i]).data = ev.newValue as ResourceType;
             ((ResourceWrapper)dataGrid.itemsSource[i]).Name = (ev.newValue as ResourceType)?.Name;

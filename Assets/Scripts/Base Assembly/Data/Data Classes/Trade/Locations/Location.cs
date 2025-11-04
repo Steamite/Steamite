@@ -8,7 +8,8 @@ namespace TradeData.Locations
     public abstract class Location : INameChangable
     {
         /// <summary>Location display name.</summary>
-        [Header("Location")][SerializeField]
+        [Header("Location")]
+        [SerializeField]
         [JsonProperty]
         string name;
         /// <summary>Location world position.</summary>

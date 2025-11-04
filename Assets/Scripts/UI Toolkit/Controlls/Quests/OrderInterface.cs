@@ -8,13 +8,13 @@ public partial class OrderInterface : Tab, IUIElement
     readonly VisualElement container;
     readonly Label header;
     readonly ProgressBar bar;
-    
+
     readonly Label rewardLabel;
     readonly Label penaltyLabel;
-    
+
     readonly DoubleResList cost;
     readonly Button button;
-    
+
 
     readonly OrderSelectionList orderSelection;
 
@@ -33,7 +33,7 @@ public partial class OrderInterface : Tab, IUIElement
         container.Add(header = new("Header"));
         header.AddToClassList("order-title");
 
-        container.Add(bar = new() { title = "xx D xx H"});
+        container.Add(bar = new() { title = "xx D xx H" });
         bar.AddToClassList("order-bar");
         bar.value = 50;
         bar[0][0].AddToClassList("order-bar-background");
@@ -48,7 +48,7 @@ public partial class OrderInterface : Tab, IUIElement
         container.Add(cost = new());
         cost.AddToClassList("order-cost");
 
-        container.Add(button = new() { name = "Button"});
+        container.Add(button = new() { name = "Button" });
         button.AddToClassList("order-button");
         button.text = "Button";
 
@@ -71,9 +71,9 @@ public partial class OrderInterface : Tab, IUIElement
         button.clicked -= OrderFinish;
         orderController = data as OrderController;
         order = orderController.CurrentOrder;
-        if(order != null)
+        if (order != null)
         {
-            if(order.state == QuestState.Active)
+            if (order.state == QuestState.Active)
             {
                 container.style.display = DisplayStyle.Flex;
                 orderSelection.style.display = DisplayStyle.None;

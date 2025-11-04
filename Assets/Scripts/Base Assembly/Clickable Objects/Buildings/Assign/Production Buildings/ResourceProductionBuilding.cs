@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 
@@ -101,7 +100,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     {
         base.Take(h, transferPerTick);
 
-        if (localRes.requests.Count == 0) 
+        if (localRes.requests.Count == 0)
         {
             ProdStates.requestedPickup = false;
             ProdStates.space = ResourceYield.Sum() <= localRes.FreeSpace;

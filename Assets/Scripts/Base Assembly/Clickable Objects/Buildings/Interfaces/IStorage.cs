@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 /// <summary>
 /// Serves as a store house for the colony.<br/>
 /// Each storage should have all resource types in the <see cref="StorageObject.localRes"/>
@@ -25,7 +23,7 @@ public interface IStorage
         ulong mask = CanStoreMask;
         while (mask != 0)
         {
-            if((mask & 1) == 1)
+            if ((mask & 1) == 1)
             {
                 LocalResources.types.Add(ResFluidTypes.GetResByIndex(i));
                 LocalResources.ammounts.Add(ammount);

@@ -1,7 +1,5 @@
-using System;
 using Unity.Properties;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Water : TileSource
 {
@@ -10,8 +8,8 @@ public class Water : TileSource
     public override GridPos GetPos()
     {
         return new(
-            transform.position.x, 
-            (transform.position.y - ClickableObjectFactory.ROAD_OFFSET) / ClickableObjectFactory.LEVEL_HEIGHT, 
+            transform.position.x,
+            (transform.position.y - ClickableObjectFactory.ROAD_OFFSET) / ClickableObjectFactory.LEVEL_HEIGHT,
             transform.position.z);
     }
 

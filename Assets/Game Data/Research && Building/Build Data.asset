@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Build Data
   m_EditorClassIdentifier: 
   Categories:
-  - Name: Unbuildable
+  - id: 1
+    Name: Unbuildable
     Objects:
     - Name: 
       id: 1122905122
@@ -32,7 +33,8 @@ MonoBehaviour:
       b: {fileID: 3249735581231611369, guid: 74dfacf7662e6ee439cfa91a20f4b354, type: 3}
       preview: {fileID: 21300000, guid: 38087adf0506ee74a83573a1ece97ced, type: 3}
     Icon: {fileID: 5923138177525885446, guid: e9d58580ef70b7744addd1ff255f07aa, type: 3}
-  - Name: Production
+  - id: 2
+    Name: Production
     Objects:
     - Name: 
       id: 1472558132
@@ -47,7 +49,8 @@ MonoBehaviour:
       b: {fileID: -8095187260356523125, guid: 2ffa8c7c60840cf40ac52e767bf304b8, type: 3}
       preview: {fileID: 21300000, guid: f718799bf6a46be46a04d16c3651babf, type: 3}
     Icon: {fileID: 2800000, guid: 31a2fc60fcb027a45869f7484256409a, type: 3}
-  - Name: Population
+  - id: 3
+    Name: Population
     Objects:
     - Name: 
       id: 1580670160
@@ -58,7 +61,8 @@ MonoBehaviour:
       b: {fileID: 3899939243742089161, guid: 47fed3082c867844ea963e9a17d26576, type: 3}
       preview: {fileID: 21300000, guid: 729a493191982dd44beeec1170baec64, type: 3}
     Icon: {fileID: 2800000, guid: ebd657dbff7382b49ac208b65a2fc976, type: 3}
-  - Name: Fluids
+  - id: 4
+    Name: Fluids
     Objects:
     - Name: 
       id: 1082678288

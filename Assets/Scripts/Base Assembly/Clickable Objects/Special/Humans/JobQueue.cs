@@ -21,7 +21,7 @@ public class JobQueue : MonoBehaviour
     [Header("")] public List<IStorage> storages = new();
     [ReadOnly(true)] public List<MonoBehaviour> Storages => storages.Cast<MonoBehaviour>().ToList();
     /// <summary>Job priority</summary>
-    [HideInInspector]public List<JobState> priority;
+    [HideInInspector] public List<JobState> priority;
 
     /// <summary>
     /// Registers new job.

@@ -1,12 +1,7 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.Analytics.IAnalytic;
 
 [UxmlElement]
 public partial class RecipeCell : ListView, IUIElement
@@ -14,9 +9,8 @@ public partial class RecipeCell : ListView, IUIElement
     Object data;
     List<DataAssign> list;
     ProductionRecipeHolder holder;
-    public RecipeCell(Object _data)
+    public RecipeCell()
     {
-        data = _data;
         makeItem = () => new DropdownField();
         holder = AssetDatabase.LoadAssetAtPath<ProductionRecipeHolder>(ProductionRecipeHolder.PATH);
         bindItem = (el, i) =>
@@ -34,14 +28,13 @@ public partial class RecipeCell : ListView, IUIElement
         onAdd = (_list) =>
         {
             list.Add(new DataAssign(-1, -1));
-            EditorUtility.SetDirty(data);
+            EditorUtility.SetDirty(data as Object);
         };
         allowAdd = true;
         allowRemove = true;
         showAddRemoveFooter = true;
     }
 
-    public RecipeCell() { }
 
     private void OnChange(ChangeEvent<string> ev)
     {
@@ -50,8 +43,9 @@ public partial class RecipeCell : ListView, IUIElement
             list[i] = new(-1, -1);
         else
             list[i] = holder.GetSaveIndexByName(ev.newValue);
-        EditorUtility.SetDirty(data);
+        EditorUtility.SetDirty(userData as Object);
     }
+
 
     /// <summary>
     /// 
@@ -59,7 +53,7 @@ public partial class RecipeCell : ListView, IUIElement
     /// <param name="data">needs to be List(DataAssign)</param>
     public void Open(object data)
     {
-        if(data == null)
+        if (data == null)
         {
             style.display = DisplayStyle.None;
         }

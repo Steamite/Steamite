@@ -1,5 +1,4 @@
 using ResearchUI;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 [UxmlElement]

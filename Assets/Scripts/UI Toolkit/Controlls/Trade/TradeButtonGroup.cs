@@ -1,5 +1,4 @@
 ﻿using AbstractControls;
-using System.Reflection.Emit;
 using UnityEngine.UIElements;
 
 namespace TradeWindowElements
@@ -66,12 +65,12 @@ namespace TradeWindowElements
             object inspectedObject;
             if (index == -1)
                 return;
-            if(index == 0)
+            if (index == 0)
             {
                 inspectedObject = colonyView.Open();
                 prevView = ViewType.Colony;
             }
-            else if(index <= tradeLocationCount)
+            else if (index <= tradeLocationCount)
             {
                 inspectedObject = tradeView.Open(index - 1);
                 prevView = ViewType.Trade;

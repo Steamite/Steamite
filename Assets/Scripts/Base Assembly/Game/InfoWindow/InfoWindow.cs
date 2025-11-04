@@ -134,7 +134,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         if (hide)
             window.style.display = DisplayStyle.None;
         windowBody.Clear();
-        
+
         secondWindow.style.display = DisplayStyle.None;
         secondBody.Clear();
 
@@ -259,7 +259,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         context.context.SetBinding(context.bindingId, binding);
         BindingResult res;
         context.context.TryGetLastBindingToUIResult(context.bindingId, out res);
-        if(res.status == BindingStatus.Failure)
+        if (res.status == BindingStatus.Failure)
             Debug.Log(res.message);
         context.context.schedule.Execute(() =>
         {

@@ -1,5 +1,4 @@
 using AbstractControls;
-using System.Collections.Generic;
 using UnityEngine.UIElements;
 
 namespace RadioGroups

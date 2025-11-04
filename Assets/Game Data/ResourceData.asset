@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: ResourceData
   m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Data.Scriptable_Objects.ResourceData
   Categories:
-  - Name: Hidden
+  - id: 1
+    Name: Hidden
     Objects:
     - Name: None
       id: 960019026
@@ -23,7 +24,8 @@ MonoBehaviour:
       data: {fileID: 11400000, guid: c1f62f9e2918d7e44adacadc45cfec2e, type: 2}
     Icon: {fileID: 0}
     color: {r: 0.8867924, g: 0.16784933, b: 0.0292809, a: 1}
-  - Name: Ores
+  - id: 2
+    Name: Ores
     Objects:
     - Name: Magnetite
       id: 1523384999
@@ -59,8 +61,9 @@ MonoBehaviour:
       id: 1757689281
       data: {fileID: 11400000, guid: 4ea054a86f63a0347b8df6c4c567b716, type: 2}
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - Name: Alloys
+    color: {r: 0, g: 0, b: 0, a: 1}
+  - id: 3
+    Name: Alloys
     Objects:
     - Name: Brass
       id: 313979134
@@ -78,8 +81,9 @@ MonoBehaviour:
       id: 288977939
       data: {fileID: 11400000, guid: 9ac8915829687d440ae620920a3cb94e, type: 2}
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - Name: Building Materials
+    color: {r: 0.33962262, g: 0.33962262, b: 0.33962262, a: 1}
+  - id: 4
+    Name: Building Materials
     Objects:
     - Name: Glass
       id: 515236953
@@ -94,8 +98,9 @@ MonoBehaviour:
       id: 394545281
       data: {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - Name: Food
+    color: {r: 0.3301887, g: 0.3037113, b: 0.3037113, a: 1}
+  - id: 5
+    Name: Food
     Objects:
     - Name: Meat
       id: 639822093
@@ -104,8 +109,9 @@ MonoBehaviour:
       id: 1295931650
       data: {fileID: 11400000, guid: 0a6313d780b942247a9feb75238dcfbc, type: 2}
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - Name: Basic parts
+    color: {r: 0.34765866, g: 0.6792453, b: 0.28515485, a: 1}
+  - id: 6
+    Name: Basic parts
     Objects:
     - Name: Bolts
       id: 959130990
@@ -126,8 +132,9 @@ MonoBehaviour:
       id: 467632481
       data: {fileID: 11400000, guid: 2e6ab3eb67a50cd489ed9f4797d756ba, type: 2}
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - Name: Advanced Parts
+    color: {r: 0.8962264, g: 0.42465988, b: 0.04650232, a: 1}
+  - id: 7
+    Name: Advanced Parts
     Objects:
     - Name: Clocks
       id: 1822603645
@@ -142,8 +149,9 @@ MonoBehaviour:
       id: 956024362
       data: {fileID: 11400000, guid: 0225af04b98e951408452b14f0aab218, type: 2}
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - Name: Human Stuff
+    color: {r: 0.34919012, g: 0.36590713, b: 0.5566038, a: 1}
+  - id: 8
+    Name: Human Stuff
     Objects:
     - Name: Clothes
       id: 1097593105
@@ -152,8 +160,9 @@ MonoBehaviour:
       id: 1173801358
       data: {fileID: 11400000, guid: ac2f30fb838ec384fb07c52c3f8f6aa8, type: 2}
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - Name: Fluids
+    color: {r: 0.3018868, g: 0.20447423, b: 0.09540761, a: 1}
+  - id: 9
+    Name: Fluids
     Objects:
     - Name: Water
       id: 786902257
@@ -162,4 +171,4 @@ MonoBehaviour:
       id: 1221293458
       data: {fileID: 11400000, guid: f8a2946e5edf5df46ae20f11393cd418, type: 2}
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0.09077963, g: 0.092922464, b: 0.3773585, a: 1}

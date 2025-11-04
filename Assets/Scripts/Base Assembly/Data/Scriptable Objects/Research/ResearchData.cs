@@ -106,7 +106,7 @@ namespace ResearchUI
             Name = node.Name;
             currentTime = node.currentTime;
             researchTime = node.researchTime;
-            objectConnection = new(objectConnection.categoryIndex, objectConnection.objectId);
+            objectConnection = new(objectConnection.categoryId, objectConnection.objectId);
             researched = node.researched;
             unlockedBy = node.unlockedBy;
             unlocks = node.unlocks;
@@ -289,5 +289,6 @@ namespace ResearchUI
     public class ResearchData : DataHolder<ResearchCategory, ResearchNode>
     {
         public new const string PATH = "Assets/Game Data/Research && Building/Research Data.asset";
+
     }
 }

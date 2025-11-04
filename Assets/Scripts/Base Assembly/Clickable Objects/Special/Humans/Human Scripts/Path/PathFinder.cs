@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -64,7 +63,7 @@ public static class PathFinder
                 if (MyGrid.GetGridItem(_start) != b && plan.foundNormaly)
                     plan.path.Add(BuildingStep(plan.path.Count > 0 ? plan.path[^1] : _start, b.gameObject, 1));
             }
-            else if(interest is Rock rock)
+            else if (interest is Rock rock)
             {
                 if (rock)
                 {
@@ -187,7 +186,7 @@ public static class PathFinder
             LookForPath(startPos, null, new(activePos), p, enterObjectType);
             if (p.path.Count == 0)
                 p.path = null;
-            else if(MyGrid.GetGridItem(p.path[p.path.Count - 1]).GetType() != enterObjectType)
+            else if (MyGrid.GetGridItem(p.path[p.path.Count - 1]).GetType() != enterObjectType)
                 p.path.RemoveAt(p.path.Count - 1);
         }
         else

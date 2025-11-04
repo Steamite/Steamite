@@ -154,8 +154,8 @@ ResearchInfo {
 .info-window {
     flex-grow: 1;
     position: absolute;
-    height: 60%;
-    width: 27%;
+    height: 35%;
+    width: 50%;
     right: 0;
     top: auto;
     border-top-width: 5px;

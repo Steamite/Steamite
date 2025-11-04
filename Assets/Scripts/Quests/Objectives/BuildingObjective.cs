@@ -1,5 +1,4 @@
 using Objectives;
-using System;
 using UnityEngine;
 
 public class BuildingObjective : Objective
@@ -17,7 +16,7 @@ public class BuildingObjective : Objective
     public override bool UpdateProgress(object data, QuestController controller)
     {
         bool res = false;
-        if(data.GetType().Name == _buildingTypeName)
+        if (data.GetType().Name == _buildingTypeName)
         {
             res = base.UpdateProgress(data, controller);
             if (res)

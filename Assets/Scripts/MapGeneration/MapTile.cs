@@ -21,7 +21,7 @@ public class MapTile
         resource = new Resource(new() { _minable.resource }, new() { _resAmmount });
         hardness = _minable.hardness;
         color = _minable.color;
-        name =  Enum.GetName(typeof(ResourceType), _minable.resource);//minable.resource;
+        name = Enum.GetName(typeof(ResourceType), _minable.resource);//minable.resource;
     }
 
     public MapTile()

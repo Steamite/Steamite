@@ -39,7 +39,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
     #region Entry managment
     protected virtual void AddEntry(BaseListView _, bool add = true)
     {
-        if(add)
+        if (add)
             selectedCategory.Objects.Add((DATA_TYPE)Activator.CreateInstance(typeof(DATA_TYPE), holder.UniqueID()));
         dataGrid.RefreshItems();
         EditorUtility.SetDirty(holder);

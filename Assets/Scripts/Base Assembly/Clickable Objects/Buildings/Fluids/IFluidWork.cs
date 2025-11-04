@@ -62,7 +62,7 @@ public interface IFluidWork
     {
         if (StoredFluids.Contains(fluid))
         {
-            if(immediatelyUse)
+            if (immediatelyUse)
                 StoredFluids.Manage(fluid, false);
             return true;
         }
@@ -82,7 +82,7 @@ public interface IFluidWork
             ((IUpdatable)storage).UIUpdate(nameof(StoredFluids));
             if (toTransfer.types.Count == 0)
             {
-                if(immediatelyUse == false)
+                if (immediatelyUse == false)
                 {
                     StoredFluids.Manage(fluid, true);
                     ((IUpdatable)this).UIUpdate(nameof(StoredFluids));
@@ -91,7 +91,7 @@ public interface IFluidWork
             }
         }
 
-        
+
         for (int i = 0; i < fluid.types.Count; i++)
         {
             int j = toTransfer.types.IndexOf(fluid.types[i]);
@@ -112,7 +112,7 @@ public interface IFluidWork
         {
             StoredFluids.Manage(fluid, true);
             ((IUpdatable)this).UIUpdate(nameof(StoredFluids));
-            if(StoredFluids.HasSpace(fluid))
+            if (StoredFluids.HasSpace(fluid))
                 return true;
         }
 
@@ -122,7 +122,7 @@ public interface IFluidWork
         {
             build.StoredFluids.Manage(fluid, true);
             ((IUpdatable)build).UIUpdate(nameof(StoredFluids));
-            if (build.StoredFluids.HasSpace(fluid) 
+            if (build.StoredFluids.HasSpace(fluid)
                 || buildings.FirstOrDefault(q => q.StoredFluids.HasSpace(fluid)) != null)
                 return true;
         }
@@ -160,6 +160,6 @@ public interface IFluidWork
 
     public bool HasSpace(Fluid fluid)
     {
-        return AttachedPipes.Select(q => q.network).Distinct().FirstOrDefault(q=> q.HasSpace(fluid)) != null;
+        return AttachedPipes.Select(q => q.network).Distinct().FirstOrDefault(q => q.HasSpace(fluid)) != null;
     }
 }

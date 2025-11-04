@@ -1,6 +1,4 @@
-using JetBrains.Annotations;
 using Objectives;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,11 +13,11 @@ public class QuestControllerSave
 
     public QuestControllerSave() { }
 
-    public QuestControllerSave(QuestController controller) 
+    public QuestControllerSave(QuestController controller)
     {
         finishedQuests = controller.finishedQuests.Select(q => new QuestSave(q)).ToList();
         activeQuests = controller.activeQuests.Select(q => new QuestSave(q)).ToList();
-        order = new (controller.orderController.CurrentOrder);
+        order = new(controller.orderController.CurrentOrder);
         trust = controller.Trust;
         finishedOrdersCount = controller.orderController.finishedOrdersCount;
         orderChoiceSaves = controller.orderController.orderChoice.Select(q => new OrderChoiceSave(q)).ToList();
@@ -47,7 +45,7 @@ public class OrderChoiceSave
 
 public class QuestSave
 {
-    public int questId;
+    public int objectId;
     public List<int> currentProgress;
     public QuestState state;
     public int timeToFail;
@@ -55,7 +53,7 @@ public class QuestSave
     public QuestSave() { }
     public QuestSave(Quest quest)
     {
-        questId = quest.id;
+        objectId = quest.id;
         currentProgress = quest.objectives.Select(q => q.CurrentProgress).ToList();
         state = quest.state;
         timeToFail = quest.TimeToFail;

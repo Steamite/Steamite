@@ -1,11 +1,7 @@
 ﻿using AbstractControls;
 using Assets.Scripts.UI_Toolkit.Controlls.Universal;
-using InfoWindowElements;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine.UIElements;
 
 [UxmlElement]
@@ -16,7 +12,7 @@ public partial class ResourceOverview : CustomRadioButtonGroup, IUIElement
     ResourceOverviewList resList;
     public ResourceOverview() : base()
     {
-        
+
     }
 
     void OpenCategory(int index)
@@ -27,9 +23,7 @@ public partial class ResourceOverview : CustomRadioButtonGroup, IUIElement
         {
             resList.style.display = DisplayStyle.Flex;
             IResolvedStyle resStyle = buttons[index].resolvedStyle;
-            resList.style.left = (resStyle.left + resStyle.width / 2) - resList.width/2;
-            resList.style.top = resolvedStyle.top + resolvedStyle.height + 10;
-            resList.ChangeCategory(index, display);
+            resList.ChangeCategory(index, display, resStyle);
         }
     }
 

@@ -90,7 +90,7 @@ public class FluidNetwork
         IEnumerable<Pipe> pipes = spliter.connectedPipes.Where(q => q != null).Select(q => q.connectedPipe);
 
         int count = pipes.Count();
-        if(count != 1)
+        if (count != 1)
         {
             foreach (var pipe in pipes)
             {

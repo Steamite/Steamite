@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class RockHider : MonoBehaviour
 {
@@ -24,7 +22,7 @@ public class RockHider : MonoBehaviour
                     material.EnableKeyword("_SPECULARHIGHLIGHTS_OFF");
                     break;
                 case 1:
-                    material.SetColor("_EmissionColor", new (1,1,1,1));
+                    material.SetColor("_EmissionColor", new(1, 1, 1, 1));
                     break;
                 case 2:
                     material.SetColor("_EmissionColor", new());

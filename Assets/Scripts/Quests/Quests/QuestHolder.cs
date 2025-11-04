@@ -1,7 +1,6 @@
 using Objectives;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,18 +13,6 @@ public enum QuestState
     Completed
 }
 
-[Serializable]
-public class QuestLink
-{
-    [SerializeField] public int categIndex;
-    [SerializeField] public int questId;
-    public QuestLink(int _categIndex, int _questId)
-    {
-        categIndex = _categIndex;
-        questId = _questId;
-    }
-
-}
 
 [Serializable]
 public class Quest : DataObject, IUpdatable
@@ -37,7 +24,7 @@ public class Quest : DataObject, IUpdatable
     [SerializeReference] public List<QuestReward> rewards = new();
     [SerializeReference] public List<QuestPenalty> penalties = new();
     [SerializeReference] public List<Objective> objectives = new();
-    [SerializeField] public List<QuestLink> nextQuests = new();
+    [SerializeField] public List<DataAssign> nextQuests = new();
 
 
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
@@ -45,7 +32,7 @@ public class Quest : DataObject, IUpdatable
     public virtual void Complete(bool success, object _controller)
     {
         QuestController questController = _controller as QuestController;
-        state = success ? QuestState.Completed: QuestState.Failed;
+        state = success ? QuestState.Completed : QuestState.Failed;
         if (success)
         {
             foreach (var reward in rewards)
@@ -64,10 +51,9 @@ public class Quest : DataObject, IUpdatable
         int i = 0;
         for (; i < nextQuests.Count; i++)
         {
-            questController.data.Categories[nextQuests[i].categIndex]
-                .Objects.FirstOrDefault(q => q.id == nextQuests[i].questId)?.Load(questController);
+            questController.data.GetObjectBySaveIndex(nextQuests[i])?.Load(questController);
         }
-        if(i == 0)
+        if (i == 0)
             questController.AddDummy();
     }
 
@@ -75,7 +61,7 @@ public class Quest : DataObject, IUpdatable
     public virtual void Load(object controller, QuestSave save = null)
     {
         QuestController questController = controller as QuestController;
-        if(save != null)
+        if (save != null)
         {
             timeToFail = save.timeToFail;
             if (save.state == QuestState.Active)
@@ -132,7 +118,7 @@ public class Quest : DataObject, IUpdatable
 
     public override bool Equals(object obj)
     {
-        if(obj is Quest quest)
+        if (obj is Quest quest)
         {
             return quest.id == id;
         }
@@ -201,9 +187,9 @@ public class Order : Quest
 
     public override void Load(object controller, QuestSave save = null)
     {
-        if(save != null)
+        if (save != null)
             state = save.state;
-        if(state == QuestState.Active)
+        if (state == QuestState.Active)
         {
             originalTimeToFail = TimeToFail;
             if (save != null)

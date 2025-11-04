@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -198,5 +197,5 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
             quests,
         };
         return inputActions;
-    } 
+    }
 }

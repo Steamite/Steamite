@@ -1,16 +1,12 @@
-using BuildingStats;
 using Objectives;
 using Orders;
-using ResearchUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.Analytics.IAnalytic;
 
 public class QuestRegister : DataGridWindow<QuestCategory, Quest>
 {
@@ -22,7 +18,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
     List<Type> rewardTypes;
     List<Type> penaltyTypes;
 
-    /// <summary>Opens the window, if it's already opened close it.</summary>
+    /// <summary>Opens the window, if it's alreopened close it.</summary>
     [MenuItem("Custom Editors/Building Quest Register %j", priority = 16)]
     public static void Open()
     {
@@ -62,10 +58,10 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
         {
             foreach (var nextQuest in item.nextQuests)
             {
-                if (takenQuests.ContainsKey(nextQuest.categIndex))
-                    takenQuests[nextQuest.categIndex].Add(nextQuest.questId);
+                if (takenQuests.ContainsKey(nextQuest.categoryId))
+                    takenQuests[nextQuest.categoryId].Add(nextQuest.objectId);
                 else
-                    takenQuests.Add(nextQuest.categIndex, new() { nextQuest.questId});
+                    takenQuests.Add(nextQuest.categoryId, new() { nextQuest.objectId });
             }
         }
         for (int i = 0; i < holder.Categories.Count; i++)
@@ -80,7 +76,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
                         category.availableObjects.Remove(item);
                 }
             }
-            
+
         }
     }/*
     protected override bool LoadCategData(int index)
@@ -126,12 +122,12 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
         {
             name = "type",
             title = "Type",
-            makeCell = () => 
+            makeCell = () =>
             {
                 NextQuestList list = new NextQuestList(holder as QuestHolder);
                 return list;
             },
-            
+
             bindCell = (el, i) =>
             {
                 NextQuestList list = el as NextQuestList;
@@ -177,7 +173,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
             },
             resizable = true,
             width = 600,
-            
+
         });
         dataGrid.columns.Add(new Column()
         {
