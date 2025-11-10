@@ -59,8 +59,10 @@ public partial class RecipeCell : ListView, IUIElement
         }
         else
         {
+            IResourceProduction prod = data as IResourceProduction;
+            this.data = prod as Object;
             style.display = DisplayStyle.Flex;
-            list = data as List<DataAssign>;
+            list = prod.RecipeAsssigment;// data as List<DataAssign>;
             itemsSource = list;
         }
     }

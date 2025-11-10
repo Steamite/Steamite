@@ -16,10 +16,10 @@
             </engine:VisualElement>
             <TimeButtons speed-states="0,1,2,3" current-state="2" name="Buttons" sprite="project://database/Assets/Resources/Icon/Pause.png?fileID=2800000&amp;guid=388d058ebff7c4844823b4c308f1488e&amp;type=3#Pause" />
         </engine:VisualElement>
-        <LevelButtons name="LevelButtons" style="flex-direction: row; max-width: 300px; position: absolute; flex-grow: 0; right: 0; top: 0;" />
+        <ResourceOverview name="Resources" style="flex-direction: row; align-self: stretch; padding-left: 0; margin-right: 10px; margin-left: 0; justify-content: space-between; position: absolute; right: 290px; max-width: 450px; min-width: 450px; height: 100%; align-items: center;" />
+        <LevelButtons name="LevelButtons" style="flex-direction: row; max-width: 275px; position: absolute; flex-grow: 0; right: 0; top: 0; min-width: 275px;" />
     </engine:VisualElement>
     <engine:VisualElement name="Money-Background" class="small-window" style="position: relative;">
         <engine:Label text="##### &lt;color=#FFD700&gt;£&lt;/color&gt;" name="Money-Value" class="money" />
     </engine:VisualElement>
-    <ResourceOverview name="Resources" style="flex-direction: column; max-width: 70px; align-self: flex-end; max-height: 50%; padding-left: 0; margin-right: 10px; margin-left: 0; min-width: 70px; justify-content: space-between;" />
 </engine:UXML>

@@ -1,26 +1,35 @@
 ﻿using InfoWindowElements;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Properties;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Assets.Scripts.UI_Toolkit.Controlls.Universal
 {
-    public partial class ResourceOverviewList : ResourceList
+    public partial class ResourceOverviewList : VisualElement, IUIElement
     {
-        [UxmlAttribute] int selectedCategory;
-        readonly public float width;
         readonly List<ResourceTypeCategory> categories;
-        int activeElems = 0;
+        List<ResourceType> types;
+        float scale;
         Label title;
+
+        List<ResourceTextIcon> icons;
+        [CreateProperty] public List<UIRes> res { get; set; }
+
+        VisualElement body;
+
 
         public ResourceOverviewList() : base() { }
         public ResourceOverviewList(List<ResourceTypeCategory> _categories, float _scale) : base()
         {
+            body = new();
+            body.AddToClassList("res-overview-group");
+
             scale = _scale;
-            width = 160 * scale + 20;
             categories = _categories;
-            style.maxWidth = width;
-            hierarchy.Insert(0, title = new()
+            body.Add(title = new()
             {
                 style =
                 {
@@ -31,48 +40,88 @@ namespace Assets.Scripts.UI_Toolkit.Controlls.Universal
                     whiteSpace = WhiteSpace.Normal
                 }
             });
-
+            VisualElement container = new();
+            container.AddToClassList("res-list-container");
+            body.Add(container);
+            Add(body);
         }
-
 
         public void ChangeCategory(int i, ResourceDisplay display, IResolvedStyle resStyle)
         {
-            selectedCategory = i;
-            itemsSource = ToUIRes(display.GlobalResources);
-            float size = 40 * activeElems;
-            style.minHeight = size;
+            types = categories[i].Objects.Select(q => q.data).ToList();
+            int activeElems;
+            InitToUI(display.GlobalResources, out activeElems);
+
             title.text = categories[i].Name;
-            if (resStyle.top + size < parent.resolvedStyle.height)
+            if (resStyle.left < parent.resolvedStyle.width)
             {
-                style.top = resStyle.top;
-                style.bottom = StyleKeyword.None;
+                style.left = resStyle.left;
+                style.right = StyleKeyword.None;
             }
             else
             {
-                style.bottom = 0;
-                style.top = StyleKeyword.None;
+                style.left = StyleKeyword.None;
+                style.right = 0;
             }
+            style.display = DisplayStyle.Flex;
         }
-        protected override VisualElement MakeItem()
+
+        public void Close()
         {
-            VisualElement element = new();
-            VisualElement el2 = base.MakeItem();
+            types = null;
+            style.display = DisplayStyle.None;
+        }
+        protected ResourceTextIcon MakeItem(ResourceType type, int ammount)
+        {
+            ResourceTextIcon el2 = new ResourceTextIcon(scale);
+            el2.SetTextIcon(ammount.ToString(), type);
             el2.style.marginTop = 5;
             el2.style.justifyContent = Justify.SpaceBetween;
-            element.Add(el2);
-            return element;
+            el2.style.flexGrow = 0;
+            el2.style.minWidth = 100;
+            el2.style.maxWidth = 100;
+            return el2;
         }
 
-        protected override void BindItem(VisualElement el, int i)
+        void InitToUI(Resource storage, out int count) 
         {
-            el.RemoveFromClassList("unity-collection-view__item");
-
-            (el[0] as ResourceTextIcon).SetTextIcon(ConvertString((UIResource)itemsSource[i]), ((UIResource)itemsSource[i]).type);
+            count = 0;
+            icons = new();
+            body[1].Clear();
+            for (int i = 0; i < storage.types.Count; i++)
+            {
+                if (types.Contains(storage.types[i]))
+                {
+                    count++;
+                    icons.Add(MakeItem(storage.types[i], storage.ammounts[i]));
+                    body[1].Add(icons[^1]);
+                }
+            }
         }
 
-        protected override List<UIResource> ToUIRes(Resource storage)
+        protected List<UIRes> ToUIRes(Resource storage)
         {
-            return base.ToUIRes(storage.FilterByType(categories[selectedCategory].Objects, out activeElems));
+            if (types == null)
+                return null;
+            int j = 0;
+            for (int i = 0; i < storage.types.Count; i++)
+            {
+                if (types.Contains(storage.types[i]))
+                {
+                    icons[j].SetText(storage.ammounts[i].ToString());
+                    j++;
+                }
+            }
+            return null;
+        }
+
+        public void Open(object data)
+        {
+            DataBinding binding = BindingUtil.CreateBinding(nameof(ResourceDisplay.GlobalResources));
+            binding.sourceToUiConverters.AddConverter((ref MoneyResource globalRes) => ToUIRes(globalRes));
+            SetBinding(nameof(res), binding);
+            dataSource = data;
+            //((IUpdatable)data).UIUpdate(binding.dataSourcePath.ToString());
         }
     }
 }

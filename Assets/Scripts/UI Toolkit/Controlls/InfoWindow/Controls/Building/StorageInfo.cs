@@ -1,3 +1,4 @@
+using AbstractControls;
 using System;
 using System.Collections.Generic;
 using Unity.Properties;
@@ -169,6 +170,11 @@ namespace InfoWindowElements
             VisualElement element = elemPref.CloneTree();
             StorageElem storageElem = new(element);
             var x = resources.Count - 1;
+            storageElem.icon.RegisterCallback<PointerEnterEvent>((ev) =>
+            {
+                ToolkitUtils.localMenu.UpdateContent(resources[x].type, (VisualElement)ev.target);
+            });
+            storageElem.icon.RegisterCallback<PointerLeaveEvent>((_) => ToolkitUtils.localMenu.Close());
             storageElem.canStore.Q<Button>("Store").RegisterCallback<ClickEvent>((_) => ToggleCanStore(true, x));
             storageElem.canStore.Q<Button>("Not-Store").RegisterCallback<ClickEvent>((_) => ToggleCanStore(false, x));
             try

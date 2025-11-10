@@ -193,11 +193,11 @@ public class GridTiles : MonoBehaviour
                             : ClickableObjectFactory.BUILD_OFFSET),
                         activePos.z + grid.z);
                     c = blueprintInstance.CanPlace() ? Color.blue : Color.red;
-                    HighLight(c, blueprintInstance.gameObject);
+                    blueprintInstance.Highlight(c);
                 }
                 return;
         }
-        HighLight(c, enterObject.gameObject);
+        enterObject.Highlight(c);
     }
 
     /// <summary>
@@ -225,7 +225,7 @@ public class GridTiles : MonoBehaviour
                     c += Color.red / 2;
                 else if (pipe)
                 {
-                    HighLight(c, pipe.gameObject);
+                    pipe.Highlight(c);
                     return;
                 }
 
@@ -254,7 +254,7 @@ public class GridTiles : MonoBehaviour
             case ControlMode.Build:
                 return;
         }
-        HighLight(c, exitObject.gameObject);
+        exitObject.Highlight(c);
     }
 
     /// <summary>
@@ -282,14 +282,14 @@ public class GridTiles : MonoBehaviour
                     Rock activeRock = clickedObject.GetComponent<Rock>();
                     if (activeRock && activeRock.toBeDug)
                         c = toBeDugColor;
-                    HighLight(c, clickedObject.gameObject);
+                    clickedObject.Highlight(c);
                     clickedObject.selected = false;
                 }
                 if (r && r.toBeDug) // rock to be dug
                     c = toBeDugColor + highlight * 2; // YELLOW + RED
                 else
                     c = highlight * 3; // WHITE
-                HighLight(c, activeObject.gameObject);
+                activeObject.Highlight(c);
 
                 // DEBUG_Binding Working entrypoint
                 // This happens when you click an object in the level.
@@ -310,7 +310,7 @@ public class GridTiles : MonoBehaviour
                         c = Color.red;
                     else
                         c = Color.red / 2;
-                    HighLight(c, b.gameObject);
+                    b.Highlight(c);
                 }
                 break;
             case ControlMode.Dig:
@@ -415,7 +415,7 @@ public class GridTiles : MonoBehaviour
                 Color c = new();
                 if (r.toBeDug)
                     c = (Color.yellow + Color.red) / 2;
-                HighLight(c, r.gameObject);
+                r.Highlight(c);
             }
         }
     }
@@ -437,7 +437,7 @@ public class GridTiles : MonoBehaviour
             {
                 filtered.Remove(g);
             }
-            HighLight(deselect ? (Color.red / 2) : toBeDugColor, g.gameObject);
+            g.Highlight(deselect ? (Color.red / 2) : toBeDugColor);
         }
         tempMarkedTiles = filtered;
     }
@@ -499,7 +499,7 @@ public class GridTiles : MonoBehaviour
         pipe.maximalProgress = pipe.CalculateMaxProgress();
         pipe.GetRenderComponents();
         pipe.ChangeRenderMode(true);
-        HighLight(pipe.CanPlace(false) && MyRes.CanAfford(pipe.Cost * (tempMarkedTiles.Count + 1 + markedTiles.SelectMany(q => q).Count())) ? Color.blue : Color.red, pipe.gameObject);
+        pipe.Highlight(pipe.CanPlace(false) && MyRes.CanAfford(pipe.Cost * (tempMarkedTiles.Count + 1 + markedTiles.SelectMany(q => q).Count())) ? Color.blue : Color.red);
         MyGrid.SetGridItem(pos, pipe, true);
         tempMarkedTiles.Add(pipe);
     }
@@ -518,21 +518,14 @@ public class GridTiles : MonoBehaviour
 
     #region Colors
     /// <summary>
-    /// HighLights all materials on toBeChanged to c.
+    /// Highlights all materials on toBeChanged to c.
     /// </summary>
     /// <param name="c"></param>
     /// <param name="toBeChanged"></param>
-    public void HighLight(Color c, GameObject toBeChanged)
+    /*public void Highlight(Color c, GameObject toBeChanged)
     {
-        foreach (Material material in
-            toBeChanged.GetComponentsInChildren<MeshRenderer>()
-            .Where(q => q).SelectMany(q => q.materials)
-            .Union(toBeChanged.GetComponentsInChildren<SkinnedMeshRenderer>()
-            .Where(q => q).SelectMany(q => q.materials)))
-        {
-            material.SetColor("_EmissionColor", c);
-        }
-    }
+        (toBeChanged.GetComponent<ClickableObject>()).Highlight(c);
+    }*/
     #endregion
 
     #region Control switching
@@ -614,7 +607,7 @@ public class GridTiles : MonoBehaviour
                 case ControlMode.Dig:
                     foreach (Rock r in tempMarkedTiles)
                     {
-                        HighLight(new(), r.gameObject);
+                        r.Highlight(new());
                     }
                     tempMarkedTiles = new();
                     startPos = null;
@@ -713,7 +706,7 @@ public class GridTiles : MonoBehaviour
 
         blueprintInstance.maximalProgress = blueprintInstance.CalculateMaxProgress();
         blueprintInstance.ChangeRenderMode(true);
-        HighLight(blueprintInstance.CanPlace() ? Color.blue : Color.red, blueprintInstance.gameObject);
+        blueprintInstance.Highlight(blueprintInstance.CanPlace() ? Color.blue : Color.red);
     }
 
     /// <summary>
@@ -731,7 +724,7 @@ public class GridTiles : MonoBehaviour
             {
                 toBeDug.RemoveAll(q => q == markTile);
                 markTile.toBeDug = false;
-                HighLight(new(), markTile.gameObject);
+                markTile.Highlight(new());
                 SceneRefs.JobQueue.CancelJob(JobState.Digging, markTile);
                 markTile.Assigned?.SetJob(JobState.Free);
             }

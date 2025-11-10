@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "ResourceData", menuName = "Resources/ResourceData")]
 public class ResourceData : DataHolder<ResourceTypeCategory, ResourceWrapper>

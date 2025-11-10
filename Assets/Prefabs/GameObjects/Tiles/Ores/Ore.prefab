@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8243330467784709925}
   - component: {fileID: -1300758535219116623}
   m_Layer: 10
-  m_Name: Coal
+  m_Name: Ore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3d93355836a1dbf439a00211e5ef7ead, type: 2}
+  - {fileID: -876546973899608171, guid: 7b613dda5d1296a45b2575d0d6486d1d, type: 3}
   - {fileID: 2100000, guid: 0930df6ecc353d34d8d6511a134ceda6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Coal
   id: -1
-  objectName: Coal
+  objectName: Ore
   rockYield:
     types:
     - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}

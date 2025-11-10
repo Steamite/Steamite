@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEditor;
@@ -38,7 +39,7 @@ public static class ResFluidTypes
     }
 
     static List<ResourceTypeCategory> fullRes;
-    static List<ResourceTypeCategory> FullRes
+    public static List<ResourceTypeCategory> FullRes
     {
         get
         {
@@ -97,10 +98,17 @@ public static class ResFluidTypes
         names.Add(None.Name);
         //#endif
         if (allowedCategories == null || allowedCategories.Count == 0)
-            names.AddRange(GetResNamesList());
+            foreach (var category in fullRes)
+            {
+                names.AddRange(category.Objects.Select(q => q.Name));
+                names.Add("");
+            }
         else
             foreach (int i in allowedCategories)
+            {
                 names.AddRange(FullRes[i].Objects.Select(q => q.Name));
+                names.Add("");
+            }
         return names;
     }
     public static List<ResourceType> GetResList()
@@ -129,4 +137,5 @@ public static class ResFluidTypes
 
     public static ResourceData GetData()
         => data;
+
 }

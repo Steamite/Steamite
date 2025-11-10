@@ -187,12 +187,16 @@ public class StorageBSave : BuildingSave
         constructed = true;
         isMain = true;
         int i = 1;
-        foreach (var item in ResFluidTypes.GetResList())
+        canStore = new();
+        foreach (var categ in ResFluidTypes.FullRes)
         {
-            resSave.types.Add(new(0, 0));
-            resSave.ammounts.Add(100);
-            canStore.Add(true);
-            i++;
+            foreach (var obj in categ.Objects)
+            {
+                resSave.types.Add(new(categ.id, obj.id));
+                resSave.ammounts.Add(100);
+                canStore.Add(true);
+                i++;
+            }
         }
     }
 }
@@ -214,6 +218,7 @@ public class ProductionBSave : AssignBSave
 {
     public float currentTime = 0;
     public ProductionStates ProdStates;
+    public int selectedRecipe;
 }
 
 public class PipeBSave : BuildingSave

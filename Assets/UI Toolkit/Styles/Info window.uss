@@ -47,7 +47,7 @@
     margin-bottom: 4px;
     margin-top: 4px;
     width: auto;
-    max-width: 11%;
+    max-width: 33px;
     background-color: var(--interactable);
     border-top-color: var(--border);
     border-right-color: var(--border);
@@ -155,7 +155,7 @@ ResearchInfo {
     flex-grow: 1;
     position: absolute;
     height: 35%;
-    width: 50%;
+    width: 25%;
     right: 0;
     top: auto;
     border-top-width: 5px;

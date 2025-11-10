@@ -37,3 +37,10 @@
     color: var(--text-hover);
     transition-duration: 0.2s;
 }
+
+RepeatButton {
+    max-width: 0;
+    max-height: 0;
+    min-width: 0;
+    min-height: 0;
+}

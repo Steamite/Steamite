@@ -17,7 +17,7 @@ namespace BottomBar.Building
         }
 
         /// <summary>
-        /// Inits the
+        /// Init the
         /// </summary>
         public void Init()
         {

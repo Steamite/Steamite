@@ -23,7 +23,7 @@ namespace BottomBar
             VisualElement element = new();
             element.AddToClassList("bottom-button-group");
             element.pickingMode = PickingMode.Ignore;
-            buildOpen = new(buildMenu.Open);
+            buildOpen = new(buildMenu.Toggle);
             researchOpen = new();
             tradeOpen = new();
 

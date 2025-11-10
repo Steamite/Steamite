@@ -7,14 +7,17 @@ public class InfoWindowControlHolder : ScriptableObject
 {
     [SerializeField] List<VisualTreeAsset> visualTreeAssets;
 
-    public void CreateElementByName(string name, VisualElement parent, object data)
+    public void CreateElementByName(string name, VisualElement parent, object data, float maxWidth = 100)
     {
         VisualTreeAsset asset = visualTreeAssets.Find(q => q.name == name);
         if (asset)
         {
             asset.CloneTree(parent);
-            parent[parent.childCount - 1].dataSource = data;
-            ((IUIElement)parent[parent.childCount - 1]).Open(data);
+            VisualElement el = parent[parent.childCount - 1];
+            parent.Add(el);
+            el.dataSource = data;
+            el.style.maxWidth = new Length(maxWidth, LengthUnit.Percent);
+            ((IUIElement)el).Open(data);
         }
         else
         {
