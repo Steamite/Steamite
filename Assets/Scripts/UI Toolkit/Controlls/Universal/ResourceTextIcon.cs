@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 [UxmlElement]
@@ -45,6 +46,7 @@ public partial class ResourceTextIcon : VisualElement
         icon.RegisterCallback<PointerEnterEvent>(OnHover);
         icon.RegisterCallback<PointerLeaveEvent>(OnLeave);
     }
+
     #region Mouse Events
     void OnHover(PointerEnterEvent evt)
     {
@@ -66,6 +68,11 @@ public partial class ResourceTextIcon : VisualElement
     public void ColorText(Color color)
     {
         value.style.color = color;
+    }
+
+    public void SetText(string newText)
+    {
+        value.text = newText;
     }
 }
 

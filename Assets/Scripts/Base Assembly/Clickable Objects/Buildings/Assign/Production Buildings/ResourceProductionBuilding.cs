@@ -39,6 +39,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     [CreateProperty] public ModifiableResource ResourceYield { get => resourceYield; set => resourceYield = value; }
     [CreateProperty] public List<ProductionRecipe> Recipes { get; set; }
     public List<DataAssign> RecipeAsssigment { get => recipesAssigmnet; set => recipesAssigmnet = value; }
+    [CreateProperty] public int SelectedRecipe { get; set; }
     #endregion
 
     #endregion
@@ -64,6 +65,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
         (clickable as ResProductionBSave).inputRes = new(InputResource);
         (clickable as ProductionBSave).currentTime = CurrentTime;
         (clickable as ProductionBSave).ProdStates = ProdStates;
+        (clickable as ProductionBSave).selectedRecipe = SelectedRecipe;
         return base.Save(clickable);
     }
 
@@ -74,6 +76,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
 
         CurrentTime = (save as ProductionBSave).currentTime;
         ProdStates = (save as ProductionBSave).ProdStates;
+        SelectedRecipe = (save as ProductionBSave).selectedRecipe;
         base.Load(save);
     }
     #endregion

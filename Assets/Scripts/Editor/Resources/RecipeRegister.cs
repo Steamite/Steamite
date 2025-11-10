@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine.UIElements;
 
 public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, ProductionRecipe>
@@ -47,7 +48,7 @@ public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, Productio
             minWidth = 250,
             makeCell = () =>
             {
-                return new ResourceCell();
+                return new ResourceCell() { allowedCategories = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 } };
             },
             bindCell = (el, i) =>
             {
@@ -63,7 +64,7 @@ public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, Productio
             minWidth = 250,
             makeCell = () =>
             {
-                return new ResourceCell();
+                return new ResourceCell() { allowedCategories = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 } };
             },
             bindCell = (el, i) =>
             {

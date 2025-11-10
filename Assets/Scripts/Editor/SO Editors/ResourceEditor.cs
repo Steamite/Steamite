@@ -2,9 +2,10 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[CustomPropertyDrawer(typeof(Resource), true)]
+//[CustomPropertyDrawer(typeof(Resource), true)]
 public class ResourceEditor : PropertyDrawer
 {
+
     public override VisualElement CreatePropertyGUI(SerializedProperty property)
     {
         SerializedObject serializedObject = property.serializedObject;

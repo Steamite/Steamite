@@ -56,10 +56,9 @@ namespace InfoWindowViews
         #endregion
 
         #region Constructors
-        public ProductionInfo()
+        public ProductionInfo() : base()
         {
             style.flexDirection = FlexDirection.Row;
-            style.maxHeight = new Length(37.5f, LengthUnit.Percent);
 
             inputResource = new(true, "Input", true);
             Add(inputResource);
@@ -122,7 +121,7 @@ namespace InfoWindowViews
             VisualElement window = SceneRefs.InfoWindow.secondWindow;
             if (window.style.display == DisplayStyle.None)
             {
-                SceneRefs.InfoWindow.CreateSecondWindow("Select Recipe");
+                SceneRefs.InfoWindow.CreateSecondWindow("Select Recipe", changeRecipe.worldBound);
                 ListView view = new()
                 {
                     virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight
@@ -164,12 +163,13 @@ namespace InfoWindowViews
                     el.style.height = 31 + 30 * maxCount;
                 };
                 view.itemsSource = (building as IResourceProduction).Recipes;
+                view.selectedIndex = (building as IResourceProduction).SelectedRecipe;
                 window[1].Add(view);
                 view.selectionChanged += (list) =>
                 {
-                    ProductionRecipe recipe = list.First() as ProductionRecipe;
+                    //ProductionRecipe recipe = list.First() as ProductionRecipe;
                     SceneRefs.InfoWindow.CloseSecondWindow();
-                    (building as IResourceProduction).SetRecipe(recipe);
+                    (building as IResourceProduction).SetRecipe(view.selectedIndex);
                 };
             }
             else

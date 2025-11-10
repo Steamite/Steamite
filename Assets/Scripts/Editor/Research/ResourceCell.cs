@@ -15,7 +15,11 @@ public partial class ResourceCell : ResourceList
     Label noneLabel;
 
     [UxmlAttribute]
-    List<int> allowedCategories;
+    public List<int> allowedCategories 
+    { 
+        get; 
+        set; 
+    }
     public ResourceCell() : base()
     {
         focusable = true;
@@ -88,7 +92,6 @@ public partial class ResourceCell : ResourceList
 
     protected override void BindItem(VisualElement el, int i)
     {
-
         el.RemoveFromClassList("unity-collection-view__item");
         DropdownField type = el.Q<DropdownField>();
         type.choices = ResFluidTypes.GetResNamesList(allowedCategories);

@@ -182,18 +182,24 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <summary>Loads a Rock.</summary>
     public Rock CreateSavedRock(RockSave save, GridPos gp, List<MinableRes> resData, Material dirtMat)
     {
+        string prefName = "Dirt";
+        if(save.yeild.types.Count > 0)
+            prefName = "Ore";
+
         Rock rock = Instantiate(
-            tilePrefabs.GetPrefab<Rock>("Dirt"),
+            tilePrefabs.GetPrefab<Rock>(prefName),
             gp.ToVec(ROCK_OFFSET),
             Quaternion.identity,
             MyGrid.FindLevelRocks(gp.y));
+
         rock.Load(save);
         if (rock.rockYield != null && rock.rockYield.Sum() > 0)
         {
-            MinableRes res = resData.FirstOrDefault(q => q.name == save.objectName);
+            rock.Name = save.objectName;
+            MinableRes res = resData.FirstOrDefault(q => q.name == rock.Name);
             if (res == null)
                 res = resData.FirstOrDefault(q => q.name == rock.rockYield.types[rock.rockYield.ammounts.IndexOf(rock.rockYield.ammounts.Max())].ToString());
-            rock.GetComponent<MeshRenderer>().material.SetColor("_Normal_Color", res.color);
+            rock.GetComponent<MeshRenderer>().materials[0].SetColor("_Normal_Color", res.color);
         }
         else
             rock.ColorWithIntegrity();
@@ -202,7 +208,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         if (rock.toBeDug)
         {
             SceneRefs.JobQueue.toBeDug.Add(rock);
-            SceneRefs.GridTiles.HighLight(SceneRefs.GridTiles.toBeDugColor, rock.gameObject);
+            rock.Highlight(SceneRefs.GridTiles.toBeDugColor);
         }
         return rock;
     }

@@ -18,10 +18,9 @@ public partial class ResourceOverview : CustomRadioButtonGroup, IUIElement
     void OpenCategory(int index)
     {
         if (index == -1)
-            resList.style.display = DisplayStyle.None;
+            resList.Close();// style.display = DisplayStyle.None;
         else
         {
-            resList.style.display = DisplayStyle.Flex;
             IResolvedStyle resStyle = buttons[index].resolvedStyle;
             resList.ChangeCategory(index, display, resStyle);
         }
@@ -40,7 +39,7 @@ public partial class ResourceOverview : CustomRadioButtonGroup, IUIElement
         resList = new ResourceOverviewList(categories, 0.5f);
         resList.Open(display);
 
-        resList.AddToClassList("res-overview-group");
+        resList.AddToClassList("res-overview");
         resList.style.display = DisplayStyle.None;
         Add(resList);
     }

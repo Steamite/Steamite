@@ -386,7 +386,7 @@ namespace EditorWindows.Windows
                     if (((BuildingWrapper)dataGrid.itemsSource[i]).building is IResourceProduction production)
                     {
                         cell.userData = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
-                        cell.Open(production.RecipeAsssigment);
+                        cell.Open(production);
                     }
                     else
                         cell.Open(null);

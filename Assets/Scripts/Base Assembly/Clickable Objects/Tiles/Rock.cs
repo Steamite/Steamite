@@ -82,6 +82,13 @@ public class Rock : ClickableObject
     }
     #endregion
 
+    #region Highlight
+    public override void Highlight(Color color)
+    {
+        GetComponent<MeshRenderer>().materials[^1].SetColor("_EmissionColor", color);
+    }
+    #endregion
+
     #region Window
     /// <summary>
     /// <inheritdoc/>
@@ -174,23 +181,27 @@ public class Rock : ClickableObject
                 f = 0.2f;
                 break;
         }
-        gameObject.GetComponent<MeshRenderer>().material
+        gameObject.GetComponent<MeshRenderer>().materials[^1]
             .SetFloat("_Hadrness", f);
     }
 
     public void Hide()
     {
-        Material material = GetComponent<MeshRenderer>().material;
-        material.SetFloat("_isHidden", 1);
-        material.EnableKeyword("_SPECULARHIGHLIGHTS_OFF");
+        foreach (var material in GetComponent<MeshRenderer>().materials)
+        {
+            material.SetFloat("_isHidden", 1);
+            material.EnableKeyword("_SPECULARHIGHLIGHTS_OFF");
+        }
         hidden = true;
     }
 
     public void Unhide()
     {
-        Material material = GetComponent<MeshRenderer>().material;
-        material.SetFloat("_isHidden", 0);
-        material.DisableKeyword("_SPECULARHIGHLIGHTS_OFF");
+        foreach (var material in GetComponent<MeshRenderer>().materials)
+        {
+            material.SetFloat("_isHidden", 0);
+            material.DisableKeyword("_SPECULARHIGHLIGHTS_OFF");
+        }
         hidden = false;
     }
     #endregion

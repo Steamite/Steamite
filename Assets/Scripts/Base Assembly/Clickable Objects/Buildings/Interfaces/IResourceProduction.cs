@@ -21,6 +21,7 @@ public interface IResourceProduction : IProduction
     [CreateProperty] ModifiableResource ResourceYield { get; set; }
     List<ProductionRecipe> Recipes { get; set; }
     List<DataAssign> RecipeAsssigment { get; set; }
+    public int SelectedRecipe { get; set; }
     #endregion
 
     #region Storing
@@ -167,12 +168,16 @@ public interface IResourceProduction : IProduction
         {
             RequestRestock();
             RequestPickup();
+
+            SetRecipe(SelectedRecipe);
         }
     }
     #endregion
 
-    void SetRecipe(ProductionRecipe recipe)
+    void SetRecipe(int index)
     {
+        SelectedRecipe = index;
+        ProductionRecipe recipe = Recipes[index];
         ResourceCost = recipe.resourceCost;
         ResourceYield = recipe.resourceYield;
         ProdTime = recipe.timeInTicks;

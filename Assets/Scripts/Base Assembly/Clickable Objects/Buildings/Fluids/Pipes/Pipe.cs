@@ -75,7 +75,7 @@ public class Pipe : Building
             }
         }
         GetComponent<SortingGroup>().sortingLayerName = "Pipes";
-        SceneRefs.GridTiles.HighLight(new(), gameObject);
+        Highlight(new());
 
         SceneRefs.JobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         MyRes.PayCostGlobal(cost);

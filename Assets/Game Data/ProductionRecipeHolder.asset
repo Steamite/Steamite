@@ -27,7 +27,7 @@ MonoBehaviour:
           types:
           - {fileID: 11400000, guid: e523913a9c6ce8d4fb05048da649cfc5, type: 2}
           - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
-          ammounts: 0a00000002000000
+          ammounts: 0500000001000000
         mod:
           percentMod: 1
           absoluteMod: 0
@@ -66,7 +66,8 @@ MonoBehaviour:
           types:
           - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
           - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
-          ammounts: 0700000002000000
+          - {fileID: 11400000, guid: 2041a4d797e915a4db26715015bb6e3f, type: 2}
+          ammounts: 030000000100000001000000
         mod:
           percentMod: 1
           absoluteMod: 0
@@ -83,7 +84,7 @@ MonoBehaviour:
         baseResource:
           types:
           - {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
-          ammounts: 0a000000
+          ammounts: 04000000
         mod:
           percentMod: 1
           absoluteMod: 0
@@ -100,8 +101,50 @@ MonoBehaviour:
         types: []
         ammounts: 
         baseResource:
-          types: []
-          ammounts: 
+          types:
+          - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
+          - {fileID: 11400000, guid: 18096b245d628204cba4870671dc9616, type: 2}
+          - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+          ammounts: 030000000100000001000000
+        mod:
+          percentMod: 1
+          absoluteMod: 0
+        money:
+          baseValue: 0
+          currentValue: 0
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+      resourceYield:
+        types: []
+        ammounts: 
+        baseResource:
+          types:
+          - {fileID: 11400000, guid: 1347ef2c9f2b3c44cb6f5e843e1d55bb, type: 2}
+          ammounts: 04000000
+        mod:
+          percentMod: 1
+          absoluteMod: 0
+        money:
+          baseValue: 0
+          currentValue: 0
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+      timeInTicks: 5
+    Icon: {fileID: 0}
+  - id: 0
+    Name: Food
+    Objects:
+    - Name: Mushrooms
+      id: 2109558725
+      resourceCost:
+        types: []
+        ammounts: 
+        baseResource:
+          types:
+          - {fileID: 11400000, guid: 8fc4cf8feaad5a648bd0c87ee4ff2ca6, type: 2}
+          ammounts: 00000000
         mod:
           percentMod: 1
           absoluteMod: 0
@@ -126,5 +169,5 @@ MonoBehaviour:
           mod:
             percentMod: 1
             absoluteMod: 0
-      timeInTicks: 0
+      timeInTicks: 5
     Icon: {fileID: 0}

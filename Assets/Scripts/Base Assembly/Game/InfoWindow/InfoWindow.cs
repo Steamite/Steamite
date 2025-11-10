@@ -67,7 +67,9 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     public VisualElement secondBody;
     public VisualElement newWindow;
 
-    TabView buildingTabView;
+    VisualElement secondWindowAnchor;
+
+    TabView TabView;
 
     public static bool CanZoom = true;
 
@@ -87,8 +89,10 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     InfoWindowControlHolder controls;
     #endregion
 
-    public void CreateSecondWindow(string labelTitle)
+    public void CreateSecondWindow(string labelTitle, Rect pos)
     {
+        secondWindowAnchor.style.bottom = 1080 - pos.y;
+        secondWindowAnchor.style.left = pos.x + pos.width/2;
         (secondWindow[0][0] as Label).text = labelTitle;
         secondWindow.style.display = DisplayStyle.Flex;
         window.RegisterCallback<MouseEnterEvent>(MyOnMouseEnter);
@@ -108,7 +112,8 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         VisualElement root = gameObject.GetComponent<UIDocument>().rootVisualElement;
         window = root.Q<VisualElement>("Info-Window");
         windowBody = window[1];
-        secondWindow = root[1];
+        secondWindowAnchor = root[1];
+        secondWindow = root[1][0];
         secondBody = secondWindow[1];
         (secondWindow[0][1] as Button).clicked += CloseSecondWindow;
         controls = await Addressables.LoadAssetAsync<InfoWindowControlHolder>("Assets/Game Data/UI/InfoWindowControlHolder.asset").Task;
@@ -154,9 +159,10 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         Close(false);
         lastInfo = active;
         window.style.display = DisplayStyle.Flex;
-        buildingTabView = null;
+        TabView = null;
         window.RegisterCallback<MouseEnterEvent>(MyOnMouseEnter);
         window.RegisterCallback<MouseLeaveEvent>(MyOnMouseExit);
+        window.style.width = new Length(25, LengthUnit.Percent);
         switch (active)
         {
             case InfoMode.None:
@@ -176,19 +182,15 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                 }
                 else
                 {
-                    windowBody.Add(buildingTabView = new TabView()
-                    {
-                        name = "Building Info",
-                        style =
-                        {
-                            flexGrow = 1
-                        }
-                    });
+                    
                 }
                 break;
 
             case InfoMode.Human:
-                controls.CreateElementByName("Human Info", windowBody, dataSource);
+                Dictionary<string, List<string>> toEnable = new();
+                toEnable.Add("General", new List<string> { "Human Info" });
+                toEnable.Add("Job", new List<string> { "Job Info" });
+                CreateTabbedView(toEnable, dataSource);
                 break;
 
             case InfoMode.Rock:
@@ -217,12 +219,20 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         Debug.Log("Can " + evt.currentTarget);
     }
 
-    public void CreateBuildingControls(Dictionary<string, List<string>> controlsToCreate, Building building)
+    public void CreateTabbedView(Dictionary<string, List<string>> controlsToCreate, System.Object building)
     {
+        windowBody.Add(TabView = new TabView()
+        {
+            name = "Tab Info",
+            style =
+            {
+                flexGrow = 1
+            }
+        });
         foreach (var key in controlsToCreate.Keys)
         {
             Tab activeTab;
-            buildingTabView.Add(activeTab = new Tab(key)
+            TabView.Add(activeTab = new Tab(key)
             {
                 style =
                 {
@@ -230,14 +240,17 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                 }
             });
             VisualElement tabContentContainer = activeTab.hierarchy.Children().ElementAt(0);
+            tabContentContainer.style.flexDirection = FlexDirection.Row;
+            float f = 100 / (float)controlsToCreate[key].Count;
+            window.style.width = new Length(25 * controlsToCreate[key].Count, LengthUnit.Percent);
             foreach (var control in controlsToCreate[key])
             {
-                controls.CreateElementByName(control, tabContentContainer, building);
+                controls.CreateElementByName(control, tabContentContainer, building, f);
             }
         }
         if (controlsToCreate.Keys.Count == 1)
         {
-            buildingTabView.hierarchy.Children().ElementAt(0).style.display = DisplayStyle.None;
+            TabView.hierarchy.Children().ElementAt(0).style.display = DisplayStyle.None;
         }
     }
     #endregion

@@ -1,3 +1,4 @@
+using Assets.Scripts.UI_Toolkit.Controlls.Universal;
 using Outposts;
 using System;
 using System.Collections.Generic;
@@ -182,16 +183,6 @@ namespace InfoWindowElements
                     binding = BindingUtil.CreateBinding(nameof(Human.Inventory));
                     binding.sourceToUiConverters.AddConverter((ref CapacityResource inventory) => ToUIRes(inventory));
                     SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
-                    break;
-                case ResourceDisplay:
-
-                    binding = BindingUtil.CreateBinding(nameof(ResourceDisplay.GlobalResources));
-                    binding.sourceToUiConverters.AddConverter((ref MoneyResource globalRes) => ToUIRes(globalRes));
-                    SetBinding("resources", binding);
-                    dataSource = data;
-                    ((IUpdatable)data).UIUpdate(binding.dataSourcePath.ToString());
-                    (hierarchy.ElementAt(1) as ScrollView).verticalScrollerVisibility = ScrollerVisibility.Hidden;
-                    showEmpty = true;
                     break;
                 case Vein:
                     binding = BindingUtil.CreateBinding(nameof(Vein.Storing));

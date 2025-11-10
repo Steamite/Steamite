@@ -114,7 +114,7 @@ public class Building : StorageObject
     /// <param name="toEnable">List of components to enable in the Visual Element.</param>
     protected virtual void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
-        info.CreateBuildingControls(toEnable, this);
+        info.CreateTabbedView(toEnable, this);
     }
 
 
@@ -457,7 +457,7 @@ public class Building : StorageObject
             transform.GetChild(i).gameObject.layer = 6;
         GetComponent<SortingGroup>().sortingLayerName = "Buildings";
 
-        SceneRefs.GridTiles.HighLight(new(), gameObject);
+        Highlight(new());
         MyRes.PayCostGlobal(cost);
         SceneRefs.JobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         UniqueID();

@@ -3,8 +3,8 @@
 [Serializable]
 public class ProductionRecipe : DataObject
 {
-    public MoneyResource resourceCost;
-    public MoneyResource resourceYield;
+    public MoneyResource resourceCost = new();
+    public MoneyResource resourceYield = new();
     public int timeInTicks;
 
     public ProductionRecipe(int _id) : base(_id) { }

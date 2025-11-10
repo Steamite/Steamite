@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 33366249774806201}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 33366249774806201}
-  m_Mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+  m_Mesh: {fileID: 4013275331872712965, guid: a34dcc341195f9045bcd665366c0a2f5, type: 3}
 --- !u!23 &5194983197857562361
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -63,10 +63,13 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: f2458165a7be2a64e99c8d1f461d3a17, type: 2}
+  - {fileID: 2100000, guid: 0930df6ecc353d34d8d6511a134ceda6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,6 +87,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -121,13 +125,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a0c44de03a1be44b617e4a593afd9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Metal
+  name: Coal
   id: -1
   objectName: Metal
   rockYield:
-    types: 02000000
-    ammounts: 02000000
-  integrity: 5
+    types:
+    - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
+    ammounts: 0a000000
+  integrity: 3
   originalIntegrity: 0
   toBeDug: 0
   assetPath: Tile/Road
+  isQuest: 0

@@ -144,6 +144,20 @@ public abstract class ClickableObject : MonoBehaviour,
     }
     #endregion Mouse Events
 
+    #region Highlighting
+    public virtual void Highlight(Color color)
+    {
+        foreach (Material material in
+            GetComponentsInChildren<MeshRenderer>()
+            .Where(q => q).SelectMany(q => q.materials)
+            .Union(GetComponentsInChildren<SkinnedMeshRenderer>()
+            .Where(q => q).SelectMany(q => q.materials)))
+        {
+            material.SetColor("_EmissionColor", color);
+        }
+    }
+    #endregion
+
     #region Window
     /// <summary>
     /// Sets the header text and returns info window reference.<br/>
