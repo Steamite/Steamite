@@ -1,7 +1,9 @@
 using InfoWindowElements;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
@@ -25,27 +27,8 @@ public partial class ResourceCell : ResourceList
         focusable = true;
         showEmpty = true;
         unbindItem = UnbindItem;
-        onAdd =
-            (_) =>
-            {
-                resource.types.Add(ResFluidTypes.None);
-                resource.ammounts.Add(0);
-                itemsSource = ToUIRes(resource);
-                EditorUtility.SetDirty(whatToSave);
-            };
-        onRemove =
-            (el) =>
-            {
-                if (el.selectedIndex > -1 && el.selectedIndex < itemsSource.Count)
-                {
-                    if (selectedIndex == itemsSource.Count - 1)
-                        allowRemove = false;
-                    resource.types.RemoveAt(el.selectedIndex);
-                    resource.ammounts.RemoveAt(el.selectedIndex);
-                    itemsSource = ToUIRes(resource);
-                    EditorUtility.SetDirty(whatToSave);
-                }
-            };
+        onAdd = Add;
+        onRemove = Remove;
         allowAdd = true;
         allowRemove = false;
         selectionType = SelectionType.Single;
@@ -69,6 +52,28 @@ public partial class ResourceCell : ResourceList
     }
 
     #region Item Events
+
+    protected virtual void Add(BaseListView _)
+    {
+        resource.types.Add(ResFluidTypes.None);
+        resource.ammounts.Add(0);
+        itemsSource = ToUIRes(resource);
+        EditorUtility.SetDirty(whatToSave);
+    }
+
+    protected virtual void Remove(BaseListView el)
+    {
+        if (el.selectedIndex > -1 && el.selectedIndex < itemsSource.Count)
+        {
+            if (selectedIndex == itemsSource.Count - 1)
+                allowRemove = false;
+            resource.types.RemoveAt(el.selectedIndex);
+            resource.ammounts.RemoveAt(el.selectedIndex);
+            itemsSource = ToUIRes(resource);
+            EditorUtility.SetDirty(whatToSave);
+        }
+    }
+
     protected override VisualElement MakeItem()
     {
         VisualElement visualElement = new();
@@ -128,10 +133,11 @@ public partial class ResourceCell : ResourceList
     /// Changes the ammount of a given type (<paramref name="evt"/>).
     /// </summary>
     /// <param name="evt">Event with the new value and changed element.</param>
-    private void ChangeType(ChangeEvent<string> evt)
+    protected virtual void ChangeType(ChangeEvent<string> evt)
     {
         int i = evt.target.GetRowIndex(false);
-        int j = resource.types.IndexOf(ResFluidTypes.GetResByName(evt.newValue));
+        ResourceType t = ResFluidTypes.GetTypeByName(evt.newValue);
+        int j = resource.types.IndexOf(t);
         if (j > -1 && i != j)
         {
             resource.ammounts[j] += resource.ammounts[i];
@@ -140,15 +146,16 @@ public partial class ResourceCell : ResourceList
             itemsSource = ToUIRes(resource);
         }
         else
-            resource.types[i] = ResFluidTypes.GetResByName(evt.newValue);
+            resource.types[i] = t;
         EditorUtility.SetDirty(whatToSave);
     }
+
 
     /// <summary>
     /// Changes the ammount of a given type (<paramref name="evt"/>).
     /// </summary>
     /// <param name="evt">Event with the new value and changed element.</param>
-    private void ChangeVal(ChangeEvent<int> evt)
+    protected virtual void ChangeVal(ChangeEvent<int> evt)
     {
         int i = evt.target.GetRowIndex(false);
         resource.ammounts[i] = evt.newValue;

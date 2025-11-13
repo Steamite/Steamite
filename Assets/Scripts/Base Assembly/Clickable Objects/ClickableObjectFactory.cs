@@ -303,4 +303,26 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     {
         return pipeMaterial;
     }
+
+    public void CreateObjectUnderRock(Rock rock)
+    {
+        if (rock.hiddenSave.assignedType == HiddenType.Nothing)
+            CreateRoad(rock.GetPos(), true);
+        else
+        {
+            switch (rock.hiddenSave.assignedType)
+            {
+                case HiddenType.Water:
+                    CreateSavedWater(new(
+                        rock.hiddenSave.ammount),
+                        rock.GetPos());
+
+                    break;
+                default:
+                    Debug.LogWarning("Don't know what to do!!!");
+                    break;
+            }
+        }
+          
+    }
 }

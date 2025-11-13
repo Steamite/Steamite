@@ -16,323 +16,79 @@ MonoBehaviour:
   - id: 1
     Name: Population
     Objects:
-    - Name: 
-      id: 1616741493
-      level: 0
-      researched: 0
-      currentTime: -1
-      researchTime: 100
-      reseachCost:
-        types: []
-        ammounts: 
-        baseResource:
-          types: []
-          ammounts: 
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      nodeType: 0
-      objectConnection:
-        categoryId: 0
-        objectId: 0
-      unlockedBy: 
-      unlocks: 
-      description: 
-      lineColor: {r: 0, g: 0, b: 0, a: 0}
-    - Name: Housing
-      id: 178465213
-      level: 0
-      researched: 0
-      currentTime: -1
-      researchTime: 10
-      reseachCost:
-        types: []
-        ammounts: 
-        baseResource:
-          types: []
-          ammounts: 
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 50
-          currentValue: 50
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      nodeType: 2
-      objectConnection:
-        categoryId: 4
-        objectId: 458707137
-      unlockedBy: 
-      unlocks: e006623a
-      description: 'Random description
-
-        Lorem Ipsum Dolor et itsu'
-      lineColor: {r: 0, g: 0, b: 0, a: 0}
-    - Name: House
-      id: 651504100
-      level: 0
-      researched: 1
-      currentTime: -1
-      researchTime: 15
-      reseachCost:
-        types: []
-        ammounts: 
-        baseResource:
-          types: []
-          ammounts: 
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      nodeType: 2
-      objectConnection:
-        categoryId: 3
-        objectId: 1580670160
-      unlockedBy: 
-      unlocks: e006623a
-      description: 
-      lineColor: {r: 0, g: 0, b: 0, a: 0}
-    - Name: Yeild
-      id: 1408289332
-      level: 1
-      researched: 0
-      currentTime: 0
-      researchTime: 5
-      reseachCost:
-        types: []
-        ammounts: 
-        baseResource:
-          types: []
-          ammounts: 
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      nodeType: 1
-      objectConnection:
-        categoryId: 1
-        objectId: 2090065767
-      unlockedBy: 
-      unlocks: e006623a
-      description: 'Improved metal casting.
-
-        $
-
-        Research: Cost 25%
-
-        Production:
-        AssignLimit by 3
-
-        Population, Production: Capacity by 5
-
-        Production:
-        InputResource -50%
-
-        Production: ProdSpeed by 2
-
-        Production:
-        ProductionYield 10%
-
-        : ProdSpeed by -100'
-      lineColor: {r: 1, g: 0, b: 0, a: 1}
-    - Name: Extension
-      id: 442275305
-      level: 1
-      researched: 0
-      currentTime: -1
-      researchTime: 15
-      reseachCost:
-        types: []
-        ammounts: 
-        baseResource:
-          types: []
-          ammounts: 
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      nodeType: 1
-      objectConnection:
-        categoryId: 1
-        objectId: 1873593032
-      unlockedBy: 
-      unlocks: e006623a
-      description: '
-
-        $
-
-        Population: Nothing by 5'
-      lineColor: {r: 0.8113208, g: 0.62379855, b: 0.62379855, a: 0.7607843}
-    - Name: Foundry
-      id: 979502816
-      level: 2
-      researched: 0
-      currentTime: -1
-      researchTime: 12
-      reseachCost:
-        types: []
-        ammounts: 
-        baseResource:
-          types: []
-          ammounts: 
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      nodeType: 2
-      objectConnection:
-        categoryId: 2
-        objectId: 1472558132
-      unlockedBy: bd29a30ae9955c1ae429d52634caf053
-      unlocks: 
-      description: 
-      lineColor: {r: 0.1870589, g: 0.6698113, b: 0.27058825, a: 0.49019608}
+    - rid: 8808251703612669995
+    - rid: 8808251703612669996
     Icon: {fileID: 2800000, guid: 786e99add6b74e346b59e4e32bfaf262, type: 3}
   - id: 2
     Name: Production
-    Objects:
-    - Name: 
-      id: 823126285
-      level: 0
-      researched: 0
-      currentTime: -1
-      researchTime: 100
-      reseachCost:
-        types: []
-        ammounts: 
-        baseResource:
-          types: []
-          ammounts: 
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      nodeType: 2
-      objectConnection:
-        categoryId: 2
-        objectId: 1472558132
-      unlockedBy: 
-      unlocks: 1b67a65bef39f217
-      description: 
-      lineColor: {r: 1, g: 0, b: 0, a: 1}
-    - Name: 
-      id: 1537632027
-      level: 1
-      researched: 0
-      currentTime: -1
-      researchTime: 200
-      reseachCost:
-        types: []
-        ammounts: 
-        baseResource:
-          types: []
-          ammounts: 
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      nodeType: 2
-      objectConnection:
-        categoryId: 2
-        objectId: 1197943099
-      unlockedBy: 0de90f31
-      unlocks: 
-      description: 
-      lineColor: {r: 1, g: 0, b: 0, a: 1}
-    - Name: 
-      id: 401750511
-      level: 1
-      researched: 0
-      currentTime: -1
-      researchTime: 200
-      reseachCost:
-        types: []
-        ammounts: 
-        baseResource:
-          types: []
-          ammounts: 
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      nodeType: 2
-      objectConnection:
-        categoryId: 2
-        objectId: 1210278343
-      unlockedBy: 0de90f31
-      unlocks: 
-      description: 
-      lineColor: {r: 0.6187502, g: 1, b: 0, a: 1}
-    - Name: 
-      id: 1861908460
-      level: 2
-      researched: 0
-      currentTime: -1
-      researchTime: 300
-      reseachCost:
-        types: []
-        ammounts: 
-        baseResource:
-          types: []
-          ammounts: 
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      nodeType: 2
-      objectConnection:
-        categoryId: 0
-        objectId: 0
-      unlockedBy: 
-      unlocks: 
-      description: 
-      lineColor: {r: 1, g: 0, b: 0, a: 1}
+    Objects: []
     Icon: {fileID: 2800000, guid: 0a64256dbb3187142a217b36d4257949, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8808251703612669995
+      type: {class: ResearchNode, ns: ResearchUI, asm: BaseAssembly}
+      data:
+        Name: aaaaaaa
+        id: 111113773
+        level: 0
+        researched: 0
+        currentTime: 0
+        researchTime: 100
+        reseachCost:
+          types: []
+          ammounts: 
+          baseResource:
+            types:
+            - {fileID: 11400000, guid: 18096b245d628204cba4870671dc9616, type: 2}
+            ammounts: 32000000
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 50
+            currentValue: 50
+            mod:
+              percentMod: 1
+              absoluteMod: 0
+        nodeType: 2
+        objectConnection:
+          categoryId: 2
+          objectId: 1235511660
+        unlockedBy: 
+        unlocks: 
+        description: 
+        lineColor: {r: 1, g: 0, b: 0, a: 1}
+    - rid: 8808251703612669996
+      type: {class: ResearchNode, ns: ResearchUI, asm: BaseAssembly}
+      data:
+        Name: bbbbbbbbbbbb
+        id: 1812948035
+        level: 0
+        researched: 0
+        currentTime: 0
+        researchTime: 100
+        reseachCost:
+          types: []
+          ammounts: 
+          baseResource:
+            types:
+            - {fileID: 11400000, guid: e523913a9c6ce8d4fb05048da649cfc5, type: 2}
+            ammounts: 35000000
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 0
+            currentValue: 0
+            mod:
+              percentMod: 1
+              absoluteMod: 0
+        nodeType: 2
+        objectConnection:
+          categoryId: 2
+          objectId: 1235511660
+        unlockedBy: 
+        unlocks: 
+        description: 
+        lineColor: {r: 1, g: 0, b: 0, a: 1}

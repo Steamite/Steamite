@@ -160,29 +160,32 @@ public interface IResourceProduction : IProduction
     {
         ProdStates.needsResources = ResourceCost.Sum() > 0;
         Recipes = new();
-        foreach (var recip in RecipeAsssigment)
+        foreach (var itemRecipe in RecipeAsssigment)
         {
-            Recipes.Add(holder.GetObjectBySaveIndex(recip));//.Categories[recip.categoryIndex].Objects.FirstOrDefault(q => q.id == recip.objectId));
+            ProductionRecipe recipe = holder.GetObjectBySaveIndex(itemRecipe);
+            if(recipe != null)
+                Recipes.Add(recipe);
         }
         if (constructed)
         {
             RequestRestock();
             RequestPickup();
-
-            SetRecipe(SelectedRecipe);
+            if(Recipes.Count > 0)
+                SetRecipe(SelectedRecipe, false);
         }
     }
     #endregion
 
-    void SetRecipe(int index)
+    void SetRecipe(int index, bool voidProd)
     {
         SelectedRecipe = index;
         ProductionRecipe recipe = Recipes[index];
         ResourceCost = recipe.resourceCost;
         ResourceYield = recipe.resourceYield;
         ProdTime = recipe.timeInTicks;
-        CurrentTime = 0;
-        if (((Building)this).selected)
+        if(voidProd)
+            CurrentTime = 0;
+        if (voidProd)
         {
             ((Building)this).OpenWindow();
         }

@@ -11,6 +11,11 @@ public class DataObject
 
     public virtual string GetName() => Name;
 
+    public DataObject(DataObject dataObject)
+    {
+        Name = dataObject.Name;
+        id = dataObject.id;
+    }
     public DataObject(int _id)
     {
         id = _id;
@@ -62,8 +67,6 @@ public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CA
 
     public WRAPPER_T GetObjectBySaveIndex(DataAssign dataAssign)
     {
-        if (dataAssign.categoryId < 1)
-            return null;
         return GetCategByID(dataAssign.categoryId)?.Objects.FirstOrDefault(q => q.id == dataAssign.objectId);
     }
 

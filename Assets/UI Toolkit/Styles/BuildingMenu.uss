@@ -243,7 +243,7 @@
 }
 
 .cannot-afford-blocker {
-    background-color: var(--disabled);
+    background-color: rgba(38, 19, 6, 0.89);
 }
 
 .not-research-blocker {

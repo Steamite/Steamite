@@ -10,7 +10,18 @@ public static class ResFluidTypes
     static ResourceData data;
     public static ResourceType Money;
 
-    public static ResourceType None;
+    static ResourceType none;
+    public static ResourceType None
+    {
+        get
+        {
+#if UNITY_EDITOR
+            if (none == null)
+                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.PATH));
+#endif
+            return none;
+        }
+    }
 
     static List<ResourceType> resources;
     static List<ResourceType> Resources
@@ -66,10 +77,18 @@ public static class ResFluidTypes
         resources = fullRes.Skip(1).SkipLast(1).SelectMany(q => q.Objects).Select(q => q.data).ToList();
 
         fluids = fullRes[^1].Objects.Select(q => q.data).ToList();
-        None = fullRes[0].Objects.First(q => q.Name == "None").data;
+        none = fullRes[0].Objects.First(q => q.Name == "None").data;
         Money = fullRes[0].Objects.First(q => q.Name == "Money").data;
     }
 
+    public static ResourceType GetTypeByName(string name)
+    {
+        ResourceType type = null;
+        if ((type = GetResByName(name)) != null)
+            return type;
+        else
+            return GetFluidByName(name);
+    }
 
     public static ResourceType GetResByName(string name)
     {
@@ -83,6 +102,18 @@ public static class ResFluidTypes
         }
         return type;
     }
+
+    public static ResourceType GetFluidByName(string name)
+    {
+        ResourceType type = Fluids.FirstOrDefault(q => q.Name == name);
+        if (type == null)
+        {
+            if (name == "None")
+                return None;
+        }
+        return type;
+    }
+
     public static ResourceType GetResByIndex(int i)
         => Resources[i];
 

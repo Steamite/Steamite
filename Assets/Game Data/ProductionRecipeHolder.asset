@@ -13,161 +13,132 @@ MonoBehaviour:
   m_Name: ProductionRecipeHolder
   m_EditorClassIdentifier: BaseAssembly::ProductionRecipeHolder
   Categories:
-  - id: 1
-    Name: Ore Refining
-    Objects:
-    - Name: Iron
-      id: 94840154
-      resourceCost:
-        types:
-        - {fileID: 11400000, guid: e523913a9c6ce8d4fb05048da649cfc5, type: 2}
-        - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
-        ammounts: 0a00000002000000
-        baseResource:
-          types:
-          - {fileID: 11400000, guid: e523913a9c6ce8d4fb05048da649cfc5, type: 2}
-          - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
-          ammounts: 0500000001000000
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      resourceYield:
-        types:
-        - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
-        ammounts: 0a000000
-        baseResource:
-          types:
-          - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
-          ammounts: 0a000000
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      timeInTicks: 10
-    - Name: Copper
-      id: 1978748951
-      resourceCost:
-        types:
-        - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
-        - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
-        ammounts: 0700000002000000
-        baseResource:
-          types:
-          - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
-          - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
-          - {fileID: 11400000, guid: 2041a4d797e915a4db26715015bb6e3f, type: 2}
-          ammounts: 030000000100000001000000
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      resourceYield:
-        types:
-        - {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
-        ammounts: 0a000000
-        baseResource:
-          types:
-          - {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
-          ammounts: 04000000
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      timeInTicks: 7
-    - Name: Brass
-      id: 1881560667
-      resourceCost:
-        types: []
-        ammounts: 
-        baseResource:
-          types:
-          - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
-          - {fileID: 11400000, guid: 18096b245d628204cba4870671dc9616, type: 2}
-          - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
-          ammounts: 030000000100000001000000
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      resourceYield:
-        types: []
-        ammounts: 
-        baseResource:
-          types:
-          - {fileID: 11400000, guid: 1347ef2c9f2b3c44cb6f5e843e1d55bb, type: 2}
-          ammounts: 04000000
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      timeInTicks: 5
-    Icon: {fileID: 0}
   - id: 0
-    Name: Food
+    Name: abcd
     Objects:
-    - Name: Mushrooms
-      id: 2109558725
-      resourceCost:
-        types: []
-        ammounts: 
-        baseResource:
-          types:
-          - {fileID: 11400000, guid: 8fc4cf8feaad5a648bd0c87ee4ff2ca6, type: 2}
-          ammounts: 00000000
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-      resourceYield:
-        types: []
-        ammounts: 
-        baseResource:
+    - rid: 8808251701909258310
+    - rid: 8808251703612669993
+    - rid: 8808251703612669994
+    Icon: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8808251701909258310
+      type: {class: ProductionRecipe, ns: , asm: BaseAssembly}
+      data:
+        Name: Brass
+        id: 2052974213
+        resourceCost:
           types: []
           ammounts: 
-        mod:
-          percentMod: 1
-          absoluteMod: 0
-        money:
-          baseValue: 0
-          currentValue: 0
+          baseResource:
+            types:
+            - {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
+            - {fileID: 11400000, guid: 2041a4d797e915a4db26715015bb6e3f, type: 2}
+            - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+            ammounts: 030000000100000001000000
           mod:
             percentMod: 1
             absoluteMod: 0
-      timeInTicks: 5
-    Icon: {fileID: 0}
+          money:
+            baseValue: 0
+            currentValue: 0
+            mod:
+              percentMod: 1
+              absoluteMod: 0
+        resourceYield:
+          types: []
+          ammounts: 
+          baseResource:
+            types:
+            - {fileID: 11400000, guid: 1347ef2c9f2b3c44cb6f5e843e1d55bb, type: 2}
+            ammounts: 04000000
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 0
+            currentValue: 0
+            mod:
+              percentMod: 1
+              absoluteMod: 0
+        timeInTicks: 5
+    - rid: 8808251703612669993
+      type: {class: ProductionRecipe, ns: , asm: BaseAssembly}
+      data:
+        Name: Bronze
+        id: 2144099731
+        resourceCost:
+          types: []
+          ammounts: 
+          baseResource:
+            types:
+            - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
+            - {fileID: 11400000, guid: 18096b245d628204cba4870671dc9616, type: 2}
+            - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+            ammounts: 030000000100000001000000
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 0
+            currentValue: 0
+            mod:
+              percentMod: 1
+              absoluteMod: 0
+        resourceYield:
+          types: []
+          ammounts: 
+          baseResource:
+            types:
+            - {fileID: 11400000, guid: 1d2e942eab98fe943ab9432e5e945d79, type: 2}
+            ammounts: 04000000
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 0
+            currentValue: 0
+            mod:
+              percentMod: 1
+              absoluteMod: 0
+        timeInTicks: 2
+    - rid: 8808251703612669994
+      type: {class: ProductionRecipe, ns: , asm: BaseAssembly}
+      data:
+        Name: Copper
+        id: 2062659612
+        resourceCost:
+          types: []
+          ammounts: 
+          baseResource:
+            types:
+            - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
+            - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+            ammounts: 0400000004000000
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 0
+            currentValue: 0
+            mod:
+              percentMod: 1
+              absoluteMod: 0
+        resourceYield:
+          types: []
+          ammounts: 
+          baseResource:
+            types:
+            - {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
+            ammounts: 04000000
+          mod:
+            percentMod: 1
+            absoluteMod: 0
+          money:
+            baseValue: 0
+            currentValue: 0
+            mod:
+              percentMod: 1
+              absoluteMod: 0
+        timeInTicks: 3

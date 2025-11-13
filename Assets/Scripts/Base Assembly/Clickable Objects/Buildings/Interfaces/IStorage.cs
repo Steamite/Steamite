@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 /// <summary>
 /// Serves as a store house for the colony.<br/>
 /// Each storage should have all resource types in the <see cref="StorageObject.localRes"/>
@@ -21,17 +22,25 @@ public interface IStorage
 
         int i = 0;
         ulong mask = CanStoreMask;
-        while (mask != 0)
+        try
         {
-            if ((mask & 1) == 1)
+            while (mask != 0)
             {
-                LocalResources.types.Add(ResFluidTypes.GetResByIndex(i));
-                LocalResources.ammounts.Add(ammount);
-                CanStore.Add(true);
+                if ((mask & 1) == 1)
+                {
+                    LocalResources.types.Add(ResFluidTypes.GetResByIndex(i));
+                    LocalResources.ammounts.Add(ammount);
+                    CanStore.Add(true);
+                }
+                mask = mask >> 1;
+                i++;
             }
-            mask = mask >> 1;
-            i++;
         }
+        catch (System.Exception)
+        {
+            Debug.LogWarning("mask out of range");
+        }
+        
     }
 
     public void FinishStorageConstruction()

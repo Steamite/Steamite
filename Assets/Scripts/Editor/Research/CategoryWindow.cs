@@ -140,6 +140,7 @@ namespace EditorWindows
             createCategory.SetEnabled(false);
             selectedCategory.Name = categoryNameField.value;
             selectedCategory.Objects = new();
+            selectedCategory.id = holder.UniqueCategID();
             holder.Categories.Add(selectedCategory);
             categorySelector.choices.Insert(holder.Categories.Count - 1, selectedCategory.Name);
             categorySelector.value = selectedCategory.Name;

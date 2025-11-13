@@ -235,6 +235,9 @@ public static class MyRes
                 h.SetJob(job);
                 return;
             }
+            SceneRefs.ObjectFactory.CreateChunk(h.GetPos(), h.Inventory, false);
+            h.Inventory.types.Clear();
+            h.Inventory.ammounts.Clear();
         }
         h.SetJob(JobState.Free);
     }
@@ -246,7 +249,7 @@ public static class MyRes
     /// <param name="h"></param>
     /// <param name="perfect"></param>
     /// <returns></returns>
-    static List<IStorage> FilterStorages(Resource r, Human h, bool perfect)
+    static List<IStorage> FilterStorages(Resource r, Human h, bool perfect, bool onlyFirst = false)
     {
         List<IStorage> storages = SceneRefs.JobQueue.storages.ToList();
         int wantToStore = r.Sum();
@@ -436,6 +439,11 @@ public static class MyRes
             moneyCost = -moneyCost;
         }
         ManageMoneyGlobal(-moneyCost);
+    }
+
+    public static bool CanStore(Resource resource, Human h)
+    {
+        return FilterStorages(resource, h, false, true).Count > 0;
     }
     #endregion
 }

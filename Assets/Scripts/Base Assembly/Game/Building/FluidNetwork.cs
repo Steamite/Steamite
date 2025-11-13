@@ -107,7 +107,7 @@ public class FluidNetwork
 
     }
 
-    public bool HasSpace(Fluid fluid)
+    public bool HasSpace(Resource fluid)
     {
         return buildings.FirstOrDefault(q => q.StoredFluids.HasSpace(fluid)) != null;
     }

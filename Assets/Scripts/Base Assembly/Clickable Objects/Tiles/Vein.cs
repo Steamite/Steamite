@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class Vein : TileSource
 {
-    [SerializeField] Resource storing = new();
-    [CreateProperty] public Resource Storing { get => storing; set => storing = value; }
 
     public int xSize;
     public int zSize;
@@ -20,7 +18,7 @@ public class Vein : TileSource
         Resource change = new();
         Storing.GetResOfAmmount(change, ammount, remove);
         UIUpdate(nameof(Storing));
-        if (storing.Sum() == 0)
+        if (Storing.Sum() == 0)
             HasResources = false;
         return change;
     }

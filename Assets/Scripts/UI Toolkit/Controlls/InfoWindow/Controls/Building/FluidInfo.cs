@@ -43,7 +43,7 @@ public partial class FluidInfo : InfoWindowControl
         switch (data)
         {
             case IFluidWork:
-                Fluid fluid = (data as IFluidWork).StoredFluids;
+                CapacityResource fluid = (data as IFluidWork).StoredFluids;
                 dataSource = data;
                 for (int i = 0; i < fluid.types.Count; i++)
                 {
@@ -54,19 +54,19 @@ public partial class FluidInfo : InfoWindowControl
                     var container = containers[i];
                     var x = i;
                     DataBinding binding = BindingUtil.CreateBinding(nameof(IFluidWork.StoredFluids));
-                    binding.sourceToUiConverters.AddConverter((ref Fluid flu) =>
+                    binding.sourceToUiConverters.AddConverter((ref CapacityResource flu) =>
                     {
-                        Debug.Log((float)flu[t] / flu.capacities[x] * size);
-                        return new StyleLength(flu[t] / (float)flu.capacities[x] * size);
+                        Debug.Log(flu[t] / (float)+flu.capacity * size);
+                        return new StyleLength(flu[t] / (float)+flu.capacity * size);
                     });
                     SceneRefs.InfoWindow.RegisterTempBinding(new BindingContext(container.filledMask, "style." + nameof(VisualElement.style.height)), binding, data);
 
                     binding = BindingUtil.CreateBinding(nameof(IFluidWork.StoredFluids));
-                    binding.sourceToUiConverters.AddConverter((ref Fluid flu) => $"{flu.ammounts[x]} / {flu.capacities[x]}");
+                    binding.sourceToUiConverters.AddConverter((ref CapacityResource flu) => $"{flu.ammounts[x]} / {+flu.capacity}");
                     SceneRefs.InfoWindow.RegisterTempBinding(new BindingContext(container.filledLabel, "text"), binding, data);
 
                     binding = BindingUtil.CreateBinding(nameof(IFluidWork.StoredFluids));
-                    binding.sourceToUiConverters.AddConverter((ref Fluid flu) => $"{flu.ammounts[x]} / {flu.capacities[x]}");
+                    binding.sourceToUiConverters.AddConverter((ref CapacityResource flu) => $"{flu.ammounts[x]} / {+flu.capacity}");
                     SceneRefs.InfoWindow.RegisterTempBinding(new BindingContext(container.emptyLabel, "text"), binding, data);
                 }
                 break;

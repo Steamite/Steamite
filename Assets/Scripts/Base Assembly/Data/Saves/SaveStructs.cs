@@ -117,6 +117,7 @@ public class RockSave : ClickableObjectSave
     public float originalIntegrity;
     public float integrity;
     public bool toBeDug;
+    public HiddenSave hiddenSave;
 
     public RockSave() { }
 
@@ -130,10 +131,40 @@ public class RockSave : ClickableObjectSave
         id = -1;
     }
 }
+
+public enum HiddenType
+{
+    Nothing,
+    Water
+}
+[Serializable]
+public class HiddenSave
+{
+    public HiddenType assignedType;
+    public int ammount = 0;
+}
+
+
 [Serializable]
 public class WaterSave : ClickableObjectSave
 {
     public ResourceSave fluid;
+
+    public WaterSave() { }
+    public WaterSave(ResourceSave _fluid)
+    {
+        fluid = _fluid;
+        id = -1;
+    }
+
+    public WaterSave(int i)
+    {
+        fluid = new() 
+        {
+            ammounts = { i}, 
+            types = { ResFluidTypes.GetSaveIndex(ResFluidTypes.GetFluidByName("Water"))}
+        };
+    }
 }
 
 [Serializable]
@@ -188,7 +219,7 @@ public class StorageBSave : BuildingSave
         isMain = true;
         int i = 1;
         canStore = new();
-        foreach (var categ in ResFluidTypes.FullRes)
+        foreach (var categ in ResFluidTypes.FullRes.Skip(1).SkipLast(1))
         {
             foreach (var obj in categ.Objects)
             {

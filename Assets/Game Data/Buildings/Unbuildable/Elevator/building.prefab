@@ -229,5 +229,11 @@ MonoBehaviour:
   maximalProgress: 0
   prefabConnection:
     categoryId: 1
-    objectId: 1122905122
-  canStoreInt: 16969858
+    objectId: 1458562700
+  assignLimit:
+    baseValue: 3
+    currentValue: 3
+    mod:
+      percentMod: 1
+      absoluteMod: 0
+  canStoreInt: 18446744073709551615

@@ -70,7 +70,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
                 return l;
             };
         dataGrid.columns["id"].bindCell =
-            (el, i) => ((Label)el).text = selectedCategory.Objects[i].id.ToString();
+            (el, i) => ((Label)el).text = selectedCategory.Objects[i]?.id.ToString();
         #endregion
 
         #region Name

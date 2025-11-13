@@ -3,6 +3,7 @@ using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// Makes up most of the map, holds valuable resources. <br/>
@@ -25,8 +26,8 @@ public class Rock : ClickableObject
     /// <summary>Is marked to be digged out.</summary>
     public bool toBeDug;
 
-    /// <summary>Prefab to replace.</summary>
-    public string assetPath;
+    /// <summary>Data for replacement.</summary>
+    public HiddenSave hiddenSave = new();
 
     bool hidden = true;
     public bool isQuest = false;
@@ -118,6 +119,7 @@ public class Rock : ClickableObject
         (clickable as RockSave).integrity = integrity;
         (clickable as RockSave).originalIntegrity = originalIntegrity;
         (clickable as RockSave).toBeDug = toBeDug;
+        (clickable as RockSave).hiddenSave = hiddenSave;
         return base.Save(clickable);
     }
 
@@ -128,6 +130,7 @@ public class Rock : ClickableObject
         originalIntegrity = (save as RockSave).originalIntegrity;
         toBeDug = (save as RockSave).toBeDug;
         rockYield = new((save as RockSave).yeild);
+        hiddenSave = (save as RockSave).hiddenSave;
         base.Load(save);
     }
     #endregion Saving
@@ -139,18 +142,22 @@ public class Rock : ClickableObject
     /// </summary>
     /// <param name="damage">Damage to integrity</param>
     /// <returns>If the rock is destroyed.</returns>
-    public bool DamageRock(float damage)
+    public bool DamageRock(float damage, Human human)
     {
         Integrity -= damage;
         if (Integrity <= 0)
         {
             if (rockYield?.Sum() > 0)
             {
-                Chunk chunk = SceneRefs.ObjectFactory.CreateChunk(GetPos(), rockYield, true);
+                Chunk chunk = SceneRefs.ObjectFactory.CreateChunk(
+                    hiddenSave.assignedType == HiddenType.Nothing 
+                        ? GetPos()
+                        : human.GetPos(),
+                    rockYield, true);
                 chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material.color
                     = GetComponent<MeshRenderer>().material.color;
             }
-            SceneRefs.ObjectFactory.CreateRoad(GetPos(), true);
+            SceneRefs.ObjectFactory.CreateObjectUnderRock(this);
             SceneRefs.QuestController.DigRock(this);
             MyGrid.UnsetRock(this);
             return true;

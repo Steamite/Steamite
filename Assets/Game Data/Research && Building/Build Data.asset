@@ -16,72 +16,131 @@ MonoBehaviour:
   - id: 1
     Name: Unbuildable
     Objects:
-    - Name: 
-      id: 1122905122
-      b: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
-      preview: {fileID: 21300000, guid: 28711bc89a9f8b244a01e3d359df53d2, type: 3}
-    - Name: 
-      id: 15011832
-      b: {fileID: -4896197024522523346, guid: 83179e38183e2cf4280bd1d2d0600fe8, type: 3}
-      preview: {fileID: 21300000, guid: 032dbbcad04145d4ab75a1c8aa050db4, type: 3}
-    - Name: 
-      id: 277555999
-      b: {fileID: 2608198296355501892, guid: 72c10e4b0dc8a754fa35ae545bdfda96, type: 3}
-      preview: {fileID: 21300000, guid: 844559dcf93745c499f6f30a2b1dd430, type: 3}
-    - Name: 
-      id: 635712276
-      b: {fileID: 3249735581231611369, guid: 74dfacf7662e6ee439cfa91a20f4b354, type: 3}
-      preview: {fileID: 21300000, guid: 38087adf0506ee74a83573a1ece97ced, type: 3}
+    - rid: 8808251701909258314
+    - rid: 8808251703612669980
+    - rid: 8808251703612669981
+    - rid: 8808251703612669982
     Icon: {fileID: 5923138177525885446, guid: e9d58580ef70b7744addd1ff255f07aa, type: 3}
   - id: 2
     Name: Production
     Objects:
-    - Name: 
-      id: 1472558132
-      b: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
-      preview: {fileID: 21300000, guid: e2dedb0ab53d02a4a8b0e2eb23c72ddb, type: 3}
-    - Name: 
-      id: 1197943099
-      b: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
-      preview: {fileID: 21300000, guid: 6141d9965f66f6a4097dac7efb27eaa4, type: 3}
-    - Name: 
-      id: 1210278343
-      b: {fileID: -8095187260356523125, guid: 2ffa8c7c60840cf40ac52e767bf304b8, type: 3}
-      preview: {fileID: 21300000, guid: f718799bf6a46be46a04d16c3651babf, type: 3}
+    - rid: 8808251703612669983
+    - rid: 8808251703612669984
+    - rid: 8808251703612669985
     Icon: {fileID: 2800000, guid: 31a2fc60fcb027a45869f7484256409a, type: 3}
   - id: 3
     Name: Population
     Objects:
-    - Name: 
-      id: 1580670160
-      b: {fileID: -5750915001953968721, guid: ee9e7a14f264a9347b18aa26ab4bf3ae, type: 3}
-      preview: {fileID: 21300000, guid: 99c47f49e7b31bb458a9f7b76d1fe662, type: 3}
-    - Name: 
-      id: 1632144239
-      b: {fileID: 3899939243742089161, guid: 47fed3082c867844ea963e9a17d26576, type: 3}
-      preview: {fileID: 21300000, guid: 729a493191982dd44beeec1170baec64, type: 3}
+    - rid: 8808251703612669986
+    - rid: 8808251703612669987
     Icon: {fileID: 2800000, guid: ebd657dbff7382b49ac208b65a2fc976, type: 3}
   - id: 4
     Name: Fluids
     Objects:
-    - Name: 
-      id: 1082678288
-      b: {fileID: 4676457964629507834, guid: da0ceec4036bc3d44953be9eccb21147, type: 3}
-      preview: {fileID: 21300000, guid: af12f7dbf4371724b9331c594fb1b6d4, type: 3}
-    - Name: 
-      id: 2082713551
-      b: {fileID: 5046250939739785881, guid: 31ecaffeada030a45935b04c1e9889a5, type: 3}
-      preview: {fileID: 21300000, guid: 8d56f6d5e177f0343bf4465b57cb3d33, type: 3}
-    - Name: 
-      id: 262182155
-      b: {fileID: -5037607063443067742, guid: 71345d36f743a7e47a57a60a967e4a78, type: 3}
-      preview: {fileID: 21300000, guid: 3c805fc3897ae954594f05dc27600b4d, type: 3}
-    - Name: 
-      id: 458707137
-      b: {fileID: -5511517730131264353, guid: 34114f6e253d3fa439554c199a1ad10b, type: 3}
-      preview: {fileID: 21300000, guid: 8831f13d226e4154897c29c1f62d2eed, type: 3}
-    - Name: 
-      id: 1473669319
-      b: {fileID: 8030177481246889903, guid: 6c1663227674e6e44bf2a4d444928f5a, type: 3}
-      preview: {fileID: 21300000, guid: c63621c53a7984e41a870e4e0778ed5e, type: 3}
+    - rid: 8808251703612669988
+    - rid: 8808251703612669989
+    - rid: 8808251703612669990
+    - rid: 8808251703612669991
+    - rid: 8808251703612669992
     Icon: {fileID: 3506167780502562645, guid: e9d58580ef70b7744addd1ff255f07aa, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8808251701909258314
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 1458562700
+        b: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+        preview: {fileID: 21300000, guid: 28711bc89a9f8b244a01e3d359df53d2, type: 3}
+    - rid: 8808251703612669980
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 242703327
+        b: {fileID: -4896197024522523346, guid: 83179e38183e2cf4280bd1d2d0600fe8, type: 3}
+        preview: {fileID: 21300000, guid: 0ef82ac86a3e2e94298e673ef0925f4d, type: 3}
+    - rid: 8808251703612669981
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 1655383015
+        b: {fileID: 2608198296355501892, guid: 72c10e4b0dc8a754fa35ae545bdfda96, type: 3}
+        preview: {fileID: 21300000, guid: 844559dcf93745c499f6f30a2b1dd430, type: 3}
+    - rid: 8808251703612669982
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 1319472487
+        b: {fileID: 3249735581231611369, guid: 74dfacf7662e6ee439cfa91a20f4b354, type: 3}
+        preview: {fileID: 21300000, guid: 38087adf0506ee74a83573a1ece97ced, type: 3}
+    - rid: 8808251703612669983
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 1235511660
+        b: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+        preview: {fileID: 21300000, guid: e2dedb0ab53d02a4a8b0e2eb23c72ddb, type: 3}
+    - rid: 8808251703612669984
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 2109301932
+        b: {fileID: -8095187260356523125, guid: 2ffa8c7c60840cf40ac52e767bf304b8, type: 3}
+        preview: {fileID: 21300000, guid: f718799bf6a46be46a04d16c3651babf, type: 3}
+    - rid: 8808251703612669985
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 1915475883
+        b: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
+        preview: {fileID: 21300000, guid: 6141d9965f66f6a4097dac7efb27eaa4, type: 3}
+    - rid: 8808251703612669986
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 268937765
+        b: {fileID: -5750915001953968721, guid: ee9e7a14f264a9347b18aa26ab4bf3ae, type: 3}
+        preview: {fileID: 0}
+    - rid: 8808251703612669987
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 640485558
+        b: {fileID: 3899939243742089161, guid: 47fed3082c867844ea963e9a17d26576, type: 3}
+        preview: {fileID: 0}
+    - rid: 8808251703612669988
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 1277743679
+        b: {fileID: 4676457964629507834, guid: da0ceec4036bc3d44953be9eccb21147, type: 3}
+        preview: {fileID: 21300000, guid: af12f7dbf4371724b9331c594fb1b6d4, type: 3}
+    - rid: 8808251703612669989
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 63962023
+        b: {fileID: 5046250939739785881, guid: 31ecaffeada030a45935b04c1e9889a5, type: 3}
+        preview: {fileID: 21300000, guid: 8d56f6d5e177f0343bf4465b57cb3d33, type: 3}
+    - rid: 8808251703612669990
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 1611848327
+        b: {fileID: 8030177481246889903, guid: 6c1663227674e6e44bf2a4d444928f5a, type: 3}
+        preview: {fileID: 21300000, guid: c63621c53a7984e41a870e4e0778ed5e, type: 3}
+    - rid: 8808251703612669991
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 1298733611
+        b: {fileID: -5511517730131264353, guid: 34114f6e253d3fa439554c199a1ad10b, type: 3}
+        preview: {fileID: 21300000, guid: 8831f13d226e4154897c29c1f62d2eed, type: 3}
+    - rid: 8808251703612669992
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 159146180
+        b: {fileID: -5037607063443067742, guid: 71345d36f743a7e47a57a60a967e4a78, type: 3}
+        preview: {fileID: 21300000, guid: 3c805fc3897ae954594f05dc27600b4d, type: 3}

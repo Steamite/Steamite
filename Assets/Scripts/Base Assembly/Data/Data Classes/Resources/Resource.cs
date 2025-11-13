@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>Game resources.</summary>
@@ -117,6 +118,21 @@ public class Resource
         }
     }
     #endregion
+
+    public bool Contains(Resource fluidCost)
+    {
+        for (int i = 0; i < fluidCost.types.Count; i++)
+        {
+            if (types.Contains(fluidCost.types[i]))
+            {
+                if (this[fluidCost.types[i]] - fluidCost.ammounts[i] < 0)
+                    return false;
+            }
+            else
+                return false;
+        }
+        return true;
+    }
 
     protected virtual void Add(ResourceType type, int ammount)
     {
@@ -268,5 +284,11 @@ public class Resource
         Resource res = new(a);
         res.Manage(b, false, removeEmpty: true);
         return res;
+    }
+
+    public void Clear()
+    {
+        ammounts.Clear();
+        types.Clear();
     }
 }

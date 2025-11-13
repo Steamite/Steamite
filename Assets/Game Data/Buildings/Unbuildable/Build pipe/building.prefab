@@ -196,7 +196,7 @@ MonoBehaviour:
   maximalProgress: 0
   prefabConnection:
     categoryId: 1
-    objectId: 15011832
+    objectId: 242703327
   network:
     pipes: []
     consumptionBuildings: []
