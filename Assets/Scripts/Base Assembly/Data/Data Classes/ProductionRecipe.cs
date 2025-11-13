@@ -7,6 +7,13 @@ public class ProductionRecipe : DataObject
     public MoneyResource resourceYield = new();
     public int timeInTicks;
 
+    public ProductionRecipe(ProductionRecipe recipe) : base(recipe)
+    {
+        resourceCost = recipe.resourceCost;
+        resourceYield = recipe.resourceYield;
+        timeInTicks = recipe.timeInTicks;
+    }
+
     public ProductionRecipe(int _id) : base(_id) { }
     public ProductionRecipe() { }
 }

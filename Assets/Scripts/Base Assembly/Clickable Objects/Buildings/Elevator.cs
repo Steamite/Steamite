@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// <inheritdoc cref="IStorage"/>
 /// </summary>
-public class Elevator : Building, IStorage
+public class Elevator : Building, IStorage, IBuilderHut
 {
     #region Variables
     /// <inheritdoc/>
@@ -13,6 +13,12 @@ public class Elevator : Building, IStorage
     public StorageResource LocalResources => localRes;
 
     public ulong CanStoreMask { get => canStoreInt; set => canStoreInt = value; }
+    
+    [CreateProperty] public List<Human> Assigned { get; set; } = new();
+
+    public ModifiableInteger assignLimit;
+    [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
+
     [SerializeField] ulong canStoreInt;
     #endregion
 
@@ -26,6 +32,7 @@ public class Elevator : Building, IStorage
     {
         toEnable.Add("Storage", new List<string> { "Storage Info" });
         toEnable.Add("Levels", new List<string> { "Level Info" });
+        toEnable.Add("Builders", new List<string> { "Assign Info" });
         base.ToggleInfoComponents(info, toEnable);
     }
 
@@ -87,7 +94,8 @@ public class Elevator : Building, IStorage
             Resource transferRes = new();
             for (int i = 0; i < request.types.Count && spaceToStore > 0; i++)
             {
-                if (CanStore[ResFluidTypes.GetResourceIndex(request.types[i])])
+                int x = LocalResources.types.IndexOf(request.types[i]);
+                if(x > -1 && CanStore[x])
                 {
                     transferRes.types.Add(request.types[i]);
                     if (spaceToStore > request.ammounts[i])
@@ -102,6 +110,10 @@ public class Elevator : Building, IStorage
                         MyRes.globalStorageSpace -= spaceToStore;
                         break;
                     }
+                }
+                else
+                {
+                    Debug.LogWarning($"X is out of range {x}, Count: {CanStore.Count}");
                 }
             }
             request = transferRes;

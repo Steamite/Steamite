@@ -6,8 +6,8 @@ public class FluidTank : Building, IFluidWork
 {
     public List<BuildPipe> AttachedPipes { get; set; }
 
-    [SerializeField] Fluid storedFluid;
-    [CreateProperty] public Fluid StoredFluids { get => storedFluid; set => storedFluid = value; }
+    [SerializeField] CapacityResource storedFluid;
+    [CreateProperty] public CapacityResource StoredFluids { get => storedFluid; set => storedFluid = value; }
     public ulong TypesToStore;
     public override void FinishBuild()
     {
@@ -21,7 +21,6 @@ public class FluidTank : Building, IFluidWork
             {
                 storedFluid.types.Add(ResFluidTypes.GetFluidByIndex(i));
                 storedFluid.ammounts.Add(0);
-                storedFluid.capacities.Add(localRes.capacity.currentValue);
             }
             byt = byt >> 1;
             i++;
@@ -51,7 +50,8 @@ public class FluidTank : Building, IFluidWork
     }
     public override void Load(ClickableObjectSave save)
     {
-        StoredFluids = new((save as TankBSave).fluidSave);
+        StoredFluids.Clear();
+        StoredFluids.Manage(new(((FluidResProductionSave)save).fluidSave), true);
         base.Load(save);
     }
     #endregion

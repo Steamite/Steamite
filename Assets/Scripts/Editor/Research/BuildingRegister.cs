@@ -383,7 +383,8 @@ namespace EditorWindows.Windows
                 bindCell = (el, i) =>
                 {
                     RecipeCell cell = el as RecipeCell;
-                    if (((BuildingWrapper)dataGrid.itemsSource[i]).building is IResourceProduction production)
+                    Building building = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
+                    if (building is IResourceProduction production && building is not NeedSourceProduction)
                     {
                         cell.userData = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
                         cell.Open(production);
@@ -606,11 +607,13 @@ namespace EditorWindows.Windows
                 title = "Capacity",
                 resizable = true,
                 width = 75,
-                makeCell = () => new IntegerField(),
+                makeCell = () => new VisualElement(),
                 bindCell = (el, i) =>
                 {
-                    IntegerField field = (IntegerField)el;
+                    el.Clear();
                     Building building = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
+
+                    IntegerField field = new();
                     if (building != null)
                     {
                         if (building.LocalRes.capacity == null)
@@ -619,12 +622,27 @@ namespace EditorWindows.Windows
                     }
                     else
                         field.value = 0;
+                    el.Add(field);
                     field.RegisterValueChangedCallback(StorageCapacityChanged);
+
+                    if (building is FluidResProductionBuilding fluidRes)
+                    {
+                        field = new IntegerField();
+                        if (fluidRes.fluidCapacity == null)
+                            fluidRes.fluidCapacity = new(-1);
+                        field.value = fluidRes.fluidCapacity.BaseValue;
+
+                        el.Add(field);
+                        field.RegisterValueChangedCallback(FluidCapacityChanged);
+                    }
+
                 },
                 unbindCell = (el, i) =>
                 {
-                    IntegerField field = (IntegerField)el;
-                    field.UnregisterValueChangedCallback(StorageCapacityChanged);
+                    (el[0] as IntegerField).UnregisterValueChangedCallback(StorageCapacityChanged);
+                    if(el.childCount > 1)
+                        (el[1] as IntegerField).UnregisterValueChangedCallback(FluidCapacityChanged);
+                    el.Clear();
                 },
             });
         }
@@ -839,6 +857,17 @@ namespace EditorWindows.Windows
             {
                 ((BuildingWrapper)dataGrid.itemsSource[i]).building.LocalRes.capacity.BaseValue = ev.newValue;
                 EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
+            }
+        }
+
+        void FluidCapacityChanged(ChangeEvent<int> ev)
+        {
+            int i = ev.target.GetRowIndex();
+            Building building = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
+            if (building != null && building is FluidResProductionBuilding fluidRes)
+            {
+                fluidRes.fluidCapacity.BaseValue = ev.newValue;
+                EditorUtility.SetDirty(building);
             }
         }
         #endregion

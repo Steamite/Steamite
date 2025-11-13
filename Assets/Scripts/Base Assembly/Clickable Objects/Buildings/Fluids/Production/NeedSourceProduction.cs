@@ -13,7 +13,7 @@ public class NeedSourceProduction : FluidResProductionBuilding, IResourceProduct
         }
     }
     TileSource source;
-    public int ammountPerCycle = 3;
+    public int ammountPerTick = 3;
 
     public override void FinishBuild()
     {
@@ -45,13 +45,15 @@ public class NeedSourceProduction : FluidResProductionBuilding, IResourceProduct
     {
         if (source is Vein)
         {
-            ResourceYield = new(source.RemoveFromSource(ammountPerCycle, takeFromSource) as Resource);
+            ResourceYield = new(source.RemoveFromSource(ammountPerTick, takeFromSource) as Resource);
             UIUpdate(nameof(ResourceYield));
         }
         else
         {
-            FluidYeild = new(source.RemoveFromSource(ammountPerCycle, takeFromSource) as Fluid);
+            FluidYeild = new(source.RemoveFromSource(ammountPerTick, takeFromSource) as Resource);
+            //FluidCost = FluidYeild;
             UIUpdate(nameof(FluidYeild));
+            UIUpdate(nameof(Source) + "." + nameof(TileSource.Storing));
         }
     }
 }

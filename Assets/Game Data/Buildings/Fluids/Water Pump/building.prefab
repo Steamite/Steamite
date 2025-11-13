@@ -189,11 +189,13 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    types: []
-    ammounts: 
+    types:
+    - {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
+    ammounts: 0a000000
     baseResource:
-      types: []
-      ammounts: 
+      types:
+      - {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
+      ammounts: 0a000000
     mod:
       percentMod: 1
       absoluteMod: 0
@@ -209,7 +211,7 @@ MonoBehaviour:
   maximalProgress: 0
   prefabConnection:
     categoryId: 4
-    objectId: 2082713551
+    objectId: 63962023
   assignLimit:
     baseValue: 2
     currentValue: 2
@@ -245,13 +247,34 @@ MonoBehaviour:
   fluidCost:
     types: []
     ammounts: 
-    capacities: 
+    baseResource:
+      types: []
+      ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
   fluidYeild:
     types: []
     ammounts: 
-    capacities: 
+    baseResource:
+      types: []
+      ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
   storedFluids:
     types: []
     ammounts: 
-    capacities: 
-  ammountPerCycle: 3
+    capacity:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
+  fluidCapacity:
+    baseValue: 50
+    currentValue: 0
+    mod:
+      percentMod: 1
+      absoluteMod: 0
+  ammountPerTick: 3

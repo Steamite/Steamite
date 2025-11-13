@@ -1,9 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine.UIElements;
 
 public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, ProductionRecipe>
 {
+    static List<Type> types = TypeCache.GetTypesDerivedFrom(typeof(ProductionRecipe)).Prepend(typeof(ProductionRecipe)).ToList();
+    static List<string> choices = types.Select(q => q.Name).ToList();
+
     [MenuItem("Custom Editors/Recipe register %u", priority = 14)]
     public static void Open()
     {
@@ -80,5 +85,6 @@ public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, Productio
         selectedCategory.Objects[row].timeInTicks = ev.newValue;
         EditorUtility.SetDirty(holder);
     }
+
 }
 

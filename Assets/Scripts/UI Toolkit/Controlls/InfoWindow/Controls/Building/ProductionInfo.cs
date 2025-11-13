@@ -169,7 +169,7 @@ namespace InfoWindowViews
                 {
                     //ProductionRecipe recipe = list.First() as ProductionRecipe;
                     SceneRefs.InfoWindow.CloseSecondWindow();
-                    (building as IResourceProduction).SetRecipe(view.selectedIndex);
+                    (building as IResourceProduction).SetRecipe(view.selectedIndex, true);
                 };
             }
             else
@@ -189,10 +189,10 @@ namespace InfoWindowViews
             radialElement.Open(data);
 
             DataBinding binding;
-            if (building is FluidResProductionBuilding)
+            if (building is FluidResProductionBuilding fluidRes)
             {
                 binding = BindingUtil.CreateBinding(nameof(NeedSourceProduction.StoredFluids));
-                binding.sourceToUiConverters.AddConverter((ref Fluid fluid) => $"Space\n{fluid.ammounts.Sum()}/{fluid.capacities[0]}");
+                binding.sourceToUiConverters.AddConverter((ref CapacityResource fluid) => $"Space\n{fluid.ammounts.Sum()}/{fluid.capacity}");
                 SceneRefs.InfoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
             }
             else

@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 
@@ -38,6 +39,7 @@ public class CapacityResource : Resource
         ((IModifiable)capacity).Init();
     }
 
+
     public override bool Equals(object _resource)
     {
         if (_resource is not CapacityResource)
@@ -45,8 +47,15 @@ public class CapacityResource : Resource
         return base.Equals(_resource);
     }
 
+
+
     public override int GetHashCode()
     {
         return HashCode.Combine(base.GetHashCode(), types, ammounts, capacity, FreeSpace);
+    }
+
+    public bool HasSpace(Resource resource)
+    {
+        return ammounts.Sum() + resource.ammounts.Sum() <= +capacity;
     }
 }

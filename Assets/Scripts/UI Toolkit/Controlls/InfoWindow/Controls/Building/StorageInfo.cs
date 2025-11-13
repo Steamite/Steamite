@@ -142,6 +142,28 @@ namespace InfoWindowElements
         void ToggleCanStore(bool b, int i)
         {
             storage.CanStore[i] = b;
+            if(b == false)
+            {
+                for (int j = storage.LocalResources.carriers.Count - 1; j > -1; j--)
+                {
+                    Resource resource = storage.LocalResources.requests[j];
+                    int typeIndex = resource.types.IndexOf(storage.LocalResources.types[i]);
+                    if (typeIndex > -1)
+                    {
+                        if (resource.types.Count == 1)
+                        {
+                            Human human = storage.LocalResources.carriers[typeIndex];
+                            storage.LocalResources.RemoveRequest(human);
+                            MyRes.FindStorage(human);
+                        }
+                        else
+                        {
+                            resource.ammounts.RemoveAt(typeIndex);
+                            resource.types.RemoveAt(typeIndex);
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>

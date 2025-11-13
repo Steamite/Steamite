@@ -3,7 +3,7 @@ using System.Linq;
 public interface IFluidWork
 {
     List<BuildPipe> AttachedPipes { get; set; }
-    Fluid StoredFluids { get; set; }
+    CapacityResource StoredFluids { get; set; }
 
     /// <summary>
     /// Call in PlaceBuilding(), places pipes.
@@ -58,7 +58,7 @@ public interface IFluidWork
     /// Finds buildings that can contain the needed fluids and then tries to take it from them.
     /// </summary>
     /// <param name="fluid">Fluid to take</param>
-    bool TakeFromNetwork(Fluid fluid, bool immediatelyUse = true)
+    bool TakeFromNetwork(Resource fluid, bool immediatelyUse = true)
     {
         if (StoredFluids.Contains(fluid))
         {
@@ -75,7 +75,7 @@ public interface IFluidWork
                 .Where(q => q.StoredFluids.types.Union(fluid.types).Count() > 0))
                 .Where(q => q != this);
 
-        Fluid toTransfer = new(fluid);
+        Resource toTransfer = new(fluid);
         foreach (var storage in bestSources)
         {
             storage.StoredFluids.TakeResource(toTransfer);
@@ -106,7 +106,7 @@ public interface IFluidWork
         return false;
     }
 
-    public bool StoreInNetwork(Fluid fluid, bool storeInSelf = true)
+    public bool StoreInNetwork(Resource fluid, bool storeInSelf = true)
     {
         if (storeInSelf && StoredFluids.HasSpace(fluid))
         {
@@ -158,7 +158,7 @@ public interface IFluidWork
         }
     }
 
-    public bool HasSpace(Fluid fluid)
+    public bool HasSpace(Resource fluid)
     {
         return AttachedPipes.Select(q => q.network).Distinct().FirstOrDefault(q => q.HasSpace(fluid)) != null;
     }

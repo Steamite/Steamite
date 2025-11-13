@@ -16,21 +16,7 @@ MonoBehaviour:
   - id: 1
     Name: Story
     Objects:
-    - Name: ABC
-      id: 1243577587
-      description: Use Dig to enter dig selection and select rocks.
-      state: 0
-      timeToFail: 20
-      rewards:
-      - rid: 7966940744893857880
-      penalties:
-      - rid: 7966940744893857881
-      objectives:
-      - rid: 7966940744893857878
-      - rid: 7966940744893857882
-      nextQuests:
-      - categoryId: 3
-        objectId: 1940834208
+    - rid: 8808251705770377216
     Icon: {fileID: 2800000, guid: 2b61dc557efa942428ac194cfa787fd7, type: 3}
   - id: 2
     Name: Test
@@ -39,130 +25,80 @@ MonoBehaviour:
   - id: 3
     Name: Orders
     Objects:
-    - Name: AD
-      id: 2046668337
-      description: ORDER
-      state: 0
-      timeToFail: 10
-      rewards:
-      - rid: 8959859900619423897
-      penalties:
-      - rid: 7966940814333444216
-      objectives:
-      - rid: 7966940744893857883
-      nextQuests: []
-    - Name: B
-      id: 1940834208
-      description: 
-      state: 0
-      timeToFail: 5
-      rewards:
-      - rid: 7966940927005295013
-      penalties:
-      - rid: 7966940927005295014
-      objectives:
-      - rid: 7966940927005295015
-      nextQuests: []
-    - Name: C
-      id: 2103426518
-      description: 
-      state: 0
-      timeToFail: 4
-      rewards:
-      - rid: 7966940927005295016
-      penalties:
-      - rid: 7966940927005295017
-      objectives:
-      - rid: 7966940927005295018
-      nextQuests: []
+    - rid: 8808251705770377220
     Icon: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: 7966940744893857878
+    - rid: 8808251705770377216
+      type: {class: Quest, ns: , asm: Quests}
+      data:
+        Name: Digging
+        id: 432565093
+        description: Mine Rocks
+        state: 0
+        timeToFail: 40
+        rewards:
+        - rid: 8808251705770377219
+        penalties: []
+        objectives:
+        - rid: 8808251705770377217
+        - rid: 8808251705770377218
+        nextQuests: []
+    - rid: 8808251705770377217
+      type: {class: AnyExcavationObjective, ns: Objectives, asm: Quests}
+      data:
+        maxProgress: 5
+    - rid: 8808251705770377218
       type: {class: ExcavationObjective, ns: Objectives, asm: Quests}
       data:
         maxProgress: 0
         needToRemove:
         - x: 9
-          z: 6
-          y: 0
-        - x: 9
           z: 5
-          y: 0
-        - x: 10
-          z: 6
           y: 0
         - x: 10
           z: 5
           y: 0
-    - rid: 7966940744893857880
-      type: {class: QuestResourceReward, ns: , asm: Quests}
+    - rid: 8808251705770377219
+      type: {class: TrustReward, ns: , asm: Quests}
       data:
+        gainAmmount: 30
+    - rid: 8808251705770377220
+      type: {class: Quest, ns: , asm: Quests}
+      data:
+        Name: m
+        id: 1180430887
+        description: jjjjj
+        state: 0
+        timeToFail: 50
+        rewards:
+        - rid: 8808251705770377221
+        penalties:
+        - rid: 8808251705770377222
+        objectives:
+        - rid: 8808251705770377223
+        nextQuests: []
+    - rid: 8808251705770377221
+      type: {class: TrustReward, ns: , asm: Quests}
+      data:
+        gainAmmount: 5
+    - rid: 8808251705770377222
+      type: {class: TrustPenalty, ns: , asm: Quests}
+      data:
+        penaltyAmmount: 20
+    - rid: 8808251705770377223
+      type: {class: ResourceObjective, ns: Objectives, asm: Quests}
+      data:
+        maxProgress: 0
         resource:
           types: []
           ammounts: 
           baseResource:
             types:
-            - {fileID: 0}
-            ammounts: 00000000
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-          money:
-            baseValue: 57
-            currentValue: 57
-            mod:
-              percentMod: 1
-              absoluteMod: 0
-    - rid: 7966940744893857881
-      type: {class: QuestMoneyPenalty, ns: , asm: Quests}
-      data:
-        penaltyAmmount: 80
-    - rid: 7966940744893857882
-      type: {class: AnyExcavationObjective, ns: Objectives, asm: Quests}
-      data:
-        maxProgress: 3
-    - rid: 7966940744893857883
-      type: {class: ResourceObjective, ns: Objectives, asm: Quests}
-      data:
-        maxProgress: 0
-        resource:
-          types: []
-          ammounts: 
-          baseResource:
-            types: []
-            ammounts: 5000000046000000
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-          money:
-            baseValue: 450
-            currentValue: 450
-            mod:
-              percentMod: 1
-              absoluteMod: 0
-    - rid: 7966940814333444216
-      type: {class: TrustPenalty, ns: , asm: Quests}
-      data:
-        penaltyAmmount: 30
-    - rid: 7966940927005295013
-      type: {class: GameWinReward, ns: , asm: Quests}
-      data: 
-    - rid: 7966940927005295014
-      type: {class: TrustPenalty, ns: , asm: Quests}
-      data:
-        penaltyAmmount: 50
-    - rid: 7966940927005295015
-      type: {class: ResourceObjective, ns: Objectives, asm: Quests}
-      data:
-        maxProgress: 0
-        resource:
-          types: []
-          ammounts: 
-          baseResource:
-            types: []
-            ammounts: 32000000
+            - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
+            - {fileID: 11400000, guid: 476987d8701b79b42acf9d04564a5ac0, type: 2}
+            ammounts: 140000000a000000
           mod:
             percentMod: 1
             absoluteMod: 0
@@ -172,33 +108,3 @@ MonoBehaviour:
             mod:
               percentMod: 1
               absoluteMod: 0
-    - rid: 7966940927005295016
-      type: {class: GameWinReward, ns: , asm: Quests}
-      data: 
-    - rid: 7966940927005295017
-      type: {class: TrustPenalty, ns: , asm: Quests}
-      data:
-        penaltyAmmount: 100
-    - rid: 7966940927005295018
-      type: {class: ResourceObjective, ns: Objectives, asm: Quests}
-      data:
-        maxProgress: 0
-        resource:
-          types: []
-          ammounts: 
-          baseResource:
-            types: []
-            ammounts: 64000000
-          mod:
-            percentMod: 1
-            absoluteMod: 0
-          money:
-            baseValue: 0
-            currentValue: 0
-            mod:
-              percentMod: 1
-              absoluteMod: 0
-    - rid: 8959859900619423897
-      type: {class: TrustReward, ns: , asm: Quests}
-      data:
-        gainAmmount: 15

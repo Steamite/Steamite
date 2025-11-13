@@ -135,5 +135,12 @@ MonoBehaviour:
   integrity: 3
   originalIntegrity: 0
   toBeDug: 0
-  assetPath: Tile/Road
+  hiddenSave:
+    rid: 8808251680418431948
   isQuest: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 8808251680418431948
+      type: {class: HiddenSave, ns: , asm: BaseAssembly}
+      data: 

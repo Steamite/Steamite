@@ -99,7 +99,7 @@ public static class HumanActions
     /// <param name="h"><inheritdoc cref="Move(Human)"/></param>
     public static void Dig(Human h)
     {
-        if ((h.Job.interest as Rock).DamageRock(digSpeed * h.Efficiency))
+        if ((h.Job.interest as Rock).DamageRock(digSpeed * h.Efficiency, h))
         {
             SceneRefs.JobQueue.CancelJob(JobState.Digging, h.Job.interest); // removes job order
             if (FindRockToDig(h) == false)
@@ -360,7 +360,7 @@ public static class HumanActions
     }
 
     /// <summary>
-    /// finds the closest build
+    /// finds the closest interest
     /// </summary>
     /// <param name="constructions"></param>
     /// <param name="h"></param>
@@ -370,6 +370,17 @@ public static class HumanActions
     {
         if (interests.Count() > 0)
         {
+            if (job == JobState.Pickup || job == JobState.Cleanup)
+            {
+                List<StorageObject> objects = new();
+                foreach (var item in interests)
+                {
+                    Resource resource = (item as StorageObject).LocalRes.Future();
+                    if (resource.ammounts.Sum() > 0 && MyRes.CanStore(resource, h))
+                        objects.Add(item as StorageObject);
+                }
+                interests = objects;
+            }
             JobData data = PathFinder.FindPath(interests.ToList(), h);
             if (data.interest)
             {

@@ -144,8 +144,8 @@ MonoBehaviour:
     types: []
     ammounts: 
     capacity:
-      baseValue: 0
-      currentValue: 0
+      baseValue: 20
+      currentValue: 20
       mod:
         percentMod: 1
         absoluteMod: 0
@@ -199,11 +199,15 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    types: []
-    ammounts: 
+    types:
+    - {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
+    - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
+    ammounts: 0a00000005000000
     baseResource:
-      types: []
-      ammounts: 
+      types:
+      - {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
+      - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
+      ammounts: 0a00000005000000
     mod:
       percentMod: 1
       absoluteMod: 0
@@ -218,8 +222,8 @@ MonoBehaviour:
   constructionProgress: 0
   maximalProgress: 20
   prefabConnection:
-    categoryId: 3
-    objectId: 1580670160
+    categoryId: 2
+    objectId: 268937765
   assignLimit:
     baseValue: 3
     currentValue: 3

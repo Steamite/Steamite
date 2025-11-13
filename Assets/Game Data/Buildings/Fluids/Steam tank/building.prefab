@@ -199,11 +199,13 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    types: []
-    ammounts: 
+    types:
+    - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
+    ammounts: 05000000
     baseResource:
-      types: []
-      ammounts: 
+      types:
+      - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
+      ammounts: 05000000
     mod:
       percentMod: 1
       absoluteMod: 0
@@ -219,9 +221,14 @@ MonoBehaviour:
   maximalProgress: 0
   prefabConnection:
     categoryId: 4
-    objectId: 458707137
+    objectId: 1298733611
   storedFluid:
     types: []
     ammounts: 
-    capacities: 
+    capacity:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
   TypesToStore: 2

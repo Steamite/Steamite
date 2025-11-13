@@ -73,4 +73,6 @@ public class ModifiableInteger : IModifiable
         baseValue = v;
         RecalculateMod();
     }
+
+    public int getBaseVal => baseValue;
 }

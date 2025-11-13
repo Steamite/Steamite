@@ -7,17 +7,19 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IFluidWork
 {
     public List<BuildPipe> AttachedPipes { get; set; } = new();
 
-    [CreateProperty] public Fluid FluidCost { get => fluidCost; set => fluidCost = value; }
-    [SerializeField] Fluid fluidCost = new();
-    [CreateProperty] public Fluid FluidYeild { get => fluidYeild; set => fluidYeild = value; }
-    [SerializeField] Fluid fluidYeild = new();
-    [CreateProperty] public Fluid StoredFluids { get => storedFluids; set => storedFluids = value; }
-    [SerializeField] Fluid storedFluids;
+    [CreateProperty] public ModifiableResource FluidCost { get => fluidCost; set => fluidCost = value; }
+    [SerializeField] ModifiableResource fluidCost = new();
+    [CreateProperty] public ModifiableResource FluidYeild { get => fluidYeild; set => fluidYeild = value; }
+    [SerializeField] ModifiableResource fluidYeild = new();
+    [CreateProperty] public CapacityResource StoredFluids { get => storedFluids; set => storedFluids = value; }
+    [SerializeField] CapacityResource storedFluids;
+
+    public ModifiableInteger fluidCapacity;
 
     public override void FinishBuild()
     {
         ProdStates = new FluidProdStates();
-        StoredFluids = new(FluidCost.types.Union(FluidYeild.types), localRes.capacity.currentValue);
+        StoredFluids = new(localRes.capacity.currentValue);
         base.FinishBuild();
     }
 
@@ -79,7 +81,7 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IFluidWork
 
     void IProduction.Product()
     {
-        // Fluid Prod
+        // Resource Prod
         FluidProdStates states = ProdStates as FluidProdStates;
         states.fluidSpace = ((IFluidWork)this).StoreInNetwork(FluidYeild);
         CurrentTime -= ProdTime;
@@ -102,13 +104,14 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IFluidWork
     {
         if (clickable == null)
             clickable = new FluidResProductionSave();
-        (clickable as FluidResProductionSave).fluidSave = new(StoredFluids);
+        (clickable as FluidResProductionSave).fluidSave = new ResourceSave(StoredFluids);
         return base.Save(clickable);
     }
 
     public override void Load(ClickableObjectSave save)
     {
-        StoredFluids = new((save as FluidResProductionSave).fluidSave);
+        StoredFluids.Clear();
+        StoredFluids.Manage(new(((FluidResProductionSave)save).fluidSave), true);
         base.Load(save);
     }
     #endregion

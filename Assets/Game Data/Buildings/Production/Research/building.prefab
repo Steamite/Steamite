@@ -633,7 +633,7 @@ MonoBehaviour:
   maximalProgress: 20
   prefabConnection:
     categoryId: 2
-    objectId: 1197943099
+    objectId: 1915475883
   assignLimit:
     baseValue: 1
     currentValue: 1

@@ -162,7 +162,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         TabView = null;
         window.RegisterCallback<MouseEnterEvent>(MyOnMouseEnter);
         window.RegisterCallback<MouseLeaveEvent>(MyOnMouseExit);
-        window.style.width = new Length(25, LengthUnit.Percent);
+        //window.style.width = new Length(25, LengthUnit.Percent);
         switch (active)
         {
             case InfoMode.None:
@@ -240,12 +240,11 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                 }
             });
             VisualElement tabContentContainer = activeTab.hierarchy.Children().ElementAt(0);
-            tabContentContainer.style.flexDirection = FlexDirection.Row;
-            float f = 100 / (float)controlsToCreate[key].Count;
-            window.style.width = new Length(25 * controlsToCreate[key].Count, LengthUnit.Percent);
+            //float f = 100 / (float)controlsToCreate[key].Count;
+            //window.style.width = new Length(25 * controlsToCreate[key].Count, LengthUnit.Percent);
             foreach (var control in controlsToCreate[key])
             {
-                controls.CreateElementByName(control, tabContentContainer, building, f);
+                controls.CreateElementByName(control, tabContentContainer, building);
             }
         }
         if (controlsToCreate.Keys.Count == 1)

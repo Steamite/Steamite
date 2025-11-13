@@ -1,3 +1,4 @@
+using System.Net.Sockets;
 using UnityEngine.UIElements;
 
 namespace InfoWindowElements
@@ -17,18 +18,31 @@ namespace InfoWindowElements
             {
                 case FluidResProductionBuilding fluidRes:
                     if (cost)
-                        mainBinding = SetupResTypes(
-                            fluidRes.FluidCost,
-                            nameof(FluidResProductionBuilding.FluidCost),
-                            nameof(FluidResProductionBuilding.StoredFluids),
-                            data);
+                    {
+                        if(fluidRes is NeedSourceProduction source)
+                        {
+                            //mainBinding = SetupResTypes(source.ammountPerTick, );
+                            mainBinding = SetupResTypes(source.FluidYeild, nameof(NeedSourceProduction.Source) +"."+ nameof(NeedSourceProduction.Source.Storing));
+                            mainBinding.sourceToUiConverters.AddConverter((ref Resource fluid) => ToUIRes(fluid));
+                            SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
+                            return;
+                        }
+                        else
+                        {
+                            mainBinding = SetupResTypes(
+                                fluidRes.FluidCost,
+                                nameof(FluidResProductionBuilding.FluidCost),
+                                nameof(FluidResProductionBuilding.StoredFluids),
+                                data);
+                        }
+                    }
                     else
                         mainBinding = SetupResTypes(
                             fluidRes.FluidYeild,
                             nameof(FluidResProductionBuilding.FluidYeild),
                             nameof(FluidResProductionBuilding.StoredFluids),
                             data);
-                    mainBinding.sourceToUiConverters.AddConverter((ref Fluid fluid) => ToUIRes(fluid));
+                    mainBinding.sourceToUiConverters.AddConverter((ref CapacityResource fluid) => ToUIRes(fluid));
                     break;
                 case Water water:
                     noneLabel.dataSource = water;

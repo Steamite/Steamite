@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5898023441544859042
 Transform:
   m_ObjectHideFlags: 0
@@ -5828,6 +5828,14 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: id
       value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: hiddenSave.ammount
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: hiddenSave.assignedType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
@@ -15261,6 +15269,14 @@ PrefabInstance:
       value: 31
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: hiddenSave.ammount
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: hiddenSave.assignedType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -22477,6 +22493,14 @@ PrefabInstance:
       value: 33
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: hiddenSave.ammount
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: hiddenSave.assignedType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -23043,6 +23067,14 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: id
       value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: hiddenSave.ammount
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: hiddenSave.assignedType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size

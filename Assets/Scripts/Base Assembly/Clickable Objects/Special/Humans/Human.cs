@@ -145,7 +145,7 @@ public class Human : ClickableObject
         transform.GetChild(0).gameObject.SetActive(true);
 #endif
         SceneRefs.Tick.SubscribeToEvent(DoRepetableAction, Tick.TimeEventType.Ticks);
-        SceneRefs.Tick.SubscribeToEvent(Day, Tick.TimeEventType.DayStart);
+        //SceneRefs.Tick.SubscribeToEvent(Day, Tick.TimeEventType.DayStart);
         ((IModifiable)Inventory.capacity).Init();
         //SceneRefs.tick.SubscribeToEvent(Night, Tick.TimeEventType.Night);
     }
@@ -325,51 +325,47 @@ public class Human : ClickableObject
             else
                 ChangeAction(null);
         }
-        else if (workplace is AssignHut hut)
+        else if (workplace is IDiggerHut digger)
         {
-            if (hut is DiggerHut)
+            if (!HumanActions.FindRockToDig(this))
             {
-                if (!HumanActions.FindRockToDig(this))
+                if (!(digger as Building).IsInside(GetPos()))
                 {
-                    if (!hut.IsInside(GetPos()))
+                    JobData data = PathFinder.FindPath(new() { (digger as Building) }, this);
+                    data.job = JobState.FullTime;
+                    if (data.interest != null)
                     {
-                        JobData data = PathFinder.FindPath(new() { hut }, this);
-                        data.job = JobState.FullTime;
-                        if (data.interest != null)
-                        {
-                            data.interest = null;
-                            SetJob(data);
-                        }
-                        Debug.Log("Going to work(dig)!");
+                        data.interest = null;
+                        SetJob(data);
                     }
-                    else
-                    {
-                        ChangeAction((_) => Idle());
-                    }
+                    Debug.Log("Going to work(dig)!");
+                }
+                else
+                {
+                    ChangeAction((_) => Idle());
                 }
             }
-            else if (hut is BuilderHut)
+        }
+        else if(workplace is IBuilderHut builder)
+        {
+            if (!HumanActions.FindBuildingsToConstruct(this))
             {
-                if (!HumanActions.FindBuildingsToConstruct(this))
+                if (!(builder as Building).IsInside(GetPos()))
                 {
-                    if (!hut.IsInside(GetPos()))
+                    JobData data = PathFinder.FindPath(new() { (builder as Building) }, this);
+                    data.job = JobState.FullTime;
+                    if (data.interest != null)
                     {
-                        JobData data = PathFinder.FindPath(new() { hut }, this);
-                        data.job = JobState.FullTime;
-                        if (data.interest != null)
-                        {
-                            data.interest = null;
-                            SetJob(data);
-                        }
-                        Debug.Log("Going to work(construct)!");
+                        data.interest = null;
+                        SetJob(data);
                     }
-                    else
-                    {
-                        ChangeAction((_) => Idle());
-                    }
+                    Debug.Log("Going to work(construct)!");
+                }
+                else
+                {
+                    ChangeAction((_) => Idle());
                 }
             }
-
         }
     }
     #endregion

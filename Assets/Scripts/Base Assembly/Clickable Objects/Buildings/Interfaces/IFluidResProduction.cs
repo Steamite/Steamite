@@ -2,10 +2,10 @@
 public interface IFluidResProduction : IResourceProduction
 {
     /// <summary>Cost of one production cycle.</summary>
-    [CreateProperty] Fluid FluidCost { get; set; }
+    [CreateProperty] Resource FluidCost { get; set; }
 
     /// <summary>Production cycle yeild.</summary>
-    [CreateProperty] Fluid FluidYeild { get; set; }
+    [CreateProperty] Resource FluidYeild { get; set; }
 
     bool IResourceProduction.ManageInputRes()
     {

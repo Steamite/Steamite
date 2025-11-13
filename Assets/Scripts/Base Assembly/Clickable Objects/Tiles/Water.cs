@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class Water : TileSource
 {
-    [SerializeField] Fluid storing = new();
-    [CreateProperty] public Fluid Storing { get => storing; set => storing = value; }
     public override GridPos GetPos()
     {
         return new(
@@ -16,10 +14,11 @@ public class Water : TileSource
 
     public override object RemoveFromSource(int ammount, bool remove)
     {
-        Fluid change = new();
+        Resource change = new();
         Storing.GetResOfAmmount(change, ammount, remove);
-        UIUpdate(nameof(Storing));
-        if (storing.Sum() == 0)
+        if(remove)
+            UIUpdate(nameof(Storing));
+        if (Storing.Sum() == 0)
             HasResources = false;
         return change;
     }
