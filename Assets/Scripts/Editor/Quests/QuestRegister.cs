@@ -36,7 +36,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
         rewardTypes = TypeCache.GetTypesDerivedFrom(typeof(QuestReward)).ToList();
         penaltyTypes = TypeCache.GetTypesDerivedFrom(typeof(QuestPenalty)).ToList();
 
-        holder = AssetDatabase.LoadAssetAtPath<QuestHolder>("Assets/Game Data/UI/QuestData.asset");
+        holder = AssetDatabase.LoadAssetAtPath<QuestHolder>(QuestHolder.EDITOR_PATH);
         RecalculateAvailableObjects();
 
         base.CreateGUI();
@@ -47,7 +47,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
     {
         base.TopBar(out iconSelector);
         orderConfigField = rootVisualElement.Q<ObjectField>("Order-Config");
-        orderConfigField.value = AssetDatabase.LoadAssetAtPath<OrderGenConfig>("Assets/Game Data/UI/OrderGenConfig.asset");
+        orderConfigField.value = AssetDatabase.LoadAssetAtPath<OrderGenConfig>("OrderGenConfig");
         orderConfigField.enabledSelf = false;
     }
     void RecalculateAvailableObjects()

@@ -83,7 +83,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         activeQuests = new();
         finishedQuests = new();
 
-        data = Instantiate(await Addressables.LoadAssetAsync<QuestHolder>("Assets/Game Data/UI/QuestData.asset").Task);
+        data = Instantiate(await Addressables.LoadAssetAsync<QuestHolder>("QuestData").Task);
         List<Quest> quests = data.Categories.SelectMany(q => q.Objects).ToList();
         foreach (Quest quest in quests)
         {

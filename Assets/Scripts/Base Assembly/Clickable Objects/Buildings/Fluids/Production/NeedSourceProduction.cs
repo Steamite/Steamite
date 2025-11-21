@@ -51,7 +51,6 @@ public class NeedSourceProduction : FluidResProductionBuilding, IResourceProduct
         else
         {
             FluidYeild = new(source.RemoveFromSource(ammountPerTick, takeFromSource) as Resource);
-            //FluidCost = FluidYeild;
             UIUpdate(nameof(FluidYeild));
             UIUpdate(nameof(Source) + "." + nameof(TileSource.Storing));
         }

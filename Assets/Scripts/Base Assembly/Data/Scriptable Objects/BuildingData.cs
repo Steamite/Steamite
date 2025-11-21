@@ -57,10 +57,10 @@ public class BuildCategWrapper : DataCategory<BuildingWrapper>
 [CreateAssetMenu(fileName = "BuildButtonCategory", menuName = "UI Data/BuildButton Holder", order = 1)]
 public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapper>
 {
-    public new const string PATH = "Assets/Game Data/Research && Building/Build Data.asset";
-
+    public new const string PATH = "Build Data";
     #region Editor
 #if UNITY_EDITOR
+    public new const string EDITOR_PATH = "Assets/Game Data/Research and Building/Build Data.asset";
 
     public bool ContainsBuilding(Building newValue)
     {
@@ -84,7 +84,7 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
 
     public Pipe GetPipe()
     {
-        return Categories[3].Objects.Find(q => q.id == 1082678288).building as Pipe;
+        return Categories[3].Objects.Find(q => q.building is Pipe).building as Pipe;
     }
 
     public override void Init()

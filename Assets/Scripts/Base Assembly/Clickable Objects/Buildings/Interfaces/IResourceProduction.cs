@@ -137,9 +137,9 @@ public interface IResourceProduction : IProduction
 
     #region Logistics
     /// <summary>Adds a <see cref="JobState.Supply"/> job order.</summary>
-    void RequestRestock()
+    void RequestRestock(bool force = false)
     {
-        if (ProdStates.needsResources && ProdStates.requestedSupply == false)
+        if (ProdStates.needsResources && ProdStates.supplied == false && (ProdStates.requestedSupply == false || force))
         {
             ProdStates.requestedSupply = true;
             SceneRefs.JobQueue.AddJob(JobState.Supply, (ClickableObject)this);
@@ -147,9 +147,9 @@ public interface IResourceProduction : IProduction
     }
 
     /// <summary>Adds a <see cref="JobState.Pickup"/> job order.</summary>
-    void RequestPickup()
+    void RequestPickup(bool force = false)
     {
-        if (ProdStates.requestedPickup == false && LocalResource.Sum() > 0)
+        if ((ProdStates.requestedPickup == false || force)&& LocalResource.Sum() > 0)
         {
             ProdStates.requestedPickup = true;
             SceneRefs.JobQueue.AddJob(JobState.Pickup, (ClickableObject)this);
@@ -168,10 +168,10 @@ public interface IResourceProduction : IProduction
         }
         if (constructed)
         {
-            RequestRestock();
-            RequestPickup();
-            if(Recipes.Count > 0)
+            if (Recipes.Count > 0)
                 SetRecipe(SelectedRecipe, false);
+            RequestRestock(true);
+            RequestPickup(true);
         }
     }
     #endregion
@@ -180,6 +180,12 @@ public interface IResourceProduction : IProduction
     {
         SelectedRecipe = index;
         ProductionRecipe recipe = Recipes[index];
+        if (recipe is FluidProductionRecipe fluid)
+        {
+            FluidResProductionBuilding fluidBuild = this as FluidResProductionBuilding;
+            fluidBuild.FluidCost = new(fluid.fluidCost);
+            fluidBuild.FluidYeild = new(fluid.fluidYield);
+        }
         ResourceCost = recipe.resourceCost;
         ResourceYield = recipe.resourceYield;
         ProdTime = recipe.timeInTicks;

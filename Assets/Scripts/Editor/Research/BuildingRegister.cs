@@ -16,7 +16,7 @@ namespace EditorWindows.Windows
 {
     public class BuildingRegister : DataGridWindow<BuildCategWrapper, BuildingWrapper>
     {
-        const string BUILDING_PATH = "Assets/Game Data/Buildings/";
+        const string BUILDING_PATH = "Buildings/";
         const string BUILD_NAME = "/building.prefab";
         const string TEX_NAME = "/texture.png";
 
@@ -41,7 +41,7 @@ namespace EditorWindows.Windows
         protected override void CreateGUI()
         {
             buildingTypes = TypeCache.GetTypesDerivedFrom(typeof(Building)).ToList();
-            holder = AssetDatabase.LoadAssetAtPath<BuildingData>(BuildingData.PATH);
+            holder = AssetDatabase.LoadAssetAtPath<BuildingData>(BuildingData.EDITOR_PATH);
 
             #region Grid
             base.CreateGUI();
@@ -89,7 +89,7 @@ namespace EditorWindows.Windows
         protected override void CreateCateg()
         {
             base.CreateCateg();
-            AssetDatabase.CreateFolder($"Assets/Game Data/Buildings", selectedCategory.Name);
+            AssetDatabase.CreateFolder($"Buildings", selectedCategory.Name);
             group = settings.CreateGroup(selectedCategory.Name, false, false, true, new() { }, new Type[0]);
             settings.SetDirty(AddressableAssetSettings.ModificationEvent.GroupAdded, group, true, false);
         }

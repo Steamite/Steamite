@@ -15,34 +15,54 @@ MonoBehaviour:
   m_GroupName: Data
   m_GUID: 361c7ab7fc512ab4789c81360e3846cb
   m_SerializeEntries:
-  - m_GUID: 0a63856121caa4d4fb696297ff3a0dd8
-    m_Address: Assets/Game Data/Research && Building
+  - m_GUID: 0c9cd03303710874483b6853cad69cb7
+    m_Address: Colony Locations
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0c9cd03303710874483b6853cad69cb7
-    m_Address: Assets/Game Data/Colony Locations
+  - m_GUID: 116323b1eb6a60342a1b0796e74ac72d
+    m_Address: Build Data
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1303e0984844aef458c05ee94fe1ca92
-    m_Address: Assets/Game Data/Resource Types
+    m_Address: Resource Types
     m_ReadOnly: 0
     m_SerializedLabels:
     - resources
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5706a7d6b23b9154b8e49dfd5130f5ec
-    m_Address: Assets/Game Data/ResourceData.asset
+  - m_GUID: 4fff276a0c9e6a9498d36865ae6609a0
+    m_Address: OrderGenConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ad404bf258fcc5a40b6ebf5cfebeac1c
-    m_Address: Assets/Game Data/UI
+  - m_GUID: 5706a7d6b23b9154b8e49dfd5130f5ec
+    m_Address: ResourceData
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ee198ecedba89642a9145722bc073de
+    m_Address: InfoWindowControlHolder
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7859fb5d40662cf45b9a21e869b9d689
+    m_Address: QuestData
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c8e96048bd4e6d4dae13753e4f65d57
+    m_Address: Research Data
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 950d237b1ce848d4f90f5e55411338a0
+    m_Address: Stats
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: db1598235bbab6947a5097d2decd0e69
-    m_Address: Assets/Game Data/ProductionRecipeHolder.asset
+    m_Address: ProductionRecipeHolder
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

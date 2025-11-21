@@ -12,7 +12,7 @@ public partial class RecipeCell : ListView, IUIElement
     public RecipeCell()
     {
         makeItem = () => new DropdownField();
-        holder = AssetDatabase.LoadAssetAtPath<ProductionRecipeHolder>(ProductionRecipeHolder.PATH);
+        holder = AssetDatabase.LoadAssetAtPath<ProductionRecipeHolder>(ProductionRecipeHolder.EDITOR_PATH);
         bindItem = (el, i) =>
         {
             DropdownField field = el as DropdownField;

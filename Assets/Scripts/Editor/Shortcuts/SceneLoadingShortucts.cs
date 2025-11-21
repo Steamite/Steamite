@@ -9,6 +9,8 @@ public class SceneLoadingShortucts : MonoBehaviour
 {
     /// <summary>Base path to the scene folde</summary>
     static readonly string scenePath = "Assets/Scenes/";
+    //static readonly string dataPath = "Assets/Editor/EditorData.asset";
+    static bool continueGame = false;
 
     /// <summary>
     /// Needs to be initialized to register the event.
@@ -18,6 +20,26 @@ public class SceneLoadingShortucts : MonoBehaviour
         EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
     }
+
+    [MenuItem("Custom Editors/Load/Continue _1")]
+    static void LoadGame()
+    {
+        if (!EditorApplication.isPlaying)
+        {
+            continueGame = true;
+            OnPlayModeStateChanged(PlayModeStateChange.ExitingEditMode);
+        }
+    }
+/*
+    [MenuItem("Custom Editors/Load/Toggle loading _1")]
+    static void ToggleLoading()
+    {
+        if(data == null)
+            data = AssetDatabase.LoadAssetAtPath<SceneLoadingData>(dataPath);
+        data.load = !data.load;
+        EditorUtility.SetDirty(data);
+        EditorUtility.DisplayDialog("Load mode changed", $"Continue is set to: {data.load}", "ok");
+    }*/
 
     /// <summary>
     /// If the scene is played from "Level" scene, then initializes all previus parts.
@@ -36,7 +58,10 @@ public class SceneLoadingShortucts : MonoBehaviour
                     EditorSceneManager.OpenScene($"{scenePath}Splash Screen.unity");
                     //EditorSceneManager.activeSceneChangedInEditMode += SceneReturn;
                 }
-                GameObject.Find("Loader").GetComponent<SplashScreen>().loadNewGame = true;
+                if (continueGame)
+                    GameObject.Find("Loader").GetComponent<SplashScreen>().loadAction = LoadActions.LoadGame;
+                else
+                    GameObject.Find("Loader").GetComponent<SplashScreen>().loadAction = LoadActions.NewGame;
                 EditorApplication.EnterPlaymode();
                 File.WriteAllText($"{Application.persistentDataPath}/openScene.txt", activeSceneName);
             }
@@ -51,6 +76,7 @@ public class SceneLoadingShortucts : MonoBehaviour
                 EditorSceneManager.OpenScene($"{scenePath}{File.ReadAllText($"{Application.persistentDataPath}/openScene.txt")}.unity");
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
+        continueGame = false;
     }
 
 

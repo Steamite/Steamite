@@ -2,12 +2,19 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum LoadActions
+{
+    NewGame,
+    MainMenu,
+    LoadGame
+}
+
 /// <summary>
 /// First splash screen scene.
 /// </summary>
 public class SplashScreen : MonoBehaviour
 {
-    [NonSerialized] public bool loadNewGame = false;
+    [NonSerialized] public LoadActions loadAction = LoadActions.MainMenu;
     private async void Awake()
     {
         QualitySettings.vSyncCount = 0;
@@ -16,9 +23,17 @@ public class SplashScreen : MonoBehaviour
 
         await ResFluidTypes.Init();
         LoadingScreen screen = GameObject.Find("Loading Screen").GetComponent<LoadingScreen>();
-        if (loadNewGame)
-            screen.StartNewGame("test - TopGun");
-        else
-            screen.OpenMainMenu();
+        switch (loadAction)
+        {
+            case LoadActions.NewGame:
+                screen.StartNewGame("test - TopGun");
+                break;
+            case LoadActions.MainMenu:
+                screen.OpenMainMenu(true);
+                break;
+            case LoadActions.LoadGame:
+                screen.OpenMainMenu(false);
+                break;
+        }
     }
 }

@@ -172,8 +172,9 @@ namespace BuildingStats
     [CreateAssetMenu(fileName = "Stats", menuName = "UI Data/Stats", order = 2)]
     public class StatData : DataHolder<BuildingStatCateg, Stat>
     {
+        public new static string PATH = "Stats";
 #if UNITY_EDITOR
-        public new static string PATH = "Assets/Game Data/Research && Building/Stats.asset";
+        public new const string EDITOR_PATH = "Assets/Game Data/Research and Building/Stats.asset";
 #endif
     }
 }

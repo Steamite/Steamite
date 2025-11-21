@@ -269,13 +269,34 @@ MonoBehaviour:
   fluidCost:
     types: []
     ammounts: 01000000
-    capacities: 
+    baseResource:
+      types: []
+      ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
   fluidYeild:
     types: []
     ammounts: 
-    capacities: 
+    baseResource:
+      types: []
+      ammounts: 
+    mod:
+      percentMod: 1
+      absoluteMod: 0
   storedFluids:
     types: []
     ammounts: 
-    capacities: 
-  ammountPerCycle: 3
+    capacity:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 1
+        absoluteMod: 0
+  fluidCapacity:
+    baseValue: 0
+    currentValue: 0
+    mod:
+      percentMod: 1
+      absoluteMod: 0
+  ammountPerTick: 3

@@ -256,8 +256,8 @@ MonoBehaviour:
       percentMod: 1
       absoluteMod: 0
   recipesAssigmnet:
-  - categoryId: -1
-    objectId: -1
+  - categoryId: 44722519
+    objectId: 874673824
   fluidCost:
     types: []
     ammounts: 01000000

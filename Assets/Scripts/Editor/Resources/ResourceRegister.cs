@@ -16,7 +16,7 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
     }
     protected override void CreateGUI()
     {
-        holder = AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.PATH);
+        holder = AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH);
         base.CreateGUI();
         colorField = rootVisualElement.Q<ColorField>();
         rootVisualElement.Q<Button>("Rebind-Create").clicked += async () => await ResFluidTypes.Init();
@@ -135,8 +135,9 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
         int i = evt.target.GetRowIndex();
         if (i != -1)
         {
-            ((ResourceWrapper)dataGrid.itemsSource[i]).data.image = evt.newValue as Texture2D;
-            EditorUtility.SetDirty(holder);
+            ResourceType resType = ((ResourceWrapper)dataGrid.itemsSource[i]).data;
+            resType.image = evt.newValue as Texture2D;
+            EditorUtility.SetDirty(resType);
             dataGrid.RefreshItem(i);
         }
     }
@@ -146,8 +147,10 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
         int i = evt.target.GetRowIndex();
         if (i != -1)
         {
-            ((ResourceWrapper)dataGrid.itemsSource[i]).data.color = evt.newValue;
-            EditorUtility.SetDirty(holder);
+            ResourceType resType = ((ResourceWrapper)dataGrid.itemsSource[i]).data;
+            resType.color = evt.newValue;
+            Debug.Log(evt.newValue);
+            EditorUtility.SetDirty(resType);
             dataGrid.RefreshItem(i);
         }
     }

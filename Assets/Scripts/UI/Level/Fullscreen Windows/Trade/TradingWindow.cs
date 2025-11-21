@@ -52,7 +52,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
             { ResFluidTypes.GetResByName("Meat"), 15},
             { ResFluidTypes.GetResByName("Wood"), 12},
         };
-        TradeHolder tradeHolder = Instantiate(await Addressables.LoadAssetAsync<TradeHolder>($"Assets/Game Data/Colony Locations/{tradeSave.colonyLocation}.asset").Task);
+        TradeHolder tradeHolder = Instantiate(await Addressables.LoadAssetAsync<TradeHolder>($"Colony Locations/{tradeSave.colonyLocation}.asset").Task);
         colonyLocation = tradeHolder.startingLocation;
         colonyLocation.LoadGame(tradeSave.prodLevels, tradeSave.statLevels);
 

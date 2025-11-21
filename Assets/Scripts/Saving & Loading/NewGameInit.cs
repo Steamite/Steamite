@@ -31,7 +31,7 @@ public class NewGameInit : MonoBehaviour
     #region Game State
     public async Task<TradeSave> InitTrade(int selectedColony)
     {
-        TradeHolder tradeHolder = await Addressables.LoadAssetAsync<TradeHolder>($"Assets/Game Data/Colony Locations/{baseLocation}.asset").Task;
+        TradeHolder tradeHolder = await Addressables.LoadAssetAsync<TradeHolder>($"Colony Locations/{baseLocation}.asset").Task;
         TradeSave save = new TradeSave()
         {
             colonyLocation = tradeHolder.startingLocation.Name,
@@ -96,7 +96,7 @@ public class NewGameInit : MonoBehaviour
 
     public async Task<QuestControllerSave> InitQuests()
     {
-        QuestHolder quest = await Addressables.LoadAssetAsync<QuestHolder>("Assets/Game Data/UI/QuestData.asset").Task;
+        QuestHolder quest = await Addressables.LoadAssetAsync<QuestHolder>("QuestData").Task;
         QuestControllerSave questSave = new()
         {
             activeQuests = new() { new(quest.Categories[0].Objects[0]) { state = QuestState.Active } },

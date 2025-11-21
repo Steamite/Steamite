@@ -112,6 +112,20 @@ public class Human : ClickableObject
     /// <param name="path">New path.</param>
     public void SetJob(JobState state, ClickableObject interest = null, List<GridPos> path = null, bool shouldDecide = true)
     {
+        if(state == JobState.Free)
+        {
+            // TODO, after clearing human remove all requests to avoid clugging the system
+            if(jData.interest is ResourceProductionBuilding building)
+            {
+                if (building.constructed == true)
+                    building.InputResource.RemoveRequest(this);
+            }
+            if (jData.interest is StorageObject storage)
+            {
+                storage.LocalRes.RemoveRequest(this);
+            }
+        }
+            
         jData.job = state;
         if (interest)
             jData.interest = interest;

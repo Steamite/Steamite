@@ -50,5 +50,15 @@ public class ModifiableResource : Resource, IModifiable
         ammounts = baseResource.ammounts.ToList();
         Modifier = new();
         RecalculateMod();
-    }
+    }/*
+
+    public Resource RemoveFluids()
+    {
+        Resource fluids = new();
+        for(int i = baseResource.types.Count - 1; i > -1; i--)
+        {
+            if (baseResource.types[i].)
+        }
+        return fluids;
+    }*/
 }

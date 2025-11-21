@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ce292ff9030fbe449f8470a5cdc9622, type: 3}
-  m_Name: Fuel
-  m_EditorClassIdentifier: BaseAssembly::ResourceCategory
-  Name: Fuel
-  icon: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 1d5db06671b9f8846aa17aa0c9b02171, type: 3}
+  m_Name: EditorData
+  m_EditorClassIdentifier: Editor::SceneLoadingData
+  load: 1

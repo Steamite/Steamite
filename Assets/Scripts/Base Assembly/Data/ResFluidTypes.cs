@@ -65,9 +65,15 @@ public static class ResFluidTypes
     [MenuItem("Custom Editors/Refresh Resource _&r", priority = 0)]
     [InitializeOnLoadMethod]
 #endif
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     public static async Task Init()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     {
+#if UNITY_EDITOR
+        data = AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH);
+#else
         data = await Addressables.LoadAssetAsync<ResourceData>(ResourceData.PATH).Task;
+#endif
         InitFill(data);
     }
 

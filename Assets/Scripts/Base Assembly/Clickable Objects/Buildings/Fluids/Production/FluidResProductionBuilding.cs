@@ -110,8 +110,9 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IFluidWork
 
     public override void Load(ClickableObjectSave save)
     {
-        StoredFluids.Clear();
+        StoredFluids = new(localRes.capacity.currentValue);
         StoredFluids.Manage(new(((FluidResProductionSave)save).fluidSave), true);
+        //StoredFluids.capacity.Init();
         base.Load(save);
     }
     #endregion
