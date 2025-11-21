@@ -14,6 +14,7 @@ public class JobQueue : MonoBehaviour
     public List<Building> deconstructions = new();
     /// <summary>Production buildings that need input resources.</summary>
     public List<IResourceProduction> supplyNeeded = new();
+    public int Count = 0;
     /// <summary>Chunks and Production buildings that have something to store.</summary>
     public List<StorageObject> pickupNeeded = new();
 
@@ -43,6 +44,7 @@ public class JobQueue : MonoBehaviour
                 break;
             case JobState.Supply:
                 supplyNeeded.Add(interest as IResourceProduction);
+                Count++;
                 break;
             case JobState.Pickup:
                 pickupNeeded.Add((ResourceProductionBuilding)interest);
@@ -72,6 +74,7 @@ public class JobQueue : MonoBehaviour
                 break;
             case JobState.Supply:
                 supplyNeeded.RemoveAll(q => ((ClickableObject)q).id == interest.id);
+                Count--;
                 break;
             case JobState.Pickup:
                 pickupNeeded.RemoveAll(q => q.id == interest.id);

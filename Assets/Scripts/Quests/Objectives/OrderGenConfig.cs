@@ -26,6 +26,7 @@ namespace Orders
         public List<ResourceGen> resourceGens = new();
 
 #if UNITY_EDITOR
+        public const string PATH = "OrderGenConfig";
         private void OnValidate()
         {
             bool dirty = false;

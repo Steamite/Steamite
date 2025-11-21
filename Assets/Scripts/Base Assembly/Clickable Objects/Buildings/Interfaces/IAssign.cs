@@ -52,7 +52,7 @@ public interface IAssign
             human.workplace = null;
             human.transform.SetParent(SceneRefs.Humans.transform.GetChild(0).transform);
             human.SetJob(JobState.Free);
-            human.Idle();
+            //human.Idle();
         }
         ((IUpdatable)this).UIUpdate(nameof(Assigned));
         return true;
@@ -67,6 +67,14 @@ public interface IAssign
     public List<Human> GetUnassigned()
     {
         return SceneRefs.Humans.GetPartTime();
+    }
+
+    public void ClearHumans()
+    {
+        for (int i = Assigned.Count-1; i > -1; i--)
+        {
+            ManageAssigned(Assigned[i], false);
+        }
     }
     #endregion
 }

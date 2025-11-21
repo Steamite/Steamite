@@ -17,11 +17,7 @@ public partial class ResourceCell : ResourceList
     Label noneLabel;
 
     [UxmlAttribute]
-    public List<int> allowedCategories 
-    { 
-        get; 
-        set; 
-    }
+    public List<int> allowedCategories;
     public ResourceCell() : base()
     {
         focusable = true;

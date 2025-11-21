@@ -12,8 +12,8 @@ public class ResearchWindow : FullscreenWindow, IGameDataController<ResearchSave
     IUIElement UI;
 
     public ResearchNode currentResearch { get; private set; }
-    [HideInInspector] public ResearchData researchData;
-    [HideInInspector] public StatData statData;
+    [HideInInspector] public ResearchData researchData = null;
+    [HideInInspector] public StatData statData = null;
     public event Action<ResearchNode> researchCompletion;
 
     public override void GetWindow()

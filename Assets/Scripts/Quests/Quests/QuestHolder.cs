@@ -247,6 +247,6 @@ public class QuestCategory : DataCategory<Quest>
 public class QuestHolder : DataHolder<QuestCategory, Quest>
 {
 #if UNITY_EDITOR
-    public new static string PATH = "Assets/Game Data/UI/QuestData.asset";
+    public new static string PATH = "QuestData";
 #endif
 }

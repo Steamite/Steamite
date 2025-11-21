@@ -61,9 +61,11 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
 
     #region Scene Managment
     /// <summary>Loads the Main Menu scene.</summary>
-    public async void OpenMainMenu()
+    public async void OpenMainMenu(bool v)
     {
         await SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
+        if(!v)
+            (GameObject.FindGameObjectWithTag("GameController").GetComponentAtIndex(2) as IInitiableUI).Init();
     }
 
 
@@ -243,7 +245,6 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// <summary>
     /// Creates chunks.
     /// </summary>
-    /// <param name="progress"></param>
     /// <param name="chunks"></param>
     void LoadChunks(ChunkSave[] chunks)
     {

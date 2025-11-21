@@ -29,7 +29,7 @@ public class BuildingSerialization
     {
         Init();
         BuildingData data = AssetDatabase.LoadAssetAtPath<BuildingData>(
-            "Assets/Game Data/Research && Building/Build Data.asset");
+            "Research && Building/Build Data);
         await client.DeleteAsync("drop-buildings");
         int i = 1;
         foreach (var item in data.Categories)

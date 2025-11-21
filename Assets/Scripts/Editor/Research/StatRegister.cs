@@ -24,7 +24,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
     protected override void CreateGUI()
     {
         researchData = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.PATH);
-        holder = AssetDatabase.LoadAssetAtPath<StatData>(StatData.PATH);
+        holder = AssetDatabase.LoadAssetAtPath<StatData>(StatData.EDITOR_PATH);
         base.CreateGUI();
         categorySelector.index = 0;
     }

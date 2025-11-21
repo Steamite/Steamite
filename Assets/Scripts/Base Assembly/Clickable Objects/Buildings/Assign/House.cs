@@ -19,6 +19,7 @@ public class House : Building, IAssign
         base.OrderDeconstruct();
         if (constructed)
         {
+            ((IAssign)this).ClearHumans();/*
             foreach (Human h in Assigned)
             {
                 h.home = null;
@@ -26,7 +27,7 @@ public class House : Building, IAssign
                 {
                     h.Night();
                 }
-            }
+            }*/
         }
     }
     #endregion

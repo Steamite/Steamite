@@ -32,6 +32,8 @@ public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CA
     #region Editor
 
 #if UNITY_EDITOR
+    public const string EDITOR_PATH = "Assets/Game Data/UI/QuestData.asset";
+
     public List<string> CategoryChoices()
         => Categories.Select(q => q.Name).ToList();
     public List<string> ObjectChoices(bool addNone = false)

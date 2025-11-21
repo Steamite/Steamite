@@ -38,9 +38,9 @@ namespace EditorWindows.Research
         {
             activeNode = null;
             showCreateButtons = false;
-            holder = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.PATH);
-            buildingData = AssetDatabase.LoadAssetAtPath<BuildingData>(BuildingData.PATH);
-            statData = AssetDatabase.LoadAssetAtPath<StatData>(StatData.PATH);
+            holder = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.EDITOR_PATH);
+            buildingData = AssetDatabase.LoadAssetAtPath<BuildingData>(BuildingData.EDITOR_PATH);
+            statData = AssetDatabase.LoadAssetAtPath<StatData>(StatData.EDITOR_PATH);
 
             base.CreateGUI();
 

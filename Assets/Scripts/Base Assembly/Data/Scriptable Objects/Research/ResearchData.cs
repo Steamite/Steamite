@@ -288,7 +288,9 @@ namespace ResearchUI
     [CreateAssetMenu(fileName = "ResearchData", menuName = "UI Data/Research Holder", order = 2)]
     public class ResearchData : DataHolder<ResearchCategory, ResearchNode>
     {
-        public new const string PATH = "Assets/Game Data/Research && Building/Research Data.asset";
-
+        public new const string PATH = "Research Data";
+#if UNITY_EDITOR
+        public new const string EDITOR_PATH = "Assets/Game Data/Research and Building/Research Data.asset";
+#endif
     }
 }

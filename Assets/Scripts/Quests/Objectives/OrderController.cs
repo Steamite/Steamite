@@ -38,7 +38,7 @@ public class OrderController
 
     public async void LoadOrderConfig()
     {
-        orderGenConfig = await Addressables.LoadAssetAsync<OrderGenConfig>("Assets/Game Data/UI/OrderGenConfig.asset").Task;
+        orderGenConfig = await Addressables.LoadAssetAsync<OrderGenConfig>(OrderGenConfig.PATH).Task;
         Order order = GenerateOrder();
     }
 

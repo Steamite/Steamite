@@ -35,7 +35,7 @@ MonoBehaviour:
     - rid: 8808251703612669963
     - rid: 8808251703612669964
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0.0754717, g: 0.044499822, b: 0.044499822, a: 1}
   - id: 3
     Name: Alloy
     Objects:
@@ -45,7 +45,7 @@ MonoBehaviour:
     - rid: 8808251703612669968
     - rid: 8808251703612669969
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0.4245283, g: 0.28188056, b: 0.13416696, a: 1}
   - id: 4
     Name: Building Materials
     Objects:
@@ -54,14 +54,14 @@ MonoBehaviour:
     - rid: 8808251703612669972
     - rid: 8808251703612669973
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0.38679248, g: 0.3010413, b: 0.3010413, a: 1}
   - id: 5
     Name: Food
     Objects:
     - rid: 8808251703612669974
     - rid: 8808251703612669975
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0, g: 0.8396226, b: 0.411536, a: 1}
   - id: 6
     Name: Basic Parts
     Objects:

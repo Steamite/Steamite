@@ -138,13 +138,13 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     /// </summary>
     public override void FinishBuild()
     {
+        ((IResourceProduction)this).Init(true, SceneRefs.ObjectFactory.recipeData);
         base.FinishBuild();
         if (ResourceCost.Sum() == 0)
         {
             ProdStates.needsResources = false;
             return;
         }
-        ((IResourceProduction)this).Init(constructed, SceneRefs.ObjectFactory.recipeData);
     }
 
 
@@ -160,6 +160,10 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
         {
             if (!deconstructing) // start deconstruction now!
             {
+                // Remove assigned workers
+                ((IAssign)this).ClearHumans();
+
+                //Also Reassing all carriers and transport
                 Human human = null;
                 queue.CancelJob(JobState.Pickup, this);
                 queue.CancelJob(JobState.Supply, this);
@@ -284,7 +288,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
             human.workplace = null;
             human.transform.SetParent(SceneRefs.Humans.transform.GetChild(0).transform);
             human.SetJob(JobState.Free);
-            human.Idle();
+            //human.Idle();
         }
         UIUpdate(nameof(Assigned));
         return true;

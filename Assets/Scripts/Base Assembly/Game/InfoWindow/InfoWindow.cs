@@ -116,7 +116,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         secondWindow = root[1][0];
         secondBody = secondWindow[1];
         (secondWindow[0][1] as Button).clicked += CloseSecondWindow;
-        controls = await Addressables.LoadAssetAsync<InfoWindowControlHolder>("Assets/Game Data/UI/InfoWindowControlHolder.asset").Task;
+        controls = await Addressables.LoadAssetAsync<InfoWindowControlHolder>("InfoWindowControlHolder").Task;
 
         window.style.display = DisplayStyle.None;
 
