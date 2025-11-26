@@ -264,7 +264,8 @@ public class TankBSave : BuildingSave
 
 public class FluidResProductionSave : ResProductionBSave
 {
-    public ResourceSave fluidSave;
+    public ResourceSave inputFluid;
+    public ResourceSave storedFluid;
 }
 
 
@@ -364,8 +365,11 @@ public class ResourceSave
 
     public ResourceSave(Resource res)
     {
-        types = res.types.Select(q => ResFluidTypes.GetSaveIndex(q)).ToList();
-        ammounts = res.ammounts.ToList();
+        if(res != null)
+        {
+            types = res.types.Select(q => ResFluidTypes.GetSaveIndex(q)).ToList();
+            ammounts = res.ammounts.ToList();
+        }
     }
     public ResourceSave()
     {

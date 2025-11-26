@@ -51,7 +51,7 @@ public class FluidTank : Building, IFluidWork
     public override void Load(ClickableObjectSave save)
     {
         StoredFluids.Clear();
-        StoredFluids.Manage(new(((FluidResProductionSave)save).fluidSave), true);
+        StoredFluids.Manage(new(((TankBSave)save).fluidSave), true);
         base.Load(save);
     }
     #endregion

@@ -384,7 +384,7 @@ namespace EditorWindows.Windows
                 {
                     RecipeCell cell = el as RecipeCell;
                     Building building = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
-                    if (building is IResourceProduction production && building is not NeedSourceProduction)
+                    if (building is IResourceProduction production)
                     {
                         cell.userData = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
                         cell.Open(production);

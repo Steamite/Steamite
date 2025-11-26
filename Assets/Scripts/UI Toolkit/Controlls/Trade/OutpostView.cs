@@ -1,5 +1,6 @@
 using InfoWindowElements;
 using Outposts;
+using System.Linq;
 using TradeWindowElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,12 +9,11 @@ using UnityEngine.UIElements;
 public partial class OutpostView : TradeMapViewBase
 {
     [UxmlAttribute] Texture2D resetIcon;
-    [UxmlAttribute] VisualTreeAsset resText;
     Outpost outpost;
 
     int outpostIndex;
     public TradeMap map;
-    VisualElement lvlBonus;
+    ResourceTextIcon resText;
     Button unlockButton;
 
     public OutpostView()
@@ -102,19 +102,19 @@ public partial class OutpostView : TradeMapViewBase
             }
         };
         root.Add(newView);
-        newView.Add(dropdownField = new() { choices = ResFluidTypes.GetResNamesList() });
+        newView.Add(dropdownField = new() { choices = ResFluidTypes.GetOutpostTypes() });
         dropdownField.index = 0;
 
         newView.Add(costList = new(true, "cost") { showMoney = true });
         costList.Open(Outpost.UpgradeCosts[outpost.level].resource);
 
 
-        resText.CloneTree(newView);
-        lvlBonus = newView.Q<VisualElement>("ResText");
-        lvlBonus.style.position = Position.Absolute;
-        lvlBonus.style.bottom = 150;
-        lvlBonus.style.maxHeight = StyleKeyword.None;
-        lvlBonus.style.minWidth = new Length(82, LengthUnit.Percent);
+        newView.Add(resText = new(1));
+        resText.style.position = Position.Absolute;
+        resText.style.bottom = 150;
+        resText.style.maxHeight = StyleKeyword.None;
+        resText.style.minWidth = new Length(82, LengthUnit.Percent);
+        resText.style.alignSelf = Align.Center;
         dropdownField.RegisterValueChangedCallback(BonusTextUpdate);
         BonusTextUpdate(null);
 
@@ -151,25 +151,10 @@ public partial class OutpostView : TradeMapViewBase
 
     void BonusTextUpdate(ChangeEvent<string> ev)
     {
-        Label l = lvlBonus.Q<Label>("Value");
-        VisualElement el = lvlBonus.Q<VisualElement>("Icon");
         ResourceType type = ResFluidTypes.None;
         if (ev != null)
             type = ResFluidTypes.GetResByName(ev.newValue);
-        l.style.flexGrow = 1;
-        if (type == ResFluidTypes.None)
-        {
-            l.text = "Chose an upgrade!";
-            l.style.unityTextAlign = TextAnchor.MiddleCenter;
-            el.style.display = DisplayStyle.None;
-        }
-        else
-        {
-            l.text = $"{Outpost.ResourceAmmount[type]} per week";
-            l.style.unityTextAlign = TextAnchor.MiddleLeft;
-            el.style.unityBackgroundImageTintColor = type.color;
-            el.style.display = DisplayStyle.Flex;
-        }
+        resText.SetOutpostText(type);
     }
 
     void UnlockButtonUpdates(ChangeEvent<string> ev)

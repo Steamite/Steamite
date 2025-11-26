@@ -68,24 +68,26 @@ MonoBehaviour:
     - rid: 8808251703612669976
     - rid: 8808251703612669977
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 1}
   - id: 7
     Name: Advanced Parts
-    Objects: []
+    Objects:
+    - rid: 8808251983391621197
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0.4528302, g: 0.26296633, b: 0, a: 1}
   - id: 8
     Name: Human
-    Objects: []
+    Objects:
+    - rid: 8808251983391621198
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0, g: 0.30272377, b: 0.5283019, a: 1}
   - id: 9
     Name: Fluids
     Objects:
     - rid: 8808251703612669978
     - rid: 8808251703612669979
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0.161767, g: 0, b: 1, a: 1}
   references:
     version: 2
     RefIds:
@@ -257,3 +259,15 @@ MonoBehaviour:
         Name: Steam
         id: 157595866
         data: {fileID: 11400000, guid: f8a2946e5edf5df46ae20f11393cd418, type: 2}
+    - rid: 8808251983391621197
+      type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: Lens
+        id: 2104595123
+        data: {fileID: 11400000, guid: 0225af04b98e951408452b14f0aab218, type: 2}
+    - rid: 8808251983391621198
+      type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: Tools
+        id: 2036373634
+        data: {fileID: 11400000, guid: ac2f30fb838ec384fb07c52c3f8f6aa8, type: 2}

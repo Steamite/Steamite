@@ -15,4 +15,3 @@ MonoBehaviour:
   Name: Brass
   color: {r: 0.88235295, g: 0.75686276, b: 0.43137255, a: 1}
   image: {fileID: 0}
-  category: {fileID: 11400000, guid: 4d6c5914ac9fb354eadc5fd6a01d0b75, type: 2}

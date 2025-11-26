@@ -109,7 +109,17 @@ public class FluidNetwork
 
     public bool HasSpace(Resource fluid)
     {
-        return buildings.FirstOrDefault(q => q.StoredFluids.HasSpace(fluid)) != null;
+        for (int i = 0; i < consumptionBuildings.Count; i++)
+        {
+            if (consumptionBuildings[i].InputFluid.HasSpace(fluid))
+                return true;
+        }
+        for (int i = 0; i < storageBuildings.Count; i++)
+        {
+            if (storageBuildings[i].StoredFluids.HasSpace(fluid))
+                return true;
+        }
+        return false;
     }
     #endregion
 }

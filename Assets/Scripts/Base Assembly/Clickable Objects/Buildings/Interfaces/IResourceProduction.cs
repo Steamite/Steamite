@@ -71,8 +71,11 @@ public interface IResourceProduction : IProduction
         {
             if (ProdStates.running || ManageInputRes())
             {
-                CurrentTime += ProdSpeed * progress;
-                ((Building)this).UIUpdate(nameof(CurrentTime));
+                if(CurrentTime < ProdTime)
+                {
+                    CurrentTime += ProdSpeed * progress;
+                    ((Building)this).UIUpdate(nameof(CurrentTime));
+                }
                 if (CurrentTime >= ProdTime)
                 {
                     Product();
@@ -185,6 +188,7 @@ public interface IResourceProduction : IProduction
             FluidResProductionBuilding fluidBuild = this as FluidResProductionBuilding;
             fluidBuild.FluidCost = new(fluid.fluidCost);
             fluidBuild.FluidYeild = new(fluid.fluidYield);
+            fluidBuild.InputFluid.capacity.ChangeBaseVal(fluidBuild.FluidCost.Sum() * 2);
         }
         ResourceCost = recipe.resourceCost;
         ResourceYield = recipe.resourceYield;

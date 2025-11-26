@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Outposts;
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -73,6 +74,22 @@ public partial class ResourceTextIcon : VisualElement
     public void SetText(string newText)
     {
         value.text = newText;
+    }
+
+    public void SetOutpostText(ResourceType type)
+    {
+        if (type == ResFluidTypes.None)
+        {
+            value.style.unityTextAlign = TextAnchor.MiddleCenter;
+            SetText("Chose an upgrade!");
+            icon.style.display = DisplayStyle.None;
+        }
+        else
+        {
+            value.style.unityTextAlign = TextAnchor.MiddleLeft;
+            SetTextIcon($"{Outpost.ResourceAmmount[type]} per week", type);
+            icon.style.display = DisplayStyle.Flex;
+        }
     }
 }
 

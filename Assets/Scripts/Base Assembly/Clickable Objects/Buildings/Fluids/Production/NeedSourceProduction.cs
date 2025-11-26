@@ -43,6 +43,9 @@ public class NeedSourceProduction : FluidResProductionBuilding, IResourceProduct
 
     void UpdateYields(bool takeFromSource)
     {
+        // Current system doesn't support ResourceCost for VEIN
+        // and FluidCost for WATER
+        // but it can be changed later.
         if (source is Vein)
         {
             ResourceYield = new(source.RemoveFromSource(ammountPerTick, takeFromSource) as Resource);

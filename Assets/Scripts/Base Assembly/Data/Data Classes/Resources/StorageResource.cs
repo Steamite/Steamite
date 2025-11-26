@@ -60,6 +60,9 @@ public class StorageResource : CapacityResource
     public void RemoveRequest(Human human)
     {
         int index = carriers.IndexOf(human);
+        if (index == -1)
+            return;
+
         if (requests[index].Sum() > 0)
             casheValid = false;
         requests.RemoveAt(index);

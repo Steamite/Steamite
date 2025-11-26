@@ -32,6 +32,10 @@ public class FluidProductionRecipe : ProductionRecipe
         fluidYield = recipe.fluidYield;
     }
 
+    public FluidProductionRecipe(ProductionRecipe recipe) : base(recipe)
+    {
+    }
+
     public FluidProductionRecipe(int _id) : base(_id) { }
     public FluidProductionRecipe() { }
 

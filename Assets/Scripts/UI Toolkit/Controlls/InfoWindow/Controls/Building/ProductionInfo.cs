@@ -188,17 +188,28 @@ namespace InfoWindowViews
             enable = building.Stoped;
             radialElement.Open(data);
 
-            DataBinding binding;
-            if (building is FluidResProductionBuilding fluidRes)
+            if(data is IResourceProduction production)
             {
-                binding = BindingUtil.CreateBinding(nameof(NeedSourceProduction.StoredFluids));
-                binding.sourceToUiConverters.AddConverter((ref CapacityResource fluid) => $"Space\n{fluid.ammounts.Sum()}/{fluid.capacity}");
+                if(production.Recipes.Count <= 1)
+                    changeRecipe.style.visibility = Visibility.Hidden;
+            }
+            else
+            {
+                changeRecipe.style.visibility = Visibility.Hidden;
+            }
+
+            DataBinding binding;
+
+            if((building is NeedSourceProduction source && source.Source is Vein) || building is not FluidResProductionBuilding)
+            {
+                binding = BindingUtil.CreateBinding(nameof(ResourceProductionBuilding.LocalRes));
+                binding.sourceToUiConverters.AddConverter((ref StorageResource resource) => $"Space\n{resource.ammounts.Sum()}/{resource.capacity}");
                 SceneRefs.InfoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
             }
             else
             {
-                binding = BindingUtil.CreateBinding(nameof(ResourceProductionBuilding.LocalRes));
-                binding.sourceToUiConverters.AddConverter((ref StorageResource resource) => $"Space\n{resource.ammounts.Sum()}/{resource.capacity}");
+                binding = BindingUtil.CreateBinding(nameof(NeedSourceProduction.StoredFluids));
+                binding.sourceToUiConverters.AddConverter((ref CapacityResource fluid) => $"Space\n{fluid.ammounts.Sum()}/{fluid.capacity}");
                 SceneRefs.InfoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
             }
 

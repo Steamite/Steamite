@@ -15,4 +15,3 @@ MonoBehaviour:
   Name: Gold
   color: {r: 1, g: 0.9027058, b: 0, a: 1}
   image: {fileID: 0}
-  category: {fileID: 11400000, guid: df0dd3076f880614db25eb3a34b11a48, type: 2}

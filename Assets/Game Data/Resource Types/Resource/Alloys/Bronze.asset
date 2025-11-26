@@ -15,4 +15,3 @@ MonoBehaviour:
   Name: Bronze
   color: {r: 0.8039216, g: 0.49803922, b: 0.19607843, a: 1}
   image: {fileID: 0}
-  category: {fileID: 11400000, guid: 4d6c5914ac9fb354eadc5fd6a01d0b75, type: 2}

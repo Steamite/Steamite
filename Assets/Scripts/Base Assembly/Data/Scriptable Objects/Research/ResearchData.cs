@@ -29,7 +29,11 @@ namespace ResearchUI
         public void RegisterFinishCallback(Action action) => onFinishResearch += action;
         /// <summary>Called when research is finished.</summary>
         event Action onFinishResearch;
-        /// <summary>Current progress time.</summary>
+        /// <summary>
+        /// Current progress time.
+        /// Must start at -1, because it marks the research was not started yet.
+        /// If it will start at 0 it will not require the cost to start research.
+        /// </summary>
         [SerializeField] float currentTime = -1;
         /// <summary>Current progress time and if the research is finished then call all events.</summary>
         [CreateProperty]
@@ -138,7 +142,7 @@ namespace ResearchUI
             id = _id;
             researchTime = 100 * (_level + 1);
 
-            currentTime = 0;
+            currentTime = -1;
             researched = false;
             objectConnection = new(-1, -1);
             unlockedBy = new();

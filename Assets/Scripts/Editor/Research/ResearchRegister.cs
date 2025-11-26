@@ -123,7 +123,7 @@ namespace EditorWindows.Research
             {
                 T_C categ = data.Categories[i];
                 categ.availableObjects = new();
-                List<ResearchNode> categoryNodes = nodes.Where(q => q.nodeType == type && q.objectConnection.categoryId == i).ToList();
+                List<ResearchNode> categoryNodes = nodes.Where(q => q.nodeType == type && q.objectConnection.categoryId == categ.id).ToList();
                 for (int j = 0; j < categ.Objects.Count; j++)
                 {
                     if (categoryNodes.FindIndex(q => q.objectConnection.objectId == categ.Objects[j].id) == -1)

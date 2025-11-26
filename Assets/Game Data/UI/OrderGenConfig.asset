@@ -16,12 +16,6 @@ MonoBehaviour:
   trustLoss: {x: 25, y: 40}
   trustGain: {x: 10, y: 15}
   resourceGens:
-  - type: {fileID: 11400000, guid: c1f62f9e2918d7e44adacadc45cfec2e, type: 2}
-    typeChance: 50
-    ammountRange: {x: 5, y: 20}
-  - type: {fileID: 11400000, guid: e523913a9c6ce8d4fb05048da649cfc5, type: 2}
-    typeChance: 50
-    ammountRange: {x: 5, y: 20}
   - type: {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
     typeChance: 50
     ammountRange: {x: 5, y: 20}
@@ -91,31 +85,7 @@ MonoBehaviour:
   - type: {fileID: 11400000, guid: 6fee85af489f377499eaab602df43f31, type: 2}
     typeChance: 50
     ammountRange: {x: 5, y: 20}
-  - type: {fileID: 11400000, guid: b67063f5a7849e04d9d584cf9d03d1df, type: 2}
-    typeChance: 50
-    ammountRange: {x: 5, y: 20}
-  - type: {fileID: 11400000, guid: f05e94de4a3c4604095e1c190f760e54, type: 2}
-    typeChance: 50
-    ammountRange: {x: 5, y: 20}
-  - type: {fileID: 11400000, guid: 74fa3538aa81f464baa5646b57334e05, type: 2}
-    typeChance: 50
-    ammountRange: {x: 5, y: 20}
-  - type: {fileID: 11400000, guid: 2e6ab3eb67a50cd489ed9f4797d756ba, type: 2}
-    typeChance: 50
-    ammountRange: {x: 5, y: 20}
-  - type: {fileID: 11400000, guid: 33453fe695958da479f24d952896dd80, type: 2}
-    typeChance: 50
-    ammountRange: {x: 5, y: 20}
-  - type: {fileID: 11400000, guid: 14d84716ffa48524aaa648bd053e9828, type: 2}
-    typeChance: 50
-    ammountRange: {x: 5, y: 20}
-  - type: {fileID: 11400000, guid: 486a54edf7f2a294a89325f5f8758bf7, type: 2}
-    typeChance: 50
-    ammountRange: {x: 5, y: 20}
   - type: {fileID: 11400000, guid: 0225af04b98e951408452b14f0aab218, type: 2}
-    typeChance: 50
-    ammountRange: {x: 5, y: 20}
-  - type: {fileID: 11400000, guid: f9678f0cb45b7034db19a8daa687f286, type: 2}
     typeChance: 50
     ammountRange: {x: 5, y: 20}
   - type: {fileID: 11400000, guid: ac2f30fb838ec384fb07c52c3f8f6aa8, type: 2}

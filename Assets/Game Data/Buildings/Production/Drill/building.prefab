@@ -144,8 +144,8 @@ MonoBehaviour:
     types: []
     ammounts: 
     capacity:
-      baseValue: -1
-      currentValue: -1
+      baseValue: 10
+      currentValue: 10
       mod:
         percentMod: 1
         absoluteMod: 0
@@ -265,7 +265,9 @@ MonoBehaviour:
     mod:
       percentMod: 1
       absoluteMod: 0
-  recipesAssigmnet: []
+  recipesAssigmnet:
+  - categoryId: 44722519
+    objectId: 357319217
   fluidCost:
     types: []
     ammounts: 01000000
@@ -294,7 +296,7 @@ MonoBehaviour:
         percentMod: 1
         absoluteMod: 0
   fluidCapacity:
-    baseValue: 0
+    baseValue: 5
     currentValue: 0
     mod:
       percentMod: 1

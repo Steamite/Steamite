@@ -15,4 +15,3 @@ MonoBehaviour:
   Name: Metal
   color: {r: 1, g: 0, b: 0, a: 1}
   image: {fileID: 0}
-  category: {fileID: 11400000, guid: e8f18db3784a6884687c6ac8a35f98dc, type: 2}
