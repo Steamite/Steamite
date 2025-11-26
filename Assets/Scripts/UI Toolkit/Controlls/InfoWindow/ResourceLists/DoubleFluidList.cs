@@ -19,10 +19,9 @@ namespace InfoWindowElements
                 case FluidResProductionBuilding fluidRes:
                     if (cost)
                     {
-                        if(fluidRes is NeedSourceProduction source)
+                        if(fluidRes is NeedSourceProduction source && source.Source is Water)
                         {
-                            //mainBinding = SetupResTypes(source.ammountPerTick, );
-                            mainBinding = SetupResTypes(source.FluidYeild, nameof(NeedSourceProduction.Source) +"."+ nameof(NeedSourceProduction.Source.Storing));
+                            mainBinding = SetupResTypes(source.FluidYeild, nameof(NeedSourceProduction.Source) + "."+ nameof(NeedSourceProduction.Source.Storing));
                             mainBinding.sourceToUiConverters.AddConverter((ref Resource fluid) => ToUIRes(fluid));
                             SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
                             return;
@@ -32,16 +31,26 @@ namespace InfoWindowElements
                             mainBinding = SetupResTypes(
                                 fluidRes.FluidCost,
                                 nameof(FluidResProductionBuilding.FluidCost),
-                                nameof(FluidResProductionBuilding.StoredFluids),
+                                nameof(FluidResProductionBuilding.InputFluid),
                                 data);
                         }
                     }
                     else
-                        mainBinding = SetupResTypes(
-                            fluidRes.FluidYeild,
-                            nameof(FluidResProductionBuilding.FluidYeild),
-                            nameof(FluidResProductionBuilding.StoredFluids),
-                            data);
+                    {
+                        if(fluidRes.FluidYeild.Sum() > 0)
+                        {
+                            mainBinding = SetupResTypes(
+                                fluidRes.FluidYeild,
+                                nameof(FluidResProductionBuilding.FluidYeild),
+                                nameof(FluidResProductionBuilding.StoredFluids),
+                                data);
+                        }
+                        else
+                        {
+                            style.display = DisplayStyle.None;
+                            return;
+                        }
+                    }
                     mainBinding.sourceToUiConverters.AddConverter((ref CapacityResource fluid) => ToUIRes(fluid));
                     break;
                 case Water water:

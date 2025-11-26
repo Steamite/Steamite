@@ -15,4 +15,3 @@ MonoBehaviour:
   Name: Glass
   color: {r: 0.601851, g: 0.6587861, b: 0.6901961, a: 1}
   image: {fileID: 0}
-  category: {fileID: 0}

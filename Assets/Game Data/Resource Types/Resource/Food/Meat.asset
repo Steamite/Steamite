@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Meat
   m_EditorClassIdentifier: BaseAssembly::ResourceType
   Name: Meat
-  color: {r: 0.06170094, g: 1, b: 0, a: 1}
+  color: {r: 1, g: 0, b: 0.040395737, a: 1}
   image: {fileID: 0}
-  category: {fileID: 11400000, guid: 40ac08876555e184eaf0c3ccb3b612cf, type: 2}

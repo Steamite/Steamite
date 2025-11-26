@@ -15,4 +15,3 @@ MonoBehaviour:
   Name: Cogwheel
   color: {r: 0.8207547, g: 0.4166485, b: 0.019357419, a: 1}
   image: {fileID: 0}
-  category: {fileID: 11400000, guid: 16d98bd177341574abc198c335c6c8bb, type: 2}

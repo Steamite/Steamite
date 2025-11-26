@@ -35,6 +35,7 @@ public class ResearchWindow : FullscreenWindow, IGameDataController<ResearchSave
             {
                 ResearchNode node = researchData.Categories[i].Objects[j];
                 node.CurrentTime = researchSave.saveData[i][j];
+                node.reseachCost.Init();
             }
         }
         foreach ((int cat, int id) queueItem in researchSave.queue)

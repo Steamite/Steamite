@@ -125,7 +125,15 @@ public static class ResFluidTypes
 
     public static ResourceType GetFluidByIndex(int index)
         => Fluids[index];
-
+    public static List<string> GetOutpostTypes()
+    {
+        return new List<string>
+        {
+            "None",
+            "Meat",
+            "Wood"
+        };
+    }
     public static List<string> GetResNamesList()
         => Resources.Select(q => q.Name).ToList();
     public static List<string> GetResNamesList(List<int> allowedCategories)

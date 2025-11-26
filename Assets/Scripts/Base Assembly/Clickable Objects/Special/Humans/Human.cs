@@ -114,16 +114,7 @@ public class Human : ClickableObject
     {
         if(state == JobState.Free)
         {
-            // TODO, after clearing human remove all requests to avoid clugging the system
-            if(jData.interest is ResourceProductionBuilding building)
-            {
-                if (building.constructed == true)
-                    building.InputResource.RemoveRequest(this);
-            }
-            if (jData.interest is StorageObject storage)
-            {
-                storage.LocalRes.RemoveRequest(this);
-            }
+            SceneRefs.JobQueue.FreeHuman(this);
         }
             
         jData.job = state;

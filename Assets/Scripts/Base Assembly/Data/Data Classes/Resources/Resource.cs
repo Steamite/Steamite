@@ -188,10 +188,10 @@ public class Resource
 
     public void TakeResource(Resource toTransfer)
     {
-        Resource ret = new();
-        Diff(ret, toTransfer);
-        ret = toTransfer - ret;
-        Manage(ret, false);
+        Resource ret = toTransfer - Diff(toTransfer);
+
+        // check if present
+        Manage(ret, false, removeEmpty: true);
         toTransfer.Manage(ret, false, removeEmpty: true);
     }
 
@@ -204,7 +204,7 @@ public class Resource
                 : _ammount;
             ret.ManageSimple(types[i], x, true);
             if (remove)
-                ManageSimple(types[i], x, false, removeEmpty: true);
+                ManageSimple(types[i], x, false);
             _ammount -= x;
             if (_ammount <= 0)
                 break;

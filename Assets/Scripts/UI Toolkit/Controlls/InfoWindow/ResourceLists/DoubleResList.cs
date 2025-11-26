@@ -32,9 +32,14 @@ namespace InfoWindowElements
                     }
                     else if (data is IResourceProduction prod)
                     {
-                        // DEBUG_Binding example binding
-                        // Creates a list that's used as itemSource, containg a static resouce and a dynamic binded resource.
-                        if (cost && prod.ResourceCost.Sum() > 0)
+                        if(cost && data is NeedSourceProduction source && source.ResourceYield.Sum() > 0)
+                        {
+                            mainBinding = SetupResTypes(source.ResourceYield, nameof(NeedSourceProduction.Source) + "." + nameof(NeedSourceProduction.Source.Storing));
+                            mainBinding.sourceToUiConverters.AddConverter((ref Resource res) => ToUIRes(res));
+                            SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
+                            return;
+                        }
+                        else if (cost && prod.ResourceCost.Sum() > 0)
                         {
                             mainBinding = SetupResTypes(
                                 prod.ResourceCost,

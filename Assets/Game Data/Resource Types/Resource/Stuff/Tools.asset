@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Tools
   m_EditorClassIdentifier: BaseAssembly::ResourceType
   Name: Tools
-  color: {r: 0, g: 0, b: 0, a: 0}
+  color: {r: 0.8867924, g: 0.32069227, b: 0, a: 1}
   image: {fileID: 0}

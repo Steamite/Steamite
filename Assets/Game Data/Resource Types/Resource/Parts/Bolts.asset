@@ -15,4 +15,3 @@ MonoBehaviour:
   Name: Bolts
   color: {r: 0.6603774, g: 0.5366158, b: 0.37068352, a: 1}
   image: {fileID: 0}
-  category: {fileID: 11400000, guid: 16d98bd177341574abc198c335c6c8bb, type: 2}

@@ -29,7 +29,7 @@ public partial class ResourceOverview : CustomRadioButtonGroup, IUIElement
     public void Open(object resDis)
     {
         display = resDis as ResourceDisplay;
-        categories = ResFluidTypes.GetData().Categories.Skip(1).ToList();
+        categories = ResFluidTypes.GetData().Categories.Skip(1).SkipLast(1).ToList();
         for (int i = 0; i < categories.ToList().Count; i++)
         {
             CustomRadioButton customRadioButton = new("resource-button", i, this, true) { style = { backgroundImage = categories[i].Icon } };

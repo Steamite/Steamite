@@ -15,4 +15,3 @@ MonoBehaviour:
   Name: Wood
   color: {r: 0.3773585, g: 0.18652998, b: 0.04805981, a: 1}
   image: {fileID: 0}
-  category: {fileID: 11400000, guid: e8f18db3784a6884687c6ac8a35f98dc, type: 2}
