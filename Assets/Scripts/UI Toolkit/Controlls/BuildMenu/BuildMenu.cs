@@ -48,7 +48,7 @@ namespace BottomBar.Building
                                 node.RegisterFinishCallback(() =>
                                 {
                                     wrapper.unlocked = true;
-                                    if (buildingData.Categories[categGroup.SelectedChoice].id == node.objectConnection.categoryId)
+                                    if (categGroup.SelectedChoice != -1 && buildingData.Categories[categGroup.SelectedChoice].id == node.objectConnection.categoryId)
                                     {
                                         buildingList.UnlockActiveButton(i);
                                     }

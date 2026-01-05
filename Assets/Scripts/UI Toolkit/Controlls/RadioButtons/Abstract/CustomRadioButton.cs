@@ -58,9 +58,14 @@ namespace AbstractControls
             IsSelected = SelectChange(true);
             if (IsSelected && styleClass != "")
             {
-                RemoveFromClassList(styleClass);
-                AddToClassList(styleClass + "-selected");
+                Transition();
             }
+        }
+
+        public void Transition()
+        {
+            RemoveFromClassList(styleClass);
+            AddToClassList(styleClass + "-selected");
         }
 
         /// <summary>

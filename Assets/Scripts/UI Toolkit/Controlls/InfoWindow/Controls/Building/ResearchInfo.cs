@@ -65,6 +65,7 @@ public partial class ResearchInfo : InfoWindowControl
             title.text = "None set";
             progress.title = "0/0";
             progress.value = 0;
+            SceneRefs.InfoWindow.ClearTempBindings();
         }
     }
 }

@@ -24,7 +24,7 @@ public interface IStorage
         ulong mask = CanStoreMask;
         try
         {
-            while (mask != 0)
+            while (mask != 0 && i < ResFluidTypes.GetResMax())
             {
                 if ((mask & 1) == 1)
                 {
@@ -36,9 +36,9 @@ public interface IStorage
                 i++;
             }
         }
-        catch (System.Exception)
+        catch (System.Exception exception)
         {
-            Debug.LogWarning("mask out of range");
+            Debug.LogWarning($"mask out of range({exception})");
         }
         
     }
@@ -46,7 +46,7 @@ public interface IStorage
     public void FinishStorageConstruction()
     {
         SetupStorage();
-        SceneRefs.JobQueue.storages.Add(this);
+        SceneRefs.JobQueue.AddStorage(this);
     }
 
     /// <summary>

@@ -1052,6 +1052,7 @@ MonoBehaviour:
   toBeDug: []
   constructions: []
   deconstructions: []
+  Count: 0
   pickupNeeded: []
   priority: 040000000500000006000000020000000300000007000000
 --- !u!1 &2029702140026209828
@@ -1289,6 +1290,14 @@ PrefabInstance:
     - target: {fileID: 955927231009529842, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_Name
       value: MyCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 1634306986070870791, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 2800808092810616947, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_TagString
+      value: MainCamera
       objectReference: {fileID: 0}
     - target: {fileID: 4186981223861399555, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: mainShortcuts

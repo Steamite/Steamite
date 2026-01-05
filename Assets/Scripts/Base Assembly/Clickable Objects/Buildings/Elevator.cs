@@ -57,7 +57,7 @@ public class Elevator : Building, IStorage, IBuilderHut
     public override void Load(ClickableObjectSave save)
     {
         CanStore = (save as StorageBSave).canStore;
-        SceneRefs.JobQueue.storages.Add(this);
+        SceneRefs.JobQueue.AddStorage(this);
         base.Load(save);
         if (SceneRefs.ObjectFactory.CenterElevatorIds.Contains(id))
         {

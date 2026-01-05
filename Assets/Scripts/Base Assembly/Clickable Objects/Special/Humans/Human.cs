@@ -353,7 +353,8 @@ public class Human : ClickableObject
         }
         else if(workplace is IBuilderHut builder)
         {
-            if (!HumanActions.FindBuildingsToConstruct(this))
+
+            if (!HumanActions.FindBuildingsToConstruct(this) && !HumanActions.FindBuildingsToDeconstruct(this))
             {
                 if (!(builder as Building).IsInside(GetPos()))
                 {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+//using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -45,6 +46,7 @@ public class GridTiles : MonoBehaviour
 
     /// <summary>Tiles marked while dragging.</summary>
     public List<ClickableObject> tempMarkedTiles;
+    public List<GridPos> tempMarkedTilePos;
     List<List<ClickableObject>> markedTiles = new();
     /// <summary>Currently selected building for construction.</summary>
     [Header("Tilemaps")] Building blueprintPrefab;
@@ -179,7 +181,7 @@ public class GridTiles : MonoBehaviour
                 if (drag)
                 {
                     CalcPipes();
-                    MyGrid.GetOverlay().MovePlacePipeOverlay(activePos, false);
+                    MyGrid.GetOverlay().MovePlacePipeOverlay(tempMarkedTilePos[^1], false);
                     return;
                 }
                 else
@@ -348,6 +350,7 @@ public class GridTiles : MonoBehaviour
                         MyGrid.GetOverlay().MovePlacePipeOverlay(activePos, true);
                         drag = true;
                         tempMarkedTiles = new() { blueprintInstance };
+                        tempMarkedTilePos = new() { blueprintInstance.GetPos() };
                         GridPos gridPos = activeObject.GetPos();
                         MyGrid.SetGridItem(gridPos, blueprintInstance, true);
                         blueprintInstance = null;
@@ -448,40 +451,33 @@ public class GridTiles : MonoBehaviour
     void CalcPipes()
     {
         Transform pipes = MyGrid.FindLevelPipes(startPos.y / 2);
-        List<GridPos> path = tempMarkedTiles.Select(q => q.GetPos()).ToList();
-        int i = path.IndexOf(activePos);
+
+        int i = tempMarkedTilePos.IndexOf(activePos);
         if (i == -1)
         {
             if (MyGrid.GetGridItem(activePos, true) == null && MyGrid.GetGridItem(activePos) is Road)
             {
-                GridPos lastPos = path[^1];
-                if (Math.Abs(lastPos.x - activePos.x) + Math.Abs(lastPos.z - activePos.z) > 1)
+                List<GridPos> partPath = PathFinder.FindPath(startPos, activePos, typeof(Road));
+                if (partPath == null)
+                    return;
+                for (int j = tempMarkedTilePos.Count - 1; j >= 0; j--)
                 {
-                    List<GridPos> partPath = PathFinder.FindPath(lastPos, activePos, typeof(Road));
-                    foreach (var tile in partPath)
+                    int k = partPath.IndexOf(tempMarkedTilePos[j]);
+                    if (k == -1)
                     {
-                        if (MyGrid.GetGridItem(tile, true) == null)
-                        {
-                            AddPipe(tile, pipes);
-                        }
-                        else
-                        {
-                            int j = path.IndexOf(tile);
-                            if (j > -1)
-                            {
-                                for (int k = tempMarkedTiles.Count - 1; k > j; k--)
-                                {
-                                    (tempMarkedTiles[k] as Building).DestoyBuilding();
-                                    tempMarkedTiles.RemoveAt(k);
-                                }
-                            }
-                        }
+                        (tempMarkedTiles[j] as Building).DestoyBuilding();
+                        tempMarkedTilePos.RemoveAt(j);
+                        tempMarkedTiles.RemoveAt(j);
                     }
+                    else
+                        partPath.RemoveAt(k);
                 }
-                else
-                    AddPipe(activePos, pipes);
 
-
+                for (int j = 0; j < partPath.Count; j++)
+                {
+                    tempMarkedTilePos.Add(partPath[j]);
+                    AddPipe(partPath[j], pipes);
+                }
             }
         }
         else
@@ -490,6 +486,7 @@ public class GridTiles : MonoBehaviour
             {
                 (tempMarkedTiles[j] as Building).DestoyBuilding();
                 tempMarkedTiles.RemoveAt(j);
+                tempMarkedTilePos.RemoveAt(j);
             }
         }
     }
@@ -509,8 +506,13 @@ public class GridTiles : MonoBehaviour
         if (activeControl == ControlMode.Build && drag == true && tempMarkedTiles.Count > 1)
         {
             markedTiles.Add(tempMarkedTiles.ToList());
+
             tempMarkedTiles.Clear();
             tempMarkedTiles.Add(markedTiles.Last().Last());
+
+            tempMarkedTilePos.Clear();
+            tempMarkedTilePos.Add(tempMarkedTiles[0].GetPos());
+
             MyGrid.GetOverlay().AddCheckPointTile(activePos);
         }
     }

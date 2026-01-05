@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
 using UnityEngine;
@@ -54,8 +55,35 @@ public class CapacityResource : Resource
         return HashCode.Combine(base.GetHashCode(), types, ammounts, capacity, FreeSpace);
     }
 
-    public bool HasSpace(Resource resource)
+    public bool HasSpace(Resource resource, bool checkTypes = false)
     {
-        return ammounts.Sum() + resource.ammounts.Sum() <= +capacity;
+        bool res = ammounts.Sum() + resource.ammounts.Sum() <= +capacity;
+        if (res == false || checkTypes == false)
+            return res;
+
+        foreach (var item in resource.types)
+        {
+            if(types.Contains(item) == false)
+                return false;
+        }
+        return true;
+    }
+
+    public void InitCapacity()
+    {
+        capacity.RecalculateMod();
+    }
+
+    public void ChangeFluidStorage(List<ResourceType> _types, IFluidWork work)
+    {
+        if (Sum() > 0)
+        {
+            work.StoreInNetwork(this, out bool succes, false);
+        }
+
+        types = _types.ToList();
+        ammounts = new();
+        for (int i = 0; i < types.Count; i++)
+            ammounts.Add(0);
     }
 }

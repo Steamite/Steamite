@@ -84,8 +84,8 @@ MonoBehaviour:
           ammounts: 030000000100000001000000
           baseResource:
             types:
-            - {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
-            - {fileID: 11400000, guid: 2041a4d797e915a4db26715015bb6e3f, type: 2}
+            - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
+            - {fileID: 11400000, guid: 18096b245d628204cba4870671dc9616, type: 2}
             - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
             ammounts: 030000000100000001000000
           mod:
@@ -129,7 +129,7 @@ MonoBehaviour:
           baseResource:
             types:
             - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
-            - {fileID: 11400000, guid: 18096b245d628204cba4870671dc9616, type: 2}
+            - {fileID: 11400000, guid: 2041a4d797e915a4db26715015bb6e3f, type: 2}
             - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
             ammounts: 030000000100000001000000
           mod:

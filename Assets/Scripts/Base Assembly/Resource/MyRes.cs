@@ -10,7 +10,7 @@ public static class MyRes
     /// <summary>Used for faster determening new jobs faster.</summary>
     public static int globalStorageSpace;
     /// <summary>All storage buildings.</summary>
-    static List<IStorage> storage;
+    //static List<IStorage> storage;
     /// <summary>Reference to global resource storage counter.</summary>
     public static ResourceDisplay resDataSource;
     #endregion
@@ -38,11 +38,8 @@ public static class MyRes
             resDataSource.InitializeResources();
             globalStorageSpace = 0;
 
-            storage = MyGrid.GetBuildings<IStorage>(q => q != null);
-            JobQueue jQ = SceneRefs.JobQueue;
-            foreach (IStorage _s in storage)
+            foreach (IStorage _s in SceneRefs.JobQueue.Storages)
             {
-                jQ.storages.Add(_s);
                 globalStorageSpace += _s.LocalResources.capacity - _s.LocalResources.Sum();
                 resDataSource.GlobalResources.Manage(_s.LocalResources, true);
             }
@@ -171,7 +168,7 @@ public static class MyRes
     {
         JobQueue jQ = SceneRefs.JobQueue;
         Resource diff = building.GetDiff(human.Inventory);
-        List<StorageObject> stores = MyGrid.chunks.Union(jQ.pickupNeeded.Union(jQ.storages.Cast<Building>())).ToList();
+        List<StorageObject> stores = MyGrid.chunks.Union(jQ.pickupNeeded.Union(jQ.Storages.Cast<Building>())).ToList();
         if (stores.Count > 0)
         {
             List<ClickableObject> filtered = ResCmp(diff, stores, true, human.Inventory.capacity - human.Inventory.Sum());
@@ -251,13 +248,16 @@ public static class MyRes
     /// <returns></returns>
     static List<IStorage> FilterStorages(Resource r, Human h, bool perfect, bool onlyFirst = false)
     {
-        List<IStorage> storages = SceneRefs.JobQueue.storages.ToList();
+        List<IStorage> storages = SceneRefs.JobQueue.Storages;
         int wantToStore = r.Sum();
         for (int i = storages.Count - 1; i >= 0; i--)
         {
             int spaceToStore = storages[i].LocalResources.capacity - storages[i].LocalResources.Future().Sum();
             if (spaceToStore <= 0)
+            {
+                storages.RemoveAt(i);
                 continue;
+            }
             for (int j = 0; j < r.types.Count; j++)
             {
                 int x = storages[i].LocalResources.types.IndexOf(r.types[j]);
@@ -355,7 +355,7 @@ public static class MyRes
     public static void EatFood(Human human)
     {
         ResourceType food = ResFluidTypes.GetResByName("Meat");
-        IStorage store = storage.FirstOrDefault(q => q.LocalResources.ammounts[q.LocalResources.Future(true).types.IndexOf(food)] > 0);
+        IStorage store = SceneRefs.JobQueue.Storages.FirstOrDefault(q => q.LocalResources.ammounts[q.LocalResources.Future(true).types.IndexOf(food)] > 0);
         if (store != null)
         {
             store.DestroyResource(food, 1);
@@ -395,10 +395,11 @@ public static class MyRes
     {
         UpdateResource(cost, false);
         Resource toRemove = new(cost);
-        for (int i = 0; i < storage.Count; i++)
+        List<IStorage> storages = SceneRefs.JobQueue.Storages;
+        for (int i = 0; i < storages.Count; i++)
         {
-            Resource diff = storage[i].LocalResources.Future(true).Diff(toRemove);
-            storage[i].LocalResources.Manage(diff, false);
+            Resource diff = storages[i].LocalResources.Future(true).Diff(toRemove);
+            storages[i].LocalResources.Manage(diff, false);
             toRemove.Manage(diff, false, removeEmpty: true);
             if (toRemove.types.Count == 0)
                 break;

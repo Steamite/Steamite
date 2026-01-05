@@ -100,8 +100,8 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             MyGrid.FindLevelBuildings(gp.y)).GetComponent<Elevator>();
         el.constructed = true;
         el.objectName = el.objectName.Replace("(Clone)", "");
+        SceneRefs.JobQueue.AddStorage(el);
         MyGrid.SetBuilding(el, true);
-
         return el;
     }
 
@@ -296,7 +296,9 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
 
     public List<Material> GetModelMaterials(Building building)
     {
-        return buildPrefabs.GetCategByID(building.prefabConnection.categoryId).Objects.FirstOrDefault(q => q.id == building.prefabConnection.objectId).materials;
+        var a = buildPrefabs.GetCategByID(building.prefabConnection.categoryId).Objects;
+        var b = a.FirstOrDefault(q => q.id == building.prefabConnection.objectId);
+        return b.materials;
     }
 
     public Material GetPipeMaterial()

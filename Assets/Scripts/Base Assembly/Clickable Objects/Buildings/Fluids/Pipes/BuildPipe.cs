@@ -34,7 +34,7 @@ public class BuildPipe : Pipe
                 || connectedBuilding is FluidResProductionBuilding)
                 network.storageBuildings.Add(connectedBuilding);
 
-            if (connectedBuilding is FluidResProductionBuilding fluidResProduction)
+            if (connectedBuilding is FluidResProductionBuilding fluidResProduction && fluidResProduction.FluidCost.Sum() > 0)
                 network.consumptionBuildings.Add(fluidResProduction);
         }
     }

@@ -154,8 +154,8 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         }
         if (isPipe)
         {
-            if (pipeGrid[x, y] == null)
-                pipeGrid[x, y] = (Pipe)clickable;
+            //if (pipeGrid[x, y] == null)
+            pipeGrid[x, y] = (Pipe)clickable;
         }
         else
             grid[x, y] = clickable;
@@ -215,7 +215,8 @@ public class GroundLevel : MonoBehaviour, IUpdatable
                     break;
                 case GridItemType.WaterSource:
                 case GridItemType.ResourceSource:
-                    (building as NeedSourceProduction).Source = GetGridItem(new(x, y)) as TileSource;
+                    if((building as NeedSourceProduction).Source == null)
+                        (building as NeedSourceProduction).Source = GetGridItem(new(x, y)) as TileSource;
                     break;
             }
         }
@@ -245,6 +246,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             {
                 case GridItemType.Road:
                 case GridItemType.Anchor:
+                case GridItemType.Pipe:
                     Road r = _roads.FirstOrDefault(q => q.GetPos().Equals(new GridPos(x, gridPos.y, y)));
                     r.entryPoints = new();
                     SetGridItem(new(x, y), r);

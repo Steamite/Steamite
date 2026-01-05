@@ -1,3 +1,4 @@
+using System.Linq;
 using Unity.Properties;
 
 public class NeedSourceProduction : FluidResProductionBuilding, IResourceProduction
@@ -17,9 +18,11 @@ public class NeedSourceProduction : FluidResProductionBuilding, IResourceProduct
 
     public override void FinishBuild()
     {
-        ResourceYield = new();
-        FluidYeild = new();
         UpdateYields(false);
+        StoredFluids.types = Source.Storing.types.ToList();
+        StoredFluids.ammounts = new();
+        for (int i = 0; i < StoredFluids.types.Count; i++)
+            StoredFluids.ammounts.Add(0);
         base.FinishBuild();
     }
     public override bool ManageInputRes()
@@ -31,7 +34,10 @@ public class NeedSourceProduction : FluidResProductionBuilding, IResourceProduct
             res = false;
         }
         else
+        {
+            UpdateYields(false);
             res = base.ManageInputRes();
+        }
 
         if (res == true)
         {
@@ -58,4 +64,6 @@ public class NeedSourceProduction : FluidResProductionBuilding, IResourceProduct
             UIUpdate(nameof(Source) + "." + nameof(TileSource.Storing));
         }
     }
+
+    
 }

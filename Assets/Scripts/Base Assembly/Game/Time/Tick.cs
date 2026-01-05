@@ -62,8 +62,8 @@ public class Tick : MonoBehaviour
 
     bool running = false;
 
-    [SerializeField] float pauseSpeed = 0.1f;
-    public static float LastSpeed { get; private set; }
+    [SerializeField] int pauseSpeed = 0;
+    public static int LastSpeed { get; private set; }
     #endregion
 
     #region Events
@@ -163,7 +163,7 @@ public class Tick : MonoBehaviour
             nightStart?.Invoke();
 
         Time.timeScale = pauseSpeed;
-        LastSpeed = 1f;
+        LastSpeed = 1;
     }
     #endregion
 
@@ -192,7 +192,7 @@ public class Tick : MonoBehaviour
     #region Starting and Ending ticks
     void StopTicks()
     {
-        LastSpeed = Time.timeScale;
+        LastSpeed = (int)Time.timeScale;
         Time.timeScale = pauseSpeed;
         if (running == false)
         {

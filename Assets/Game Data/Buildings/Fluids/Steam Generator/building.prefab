@@ -144,8 +144,8 @@ MonoBehaviour:
     types: []
     ammounts: 
     capacity:
-      baseValue: 25
-      currentValue: 25
+      baseValue: 0
+      currentValue: 0
       mod:
         percentMod: 1
         absoluteMod: 0
@@ -280,14 +280,8 @@ MonoBehaviour:
     types: []
     ammounts: 
     capacity:
-      baseValue: 0
+      baseValue: 20
       currentValue: 0
       mod:
         percentMod: 1
         absoluteMod: 0
-  fluidCapacity:
-    baseValue: 0
-    currentValue: 0
-    mod:
-      percentMod: 1
-      absoluteMod: 0

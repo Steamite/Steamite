@@ -66,7 +66,7 @@ public class ToolkitShortucts : MonoBehaviour, IAfterLoad
             {
                 if (level.triggered)
                 {
-                    levelButtons.OutsideTrigger(-1, Mathf.RoundToInt(level.ReadValue<float>()));
+                    MyGrid.ChangeGridLevel(Mathf.RoundToInt(level.ReadValue<float>()));
                 }
             }
             else

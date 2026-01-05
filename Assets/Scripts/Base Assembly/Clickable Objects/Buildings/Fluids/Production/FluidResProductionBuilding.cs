@@ -19,12 +19,10 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IInputFlui
 
     [SerializeField] CapacityResource storedFluids;
 
-    public ModifiableInteger fluidCapacity;
-
     public override void FinishBuild()
     {
         ProdStates = new FluidProdStates();
-        StoredFluids = new(localRes.capacity.currentValue);
+        StoredFluids.InitCapacity();// = new(storedFluids.capacity.getBaseVal);
         InputFluid = new(fluidCost.ammounts.Sum()*2);
         base.FinishBuild();
     }
@@ -123,7 +121,7 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IInputFlui
         InputFluid = new(fluidCost.ammounts.Sum() * 2);
         InputFluid.Manage(new(((FluidResProductionSave)save).inputFluid), true);
 
-        StoredFluids = new(localRes.capacity.currentValue);
+        StoredFluids.InitCapacity();// = new(storedFluids.capacity.currentValue);
         StoredFluids.Manage(new(((FluidResProductionSave)save).storedFluid), true);
         base.Load(save);
     }

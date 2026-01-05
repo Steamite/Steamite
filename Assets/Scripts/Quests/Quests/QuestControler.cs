@@ -100,7 +100,6 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         orderController = new(
                 this,
                 _questCatalog,
-                new(data.Categories[2].Objects.FirstOrDefault(q => q.id == saveData.order.objectId)),
                 saveData);
         SceneRefs.Tick.SubscribeToEvent(UpdateTimers, Tick.TimeEventType.Ticks);
 

@@ -39,11 +39,8 @@ public partial class LevelButtons : CustomRadioButtonGroup
 
     public void OutsideTrigger(int old, int newI)
     {
-        if (SelectedChoice != newI && (MyGrid.IsUnlocked(newI)
-#if UNITY_EDITOR
-    || true
-#endif
-    ))
-            buttons[newI].Select();
+        buttons[old].Deselect(false);
+        SelectedChoice = newI;
+        buttons[newI].Transition();
     }
 }
