@@ -295,10 +295,4 @@ MonoBehaviour:
       mod:
         percentMod: 1
         absoluteMod: 0
-  fluidCapacity:
-    baseValue: 5
-    currentValue: 0
-    mod:
-      percentMod: 1
-      absoluteMod: 0
   ammountPerTick: 3

@@ -227,22 +227,6 @@ public static class HumanActions
     {
         switch (j)
         {
-            case JobState.Digging:
-                Debug.Log("nope - can't Dig");
-                //return FindRockToDig(h);
-                break;
-            case JobState.Constructing:
-                //Debug.Log("nope - can't construct");
-                //return FindBuildingsToConstruct(h);
-                break;
-            case JobState.Deconstructing:
-                // deconstructions with no workers assigned
-                if (FindInterests(jobQueue.deconstructions.Where(q => q.LocalRes.carriers.Count == 0), h, j))
-                {
-                    h.Job.interest.GetComponent<Building>().RequestRes(new(), h, 0);
-                    return true;
-                }
-                break;
             case JobState.Pickup:
                 // if there's any space for it
                 if (MyRes.globalStorageSpace > 0)
@@ -356,8 +340,25 @@ public static class HumanActions
         // builds that are missing resources to progress further
         if (FilterBuilds(missingResoucerces, h, JobState.Constructing))
             return true;
+
+        
+
         return false;
     }
+
+    public static bool FindBuildingsToDeconstruct(Human h)
+    {
+        JobQueue jobQueue = SceneRefs.JobQueue;
+        if (jobQueue.deconstructions.Count == 0)
+            return false;
+        if (FindInterests(jobQueue.deconstructions.Where(q => q.LocalRes.carriers.Count == 0), h, JobState.Deconstructing))
+        {
+            h.Job.interest.GetComponent<Building>().RequestRes(new(), h, 0);
+            return true;
+        }
+        return false;
+    }
+
 
     /// <summary>
     /// finds the closest interest

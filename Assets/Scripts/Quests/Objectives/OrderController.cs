@@ -19,11 +19,18 @@ public class OrderController
 
     public int finishedOrdersCount;
 
-    public OrderController(QuestController _questController, UIDocument _questCatalog, Order _order, QuestControllerSave saveData)
+    public OrderController(QuestController _questController, UIDocument _questCatalog, QuestControllerSave saveData)
     {
         data = _questController.data;
         orderInterface = _questCatalog.rootVisualElement[0][0].Q("OrderInterface") as IUIElement;
-        currentOrder = _order;
+        Quest temp = data.Categories[2].Objects.FirstOrDefault(q => q.id == saveData.order?.objectId);
+        if (temp != null)
+        {
+            currentOrder = new(temp);
+            currentOrder.Load(this, saveData.order);
+        }
+        else
+            currentOrder = null;
         finishedOrdersCount = saveData.finishedOrdersCount;
 
         orderChoice = new();
@@ -31,7 +38,6 @@ public class OrderController
         {
             orderChoice.Add(new(item));
         }
-        _order.Load(this, saveData.order);
 
         LoadOrderConfig();
     }
@@ -70,6 +76,7 @@ public class OrderController
             orderChoice.Add(GenerateOrder());
             orderChoice.Add(GenerateOrder());
         }
+        currentOrder = null; 
     }
 
     public void UpdateTimers()

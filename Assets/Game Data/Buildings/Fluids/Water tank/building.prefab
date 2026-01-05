@@ -226,7 +226,7 @@ MonoBehaviour:
     types: []
     ammounts: 
     capacity:
-      baseValue: 0
+      baseValue: 75
       currentValue: 0
       mod:
         percentMod: 1

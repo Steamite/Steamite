@@ -111,12 +111,12 @@ public class FluidNetwork
     {
         for (int i = 0; i < consumptionBuildings.Count; i++)
         {
-            if (consumptionBuildings[i].InputFluid.HasSpace(fluid))
+            if (consumptionBuildings[i].InputFluid.HasSpace(fluid, true))
                 return true;
         }
         for (int i = 0; i < storageBuildings.Count; i++)
         {
-            if (storageBuildings[i].StoredFluids.HasSpace(fluid))
+            if (storageBuildings[i].StoredFluids.HasSpace(fluid, true))
                 return true;
         }
         return false;

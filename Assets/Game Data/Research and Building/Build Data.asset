@@ -101,14 +101,14 @@ MonoBehaviour:
         Name: 
         id: 268937765
         b: {fileID: -5750915001953968721, guid: ee9e7a14f264a9347b18aa26ab4bf3ae, type: 3}
-        preview: {fileID: 0}
+        preview: {fileID: 21300000, guid: 99c47f49e7b31bb458a9f7b76d1fe662, type: 3}
     - rid: 8808251703612669987
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
         Name: 
         id: 640485558
         b: {fileID: 3899939243742089161, guid: 47fed3082c867844ea963e9a17d26576, type: 3}
-        preview: {fileID: 0}
+        preview: {fileID: 21300000, guid: 729a493191982dd44beeec1170baec64, type: 3}
     - rid: 8808251703612669988
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:

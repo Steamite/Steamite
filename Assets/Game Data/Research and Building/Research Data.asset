@@ -168,7 +168,7 @@ MonoBehaviour:
         level: 1
         researched: 0
         currentTime: -1
-        researchTime: 200
+        researchTime: 50
         reseachCost:
           types: []
           ammounts: 

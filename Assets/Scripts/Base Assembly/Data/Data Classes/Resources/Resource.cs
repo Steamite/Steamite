@@ -30,6 +30,12 @@ public class Resource
     }
     public Resource(ResourceSave save)
     {
+        if (save.types == null)
+        {
+            types = new();
+            ammounts = new();
+            return;
+        }
         types = ResFluidTypes.LoadTypeList(save.types);//..Select(q => ResFluidTypes.GetResByIndex(q)).ToList();
         ammounts = save.ammounts.ToList();
     }
@@ -191,7 +197,7 @@ public class Resource
         Resource ret = toTransfer - Diff(toTransfer);
 
         // check if present
-        Manage(ret, false, removeEmpty: true);
+        Manage(ret, false);
         toTransfer.Manage(ret, false, removeEmpty: true);
     }
 

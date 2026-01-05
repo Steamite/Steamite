@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 
@@ -183,15 +184,26 @@ public interface IResourceProduction : IProduction
     {
         SelectedRecipe = index;
         ProductionRecipe recipe = Recipes[index];
+        bool changeYeild = true;
+        if(this is NeedSourceProduction sourceProduction)
+            changeYeild = false;
         if (recipe is FluidProductionRecipe fluid)
         {
             FluidResProductionBuilding fluidBuild = this as FluidResProductionBuilding;
             fluidBuild.FluidCost = new(fluid.fluidCost);
-            fluidBuild.FluidYeild = new(fluid.fluidYield);
+            
+            if (changeYeild)
+                fluidBuild.FluidYeild = new(fluid.fluidYield);
+
+            fluidBuild.InputFluid.ChangeFluidStorage(fluid.fluidCost.types, fluidBuild);
+            fluidBuild.StoredFluids.ChangeFluidStorage(fluid.fluidYield.types, fluidBuild);
+
+
             fluidBuild.InputFluid.capacity.ChangeBaseVal(fluidBuild.FluidCost.Sum() * 2);
         }
         ResourceCost = recipe.resourceCost;
-        ResourceYield = recipe.resourceYield;
+        if(changeYeild)
+            ResourceYield = recipe.resourceYield;
         ProdTime = recipe.timeInTicks;
         if(voidProd)
             CurrentTime = 0;

@@ -70,12 +70,9 @@ public class UIOverlay : MonoBehaviour
     {
         if (init == true)
         {
-            overlayParent.anchoredPosition = new(0, 0);
-            Image image = Instantiate(overlayTile, overlayParent);
-            image.rectTransform.anchoredPosition = new(pos.x, -pos.z);
-            image.color = new Color(0.5803922f, 0f, 0.8274511f, 0.25f);
-            image = Instantiate(overlayTile, overlayParent);
-            image.color = new Color(0.5803922f, 0f, 0.8274511f, 0.25f);
+            overlayParent.anchoredPosition = new(0, 0); 
+            AddCheckPointTile(pos);
+            AddCheckPointTile(pos);
         }
         else
         {
@@ -83,6 +80,7 @@ public class UIOverlay : MonoBehaviour
                 .anchoredPosition = new(pos.x, -pos.z);
         }
     }
+
     public void AddCheckPointTile(GridPos pos)
     {
         Image image = Instantiate(overlayTile, overlayParent);

@@ -102,19 +102,13 @@ public partial class OrderInterface : Tab, IUIElement
                     button.enabledSelf = false;
                 }
             }
-            else
-            {
-                container.style.display = DisplayStyle.None;
-                orderSelection.style.display = DisplayStyle.Flex;
-                noneLabel.style.display = DisplayStyle.None;
-                orderSelection.Open(data);
-            }
         }
         else
         {
             container.style.display = DisplayStyle.None;
-            orderSelection.style.display = DisplayStyle.None;
-            noneLabel.style.display = DisplayStyle.Flex;
+            orderSelection.style.display = DisplayStyle.Flex;
+            noneLabel.style.display = DisplayStyle.None;
+            orderSelection.Open(data);
         }
     }
 

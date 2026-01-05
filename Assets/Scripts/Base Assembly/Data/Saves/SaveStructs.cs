@@ -129,6 +129,7 @@ public class RockSave : ClickableObjectSave
         this.toBeDug = toBeDug;
         objectName = _name;
         id = -1;
+        hiddenSave = new();
     }
 }
 

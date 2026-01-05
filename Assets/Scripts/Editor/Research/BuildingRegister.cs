@@ -53,7 +53,7 @@ namespace EditorWindows.Windows
                 {
                     if (EditorUtility.DisplayDialog("Building reload?", "Do you want to reload buildings", "rebuild", "cancel"))
                     {
-                        ResearchData researchData = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.PATH);
+                        ResearchData researchData = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.EDITOR_PATH);
                         List<ResearchNode> nodes = researchData.Categories.SelectMany(q => q.Objects).Where(q => q.nodeType == NodeType.Building).ToList();
                         for (int i = 0; i < selectedCategory.Objects.Count; i++)
                         {
@@ -616,21 +616,29 @@ namespace EditorWindows.Windows
                     IntegerField field = new();
                     if (building != null)
                     {
-                        if (building.LocalRes.capacity == null)
-                            building.LocalRes.capacity = new(-1);
-                        field.value = building.LocalRes.capacity.BaseValue;
+                        el.Add(field);
+                        if(building is FluidTank tank)
+                        {
+                            if (tank.StoredFluids.capacity == null)
+                                tank.StoredFluids.capacity = new(-1);
+                            field.value = tank.StoredFluids.capacity.BaseValue;
+                            field.RegisterValueChangedCallback(FluidCapacityChanged);
+                        }
+                        else
+                        {
+                            if (building.LocalRes.capacity == null)
+                                building.LocalRes.capacity = new(-1);
+                            field.value = building.LocalRes.capacity.BaseValue;
+                            field.RegisterValueChangedCallback(StorageCapacityChanged);
+                        }
                     }
-                    else
-                        field.value = 0;
-                    el.Add(field);
-                    field.RegisterValueChangedCallback(StorageCapacityChanged);
 
                     if (building is FluidResProductionBuilding fluidRes)
                     {
                         field = new IntegerField();
-                        if (fluidRes.fluidCapacity == null)
-                            fluidRes.fluidCapacity = new(-1);
-                        field.value = fluidRes.fluidCapacity.BaseValue;
+                        if (fluidRes.StoredFluids.capacity == null)
+                            fluidRes.StoredFluids.capacity = new(-1);
+                        field.value = fluidRes.StoredFluids.capacity.BaseValue;
 
                         el.Add(field);
                         field.RegisterValueChangedCallback(FluidCapacityChanged);
@@ -864,9 +872,9 @@ namespace EditorWindows.Windows
         {
             int i = ev.target.GetRowIndex();
             Building building = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
-            if (building != null && building is FluidResProductionBuilding fluidRes)
+            if (building != null && building is IFluidWork fluidRes)
             {
-                fluidRes.fluidCapacity.BaseValue = ev.newValue;
+                fluidRes.StoredFluids.capacity.BaseValue = ev.newValue;
                 EditorUtility.SetDirty(building);
             }
         }

@@ -44,17 +44,16 @@ public static class MyGrid
     #endregion
 
     [RuntimeInitializeOnLoadMethod]
-    static void ReloadDomain() => GridChange = null;
+    public static void ReloadDomain() => GridChange = null;
 
     /// <summary>
     /// Links <see cref="GridChange"/> events. And changes the active level.
     /// </summary>
     public static void Init()
     {
-        GridChange = null;
-        GridChange += (int _, int _) => SceneRefs.GridTiles.ChangeSelMode(ControlMode.Nothing);
-        GridChange += (int _, int _) => SceneRefs.GridTiles.Exit(SceneRefs.GridTiles.activeObject);
-        GridChange += SceneRefs.Humans.SwitchLevel;
+        AddToGridChange((_, _) => SceneRefs.GridTiles.ChangeSelMode(ControlMode.Nothing));
+        AddToGridChange((_, _) => SceneRefs.GridTiles.Exit(SceneRefs.GridTiles.activeObject));
+        AddToGridChange(SceneRefs.Humans.SwitchLevel);
         ChangeGridLevel(0);
     }
     public static void AddToGridChange(Action<int, int> action)

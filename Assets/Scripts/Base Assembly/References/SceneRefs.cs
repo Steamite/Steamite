@@ -67,6 +67,7 @@ public class SceneRefs : MonoBehaviour
 
     public static void FinishLoad()
     {
+        MyGrid.ReloadDomain();
         foreach (IAfterLoad afterLoad in instance.afterLoads.Cast<IAfterLoad>())
             afterLoad.AfterInit();
         instance.afterLoads = null;

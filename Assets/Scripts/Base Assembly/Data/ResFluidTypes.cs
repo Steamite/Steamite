@@ -122,6 +122,8 @@ public static class ResFluidTypes
 
     public static ResourceType GetResByIndex(int i)
         => Resources[i];
+    public static int GetResMax()
+        => Resources.Count;
 
     public static ResourceType GetFluidByIndex(int index)
         => Fluids[index];

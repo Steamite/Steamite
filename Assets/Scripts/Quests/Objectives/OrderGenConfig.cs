@@ -44,11 +44,11 @@ namespace Orders
                     resourceGens.RemoveAt(resourceGens.Count - 1);
                     dirty = true;
                 }
-                for (int i = 0; i < resourceGens.Count - 1; i++)
+                for (int i = 0; i < resourceGens.Count; i++)
                 {
-                    if (resourceGens[i].type != ResFluidTypes.GetResByIndex(i + 1))
+                    if (resourceGens[i].type != ResFluidTypes.GetResByIndex(i))
                     {
-                        resourceGens[i].type = ResFluidTypes.GetResByIndex(i + 1);
+                        resourceGens[i].type = ResFluidTypes.GetResByIndex(i);
                         dirty = true;
                     }
                 }

@@ -73,13 +73,10 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
 
     public static bool CanZoom = true;
 
-    #region Construction View
-    Label constructionStateLabel;
-    Button deconstructButton;
-    #endregion
 
-    /// <summary>List containing all active bindings, that are cleared on <see cref="Close(bool)"/>.</summary>
-    //List<BindingContext> activeBindings;
+
+    /// <summary>List containing all temp bindings, are destroyed with object.</summary>
+    List<BindingContext> activeBindings = new();
 
     /// <summary>Stores last opened mode. To hide it and remove datasource.</summary>
     public InfoMode lastInfo { get; private set; }
@@ -142,8 +139,8 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
 
         secondWindow.style.display = DisplayStyle.None;
         secondBody.Clear();
-
-        //activeBindings.Clear();
+        
+        activeBindings.Clear();
     }
     #endregion
 
@@ -275,10 +272,18 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
             Debug.Log(res.message);
         context.context.schedule.Execute(() =>
         {
-            //activeBindings.Add(context);
+            activeBindings.Add(context);
             ((IUpdatable)dataObject).UIUpdate(binding.dataSourcePath.ToString());
         });
     }
 
+    public void ClearTempBindings()
+    {
+        foreach (var item in activeBindings)
+        {
+            item.ClearBinding();
+        }
+        activeBindings.Clear();
+    }
     #endregion
 }

@@ -247,10 +247,10 @@ namespace InfoWindowElements
                             () =>
                             {
                                 GridPos pos = selectedElevator.GetPos();
+                                MyRes.PayCostGlobal(LevelData.costs[SelectedLevel]);
                                 SceneRefs.ObjectFactory.CreateElevator(
                                     new(pos.x, SelectedLevel, pos.z),
                                     Mathf.RoundToInt(selectedElevator.transform.eulerAngles.y));
-                                MyRes.PayCostGlobal(LevelData.costs[SelectedLevel]);
                                 MyGrid.ChangeGridLevel(SelectedLevel);
                             },
                             $"Connect to level: {SelectedLevel}",
@@ -264,8 +264,8 @@ namespace InfoWindowElements
                             () =>
                             {
                                 GridPos pos = selectedElevator.GetPos();
-                                SceneRefs.ObjectFactory.CreateElevator(new(pos.x, SelectedLevel, pos.z));
                                 MyRes.PayCostGlobal(LevelData.costs[SelectedLevel]);
+                                SceneRefs.ObjectFactory.CreateElevator(new(pos.x, SelectedLevel, pos.z));
                                 MyGrid.UnlockLevel(selectedElevator, SelectedLevel);
                                 MyGrid.ChangeGridLevel(SelectedLevel);
                             },

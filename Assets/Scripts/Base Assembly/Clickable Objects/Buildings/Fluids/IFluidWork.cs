@@ -58,7 +58,7 @@ public interface IFluidWork
     
     public static IFluidWork GetBuildingWith(IEnumerable<IFluidWork> buildings, Resource toStore)
     {
-        return buildings.FirstOrDefault(q => (q is IInputFluidWork input) ? input.InputFluid.HasSpace(toStore) : q.StoredFluids.HasSpace(toStore));
+        return buildings.FirstOrDefault(q => (q is IInputFluidWork input) ? input.InputFluid.HasSpace(toStore, true) : q.StoredFluids.HasSpace(toStore, true));
 
     }
 

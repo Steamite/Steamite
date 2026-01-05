@@ -12,7 +12,7 @@ public class ResourceGenDrawer : PropertyDrawer
     public override VisualElement CreatePropertyGUI(SerializedProperty property)
     {
         VisualElement el = treeAsset.CloneTree();
-        (el[0] as Label).text = Enum.GetNames(typeof(ResourceType))[property.FindPropertyRelative("id").intValue];
+        (el[0] as Label).text = ((ResourceType)property.FindPropertyRelative(nameof(ResourceGen.type)).boxedValue).name;
 
         (el[1] as SliderInt).BindProperty(property.FindPropertyRelative(nameof(ResourceGen.typeChance)));
 

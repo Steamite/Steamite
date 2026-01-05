@@ -24,10 +24,14 @@ public class SceneLoadingShortucts : MonoBehaviour
     [MenuItem("Custom Editors/Load/Continue _1")]
     static void LoadGame()
     {
-        if (!EditorApplication.isPlaying)
+        if (!EditorApplication.isPlaying && EditorSceneManager.GetActiveScene().name == "Level")
         {
             continueGame = true;
             OnPlayModeStateChanged(PlayModeStateChange.ExitingEditMode);
+        }
+        else
+        {
+            Debug.Log("Go to level");
         }
     }
 /*

@@ -11,8 +11,7 @@ public class FluidTank : Building, IFluidWork
     public ulong TypesToStore;
     public override void FinishBuild()
     {
-        storedFluid = new();
-
+        StoredFluids.InitCapacity();
         ulong byt = TypesToStore;
         int i = 0;
         while (byt != 0)
@@ -50,7 +49,7 @@ public class FluidTank : Building, IFluidWork
     }
     public override void Load(ClickableObjectSave save)
     {
-        StoredFluids.Clear();
+        StoredFluids.InitCapacity();
         StoredFluids.Manage(new(((TankBSave)save).fluidSave), true);
         base.Load(save);
     }
