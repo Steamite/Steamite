@@ -29,7 +29,6 @@ public abstract class FullscreenWindow : MonoBehaviour
         if (UIRefs.FullscreenConstraint())
         {
             isOpen = true;
-            SceneRefs.GridTiles.MarkPipeCheckpoint();
             SceneRefs.GridTiles.DeselectObjects();
             MainShortcuts.DisableInput();
             SceneRefs.InfoWindow?.Close();

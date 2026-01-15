@@ -10,6 +10,17 @@ public class Pipe : Building
     public PipePart[] connectedPipes = new PipePart[4];
     readonly int[] connectionOrder = { 1, 0, 3, 2 };
 
+    public override bool Equals(object obj)
+    {
+        bool b = base.Equals(obj);
+
+        if (b && id == -1)
+        {
+            return (obj as Pipe).GetPos().Equals(GetPos());
+        }
+        return false;
+    }
+
     public override void FinishBuild()
     {
         List<FluidNetwork> connectedNetworks = connectedPipes
@@ -88,7 +99,10 @@ public class Pipe : Building
         if ((pipePart = transform.GetComponentsInChildren<Transform>().FirstOrDefault(q => q.name == _case.ToString())) == null || !canNext)
         {
             if (connectedPipes[_case] != null)
+            {
                 Debug.LogError("Pipe is already present");
+                return;
+            }
             connectedPipes[_case] = Instantiate(SceneRefs.ObjectFactory.PipeConnectionPrefab, transform);
             pipePart = connectedPipes[_case].transform;
             pipePart.localScale = new(

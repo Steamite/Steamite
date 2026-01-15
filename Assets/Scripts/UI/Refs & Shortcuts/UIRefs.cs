@@ -55,7 +55,7 @@ public class UIRefs : MonoBehaviour
             instance._trading.CloseWindow();
         else if (instance._quests.isOpen)
             instance._quests.CloseWindow();
-        else if (SceneRefs.GridTiles.activeControl != ControlMode.Nothing)
+        else if (SceneRefs.GridTiles.ActiveControl != ControlMode.Nothing)
             SceneRefs.GridTiles.BreakAction();
         else
             return true;
@@ -71,7 +71,7 @@ public class UIRefs : MonoBehaviour
             instance._trading.CloseWindow();
         if (instance._quests.isOpen)
             instance._quests.CloseWindow();
-        if (SceneRefs.GridTiles.activeControl != ControlMode.Nothing)
+        if (SceneRefs.GridTiles.ActiveControl != ControlMode.Nothing)
             SceneRefs.GridTiles.BreakAction();
 
         return true;

@@ -41,8 +41,9 @@ public abstract class ClickableObject : MonoBehaviour,
     {
         if (obj == null || GetType() != obj.GetType())
             return false;
-        else if (((ClickableObject)obj).id == id && ((ClickableObject)obj).objectName == objectName)
-            return true;
+        else if (((ClickableObject)obj).id == id)
+            if (((ClickableObject)obj).objectName == objectName)
+                return true;
         return false;
     }
 

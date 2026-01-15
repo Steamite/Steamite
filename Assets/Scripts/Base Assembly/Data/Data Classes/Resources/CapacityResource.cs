@@ -81,9 +81,28 @@ public class CapacityResource : Resource
             work.StoreInNetwork(this, out bool succes, false);
         }
 
-        types = _types.ToList();
-        ammounts = new();
+        List<int> tempAmmounts = new();
+        List<ResourceType> tempTypes = _types.ToList();
+        for (int i = 0; i < tempTypes.Count; i++)
+            tempAmmounts.Add(0);
+
         for (int i = 0; i < types.Count; i++)
-            ammounts.Add(0);
+        {
+            if (ammounts[i] > 0)
+            {
+                int x = tempTypes.IndexOf(types[i]);
+                if(x == -1)
+                {
+                    tempTypes.Add(types[i]);
+                    tempAmmounts.Add(ammounts[i]);
+                }
+                else
+                {
+                    tempAmmounts[x] = ammounts[i];
+                }
+            }
+        }
+        types = tempTypes;
+        ammounts = tempAmmounts;
     }
 }

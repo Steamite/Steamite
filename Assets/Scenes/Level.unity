@@ -1087,6 +1087,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b89c037a29ee5a446aaebd9fbd82346c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  multiSelect: {fileID: 4967022013944964018}
   buildingMask:
     serializedVersion: 2
     m_Bits: 1587
@@ -1117,20 +1118,14 @@ MonoBehaviour:
     x: 0
     z: 0
     y: 0
-  startPos:
-    x: 0
-    z: 0
-    y: 0
   drag: 0
   deselect: 0
-  tempMarkedTiles: []
   clickedObject: {fileID: 0}
   activeObject: {fileID: 0}
   cursors:
   - {fileID: 2800000, guid: ae363da8347a847499c9345c5845bf1e, type: 3}
   - {fileID: 2800000, guid: fd2def2a77be87d4382da31006c84430, type: 3}
   highlight: {r: 0.33333334, g: 0.33333334, b: 0.33333334, a: 0.33333334}
-  toBeDugColor: {r: 1, g: 0.46078432, b: 0.007843138, a: 1}
 --- !u!114 &3891230603216898686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1176,6 +1171,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 206732441787875933}
+  - component: {fileID: 4967022013944964018}
   - component: {fileID: 3114157475242612541}
   - component: {fileID: 4967022013944964016}
   - component: {fileID: 4967022013944964017}
@@ -1217,6 +1213,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opaqueMaterial: {fileID: 2100000, guid: 53b082ebb47dbf642aca567c53d62751, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 70b0af3bc4134144c84cb2af04028a8f, type: 2}
+--- !u!114 &4967022013944964018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4967022013944964015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0704fd5b41724b745b3ddbf718c48a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BaseAssembly::MultiSelect
+  toBeDugColor: {r: 1, g: 0.46078432, b: 0.007843138, a: 1}
 --- !u!4 &5026351469592114601
 Transform:
   m_ObjectHideFlags: 0

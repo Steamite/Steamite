@@ -76,7 +76,7 @@ public class Rock : ClickableObject
 
     public override void OnPointerDown(PointerEventData eventData)
     {
-        if (hidden && SceneRefs.GridTiles.activeControl == ControlMode.Nothing)
+        if (hidden && SceneRefs.GridTiles.ActiveControl == ControlMode.Nothing)
             return;
         base.OnPointerDown(eventData);
 

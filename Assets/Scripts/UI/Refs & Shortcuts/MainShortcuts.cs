@@ -101,7 +101,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
             else if (buildRotate.triggered)
             {
                 float axis = buildRotate.ReadValue<float>();
-                if (SceneRefs.GridTiles.activeControl == ControlMode.Build)
+                if (SceneRefs.GridTiles.ActiveControl == ControlMode.Build)
                 {
                     Building building = SceneRefs.GridTiles.BlueprintInstance;
                     if (building is Pipe)
@@ -125,7 +125,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
 
         if (shift.inProgress)
         {
-            if (gt.activeControl == ControlMode.Deconstruct)
+            if (gt.ActiveControl == ControlMode.Deconstruct)
             {
                 gt.Enter(gt.activeObject);
             }

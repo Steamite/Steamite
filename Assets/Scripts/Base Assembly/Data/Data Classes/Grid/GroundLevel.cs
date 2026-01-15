@@ -154,7 +154,6 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         }
         if (isPipe)
         {
-            //if (pipeGrid[x, y] == null)
             pipeGrid[x, y] = (Pipe)clickable;
         }
         else
@@ -186,20 +185,19 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <param name="building">Building thats being placed.</param>
     /// <param name="gridPos">building anchor position.</param>
     /// <param name="load">If load is true creates, creates new roads and doesn't recycle entrypoints.</param>
-    public void RegisterBuilding(Building building, GridPos gridPos = null, bool load = false)
+    public void RegisterBuilding(Building building, GridPos? gridPos = null, bool load = false)
     {
+        GridPos pos = gridPos ?? building.GetPos();
         MyGrid.Buildings.Add(building);
-        if (gridPos == null)
-            gridPos = building.GetPos();
-        overlays.AddBuildingOverlay(gridPos, building.id);
+        overlays.AddBuildingOverlay(pos, building.id);
 
         List<Image> tiles = overlays.buildingOverlays[^1].GetComponentsInChildren<Image>().ToList();
         for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
         {
             NeededGridItem item = building.blueprint.itemList[i];
-            GridPos itemPos = MyGrid.Rotate(item.pos, building.transform.rotation.eulerAngles.y, true);
-            int x = (int)(itemPos.x + gridPos.x);
-            int y = (int)(gridPos.z - itemPos.z);
+            GridPos itemPos = item.pos.Rotate(building.transform.rotation.eulerAngles.y, true);
+            int x = (int)(itemPos.x + pos.x);
+            int y = (int)(pos.z - itemPos.z);
             Road r = GetGridItem(new(x, y))?.GetComponent<Road>();
             switch (item.itemType)
             {
@@ -238,7 +236,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
         {
             NeededGridItem item = building.blueprint.itemList[i];
-            GridPos itemPos = MyGrid.Rotate(item.pos, building.transform.rotation.eulerAngles.y, true);
+            GridPos itemPos = item.pos.Rotate(building.transform.rotation.eulerAngles.y, true);
             int x = (int)(itemPos.x + gridPos.x);
             int y = (int)(gridPos.z - itemPos.z);
 
@@ -266,8 +264,20 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <returns>If it's ok to build there or not.</returns>
     public bool CanPlace(Pipe pipe, GridPos pos)
     {
-        bool canPlace = pipeGrid[(int)pos.x, (int)pos.z] == null && GetGridItem(pos) is Road;
-        pipe.FindConnections(canPlace);
+        Pipe nextP = pipeGrid[(int)pos.x, (int)pos.z];
+
+        bool canPlace = 
+            (nextP == null || nextP.id == -1)
+                && GetGridItem(pos) is Road;
+        //if(nextP == null || nextP.Equals(this))
+            pipe.FindConnections(canPlace);/*
+        else
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                pipe.DisconnectPipe(i, true);
+            }
+        }*/
         return canPlace;
     }
 
@@ -292,7 +302,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         for (int i = 0; i < building.blueprint.itemList.Count; i++)
         {
             NeededGridItem item = building.blueprint.itemList[i];
-            GridPos itemPos = MyGrid.Rotate(item.pos, building.transform.rotation.eulerAngles.y, true);
+            GridPos itemPos = item.pos.Rotate(building.transform.rotation.eulerAngles.y, true);
             itemPos.x += gridPos.x;
             itemPos.z = gridPos.z - itemPos.z;
             Transform tile = overlay.GetChild(i);
