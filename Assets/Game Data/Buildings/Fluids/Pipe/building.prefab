@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1351098271473920992}
   - component: {fileID: 4676457964629507834}
   - component: {fileID: 2337060514408432828}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ SortingGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 194448335516347060}
   m_Enabled: 1
-  m_SortingLayerID: -451778777
-  m_SortingLayer: 2
+  m_SortingLayerID: -545164103
+  m_SortingLayer: 4
   m_SortingOrder: 15
   m_SortAtRoot: 0

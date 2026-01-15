@@ -50,6 +50,8 @@ namespace InfoWindowViews
         Button button;
         Button changeRecipe;
         Label prodSpeedLabel;
+
+        ResourceList storageList;
         #endregion
 
         IProduction building;
@@ -113,6 +115,8 @@ namespace InfoWindowViews
 
             outputResource = new(false, "Output", true);
             Add(outputResource);
+            storageList = new(_name: "Storage") { style = { display = DisplayStyle.None } };
+            Add(storageList);
             UpdateButton();
         }
 
@@ -179,9 +183,38 @@ namespace InfoWindowViews
         }
         #endregion
 
+        void ToggleElems(bool prod)
+        {
+            if (prod)
+            {
+                storageList.style.display = DisplayStyle.None;
+                inputResource.style.display = DisplayStyle.Flex;
+                radialElement.parent.style.display = DisplayStyle.Flex;
+                outputResource.style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                storageList.style.display = DisplayStyle.Flex;
+                inputResource.style.display = DisplayStyle.None;
+                radialElement.parent.style.display = DisplayStyle.None;
+                outputResource.style.display = DisplayStyle.None;
+            }
+        }
+
         /// <inheritdoc/>
         public override void Open(object data)
         {
+            if(data is NeedSourceProduction needSource)
+            {
+                if(needSource.ResourceCost.Sum() + needSource.FluidCost.Sum() == 0)
+                {
+                    ToggleElems(false);
+                    storageList.Open(needSource);
+                    return;
+                }
+            }
+            ToggleElems(true);
+
             building = (IProduction)data;
             inputResource.Open(data);
             outputResource.Open(data);

@@ -116,7 +116,7 @@ public interface IFluidWork
             NeededGridItem item = building.blueprint.itemList[i];
             if (item.itemType == GridItemType.Pipe)
             {
-                GridPos itemPos = MyGrid.Rotate(item.pos, building.transform.rotation.eulerAngles.y, true);
+                GridPos itemPos = item.pos.Rotate(building.transform.rotation.eulerAngles.y, true);
                 itemPos.x += buildPos.x;
                 itemPos.z = buildPos.z - itemPos.z;
                 AttachedPipes.Add(

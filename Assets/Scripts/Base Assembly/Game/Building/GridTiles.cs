@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-//using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -23,6 +22,7 @@ public enum ControlMode
 public class GridTiles : MonoBehaviour
 {
     #region Variables
+    [SerializeField] MultiSelect multiSelect;
     //bool buildingPlaced = false;
     /// <summary>Raycast mask for building.</summary>
     public LayerMask buildingMask;
@@ -31,23 +31,19 @@ public class GridTiles : MonoBehaviour
     public LayerMask pipeMask;
 
     /// <summary>Current active control mode.</summary>
-    public ControlMode activeControl { get; private set; } = ControlMode.Nothing;
+    public ControlMode ActiveControl { get; private set; } = ControlMode.Nothing;
     [SerializeField] InputAction shiftKey;
 
     /// <summary>Last mouse position.</summary>
     public GridPos activePos;
     /// <summary>Starting mouse position when dragging.</summary>
-    public GridPos startPos;
 
     /// <summary>If the mouse is down and trying to drag.</summary>
     public bool drag = false;
     /// <summary>Drag started on a marked tile.</summary>
     public bool deselect = false;
 
-    /// <summary>Tiles marked while dragging.</summary>
-    public List<ClickableObject> tempMarkedTiles;
-    public List<GridPos> tempMarkedTilePos;
-    List<List<ClickableObject>> markedTiles = new();
+    
     /// <summary>Currently selected building for construction.</summary>
     [Header("Tilemaps")] Building blueprintPrefab;
 
@@ -96,8 +92,8 @@ public class GridTiles : MonoBehaviour
     [Tooltip("used to help determine control states")] public Texture2D[] cursors;
     /// <summary>Basic highlight color(for selection).</summary>
     public Color highlight = Color.white / 3;
-    /// <summary>Color for selecting what do dig.</summary>
-    public Color toBeDugColor = (Color.yellow + Color.red) / 2;
+
+    public Color ToBeDugColor => multiSelect.toBeDugColor;
     #endregion
 
     /// <summary>Called when AltTabing from the game.</summary>
@@ -120,11 +116,11 @@ public class GridTiles : MonoBehaviour
         if (enterObject == null)
             return;
         Color c = new();
-        if (activeControl == ControlMode.Nothing && activeObject != null)
+        if (ActiveControl == ControlMode.Nothing && activeObject != null)
             Exit(activeObject);
         activeObject = enterObject;
         activePos = enterObject.GetPos();
-        switch (activeControl)
+        switch (ActiveControl)
         {
             case ControlMode.Nothing:
 
@@ -135,7 +131,7 @@ public class GridTiles : MonoBehaviour
 
                 Rock r = enterObject.GetComponent<Rock>();
                 if (r && r.toBeDug) // if rock is to be dug
-                    c += toBeDugColor; // DUGCOLOR
+                    c += ToBeDugColor; // DUGCOLOR
                 else
                 {
                     Building b = enterObject.GetComponent<Building>();
@@ -162,7 +158,7 @@ public class GridTiles : MonoBehaviour
                 Rock _r = enterObject.GetComponent<Rock>();
                 if (drag)
                 {
-                    CalcTiles();
+                    multiSelect.CalcTiles(activePos);
                     return;
                 }
                 else if (_r)
@@ -180,13 +176,12 @@ public class GridTiles : MonoBehaviour
             case ControlMode.Build:
                 if (drag)
                 {
-                    CalcPipes();
-                    MyGrid.GetOverlay().MovePlacePipeOverlay(tempMarkedTilePos[^1], false);
+                    multiSelect.CalcPipes(activePos, blueprintPrefab as Pipe);
                     return;
                 }
                 else
                 {
-                    GridPos grid = MyGrid.Rotate(blueprintInstance.blueprint.moveBy, blueprintInstance.transform.eulerAngles.y);
+                    GridPos grid = blueprintInstance.blueprint.moveBy.Rotate(blueprintInstance.transform.eulerAngles.y);
                     blueprintInstance.transform.position = new(
                         activePos.x + grid.x,
                         (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) +
@@ -211,7 +206,7 @@ public class GridTiles : MonoBehaviour
         if (exitObject == null)
             return;
         Color c = new();
-        switch (activeControl)
+        switch (ActiveControl)
         {
             case ControlMode.Nothing:
                 Rock r = exitObject.GetComponent<Rock>();
@@ -222,7 +217,7 @@ public class GridTiles : MonoBehaviour
                 else
                     c = new();
                 if (r && r.toBeDug)
-                    c += toBeDugColor;
+                    c += ToBeDugColor;
                 else if (b && b.deconstructing)
                     c += Color.red / 2;
                 else if (pipe)
@@ -248,7 +243,7 @@ public class GridTiles : MonoBehaviour
                     if (drag)
                         return;
                     else if (_r.toBeDug)
-                        c = toBeDugColor;
+                        c = ToBeDugColor;
                     else
                         c = new();
                 }
@@ -275,7 +270,7 @@ public class GridTiles : MonoBehaviour
         }
         Color c = new();
         Material[] m = activeObject.GetComponentsInChildren<MeshRenderer>().Where(q => q != null).Select(q => q.material).ToArray();
-        switch (activeControl)
+        switch (ActiveControl)
         {
             case ControlMode.Nothing:
                 Rock r = activeObject.GetComponent<Rock>();
@@ -283,12 +278,12 @@ public class GridTiles : MonoBehaviour
                 {
                     Rock activeRock = clickedObject.GetComponent<Rock>();
                     if (activeRock && activeRock.toBeDug)
-                        c = toBeDugColor;
+                        c = ToBeDugColor;
                     clickedObject.Highlight(c);
                     clickedObject.selected = false;
                 }
                 if (r && r.toBeDug) // rock to be dug
-                    c = toBeDugColor + highlight * 2; // YELLOW + RED
+                    c = ToBeDugColor + highlight * 2; // YELLOW + RED
                 else
                     c = highlight * 3; // WHITE
                 activeObject.Highlight(c);
@@ -319,10 +314,10 @@ public class GridTiles : MonoBehaviour
                 Rock _r = activeObject.GetComponent<Rock>();
                 if (_r)
                 {
-                    startPos = new(activePos.x, activePos.y, activePos.z);
+                    multiSelect.InitDig(
+                        new GridPos(activePos.x, activePos.y, activePos.z),
+                        _r);
                     drag = true;
-                    deselect = _r.toBeDug ? true : false;
-                    tempMarkedTiles = new() { _r };
                 }
                 break;
             case ControlMode.Build:
@@ -336,7 +331,7 @@ public class GridTiles : MonoBehaviour
     /// </summary>
     public void Up()
     {
-        switch (activeControl)
+        switch (ActiveControl)
         {
             case ControlMode.Nothing:
             case ControlMode.Deconstruct:
@@ -347,35 +342,20 @@ public class GridTiles : MonoBehaviour
                 {
                     if (drag == false)
                     {
+                        multiSelect.InitPipes(
+                            new GridPos(activePos.x, activePos.y, activePos.z),
+                            blueprintInstance as Pipe);
                         MyGrid.GetOverlay().MovePlacePipeOverlay(activePos, true);
                         drag = true;
-                        tempMarkedTiles = new() { blueprintInstance };
-                        tempMarkedTilePos = new() { blueprintInstance.GetPos() };
+
                         GridPos gridPos = activeObject.GetPos();
-                        MyGrid.SetGridItem(gridPos, blueprintInstance, true);
+                        MyGrid.SetGridItem(activePos, blueprintInstance, true);
                         blueprintInstance = null;
-                        startPos = activePos;
                     }
                     else
                     {
-                        if (tempMarkedTiles.Count > 1)
-                        {
-                            MarkPipeCheckpoint();
-                        }
-                        else
-                        {
-                            foreach (Building b in markedTiles.SelectMany(q => q).Union(tempMarkedTiles))
-                            {
-                                if (MyRes.CanAfford(b.Cost))
-                                    b.PlaceBuilding();
-                                else
-                                    b.DestoyBuilding();
-                            }
-                            //buildingPlaced = true;
-                            markedTiles.Clear();
-                            tempMarkedTiles.Clear();
+                        if(multiSelect.ClickPipes(activePos))
                             BlueprintInstance = null;
-                        }
                     }
 
                 }
@@ -397,8 +377,9 @@ public class GridTiles : MonoBehaviour
                 }
                 break;
             case ControlMode.Dig:
-                PrepDig();
-                tempMarkedTiles = new();
+                multiSelect.DigMark();
+                drag = false;
+                Enter(activeObject);
                 break;
         }
     }
@@ -406,116 +387,7 @@ public class GridTiles : MonoBehaviour
     #endregion Mouse Events
 
     #region Multiselecting  
-    /// <summary>
-    /// Called when canceling drag, changes highlight of all rocks in markedTiles.
-    /// </summary>
-    void ClearMarks()
-    {
-        if (tempMarkedTiles != null)
-        {
-            foreach (Rock r in tempMarkedTiles)
-            {
-                Color c = new();
-                if (r.toBeDug)
-                    c = (Color.yellow + Color.red) / 2;
-                r.Highlight(c);
-            }
-        }
-    }
-    /// <summary>
-    /// ReMarks all rock in range from start to activePos. 
-    /// </summary>
-    void CalcTiles()
-    {
-        ClearMarks();
-        List<ClickableObject> rocks = new();
-        float x = (Mathf.FloorToInt(startPos.x) - activePos.x) / 2f;
-        float z = (Mathf.FloorToInt(startPos.z) - activePos.z) / 2f;
-        rocks.AddRange(Physics.OverlapBox(new Vector3(startPos.x - x, (startPos.y * 2) + ClickableObjectFactory.ROCK_OFFSET, startPos.z - z), new(Mathf.Abs(x), 0.5f, Mathf.Abs(z))).Where(q => q.GetComponent<Rock>() != null).Select(q => q.GetComponent<Rock>()).ToList());
-        List<ClickableObject> filtered = rocks.ToList();
-        List<Rock> toBeDug = SceneRefs.JobQueue.toBeDug;
-        foreach (Rock g in rocks)
-        {
-            if (!deselect && toBeDug.Contains(g))
-            {
-                filtered.Remove(g);
-            }
-            g.Highlight(deselect ? (Color.red / 2) : toBeDugColor);
-        }
-        tempMarkedTiles = filtered;
-    }
-
-    /// <summary>
-    /// Creates/Deletes pipes to copy the shortest path from startPos to activePos
-    /// </summary>
-    void CalcPipes()
-    {
-        Transform pipes = MyGrid.FindLevelPipes(startPos.y / 2);
-
-        int i = tempMarkedTilePos.IndexOf(activePos);
-        if (i == -1)
-        {
-            if (MyGrid.GetGridItem(activePos, true) == null && MyGrid.GetGridItem(activePos) is Road)
-            {
-                List<GridPos> partPath = PathFinder.FindPath(startPos, activePos, typeof(Road));
-                if (partPath == null)
-                    return;
-                for (int j = tempMarkedTilePos.Count - 1; j >= 0; j--)
-                {
-                    int k = partPath.IndexOf(tempMarkedTilePos[j]);
-                    if (k == -1)
-                    {
-                        (tempMarkedTiles[j] as Building).DestoyBuilding();
-                        tempMarkedTilePos.RemoveAt(j);
-                        tempMarkedTiles.RemoveAt(j);
-                    }
-                    else
-                        partPath.RemoveAt(k);
-                }
-
-                for (int j = 0; j < partPath.Count; j++)
-                {
-                    tempMarkedTilePos.Add(partPath[j]);
-                    AddPipe(partPath[j], pipes);
-                }
-            }
-        }
-        else
-        {
-            for (int j = tempMarkedTiles.Count - 1; j > i; j--)
-            {
-                (tempMarkedTiles[j] as Building).DestoyBuilding();
-                tempMarkedTiles.RemoveAt(j);
-                tempMarkedTilePos.RemoveAt(j);
-            }
-        }
-    }
-    void AddPipe(GridPos pos, Transform pipes)
-    {
-        Pipe pipe = Instantiate(blueprintPrefab as Pipe, pos.ToVec(ClickableObjectFactory.PIPE_OFFSET), Quaternion.identity, pipes);
-        pipe.maximalProgress = pipe.CalculateMaxProgress();
-        pipe.GetRenderComponents();
-        pipe.ChangeRenderMode(true);
-        pipe.Highlight(pipe.CanPlace(false) && MyRes.CanAfford(pipe.Cost * (tempMarkedTiles.Count + 1 + markedTiles.SelectMany(q => q).Count())) ? Color.blue : Color.red);
-        MyGrid.SetGridItem(pos, pipe, true);
-        tempMarkedTiles.Add(pipe);
-    }
-
-    public void MarkPipeCheckpoint()
-    {
-        if (activeControl == ControlMode.Build && drag == true && tempMarkedTiles.Count > 1)
-        {
-            markedTiles.Add(tempMarkedTiles.ToList());
-
-            tempMarkedTiles.Clear();
-            tempMarkedTiles.Add(markedTiles.Last().Last());
-
-            tempMarkedTilePos.Clear();
-            tempMarkedTilePos.Add(tempMarkedTiles[0].GetPos());
-
-            MyGrid.GetOverlay().AddCheckPointTile(activePos);
-        }
-    }
+    
     #endregion Multiselecting
 
     #region Colors
@@ -534,20 +406,9 @@ public class GridTiles : MonoBehaviour
     /// <summary>
     /// Called on press of right mouse button.
     /// </summary>
-    public void BreakAction(bool force = false)
+    public void BreakAction()
     {
-        if (force == false && markedTiles.Count > 0)
-        {
-            foreach (Building o in tempMarkedTiles.Skip(1))
-            {
-                o.DestoyBuilding();
-            }
-            MyGrid.GetOverlay().RemoveCheckPointTile(markedTiles.Count + 1);
-            tempMarkedTiles = markedTiles.Last();
-            markedTiles.RemoveAt(markedTiles.Count - 1);
-            SceneRefs.CameraSceneMover.MoveToPosition(tempMarkedTiles.Last().GetPos(), true);
-        }
-        else
+        if (multiSelect.Break())
         {
             ChangeSelMode(ControlMode.Nothing);
             drag = false;
@@ -582,9 +443,9 @@ public class GridTiles : MonoBehaviour
     /// <param name="mode"></param>
     public void ChangeSelMode(ControlMode mode)
     {
-        if (mode == activeControl && mode != ControlMode.Nothing)
+        if (mode == ActiveControl && mode != ControlMode.Nothing)
         {
-            if (activeControl == ControlMode.Build)
+            if (ActiveControl == ControlMode.Build)
             {
                 if (blueprintPrefab.objectName == blueprintInstance.objectName)
                 {
@@ -601,34 +462,22 @@ public class GridTiles : MonoBehaviour
         }
         else
         {
-            switch (activeControl)
+            switch (ActiveControl)
             {
                 case ControlMode.Deconstruct:
-                    activeControl = ControlMode.Nothing;
+                    ActiveControl = ControlMode.Nothing;
                     break;
                 case ControlMode.Dig:
-                    foreach (Rock r in tempMarkedTiles)
-                    {
-                        r.Highlight(new());
-                    }
-                    tempMarkedTiles = new();
-                    startPos = null;
+                    multiSelect.ClearDig();
                     drag = false;
-                    activeControl = ControlMode.Nothing;
+                    ActiveControl = ControlMode.Nothing;
                     break;
                 case ControlMode.Build:
                     SceneRefs.CameraSceneMover.SetRaycastMask(defaultMask);
                     if (drag)
                     {
-                        foreach (Pipe pipe in tempMarkedTiles.Union(markedTiles.SelectMany(q => q)))
-                        {
-                            blueprintInstance = pipe;
-                            DestroyBlueprint(false);
-                        }
-                        blueprintInstance = null;
+                        multiSelect.ClearPipes();
                         DeselectBuildingButton?.Invoke();
-                        markedTiles.Clear();
-                        tempMarkedTiles.Clear();
                         drag = false;
                     }
                     else if (blueprintInstance)
@@ -640,7 +489,7 @@ public class GridTiles : MonoBehaviour
             bool visible = true;
             Texture2D cur = null;
             Vector2 vec = new();
-            activeControl = mode;
+            ActiveControl = mode;
             switch (mode)
             {
                 case ControlMode.Nothing:
@@ -686,7 +535,7 @@ public class GridTiles : MonoBehaviour
         Quaternion q = new();
         if (blueprintInstance)
             q = new(blueprintInstance.transform.rotation.x, blueprintInstance.transform.rotation.y, blueprintInstance.transform.rotation.z, blueprintInstance.transform.rotation.w);
-        GridPos gp = MyGrid.Rotate(blueprintPrefab.blueprint.moveBy, blueprintPrefab.transform.eulerAngles.y);
+        GridPos gp = blueprintPrefab.blueprint.moveBy.Rotate(blueprintPrefab.transform.eulerAngles.y);
         gp = new(
             activePos.x + gp.x,
             (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) +
@@ -712,49 +561,12 @@ public class GridTiles : MonoBehaviour
     }
 
     /// <summary>
-    /// Changes the state of rocks in <see cref="tempMarkedTiles"/>, if the first one was marked, cancels them.<br/>
-    /// Else marks orders their excavation.
-    /// </summary>
-    void PrepDig()
-    {
-        List<Rock> toBeDug = SceneRefs.JobQueue.toBeDug;
-        drag = false;
-        HumanUtil humans = transform.parent.parent.GetChild(2).GetComponent<HumanUtil>();
-        if (deselect)
-        {
-            foreach (Rock markTile in tempMarkedTiles.Select(q => q.GetComponent<Rock>())) // removes to be dug
-            {
-                toBeDug.RemoveAll(q => q == markTile);
-                markTile.toBeDug = false;
-                markTile.Highlight(new());
-                SceneRefs.JobQueue.CancelJob(JobState.Digging, markTile);
-                markTile.Assigned?.SetJob(JobState.Free);
-            }
-        }
-        else
-        {
-            foreach (var dig in toBeDug) // removes to be dug
-            {
-                tempMarkedTiles.RemoveAll(q => q == dig);
-            }
-            foreach (Rock tile in tempMarkedTiles)
-            {
-                toBeDug.Add(tile); // add rock
-                tile.toBeDug = true;
-                SceneRefs.JobQueue.AddJob(JobState.Digging, tile);
-            }
-        }
-        tempMarkedTiles.Clear();
-        deselect = false;
-        Enter(activeObject);
-    }
-
-    /// <summary>
     /// If the object was selected unselect.(Happens when the object is destroyed)
     /// </summary>
     /// <param name="cO"></param>
     public void DestroyUnselect(ClickableObject cO)
     {
+        multiSelect.RemoveFromMarked(cO);
         Exit(cO);
         if (activeObject && activeObject == cO)
             activeObject = null;

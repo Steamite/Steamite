@@ -6,10 +6,8 @@ using UnityEngine;
 /// Used for saving insed of Vector3(it has a circular reference that is bad).
 /// </summary>
 [Serializable]
-public class GridPos
+public struct GridPos
 {
-
-
     /// <summary>X coord on grid.</summary>
     [SerializeField] public float x;
     /// <summary>Y coord on grid.</summary>
@@ -56,10 +54,6 @@ public class GridPos
     #endregion
 
     #region Constructors
-    public GridPos()
-    {
-
-    }
     public GridPos(float _x, float _level, float _z)
     {
         x = _x;
@@ -70,6 +64,7 @@ public class GridPos
     {
         x = _x;
         z = _z;
+        y = 0;
     }
     public GridPos(Vector3 vec)
     {
@@ -77,6 +72,17 @@ public class GridPos
         y = Mathf.RoundToInt(vec.y);
         z = vec.z;
     }
+
+    public static GridPos operator +(GridPos a, GridPos b)
+        => new GridPos(a.x + b.x, a.z + b.z);
+
+    public static GridPos operator -(GridPos a, GridPos b)
+        => new GridPos(a.x - b.x, a.z - b.z);
+    #endregion
+
+    #region Functions
+
+
 
     public Vector3 ToVec(float yOffset = 0)
     {
@@ -99,10 +105,40 @@ public class GridPos
         return new(x, z);
     }
 
-    public static GridPos operator +(GridPos a, GridPos b)
-        => new GridPos(a.x + b.x, a.z + b.z);
+    /// <summary>
+    /// Rotates the <paramref name="offset"/> by rotation.
+    /// </summary>
+    /// <param name="offset">Original value.</param>
+    /// <param name="rotation">Dermining value</param>
+    /// <param name="isTile">If it's a building or a tile.</param>
+    /// <returns>Rotated <paramref name="offset"/>.</returns>
+    public GridPos Rotate(float rotation, bool isTile = false)
+    {
+        GridPos gp;
+        switch (rotation)
+        {
+            case 90:
+                if (isTile)
+                    gp = new(-z, x);
+                else
+                    gp = new(z, -x);
+                break;
+            case 180:
+                gp = new(-x, -z);
+                break;
+            case 270:
+                if (isTile)
+                    gp = new(z, -x);
+                else
+                    gp = new(-z, x);
+                break;
+            default:
+                gp = new(x, z);
+                break;
+        }
+        return gp;
+    }
 
-    public static GridPos operator -(GridPos a, GridPos b)
-        => new GridPos(a.x - b.x, a.z - b.z);
+
     #endregion
 }

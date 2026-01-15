@@ -158,7 +158,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <summary>Loads a building.</summary>
     public void CreateSavedBuilding(BuildingSave save)
     {
-        GridPos rotate = MyGrid.Rotate(save.blueprint.moveBy, save.rotationY);
+        GridPos rotate = save.blueprint.moveBy.Rotate(save.rotationY);
         Building b = Instantiate(
             buildPrefabs.GetObjectBySaveIndex(save.prefabConnection).building,
             new Vector3(save.gridPos.x + rotate.x, (save.gridPos.y * LEVEL_HEIGHT) + BUILD_OFFSET, save.gridPos.z + rotate.z),
@@ -208,7 +208,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         if (rock.toBeDug)
         {
             SceneRefs.JobQueue.toBeDug.Add(rock);
-            rock.Highlight(SceneRefs.GridTiles.toBeDugColor);
+            rock.Highlight(SceneRefs.GridTiles.ToBeDugColor);
         }
         return rock;
     }

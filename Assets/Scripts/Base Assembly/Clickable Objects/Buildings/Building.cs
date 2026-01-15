@@ -60,7 +60,7 @@ public class Building : StorageObject
     /// <returns><inheritdoc/></returns>
     public override GridPos GetPos()
     {
-        GridPos pos = MyGrid.Rotate(blueprint.moveBy, transform.rotation.eulerAngles.y);
+        GridPos pos = blueprint.moveBy.Rotate(transform.rotation.eulerAngles.y);
         return new(
             transform.position.x - pos.x,
             (transform.position.y - 1) / 2,
@@ -76,7 +76,7 @@ public class Building : StorageObject
             NeededGridItem item = blueprint.itemList[i];
             if (item.itemType == GridItemType.Road || item.itemType == GridItemType.Anchor)
             {
-                GridPos tileOffset = MyGrid.Rotate(item.pos, transform.rotation.eulerAngles.y);
+                GridPos tileOffset = item.pos.Rotate(transform.rotation.eulerAngles.y);
                 if (tileOffset.x == pos.x && tileOffset.z == pos.z)
                 {
                     return true;

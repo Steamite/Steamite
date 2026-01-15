@@ -30,7 +30,7 @@ public class UIOverlay : MonoBehaviour
     {
         if (overlayParent.gameObject.activeSelf)
         {
-            GridPos gp = MyGrid.Rotate(building.blueprint.moveBy, building.transform.rotation.eulerAngles.y);
+            GridPos gp = building.blueprint.moveBy.Rotate(building.transform.rotation.eulerAngles.y);
             overlayParent.localRotation = Quaternion.Euler(180, 0, building.transform.rotation.eulerAngles.y);
             overlayParent.anchoredPosition = new(building.transform.position.x - gp.x, building.transform.position.z - gp.z);
             if (buildGridFilled == false)

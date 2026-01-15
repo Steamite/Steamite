@@ -49,7 +49,7 @@ public class GridPosList : ListView
 
         bindItem = (el, i) =>
         {
-            GridPos gridPos = itemsSource[i] as GridPos;
+            GridPos gridPos = (GridPos)itemsSource[i];
             IntegerField integerField = el[0] as IntegerField;
             integerField.value = (int)gridPos.x;
             integerField.RegisterValueChangedCallback(ChangeValue);
@@ -108,13 +108,13 @@ public class GridPosList : ListView
         int x = (ev.target as VisualElement).parent.IndexOf(ev.target as VisualElement);
         if (ev.previousValue != ev.newValue)
         {
+            GridPos pos = (GridPos)itemsSource[i];
             if (x == 0)
-                (itemsSource[i] as GridPos).x = ev.newValue;
+                itemsSource[i] = new GridPos(ev.newValue, pos.y, pos.z);
             else if (x == 1)
-                (itemsSource[i] as GridPos).y = ev.newValue;
+                itemsSource[i] = new GridPos(pos.x, ev.newValue, pos.z);
             else
-                (itemsSource[i] as GridPos).z = ev.newValue;
-
+                itemsSource[i] = new GridPos(pos.x, pos.y, ev.newValue);
             EditorUtility.SetDirty(holder);
         }
     }

@@ -34,6 +34,7 @@ public static class MyGrid
     /// <summary>World name(for saving).</summary>
     public static string worldName;
     public static string startSceneName;
+
     #endregion
 
     #region Getters
@@ -121,7 +122,6 @@ public static class MyGrid
     public static void UnsetRock(Rock rock)
     {
         SceneRefs.JobQueue.toBeDug.Remove(rock); // removes from list
-        SceneRefs.GridTiles.tempMarkedTiles.Remove(rock);
         SceneRefs.GridTiles.DestroyUnselect(rock);
         GameObject.Destroy(rock.gameObject);
     }
@@ -193,39 +193,6 @@ public static class MyGrid
     public static bool IsUnlocked(int lIndex) => levels[lIndex].Unlocked;
     #endregion
 
-    /// <summary>
-    /// Rotates the <paramref name="offset"/> by rotation.
-    /// </summary>
-    /// <param name="offset">Original value.</param>
-    /// <param name="rotation">Dermining value</param>
-    /// <param name="isTile">If it's a building or a tile.</param>
-    /// <returns>Rotated <paramref name="offset"/>.</returns>
-    public static GridPos Rotate(GridPos offset, float rotation, bool isTile = false)
-    {
-        GridPos gp;
-        switch (rotation)
-        {
-            case 90:
-                if (isTile)
-                    gp = new(-offset.z, offset.x);
-                else
-                    gp = new(offset.z, -offset.x);
-                break;
-            case 180:
-                gp = new(-offset.x, -offset.z);
-                break;
-            case 270:
-                if (isTile)
-                    gp = new(offset.z, -offset.x);
-                else
-                    gp = new(-offset.z, offset.x);
-                break;
-            default:
-                gp = new(offset.x, offset.z);
-                break;
-        }
-        return gp;
-    }
 
     /// <summary>
     /// Only way to change active level view. Triggers the <see cref="GridChange"/> event.

@@ -162,6 +162,19 @@ namespace InfoWindowElements
             DataBinding binding;
             switch (data)
             {
+                case NeedSourceProduction prod:
+                    if (prod.StoredFluids.Sum() > 0)
+                    {
+                        binding = BindingUtil.CreateBinding(nameof(NeedSourceProduction.StoredFluids));
+                        binding.sourceToUiConverters.AddConverter((ref CapacityResource stored) => ToUIRes(stored));
+                    }
+                    else
+                    {
+                        binding = BindingUtil.CreateBinding(nameof(NeedSourceProduction.LocalRes));
+                        binding.sourceToUiConverters.AddConverter((ref StorageResource stored) => ToUIRes(stored));
+                    }
+                    SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    break;
                 case StorageObject:
                     binding = BindingUtil.CreateBinding(nameof(StorageObject.LocalRes));
                     binding.sourceToUiConverters.AddConverter((ref StorageResource stored) => ToUIRes(stored));
