@@ -30,6 +30,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 1153726695335526400
+      type: {class: TrustPenalty, ns: , asm: Quests}
+      data:
+        penaltyAmmount: 15
     - rid: 8808251705770377216
       type: {class: Quest, ns: , asm: Quests}
       data:
@@ -40,7 +44,8 @@ MonoBehaviour:
         timeToFail: 40
         rewards:
         - rid: 8808251705770377219
-        penalties: []
+        penalties:
+        - rid: 1153726695335526400
         objectives:
         - rid: 8808251705770377217
         - rid: 8808251705770377218
