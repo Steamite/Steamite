@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 /// <summary>Handles the game clock.</summary>
 public class Tick : MonoBehaviour
@@ -60,10 +61,12 @@ public class Tick : MonoBehaviour
     /// <summary>The tick counter, resets if it reaches uint capacity.</summary>
     [HideInInspector] public uint lastTick = 0;
 
-    bool running = false;
 
-    [SerializeField] int pauseSpeed = 0;
-    public static int LastSpeed { get; private set; }
+    [SerializeField] float tickTimer = 0f;
+    static float timerSpeed = 1f;
+    public static float Speed => timerSpeed;
+    bool uiOpen = false;
+
     #endregion
 
     #region Events
@@ -162,89 +165,72 @@ public class Tick : MonoBehaviour
         if (timeInMinutes < 6 * 60 || timeInMinutes > 21 * 60)
             nightStart?.Invoke();
 
-        Time.timeScale = pauseSpeed;
-        LastSpeed = 1;
+        tickTimer = 0;
+        Time.timeScale = 1;
+        enabled = false;
     }
     #endregion
 
     #region Speed Managing
     public void ChangeGameSpeed(float _speed = 0)
     {
-        if (_speed == 0 && running == false)
+        if (_speed > 0)
         {
-            Time.timeScale = LastSpeed;
-            StartTicks();
-            Debug.Log("Can't get here");
+            timerSpeed = _speed;
         }
-        else if (_speed > 0)
-        {
-            Time.timeScale = _speed;
-            if (running == false)
-                StartTicks();
-        }
-        else
-        {
-            StopTicks();
-        }
+        enabled = !uiOpen && _speed > 0;
     }
     #endregion
 
     #region Starting and Ending ticks
-    void StopTicks()
+
+    /// <summary>
+    /// Directly stop/start clock, because time could have been stoped by the player before, so we can't use Stop and Start Ticks.
+    /// </summary>
+    /// <param name="_enable"></param>
+    public void UIWindowToggle(bool _enable)
     {
-        LastSpeed = (int)Time.timeScale;
-        Time.timeScale = pauseSpeed;
-        if (running == false)
+        uiOpen = !_enable;
+        if (_enable)
         {
-            Debug.LogWarning("Not ticking, cannot stop ticks.");
+            enabled = true;
         }
         else
         {
-            running = false;
-            StopAllCoroutines();
+            enabled = false;
         }
-    }
-
-    void StartTicks()
-    {
-        if (running == true)
-        {
-            Debug.LogError("Already ticking, cannot tick two times.");
-        }
-        else
-        {
-            running = true;
-            StartCoroutine(DoTick());
-        }
-    }
-
-    // Directly stop/start clock, because time could have been stoped by the player before, so we can't use Stop and Start Ticks.
-    public void UIWindowToggle(bool enable)
-    {
-        if (!enable)
-            StopAllCoroutines();
-        else if (running)
-            StartCoroutine(DoTick());
     }
     #endregion
 
     #region Tick
-    IEnumerator DoTick()
+    private void Update()
     {
-        while (true)
+        tickTimer += Time.unscaledDeltaTime * timerSpeed;
+        if (tickTimer > 1)
         {
-            //Debug.Log("All time:" + Time.time);
-            yield return new WaitForSeconds(1);
+            tickTimer -= 1f;
             UpdateTime();
             tickAction?.Invoke();
-            if (lastTick == 4294967295)
+            if (lastTick == uint.MaxValue)
                 lastTick = 0;
             else
                 lastTick++;
-            //MyRes.resDataSource.Trust++;
         }
     }
-
+    private void OnApplicationFocus(bool focus)
+    {
+        if (Application.runInBackground)
+            return;
+        
+        if (focus)
+        {
+            ChangeGameSpeed(Speed);
+        }
+        else
+        {
+            ChangeGameSpeed(0);
+        }
+    }
 
     void UpdateTime()
     {
