@@ -130,7 +130,7 @@ namespace InfoWindowElements
         {
 
             el.RemoveFromClassList("unity-collection-view__item");
-
+            
             (el as ResourceTextIcon).SetTextIcon(ConvertString((UIResource)itemsSource[i]), ((UIResource)itemsSource[i]).type);
         }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -56,10 +57,10 @@ public class MapGen : MonoBehaviour
     /// </summary>
     /// <param name="_seed">Seed containing all generation paramaters.</param>
     /// <param name="templateLevel">Level template for creating <see cref="GroundLevel"/>s.</param>
-    public int Generate(string _seed, out WorldSave world)
+    public async Task<WorldSave> Generate(string _seed)
     {
         seed = _seed;
-        world = new();
+        WorldSave world = new();
         ParseInput();
 
         #region Generation
@@ -85,8 +86,8 @@ public class MapGen : MonoBehaviour
             GridSave levelSave = new(gridSize, gridSize, level == 0 ? save.id : -1);
 
             map = new MapTile[gridSize, gridSize];
-            CreateGrid();
-            PerlinNoise(level);
+            await CreateGrid();
+            await PerlinNoise(level);
             MapTile tile;
             for (int x = 0; x < gridSize; x++)
             {
@@ -106,7 +107,7 @@ public class MapGen : MonoBehaviour
         }
 
         #endregion
-        return gridSize;
+        return world;
     }
 
     /// <summary>Extracts parameters from the <see cref="seed"/>.</summary>
@@ -138,7 +139,7 @@ public class MapGen : MonoBehaviour
 
     #region Veins
     /// <summary>Generates veins on a level.</summary>
-    void CreateGrid()
+    Task CreateGrid()
     {
         foreach (MinableRes minable in minableResources)
         {
@@ -148,6 +149,7 @@ public class MapGen : MonoBehaviour
                 SpiralVein(minable);
             }
         }
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -262,7 +264,7 @@ public class MapGen : MonoBehaviour
     #endregion Chunks
 
     #region Integrity
-    void PerlinNoise(int level)
+    Task PerlinNoise(int level)
     {
         float randomX = Random.Range(-500f, 500f);
         float randomY = Random.Range(-500f, 500f);
@@ -289,6 +291,7 @@ public class MapGen : MonoBehaviour
                     map[x, y].color = new();
             }
         }
+        return Task.CompletedTask;
     }
     float CalculateRockIntegrity(int level, float f)
     {

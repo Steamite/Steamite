@@ -59,7 +59,7 @@ public class JobSave
 ////////////////////////////////////////////////////////////
 //--------------------------Grid--------------------------//
 ////////////////////////////////////////////////////////////
-public class WorldSave
+public struct WorldSave
 {
     public BuildsAndChunksSave objectsSave;
     public GridSave[] gridSave;

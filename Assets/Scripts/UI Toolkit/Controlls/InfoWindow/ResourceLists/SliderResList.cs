@@ -41,15 +41,21 @@ public partial class SliderResList : DoubleResList, IUpdatable
     }
     protected override void BindItem(VisualElement el, int i)
     {
+        el.RemoveFromClassList("unity-collection-view__item");
         el.style.height = 88;
         el[0].style.height = 88;
 
         VisualElement deal = el.Q("Deal");
-        if (deal.Q<Label>("Value") == null)
-            deal.Insert(2, new Label("##") { name = "Value" });
+        Label val = deal.Q<Label>("Value");
+        if (val == null)
+            deal.Insert(2, new Label(((UIResource)itemsSource[i]).ammount.ToString()) { name = "Value" });
+        else
+        {
+            val.text = ((UIResource)itemsSource[i]).ammount.ToString();
+        }
 
-        base.BindItem(el, i);
-        SliderInt slider = el.Q<SliderInt>("Slider");
+            //base.BindItem(el, i);
+            SliderInt slider = el.Q<SliderInt>("Slider");
         slider.Q<TextField>().maxLength = 3;
         slider.Q("unity-tracker").style.top = 18;
         slider.Q("unity-dragger").style.top = 27;

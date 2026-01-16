@@ -76,7 +76,8 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         int size;
         if (seed != "")
         {
-            size = gameObject.GetComponent<MapGen>().Generate(seed, out save);
+            save = await gameObject.GetComponent<MapGen>().Generate(seed);
+            size = save.gridSave[0].height;
         }
         else
         {

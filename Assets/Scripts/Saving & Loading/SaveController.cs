@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -134,8 +135,9 @@ public class SaveController : MonoBehaviour, IAfterLoad
     /// If it succedes calls AfterSave().
     /// </summary>
     /// <param name="autoSave"></param>
-    public void SaveGame(string saveName, bool autoSave)
+    public async void SaveGame(string saveName, bool autoSave)
     {
+        SceneRefs.Tick.UIWindowToggle(false);
         if (Directory.GetDirectories($"{Application.persistentDataPath}").FirstOrDefault(q => q == $"{Application.persistentDataPath}/saves") == null)
             Directory.CreateDirectory($"{Application.persistentDataPath}/saves");
 
@@ -144,16 +146,20 @@ public class SaveController : MonoBehaviour, IAfterLoad
             .Select(q => GetSaveName(q)).Contains(saveName))
         {
             ConfirmWindow.window.Open(
-                () =>
+                async () =>
                 {
-                    Save(saveName, autoSave);
+                    await Save(saveName, autoSave);
+                },
+                () => 
+                {
+                    SceneRefs.Tick.UIWindowToggle(true);
                 },
                 "Override save",
                 $"Are you sure you want to override this save: <color=\"orange\">{saveName}?");
         }
         else
         {
-            Save(saveName, autoSave);
+            await Save(saveName, autoSave);
         }
     }
 
@@ -162,7 +168,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
     /// </summary>
     /// <param name="saveName">Name of the new save.</param>
     /// <param name="autoSave">Is it an auto save.</param>
-    void Save(string saveName, bool autoSave)
+    Task Save(string saveName, bool autoSave)
     {
         string tmpPath = $"{Application.persistentDataPath}/saves/_tmp";
         Directory.CreateDirectory($"{tmpPath}");
@@ -218,8 +224,9 @@ public class SaveController : MonoBehaviour, IAfterLoad
                 File.Delete(file);
             }
             Directory.Delete($"{tmpPath}");
-            return;
         }
+        SceneRefs.Tick.UIWindowToggle(true);
+        return Task.CompletedTask;
     }
 
     /// <summary>

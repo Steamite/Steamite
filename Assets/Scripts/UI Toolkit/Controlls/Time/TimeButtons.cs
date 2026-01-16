@@ -37,7 +37,7 @@ public partial class TimeButtons : CustomRadioButtonGroup
     public void OutsideTrigger(int i)
     {
         if (SelectedChoice == 0 && i == 0)
-            i = speedStates.IndexOf(Convert.ToInt32(Tick.Speed));
+            i = speedStates.IndexOf(Convert.ToInt32(Tick.LastSpeed));
         buttons[i].Select();
     }
 }
