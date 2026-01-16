@@ -43,6 +43,8 @@ public class Tick : MonoBehaviour
     public int numberOfDays = 5;
 
     public static int TicksInDay;
+
+    #region Actions
     /// <summary>The most subscribed action in the whole project, Triggers each tick.</summary>
     event Action tickAction;
     /// <summary>Subscribable event, triggered when starting Day(00:00).</summary>
@@ -57,16 +59,17 @@ public class Tick : MonoBehaviour
     event Action monthStart;
     /// <summary>Subscriable event, triggered when starting a Year.</summary>
     event Action yearStart;
+    #endregion
 
     /// <summary>The tick counter, resets if it reaches uint capacity.</summary>
     [HideInInspector] public uint lastTick = 0;
 
-
+    [SerializeField] float ticksPerSecond = 4f;
     [SerializeField] float tickTimer = 0f;
-    static float timerSpeed = 1f;
-    public static float Speed => timerSpeed;
+    float timeToTick;
+    float timerSpeed = 1f;
+    public static float LastSpeed;
     bool uiOpen = false;
-
     #endregion
 
     #region Events
@@ -160,11 +163,13 @@ public class Tick : MonoBehaviour
     #region Init
     public void InitTicks()
     {
-        minutesPerTick = (int)(60f / ticksPerHour);
+        minutesPerTick = 5;//(int)((60f / ticksPerHour) / ticksPerSecond);
         TicksInDay = 1440 / minutesPerTick;
         if (timeInMinutes < 6 * 60 || timeInMinutes > 21 * 60)
             nightStart?.Invoke();
 
+        timeToTick = 1f / ticksPerSecond;
+        LastSpeed = 1;
         tickTimer = 0;
         Time.timeScale = 1;
         enabled = false;
@@ -174,11 +179,10 @@ public class Tick : MonoBehaviour
     #region Speed Managing
     public void ChangeGameSpeed(float _speed = 0)
     {
-        if (_speed > 0)
-        {
-            timerSpeed = _speed;
-        }
-        enabled = !uiOpen && _speed > 0;
+        if(timerSpeed != 0)
+            LastSpeed = timerSpeed;
+        timerSpeed = _speed;
+        enabled = !uiOpen && timerSpeed > 0;
     }
     #endregion
 
@@ -206,9 +210,11 @@ public class Tick : MonoBehaviour
     private void Update()
     {
         tickTimer += Time.unscaledDeltaTime * timerSpeed;
-        if (tickTimer > 1)
+        if(tickTimer > timeToTick)
         {
-            tickTimer -= 1f;
+            tickTimer -= timeToTick;
+            if (tickTimer > timeToTick)
+                tickTimer = 0;
             UpdateTime();
             tickAction?.Invoke();
             if (lastTick == uint.MaxValue)
@@ -224,11 +230,11 @@ public class Tick : MonoBehaviour
         
         if (focus)
         {
-            ChangeGameSpeed(Speed);
+            enabled = true;
         }
         else
         {
-            ChangeGameSpeed(0);
+            enabled = false;
         }
     }
 

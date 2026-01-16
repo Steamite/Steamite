@@ -20,6 +20,10 @@ public class Pipe : Building
         }
         return false;
     }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(base.GetHashCode(), objectName, id);
+    }
 
     public override void FinishBuild()
     {
@@ -316,6 +320,5 @@ public class Pipe : Building
             }
         }
     }
-
 
 }
