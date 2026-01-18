@@ -32,7 +32,7 @@ public class Tick : MonoBehaviour
     /// <seealso href="../../../Documentation/Time scale.xlsx">
     /// Time scale table.
     /// </seealso>
-    [Header("Tick speed")][SerializeField] int ticksPerHour = 4;
+    //[Header("Tick speed")][SerializeField] int ticksPerHour = 4;
     /// <summary>Progresses time by this(60/<see cref="ticksPerHour"/>).</summary>
     private int minutesPerTick;
     public static int MinutesPerTick = 15;
@@ -151,19 +151,19 @@ public class Tick : MonoBehaviour
     /// <returns>Time since the start of the week.</returns>
     public int GetWeekTime()
     {
-        return ((numberOfDays % 7 * 24) + timeInMinutes / 60) * ticksPerHour;
+        return ((numberOfDays % 7 * 24 * 60) + timeInMinutes) / minutesPerTick;
     }
 
     public int GetWeekTimeFull()
     {
-        return ((7 * 24) + timeInMinutes / 60) * ticksPerHour;
+        return ((7 * 24 * 60) + timeInMinutes) / minutesPerTick;
     }
     #endregion
 
     #region Init
     public void InitTicks()
     {
-        minutesPerTick = 5;//(int)((60f / ticksPerHour) / ticksPerSecond);
+        minutesPerTick = 5;
         TicksInDay = 1440 / minutesPerTick;
         if (timeInMinutes < 6 * 60 || timeInMinutes > 21 * 60)
             nightStart?.Invoke();
