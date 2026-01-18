@@ -86,7 +86,19 @@ public class Rock : ClickableObject
     #region Highlight
     public override void Highlight(Color color)
     {
-        GetComponent<MeshRenderer>().materials[^1].SetColor("_EmissionColor", color);
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        if (hidden)
+        {
+            if (color == new Color())
+            {
+                meshRenderer.enabled = false;
+            }
+            else
+            {
+                meshRenderer.enabled = true;
+            }
+        }
+        meshRenderer.materials[^1].SetColor("_EmissionColor", color);
     }
     #endregion
 
@@ -194,22 +206,26 @@ public class Rock : ClickableObject
 
     public void Hide()
     {
-        foreach (var material in GetComponent<MeshRenderer>().materials)
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        foreach (var material in meshRenderer.materials)
         {
             material.SetFloat("_isHidden", 1);
             material.EnableKeyword("_SPECULARHIGHLIGHTS_OFF");
         }
         hidden = true;
+        meshRenderer.enabled = false;
     }
 
     public void Unhide()
     {
-        foreach (var material in GetComponent<MeshRenderer>().materials)
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        foreach (var material in meshRenderer.materials)
         {
             material.SetFloat("_isHidden", 0);
             material.DisableKeyword("_SPECULARHIGHLIGHTS_OFF");
         }
         hidden = false;
+        meshRenderer.enabled = true;
     }
     #endregion
 }

@@ -253,7 +253,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1066612874
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -359,23 +359,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ce4778e19c42f84b8d94058517a865d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raycaster: {fileID: 1558715395}
+  raycaster: {fileID: 0}
 --- !u!1 &1269801207 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 955927231009529842, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
   m_PrefabInstance: {fileID: 7072378217534680770}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1558715395 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7674749408414356125, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
-  m_PrefabInstance: {fileID: 7072378217534680770}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7072378217534680773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &5026351469592114601
 Transform:
   m_ObjectHideFlags: 0
@@ -490,11 +479,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8826420735073951469, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.8944272
       objectReference: {fileID: 0}
     - target: {fileID: 8826420735073951469, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.44721365
       objectReference: {fileID: 0}
     - target: {fileID: 8826420735073951469, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -550,6 +539,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1634306986070870791, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7072378217534680776}
+    - targetCorrespondingSourceObject: {fileID: 1634306986070870791, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7072378217534680779}
     - targetCorrespondingSourceObject: {fileID: 6314038135591522541, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7072378217534680778}
@@ -706,6 +698,57 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!20 &7072378217534680779
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7072378217534680773}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!1 &8150810313726245682
 GameObject:
   m_ObjectHideFlags: 0
@@ -750,11 +793,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c820b0d8f88bdb4d835008f00417405, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ticksPerHour: 4
   timeInMinutes: 4
   numberOfDays: 5
   lastTick: 0
-  pauseSpeed: 0.1
+  ticksPerSecond: 4
+  tickTimer: 0
 --- !u!114 &8150810313726245685
 MonoBehaviour:
   m_ObjectHideFlags: 0
