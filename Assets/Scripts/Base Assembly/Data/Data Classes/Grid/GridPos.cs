@@ -2,8 +2,8 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Class used for unitialized coordnites.<br/>
-/// Used for saving insed of Vector3(it has a circular reference that is bad).
+/// Class used for united coordnites.<br/>
+/// Used for saving insted of Vector3(it has a circular reference that is bad).
 /// </summary>
 [Serializable]
 public struct GridPos

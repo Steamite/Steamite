@@ -16,7 +16,7 @@ namespace EditorWindows.Windows
 {
     public class BuildingRegister : DataGridWindow<BuildCategWrapper, BuildingWrapper>
     {
-        const string BUILDING_PATH = "Buildings/";
+        const string BUILDING_PATH = "Assets/Game Data/Buildings/";
         const string BUILD_NAME = "/building.prefab";
         const string TEX_NAME = "/texture.png";
 
@@ -156,7 +156,21 @@ namespace EditorWindows.Windows
                 "Filled", "Cancel", "Empty");
             if (choice == 0)
             {
-                string s = AssetDatabase.GUIDToAssetPath(AssetDatabase.CreateFolder($"{BUILDING_PATH}{selectedCategory.Name}", "Dummy"));
+                int i = 0;
+                string folderName;
+                string path;
+                while (true)
+                {
+                    folderName =  $"Dummy{i}";
+                    path = $"{BUILDING_PATH}{selectedCategory.Name}/{folderName}";
+                    if (AssetDatabase.IsValidFolder(path))
+                    {
+                        i++;
+                        continue; 
+                    }
+                    AssetDatabase.CreateFolder($"{BUILDING_PATH}{selectedCategory.Name}", folderName);
+                    break;
+                }
 
                 GameObject gameObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 SortingGroup sortGroup = gameObj.AddComponent<SortingGroup>();
@@ -166,15 +180,15 @@ namespace EditorWindows.Windows
 
                 gameObj.AddComponent<Building>();
                 gameObj.GetComponent<BoxCollider>().isTrigger = true;
-                PrefabUtility.SaveAsPrefabAsset(gameObj, $"{s}{BUILD_NAME}");
+                PrefabUtility.SaveAsPrefabAsset(gameObj, $"{path}{BUILD_NAME}");
                 wrapper.SetBuilding(
-                    AssetDatabase.LoadAssetAtPath<Building>($"{s}{BUILD_NAME}"),
-                    (byte)holder.Categories.FindIndex(q => q.Name == selectedCategory.Name),
-                    s.Split('/')[^1]);
-                wrapper.preview = GetPrefabPreview($"{s}");
+                    AssetDatabase.LoadAssetAtPath<Building>($"{path}{BUILD_NAME}"),
+                    (byte)holder.Categories.First(q => q.Name == selectedCategory.Name).id,
+                    folderName);
+                wrapper.preview = GetPrefabPreview($"{path}");
                 DestroyImmediate(gameObj);
 
-                AddressableAssetEntry entry = settings.CreateOrMoveEntry(AssetDatabase.GUIDFromAssetPath(s).ToString(), group);
+                AddressableAssetEntry entry = settings.CreateOrMoveEntry(AssetDatabase.GUIDFromAssetPath(path).ToString(), group);
                 entry.SetAddress(wrapper.building.objectName);
                 settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryCreated, group, true);
             }
@@ -601,6 +615,7 @@ namespace EditorWindows.Windows
             });
             #endregion
 
+            #region Capacity
             dataGrid.columns.Add(new()
             {
                 name = "Capacity",
@@ -647,12 +662,54 @@ namespace EditorWindows.Windows
                 },
                 unbindCell = (el, i) =>
                 {
-                    (el[0] as IntegerField).UnregisterValueChangedCallback(StorageCapacityChanged);
-                    if(el.childCount > 1)
-                        (el[1] as IntegerField).UnregisterValueChangedCallback(FluidCapacityChanged);
-                    el.Clear();
+                    try
+                    {
+                        (el[0] as IntegerField).UnregisterValueChangedCallback(StorageCapacityChanged);
+                        if (el.childCount > 1)
+                            (el[1] as IntegerField).UnregisterValueChangedCallback(FluidCapacityChanged);
+                        el.Clear();
+                    }
+                    catch { }
                 },
             });
+            #endregion
+
+            #region
+            dataGrid.columns.Add(new()
+            {
+                name = "Range",
+                title = "Range",
+                resizable = true,
+                width = 75,
+                makeCell = () => new VisualElement(),
+                bindCell = (el, i) =>
+                {
+                    el.Clear();
+                    Building building = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
+
+                    IntegerField field = new();
+                    if (building != null)
+                    {
+                        el.Add(field);
+                        if (building is Pub pub)
+                        {
+                            pub.Range ??= new(-1);
+                            field.value = pub.Range.BaseValue;
+                            field.RegisterValueChangedCallback(RangeChange);
+                        }
+                    }
+                },
+                unbindCell = (el, i) =>
+                {
+                    try
+                    {
+                        (el[0] as IntegerField).UnregisterValueChangedCallback(RangeChange);
+                        el.Clear();
+                    }
+                    catch { }
+                },
+            });
+            #endregion
         }
 
 
@@ -917,6 +974,21 @@ namespace EditorWindows.Windows
             }
             EditorUtility.SetDirty(prev);
         }
+
+        void RangeChange(ChangeEvent<int> ev)
+        {
+            int i = ev.target.GetRowIndex();
+            Building prev = ((BuildingWrapper)dataGrid.itemsSource[i]).building;
+            if (prev != null)
+            {
+                if (prev is Pub pub)
+                {
+                    pub.Range = new(ev.newValue);
+                }
+            }
+            EditorUtility.SetDirty(prev);
+        }
+
 
         #endregion
 

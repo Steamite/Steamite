@@ -407,7 +407,16 @@ public class Building : StorageObject
             _renderer.material = newMat;
         }
         else
-            _renderer.material = new(material);
+        {
+            Color highlight = _renderer.material.GetColor("_EmissionColor");
+            Material mat = new(material);
+            if(highlight != new Color())
+            {
+                mat.SetColor("_EmissionColor", highlight);
+                mat.EnableKeyword("_Emmision");
+            }
+            _renderer.material = mat;
+        }
     }
 
     protected virtual void UpdateConstructionProgressAlpha()

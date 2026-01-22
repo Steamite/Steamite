@@ -230,3 +230,4 @@ MonoBehaviour:
     mod:
       percentMod: 1
       absoluteMod: 0
+  pub: {fileID: 0}

@@ -12,7 +12,6 @@ public class MultiSelect : MonoBehaviour
     /// <summary>Tiles marked while dragging.</summary>
     List<ClickableObject> tempMarkedTiles = new();
     List<GridPos> tempMarkedTilePos = new();
-    List<int> checkpoints = new();
     List<List<ClickableObject>> markedTiles = new();
 
 
@@ -62,8 +61,14 @@ public class MultiSelect : MonoBehaviour
     /// Changes the state of rocks in <see cref="tempMarkedTiles"/>, if the first one was marked, cancels them.<br/>
     /// Else marks orders their excavation.
     /// </summary>
-    public void DigMark()
+    public void DigMark(GridPos pos, Rock rock)
     {
+        if (tempMarkedTiles.Count == 0)
+        {
+            InitDig(pos, rock);
+            tempMarkedTiles.Add(rock);
+        }
+
         List<Rock> toBeDug = SceneRefs.JobQueue.toBeDug;
         HumanUtil humans = transform.parent.parent.GetChild(2).GetComponent<HumanUtil>();
         if (deselect)
@@ -171,7 +176,7 @@ public class MultiSelect : MonoBehaviour
     public void InitDig(GridPos pos, Rock r)
     {
         startPos = pos;
-        deselect = r.toBeDug ? true : false;
+        deselect = r.toBeDug;
     }
 
     public void InitPipes(GridPos gridPos, Pipe pipe)

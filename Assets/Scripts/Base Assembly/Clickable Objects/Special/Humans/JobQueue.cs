@@ -68,6 +68,8 @@ public class JobQueue : MonoBehaviour
             case JobState.Digging:
                 toBeDug.RemoveAll(q => q.id == interest.id); // remove from the list
                 Rock rock = ((Rock)interest);
+                if (rock.Assigned != null)
+                    HumanActions.LookForNew(rock.Assigned);
                 break;
             case JobState.Constructing:
                 constructions.RemoveAll(q => q.id == interest.id); // remove from the list

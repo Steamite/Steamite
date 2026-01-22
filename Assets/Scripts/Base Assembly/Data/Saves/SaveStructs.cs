@@ -294,6 +294,8 @@ public class HumanSave : ClickableObjectSave
     public Specializations specs;
     public int houseID;
     public int workplaceId;
+
+    public List<(ModType, int)> effects;
     public HumanSave()
     {
 

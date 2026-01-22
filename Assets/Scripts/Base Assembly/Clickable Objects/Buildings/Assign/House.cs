@@ -7,6 +7,23 @@ public class House : Building, IAssign
 {
     [CreateProperty] public List<Human> Assigned { get; set; } = new();
     [SerializeField] ModifiableInteger assignLimit;
+    bool hasPub;
+    public bool HasPub 
+    { 
+        get => hasPub; 
+        set 
+        { 
+            hasPub = value;
+            foreach (Human human in Assigned)
+            {
+                if(hasPub)
+                    human.ModifyEfficiency(ModType.Pub, 1);
+                else
+                    human.ModifyEfficiency(ModType.Pub, -1);
+            }
+        } 
+    }
+
     [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
 
     #region Deconstruction
@@ -19,15 +36,7 @@ public class House : Building, IAssign
         base.OrderDeconstruct();
         if (constructed)
         {
-            ((IAssign)this).ClearHumans();/*
-            foreach (Human h in Assigned)
-            {
-                h.home = null;
-                if (h.nightTime)
-                {
-                    h.Night();
-                }
-            }*/
+            ((IAssign)this).ClearHumans();
         }
     }
     #endregion
@@ -68,11 +77,14 @@ public class House : Building, IAssign
                 return false;
             Assigned.Add(human);
             human.home = this;
+            if(hasPub)
+                human.ModifyEfficiency(ModType.Pub, 1);
         }
         else
         {
             Assigned.Remove(human);
             human.home = null;
+            human.ModifyEfficiency(ModType.Pub, -1);
         }
         UIUpdate(nameof(Assigned));
         return true;

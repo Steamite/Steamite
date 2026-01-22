@@ -377,7 +377,7 @@ public class GridTiles : MonoBehaviour
                 }
                 break;
             case ControlMode.Dig:
-                multiSelect.DigMark();
+                multiSelect.DigMark(activePos, activeObject as Rock);
                 drag = false;
                 Enter(activeObject);
                 break;

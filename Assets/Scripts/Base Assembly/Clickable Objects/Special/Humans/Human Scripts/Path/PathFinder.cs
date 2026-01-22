@@ -48,12 +48,12 @@ public static class PathFinder
     /// <param name="objects">Possible interests.</param>
     /// <param name="h">Human that needs the path.</param>
     /// <returns>New path with an interest (the closest object from <paramref name="objects"/>).</returns>
-    public static JobData FindPath(List<ClickableObject> objects, Human h)
+    public static JobData FindPath(List<ClickableObject> objects, Human h, int maxLength = -1)
     {
         if (objects.Count == 0)
             return new();
         GridPos _start = h.GetPos();
-        Plan plan = Prep(_start, objects).Result;
+        Plan plan = Prep(_start, objects, maxLength).Result;
         if (plan.index > -1)
         {
             ClickableObject interest = objects[plan.index];
@@ -81,7 +81,7 @@ public static class PathFinder
     /// <param name="_start"></param>
     /// <param name="objects"></param>
     /// <returns>Path to the object and index of the object.</returns>
-    async static Task<Plan> Prep(GridPos _start, List<ClickableObject> objects)
+    async static Task<Plan> Prep(GridPos _start, List<ClickableObject> objects, int maxLength)
     {
         List<int> entryPoints = new();
         SearchCoords coordinates = new();
@@ -106,7 +106,7 @@ public static class PathFinder
                     continue;
                 }
 
-                foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q => q.name == building.id.ToString())
+                foreach (RectTransform t in MyGrid.GetOverlay(gp.y).GetGroupOverlay(building)
                     .GetComponentsInChildren<Image>().Select(q => q.transform))
                 {
                     GridPos entryPos = new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z));
@@ -141,7 +141,7 @@ public static class PathFinder
         foreach (Building el in MyGrid.GetBuildings(q => q is Elevator))
         {
             GridPos gp = el.GetPos();
-            foreach (RectTransform t in MyGrid.GetOverlay(gp.y).buildingOverlays.First(q => q.name == el.id.ToString()).GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance).Skip(1))
+            foreach (RectTransform t in MyGrid.GetOverlay(gp.y).GetGroupOverlay(el).GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance).Skip(1))
             {
                 coordinates.elevPositions.Add(gp);
                 coordinates.elevEnterPositions.Add(new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z)));
@@ -156,7 +156,7 @@ public static class PathFinder
             }
         }
 
-        await LookForPath(_start, part, coordinates, plan, typeof(Road));
+        await LookForPath(_start, part, coordinates, plan, typeof(Road), maxLength);
         if (plan.index > -1)
         {
             if (!part)
@@ -178,12 +178,12 @@ public static class PathFinder
     /// <param name="activePos">Path end position.</param>
     /// <param name="enterObjectType">Object filter, null means anything.</param>
     /// <returns>path</returns>
-    public static List<GridPos> FindPath(GridPos startPos, GridPos activePos, Type enterObjectType)
+    public static List<GridPos> FindPath(GridPos startPos, GridPos activePos, Type enterObjectType, int maxLength = -1)
     {
         Plan p = new();
         if (!startPos.Equals(activePos))
         {
-            LookForPath(startPos, null, new(activePos), p, enterObjectType);
+            LookForPath(startPos, null, new(activePos), p, enterObjectType, maxLength);
             if (p.path.Count == 0)
                 p.path = null;
             else if (MyGrid.GetGridItem(p.path[p.path.Count - 1]).GetType() != enterObjectType)
@@ -207,7 +207,7 @@ public static class PathFinder
     /// <param name="plan">Result</param>
     /// <param name="enterObjectType">Object filter, null means anything.</param>
     /// <returns></returns>
-    static Task LookForPath(GridPos _start, Building buildingTile, SearchCoords searchCoords, Plan plan, Type enterObjectType)
+    static Task LookForPath(GridPos _start, Building buildingTile, SearchCoords searchCoords, Plan plan, Type enterObjectType, int maxLength)
     {
         // Move if starting inside a building
         if (buildingTile != null)
@@ -235,6 +235,8 @@ public static class PathFinder
                             if (CanEnter(clickable, enterObjectType))
                             {
                                 checkNode.minCost += ROAD_COST;
+                                if (checkNode.minCost == maxLength)
+                                    continue;
                                 queue.Enqueue(checkNode);
                             }
                         }
@@ -336,8 +338,7 @@ public static class PathFinder
                     PathNode outElevatorNode = new(elevatorPos, inElevatorNode.minCost, inElevatorNode);
                     ClickableObject el = MyGrid.GetGridItem(elevatorPos);
 
-                    foreach (RectTransform t in MyGrid.GetOverlay(level).buildingOverlays
-                        .First(q => q.name == el.id.ToString())
+                    foreach (RectTransform t in MyGrid.GetOverlay(level).GetGroupOverlay(el as Building)
                         .GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance).Skip(1))
                     {
                         PathNode finishMove =

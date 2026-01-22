@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 875e3737c9b9eeb479acbf6ca6e07cec
+    m_Address: Pub
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e07bc6bb40d70d14087632cefb5f45e7
     m_Address: House
     m_ReadOnly: 0

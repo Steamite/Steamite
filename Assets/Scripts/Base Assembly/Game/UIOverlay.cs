@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 /// <summary>Provides visualization for placing new buildings and entrypoints.</summary>
 public class UIOverlay : MonoBehaviour
@@ -13,13 +14,34 @@ public class UIOverlay : MonoBehaviour
     [SerializeField] public RectTransform overlayParent;
     /// <summary>Group for entry point overlays.</summary>
     [SerializeField] public RectTransform entryPointParent;
-    /// <summary>Prefab for tile groups.</summary>
-    [SerializeField] public GameObject groupPrefab;
     /// <summary>List of all building overlay group.</summary>
-    [SerializeField] public List<RectTransform> buildingOverlays = new();
+    [SerializeField] List<GroupOverlay> buildingOverlays = new();
+
+    /// <summary>
+    /// Gets the overlay group for a building.
+    /// </summary>
+    /// <param name="building">Which building to search with</param>
+    /// <returns></returns>
+    public GroupOverlay GetGroupOverlay(Building building) => buildingOverlays.FirstOrDefault(q => q.building.Equals(building));
+    
+    public List<Transform> GetImagesOnPos(GridPos pos)
+    {
+        List<Transform> images = new();
+        foreach (GroupOverlay overlay in buildingOverlays)
+        {
+            foreach (Transform tile in overlay.transform)
+            {
+                if (new GridPos(tile.position).Equals(pos))
+                    images.Add(tile);
+            }
+        }
+        return images;
+    }
 
     /// <summary>Asks if there's a need to create a new overlay group.</summary>
     bool buildGridFilled = false;
+
+    GameObject OverlayGroup;
     #endregion
 
     /// <summary>
@@ -109,12 +131,24 @@ public class UIOverlay : MonoBehaviour
     /// </summary>
     /// <param name="gridPos">Anchor position.</param>
     /// <param name="id">Id of the building.</param>
-    public void AddBuildingOverlay(GridPos gridPos, int id)
+    public GroupOverlay AddBuildingOverlay(GridPos gridPos, Building building)
     {
-        RectTransform t = Instantiate(groupPrefab, entryPointParent).GetComponent<RectTransform>();
-        t.anchoredPosition = new(gridPos.x, gridPos.z);
-        t.name = id.ToString();
-        buildingOverlays.Add(t);
+        GameObject groupObject = new("GroupOverlay", typeof(RectTransform));
+        groupObject.layer = LayerMask.NameToLayer("Overlays");
+        groupObject.transform.SetParent(entryPointParent);
+        
+
+        RectTransform rect = groupObject.GetComponent<RectTransform>();
+        rect.anchoredPosition3D = new(gridPos.x, gridPos.z, 0);
+        rect.anchorMin = new(0, 0);
+        rect.anchorMax = new(0, 0);
+        rect.localRotation = Quaternion.Euler(0,0,0);
+
+
+        GroupOverlay overlay = groupObject.AddComponent<GroupOverlay>();
+        overlay.building = building;
+        buildingOverlays.Add(overlay);
+        return overlay;
     }
 
 
@@ -123,19 +157,19 @@ public class UIOverlay : MonoBehaviour
     /// </summary>
     /// <param name="gridPos">Position for the entrypoint.</param>
     /// <param name="childIndex">Index for recycling overlay tiles.</param>
-    public void Add(GridPos gridPos, int childIndex = -1, bool road = true)
+    public void Add(GridPos gridPos, GroupOverlay overlay, int childIndex = -1, bool road = true)
     {
         RectTransform rect;
         if (childIndex == -1)
         {
-            rect = Instantiate(overlayTile, buildingOverlays[^1]).GetComponent<RectTransform>();
+            rect = Instantiate(overlayTile, buildingOverlays[^1].transform).GetComponent<RectTransform>();
             rect.anchoredPosition = new(gridPos.x, -gridPos.z);
             rect.GetComponent<Image>().color = road ? new(0.5f, 0.5f, 0.5f, 0.25f) : new(0.1f, 0.1f, 0.1f, 0.25f);
         }
         else
         {
             rect = overlayParent.GetChild(childIndex).GetComponent<RectTransform>();
-            rect.transform.SetParent(buildingOverlays[^1]);
+            rect.transform.SetParent(buildingOverlays[^1].transform);
             rect.gameObject.layer = 5;
         }
 
@@ -146,9 +180,9 @@ public class UIOverlay : MonoBehaviour
     /// </summary>
     /// <param name="id">Id of the removed building.</param>
     /// <param name="y">Level of the tile.</param>
-    public void Remove(int id, int y)
+    public void Remove(Building building, int y)
     {
-        int i = buildingOverlays.FindIndex(q => q.name == id.ToString());
+        int i = buildingOverlays.FindIndex(q => q.GetComponent<GroupOverlay>().building == building);
         if (i > -1)
         {
             Destroy(buildingOverlays[i].gameObject);
@@ -157,7 +191,7 @@ public class UIOverlay : MonoBehaviour
                 ClickableObject clickable = MyGrid.GetGridItem(new(gp.x, y, gp.z));
                 if (clickable is Road)
                 {
-                    ((Road)clickable).entryPoints.Remove(id);
+                    ((Road)clickable).entryPoints.Remove(building);
                 }
             }
             buildingOverlays.RemoveAt(i);
@@ -171,10 +205,10 @@ public class UIOverlay : MonoBehaviour
     public void ToggleEntryPoints(Road r)
     {
         if (r)
-            foreach (int id in r.entryPoints)
+            foreach (Building building in r.entryPoints)
             {
-                RectTransform rect = buildingOverlays.First(q => q.name == id.ToString());
-                for (int i = 0; i < rect.transform.childCount; i++)
+                Transform rect = buildingOverlays.First(q => q.building == building).transform;
+                for (int i = 0; i < rect.childCount; i++)
                 {
                     GameObject tileObject = rect.GetChild(i).gameObject;
                     if (r.GetPos().Equals(new GridPos(tileObject.transform.position)))
@@ -184,5 +218,38 @@ public class UIOverlay : MonoBehaviour
                     }
                 }
             }
+    }
+
+
+    public void CreateTileOverlay(IEnumerable<GridPos> positions)
+    {
+        if (OverlayGroup != null)
+        {
+            Destroy(OverlayGroup);
+        }
+
+        OverlayGroup = new("GroupOverlay", typeof(RectTransform));
+        OverlayGroup.layer = LayerMask.NameToLayer("Overlays");
+        OverlayGroup.transform.SetParent(transform.GetChild(0));
+
+        RectTransform rect = OverlayGroup.GetComponent<RectTransform>();
+        rect.anchoredPosition3D = new(0, 0, 0);
+        rect.anchorMin = new(0, 0);
+        rect.anchorMax = new(0, 0);
+        rect.localRotation = Quaternion.Euler(180, 0, 0);
+        
+
+        foreach (GridPos pos in positions)
+        {
+            RectTransform tile = Instantiate(overlayTile, OverlayGroup.transform).GetComponent<RectTransform>();
+            tile.anchoredPosition = new(pos.x, -pos.z);
+            tile.localRotation = Quaternion.Euler(0, 0, 0);
+            tile.GetComponent<Image>().color = new Color(0f, 1f, 0f, 0.25f);
+        }
+    }
+
+    public void ClearTileOverlay()
+    {
+        Destroy(OverlayGroup);
     }
 }
