@@ -87,6 +87,17 @@ public class Human : ClickableObject
         UIUpdate("Efficiency");
     }
 
+    /// <summary>
+    /// Updates efficiency modifiers and UI.
+    /// </summary>
+    /// <param name="_modType"><inheritdoc cref="Efficiency.ManageModifier(ModType, bool)" path="/param[@name='_modType']"/></param>
+    /// <param name="state"><inheritdoc cref="Efficiency.SetModifier(ModType, int)" path="/param[@name='state']"/></param>
+    public void ModifyEfficiency(ModType _modType, int state)
+    {
+        efficiency.SetModifier(_modType, state);
+        UIUpdate("Efficiency");
+    }
+
     /// <inheritdoc cref="jData"/>
     [CreateProperty]
     public JobData Job => jData;
@@ -150,9 +161,11 @@ public class Human : ClickableObject
         transform.GetChild(0).gameObject.SetActive(true);
 #endif
         SceneRefs.Tick.SubscribeToEvent(DoRepetableAction, Tick.TimeEventType.Ticks);
-        //SceneRefs.Tick.SubscribeToEvent(Day, Tick.TimeEventType.DayStart);
+        SceneRefs.Tick.SubscribeToEvent(Day, Tick.TimeEventType.DayStart);
         ((IModifiable)Inventory.capacity).Init();
-        //SceneRefs.tick.SubscribeToEvent(Night, Tick.TimeEventType.Night);
+        SceneRefs.Tick.SubscribeToEvent(Night, Tick.TimeEventType.Night);
+        if (SceneRefs.Tick.timeInMinutes > 60 * SceneRefs.Tick.dayTime || SceneRefs.Tick.timeInMinutes < 60 * SceneRefs.Tick.nightTime)
+            nightTime = true;
     }
 
     /// <summary>
@@ -202,6 +215,7 @@ public class Human : ClickableObject
         (clickable as HumanSave).specs = specialization;
         (clickable as HumanSave).houseID = home ? home.id : -1;
         (clickable as HumanSave).workplaceId = workplace != null ? ((ClickableObject)workplace).id : -1;
+        (clickable as HumanSave).effects = efficiency.Save();// = workplace != null ? ((ClickableObject)workplace).id : -1;
         return base.Save(clickable);
     }
 
@@ -226,6 +240,7 @@ public class Human : ClickableObject
         Inventory.Manage(new(s.inventory), true);
         specialization = s.specs;
 
+        efficiency.Load(s.effects);
 
 
         base.Load(save);
@@ -260,10 +275,14 @@ public class Human : ClickableObject
     {
         if (nightTime)
         {
-            if (GoHome().path.Count == 0) // should be called after arriving home
+            JobData data = GoHome();
+            if (data.path.Count == 0) // should be called after arriving home
                 ChangeAction(null);
-            else // decided during the night
-                Debug.LogWarning("I'm sleeping, don't bother me!");
+            else // Move to the new home
+            {
+                jData.path = GoHome().path;
+                ChangeAction(HumanActions.Move);
+            }
             return;
         }
         if (jData.path?.Count > 0)
@@ -383,7 +402,7 @@ public class Human : ClickableObject
         nightTime = false; // stop sleeping
         if (jData.job <= JobState.Free)
             SetJob(JobState.Free);
-        else
+        else if (jData.interest != null)
         {
             SetJob(jData.job, path: PathFinder.FindPath(new() { jData.interest }, this).path);
         }
@@ -414,11 +433,14 @@ public class Human : ClickableObject
             if (_jData.interest)
             {
                 ModifyEfficiency(ModType.House, true);
+                if (home.HasPub)
+                    ModifyEfficiency(ModType.Pub, 1);
                 return _jData;
             }
         }
         _jData = PathFinder.FindPath(new() { MyGrid.GetLevelElevator(GetPos().y) }, this);
         ModifyEfficiency(ModType.House, false);
+        ModifyEfficiency(ModType.Pub, false);
         if (_jData.interest)
         {
             return _jData;

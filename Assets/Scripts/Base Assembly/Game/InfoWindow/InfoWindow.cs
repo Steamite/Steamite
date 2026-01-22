@@ -102,6 +102,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         window.UnregisterCallback<MouseEnterEvent>(MyOnMouseEnter);
         window.UnregisterCallback<MouseLeaveEvent>(MyOnMouseExit);
     }
+    
     /// <summary>Fills all control references.</summary>
     public async Task BeforeInit()
     {
@@ -140,6 +141,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         secondWindow.style.display = DisplayStyle.None;
         secondBody.Clear();
         
+        MyGrid.GetOverlay().ClearTileOverlay();
         activeBindings.Clear();
     }
     #endregion

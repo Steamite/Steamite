@@ -33,6 +33,7 @@ MonoBehaviour:
     Objects:
     - rid: 8808251703612669986
     - rid: 8808251703612669987
+    - rid: 1153726817925070940
     Icon: {fileID: 2800000, guid: ebd657dbff7382b49ac208b65a2fc976, type: 3}
   - id: 4
     Name: Fluids
@@ -46,6 +47,13 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 1153726817925070940
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        id: 512409920
+        b: {fileID: -8276471774322207939, guid: 68185ba783100ad42998ab6da59d02d8, type: 3}
+        preview: {fileID: 21300000, guid: 17f94f26da813984e91e7ac514c22efa, type: 3}
     - rid: 8808251701909258314
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:

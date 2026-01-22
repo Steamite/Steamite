@@ -137,7 +137,6 @@ public class SaveController : MonoBehaviour, IAfterLoad
     /// <param name="autoSave"></param>
     public async void SaveGame(string saveName, bool autoSave)
     {
-        SceneRefs.Tick.UIWindowToggle(false);
         if (Directory.GetDirectories($"{Application.persistentDataPath}").FirstOrDefault(q => q == $"{Application.persistentDataPath}/saves") == null)
             Directory.CreateDirectory($"{Application.persistentDataPath}/saves");
 
@@ -152,14 +151,17 @@ public class SaveController : MonoBehaviour, IAfterLoad
                 },
                 () => 
                 {
-                    SceneRefs.Tick.UIWindowToggle(true);
                 },
                 "Override save",
                 $"Are you sure you want to override this save: <color=\"orange\">{saveName}?");
         }
         else
         {
+            if (autoSave)
+                SceneRefs.Tick.UIWindowToggle(false);
             await Save(saveName, autoSave);
+            if (autoSave)
+                SceneRefs.Tick.UIWindowToggle(true);
         }
     }
 
@@ -225,7 +227,6 @@ public class SaveController : MonoBehaviour, IAfterLoad
             }
             Directory.Delete($"{tmpPath}");
         }
-        SceneRefs.Tick.UIWindowToggle(true);
         return Task.CompletedTask;
     }
 

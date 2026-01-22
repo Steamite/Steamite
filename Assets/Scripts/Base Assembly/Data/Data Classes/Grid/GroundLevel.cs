@@ -138,19 +138,13 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         }
         if (clickable?.GetType() == typeof(Road))
         {
-            foreach (Transform tran in overlays.buildingOverlays)
+            foreach (Transform t in overlays.GetImagesOnPos(gp))
             {
-                for (int i = 0; i < tran.childCount; i++)
-                {
-                    Transform t = tran.GetChild(i);
-                    if (t.gameObject.activeSelf == false && new GridPos(t.position).Equals(gp))
-                    {
-                        t.gameObject.SetActive(true);
-                        (clickable as Road).entryPoints.Add(int.Parse(t.parent.name));
-                        t.localPosition = new(t.localPosition.x, t.localPosition.y, 0);
-                    }
-                }
+                t.gameObject.SetActive(true);
+                (clickable as Road).entryPoints.Add(t.parent.GetComponent<GroupOverlay>().building);
+                t.localPosition = new(t.localPosition.x, t.localPosition.y, 0);
             }
+
         }
         if (isPipe)
         {
@@ -158,6 +152,11 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         }
         else
             grid[x, y] = clickable;
+
+        foreach (var item in MyGrid.EffectBuildings)
+        {
+            item.RecalculateRange();
+        }
     }
 
     /// <summary>
@@ -189,9 +188,12 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     {
         GridPos pos = gridPos ?? building.GetPos();
         MyGrid.Buildings.Add(building);
-        overlays.AddBuildingOverlay(pos, building.id);
+        if(building is Pub pub)
+        {
+            MyGrid.EffectBuildings.Add(pub);
+        }
+        GroupOverlay overlay = overlays.AddBuildingOverlay(pos, building);
 
-        List<Image> tiles = overlays.buildingOverlays[^1].GetComponentsInChildren<Image>().ToList();
         for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
         {
             NeededGridItem item = building.blueprint.itemList[i];
@@ -208,8 +210,9 @@ public class GroundLevel : MonoBehaviour, IUpdatable
                     SetGridItem(new(x, y), building);
                     break;
                 case GridItemType.Entrance:
-                    overlays.Add(new(itemPos.x, itemPos.z), load ? -1 : i);
-                    r?.entryPoints.Add(building.id);
+                    overlays.Add(new(itemPos.x, itemPos.z), overlay, load ? -1 : i);
+                    r?.entryPoints.Add(building);
+                    r.RegisterEffects(building);
                     break;
                 case GridItemType.WaterSource:
                 case GridItemType.ResourceSource:
@@ -231,7 +234,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <param name="gridPos">Building position</param>
     public void UnsetBuilding(Building building, GridPos gridPos)
     {
-        overlays.Remove(building.id, gridPos.y);
+        overlays.Remove(building, gridPos.y);
         List<Road> _roads = roads.GetComponentsInChildren<Road>().ToList();
         for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
         {
@@ -462,21 +465,21 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <returns>If it's ok to build there or not.</returns>
     bool CheckEntranceObscursion(List<Road> roads, List<Image> tiles)
     {
-        Dictionary<int, int> buildings = new();
+        Dictionary<Building, int> buildings = new();
         bool ok = true;
 
         foreach (Road road in roads)
         {
-            foreach (int i in road.entryPoints)
+            foreach (Building build in road.entryPoints)
             {
-                buildings.TryAdd(i, overlays.buildingOverlays.First(q => q.name == i.ToString()).GetComponentsInChildren<Image>().Where(q => q.enabled).Count());
-                buildings[i]--;
-                if (buildings[i] == 0)
+                buildings.TryAdd(build, overlays.GetGroupOverlay(build).GetComponentsInChildren<Image>().Where(q => q.enabled).Count());
+                buildings[build]--;
+                if (buildings[build] == 0)
                 {
                     List<int> ids = new();
                     for (int j = 0; j < roads.Count; j++)
                     {
-                        if (roads[j].entryPoints.Contains(i))
+                        if (roads[j].entryPoints.Contains(build))
                         {
                             //entries[j].gameObject.SetActive(false);
                             tiles[j].color = new(1, 0, 0, 0.5f);

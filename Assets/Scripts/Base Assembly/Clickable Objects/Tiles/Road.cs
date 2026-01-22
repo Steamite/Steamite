@@ -7,7 +7,9 @@ using UnityEngine.EventSystems;
 public class Road : ClickableObject
 {
     /// <summary>Contains ids of buildings that have entry points on this tile</summary>
-    public List<int> entryPoints = new();
+    public List<Building> entryPoints = new();
+
+    List<IEffectObject> effects = new();
 
     #region Basic Operations
     /// <inheritdoc/>
@@ -71,6 +73,33 @@ public class Road : ClickableObject
                     }
                 }
             }
+        }
+    }
+
+    public void AddEffect(IEffectObject effect)
+    {
+        effects.Add(effect);
+        foreach (var building in entryPoints)
+        {
+            effect.AddEffectMod(building);
+        }
+    }
+
+    public void RemoveEffect(IEffectObject effect)
+    {
+        effects.Remove(effect);
+        bool stillContains = effects.Contains(effect);
+        foreach (var building in entryPoints)
+        {
+            effect.RemoveEffectMod(building, stillContains);
+        }
+    }
+
+    public void RegisterEffects(Building building)
+    {
+        foreach (var effect in effects)
+        {
+            effect.AddEffectMod(building);
         }
     }
 }

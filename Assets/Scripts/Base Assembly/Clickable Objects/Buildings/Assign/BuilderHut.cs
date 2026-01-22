@@ -14,4 +14,9 @@ public class BuilderHut : Building, IBuilderHut
         toEnable.Add("General", new List<string> { "Assign Info" });
         base.ToggleInfoComponents(info, toEnable);
     }
+    public override void OrderDeconstruct()
+    {
+        ((IAssign)this).ClearHumans();
+        base.OrderDeconstruct();
+    }
 }

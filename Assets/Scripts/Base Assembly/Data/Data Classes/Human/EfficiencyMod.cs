@@ -1,14 +1,14 @@
 using System;
 using UnityEngine;
 
-/// <summary>Efficiency modifier, works in stacks(the longer it is the stronger it grows).</summary>
+/// <summary>Efficiency modifier, works in stacks(the longer it is active, the stronger it grows).</summary>
 [Serializable]
 public class EfficiencyMod
 {
     #region Variables
-    /// <summary>Modifier name for.</summary>
+    /// <summary>Modifier name.</summary>
     [SerializeField] public string name;
-    /// <summary>Modifier name for.</summary>
+    /// <summary>Modifier type.</summary>
     [HideInInspector] public ModType modType;
     /// <summary>Current modifier state(can range from <see cref="negCount"/> to <see cref="posCount"/>).</summary>
     public int count = 1;

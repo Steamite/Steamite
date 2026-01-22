@@ -61,6 +61,8 @@ public class Tick : MonoBehaviour
     event Action yearStart;
     #endregion
 
+    [SerializeField] public int dayTime = 6;
+    [SerializeField] public int nightTime = 21;
     /// <summary>The tick counter, resets if it reaches uint capacity.</summary>
     [HideInInspector] public uint lastTick = 0;
 
@@ -165,7 +167,7 @@ public class Tick : MonoBehaviour
     {
         minutesPerTick = 5;
         TicksInDay = 1440 / minutesPerTick;
-        if (timeInMinutes < 6 * 60 || timeInMinutes > 21 * 60)
+        if (timeInMinutes < dayTime * 60 || timeInMinutes > nightTime * 60)
             nightStart?.Invoke();
 
         timeToTick = 1f / ticksPerSecond;

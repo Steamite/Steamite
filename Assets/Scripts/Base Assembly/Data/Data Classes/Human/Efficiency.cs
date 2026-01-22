@@ -52,6 +52,26 @@ public class Efficiency
         }
         CalculateEfficiecy();
     }
+    public void SetModifier(ModType _modType, int state)
+    {
+        EfficiencyMod mod = modifiers.FirstOrDefault(q => q.modType == _modType);
+        if (mod != null)
+        {
+            if(state == 0)
+            {
+                modifiers.Remove(mod);
+                CalculateEfficiecy();
+                return;
+            }
+        }
+        else
+        {
+            mod = SceneRefs.Humans.modifiers.GetModifier(_modType);
+            modifiers.Add(mod);
+        }
+        mod.count = state;
+        CalculateEfficiecy();
+    }
 
     /// <summary>Recalculates new <see cref="efficiency"/>.</summary>
     void CalculateEfficiecy()
@@ -70,5 +90,24 @@ public class Efficiency
         }
         if (efficiency < 0)
             efficiency = 0.1f;
+    }
+
+    public List<(ModType, int)> Save()
+    {
+        return modifiers.Where(q => q.count != 0).Select(q => (q.modType, q.count)).ToList();
+    }
+
+    public void Load(List<(ModType, int)> mods)
+    {
+        modifiers = new();
+        if (mods == null)
+            return;
+        foreach (var item in mods)
+        {
+            EfficiencyMod mod = SceneRefs.Humans.modifiers.GetModifier(item.Item1);
+            mod.count = item.Item2;
+            modifiers.Add(mod);
+        }
+        CalculateEfficiecy();
     }
 }

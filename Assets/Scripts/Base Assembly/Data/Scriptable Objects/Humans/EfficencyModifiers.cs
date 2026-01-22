@@ -9,6 +9,9 @@ public class EfficencyModifiers : ScriptableObject
 {
     /// <summary><inheritdoc cref="EfficencyModifiers"/>.</summary>
     [SerializeField] List<EfficiencyMod> modifiers = new();
+#if UNITY_EDITOR
+    public List<EfficiencyMod> Modifiers => modifiers;
+#endif
 
     /// <summary>
     /// Returns <paramref name="modType"/> modifier.

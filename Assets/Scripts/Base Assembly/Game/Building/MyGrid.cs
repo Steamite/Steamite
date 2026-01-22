@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-/// <summary>Basic highlight color(for selection).</summary>
+/// <summary>Util for managing world data.</summary>
 public static class MyGrid
 {
     #region Variables
@@ -15,10 +15,12 @@ public static class MyGrid
     public static List<Pipe> Pipes => pipes;
     static List<Pipe> pipes = new();
 
-    /// <inheritdoc cref="buildings"/>
-    public static List<Building> Buildings => buildings;
     /// <summary>List of all buildings on all levels.</summary>
-    static List<Building> buildings = new();
+    public static List<Building> Buildings { get; private set; }
+
+    /// <summary>List of all effects buildings on all levels.</summary>
+    public static List<IEffectObject> EffectBuildings { get; set; }
+
     /// <summary>List of all chunks on all levels.</summary>
     public static List<Chunk> chunks = new();
     /// <summary>List of all veins on all levels.</summary>
@@ -90,13 +92,52 @@ public static class MyGrid
     }
     public static void PrepGridLists()
     {
-        buildings = new List<Building>();
+        Buildings= new List<Building>();
+        EffectBuildings = new List<IEffectObject>();
         chunks = new List<Chunk>();
         veins = new List<Vein>();
         fluidNetworks = new();
         levels = new GroundLevel[5];
         currentLevel = 2;
         pipes = new();
+    }
+    public static IEnumerable<ClickableObject> GetTilesInRange(int range, GridPos pos, params Type[] types)
+    {
+        List<ClickableObject> objects = new List<ClickableObject>();
+        foreach (GridPos checkPos in GetPositionsInRange(range, pos, types))
+        {
+            objects.Add(GetGridItem(checkPos));
+        }
+        return objects.Distinct();
+    }
+
+    public static IEnumerable<GridPos> GetPositionsInRange(int range, GridPos pos, params Type[] types)
+    {
+        GridPos startPos = new(
+            Mathf.Clamp(pos.x - range, 0, gridSize(0)),
+            Mathf.Clamp(pos.z - range, 0, gridSize(0)));
+        GridPos endPos = new(
+            Mathf.Clamp(pos.x + range, 0, gridSize(0)),
+            Mathf.Clamp(pos.z + range, 0, gridSize(0)));
+
+        GridPos checkPos = new();
+        List<GridPos> objects = new();
+        for (int x = Mathf.FloorToInt(startPos.x); x <= Mathf.FloorToInt(endPos.x); x++)
+        {
+            checkPos.x = x;
+            for (int z = Mathf.FloorToInt(startPos.z); z <= Mathf.FloorToInt(endPos.z); z++)
+            {
+                checkPos.z = z;
+                if(types != null)
+                {
+                    ClickableObject clickable = GetGridItem(checkPos);
+                    if(!types.Any(q => q == clickable.GetType()))
+                        continue;
+                }
+                objects.Add(new GridPos(checkPos.x, pos.y, checkPos.z));
+            }
+        }
+        return objects.Distinct();
     }
     #endregion Grid Access
 
@@ -142,7 +183,11 @@ public static class MyGrid
             {
                 levels[gridPos.y].UnsetBuilding(building, gridPos);
             }
-            buildings.Remove(building);
+            Buildings.Remove(building);
+            if(building is Pub pub)
+            {
+                EffectBuildings.Remove(building as Pub);
+            }
         }
         GameObject.Destroy(building.gameObject);
     }

@@ -194,7 +194,7 @@ MonoBehaviour:
   maxToRemove: 25
   minToAdd: 1
   maxToAdd: 6
-  gridSizes: 150000001f00000065000000
+  gridSizes: 150000001f00000033000000
   minableResources:
   - {fileID: 11400000, guid: a8d8035b791c05943ba13e1333106fc9, type: 2}
   - {fileID: 11400000, guid: 1c3d32d887bb74046af6627885ac30b8, type: 2}

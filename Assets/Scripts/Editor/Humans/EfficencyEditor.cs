@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +12,7 @@ using UnityEngine;
 public class EfficencyEditor : Editor
 {
     /// <summary>Path to the mod script</summary>
-    string path = "/Scripts/Data/Data Classes/Human/ModType.cs";
+    string path = "/Scripts/Base Assembly/Data/Data Classes/Human/EfficiencyTypes.cs";
     /// <summary>Is currently overwriting Enums.</summary>
     bool saving = false;
 
@@ -19,24 +21,34 @@ public class EfficencyEditor : Editor
     {
         path = GUILayout.TextField(path);
         string[] enumNames = Enum.GetNames(typeof(ModType));
-        string[] strings = ((EfficencyModifiers)target).GetModifierNames();
+        EfficencyModifiers modifiers = (EfficencyModifiers)target;
+        string[] strings = modifiers.GetModifierNames();
+        bool canUpdate = false;
 
         if (enumNames.Length == strings.Length)
         {
+            List<EfficiencyMod> mods = modifiers.Modifiers;
             for (int i = 0; i < strings.Length; i++)
             {
-                if (enumNames[i] != strings[i])
+                if (enumNames[i] != mods[i].name)
                     GUI.backgroundColor = Color.red;
+                if(mods[i].modType != (ModType)i)
+                {
+                    mods[i].modType = (ModType)i;
+                    EditorUtility.SetDirty(target);
+                }
             }
         }
         else
         {
             GUI.backgroundColor = Color.red;
+            canUpdate = true;
         }
 
-        if (GUILayout.Button("Update Enums") && GUI.backgroundColor == Color.red && !saving)
+        if (GUILayout.Button("Update Enums") && canUpdate && !saving)
         {
             RefreshEnums();
+
         }
         GUI.backgroundColor = Color.white;
         base.OnInspectorGUI();
