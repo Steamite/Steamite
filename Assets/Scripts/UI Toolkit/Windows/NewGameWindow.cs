@@ -122,7 +122,7 @@ namespace StartMenu
                     if (selectedOption == 0)
                         GameObject.Find("Loading Screen").GetComponent<LoadingScreen>().StartNewGame(worldName);
                     else
-                        GameObject.Find("Loading Screen").GetComponent<LoadingScreen>().StartNewGame(worldName, gameObject.GetComponent<MapGeneration>().Seed);
+                        GameObject.Find("Loading Screen").GetComponent<LoadingScreen>().StartNewGame(worldName, gameObject.GetComponent<MapGenParameterController>().Seed);
                 }
                 else
                 {

@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 public class CameraSceneMovement : MonoBehaviour
 {
     [SerializeField] PhysicsRaycaster raycaster;
+
+    public AudioListener Listener { get; set; }
+
     public void MoveToPosition(GridPos pos, bool setCursor = false)
     {
         transform.position = pos.ToVec();

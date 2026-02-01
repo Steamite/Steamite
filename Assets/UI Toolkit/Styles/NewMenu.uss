@@ -1,0 +1,18 @@
+.param-title {
+    align-content: flex-end;
+    font-size: 43px;
+    height: 50px;
+    margin-top: 20px;
+    justify-content: flex-end;
+    margin-bottom: 17px;
+}
+
+.param {
+    font-size: 37px;
+    -unity-text-align: middle-left;
+    padding-left: 1px;
+    margin-left: 2px;
+    flex-grow: 0;
+    max-height: 50px;
+    justify-content: space-between;
+}

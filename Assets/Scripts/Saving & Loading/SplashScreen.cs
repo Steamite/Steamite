@@ -17,6 +17,7 @@ public class SplashScreen : MonoBehaviour
     [NonSerialized] public LoadActions loadAction = LoadActions.MainMenu;
     private async void Awake()
     {
+        Time.timeScale = 1;
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = -1;
         await SceneManager.LoadSceneAsync(1);

@@ -344,6 +344,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afe1e503ad2dbc94abcae7f35284d5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sizes:
+  - Small
+  - Medium
+  - Large
+  states:
+  - Low
+  - Medium
+  - High
 --- !u!114 &1793054209
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,22 +1,25 @@
 .menu {
     transition-duration: 2s;
-    transition-timing-function: ease-out;
+    transition-timing-function: ease-in-out;
     translate: 0 0;
     transition-property: translate;
+    transition-delay: 0s;
 }
 
 .menu-new {
     transition-duration: 2s;
-    transition-timing-function: ease-out;
+    transition-timing-function: ease-in-out;
     translate: -100% 0;
     transition-property: translate;
+    transition-delay: 0s;
 }
 
 .menu-load {
     transition-duration: 2s;
-    transition-timing-function: ease-out;
+    transition-timing-function: ease-in-out;
     translate: 0 -100%;
     transition-property: translate;
+    transition-delay: 0s;
 }
 
 .window {
