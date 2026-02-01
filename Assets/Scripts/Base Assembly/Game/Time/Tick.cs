@@ -173,7 +173,6 @@ public class Tick : MonoBehaviour
         timeToTick = 1f / ticksPerSecond;
         LastSpeed = 1;
         tickTimer = 0;
-        Time.timeScale = 1;
         enabled = false;
     }
     #endregion
