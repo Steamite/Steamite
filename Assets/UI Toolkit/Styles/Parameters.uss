@@ -25,6 +25,52 @@
     flex-grow: 0;
 }
 
-.param > .unity-toggle__input {
-    max-width: 25px;
+.unity-toggle__input {
+    flex-grow: 0;
+    min-width: 40px;
+    aspect-ratio: 1;
+    align-self: center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.unity-toggle__input:hover > #unity-checkmark {
+    background-color: var(--hover);
+    transition-duration: 0.2s;
+}
+
+#unity-checkmark {
+    flex-grow: 0;
+    min-width: 40px;
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    aspect-ratio: 1;
+    align-self: center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    background-color: var(--interactable);
+    transition-duration: 0.2s;
+}
+
+.unity-slider-int__input > #unity-text-field {
+    max-width: 15%;
+    padding-left: 10px;
 }

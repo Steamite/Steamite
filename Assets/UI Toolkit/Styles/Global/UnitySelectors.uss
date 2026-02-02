@@ -269,3 +269,7 @@ DoubleResList TemplateContainer {
 .unity-base-text-field:focus:enabled > .unity-base-text-field__input {
     border-color: var(--border);
 }
+
+.unity-base-field:focus:enabled > .unity-base-field__label {
+    color: var(--text);
+}
