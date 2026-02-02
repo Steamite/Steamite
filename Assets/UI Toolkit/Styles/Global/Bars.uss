@@ -57,3 +57,71 @@
     margin-left: 0;
     background-color: var(--finished);
 }
+
+SliderInt {
+    width: 60%;
+    margin-left: 3%;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+SliderInt #unity-text-field {
+    width: 32%;
+    -unity-text-align: upper-center;
+    max-width: 33%;
+}
+
+SliderInt #unity-tracker {
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    height: 20px;
+    margin-top: 0;
+    background-color: var(--background);
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    top: 11px;
+}
+
+SliderInt #unity-fill {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    background-color: var(--text-secondary);
+}
+
+SliderInt #unity-dragger {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    height: 26px;
+    width: 6%;
+    background-color: var(--interactable);
+    border-top-color: var(--border);
+    border-right-color: var(--border);
+    border-bottom-color: var(--border);
+    border-left-color: var(--border);
+    top: 20px;
+}
+
+SliderInt #unity-dragger:hover {
+    background-color: var(--hover);
+}

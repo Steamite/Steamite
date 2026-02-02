@@ -36,6 +36,7 @@ public class QuestResourceReward : QuestReward
     }
 }
 
+[Serializable]
 public class TrustReward : QuestReward
 {
     public int gainAmmount;
