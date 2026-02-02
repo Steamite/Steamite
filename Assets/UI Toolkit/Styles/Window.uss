@@ -28,3 +28,6 @@
     font-size: 60px;
     align-self: center;
 }
+
+#unity-tab-view__header-container {
+}

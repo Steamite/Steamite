@@ -56,6 +56,20 @@ public static class ToolkitUtils
         element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
     }
 
+    public static void ToggleStyleButton(this Button button, bool activate)
+    {
+        if (activate)
+        {
+            button.RemoveFromClassList("disabled-button");
+            button.AddToClassList("main-button");
+        }
+        else
+        {
+            button.AddToClassList("disabled-button");
+            button.RemoveFromClassList("main-button");
+        }
+    }
+
     public static VisualElement GetRoot(VisualElement element)
     {
         while (element.parent != null)
