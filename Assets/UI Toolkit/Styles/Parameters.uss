@@ -10,9 +10,21 @@
 .param {
     font-size: 37px;
     -unity-text-align: middle-left;
-    padding-left: 1px;
+    padding-left: 15px;
     margin-left: 2px;
     flex-grow: 0;
     max-height: 50px;
     justify-content: space-between;
+}
+
+.param > .unity-base-slider__input {
+    max-width: 40%;
+}
+
+.param > .unity-toggle__label {
+    flex-grow: 0;
+}
+
+.param > .unity-toggle__input {
+    max-width: 25px;
 }

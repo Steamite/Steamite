@@ -116,6 +116,9 @@
     background-color: var(--clear);
 }
 
+#unity-tab-view__header-container {
+}
+
 .main-button-selected {
     padding-top: 0;
     padding-right: 0;
