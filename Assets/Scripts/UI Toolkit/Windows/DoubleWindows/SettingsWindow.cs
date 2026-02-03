@@ -155,7 +155,10 @@ namespace Settings
             musicToggle.SetValueWithoutNotify(data.Mute);
             vsyncToggle.SetValueWithoutNotify(data.VSync);
 
-            screenDropdown.SetValueWithoutNotify(screenSettings[(int)data.fullScreenMode]);
+            int i = (int)data.fullScreenMode;
+            if(i == 3)
+                i = 2;
+            screenDropdown.SetValueWithoutNotify(screenSettings[i]);
             fpsDropdown.SetValueWithoutNotify(data.MaxFPS.ToString());
             resolutionDropdown.SetValueWithoutNotify($"{data.Width}x{data.Height}");
             UpdateButtonState();
