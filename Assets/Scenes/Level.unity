@@ -859,6 +859,7 @@ GameObject:
   - component: {fileID: 1708745677}
   - component: {fileID: 1708745682}
   - component: {fileID: 1708745683}
+  - component: {fileID: 1708745684}
   m_Layer: 5
   m_Name: Pause Menu
   m_TagString: Untagged
@@ -901,6 +902,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   confrimWindow: {fileID: 1708745683}
   uiDocument: {fileID: 1708745682}
+  settings: {fileID: 1708745684}
 --- !u!114 &1708745682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -938,6 +940,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opened: 0
   dialog: {fileID: 9197481963319205126, guid: 6ba2d918a4130bd4083d3afa9f88b90e, type: 3}
+--- !u!114 &1708745684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708745675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23e4bdc89b78c3542806ea948b36faa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ToolkitUI::Settings.SettingsWindow
 --- !u!1 &1855733981
 GameObject:
   m_ObjectHideFlags: 0
@@ -1434,11 +1448,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c820b0d8f88bdb4d835008f00417405, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ticksPerHour: 4
   timeInMinutes: 4
   numberOfDays: 5
+  dayTime: 6
+  nightTime: 21
   lastTick: 0
-  pauseSpeed: 0
+  ticksPerSecond: 4
+  tickTimer: 0
 --- !u!114 &8150810313726245685
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -148,10 +148,13 @@ namespace Settings.Sound
         #endregion
 
         #region Volume Control
-        public void SetVolume(int _musicVolume, int _effectVolume)
+        public void SetVolume(bool _mute, int _masterVolume, int _musicVolume, int _effectVolume)
         {
-            effectVolume = _effectVolume / 100f;
-            source.volume = _musicVolume / 100f;
+            source.mute = _mute;
+
+            float masterVolume = _masterVolume / 100f;
+            effectVolume = (_effectVolume * masterVolume) / 100f;
+            source.volume = (_musicVolume * masterVolume) / 100f;
             
             if (enabled == false)
             {

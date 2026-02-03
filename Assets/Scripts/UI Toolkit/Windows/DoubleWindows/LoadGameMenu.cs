@@ -26,6 +26,7 @@ public class LoadGameMenu : DoubleWindow
 
     public override void Init(VisualElement root)
     {
+        base.Init(root);
         menu = root.Q<VisualElement>("Load-Menu");
         menu.Q<VisualElement>("Background").ClearClassList();
         if (isMainMenu)

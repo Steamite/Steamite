@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 /// <summary>Provides visualization for placing new buildings and entrypoints.</summary>
 public class UIOverlay : MonoBehaviour

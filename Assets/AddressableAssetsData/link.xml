@@ -1,0 +1,141 @@
+<linker>
+  <assembly fullname="BaseAssembly, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="BuilderHut" preserve="all" />
+    <type fullname="BuildingData" preserve="all" />
+    <type fullname="BuildingStats.StatData" preserve="all" />
+    <type fullname="BuildPipe" preserve="all" />
+    <type fullname="DiggerHut" preserve="all" />
+    <type fullname="Elevator" preserve="all" />
+    <type fullname="FluidResProductionBuilding" preserve="all" />
+    <type fullname="FluidTank" preserve="all" />
+    <type fullname="House" preserve="all" />
+    <type fullname="InfoWindowControlHolder" preserve="all" />
+    <type fullname="NeedSourceProduction" preserve="all" />
+    <type fullname="Pipe" preserve="all" />
+    <type fullname="ProductionRecipeHolder" preserve="all" />
+    <type fullname="ResearchProduction" preserve="all" />
+    <type fullname="ResearchUI.ResearchData" preserve="all" />
+    <type fullname="ResourceData" preserve="all" />
+    <type fullname="ResourceProductionBuilding" preserve="all" />
+    <type fullname="ResourceType" preserve="all" />
+    <type fullname="TradeData.Stats.WorkerStat" preserve="all" />
+    <type fullname="TradeHolder" preserve="all" />
+    <type fullname="BuildingGrid" preserve="nothing" serialized="true" />
+    <type fullname="CapacityResource" preserve="nothing" serialized="true" />
+    <type fullname="GridPos" preserve="nothing" serialized="true" />
+    <type fullname="ModValue" preserve="nothing" serialized="true" />
+    <type fullname="ModifiableFloat" preserve="nothing" serialized="true" />
+    <type fullname="ModifiableInteger" preserve="nothing" serialized="true" />
+    <type fullname="ModifiableResource" preserve="nothing" serialized="true" />
+    <type fullname="MoneyResource" preserve="nothing" serialized="true" />
+    <type fullname="NeededGridItem" preserve="nothing" serialized="true" />
+    <type fullname="Resource" preserve="nothing" serialized="true" />
+    <type fullname="StorageResource" preserve="nothing" serialized="true" />
+    <type fullname="BuildCategWrapper" preserve="nothing" serialized="true" />
+    <type fullname="BuildingStats.BuildingStatCateg" preserve="nothing" serialized="true" />
+    <type fullname="BuildingWrapper" preserve="nothing" serialized="true" />
+    <type fullname="FluidNetwork" preserve="nothing" serialized="true" />
+    <type fullname="FluidProductionRecipe" preserve="nothing" serialized="true" />
+    <type fullname="ProductionRecipe" preserve="nothing" serialized="true" />
+    <type fullname="ProductionRecipeCategory" preserve="nothing" serialized="true" />
+    <type fullname="ResearchUI.ResearchCategory" preserve="nothing" serialized="true" />
+    <type fullname="ResearchUI.ResearchNode" preserve="nothing" serialized="true" />
+    <type fullname="ResourceTypeCategory" preserve="nothing" serialized="true" />
+    <type fullname="ResourceWrapper" preserve="nothing" serialized="true" />
+    <type fullname="TradeData.Locations.ColonyLocation" preserve="nothing" serialized="true" />
+    <type fullname="TradeData.Locations.TradeLocation" preserve="nothing" serialized="true" />
+    <type fullname="TradeData.Stats.MinMax" preserve="nothing" serialized="true" />
+    <type fullname="TradeData.Stats.StatData" preserve="nothing" serialized="true" />
+    <type fullname="TradeDeal" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Quests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="Orders.OrderGenConfig" preserve="all" />
+    <type fullname="QuestHolder" preserve="all" />
+    <type fullname="Objectives.AnyExcavationObjective" preserve="nothing" serialized="true" />
+    <type fullname="Objectives.ExcavationObjective" preserve="nothing" serialized="true" />
+    <type fullname="Objectives.ResourceObjective" preserve="nothing" serialized="true" />
+    <type fullname="Orders.ResourceGen" preserve="nothing" serialized="true" />
+    <type fullname="Quest" preserve="nothing" serialized="true" />
+    <type fullname="QuestCategory" preserve="nothing" serialized="true" />
+    <type fullname="TrustPenalty" preserve="nothing" serialized="true" />
+    <type fullname="TrustReward" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.BundledAssetProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.InstanceProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.SceneProvider" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.GameObject" preserve="all" />
+    <type fullname="UnityEngine.Material" preserve="all" />
+    <type fullname="UnityEngine.Mesh" preserve="all" />
+    <type fullname="UnityEngine.MeshFilter" preserve="all" />
+    <type fullname="UnityEngine.MeshRenderer" preserve="all" />
+    <type fullname="UnityEngine.Object" preserve="all" />
+    <type fullname="UnityEngine.RectTransform" preserve="all" />
+    <type fullname="UnityEngine.Rendering.SortingGroup" preserve="all" />
+    <type fullname="UnityEngine.Shader" preserve="all" />
+    <type fullname="UnityEngine.SkinnedMeshRenderer" preserve="all" />
+    <type fullname="UnityEngine.Sprite" preserve="all" />
+    <type fullname="UnityEngine.SpriteRenderer" preserve="all" />
+    <type fullname="UnityEngine.Texture2D" preserve="all" />
+    <type fullname="UnityEngine.Transform" preserve="all" />
+    <type fullname="UnityEngine.RectOffset" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.BoxCollider" preserve="all" />
+    <type fullname="UnityEngine.CapsuleCollider" preserve="all" />
+    <type fullname="UnityEngine.Rigidbody" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.UI.HorizontalLayoutGroup" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.UIElementsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.UIElements.StyleSheet" preserve="all" />
+    <type fullname="UnityEngine.UIElements.VectorImage" preserve="all" />
+    <type fullname="UnityEngine.UIElements.VisualTreeAsset" preserve="all" />
+    <type fullname="UnityEngine.UIElements.VectorImageVertex" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.Button/UxmlFactory" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.Button/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.Label/UxmlFactory" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.Label/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.StyleComplexSelector" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.StyleProperty" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.StyleRule" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.StyleSelector" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.StyleSelectorPart" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.StyleSheets.Dimension" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.StyleValueHandle" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.ToggleButtonGroup/UxmlFactory" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.ToggleButtonGroup/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.UxmlNamespaceDefinition" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.UxmlRootElementFactory" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.VisualElement/UxmlFactory" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.VisualElement/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.VisualElementAsset" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UIElements.VisualTreeAsset/AssetEntry" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Adapters">
+    <type fullname="DataAssign" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="ToolkitUI">
+    <type fullname="ChunkInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="ConstructionInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="FluidInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="HumanInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="InfoWindowElements.LevelInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="InfoWindowElements.StorageInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="InfoWindowViews.AssignInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="InfoWindowViews.ProductionInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="JobInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="PipeInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="ResearchInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="RockInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="VeinInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+    <type fullname="WaterInfo/UxmlSerializedData" preserve="nothing" serialized="true" />
+  </assembly>
+</linker>

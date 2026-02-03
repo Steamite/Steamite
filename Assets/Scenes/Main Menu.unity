@@ -244,6 +244,7 @@ GameObject:
   - component: {fileID: 1793054208}
   - component: {fileID: 1793054203}
   - component: {fileID: 1793054205}
+  - component: {fileID: 1793054210}
   m_Layer: 5
   m_Name: Main Menu
   m_TagString: GameController
@@ -332,6 +333,7 @@ MonoBehaviour:
   - {fileID: 1793054208}
   - {fileID: 1793054203}
   - {fileID: 1793054205}
+  - {fileID: 1793054210}
 --- !u!114 &1793054208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,6 +366,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 979f8d3ea9d33de449ba077b0aa0906b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1793054210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793054200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23e4bdc89b78c3542806ea948b36faa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ToolkitUI::Settings.SettingsWindow
+  windowSizes:
+  - {x: 1920, y: 1080}
+  - {x: 2560, y: 1440}
+  - {x: 1366, y: 768}
+  screenSettings:
+  - Fullscreen
+  - Borderless
+  - Windowed
+  fps: 3c0000005a0000007800000090000000
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

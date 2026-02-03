@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using UnityEditor;
 
 namespace Settings
 {
@@ -49,19 +50,27 @@ namespace Settings
 
             ApplySettings();
         }
-        public void ConfirmSettings(SettingsData data)
+
+        public static SettingsData GetData() => instance.settings;
+        public static void TestSettings(SettingsData data)
         {
-            settings = data;
-            ApplySettings();
+            SettingsData oldSettings = instance.settings;
+            instance.settings = data;
+            instance.ApplySettings();
         }
 
         void ApplySettings()
         {
-            Screen.SetResolution(settings.Width, settings.Height, settings.Fullscreen);
+            Screen.SetResolution(settings.Width, settings.Height, settings.fullScreenMode);
             QualitySettings.SetQualityLevel(settings.QualityLevel);
-            Application.targetFrameRate = settings.MaxFPS;
+            QualitySettings.vSyncCount = settings.VSync ? 1 : 0;
+            if(settings.VSync == false)
+                Application.targetFrameRate = settings.MaxFPS;
+            else
+                Application.targetFrameRate = -1;
 
-            player.SetVolume(settings.MusicVolume, settings.EffectVolume);
+            player.SetVolume(settings.Mute, settings.MasterVolume, settings.MusicVolume, settings.EffectVolume);
         }
+
     }
 }

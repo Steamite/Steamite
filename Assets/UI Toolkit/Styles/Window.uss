@@ -32,8 +32,8 @@
 #unity-tab-view__header-container {
 }
 
-
-
-
+#unity-dragger {
+    max-width: 15px;
+}
 
 
