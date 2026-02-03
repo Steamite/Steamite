@@ -12,11 +12,14 @@ public class Menu : MonoBehaviour
 
     public VisualElement menuContainer;
 
+    [SerializeField] MonoBehaviour settings;
+
     public void Init(Action<string> save, ref Action afterSave)
     {
         gameObject.SetActive(true);
         UIRefs.SaveDialog.Init(save);
         ((IToolkitController)UIRefs.LoadMenu).Init(uiDocument.rootVisualElement);
+        ((IToolkitController)settings).Init(uiDocument.rootVisualElement);
         confrimWindow.Init(uiDocument.rootVisualElement);
         menuContainer = uiDocument.rootVisualElement.Q<VisualElement>("Container");
         menuContainer.Q<Button>("Close").RegisterCallback<ClickEvent>(Toggle);

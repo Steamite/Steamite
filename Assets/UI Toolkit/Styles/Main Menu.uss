@@ -22,6 +22,14 @@
     transition-delay: 0s;
 }
 
+.menu-settings {
+    transition-duration: 2s;
+    transition-timing-function: ease-in-out;
+    transition-property: translate;
+    transition-delay: 0s;
+    translate: 100% 0%;
+}
+
 .window {
     flex-grow: 1;
     position: absolute;
@@ -48,7 +56,7 @@ _______________ {
 }
 
 .main-menu-header {
-    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
+    -unity-font-definition: resource("Fonts & Materials/custom fonts/assets/Alpha-Slab-One");
     -unity-text-align: upper-center;
     font-size: 210px;
     -unity-font-style: normal;

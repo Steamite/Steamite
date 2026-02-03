@@ -1,3 +1,7 @@
+.unity-popup-field__input {
+    min-width: 15%;
+}
+
 #unity-tab-view__header-container {
     font-size: 30px;
 }

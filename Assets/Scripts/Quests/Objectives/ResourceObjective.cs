@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Objectives
 {
+    [Serializable]
     public class ResourceObjective : Objective
     {
         [SerializeField] public MoneyResource resource;
