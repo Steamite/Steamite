@@ -72,5 +72,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 /UIElementsSchema
 /Documentation
-/Packages
+/Packages/*/
 /Assets/Packages

@@ -62,7 +62,7 @@ class LoggingValueProvider : IValueProvider
 public class SaveController : MonoBehaviour, IAfterLoad
 {
     /// <summary>Action trigger after a succesful saving(to update ui).</summary>
-    Action saveUIAction;
+    System.Action saveUIAction;
     /// <summary>Name of the world.</summary>
     string worldName;
 
@@ -248,7 +248,11 @@ public class SaveController : MonoBehaviour, IAfterLoad
 
         foreach (string saveFile in Directory.GetFiles(tmpPath))
         {
+#if LINUX
+            string s = saveFile.Split("/").Last();
+#else
             string s = saveFile.Split("\\").Last();
+#endif
             if (File.Exists($"{path}/{s}"))
                 File.Delete($"{path}/{s}");
             File.Move($"{saveFile}", $"{path}/{s}");

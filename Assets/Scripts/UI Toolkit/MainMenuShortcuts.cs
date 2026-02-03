@@ -27,7 +27,7 @@ namespace StartMenu
                 }
                 else
                 {
-                    mainMenu.CloseWindow();
+                    //mainMenu.CloseWindow();
                 }
             }
         }
