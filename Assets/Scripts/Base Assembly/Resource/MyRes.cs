@@ -398,9 +398,7 @@ public static class MyRes
         List<IStorage> storages = SceneRefs.JobQueue.Storages;
         for (int i = 0; i < storages.Count; i++)
         {
-            Resource diff = storages[i].LocalResources.Future(true).Diff(toRemove);
-            storages[i].LocalResources.Manage(diff, false);
-            toRemove.Manage(diff, false, removeEmpty: true);
+            storages[i].LocalResources.TakeResource(toRemove);
             if (toRemove.types.Count == 0)
                 break;
         }

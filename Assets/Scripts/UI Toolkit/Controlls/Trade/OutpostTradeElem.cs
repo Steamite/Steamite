@@ -54,7 +54,7 @@ public partial class OutpostTradeElem : VisualElement
         rButton = new("choice-button", 0, group) { text = "Sell" };
         rButton = new("choice-button", 1, group) { text = "Collect" };
 
-        Button button = new Button(ResetSliders)
+        /*Button button = new Button(ResetSliders)
         {
             style =
             {
@@ -63,7 +63,8 @@ public partial class OutpostTradeElem : VisualElement
             }
         };
         button.AddToClassList("choice-button");
-        group.Add(button);
+        group.Add(button);*/
+
         Add(group);
         Add(sliderRes = new(false, "stored") { showEmpty = true });
         Add(commitButton = new(Commit)
