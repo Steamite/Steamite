@@ -58,16 +58,7 @@ public class SaveDialog : MonoBehaviour, IGridMenu
 
     public void UpdateButtonState()
     {
-        if (saveName.Length > 0)
-        {
-            saveButton.RemoveFromClassList("disabled-button");
-            saveButton.AddToClassList("confirm-button");
-        }
-        else
-        {
-            saveButton.AddToClassList("disabled-button");
-            saveButton.RemoveFromClassList("confirm-button");
-        }
+        saveButton.enabledSelf = saveName.Length > 0;
     }
 
     public void SaveGame(ClickEvent _)

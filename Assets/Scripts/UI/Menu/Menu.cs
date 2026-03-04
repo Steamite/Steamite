@@ -13,6 +13,12 @@ public class Menu : MonoBehaviour
     public VisualElement menuContainer;
 
     [SerializeField] MonoBehaviour settings;
+    private void Awake()
+    {
+        menuContainer = uiDocument.rootVisualElement.Q<VisualElement>("Container");
+        menuContainer.style.display = DisplayStyle.None;
+    }
+
 
     public void Init(Action<string> save, ref Action afterSave)
     {
@@ -21,7 +27,8 @@ public class Menu : MonoBehaviour
         ((IToolkitController)UIRefs.LoadMenu).Init(uiDocument.rootVisualElement);
         ((IToolkitController)settings).Init(uiDocument.rootVisualElement);
         confrimWindow.Init(uiDocument.rootVisualElement);
-        menuContainer = uiDocument.rootVisualElement.Q<VisualElement>("Container");
+        /*menuContainer = uiDocument.rootVisualElement.Q<VisualElement>("Container");
+        menuContainer.style.display = DisplayStyle.None;*/
         menuContainer.Q<Button>("Close").RegisterCallback<ClickEvent>(Toggle);
         menuContainer.Q<Button>("Main-Menu").RegisterCallback<ClickEvent>(GoToMainMenu);
         menuContainer.Q<Button>("Quit").RegisterCallback<ClickEvent>(DoQuit);
@@ -37,6 +44,11 @@ public class Menu : MonoBehaviour
             bool menuIsOn = menuContainer.style.display == DisplayStyle.Flex;
             if (menuIsOn)
             {
+                if(((IGridMenu)settings).IsOpen())
+                {
+                    ((IGridMenu)settings).CloseWindow();
+                    return;
+                }
                 MainShortcuts.EnableInput();
                 SceneRefs.Tick.UIWindowToggle(true);
             }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38.33 24.91">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="Buttons">
+    <g>
+      <rect class="cls-1" y="18.01" width="11.36" height="6.9"/>
+      <rect class="cls-1" x="13.49" y="18.01" width="11.36" height="6.9"/>
+      <rect class="cls-1" x="26.97" y="18.01" width="11.36" height="6.9"/>
+      <rect class="cls-1" x="6.47" y="9.01" width="11.36" height="6.9"/>
+      <rect class="cls-1" x="20.47" y="9.01" width="11.36" height="6.9"/>
+      <rect class="cls-1" x="13.49" width="11.36" height="6.9"/>
+    </g>
+  </g>
+</svg>

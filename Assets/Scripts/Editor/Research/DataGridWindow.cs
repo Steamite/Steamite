@@ -95,6 +95,27 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
                 field.UnregisterCallback<FocusOutEvent>(NameChange);
             };
         #endregion
+        #region Description
+        dataGrid.columns.Add(new()
+        {
+            name = "description",
+            title = "Descr",
+            makeCell = () => new TextField(),
+            bindCell = (el, i) =>
+            {
+                TextField field = (TextField)el;
+                field.value = ((DATA_TYPE)dataGrid.itemsSource[i]).description;
+                field.RegisterCallback<FocusOutEvent>(DescrChange);
+            },
+            unbindCell =
+            (el, i) =>
+            {
+                TextField field = (TextField)el;
+                field.UnregisterCallback<FocusOutEvent>(DescrChange);
+            }
+
+        });
+        #endregion
         #endregion
     }
 
@@ -119,6 +140,29 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
         if (((DATA_TYPE)dataGrid.itemsSource[i]).Name != value)
         {
             ((DATA_TYPE)dataGrid.itemsSource[i]).Name = value;
+            EditorUtility.SetDirty(holder);
+        }
+    }
+    protected virtual void DescrChange(FocusOutEvent ev)
+    {
+        string value;
+        if (ev.target is TextElement)
+        {
+            TextElement field = (TextElement)ev.target;
+            value = field.text.Trim(' ');
+            field.text = value;
+        }
+        else
+        {
+            TextField field = (TextField)ev.target;
+            value = field.value.Trim(' ');
+            field.value = value;
+        }
+
+        int i = ((VisualElement)ev.target).GetRowIndex();
+        if (((DATA_TYPE)dataGrid.itemsSource[i]).description != value)
+        {
+            ((DATA_TYPE)dataGrid.itemsSource[i]).description = value;
             EditorUtility.SetDirty(holder);
         }
     }

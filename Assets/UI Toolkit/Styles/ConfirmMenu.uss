@@ -1,20 +1,8 @@
 .confirm-button {
-    flex-grow: 1;
-    width: 0;
-    min-width: 40%;
-    margin-right: 4%;
-    background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=c23bbc337457b514697754b60fba36ea&type=3#Button");
     background-color: var(--clear);
-    border-top-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-    padding-bottom: 0;
-    padding-top: 0;
-    align-items: auto;
-    align-content: auto;
     -unity-background-image-tint-color: rgb(60, 55, 22);
     transition-duration: 0.2s;
+    flex-grow: 1;
 }
 
 .confirm-button:hover {
@@ -26,22 +14,9 @@
 }
 
 .cancel-button {
-    flex-grow: 1;
-    width: 0;
-    min-width: 40%;
-    margin-right: 4%;
-    background-image: url("project://database/Assets/Sprites/Textures/Button.png?fileID=2800000&guid=c23bbc337457b514697754b60fba36ea&type=3#Button");
     background-color: var(--clear);
-    border-top-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-    padding-bottom: 0;
-    padding-top: 0;
-    align-items: auto;
-    align-content: auto;
     -unity-background-image-tint-color: rgb(68, 44, 21);
-    transition-duration: 0.2s;
+    flex-grow: 1;
 }
 
 .cancel-button:hover {
@@ -49,7 +24,7 @@
     transition-duration: 0.2s;
     transition-timing-function: ease-out;
     transition-property: all;
-    -unity-background-image-tint-color: rgb(46, 29, 14);
+    -unity-background-image-tint-color: rgb(255, 0, 13);
 }
 
 .resize-window {
@@ -60,7 +35,7 @@
     max-height: none;
     max-width: 30%;
     top: 25%;
-    -unity-font-definition: resource('Fonts & Materials/custom fonts/fonts/AlfaSlabOne-Regular');
+    -unity-font-definition: resource("Fonts & Materials/custom fonts/fonts/AlfaSlabOne-Regular");
     align-content: auto;
     align-items: stretch;
     flex-shrink: 1;

@@ -56,7 +56,7 @@ namespace InfoWindowViews
 
         IProduction building;
         #endregion
-
+        
         #region Constructors
         public ProductionInfo() : base()
         {
@@ -77,11 +77,6 @@ namespace InfoWindowViews
             Add(visualElement);
 
             changeRecipe = new() { text = "Change Recipe" };
-            changeRecipe.AddToClassList("main-button");
-            changeRecipe.style.width = 225;
-            changeRecipe.style.maxWidth = StyleKeyword.None;
-            changeRecipe.style.marginTop = 5;
-            changeRecipe.style.fontSize = 25;
             changeRecipe.clicked += ChangeRecipeClicked;
             visualElement.Add(changeRecipe);
 

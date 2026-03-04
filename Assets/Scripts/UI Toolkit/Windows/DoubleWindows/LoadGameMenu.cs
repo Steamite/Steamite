@@ -56,6 +56,8 @@ public class LoadGameMenu : DoubleWindow
                 continueButton.RegisterCallback<ClickEvent>(Continue);
                 continueButton.ToggleStyleButton(true);
             }
+            else
+                continueButton.ToggleStyleButton(false);
             selectedWorld = -1;
         }
         else

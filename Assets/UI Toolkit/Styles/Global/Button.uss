@@ -1,0 +1,88 @@
+.Empty {
+    background-color: var(--background);
+    flex-grow: 1;
+    -unity-font-style: normal;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.delete-button {
+    background-image: url("project://database/Assets/Sprites/Icons/Info%20window/Cancel.png?fileID=2800000&guid=a038df6f8c235ab42ac4da953bbda40d&type=3#Cancel");
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    top: 15px;
+    right: 15px;
+    align-items: auto;
+    align-content: auto;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    -unity-slice-left: 0;
+    -unity-slice-top: 0;
+    -unity-slice-right: 0;
+    -unity-slice-bottom: 0;
+    -unity-slice-scale: 1px;
+}
+
+.delete-button:hover {
+    background-image: url("project://database/Assets/Sprites/Icons/Info%20window/Cancel.png?fileID=2800000&guid=a038df6f8c235ab42ac4da953bbda40d&type=3#Cancel");
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    top: 15px;
+    right: 15px;
+    align-items: auto;
+    align-content: auto;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+}
+
+.disabled-button {
+    opacity: 1;
+    -unity-text-align: middle-center;
+    transition-property: all;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-in;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    -unity-background-image-tint-color: var(--disabled);
+    background-color: var(--clear);
+    font-size: 50px;
+    color: var(--text-disabled);
+    -unity-slice-scale: 0.5px;
+    -unity-slice-left: 60;
+    -unity-slice-top: 60;
+    -unity-slice-right: 60;
+    -unity-slice-bottom: 60;
+    -unity-slice-type: tiled;
+}
+
+

@@ -92,7 +92,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
                 trade = await newGameInit.InitTrade(0),
                 research = await newGameInit.InitResearch(),
                 humans = newGameInit.InitHumans(size),
-                quests = await newGameInit.InitQuests(),
+                quests = await newGameInit.InitQuests(seed != ""),
                 world = save
             });
     }

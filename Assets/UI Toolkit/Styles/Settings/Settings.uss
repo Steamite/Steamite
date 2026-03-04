@@ -1,7 +1,15 @@
 .unity-popup-field__input {
-    min-width: 15%;
+    min-width: 20%;
 }
 
 #unity-tab-view__header-container {
     font-size: 30px;
+}
+
+.settings-button {
+    bottom: 0;
+    align-self: center;
+    height: 80px;
+    font-size: 40px;
+    min-width: 225px;
 }

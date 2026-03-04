@@ -13,66 +13,24 @@
     flex-shrink: 0;
 }
 
-#Can-Store #unity-toggle-button-group__container {
-    align-self: auto;
-    justify-content: center;
-    flex-direction: row;
-    align-items: auto;
-    align-content: auto;
+#Can-Store > #unity-toggle-button-group__container {
+    align-self: stretch;
+    justify-content: space-around;
 }
 
 .can-store-button {
-    margin-top: 0;
-    margin-right: 2%;
-    margin-bottom: 0;
-    margin-left: 2%;
-    max-width: 30px;
-    max-height: 30px;
-    padding-left: 2px;
-    padding-top: 2px;
-    padding-right: 2px;
-    padding-bottom: 2px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-top-width: 1.5px;
-    border-right-width: 1.5px;
-    border-bottom-width: 1.5px;
-    border-left-width: 1.5px;
-    border-top-color: var(--border);
-    border-right-color: var(--border);
-    border-bottom-color: var(--border);
-    border-left-color: var(--border);
-    background-color: var(--interactable);
-    transition-duration: 0.2s;
+    aspect-ratio: 1;
+    max-width: 40%;
+    -unity-slice-scale: 0.2px;
 }
 
 .can-store-button:hover {
-    background-color: var(--hover);
+    -unity-background-image-tint-color: var(--hover);
 }
 
 .can-store-button:checked {
-    margin-top: 0;
-    margin-right: 2%;
-    margin-bottom: 0;
-    margin-left: 2%;
-    max-width: 30px;
-    max-height: 30px;
-    padding-left: 2px;
-    padding-top: 2px;
-    padding-right: 2px;
-    padding-bottom: 2px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-top-width: 1.5px;
-    border-right-width: 1.5px;
-    border-bottom-width: 1.5px;
-    border-left-width: 1.5px;
-    background-color: var(--selected);
     transition-duration: 0.2s;
+    -unity-background-image-tint-color: var(--selected);
 }
 
 .Capacity {
@@ -119,8 +77,6 @@
     border-left-width: 3px;
     flex-shrink: 0;
     max-width: 136px;
-    max-height: 144px;
-    min-height: 144px;
     min-width: 136px;
     overflow: visible;
     background-color: var(--background);
@@ -128,6 +84,7 @@
     border-right-color: var(--border);
     border-bottom-color: var(--border);
     border-left-color: var(--border);
+    padding-bottom: 15px;
 }
 
 .unity-scroll-view {

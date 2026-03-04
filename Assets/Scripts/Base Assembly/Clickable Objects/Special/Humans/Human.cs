@@ -164,8 +164,7 @@ public class Human : ClickableObject
         SceneRefs.Tick.SubscribeToEvent(Day, Tick.TimeEventType.DayStart);
         ((IModifiable)Inventory.capacity).Init();
         SceneRefs.Tick.SubscribeToEvent(Night, Tick.TimeEventType.Night);
-        if (SceneRefs.Tick.timeInMinutes > 60 * SceneRefs.Tick.dayTime || SceneRefs.Tick.timeInMinutes < 60 * SceneRefs.Tick.nightTime)
-            nightTime = true;
+        nightTime = SceneRefs.Tick.timeInMinutes < 60 * SceneRefs.Tick.dayTime || SceneRefs.Tick.timeInMinutes > 60 * SceneRefs.Tick.nightTime;
     }
 
     /// <summary>

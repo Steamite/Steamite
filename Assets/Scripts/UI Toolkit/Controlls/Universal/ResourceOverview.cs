@@ -32,7 +32,7 @@ public partial class ResourceOverview : CustomRadioButtonGroup, IUIElement
         categories = ResFluidTypes.GetData().Categories.Skip(1).SkipLast(1).ToList();
         for (int i = 0; i < categories.ToList().Count; i++)
         {
-            CustomRadioButton customRadioButton = new("resource-button", i, this, true) { style = { backgroundImage = categories[i].Icon } };
+            CustomRadioButton customRadioButton = new("resource-button", i, this, true) { style = { backgroundImage = Background.FromVectorImage(categories[i].Icon)} };
             customRadioButton.style.backgroundColor = categories[i].color;
         }
         SetChangeCallback(OpenCategory);

@@ -58,16 +58,7 @@ public static class ToolkitUtils
 
     public static void ToggleStyleButton(this Button button, bool activate)
     {
-        if (activate)
-        {
-            button.RemoveFromClassList("disabled-button");
-            button.AddToClassList("main-button");
-        }
-        else
-        {
-            button.AddToClassList("disabled-button");
-            button.RemoveFromClassList("main-button");
-        }
+        button.enabledSelf = activate;
     }
 
     public static VisualElement GetRoot(VisualElement element)

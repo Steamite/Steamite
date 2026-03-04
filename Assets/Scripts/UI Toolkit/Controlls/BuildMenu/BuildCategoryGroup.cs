@@ -1,4 +1,5 @@
 using AbstractControls;
+using System.Linq;
 using UnityEngine.UIElements;
 
 namespace BottomBar.Building
@@ -19,9 +20,11 @@ namespace BottomBar.Building
         CustomRadioButton CreateCategButton(BuildCategWrapper categ, int i)
         {
             CustomRadioButton button = new("building-categ", i, this, true);
+            if (i == 0)
+                button.style.display = DisplayStyle.None;
 
             VisualElement img = new();
-            img.style.backgroundImage = categ.Icon;
+            img.style.backgroundImage = Background.FromVectorImage(categ.Icon);
             img.AddToClassList("building-background");
             button.Add(img);
             return button;

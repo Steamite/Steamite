@@ -8,7 +8,7 @@ public abstract class DoubleWindow : MonoBehaviour, IToolkitController, IGridMen
 {
     protected VisualElement menu;
     protected bool isMainMenu;
-    public void CloseWindow(ClickEvent _ = null)
+    public virtual void CloseWindow(ClickEvent _ = null)
     {
         if (isMainMenu)
             gameObject.GetComponent<MyMainMenu>().CloseWindow();

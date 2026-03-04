@@ -34,6 +34,7 @@ namespace Settings
 
 
         Button saveSettings;
+        Button revertSettings;
         
         SettingsData data;
         Toggle musicToggle;
@@ -120,8 +121,10 @@ namespace Settings
             });
 
             saveSettings = menu.Q<Button>("Save-Settings-Button");
-
             saveSettings.clicked += SaveSettings;
+
+            revertSettings = menu.Q<Button>("Revert-Settings-Button");
+            revertSettings.clicked += RevertSettings;// = menu.Q<Button>("Revert-Settings-Button");
 
             Button settingsButton = root.Q<Button>("Settings-Button");
             settingsButton.RegisterCallback<ClickEvent>(OpenWindow);
@@ -143,6 +146,26 @@ namespace Settings
             else
             {
                 menu.style.display = DisplayStyle.Flex;
+            }
+        }
+        public override void CloseWindow(ClickEvent _ = null)
+        {
+            if (!data.Equals(Settings.GetData()))
+            {
+                ConfirmWindow.window.Open(
+                    () =>
+                    {
+                        LoadFromSettings(Settings.GetData());
+                        base.CloseWindow(_);
+                    },
+                    "Unsaved Changes",
+                    $"You have unsaved changes, do you want to discard them?",
+                    "discard",
+                    "cancel");
+            }
+            else
+            {
+                base.CloseWindow(_);
             }
         }
 
@@ -169,27 +192,24 @@ namespace Settings
             bool b = !data.Equals(Settings.GetData());
             saveSettings.ToggleStyleButton(b);
             saveSettings.enabledSelf = b;
+
+            revertSettings.ToggleStyleButton(b);
+            revertSettings.enabledSelf = b;
         }
 
         private void SaveSettings()
         {
-            /*
-            data = new() 
-            { 
-                MasterVolume = masterVolumeSlider.value,
-                MusicVolume = musicVolumeSlider.value,
-                EffectVolume = effectVolumeSlider.value,
-                Mute = musicToggle.value,
-                VSync = vsyncToggle.value,
-                fullScreenMode = (FullScreenMode)screenSettings.IndexOf(screenDropdown.value),
-                MaxFPS = int.Parse(fpsDropdown.value),
-                Width = int.Parse(resolutionDropdown.value.Split('x')[0]),
-                Height = int.Parse(resolutionDropdown.value.Split('x')[1])
-            };*/
-
             Settings.TestSettings(data);
             UpdateButtonState();
         }
-
+        private void RevertSettings()
+        {
+            ConfirmWindow.window.Open(
+                () => { LoadFromSettings(Settings.GetData()); },
+                "Revert settings?",
+                "Are you sure you want to revert changes to the game settings?",
+                "revert",
+                "cancel");
+        }
     }
 }

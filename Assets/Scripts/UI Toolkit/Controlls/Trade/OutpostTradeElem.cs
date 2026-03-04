@@ -114,16 +114,7 @@ public partial class OutpostTradeElem : VisualElement
     {
         int sum = vals.Sum();
         Debug.Log(sum);
-        if (sum > 0)
-        {
-            commitButton.AddToClassList("main-button");
-            commitButton.RemoveFromClassList("disabled-button");
-        }
-        else
-        {
-            commitButton.RemoveFromClassList("main-button");
-            commitButton.AddToClassList("disabled-button");
-        }
+        commitButton.enabledSelf = sum > 0;
     }
 
     void Commit()

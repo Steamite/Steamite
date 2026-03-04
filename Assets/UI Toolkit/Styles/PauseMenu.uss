@@ -11,7 +11,7 @@
     border-bottom-width: 4px;
     border-left-width: 4px;
     display: flex;
-    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
+    -unity-font-definition: resource("Fonts & Materials/custom fonts/assets/Alpha-Slab-One");
     background-color: var(--background);
     border-top-color: var(--border);
     border-left-color: var(--border);
@@ -59,4 +59,27 @@
     padding-left: 0;
     font-size: 66px;
     -unity-text-align: upper-center;
+}
+
+#PauseMenu > .unity-button {
+    font-size: 65px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+.menu-title {
+    font-size: 61px;
+    -unity-text-align: upper-center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    border-bottom-width: 4px;
+    border-bottom-color: var(--border);
 }

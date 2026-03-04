@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Population
   m_GUID: 1b2a071d731a43443aa1795bb2533ec6
   m_SerializeEntries:
+  - m_GUID: 6339520b3d51c0a418f62377cc3ac65a
+    m_Address: Builder
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 829c2b457e775ae459befe3d32ae4aee
     m_Address: Mushroom farm
     m_ReadOnly: 0

@@ -69,7 +69,7 @@ public class Tick : MonoBehaviour
     [SerializeField] float ticksPerSecond = 4f;
     [SerializeField] float tickTimer = 0f;
     float timeToTick;
-    float timerSpeed = 1f;
+    float timerSpeed;
     public static float LastSpeed;
     bool uiOpen = false;
     #endregion
@@ -171,6 +171,7 @@ public class Tick : MonoBehaviour
             nightStart?.Invoke();
 
         timeToTick = 1f / ticksPerSecond;
+        timerSpeed = 0;
         LastSpeed = 1;
         tickTimer = 0;
         enabled = false;

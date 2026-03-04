@@ -1,4 +1,4 @@
-.bottom-button-group > Button {
+.bottom-button {
     min-width: 90px;
     min-height: 90px;
     flex-grow: 0;
@@ -19,9 +19,14 @@
     border-right-color: var(--border);
     border-bottom-color: var(--border);
     border-left-color: var(--border);
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    background-image: none;
 }
 
-.bottom-button-group > Button:hover {
+.bottom-button:hover {
     scale: 1.05 1.05;
     background-color: var(--hover);
     -unity-background-image-tint-color: var(--text-hover);
@@ -33,4 +38,16 @@
 .bottom-button-group {
     flex-direction: column-reverse;
     min-width: 100px;
+}
+
+.bottom-button > VisualElement {
+    flex-grow: 1;
+    -unity-background-image-tint-color: var(--text-primary);
+    aspect-ratio: 1;
+    transition-duration: 0.2s;
+}
+
+.bottom-button:hover > VisualElement {
+    -unity-background-image-tint-color: var(--text-hover);
+    transition-duration: 0.2s;
 }

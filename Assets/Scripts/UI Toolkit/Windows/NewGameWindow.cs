@@ -49,8 +49,7 @@ namespace StartMenu
             //document.Q<TextField>("World-Name").dataSourcePath = new PropertyPath("value");
             _root.Q<Button>("New-Game-Button").RegisterCallback<ClickEvent>(OpenWindow);
             _root.Q<Button>("New-Close-Button").RegisterCallback<ClickEvent>(CloseWindow);
-            startButton.AddToClassList("disabled-button");
-            startButton.RemoveFromClassList("main-button");
+            startButton.enabledSelf = false;
             WorldName = "";
             selectedOption = 0;
         }
@@ -71,16 +70,7 @@ namespace StartMenu
         public void UpdateButtonState()
         {
             Debug.Log("updating");
-            if (selectedOption > -1 && worldName.Trim().Length > 0)
-            {
-                startButton.AddToClassList("main-button");
-                startButton.RemoveFromClassList("disabled-button");
-            }
-            else
-            {
-                startButton.AddToClassList("disabled-button");
-                startButton.RemoveFromClassList("main-button");
-            }
+            startButton.enabledSelf = selectedOption > -1 && worldName.Trim().Length > 0;
 
             if (selectedOption < 1)
             {

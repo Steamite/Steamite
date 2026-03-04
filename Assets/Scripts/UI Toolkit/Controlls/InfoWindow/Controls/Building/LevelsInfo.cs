@@ -117,7 +117,6 @@ namespace InfoWindowElements
                     height = new Length(60, LengthUnit.Pixel)
                 },
             };
-            moveButton.AddToClassList("main-button");
             moveButton.RegisterCallback<ClickEvent>(HandleButton);
             element.Add(moveButton);
 
@@ -219,16 +218,7 @@ namespace InfoWindowElements
         void MoveButtonUpdate(bool active, string displaystring)
         {
             moveButton.text = displaystring;
-            if (active)
-            {
-                moveButton.RemoveFromClassList("disabled-button");
-                moveButton.AddToClassList("main-button");
-            }
-            else
-            {
-                moveButton.RemoveFromClassList("main-button");
-                moveButton.AddToClassList("disabled-button");
-            }
+            moveButton.enabledSelf = active;
         }
 
         /// <summary>

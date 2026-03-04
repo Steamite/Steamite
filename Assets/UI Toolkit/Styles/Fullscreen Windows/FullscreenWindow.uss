@@ -4,7 +4,7 @@
     position: absolute;
     width: 100%;
     height: 94%;
-    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
+    -unity-font-definition: resource("Fonts & Materials/custom fonts/assets/Alpha-Slab-One");
     -unity-font-style: normal;
     font-size: 40px;
     flex-direction: row;
@@ -41,6 +41,11 @@
     border-left-color: var(--border);
     -unity-background-image-tint-color: var(--text-primary);
     background-color: var(--interactable);
+    -unity-slice-left: 0;
+    -unity-slice-top: 0;
+    -unity-slice-right: 0;
+    -unity-slice-bottom: 0;
+    -unity-slice-scale: 1px;
 }
 
 .close-button:hover {

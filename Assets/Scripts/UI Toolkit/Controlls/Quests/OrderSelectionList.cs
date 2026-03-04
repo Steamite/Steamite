@@ -53,7 +53,6 @@ public partial class OrderSelectionList : VisualElement, IUIElement
         list.Open(order);
         Button button;
         card.Add(button = new Button(() => SelectOrder(i)) { text = "Select" });
-        button.AddToClassList("main-button");
         return card;
     }
 

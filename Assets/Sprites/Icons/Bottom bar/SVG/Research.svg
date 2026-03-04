@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.78 38.04">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3 {
+        fill: #fff;
+        stroke: #fff;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        stroke-width: 3px;
+      }
+
+      .cls-3 {
+        stroke-width: 6px;
+      }
+    </style>
+  </defs>
+  <g id="Buttons">
+    <g>
+      <circle class="cls-1" cx="12.39" cy="25.66" r="11.89"/>
+      <line class="cls-3" x1="12.39" y1=".77" x2="12.39" y2="25.66"/>
+      <line class="cls-2" x1="8.39" y1="1.5" x2="16.39" y2="1.5"/>
+    </g>
+  </g>
+</svg>

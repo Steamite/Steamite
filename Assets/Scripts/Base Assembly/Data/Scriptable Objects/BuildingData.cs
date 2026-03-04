@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [Serializable]
 public class BuildingWrapper : DataObject
@@ -45,7 +46,7 @@ public class BuildCategWrapper : DataCategory<BuildingWrapper>
     [NonSerialized] public List<bool> columnStates;
     public BuildCategWrapper() { }
 
-    public BuildCategWrapper(string _name, Texture2D _categIcon)
+    public BuildCategWrapper(string _name, VectorImage _categIcon)
     {
         Name = _name;
         Icon = _categIcon;

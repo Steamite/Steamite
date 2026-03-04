@@ -17,7 +17,6 @@ public enum QuestState
 [Serializable]
 public class Quest : DataObject, IUpdatable
 {
-    [SerializeField] public string description;
     [SerializeField] public QuestState state = QuestState.Hidden;
     [SerializeField] protected int timeToFail;
     [CreateProperty] public int TimeToFail { get => timeToFail; set => timeToFail = value; }

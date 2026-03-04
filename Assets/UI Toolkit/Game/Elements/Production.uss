@@ -76,6 +76,7 @@ DoubleResourceList Scroller {
     background-color: var(--interactable);
     transition-duration: 0.2s;
     top: 6%;
+    background-image: none;
 }
 
 .production-button:hover {
@@ -91,4 +92,15 @@ DoubleResourceList Scroller {
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
+}
+
+ProductionInfo > VisualElement > .unity-button {
+    -unity-slice-scale: 0.1px;
+    -unity-text-auto-size: none;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    flex-grow: 0;
+    font-size: 14px;
 }

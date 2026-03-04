@@ -67,7 +67,6 @@ namespace ResearchUI
         [SerializeField] public List<int> unlockedBy;
         /// <summary>Next nodes.</summary>
         [SerializeField] public List<int> unlocks;
-        public string description;
 
         [NonSerialized] public Sprite preview;
 

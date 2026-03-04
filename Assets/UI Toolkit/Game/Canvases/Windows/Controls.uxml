@@ -1,0 +1,22 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Global/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button"/>
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Window.uss?fileID=7433441132597879392&amp;guid=a52c4c079ba57c5419681c2f3af6656f&amp;type=3#Window"/>
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Save%20window.uss?fileID=7433441132597879392&amp;guid=eca73d8699a9e1c41a8dd8849b9c0de9&amp;type=3#Save window"/>
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Global/UnitySelectors.uss?fileID=7433441132597879392&amp;guid=3468915a4f8821544854e970a313de3c&amp;type=3#UnitySelectors"/>
+    <ui:VisualElement name="Load-Menu" enabled="true" class="game-window">
+        <ui:VisualElement name="Background" class="menu-view" style="width: 100%; position: relative;">
+            <ui:VisualElement name="Header-Bar" class="bar">
+                <ui:Button text="Close" tooltip="Close" name="Save-Close-Button" class="close-button"/>
+                <ui:Label text="Help" name="Load-Header" class="title"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="Body" style="flex-direction: column; justify-content: flex-start; max-height: 90%; flex-grow: 1; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px; font-size: 40px;">
+                <ui:Label text="Digging - g"/>
+                <ui:Label text="Build - b"/>
+                <ui:Label text="Demolish - delete"/>
+                <ui:Label text="Quests - y"/>
+                <ui:Label text="Trade - t"/>
+                <ui:Label text="Research - r"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
