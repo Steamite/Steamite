@@ -158,7 +158,7 @@ public partial class OutpostView : TradeMapViewBase
 
     void UnlockButtonUpdates(ChangeEvent<string> ev)
     {
-        unlockButton.enabledSelf = ev.newValue == "None";
+        unlockButton.enabledSelf = ev.newValue != "None";
     }
 
     public override object Open(int i)
