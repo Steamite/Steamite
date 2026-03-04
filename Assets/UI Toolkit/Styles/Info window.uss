@@ -27,7 +27,7 @@
     max-width: 90%;
 }
 
-#Body .main-button {
+#Body > .unity-button {
     font-size: 40px;
     padding-left: 5px;
     min-width: 90%;
@@ -61,6 +61,7 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
+    background-image: none;
 }
 
 .close-button:hover {
@@ -167,7 +168,7 @@ ResearchInfo {
     border-bottom-left-radius: 0;
     bottom: 0;
     font-size: 22px;
-    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
+    -unity-font-definition: resource("Fonts & Materials/custom fonts/assets/Alpha-Slab-One");
     display: flex;
     background-color: var(--background);
     border-top-color: var(--border);

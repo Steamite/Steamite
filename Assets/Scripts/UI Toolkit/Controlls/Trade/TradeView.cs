@@ -23,6 +23,8 @@ namespace TradeWindowElements
 
         TradeMap map;
         int BuyMoney, SellMoney, BuyCount, SellCount;
+
+        bool canTrade;
         #endregion
 
         #region Constructors
@@ -129,7 +131,6 @@ namespace TradeWindowElements
                     flexGrow = 1
                 }
             };
-            confirmButton.AddToClassList("main-button");
             confirmButton.clicked += TradeCommit;
             temp.Add(confirmButton);
             summary.Add(temp);
@@ -294,43 +295,37 @@ namespace TradeWindowElements
         void UpdateConfirmButton()
         {
             ((Label)ElementAt(2).ElementAt(0).ElementAt(1)).text = $"{MyRes.Money - BuyMoney + SellMoney} £";
+            canTrade = false;
+
             if (UIRefs.TradingWindow.ConvoyOnRoute(selectedLocationIndex))
             {
-                confirmButton.RemoveFromClassList("main-button");
-                confirmButton.AddToClassList("disabled-button");
                 confirmButton.text = "<line-height=77%>Convoy already on route";
             }
             else if (UIRefs.TradingWindow.AvailableConvoy == 0)
             {
-                confirmButton.RemoveFromClassList("main-button");
-                confirmButton.AddToClassList("disabled-button");
                 confirmButton.text = "No available convoy";
             }
             else if (MyRes.Money + BuyMoney + SellMoney < 0)
             {
-                confirmButton.RemoveFromClassList("main-button");
-                confirmButton.AddToClassList("disabled-button");
                 confirmButton.text = "Not enough money";
             }
             else if (BuyCount + SellCount == 0)
             {
-                confirmButton.RemoveFromClassList("main-button");
-                confirmButton.AddToClassList("disabled-button");
                 confirmButton.text = "Nothing selected";
             }
             else
             {
-                confirmButton.RemoveFromClassList("disabled-button");
-                confirmButton.AddToClassList("main-button");
                 confirmButton.text = "Commit trade";
+                canTrade = true;
             }
+            confirmButton.enabledSelf = canTrade;
         }
         #endregion
 
         #region Commit
         void TradeCommit()
         {
-            if (confirmButton.ClassListContains("main-button"))
+            if (canTrade)
             {
                 Slider slider = (Slider)ToolkitUtils.GetRoot(this).Q<TradeMap>("Map").ElementAt(0).ElementAt(0).ElementAt(selectedLocationIndex).ElementAt(0);
                 UIRefs.TradingWindow.Trade(

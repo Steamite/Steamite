@@ -43,5 +43,5 @@ public class TimeDisplay : MonoBehaviour, IToolkitController
     }
 
     void UpdateYear() =>
-        year.text = (1885 + (SceneRefs.Tick.numberOfDays / 336)).ToString();
+        year.text = (1840 + (SceneRefs.Tick.numberOfDays / 336)).ToString();
 }

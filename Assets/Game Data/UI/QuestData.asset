@@ -38,8 +38,8 @@ MonoBehaviour:
       type: {class: Quest, ns: , asm: Quests}
       data:
         Name: Digging
+        description: Dig
         id: 432565093
-        description: Mine Rocks
         state: 0
         timeToFail: 40
         rewards:
@@ -72,9 +72,9 @@ MonoBehaviour:
     - rid: 8808251705770377220
       type: {class: Quest, ns: , asm: Quests}
       data:
-        Name: m
+        Name: First Order
+        description: 
         id: 1180430887
-        description: jjjjj
         state: 0
         timeToFail: 50
         rewards:

@@ -78,7 +78,6 @@ public partial class ConstructionInfo : InfoWindowControl
         {
             text = "Empty"
         });
-        button.AddToClassList("main-button");
         button.clicked +=
             () =>
             {

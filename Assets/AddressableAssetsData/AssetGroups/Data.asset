@@ -41,6 +41,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5dacd85fbe0644649947d7d82c76c635
+    m_Address: Assets/Game Data/Buildings/Mining
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6ee198ecedba89642a9145722bc073de
     m_Address: InfoWindowControlHolder
     m_ReadOnly: 0

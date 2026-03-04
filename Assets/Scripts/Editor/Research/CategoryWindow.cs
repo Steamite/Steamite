@@ -68,7 +68,7 @@ namespace EditorWindows
                 createCategory.clicked -= RenameCateg;
                 createCategory.clicked += RenameCateg;
 
-                iconElement.style.backgroundImage = selectedCategory.Icon;
+                iconElement.style.backgroundImage = Background.FromVectorImage(selectedCategory.Icon);
                 iconSelector.value = selectedCategory.Icon;
                 categoryNameField.value = selectedCategory.Name;
             }
@@ -98,6 +98,7 @@ namespace EditorWindows
 
             iconElement = rootVisualElement.Q<VisualElement>("Icon-Image");
             iconSelector = rootVisualElement.Q<ObjectField>("Icon-Changer");
+            iconSelector.objectType = typeof(VectorImage);
             iconSelector.UnregisterValueChangedCallback<Object>(IconChange);
             iconSelector.RegisterValueChangedCallback<Object>(IconChange);
 
@@ -108,10 +109,10 @@ namespace EditorWindows
 
         void IconChange(ChangeEvent<Object> ev)
         {
-            if (selectedCategory != null && selectedCategory.Icon != (Texture2D)ev.newValue)
+            if (selectedCategory != null && selectedCategory.Icon != (VectorImage)ev.newValue)
             {
-                selectedCategory.Icon = (Texture2D)ev.newValue;
-                iconElement.style.backgroundImage = selectedCategory.Icon;
+                selectedCategory.Icon = (VectorImage)ev.newValue;
+                iconElement.style.backgroundImage = Background.FromVectorImage(selectedCategory.Icon);
                 EditorUtility.SetDirty(holder);
             }
         }

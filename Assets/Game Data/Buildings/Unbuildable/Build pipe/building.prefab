@@ -91,6 +91,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &1351098271473920992
 BoxCollider:
@@ -125,6 +126,7 @@ SortingGroup:
   m_SortingLayer: 2
   m_SortingOrder: 15
   m_SortAtRoot: 0
+  m_Sort3DAs2D: 0
 --- !u!114 &-4896197024522523346
 MonoBehaviour:
   m_ObjectHideFlags: 0

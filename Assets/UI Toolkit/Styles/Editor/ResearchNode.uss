@@ -117,4 +117,5 @@
 .description-field {
     height: 50px;
     -unity-text-align: upper-left;
+    white-space: normal;
 }

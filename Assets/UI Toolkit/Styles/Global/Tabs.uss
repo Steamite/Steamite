@@ -12,7 +12,6 @@
     -unity-font-style: normal;
     flex-grow: 1;
     flex-shrink: 0;
-    max-width: 50%;
     -unity-text-align: upper-center;
     border-top-width: 0;
     border-bottom-width: 5px;

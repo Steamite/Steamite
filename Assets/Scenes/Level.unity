@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 220867755}
   - component: {fileID: 220867756}
   - component: {fileID: 220867757}
+  - component: {fileID: 220867758}
   m_Layer: 5
   m_Name: Stats
   m_TagString: Untagged
@@ -204,6 +205,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50892ef2b5235ba40902ef079f75e2f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &220867758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220867750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 392cd1538bda30345af0bf035fbc62a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &225780439
 GameObject:
   m_ObjectHideFlags: 0
@@ -1332,7 +1345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9079333737667581699, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.03
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9079333737667581699, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_LocalPosition.z

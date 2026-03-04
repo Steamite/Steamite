@@ -44,15 +44,16 @@
     border-left-color: var(--border);
     background-color: var(--interactable);
     -unity-background-image-tint-color: var(--text-primary);
+    background-image: none;
 }
 
 .building-categ:hover {
     width: 80px;
     height: 80px;
-    padding-top: 4px;
-    padding-right: 4px;
-    padding-bottom: 4px;
-    padding-left: 4px;
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
     margin-top: 0;
     margin-right: 5px;
     margin-bottom: 0;
@@ -98,6 +99,34 @@
     scale: 1.1 1.1;
     background-color: var(--selected);
     -unity-background-image-tint-color: var(--text-secondary);
+}
+
+.building-background {
+    flex-grow: 0;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    flex-shrink: 0;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.building-categ > .building-background {
+    -unity-background-image-tint-color: var(--text-primary);
+    transition-duration: 0.2s;
+}
+
+.building-categ:hover > .building-background {
+    -unity-background-image-tint-color: var(--text-hover);
+    transition-duration: 0.2s;
+}
+
+.building-categ-selected > .building-background {
+    -unity-background-image-tint-color: var(--text-secondary);
+    transition-duration: 0.2s;
 }
 
 .build-bar {
@@ -150,6 +179,7 @@
     border-bottom-color: var(--border);
     border-left-color: var(--border);
     background-color: var(--interactable);
+    background-image: none;
 }
 
 .build-button:hover {
@@ -210,26 +240,12 @@
     overflow: hidden;
 }
 
-.building-background {
-    flex-grow: 0;
-    position: relative;
-    height: 100%;
-    width: 100%;
-    flex-shrink: 0;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 2px;
-    background-image: url("project://database/Assets/Standard%20Assets/SimpleFolderIcon/Icons/Buildings.png?fileID=2800000&guid=64f38df3738bf5344a22370b37df9b1d&type=3#Buildings");
-    -unity-background-image-tint-color: rgb(255, 255, 255);
-}
-
 .build-menu {
     flex-grow: 1;
     align-self: flex-end;
     display: flex;
     font-size: 22px;
-    -unity-font-definition: resource('Fonts & Materials/custom fonts/assets/Alpha-Slab-One');
+    -unity-font-definition: resource("Fonts & Materials/custom fonts/assets/Alpha-Slab-One");
     bottom: 0;
     position: relative;
     min-width: 100%;

@@ -142,25 +142,6 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
         });
         dataGrid.columns.Add(new Column()
         {
-            name = "description",
-            title = "Description",
-            makeCell = () => new TextField() { multiline = true, style = { whiteSpace = WhiteSpace.Normal } },
-            bindCell = (el, i) =>
-            {
-                TextField field = el as TextField;
-                field.value = ((Quest)dataGrid.itemsSource[i]).description;
-                field.RegisterValueChangedCallback(DescriptionChange);
-            },
-            unbindCell = (el, i) =>
-            {
-                TextField field = el as TextField;
-                field.UnregisterValueChangedCallback(DescriptionChange);
-            },
-            resizable = false,
-            width = 100,
-        });
-        dataGrid.columns.Add(new Column()
-        {
             name = "objective",
             title = "Objective",
             makeCell = () => new ObjectiveGridEditor(),
@@ -221,16 +202,6 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
         {
             Quest quest = dataGrid.itemsSource[i] as Quest;
             quest.TimeToFail = ev.newValue;
-            EditorUtility.SetDirty(holder);
-        }
-    }
-    void DescriptionChange(ChangeEvent<string> ev)
-    {
-        int i = ev.target.GetRowIndex();
-        if (ev.previousValue != ev.newValue)
-        {
-            Quest quest = dataGrid.itemsSource[i] as Quest;
-            quest.description = ev.newValue;
             EditorUtility.SetDirty(holder);
         }
     }

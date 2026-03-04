@@ -37,6 +37,7 @@ public static class BindingUtil
         if (dataSource != null)
             ((IUpdatable)dataSource).UIUpdate(sourceProp);
 
+        Debug.Log("test");
         return dataBinding;
     }
 

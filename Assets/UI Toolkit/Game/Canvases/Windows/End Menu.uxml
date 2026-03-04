@@ -4,9 +4,9 @@
         <ui:Label text="Game Over" style="-unity-text-align: middle-center; font-size: 50px;" />
         <ui:Label text="You were replaced, because of your inadequate results!" name="Label" style="align-self: center; margin-top: 50px; font-size: 45px;" />
         <ui:VisualElement style="flex-direction: row; justify-content: space-around; height: 80px; bottom: 0; position: absolute; width: 100%; padding-bottom: 10px;">
-            <ui:Button text="Reload Last Save" name="Last-Save" class="main-button" style="min-width: auto; height: auto; font-size: 28px; width: 308px;" />
-            <ui:Button text="Load" name="Load" class="main-button" style="min-width: auto; height: auto; font-size: 40px; width: 308px;" />
-            <ui:Button text="Main Menu" name="Main-Menu" class="main-button" style="min-width: auto; height: auto; font-size: 40px; width: 308px;" />
+            <ui:Button text="Reload Last Save" name="Last-Save" style="min-width: auto; height: auto; font-size: 28px; width: 308px;" />
+            <ui:Button text="Load" name="Load"  style="min-width: auto; height: auto; font-size: 40px; width: 308px;" />
+            <ui:Button text="Main Menu" name="Main-Menu" style="min-width: auto; height: auto; font-size: 40px; width: 308px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

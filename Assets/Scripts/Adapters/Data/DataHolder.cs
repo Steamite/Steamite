@@ -7,6 +7,7 @@ using UnityEngine;
 public class DataObject
 {
     [SerializeField] public string Name;
+    [SerializeField] public string description;
     [SerializeField] public int id;
 
     public virtual string GetName() => Name;
@@ -15,6 +16,7 @@ public class DataObject
     {
         Name = dataObject.Name;
         id = dataObject.id;
+        description = dataObject.description;
     }
     public DataObject(int _id)
     {
@@ -69,7 +71,10 @@ public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CA
 
     public WRAPPER_T GetObjectBySaveIndex(DataAssign dataAssign)
     {
-        return GetCategByID(dataAssign.categoryId)?.Objects.FirstOrDefault(q => q.id == dataAssign.objectId);
+        WRAPPER_T result = GetCategByID(dataAssign.categoryId)?.Objects.FirstOrDefault(q => q.id == dataAssign.objectId);
+        if (result == null)
+            throw new Exception($"cat: {dataAssign.categoryId}, id: {dataAssign.objectId}");
+        return result;
     }
 
     public DataAssign GetSaveIndexByName(string _name)

@@ -1,12 +1,13 @@
-﻿using Settings.Sound;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Settings.Sound;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
+using static UnityEngine.Analytics.IAnalytic;
 
 namespace Settings
 {
@@ -16,6 +17,7 @@ namespace Settings
         [SerializeField] string settingPath = "/settings.json";
         MusicPlayer player;
 
+        
         static Settings instance;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
@@ -54,9 +56,15 @@ namespace Settings
         public static SettingsData GetData() => instance.settings;
         public static void TestSettings(SettingsData data)
         {
+            instance.Test(data);
+        }
+
+
+        void Test(SettingsData data)
+        {
             SettingsData oldSettings = instance.settings;
-            instance.settings = data;
-            instance.ApplySettings();
+            settings = data;
+            ApplySettings();
         }
 
         void ApplySettings()
@@ -70,6 +78,16 @@ namespace Settings
                 Application.targetFrameRate = -1;
 
             player.SetVolume(settings.Mute, settings.MasterVolume, settings.MusicVolume, settings.EffectVolume);
+
+            SaveToDisk();
+        }
+        void SaveToDisk()
+        {
+            string path = Application.persistentDataPath + settingPath;
+
+            JsonSerializer jsonSerializer = SaveController.PrepSerializer();
+            using JsonTextWriter jsonWriter = new(new StreamWriter(path));
+            jsonSerializer.Serialize(jsonWriter, settings);
         }
 
     }

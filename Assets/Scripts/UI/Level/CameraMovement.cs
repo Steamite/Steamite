@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -93,7 +94,11 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     {
         if (reset.triggered)
         {
-            transform.position = new(10, 1, 10);
+            transform.position = new(
+                MyGrid.gridSize(MyGrid.currentLevel) / 2, 
+                MyGrid.currentLevel, 
+                MyGrid.gridSize(MyGrid.currentLevel) / 2);
+
             transform.rotation = Quaternion.Euler(0, 0, 0);
 
             transform.GetChild(0).localPosition = new(0, 20, -15);
@@ -111,7 +116,29 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
         }
         else
         {
-            transform.Translate(
+            /*transform.Translate(
+                GetSpeed(
+                    ref currentMovementX,
+                    addMovement,
+                    removeMovement,
+                    maxMovement,
+                    MergeMove(
+                        Edge(
+                            mouse.x,
+                            Screen.width),
+                        vec.x)),
+                0,
+                GetSpeed(
+                    ref currentMovementY,
+                    addMovement,
+                    removeMovement,
+                    maxMovement,
+                    MergeMove(
+                        Edge(
+                            mouse.y,
+                            Screen.height),
+                        vec.y)));*/
+            Vector3 toMove = new(
                 GetSpeed(
                     ref currentMovementX,
                     addMovement,
@@ -133,6 +160,12 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
                             mouse.y,
                             Screen.height),
                         vec.y)));
+
+            toMove = (transform.rotation * toMove) + transform.position;
+            int gridSize = MyGrid.gridSize(MyGrid.currentLevel);
+            toMove.x = Mathf.Clamp(toMove.x, 0, gridSize);
+            toMove.z = Mathf.Clamp(toMove.z, 0, gridSize);
+            transform.position = toMove;
         }
 
     }

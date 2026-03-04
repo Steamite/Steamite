@@ -134,7 +134,6 @@ public partial class OutpostView : TradeMapViewBase
         });
 
         unlockButton.enabledSelf = false;
-        unlockButton.AddToClassList("disabled-button");
         if (outpost.CanAffordUpgrade())
         {
             dropdownField.RegisterValueChangedCallback(UnlockButtonUpdates);
@@ -159,18 +158,7 @@ public partial class OutpostView : TradeMapViewBase
 
     void UnlockButtonUpdates(ChangeEvent<string> ev)
     {
-        if (ev.newValue == "None")
-        {
-            unlockButton.RemoveFromClassList("main-button");
-            unlockButton.AddToClassList("disabled-button");
-            unlockButton.enabledSelf = false;
-        }
-        else
-        {
-            unlockButton.AddToClassList("main-button");
-            unlockButton.RemoveFromClassList("disabled-button");
-            unlockButton.enabledSelf = true;
-        }
+        unlockButton.enabledSelf = ev.newValue == "None";
     }
 
     public override object Open(int i)

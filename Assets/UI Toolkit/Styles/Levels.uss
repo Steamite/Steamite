@@ -1,3 +1,7 @@
+#Levels > #Level-View > VisualElement > .unity-button {
+    -unity-slice-scale: 0.3px;
+}
+
 .Level-Group {
     flex-grow: 1;
     justify-content: space-around;
@@ -36,14 +40,6 @@ LevelUnlocker {
     align-content: auto;
     justify-content: flex-start;
     flex-shrink: 0;
-    border-top-width: 4px;
-    border-right-width: 4px;
-    border-bottom-width: 4px;
-    border-left-width: 4px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
     -unity-text-align: middle-center;
     font-size: 60px;
     transition-duration: 0.2s;
@@ -53,11 +49,8 @@ LevelUnlocker {
     min-height: 80px;
     max-width: 80px;
     max-height: 80px;
-    border-top-color: var(--border);
-    border-right-color: var(--border);
-    border-bottom-color: var(--border);
-    border-left-color: var(--border);
-    background-color: var(--disabled);
+    background-image: url("project://database/Assets/Sprites/Icons/Info%20window/ResIcon@4x.png?fileID=2800000&guid=9c948cd08b1522c4a95a3a66fe6242d4&type=3#ResIcon@4x");
+    -unity-background-image-tint-color: var(--disabled);
 }
 
 LevelUnlocker:disabled {
@@ -85,12 +78,12 @@ LevelUnlocker:disabled {
     flex-shrink: 0;
     opacity: 1;
     scale: 1 1;
-    background-color: var(--clear);
+    -unity-background-image-tint-color: var(--disabled);
 }
 
 .Level-Can-Unlock:hover {
     scale: 1.05 1.05;
-    background-color: var(--hover);
+    -unity-background-image-tint-color: var(--hover);
 }
 
 .Level-Opened {
@@ -107,7 +100,7 @@ LevelUnlocker:disabled {
     opacity: 1;
     scale: 1 1;
     text-shadow: 1px 1px 0 rgb(35, 32, 2);
-    background-color: var(--interactable);
+    -unity-background-image-tint-color: var(--interactable);
 }
 
 .Level-Opened:hover {
@@ -123,19 +116,19 @@ LevelUnlocker:disabled {
     flex-shrink: 0;
     opacity: 1;
     scale: 1.05 1.05;
-    background-color: var(--hover);
+    -unity-background-image-tint-color: var(--hover);
 }
 
 .Level-Selected {
     scale: 1.15 1.15;
     text-shadow: 1px 1px 0 rgb(80, 74, 29);
-    background-color: var(--selected);
+    -unity-background-image-tint-color: var(--selected);
 }
 
 .Level-Selected:hover {
     scale: 1.15 1.15;
     text-shadow: 1px 1px 0 rgb(80, 74, 29);
-    background-color: var(--selected);
+    -unity-background-image-tint-color: var(--selected);
 }
 
 .Level-Active {
