@@ -336,6 +336,7 @@ public class Building : StorageObject
     public virtual Chunk Deconstruct(GridPos instantPos)
     {
         Resource r = new();
+        r.Manage(localRes, true);
         if (constructed)
         {
             r.Manage(cost, true);
@@ -344,7 +345,11 @@ public class Building : StorageObject
                 r.ammounts[i] /= 2;
             }
         }
-        r.Manage(localRes, true);
+        else
+        {
+            Resource resource = cost - localRes;
+            MyRes.UpdateResource(resource, true);
+        }
         DestoyBuilding(); // destroy self
         return SceneRefs.ObjectFactory.CreateChunk(instantPos, r, true);
     }
@@ -467,7 +472,8 @@ public class Building : StorageObject
         GetComponent<SortingGroup>().sortingLayerName = "Buildings";
 
         Highlight(new());
-        MyRes.PayCostGlobal(cost);
+        MyRes.UpdateResource(cost, false);
+        MyRes.ManageMoneyGlobal(-cost.Money);
         SceneRefs.JobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         UniqueID();
         MyGrid.SetBuilding(this);

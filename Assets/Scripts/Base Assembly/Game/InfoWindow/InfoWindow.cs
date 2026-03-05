@@ -209,13 +209,13 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     private void MyOnMouseEnter(MouseEnterEvent evt)
     {
         CanZoom = false;
-        Debug.Log("Cant " + evt.currentTarget);
+        //Debug.Log("Cant " + evt.currentTarget);
     }
 
     private void MyOnMouseExit(MouseLeaveEvent evt)
     {
         CanZoom = true;
-        Debug.Log("Can " + evt.currentTarget);
+        //Debug.Log("Can " + evt.currentTarget);
     }
 
     public void CreateTabbedView(Dictionary<string, List<string>> controlsToCreate, System.Object building)

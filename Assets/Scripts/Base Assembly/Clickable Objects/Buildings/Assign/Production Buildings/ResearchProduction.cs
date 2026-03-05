@@ -53,7 +53,7 @@ public class ResearchProduction : Building, IProduction, IAssign
             {
                 Assigned.Add(human);
                 human.transform.SetParent(SceneRefs.Humans.transform.GetChild(1).transform);
-                human.workplace = this;
+                human.Workplace = this;
                 job.job = JobState.FullTime;
 
                 SceneRefs.JobQueue.FreeHuman(human);
@@ -76,7 +76,7 @@ public class ResearchProduction : Building, IProduction, IAssign
         else
         {
             Assigned.Remove(human);
-            human.workplace = null;
+            human.Workplace = null;
             human.transform.SetParent(SceneRefs.Humans.transform.GetChild(0).transform);
             human.Idle();
         }

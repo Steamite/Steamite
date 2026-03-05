@@ -98,10 +98,9 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             gp.ToVec(BUILD_OFFSET),
             Quaternion.Euler(0, rotation, 0),
             MyGrid.FindLevelBuildings(gp.y)).GetComponent<Elevator>();
-        el.constructed = true;
         el.objectName = el.objectName.Replace("(Clone)", "");
-        SceneRefs.JobQueue.AddStorage(el);
         MyGrid.SetBuilding(el, true);
+        el.FinishBuild();
         return el;
     }
 

@@ -74,7 +74,8 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         NewGameInit newGameInit = gameObject.GetComponent<NewGameInit>();
         WorldSave save;
         int size;
-        if (seed != "")
+        bool randomMap = seed != "";
+        if (randomMap)
         {
             save = await gameObject.GetComponent<MapGen>().Generate(seed);
             size = save.gridSave[0].height;
@@ -92,7 +93,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
                 trade = await newGameInit.InitTrade(0),
                 research = await newGameInit.InitResearch(),
                 humans = newGameInit.InitHumans(size),
-                quests = await newGameInit.InitQuests(seed != ""),
+                quests = await newGameInit.InitQuests(randomMap),
                 world = save
             });
     }

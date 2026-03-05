@@ -96,9 +96,7 @@ public class House : Building, IAssign
     /// <returns><returns>Returns homeless <see cref="Human"/>s</returns></returns>
     public List<Human> GetUnassigned()
     {
-        List<Human> unassigned = SceneRefs.Humans.GetHumen();
-        unassigned.RemoveAll(q => Assigned.Contains(q) || q.home != null);
-        return unassigned;
+        return SceneRefs.Humans.GetHumans().Where(q => !Assigned.Contains(q) && q.home == null).ToList();
     }
     #endregion
 
