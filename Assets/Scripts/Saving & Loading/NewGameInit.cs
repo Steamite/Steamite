@@ -99,7 +99,7 @@ public class NewGameInit : MonoBehaviour
         QuestHolder quest = await Addressables.LoadAssetAsync<QuestHolder>("QuestData").Task;
         QuestControllerSave questSave = new()
         {
-            activeQuests = randomMap ? new() { new(quest.Categories[0].Objects[0]) { state = QuestState.Active } } : new(),
+            activeQuests = randomMap ? new() : new() { new(quest.Categories[0].Objects[0]) { state = QuestState.Active } },
             finishedQuests = new(),
             order = new(quest.Categories[2].Objects[0]) { state = QuestState.Active },
             trust = 40,

@@ -249,6 +249,7 @@ public static class MyGrid
         levels[currentLevel].gameObject.SetActive(false);
         currentLevel = newLevel;
         levels[currentLevel].gameObject.SetActive(true);
+        SceneRefs.CameraSceneMover.MoveToLevel(currentLevel);
     }
 
     #region Saving

@@ -213,7 +213,7 @@ public class Rock : ClickableObject
             material.EnableKeyword("_SPECULARHIGHLIGHTS_OFF");
         }
         hidden = true;
-        meshRenderer.enabled = false;
+        meshRenderer.enabled = toBeDug;
     }
 
     public void Unhide()

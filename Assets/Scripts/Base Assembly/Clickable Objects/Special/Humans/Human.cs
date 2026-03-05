@@ -61,7 +61,7 @@ public class Human : ClickableObject
     /// </summary>
     public Building destination;
     /// <summary>Marks the assigned workplace.</summary>
-    public IAssign workplace;
+    public IAssign Workplace { get; set; }
     /// <summary>Action to execute next tick.</summary>
     Action<Human> repetableAction;
     /// <summary>Resources that are being carried.</summary>
@@ -150,7 +150,7 @@ public class Human : ClickableObject
     /// <summary>
     /// Creates a list from <see cref="HumanUtil.humans"/>.
     /// </summary>
-    public override void UniqueID() => CreateNewId(SceneRefs.Humans.GetHumen().Select(q => q.id).ToList());
+    public override void UniqueID() => CreateNewId(SceneRefs.Humans.GetHumans().Select(q => q.id).ToList());
 
     /// <summary>
     /// Links tick, day and night actions.
@@ -213,7 +213,7 @@ public class Human : ClickableObject
         (clickable as HumanSave).inventory = new(inventory);
         (clickable as HumanSave).specs = specialization;
         (clickable as HumanSave).houseID = home ? home.id : -1;
-        (clickable as HumanSave).workplaceId = workplace != null ? ((ClickableObject)workplace).id : -1;
+        (clickable as HumanSave).workplaceId = Workplace != null ? ((ClickableObject)Workplace).id : -1;
         (clickable as HumanSave).effects = efficiency.Save();// = workplace != null ? ((ClickableObject)workplace).id : -1;
         return base.Save(clickable);
     }
@@ -293,7 +293,7 @@ public class Human : ClickableObject
         switch (jData.job)
         {
             case JobState.Free:
-                if (workplace != null)
+                if (Workplace != null)
                     Idle();
                 else
                     HumanActions.LookForNew(this);
@@ -326,7 +326,7 @@ public class Human : ClickableObject
     /// <summary>Gets the Main <see cref="Elevator"/> and if the Human isn't there move to it, else set free state.</summary>
     public void Idle()
     {
-        if (workplace == null)
+        if (Workplace == null)
         {
             GridPos pos = GetPos();
             Elevator el = MyGrid.GetLevelElevator(pos.y);// ClickableObject el = Elevator.main;
@@ -348,7 +348,7 @@ public class Human : ClickableObject
             else
                 ChangeAction(null);
         }
-        else if (workplace is IDiggerHut digger)
+        else if (Workplace is IDiggerHut digger)
         {
             if (!HumanActions.FindRockToDig(this))
             {
@@ -369,7 +369,7 @@ public class Human : ClickableObject
                 }
             }
         }
-        else if(workplace is IBuilderHut builder)
+        else if(Workplace is IBuilderHut builder)
         {
 
             if (!HumanActions.FindBuildingsToConstruct(this) && !HumanActions.FindBuildingsToDeconstruct(this))

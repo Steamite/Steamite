@@ -264,7 +264,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
             {
                 Assigned.Add(human);
                 human.transform.SetParent(SceneRefs.Humans.transform.GetChild(1).transform);
-                human.workplace = this;
+                human.Workplace = this;
                 job.job = JobState.FullTime;
 
                 SceneRefs.JobQueue.FreeHuman(human);
@@ -285,7 +285,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
         else
         {
             Assigned.Remove(human);
-            human.workplace = null;
+            human.Workplace = null;
             human.transform.SetParent(SceneRefs.Humans.transform.GetChild(0).transform);
             human.SetJob(JobState.Free);
             //human.Idle();

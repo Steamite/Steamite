@@ -47,7 +47,7 @@ public static class MyRes
             {
                 resDataSource.GlobalResources.Manage(chunk.LocalRes, true);
             }
-            foreach (Human human in SceneRefs.Humans.GetHumen())
+            foreach (Human human in SceneRefs.Humans.GetHumans())
             {
                 resDataSource.GlobalResources.Manage(human.Inventory, true);
             }

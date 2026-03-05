@@ -17,10 +17,10 @@ public class HumanUtil : MonoBehaviour
 
     #region Getters
     /// <returns>Humans without assigned fulltime job.</returns>
-    public List<Human> GetPartTime() => humans.Where(q => q.workplace == null).ToList();
+    public List<Human> GetPartTime() => humans.Where(q => q.Workplace == null).ToList();
 
     /// <returns>All Humans.</returns>
-    public List<Human> GetHumen() => humans;
+    public List<Human> GetHumans() => humans;
 
     /// <returns>Saved <see cref="humans"/>.</returns>
     public HumanSave[] SaveHumans() => humans.Select(q => q.Save() as HumanSave).ToArray();

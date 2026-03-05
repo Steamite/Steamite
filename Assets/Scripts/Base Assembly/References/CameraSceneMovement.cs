@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -27,5 +28,10 @@ public class CameraSceneMovement : MonoBehaviour
     public void Toggle(bool enable)
     {
         raycaster.enabled = enable;
+    }
+
+    public void MoveToLevel(int currentLevel)
+    {
+        transform.position = new(transform.position.x, 1 + currentLevel * ClickableObjectFactory.LEVEL_HEIGHT, transform.position.z);
     }
 }

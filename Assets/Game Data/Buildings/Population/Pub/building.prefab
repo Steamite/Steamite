@@ -155,7 +155,7 @@ MonoBehaviour:
     carriers: []
     mods: 
   meshRenderers: []
-  buildingCategories: 1
+  buildingCategories: 0
   blueprint:
     size:
       x: 2

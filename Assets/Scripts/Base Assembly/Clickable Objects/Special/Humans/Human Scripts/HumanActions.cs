@@ -110,7 +110,7 @@ public static class HumanActions
     /// <param name="h"></param>
     public static void DoProduction(Human h)
     {
-        if (h.workplace is IProduction prod)
+        if (h.Workplace is IProduction prod)
         {
             prod.ProgressProduction(h.Efficiency * productionSpeed);
         }
@@ -250,7 +250,7 @@ public static class HumanActions
                     return true;
                 break;
             case JobState.Cleanup:
-                if (MyRes.globalStorageSpace == 0)
+                if (MyRes.globalStorageSpace <= 0)
                     break;
                 IEnumerable<ClickableObject> chunks;
                 if ((chunks = MyGrid.chunks.Where(q => q.LocalRes.Future().Sum() > 0)).Count() > 0)
