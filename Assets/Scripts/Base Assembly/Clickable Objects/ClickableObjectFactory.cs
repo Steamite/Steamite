@@ -29,8 +29,6 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     public ProductionRecipeHolder recipeData;
     #endregion
     Material pipeMaterial;
-    public List<int> CenterElevatorIds { get; private set; }
-
 
     #region Tiles
     /// <summary>
@@ -285,7 +283,6 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
 
     public async Task BeforeInit()
     {
-        CenterElevatorIds = new();
         buildPrefabs = await Addressables.LoadAssetAsync<BuildingData>(BuildingData.PATH).Task;
         buildPrefabs.Init();
         recipeData = await Addressables.LoadAssetAsync<ProductionRecipeHolder>(ProductionRecipeHolder.PATH).Task;

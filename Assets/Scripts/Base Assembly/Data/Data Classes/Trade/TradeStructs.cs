@@ -19,6 +19,6 @@ public class TradeDeal
     public TradeDeal(TradeDealSave save)
     {
         type = ResFluidTypes.GetResByIndex(save.type);
-        cost = 0;
+        cost = save.cost;
     }
 }

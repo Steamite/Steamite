@@ -134,6 +134,16 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
                 else
                     description.text = "";
                 break;
+            /*case TradeConvoy convoy:
+                header.text = convoy.firstPhase ? "Going There" : "Coming back";
+                secondHeader.text = "";
+                List<TradeConvoy> convoyList = UIRefs.TradingWindow.GetConvoys();
+                TradeConvoy convoy = convoyList.FirstOrDefault(q => q.tradeLocation == UIRefs.TradingWindow.tradeLocations.IndexOf(tradeLocation));
+                if (convoy != null)
+                    description.text = convoy.ToString();
+                else
+                    description.text = "";
+                break;*/
             case ColonyLocation colonyLocation:
                 header.text = colonyLocation.Name;
                 secondHeader.text = "colony";

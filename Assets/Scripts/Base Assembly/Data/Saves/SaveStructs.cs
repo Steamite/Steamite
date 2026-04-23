@@ -72,15 +72,13 @@ public class GridSave
     public int height;
     public ClickableObjectSave[,] grid;
     public ClickableObjectSave[,] pipes;
-    public int elevatorID;
 
-    public GridSave(int _width, int _height, int _elevatorID)
+    public GridSave(int _width, int _height)
     {
         width = _width;
         height = _height;
         grid = new ClickableObjectSave[_width, _height];
         pipes = new ClickableObjectSave[_width, _height];
-        elevatorID = _elevatorID;
     }
     public GridSave()
     {
@@ -211,6 +209,7 @@ public class BuildingSave : StorageObjectSave
 [Serializable]
 public class StorageBSave : BuildingSave
 {
+    const int BASE_TEST_STORAGE = 50;
     public List<bool> canStore;
     public bool isMain;
 
@@ -225,7 +224,7 @@ public class StorageBSave : BuildingSave
             foreach (var obj in categ.Objects)
             {
                 resSave.types.Add(new(categ.id, obj.id));
-                resSave.ammounts.Add(100);
+                resSave.ammounts.Add(BASE_TEST_STORAGE);
                 canStore.Add(true);
                 i++;
             }

@@ -25,7 +25,7 @@ public class JobQueue : MonoBehaviour
         storages.Add(store);
         MyRes.globalStorageSpace += store.LocalResources.capacity.currentValue;
     }
-    [ReadOnly(true)] public List<IStorage> Storages => storages;
+    [ReadOnly(true)] public List<IStorage> Storages => storages.ToList();
     /// <summary>Job priority</summary>
     [HideInInspector] public List<JobState> priority;
 

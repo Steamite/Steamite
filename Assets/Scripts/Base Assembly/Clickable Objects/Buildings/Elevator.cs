@@ -59,10 +59,7 @@ public class Elevator : Building, IStorage, IBuilderHut
         CanStore = (save as StorageBSave).canStore;
         SceneRefs.JobQueue.AddStorage(this);
         base.Load(save);
-        if (SceneRefs.ObjectFactory.CenterElevatorIds.Contains(id))
-        {
-            MyGrid.UnlockLevel(this, GetPos().y);
-        }
+        MyGrid.UnlockLevel(this, GetPos().y);
     }
     #endregion
 
