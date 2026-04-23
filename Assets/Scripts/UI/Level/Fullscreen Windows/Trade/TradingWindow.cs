@@ -43,7 +43,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
 
     public async Task LoadState(TradeSave tradeSave)
     {
-        RESOURCE_COSTS = new()
+        /*RESOURCE_COSTS = new()
         {
             { ResFluidTypes.None, 0},
             { ResFluidTypes.GetResByName("Coal"), 3},
@@ -51,7 +51,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
             { ResFluidTypes.GetResByName("Stone"), 10},
             { ResFluidTypes.GetResByName("Meat"), 15},
             { ResFluidTypes.GetResByName("Wood"), 12},
-        };
+        };*/
         TradeHolder tradeHolder = Instantiate(await Addressables.LoadAssetAsync<TradeHolder>($"Colony Locations/{tradeSave.colonyLocation}.asset").Task);
         colonyLocation = tradeHolder.startingLocation;
         colonyLocation.LoadGame(tradeSave.prodLevels, tradeSave.statLevels);

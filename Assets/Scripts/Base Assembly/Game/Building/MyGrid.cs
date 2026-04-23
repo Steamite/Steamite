@@ -245,6 +245,13 @@ public static class MyGrid
     /// <param name="newLevel">New level to switch to.</param>
     static public void ChangeGridLevel(int newLevel)
     {
+#if !UNITY_EDITOR
+        if (!levels[newLevel].Unlocked
+            
+            )
+            return;
+#endif
+
         GridChange?.Invoke(currentLevel, newLevel);
         levels[currentLevel].gameObject.SetActive(false);
         currentLevel = newLevel;
@@ -256,7 +263,7 @@ public static class MyGrid
     public static GridSave Save(int i)
     {
         GroundLevel level = levels[i];
-        GridSave gridSave = new(level.height, level.width, level.ConnectingElevator ? level.ConnectingElevator.id : -1);
+        GridSave gridSave = new(level.height, level.width);
         GridPos gp = new();
         for (int x = 0; x < gridSave.height; x++)
         {
@@ -287,7 +294,6 @@ public static class MyGrid
     {
         GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickableObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.GridTiles.transform);
         levels[i] = groundLevel;
-        SceneRefs.ObjectFactory.CenterElevatorIds.Add(gridSave.elevatorID);
 
         groundLevel.ClearGrid(gridSave.width);
         groundLevel.gameObject.SetActive(i == 2);

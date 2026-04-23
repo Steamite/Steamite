@@ -91,7 +91,10 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     public void SetUnlocked(Elevator elevator)
     {
         if (Unlocked)
-            Debug.LogError("Already unlocked!");
+        {
+            //Debug.LogError("Already unlocked!");
+            return;
+        }
         Unlocked = true;
         ConnectingElevator = elevator;
     }
@@ -501,19 +504,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <param name="gridSize">Size of the grid.</param>
     public void CreateGrid(WorldSave save, int level)
     {
-        int _unlocked = -1;
-        for (int i = 0; i < buildings.childCount; i++)
-        {
-            Elevator el;
-            if ((el = buildings.GetChild(i).GetComponent<Elevator>()) != null)
-            {
-                el.id = level;
-                _unlocked = el.id;
-                break;
-            }
-        }
-
-        GridSave grid = new(width, height, _unlocked);
+        GridSave grid = new(width, height);
         save.gridSave[level] = grid;//= new ClickableObjectSave[width, height];
         CreateRocks(save.gridSave[level]); // adds ores
         CreateWater(save.gridSave[level]); // adds water

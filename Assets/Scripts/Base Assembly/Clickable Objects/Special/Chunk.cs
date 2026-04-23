@@ -98,6 +98,7 @@ public class Chunk : StorageObject
             UIUpdate(nameof(LocalRes));
             if (localRes.requests[index].Sum() == 0)
             {
+                localRes.RemoveRequest(h);
                 if (h.Inventory.capacity.currentValue - h.Inventory.Sum() == 0)
                 {
                     FindS(h);

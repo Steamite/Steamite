@@ -72,10 +72,10 @@ public class TradeConvoy
     {
         string s = (firstPhase ? "Going there" : "Returning") + "\n";
 
-        string x = buying.ToString();
-        if (x != "")
-            s += $"resources:{x}";
-        //s += $"reward:{reward}";
+        if(buying.types.Count > 0)
+            s += $"buying:\n{buying}\n\n";
+        if (reward > 0)
+            s += $"reward:\n{reward} £";
         return s;
     }
 }

@@ -73,7 +73,7 @@ public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CA
     {
         WRAPPER_T result = GetCategByID(dataAssign.categoryId)?.Objects.FirstOrDefault(q => q.id == dataAssign.objectId);
         if (result == null)
-            throw new Exception($"cat: {dataAssign.categoryId}, id: {dataAssign.objectId}");
+            Debug.LogError($"cat: {dataAssign.categoryId}, id: {dataAssign.objectId}");
         return result;
     }
 
