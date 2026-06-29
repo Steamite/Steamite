@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+[Serializable]
 public abstract class DataCategory<T> where T : DataObject
 {
     [SerializeField] public int id;

@@ -47,7 +47,7 @@ public class ResearchWindow : FullscreenWindow, IGameDataController<ResearchSave
         statData = Instantiate(await Addressables.LoadAssetAsync<StatData>(StatData.PATH).Task);
         GetWindow();
         SceneRefs.ResearchAdapter.Init(DoResearch);
-        ((IInitiableUI)UIRefs.BottomBar.Q<VisualElement>(className: "build-menu")).Init();
+        ((IInitiableUI)UIRefs.BottomBarRoot.Q<VisualElement>(className: "build-menu")).Init();
         InitResearchStats();
     }
 

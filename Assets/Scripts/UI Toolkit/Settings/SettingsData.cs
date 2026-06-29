@@ -9,7 +9,7 @@ namespace Settings
     {
         public bool Mute;// { get; set; }
         public int MasterVolume;// { get; set; }
-        public int MusicVolume ;// { get; set; }
+        public int MusicVolume;// { get; set; }
         public int EffectVolume;// { get; set; }
 
         public bool VSync;// { get; set; }

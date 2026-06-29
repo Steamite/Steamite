@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public class SaveDialog : MonoBehaviour, IGridMenu
 {
-    [SerializeField] UIDocument uiDoc;
+    [SerializeField, Required] PanelRendererRoot uiDoc;
     public bool opened;
 
     Button saveButton;
@@ -28,29 +28,29 @@ public class SaveDialog : MonoBehaviour, IGridMenu
     public void Init(Action<string> _saveAction)
     {
         saveAction = _saveAction;
-        TextField f = uiDoc.rootVisualElement.Q<TextField>("SaveField");
+        TextField f = uiDoc.Root.Q<TextField>("SaveField");
         f.dataSource = this;
-        saveButton = uiDoc.rootVisualElement.Q<Button>("Save-Game");
-        closeButton = uiDoc.rootVisualElement.Q<Button>("Cancel-Save");
+        saveButton = uiDoc.Root.Q<Button>("Save-Game");
+        closeButton = uiDoc.Root.Q<Button>("Cancel-Save");
 
         closeButton.RegisterCallback<ClickEvent>(CloseWindow);
 
-        Button b = uiDoc.rootVisualElement.Q<Button>("Save");
+        Button b = uiDoc.Root.Q<Button>("Save");
         b.RegisterCallback<ClickEvent>((e) => OpenWindow(e));
         saveName = "";
     }
 
     public void OpenWindow(ClickEvent _)
     {
-        uiDoc.rootVisualElement.Q<VisualElement>("Save-Dialog").style.display = DisplayStyle.Flex;
+        uiDoc.Root.Q<VisualElement>("Save-Dialog").style.display = DisplayStyle.Flex;
         saveButton.RegisterCallback<ClickEvent>(SaveGame);
         opened = true;
     }
 
     public void CloseWindow(ClickEvent _ = null)
     {
-        uiDoc.rootVisualElement.Q<TextField>("SaveField").value = "";
-        uiDoc.rootVisualElement.Q<VisualElement>("Save-Dialog").style.display = DisplayStyle.None;
+        uiDoc.Root.Q<TextField>("SaveField").value = "";
+        uiDoc.Root.Q<VisualElement>("Save-Dialog").style.display = DisplayStyle.None;
         opened = false;
         saveName = "";
         saveButton.UnregisterCallback<ClickEvent>(SaveGame);
@@ -70,10 +70,5 @@ public class SaveDialog : MonoBehaviour, IGridMenu
     public bool IsOpen()
     {
         return opened;
-    }
-
-    public void OpenWindow()
-    {
-        throw new NotImplementedException();
     }
 }

@@ -19,10 +19,10 @@ public class OrderController
 
     public int finishedOrdersCount;
 
-    public OrderController(QuestController _questController, UIDocument _questCatalog, QuestControllerSave saveData)
+    public OrderController(QuestController _questController, PanelRendererRoot _questCatalog, QuestControllerSave saveData)
     {
         data = _questController.data;
-        orderInterface = _questCatalog.rootVisualElement[0][0].Q("OrderInterface") as IUIElement;
+        orderInterface = _questCatalog.Root[0][0].Q("OrderInterface") as IUIElement;
         Quest temp = data.Categories[2].Objects.FirstOrDefault(q => q.id == saveData.order?.objectId);
         if (temp != null)
         {

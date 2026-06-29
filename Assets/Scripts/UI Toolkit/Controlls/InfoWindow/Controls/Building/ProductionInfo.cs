@@ -117,7 +117,7 @@ namespace InfoWindowViews
 
         void ChangeRecipeClicked()
         {
-            VisualElement window = SceneRefs.InfoWindow.secondWindow;
+            VisualElement window = SceneRefs.InfoWindow.SecondWindow;
             if (window.style.display == DisplayStyle.None)
             {
                 SceneRefs.InfoWindow.CreateSecondWindow("Select Recipe", changeRecipe.worldBound);

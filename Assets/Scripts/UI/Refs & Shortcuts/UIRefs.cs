@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,8 +12,8 @@ public class UIRefs : MonoBehaviour
     [SerializeField] FullscreenWindow _quests;
     [SerializeField] Menu _pauseMenu;
     [SerializeField] MonoBehaviour _toolkitShotcuts;
-    [SerializeField] UIDocument _bottomBar;
-    [SerializeField] UIDocument _topBar;
+    [SerializeField] PanelRendererRoot _bottomBar;
+    [SerializeField] PanelRendererRoot _topBar;
 
     [SerializeField] SaveDialog _saveDialog;
     [SerializeReference] MonoBehaviour _loadMenu;
@@ -22,8 +23,11 @@ public class UIRefs : MonoBehaviour
     public static ResearchWindow ResearchWindow => instance._research;
     public static FullscreenWindow Quests => instance._quests;
     public static Menu PauseMenu => instance._pauseMenu;
-    public static VisualElement BottomBar => instance._bottomBar.rootVisualElement[0];
-    public static UIDocument TopBar => instance._topBar;
+    public static PanelRendererRoot BottomBar => instance._bottomBar;
+    public static VisualElement BottomBarRoot => instance._bottomBar.Root;
+
+    public static PanelRendererRoot TopBar => instance._topBar;
+    public static VisualElement TopBarRoot => instance._topBar.Root;
 
     public static IToolkitController ToolkitShortcuts => instance._toolkitShotcuts.GetComponent<IToolkitController>();
 
@@ -38,8 +42,9 @@ public class UIRefs : MonoBehaviour
     {
         instance = this;
 
-        ((IInitiableUI)BottomBar).Init();
+        ((IInitiableUI)BottomBarRoot.Q("BottomButtonBar")).Init();
     }
+
 
     public static bool WindowConstraint()
     {

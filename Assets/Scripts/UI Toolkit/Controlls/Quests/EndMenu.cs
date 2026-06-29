@@ -8,26 +8,26 @@ public class EndMenu : MonoBehaviour, IUIElement
     [SerializeField] VisualTreeAsset asset;
 
     public LoadGameMenu loadGameMenu;
-    UIDocument doc;
+    PanelRendererRoot doc;
 
     public void Open(object data)
     {
         MainShortcuts.DisableAll();
         bool result = (bool)data;
-        doc = gameObject.AddComponent<UIDocument>();
-        doc.panelSettings = settings;
-        doc.visualTreeAsset = asset;
-        doc.sortingOrder = 5;
+        doc = gameObject.AddComponent<PanelRendererRoot>();
+        doc.Renderer.panelSettings = settings;
+        doc.Renderer.visualTreeAsset = asset;
+        doc.Renderer.sortingOrder = 5;
 
         UIRefs.FullscreenConstraint();
         SceneRefs.Tick.UIWindowToggle(false);
         if (result)
         {
-            GameWon(doc.rootVisualElement[0]);
+            GameWon(doc.Root[0]);
         }
         else
         {
-            GameLost(doc.rootVisualElement[0][2]);
+            GameLost(doc.Root[0][2]);
         }
     }
 

@@ -46,7 +46,6 @@ namespace BottomBar
             if(action != null)
                 button.clicked += action;
             button[0].style.backgroundImage = Background.FromVectorImage(image);
-            button[0].style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
         }
         public void Init()
         {

@@ -52,7 +52,7 @@ public class HiddenSaveEditor //: PropertyDrawer
         
         HiddenSave save = Activator.CreateInstance(t) as HiddenSave;
         Rock r = inspectedObject as Rock;
-        r.GetComponent<Rock>().hiddenSave = save;
+        r.GetComponent<Rock>().HiddenSave = save;
         EditorUtility.SetDirty(r.gameObject);
         
         RebuildBody(save);
