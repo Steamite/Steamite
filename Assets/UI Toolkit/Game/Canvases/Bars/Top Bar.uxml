@@ -3,14 +3,20 @@
     <Style src="project://database/Assets/UI%20Toolkit/Styles/TopBar.uss?fileID=7433441132597879392&amp;guid=4fe123aa2d844744b9e1a00d21362590&amp;type=3#TopBar"/>
     <Style src="project://database/Assets/UI%20Toolkit/Styles/StatusBar.uss?fileID=7433441132597879392&amp;guid=b591f8d887031d24b933f7e2268f24d0&amp;type=3#StatusBar"/>
     <engine:VisualElement name="TopBar" class="topBar" style="overflow: visible; justify-content: center;">
-        <engine:VisualElement name="time-container" style="flex-direction: row; position: absolute; left: 0;">
+        <engine:VisualElement name="time-container" style="flex-direction: row; position: absolute; left: 0; height: 100%; align-self: flex-start;">
             <engine:VisualElement name="TimeDisplay" class="time">
-                <engine:Label text="00" name="Hour" style="border-left-width: 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; width: 50px; padding-left: 10px;"/>
-                <engine:Label text=":" name="Separator" style="border-left-width: 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; width: 25px; -unity-text-align: middle-center;"/>
-                <engine:Label text="00" name="Minute" style="border-left-width: 0; margin-right: 0; width: 56px; padding-right: 10px;"/>
-                <engine:Label text="00." name="Day" style="border-left-width: 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; width: 60px; padding-left: 10px;"/>
-                <engine:Label text="00." name="Month" style="border-left-width: 0; margin-right: 0; width: 73px; padding-right: 10px; padding-left: 10px;"/>
-                <engine:Label text="1856" name="Year" style="border-top-width: 0; border-right-width: 3px; border-bottom-width: 0; border-left-width: 0; width: 100px; padding-right: 10px;"/>
+                <engine:VisualElement class="time-part">
+                    <engine:Label text="00" name="Hour" style="border-left-width: 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; width: 60px;"/>
+                    <engine:Label text=":" name="Separator" style="padding-bottom: 8px;"/>
+                    <engine:Label text="00" name="Minute" style="width: 60px;"/>
+                </engine:VisualElement>
+                <engine:VisualElement class="time-part" style="flex-grow: 1; flex-direction: row;">
+                    <engine:Label text="00." name="Day" style="width: 65px;"/>
+                    <engine:Label text="00." name="Month" style="width: 65px;"/>
+                </engine:VisualElement>
+                <engine:VisualElement class="time-part" style="flex-grow: 1;">
+                    <engine:Label text="1856" name="Year" style="width: 100px;"/>
+                </engine:VisualElement>
             </engine:VisualElement>
             <TimeButtons speed-states="0,1,2,3" current-state="2" name="Buttons" sprite="project://database/Assets/Resources/Icon/Pause.png?fileID=2800000&amp;guid=388d058ebff7c4844823b4c308f1488e&amp;type=3#Pause"/>
         </engine:VisualElement>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,8 @@ public class SceneRefs : MonoBehaviour
 
     [Header("Canvas")]
     [SerializeField] Transform _stats;
-    [SerializeField] UIDocument _miscellaneous;
+    [SerializeField] PanelRendererRoot _miscellaneous;
+    
     [SerializeField] InfoWindow _infoWindow;
     [SerializeField] CameraSceneMovement _cameraSceneMover;
 
@@ -44,7 +46,6 @@ public class SceneRefs : MonoBehaviour
     public static Tick Tick => instance._tick;
 
     public static Transform Stats => instance._stats;
-    public static UIDocument Miscellaneous => instance._miscellaneous;
     public static InfoWindow InfoWindow => instance._infoWindow;
     public static CameraSceneMovement CameraSceneMover => instance._cameraSceneMover;
 
@@ -86,15 +87,14 @@ public class SceneRefs : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(MessageToggle(text));
     }
-
     /// <summary>
     /// Shows message for 2 seconds.
     /// </summary>
     /// <param name="text">Message text.</param>
     IEnumerator MessageToggle(string text)
     {
-        ((Label)Miscellaneous.rootVisualElement[1]).text = text;
+        ((Label)_miscellaneous.Root[1]).text = text;
         yield return new WaitForSecondsRealtime(2f);
-        ((Label)Miscellaneous.rootVisualElement[1]).text = "";
+        ((Label)_miscellaneous.Root[1]).text = "";
     }
 }

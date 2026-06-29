@@ -61,7 +61,7 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
             resources.ammounts.Add(0);
         }
 
-        VisualElement root = gameObject.GetComponent<UIDocument>().rootVisualElement;
+        VisualElement root = gameObject.GetComponent<PanelRendererRoot>().Root;
 
         moneyLabel = root.Q<Label>("Money-Value");
         moneyLabel.SetBinding(nameof(Money), nameof(Label.text), (ref int _Money) => $"{Money} <color=#FFD700>" + (char)163 + "</color>", this);

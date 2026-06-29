@@ -7,7 +7,7 @@ public abstract class FullscreenWindow : MonoBehaviour
     public bool isOpen = false;
     public virtual void GetWindow()
     {
-        window = gameObject.GetComponent<UIDocument>().rootVisualElement;
+        window = gameObject.GetComponent<PanelRendererRoot>().Root;
         window.style.display = DisplayStyle.None;
         window[0].style.display = DisplayStyle.Flex;
     }

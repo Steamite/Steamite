@@ -271,3 +271,7 @@
 BuildButtonList {
     align-self: flex-start;
 }
+
+BottomButtonBar > .bottom-button-group > .bottom-button > VisualElement {
+    -unity-background-scale-mode: scale-to-fit;
+}

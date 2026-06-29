@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
-
 /// <summary>All groups of objects that can be inspected. For switching info window views.</summary>
 public enum InfoMode
 {
@@ -58,14 +57,19 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     /// <summary>For styling resouces in UI elements.</summary>
     //public ResourceSkins resourceSkins;
 
+
+    [SerializeField] PanelRendererRoot infoWindowRenderer;
     /// <summary>Info window text header.</summary>
     public IUIElement header;
     /// <summary>Info window itself.</summary>
-    public VisualElement window;
-    public VisualElement windowBody;
-    public VisualElement secondWindow;
-    public VisualElement secondBody;
-    public VisualElement newWindow;
+    VisualElement window;
+    VisualElement windowBody;
+
+    public VisualElement SecondWindow => secondWindow;
+    VisualElement secondWindow;
+    VisualElement secondBody;
+
+    VisualElement newWindow;
 
     VisualElement secondWindowAnchor;
 
@@ -107,11 +111,13 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     public async Task BeforeInit()
     {
         lastInfo = InfoMode.None;
-        VisualElement root = gameObject.GetComponent<UIDocument>().rootVisualElement;
+        VisualElement root = infoWindowRenderer.Root;
         window = root.Q<VisualElement>("Info-Window");
         windowBody = window[1];
+
         secondWindowAnchor = root[1];
         secondWindow = root[1][0];
+
         secondBody = secondWindow[1];
         (secondWindow[0][1] as Button).clicked += CloseSecondWindow;
         controls = await Addressables.LoadAssetAsync<InfoWindowControlHolder>("InfoWindowControlHolder").Task;
@@ -288,4 +294,5 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         activeBindings.Clear();
     }
     #endregion
+
 }
