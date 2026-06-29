@@ -202,7 +202,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
 
         // create progress val for loading slider
         int maxprogress = 0;
-        for (int i = 0; i < worldSave.gridSave.Length; i++)
+        for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
             maxprogress += worldSave.gridSave[i].width * worldSave.gridSave[i].height * TILE_WEIGHT; // Tiles and pipes
         maxprogress += worldSave.objectsSave.buildings.Length * BUILD_WEIGHT; //scale number
         maxprogress += worldSave.objectsSave.chunks.Length * CHUNK_WEIGHT;

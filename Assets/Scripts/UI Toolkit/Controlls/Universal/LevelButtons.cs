@@ -5,14 +5,13 @@ using UnityEngine.UIElements;
 [UxmlElement]
 public partial class LevelButtons : CustomRadioButtonGroup
 {
-    [UxmlAttribute] List<int> levels = new() { 1, 2, 3, 4, 5 };
     public LevelButtons() : base()
     {
         buttons = new();
-        for (int i = 0; i < levels?.Count; i++)
+        for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
         {
             CustomRadioButton button = new("status-bar-button", i, this);
-            button.text = $"{levels[i]}";
+            button.text = $"{i}";
             button.style.marginTop = 5;
             button.style.marginBottom = 5;
             button.enabledSelf = false;
@@ -27,7 +26,7 @@ public partial class LevelButtons : CustomRadioButtonGroup
         buttons[0].SelectWithoutTransition(false);
         MyGrid.AddToGridChange(OutsideTrigger);
         object level;
-        for (int i = 0; i < levels.Count; i++)
+        for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
         {
             level = MyGrid.GetGroundLevelData(i);
             hierarchy[i].SetBinding(

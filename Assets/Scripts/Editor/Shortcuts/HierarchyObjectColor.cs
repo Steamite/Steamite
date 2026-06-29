@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 /// <summary> Sets a background color for game objects in the Hierarchy tab</summary>
@@ -10,15 +11,14 @@ public class HierarchyObjectColor
 
     static HierarchyObjectColor()
     {
-        EditorApplication.hierarchyWindowItemOnGUI += HandleHierarchyWindowItemOnGUI;
+        EditorApplication.hierarchyWindowItemByEntityIdOnGUI += EntityDraw;
         highlightObjects = (HighlightObjectHolder)Resources.Load("Holders/Editor/Highlight holder");
         icon = EditorGUIUtility.IconContent("GameObject Icon").image as Texture2D;//EditorGUIUtility.FindTexture("GameObject On Icon");
     }
 
-
-    private static void HandleHierarchyWindowItemOnGUI(int instanceID, Rect selectionRect)
+    static void EntityDraw(EntityId entityId, Rect selectionRect) 
     {
-        var obj = EditorUtility.EntityIdToObject(instanceID);
+        var obj = EditorUtility.EntityIdToObject(entityId);
         if (obj != null)
         {
             Color backgroundColor = Color.white;

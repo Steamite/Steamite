@@ -8,7 +8,7 @@ public static class MyGrid
 {
     #region Variables
     /// <summary>Number of Levels in game.</summary>
-    public const int NUMBER_OF_LEVELS = 5;
+    public const int NUMBER_OF_LEVELS = 6;
 
     public const int ROAD_SCAN_RADIUS = 2;
 
@@ -97,7 +97,7 @@ public static class MyGrid
         chunks = new List<Chunk>();
         veins = new List<Vein>();
         fluidNetworks = new();
-        levels = new GroundLevel[5];
+        levels = new GroundLevel[NUMBER_OF_LEVELS];
         currentLevel = 2;
         pipes = new();
     }

@@ -67,7 +67,7 @@ public class MapGen : MonoBehaviour
 
         minCenter = (gridSize / 2) - 5;
         maxCenter = (gridSize / 2) + 5;
-        world.gridSave = new GridSave[5];
+        world.gridSave = new GridSave[MyGrid.NUMBER_OF_LEVELS];
 
         StorageBSave save = (StorageBSave)elevator.Save();
         save.id = 20;
@@ -81,7 +81,7 @@ public class MapGen : MonoBehaviour
             new ChunkSave[] { },
             new VeinSave[] { });
 
-        for (level = 0; level < 5; level++)
+        for (level = 0; level < MyGrid.NUMBER_OF_LEVELS; level++)
         {
             GridSave levelSave = new(gridSize, gridSize);
 
@@ -169,7 +169,7 @@ public class MapGen : MonoBehaviour
         int _veinSize = minable.size[level].Value(veinSize);
 
         while (_veinSize > 0)
-            AddTiles(_veinSize, minable, x, z + 1);
+            AddTiles(ref _veinSize, minable, x, z + 1);
     }
 
     /// <summary>
@@ -179,7 +179,7 @@ public class MapGen : MonoBehaviour
     /// <param name="minable">Vein parameters.</param>
     /// <param name="x">Position to start.</param>
     /// <param name="z">Position to start</param>
-    void AddTiles(int numberOfTiles, MinableRes minable, int x, int z)
+    void AddTiles(ref int numberOfTiles, MinableRes minable, int x, int z)
     {
         int maxX = 0;
         int maxY = 1;
