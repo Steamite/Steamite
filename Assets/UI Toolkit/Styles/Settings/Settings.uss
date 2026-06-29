@@ -11,5 +11,5 @@
     align-self: center;
     height: 80px;
     font-size: 40px;
-    min-width: 225px;
+    width: 250px;
 }

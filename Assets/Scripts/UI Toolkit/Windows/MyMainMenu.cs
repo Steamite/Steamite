@@ -16,9 +16,13 @@ namespace StartMenu
 
         bool instaLoad = false;
 
-        void Start()
+        private void Awake()
         {
-            root = gameObject.GetComponent<UIDocument>().rootVisualElement;
+            gameObject.GetComponent<PanelRendererRoot>().RegisterReload(Init);
+        }
+        void Init(VisualElement element)
+        {
+            root = element;
             elements = root.Q<VisualElement>("Elements");
             blocker = root.Q<VisualElement>("Main-Blocker");
 

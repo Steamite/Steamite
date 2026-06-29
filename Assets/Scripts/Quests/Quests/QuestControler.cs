@@ -12,9 +12,8 @@ using UnityEngine.UIElements;
 public class QuestController : FullscreenWindow, IQuestController, IGameDataController<QuestControllerSave>, IUpdatable
 {
     [SerializeField] public GameObject ExcavationIcon;
-    [SerializeField] UIDocument _questCatalog;
+    [SerializeField] PanelRendererRoot questCatalogRenderer;
     IUIElement questCatalog;
-    [SerializeField] UIDocument _questInteface;
     IUIElement questInteface;
     public QuestHolder data;
     public GameObject endMenu;
@@ -99,18 +98,18 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         }
         orderController = new(
                 this,
-                _questCatalog,
+                questCatalogRenderer,
                 saveData);
         SceneRefs.Tick.SubscribeToEvent(UpdateTimers, Tick.TimeEventType.Ticks);
 
-        questInteface = _questInteface.rootVisualElement.Q("QuestGroup") as IUIElement;
+        questInteface = UIRefs.BottomBarRoot.Q("QuestGroup") as IUIElement;
         questInteface.Open(this);
 
-        questCatalog = _questCatalog.rootVisualElement[0][0].Q("QuestCatalog") as IUIElement;
+        questCatalog = questCatalogRenderer.Root[0][0].Q("QuestCatalog") as IUIElement;
 
 
         GetWindow();
-        (_questCatalog.rootVisualElement[0][1] as Button).clicked += CloseWindow;
+        (questCatalogRenderer.Root[0][1] as Button).clicked += CloseWindow;
 
     }
 

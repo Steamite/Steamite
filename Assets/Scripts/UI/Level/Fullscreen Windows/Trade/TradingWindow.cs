@@ -61,7 +61,7 @@ public class TradingWindow : FullscreenWindow, IGameDataController<TradeSave>
         outposts = tradeSave.outposts.Select(q => new Outpost(q)).ToList();
         SceneRefs.Stats.GetComponent<ResourceDisplay>().Money = tradeSave.money;
         GetWindow();
-        VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+        VisualElement root = GetComponent<PanelRendererRoot>().Root;
         map = (IFullScreenWindowElem)root.Q<VisualElement>("Map");
         ((IInitiableUI)map).Init();
         ((IInitiableUI)root.Q<VisualElement>("Colony")[0]).Init();

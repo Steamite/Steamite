@@ -30,9 +30,12 @@
                         <ui:DropdownField label="Resolution" name="Resolution-Dropdown" class="param"/>
                     </ui:VisualElement>
                 </ui:ScrollView>
-                <ui:VisualElement style="flex-grow: 1; flex-direction: row; position: absolute; bottom: 0; align-self: stretch; width: 100%; justify-content: space-around; padding-right: 20%; padding-left: 20%;">
-                    <ui:Button text="Revert" name="Revert-Settings-Button" class="settings-button"/>
-                    <ui:Button text="Save" name="Save-Settings-Button" class="settings-button"/>
+                <ui:VisualElement style="flex-direction: row; position: absolute; bottom: 0; padding-right: 0; padding-left: 0; padding-top: 0; padding-bottom: 0; width: 100%; justify-content: space-between;">
+                    <ui:Button text="Default" name="Reset-Settings-Button" class="settings-button" style="align-self: flex-end;"/>
+                    <ui:VisualElement name="VisualElement">
+                        <ui:Button text="Revert" name="Revert-Settings-Button" class="settings-button"/>
+                        <ui:Button text="Save" name="Save-Settings-Button" class="settings-button"/>
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:Tab>
         </ui:TabView>

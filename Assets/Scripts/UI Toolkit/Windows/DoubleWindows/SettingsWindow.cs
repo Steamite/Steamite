@@ -32,7 +32,7 @@ namespace Settings
             144,
         };
 
-
+        Button resetSettings;
         Button saveSettings;
         Button revertSettings;
         
@@ -115,10 +115,14 @@ namespace Settings
             resolutionDropdown.choices = windowSizes.ConvertAll(res => $"{res.x}x{res.y}");
             resolutionDropdown.RegisterValueChangedCallback((q) => 
             {
-                data.Width = int.Parse(q.newValue.Split('x')[0]);
-                data.Height = int.Parse(q.newValue.Split('x')[1]);
+                string[] list = q.newValue.Split('x');
+                data.Width = int.Parse(list[0]);
+                data.Height = int.Parse(list[1]);
                 UpdateButtonState();
             });
+
+            resetSettings = menu.Q<Button>("Reset-Settings-Button");
+            resetSettings.clicked += ResetSettings;
 
             saveSettings = menu.Q<Button>("Save-Settings-Button");
             saveSettings.clicked += SaveSettings;
@@ -190,6 +194,7 @@ namespace Settings
         public override void UpdateButtonState()
         {
             bool b = !data.Equals(Settings.GetData());
+
             saveSettings.ToggleStyleButton(b);
             saveSettings.enabledSelf = b;
 
@@ -197,18 +202,33 @@ namespace Settings
             revertSettings.enabledSelf = b;
         }
 
-        private void SaveSettings()
+        void SaveSettings()
         {
             Settings.TestSettings(data);
             UpdateButtonState();
         }
-        private void RevertSettings()
+
+        void RevertSettings()
         {
             ConfirmWindow.window.Open(
                 () => { LoadFromSettings(Settings.GetData()); },
                 "Revert settings?",
                 "Are you sure you want to revert changes to the game settings?",
                 "revert",
+                "cancel");
+        }
+
+        void ResetSettings()
+        {
+            ConfirmWindow.window.Open(
+                () => 
+                {
+                    Settings.ResetSettings();
+                    LoadFromSettings(Settings.GetData()); 
+                },
+                "Reset settings?",
+                "Are you sure you want to reset ALL changes to the game settings?",
+                "reset",
                 "cancel");
         }
     }

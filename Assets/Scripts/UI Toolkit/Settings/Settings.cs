@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
 using static UnityEngine.Analytics.IAnalytic;
@@ -13,8 +14,11 @@ namespace Settings
 {
     public class Settings : MonoBehaviour
     {
+        [SerializeField] SettingsData defaultSettings;
         [SerializeField] SettingsData settings;
-        [SerializeField] string settingPath = "/settings.json";
+
+        string Path => System.IO.Path.Combine(Application.persistentDataPath, SETTINGS_PATH);
+        const string SETTINGS_PATH = "settings.json";
         MusicPlayer player;
 
         
@@ -40,27 +44,27 @@ namespace Settings
         }
 
         void Start()
-        {
-            string path = Application.persistentDataPath + settingPath;
-            
-            if (File.Exists(path))
+        {            
+            if (!File.Exists(Path))
             {
-                JsonSerializer jsonSerializer = SaveController.PrepSerializer();
-                using JsonTextReader jsonReader = new(new StreamReader(path));
-                settings = jsonSerializer.Deserialize<SettingsData>(jsonReader);
+                DoReset();
+                return;
             }
 
+            JsonSerializer jsonSerializer = SaveController.PrepSerializer();
+            using(StreamReader reader = new StreamReader(Path))
+            {
+                using JsonTextReader jsonReader = new(reader);
+                settings = jsonSerializer.Deserialize<SettingsData>(jsonReader);
+            }
             ApplySettings();
         }
 
         public static SettingsData GetData() => instance.settings;
-        public static void TestSettings(SettingsData data)
-        {
-            instance.Test(data);
-        }
+        public static void ResetSettings() => instance.DoReset();
+        public static void TestSettings(SettingsData data) => instance.DoTest(data);
 
-
-        void Test(SettingsData data)
+        void DoTest(SettingsData data)
         {
             SettingsData oldSettings = instance.settings;
             settings = data;
@@ -81,14 +85,24 @@ namespace Settings
 
             SaveToDisk();
         }
+
         void SaveToDisk()
         {
-            string path = Application.persistentDataPath + settingPath;
-
             JsonSerializer jsonSerializer = SaveController.PrepSerializer();
-            using JsonTextWriter jsonWriter = new(new StreamWriter(path));
+            using StreamWriter writer = new StreamWriter(Path);
+            using JsonTextWriter jsonWriter = new(writer);
             jsonSerializer.Serialize(jsonWriter, settings);
         }
 
+
+        void DoReset()
+        {
+            settings = defaultSettings;
+            var res = Screen.currentResolution;
+            settings.Width = res.width;
+            settings.Height = res.height;
+            settings.MaxFPS = (int)Math.Round(res.refreshRateRatio.value);
+            ApplySettings();
+        }
     }
 }
