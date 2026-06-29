@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testLevels:
+  - {fileID: 8292747787264182705, guid: 0ed46548ac0ad9a48bdb7e039fc61544, type: 3}
   - {fileID: 8292747787264182705, guid: aed02f0746a70df4182f61780b0431bd, type: 3}
   - {fileID: 8292747787264182705, guid: 5d2fc7fe1586e9a4f92424803d3e179a, type: 3}
   - {fileID: 8292747787264182705, guid: 526772f9b42d92d44a6ec1a51a46d23e, type: 3}
@@ -194,7 +195,7 @@ MonoBehaviour:
   maxToRemove: 25
   minToAdd: 1
   maxToAdd: 6
-  gridSizes: 150000001f00000033000000
+  gridSizes: 150000001f00000065000000
   minableResources:
   - {fileID: 11400000, guid: a8d8035b791c05943ba13e1333106fc9, type: 2}
   - {fileID: 11400000, guid: 1c3d32d887bb74046af6627885ac30b8, type: 2}
@@ -221,6 +222,7 @@ MonoBehaviour:
   numberOfDays: 6
   dayTime: 360
   priority: 00000000020000000300000004000000050000000600000007000000
+  numberOfHumans: 6
 --- !u!114 &642414934
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "DefaultKeyBinds",
     "maps": [
         {
@@ -583,10 +584,21 @@
             "bindings": [
                 {
                     "name": "",
+                    "id": "b297a635-03c4-41cd-9d39-8f6232943eb3",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "Scale(factor=0)",
+                    "groups": "",
+                    "action": "Level",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "a84da518-dcae-4283-b2f1-c037d5fd3951",
                     "path": "<Keyboard>/1",
                     "interactions": "",
-                    "processors": "Scale(factor=0)",
+                    "processors": "Scale",
                     "groups": "",
                     "action": "Level",
                     "isComposite": false,
@@ -597,7 +609,7 @@
                     "id": "d2b3f9b6-2ad9-4147-8862-5568f178fe9a",
                     "path": "<Keyboard>/2",
                     "interactions": "",
-                    "processors": "Scale",
+                    "processors": "Scale(factor=2)",
                     "groups": "",
                     "action": "Level",
                     "isComposite": false,
@@ -608,7 +620,7 @@
                     "id": "4a4523ff-a494-4f43-9801-830c99100145",
                     "path": "<Keyboard>/3",
                     "interactions": "",
-                    "processors": "Scale(factor=2)",
+                    "processors": "Scale(factor=3)",
                     "groups": "",
                     "action": "Level",
                     "isComposite": false,
@@ -619,7 +631,7 @@
                     "id": "b0ae404d-0f04-41c6-8702-d5a9f8eb7a30",
                     "path": "<Keyboard>/4",
                     "interactions": "",
-                    "processors": "Scale(factor=3)",
+                    "processors": "Scale(factor=4)",
                     "groups": "",
                     "action": "Level",
                     "isComposite": false,
@@ -630,7 +642,7 @@
                     "id": "28096aec-dca1-401c-a767-699bc948756f",
                     "path": "<Keyboard>/5",
                     "interactions": "",
-                    "processors": "Scale(factor=4)",
+                    "processors": "Scale(factor=5)",
                     "groups": "",
                     "action": "Level",
                     "isComposite": false,

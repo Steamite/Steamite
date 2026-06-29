@@ -1466,7 +1466,7 @@ MonoBehaviour:
   dayTime: 6
   nightTime: 21
   lastTick: 0
-  ticksPerSecond: 4
+  ticksPerSecond: 1
   tickTimer: 0
 --- !u!114 &8150810313726245685
 MonoBehaviour:

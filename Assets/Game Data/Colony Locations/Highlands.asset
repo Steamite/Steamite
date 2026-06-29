@@ -22,9 +22,9 @@ MonoBehaviour:
       production:
       - min: 2
         max: 5
-      stats:
       - min: 2
         max: 4
+      stats: []
     stats:
     - {fileID: 11400000, guid: 3780807cb90310743a9367fdf8d146c1, type: 2}
     production: []

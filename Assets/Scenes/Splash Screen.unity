@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: ToolkitUI::Settings.Settings
   settings:
-    Mute: 0
+    Mute: 1
     MasterVolume: 100
     MusicVolume: 100
     EffectVolume: 100

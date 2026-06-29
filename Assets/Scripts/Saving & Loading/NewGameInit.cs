@@ -14,15 +14,17 @@ public class NewGameInit : MonoBehaviour
     [SerializeField] int dayTime = 6 * 60;
     [SerializeField] List<JobState> priority;
 
+    [SerializeField] int numberOfHumans = 3;
+
     #region Grid
-    public void CreateGrid(List<GroundLevel> mainLevel, out WorldSave save)
+    public void CreateGrid(List<GroundLevel> levelPrefabs, out WorldSave save)
     {
         save = new();
-        save.gridSave = new GridSave[5];
+        save.gridSave = new GridSave[MyGrid.NUMBER_OF_LEVELS];
         save.objectsSave = new(new BuildingSave[] { }, new ChunkSave[] { }, new VeinSave[] { });
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
         {
-            mainLevel[i].CreateGrid(save, i);
+            levelPrefabs[i].CreateGrid(save, i);
         }
     }
 
@@ -62,13 +64,13 @@ public class NewGameInit : MonoBehaviour
     /// <param name="humanActivation">Event that links new humans to activation.</param>
     public HumanSave[] InitHumans(int gridSize)
     {
-        HumanSave[] saves = new HumanSave[3];
+        HumanSave[] saves = new HumanSave[numberOfHumans];
         GridPos pos = new(gridSize / 2, 0, gridSize / 2);
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < numberOfHumans; i++)
         {
             saves[i] = new()
             {
-                color = new(hatMaterial[i]),
+                color = new(hatMaterial[i % hatMaterial.Count]),
                 gridPos = pos,
                 houseID = -1,
                 id = i,

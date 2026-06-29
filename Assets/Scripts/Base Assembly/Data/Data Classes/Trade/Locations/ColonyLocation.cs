@@ -18,7 +18,7 @@ namespace TradeData.Locations
 
         public void DoProduction()
         {
-            foreach (ColonyStat stat in stats)
+            foreach (ColonyStat stat in production)
             {
                 stat.DoStat();
             }

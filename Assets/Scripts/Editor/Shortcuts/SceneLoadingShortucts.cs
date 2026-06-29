@@ -53,7 +53,7 @@ public class SceneLoadingShortucts : MonoBehaviour
     {
         if (state == PlayModeStateChange.ExitingEditMode)
         {
-            if (EditorSceneManager.GetActiveScene().name == "Level")
+            if (EditorSceneManager.GetActiveScene().name != "Main Menu")
             {
                 EditorSceneManager.SaveOpenScenes();
                 string activeSceneName = EditorSceneManager.GetActiveScene().name;
@@ -93,7 +93,7 @@ public class SceneLoadingShortucts : MonoBehaviour
             EditorSceneManager.OpenScene($"{scenePath}Splash Screen.unity");
         }
     }
-    [MenuItem("Custom Editors/Load/Main Menu _F2", priority = 1)]
+    [MenuItem("Custom Editors/Load/Main Menu _F5", priority = 1)]
     static void LoadMainMenu()
     {
         if (EditorSceneManager.GetActiveScene().name != "Main Menu")

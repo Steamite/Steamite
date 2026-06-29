@@ -182,7 +182,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
                 jsonSerializer,
                 new BuildsAndChunksSave(SaveBuildings(), SaveChunks(), SaveVeins()));
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
                 WriteSave(
                     $"{tmpPath}/Level{i}.json",
                     jsonSerializer,

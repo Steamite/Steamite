@@ -4,6 +4,7 @@ using System.Collections.Generic;
 /// https://github.com/delta-cs/lectures/blob/master/12_binarni_halda/12_binarni_halda.pdf
 class Queue
 {
+    
     List<PathNode> queue;
     List<PathNode> visited;
     public Queue(GridPos startGp)
@@ -11,6 +12,13 @@ class Queue
         queue = new() { new(startGp, 0, null) };
         visited = new();
     }
+
+    public Queue()
+    {
+        queue = new();
+        visited = new();
+    }
+
 
     void BubbleUp(int index)
     {

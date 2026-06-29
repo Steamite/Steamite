@@ -109,16 +109,11 @@
 #Buttons {
     flex-direction: row;
     justify-content: space-between;
-    flex-grow: 0;
     align-self: center;
     align-items: center;
-    width: 250px;
-    max-width: 250px;
-    left: 10px;
 }
 
 .time {
-    height: 100%;
     align-content: flex-end;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
@@ -138,5 +133,13 @@
     margin-top: 0;
     margin-right: 0;
     flex-direction: row;
-    width: 360px;
+}
+
+#Buttons > CustomRadioButton {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+#LevelButtons > CustomRadioButton {
+    margin-right: 5px;
 }
