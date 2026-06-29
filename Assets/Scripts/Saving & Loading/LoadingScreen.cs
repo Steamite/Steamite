@@ -113,7 +113,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     async Task StartLoading(string _folderName, string _worldName, Save save)
     {
         worldName = _worldName;
-        VisualElement loadingScreenWindow = transform.GetComponent<UIDocument>().rootVisualElement;
+        VisualElement loadingScreenWindow = transform.GetComponent<PanelRendererRoot>().Root;
         loadingScreenWindow[0].style.display = DisplayStyle.Flex;
 
         Label actionText = loadingScreenWindow.Q<Label>("Title");
@@ -434,7 +434,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         humanActivation?.Invoke();
         humanActivation = null;
         SceneRefs.Tick.InitTicks();
-        UIRefs.TopBar.GetComponent<IToolkitController>().Init(UIRefs.TopBar.rootVisualElement);
+        UIRefs.TopBar.GetComponent<IToolkitController>().Init(UIRefs.TopBarRoot);
     }
 
     public void UIUpdate(string property = "")

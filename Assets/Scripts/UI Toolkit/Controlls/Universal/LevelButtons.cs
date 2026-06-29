@@ -11,7 +11,7 @@ public partial class LevelButtons : CustomRadioButtonGroup
         for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
         {
             CustomRadioButton button = new("status-bar-button", i, this);
-            button.text = $"{i}";
+            button.text = $"{i+1}";
             button.style.marginTop = 5;
             button.style.marginBottom = 5;
             button.enabledSelf = false;

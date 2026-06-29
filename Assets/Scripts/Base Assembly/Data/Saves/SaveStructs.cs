@@ -5,7 +5,6 @@ using System.Linq;
 using TradeData.Locations;
 using UnityEngine;
 
-[Serializable]
 public class JobSave
 {
     /// <summary>Helps with finding the interest, by chosing the correct list to search in.</summary>
@@ -65,7 +64,6 @@ public struct WorldSave
     public GridSave[] gridSave;
 }
 
-[Serializable]
 public class GridSave
 {
     public int width;
@@ -85,7 +83,6 @@ public class GridSave
     }
 }
 
-[Serializable]
 public class BuildsAndChunksSave
 {
     public BuildingSave[] buildings;
@@ -100,14 +97,12 @@ public class BuildsAndChunksSave
     }
 }
 
-[Serializable]
 public class ClickableObjectSave
 {
     public int id;
     public string objectName;
 }
 
-[Serializable]
 public class RockSave : ClickableObjectSave
 {
     public ResourceSave yeild;
@@ -136,7 +131,6 @@ public enum HiddenType
     Nothing,
     Water
 }
-[Serializable]
 public class HiddenSave
 {
     public HiddenType assignedType;
@@ -144,7 +138,6 @@ public class HiddenSave
 }
 
 
-[Serializable]
 public class WaterSave : ClickableObjectSave
 {
     public ResourceSave fluid;
@@ -166,7 +159,6 @@ public class WaterSave : ClickableObjectSave
     }
 }
 
-[Serializable]
 public class VeinSave : ClickableObjectSave
 {
     public GridPos gridPos;
@@ -179,19 +171,16 @@ public class VeinSave : ClickableObjectSave
 ////////////////////////////////////////////////////////////
 //---------------------Grid Buildings---------------------//
 ////////////////////////////////////////////////////////////
-[Serializable]
 public class StorageObjectSave : ClickableObjectSave
 {
     public StorageResSave resSave;
     public GridPos gridPos;
 }
 
-[Serializable]
 public class ChunkSave : StorageObjectSave
 {
     public MyColor resColor;
 }
-[Serializable]
 public class BuildingSave : StorageObjectSave
 {
     ///public Build build;
@@ -206,7 +195,6 @@ public class BuildingSave : StorageObjectSave
     public DataAssign prefabConnection;
 }
 
-[Serializable]
 public class StorageBSave : BuildingSave
 {
     const int BASE_TEST_STORAGE = 50;
@@ -232,19 +220,16 @@ public class StorageBSave : BuildingSave
     }
 }
 
-[Serializable]
 public class AssignBSave : BuildingSave
 {
     public List<int> assigned;
     public int limit;
 }
 
-[Serializable]
 public class ResProductionBSave : ProductionBSave
 {
     public StorageResSave inputRes;
 }
-
 public class ProductionBSave : AssignBSave
 {
     public float currentTime = 0;
@@ -269,7 +254,6 @@ public class FluidResProductionSave : ResProductionBSave
 }
 
 
-[Serializable]
 public class FluidProdBSave : ProductionBSave
 {
     public ResourceSave fluidSave;
@@ -300,7 +284,6 @@ public class HumanSave : ClickableObjectSave
 
     }
 }
-[Serializable]
 public class StorageResSave : ResourceSave
 {
     [JsonProperty, JsonRequired] public List<ResourceSave> Requests { get; set; }
@@ -330,7 +313,6 @@ public class StorageResSave : ResourceSave
         return HashCode.Combine(base.GetHashCode(), types, ammounts, Requests, carriers, mod);
     }
 }
-[Serializable]
 public class GameStateSave
 {
     public List<JobState> priorities;
@@ -340,7 +322,6 @@ public class GameStateSave
 
 }
 
-[Serializable]
 public class MyColor
 {
     public float r;
@@ -360,6 +341,7 @@ public class MyColor
     }
 }
 
+[Serializable]
 public class ResourceSave
 {
     public List<DataAssign> types;

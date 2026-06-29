@@ -8,15 +8,18 @@ public class Menu : MonoBehaviour
 {
     [SerializeField] ConfirmWindow confrimWindow;
 
-    [SerializeField] UIDocument uiDocument;
+    [SerializeField] PanelRendererRoot menuRenderer;
 
     public VisualElement menuContainer;
 
     [SerializeField] MonoBehaviour settings;
     private void Awake()
     {
-        menuContainer = uiDocument.rootVisualElement.Q<VisualElement>("Container");
-        menuContainer.style.display = DisplayStyle.None;
+        menuRenderer.RegisterReload((e) =>
+        {
+            menuContainer = e.Q<VisualElement>("Container");
+            menuContainer.style.display = DisplayStyle.None;
+        });
     }
 
 
@@ -24,10 +27,10 @@ public class Menu : MonoBehaviour
     {
         gameObject.SetActive(true);
         UIRefs.SaveDialog.Init(save);
-        ((IToolkitController)UIRefs.LoadMenu).Init(uiDocument.rootVisualElement);
-        ((IToolkitController)settings).Init(uiDocument.rootVisualElement);
-        confrimWindow.Init(uiDocument.rootVisualElement);
-        /*menuContainer = uiDocument.rootVisualElement.Q<VisualElement>("Container");
+        ((IToolkitController)UIRefs.LoadMenu).Init(menuRenderer.Root);
+        ((IToolkitController)settings).Init(menuRenderer.Root);
+        confrimWindow.Init(menuRenderer.Root);
+        /*menuContainer = PanelRenderer.rootVisualElement.Q<VisualElement>("Container");
         menuContainer.style.display = DisplayStyle.None;*/
         menuContainer.Q<Button>("Close").RegisterCallback<ClickEvent>(Toggle);
         menuContainer.Q<Button>("Main-Menu").RegisterCallback<ClickEvent>(GoToMainMenu);

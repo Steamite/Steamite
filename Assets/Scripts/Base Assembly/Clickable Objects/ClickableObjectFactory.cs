@@ -304,15 +304,15 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
 
     public void CreateObjectUnderRock(Rock rock)
     {
-        if (rock.hiddenSave.assignedType == HiddenType.Nothing)
+        if (rock.HiddenSave.assignedType == HiddenType.Nothing)
             CreateRoad(rock.GetPos(), true);
         else
         {
-            switch (rock.hiddenSave.assignedType)
+            switch (rock.HiddenSave.assignedType)
             {
                 case HiddenType.Water:
                     CreateSavedWater(new(
-                        rock.hiddenSave.ammount),
+                        rock.HiddenSave.ammount),
                         rock.GetPos());
 
                     break;

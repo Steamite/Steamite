@@ -27,7 +27,8 @@ public class Rock : ClickableObject
     public bool toBeDug;
 
     /// <summary>Data for replacement.</summary>
-    public HiddenSave hiddenSave = new();
+    HiddenSave hiddenSave = new();
+    public HiddenSave HiddenSave { get => hiddenSave; set => hiddenSave = value; }
 
     bool hidden = true;
     public bool isQuest = false;

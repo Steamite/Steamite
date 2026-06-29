@@ -21,7 +21,7 @@ public class ToolkitShortucts : MonoBehaviour, IAfterLoad
 
     public void AfterInit()
     {
-        VisualElement bottomBar = UIRefs.TopBar.rootVisualElement;
+        VisualElement bottomBar = UIRefs.TopBarRoot;
         shift = inputAsset.actionMaps[1].FindAction("Shift");
 
         gameSpeed = smallShortcuts.FindAction("Game Speed");
@@ -83,7 +83,7 @@ public class ToolkitShortucts : MonoBehaviour, IAfterLoad
 
             if (buildMenu.triggered)
             {
-                ((BuildMenu)UIRefs.BottomBar[1]).Toggle();
+                ((BuildMenu)UIRefs.BottomBarRoot[1]).Toggle();
             }
         }
     }

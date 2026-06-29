@@ -164,17 +164,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e95bc17bc8a1047bf4ebf3147f2a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ToolkitUI::Settings.Settings
-  settings:
-    Mute: 1
+  defaultSettings:
+    Mute: 0
     MasterVolume: 100
     MusicVolume: 100
     EffectVolume: 100
-    VSync: 0
+    VSync: 1
     MaxFPS: 60
-    fullScreenMode: 0
+    fullScreenMode: 1
     Width: 1920
     Height: 1080
     QualityLevel: 0
+  settings:
+    Mute: 0
+    MasterVolume: -1
+    MusicVolume: -1
+    EffectVolume: -1
+    VSync: 0
+    MaxFPS: -1
+    fullScreenMode: 0
+    Width: -1
+    Height: -1
+    QualityLevel: -1
   settingPath: /settings.json
 --- !u!1 &944944566
 GameObject:

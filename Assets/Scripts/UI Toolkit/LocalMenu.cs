@@ -25,7 +25,7 @@ public class LocalMenu : MonoBehaviour, IAfterLoad
     int width = 300;
     public void AfterInit()
     {
-        menu = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Menu");
+        menu = GetComponent<PanelRendererRoot>().Root.Q<VisualElement>("Menu");
         menu.pickingMode = PickingMode.Ignore;
         menu.style.display = DisplayStyle.None;
         ToolkitUtils.localMenu = this;
