@@ -227,8 +227,8 @@ MonoBehaviour:
     categoryId: 3
     objectId: 512409920
   range:
-    baseValue: 5
-    currentValue: 5
+    baseValue: 7
+    currentValue: 7
     mod:
       percentMod: 1
       absoluteMod: 0

@@ -9,14 +9,14 @@ using UnityEngine.UIElements;
 public interface IEffectObject
 {
     public ModifiableInteger Range { get; set; }
-    public List<Road> effectRoads { get; set; }
+    public List<Road> EffectRoads { get; set; }
 
-    GridPos effectPos { get; set; }
+    GridPos EffectPos { get; set; }
 
     void RepaintTiles()
     {
         if(this is ClickableObject clickable && clickable.selected)
-            MyGrid.GetOverlay().CreateTileOverlay(effectRoads.Select(q => q.GetPos()));
+            MyGrid.GetOverlay().CreateTileOverlay(EffectRoads.Select(q => q.GetPos()));
     }
 
     public void RecalculateRange()
@@ -30,17 +30,17 @@ public interface IEffectObject
         // GetPos() + blueprint.moveBy.Rotate(transform.rotation.eulerAngles.y)
         IEnumerable<ClickableObject> obj = MyGrid.GetTilesInRange(
             Range.currentValue,
-            effectPos,
+            EffectPos,
             typeof(Road));
-        List<Road> temp = effectRoads.ToList();
-        effectRoads.Clear();
+        List<Road> temp = EffectRoads.ToList();
+        EffectRoads.Clear();
 
         if (enable == true)
         {
-            foreach (Road road in obj)
+            foreach (Road road in obj.Cast<Road>())
             {
                 temp.Remove(road);
-                effectRoads.Add(road);
+                EffectRoads.Add(road);
 
                 if (road == null) continue;
                 road.AddEffect(this);
