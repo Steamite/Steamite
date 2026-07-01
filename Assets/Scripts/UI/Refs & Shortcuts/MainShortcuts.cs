@@ -59,7 +59,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
             instance.menu.performed += ShotcutActions.Menu_performed;
         }
         UIRefs.LevelCamera.enabled = false;
-        SceneRefs.GridTiles.activeObject = null;
+        SceneRefs.GridTiles.ActiveObject = null;
     }
     public static void EnableInput()
     {

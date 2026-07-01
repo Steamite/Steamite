@@ -18,12 +18,14 @@ public enum ControlMode
     Build,
     Upgrade
 }
-
-/// <summary>Handles Input on the game Grid.</summary>
+[RequireComponent(typeof(MouseEvents), typeof(MultiSelect), typeof(BuildingActions))]
 public class GridTiles : MonoBehaviour
 {
     #region Variables
     [SerializeField] MultiSelect multiSelect;
+    [SerializeField] MouseEvents mouseEvents;
+    [SerializeField] BuildingActions buildingActions;
+
     //bool buildingPlaced = false;
     /// <summary>Raycast mask for building.</summary>
     public LayerMask buildingMask;
@@ -33,375 +35,135 @@ public class GridTiles : MonoBehaviour
 
     /// <summary>Current active control mode.</summary>
     public ControlMode ActiveControl { get; private set; } = ControlMode.Nothing;
-    [SerializeField] InputAction shiftKey;
+    public InputAction shiftKey;
 
-    /// <summary>Last mouse position.</summary>
-    public GridPos activePos;
-    /// <summary>Starting mouse position when dragging.</summary>
-
-    /// <summary>If the mouse is down and trying to drag.</summary>
-    public bool drag = false;
     /// <summary>Drag started on a marked tile.</summary>
     public bool deselect = false;
-
     
-    /// <summary>Currently selected building for construction.</summary>
-    [Header("Tilemaps")] Building blueprintPrefab;
-
-    /// <summary>Changed from <see cref="BuildMenu"/></summary>
-    public Building BuildPrefab
-    {
-        get => blueprintPrefab;
-        set
-        {
-            blueprintPrefab = value;
-            if (value == null)
-            {
-                if (blueprintInstance != null)
-                    ChangeSelMode(ControlMode.Nothing);
-            }
-            else
-                ChangeSelMode(ControlMode.Build);
-        }
-    }
-
-    /// <summary>Building that's currently beeing placed.</summary>
-    Building blueprintInstance;
-    public Building BlueprintInstance
-    {
-        get => blueprintInstance;
-        set
-        {
-            MyGrid.GetOverlay().DestroyBuilingTiles();
-            blueprintInstance = value;
-            if (value == null)
-            {
-                DeselectBuildingButton?.Invoke();
-                ChangeSelMode(ControlMode.Nothing);
-            }
-        }
-    }
+    
     public Action DeselectBuildingButton;
 
-
-    /// <summary>Clicked(selected) object.</summary>
-    public ClickableObject clickedObject;
-    /// <summary>Last object with mouse contact.</summary>
-    public ClickableObject activeObject;
-
     /// <summary>List of all usable cursors.</summary>
-    [Tooltip("used to help determine control states")] public Texture2D[] cursors;
-    /// <summary>Basic highlight color(for selection).</summary>
-    public Color highlight = Color.white / 3;
-
-    public Color ToBeDugColor => multiSelect.toBeDugColor;
+    [Tooltip("used to help determine control states")] 
+    public Texture2D[] cursors;
     #endregion
+
+    #region Building
+    ///<inheritdoc cref="BuildingActions.BlueprintPrefab"/>
+    public Building BlueprintPrefab 
+    { 
+        get => buildingActions.BlueprintPrefab; 
+        set => buildingActions.BlueprintPrefab = value; 
+    }
+
+    ///<inheritdoc cref="BuildingActions.BlueprintInstance"/>
+    public Building BlueprintInstance
+    { 
+        get => buildingActions.BlueprintInstance; 
+        set => buildingActions.BlueprintInstance = value; 
+    }
+
+    ///<inheritdoc cref="BuildingActions.Blueprint()"/>
+    public void Blueprint() => buildingActions.Blueprint();
+
+    ///<inheritdoc cref="BuildingActions.DestroyBlueprint(bool)"/>
+    public void DestroyBlueprint(bool forgetInstance) => buildingActions.DestroyBlueprint(forgetInstance);
+    #endregion
+
+
+
+    #region Mouse
+    ///<inheritdoc cref="MouseEvents.activePos"/>
+    public GridPos ActivePos => mouseEvents.activePos;
+    ///<inheritdoc cref="MouseEvents.drag"/>
+    public bool Drag
+    { 
+        get => mouseEvents.drag;
+        set => mouseEvents.drag = value; 
+    }
+    ///<inheritdoc cref="MouseEvents.activeObject"/>
+    public ClickableObject ActiveObject
+    { 
+        get => mouseEvents.activeObject; 
+        set => mouseEvents.activeObject = value; 
+    }
+
+    ///<inheritdoc cref="MouseEvents.Exit()"/>
+    public void Exit() => mouseEvents.Exit();
+
+    ///<inheritdoc cref="MouseEvents.Exit(ClickableObject)"/>
+    public void Exit(ClickableObject clickableObject) => mouseEvents.Exit(clickableObject);
+    
+
+
+    ///<inheritdoc cref="MouseEvents.Enter()"/>
+    public void Enter() => mouseEvents.Enter();
+
+    ///<inheritdoc cref="MouseEvents.Enter(ClickableObject)"/>
+    public void Enter(ClickableObject clickableObject) => mouseEvents.Enter(clickableObject);
+
+
+    ///<inheritdoc cref="MouseEvents.Down"/>
+    public void Down() => mouseEvents.Down();
+    ///<inheritdoc cref="MouseEvents.Up()"/>
+    public void Up() => mouseEvents.Up();
+
+    ///<inheritdoc cref="MouseEvents.DeselectObjects"/>
+    public void DeselectObjects() => mouseEvents.DeselectObjects();
+    ///<inheritdoc cref="MouseEvents.Clear"/>
+    public void Clear() => mouseEvents.Clear();
+    #endregion
+
+
+
+    #region MultiSelect
+    ///<inheritdoc cref="MultiSelect.ToBeDugColor"/>
+    public Color ToBeDugColor => multiSelect.ToBeDugColor;
+
+    ///<inheritdoc cref="MultiSelect.InitPipes(GridPos, Pipe)"/>
+    public void InitPipes(GridPos pos, Pipe pipe) => multiSelect.InitPipes(pos, pipe);
+    
+    ///<inheritdoc cref="MultiSelect.CalcPipes(GridPos, Pipe)"/>
+    public void CalcPipes(GridPos pos, Pipe pipe) => multiSelect.CalcPipes(pos, pipe);
+    
+    ///<inheritdoc cref="MultiSelect.ClickPipes(GridPos)"/>
+    public bool ClickPipes(GridPos pos) => multiSelect.ClickPipes(pos);
+    
+    ///<inheritdoc cref="MultiSelect.ClearPipes"/>
+    public void ClearPipes() => multiSelect.ClearPipes();
+
+    ///<inheritdoc cref="MultiSelect.InitDig(Rock)"/>
+    public void InitDig(Rock rock) => multiSelect.InitDig(rock);
+    ///<inheritdoc cref="MultiSelect.DigMark(Rock)"/>
+    public void DigMark(Rock rock) => multiSelect.DigMark(rock);
+
+    ///<inheritdoc cref="MultiSelect.ClearDig()"/>
+    public void ClearDig() => multiSelect.ClearDig();
+
+    ///<inheritdoc cref="MultiSelect.CalcTiles(GridPos)"/>
+    public void CalcTiles(GridPos pos) => multiSelect.CalcTiles(pos);
+    ///<inheritdoc cref="MultiSelect.RemoveFromMarked(ClickableObject)"/>
+    public void RemoveFromMarked(ClickableObject cO) => multiSelect.RemoveFromMarked(cO);
+    ///<inheritdoc cref="MultiSelect.Break()"/>
+    public void Break() => multiSelect.Break();
+    #endregion
+
+
+    private void Awake()
+    {
+        multiSelect = GetComponent<MultiSelect>();
+        mouseEvents = GetComponent<MouseEvents>();
+        buildingActions = GetComponent<BuildingActions>();
+    }
 
     /// <summary>Called when AltTabing from the game.</summary>
     void OnApplicationFocus(bool focus)
     {
         if (!focus)
         {
-            Exit(activeObject);
-            activeObject = null;
+            Clear();
         }
     }
-
-    #region Mouse Events
-    /// <summary>
-    /// Called when mouse enters the ClickableObject collider.
-    /// </summary>
-    /// <param name="enterObject"></param>
-    public void Enter(ClickableObject enterObject)
-    {
-        if (enterObject == null)
-            return;
-        Color c = new();
-        if (ActiveControl == ControlMode.Nothing && activeObject != null)
-            Exit(activeObject);
-        activeObject = enterObject;
-        activePos = enterObject.GetPos();
-        switch (ActiveControl)
-        {
-            case ControlMode.Nothing:
-
-                if (activeObject.selected)// if active
-                    c = highlight * 3; // WHITE
-                else
-                    c = highlight; // WHITE / 3
-
-                Rock r = enterObject.GetComponent<Rock>();
-                if (r && r.toBeDug) // if rock is to be dug
-                    c += ToBeDugColor; // DUGCOLOR
-                else
-                {
-                    Building b = enterObject.GetComponent<Building>();
-                    if (b)
-                    {
-                        if (b.deconstructing)
-                            c += Color.red / 2;/*
-                        else if (!b.constructed)
-                            c +=;*/
-                    }
-                }
-                break;
-            case ControlMode.Deconstruct:
-                Building _b = enterObject.GetComponent<Building>();
-                if (_b)
-                    if (_b.deconstructing)
-                        c = Color.red / 2;
-                    else
-                        c = Color.red;
-                else
-                    return;
-                break;
-            case ControlMode.Dig:
-                Rock _r = enterObject.GetComponent<Rock>();
-                if (drag)
-                {
-                    multiSelect.CalcTiles(activePos);
-                    return;
-                }
-                else if (_r)
-                {
-                    if (_r.toBeDug)
-                    {
-                        c = Color.red;
-                    }
-                    else
-                    {
-                        c = Color.yellow;
-                    }
-                }
-                break;
-            case ControlMode.Build:
-                if (drag)
-                {
-                    multiSelect.CalcPipes(activePos, blueprintPrefab as Pipe);
-                    return;
-                }
-                else
-                {
-                    GridPos grid = blueprintInstance.blueprint.moveBy.Rotate(blueprintInstance.transform.eulerAngles.y);
-                    blueprintInstance.transform.position = new(
-                        activePos.x + grid.x,
-                        (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) +
-                            (blueprintInstance is Pipe
-                            ? ClickableObjectFactory.PIPE_OFFSET
-                            : ClickableObjectFactory.BUILD_OFFSET),
-                        activePos.z + grid.z);
-                    c = blueprintInstance.CanPlace() ? Color.blue : Color.red;
-                    blueprintInstance.Highlight(c);
-                }
-                return;
-        }
-        enterObject.Highlight(c);
-    }
-
-    /// <summary>
-    /// Called when mouse leaves the ClickableObject collider.
-    /// </summary>
-    /// <param name="exitObject"></param>
-    public void Exit(ClickableObject exitObject)
-    {
-        if (exitObject == null)
-            return;
-        Color c = new();
-        switch (ActiveControl)
-        {
-            case ControlMode.Nothing:
-                Rock r = exitObject.GetComponent<Rock>();
-                Building b = exitObject.GetComponent<Building>();
-                Pipe pipe = exitObject.GetComponent<Pipe>();
-                if (exitObject.selected)
-                    c = highlight * 2;
-                else
-                    c = new();
-                if (r && r.toBeDug)
-                    c += ToBeDugColor;
-                else if (b && b.deconstructing)
-                    c += Color.red / 2;
-                else if (pipe)
-                {
-                    pipe.Highlight(c);
-                    return;
-                }
-
-                if (exitObject == activeObject)
-                    activeObject = null;
-                break;
-            case ControlMode.Deconstruct:
-                Building _b = exitObject.GetComponent<Building>();
-                if (_b && _b.deconstructing)
-                    c = Color.red * 0.75f;
-                else
-                    c = new();
-                break;
-            case ControlMode.Dig:
-                Rock _r = exitObject.GetComponent<Rock>();
-                if (_r)
-                {
-                    if (drag)
-                        return;
-                    else if (_r.toBeDug)
-                        c = ToBeDugColor;
-                    else
-                        c = new();
-                }
-                break;
-            case ControlMode.Build:
-                return;
-        }
-        exitObject.Highlight(c);
-    }
-
-    /// <summary>
-    /// Called when mouse presses down the ClickableObject collider.
-    /// </summary>
-    public void Down()
-    {
-        if (activeObject == null)
-            return;
-        else if (activeObject == clickedObject)
-        {
-            ClickableObject temp = clickedObject;
-            DeselectObjects();
-            Enter(temp);
-            return;
-        }
-        Color c = new();
-        Material[] m = activeObject.GetComponentsInChildren<MeshRenderer>().Where(q => q != null).Select(q => q.material).ToArray();
-        switch (ActiveControl)
-        {
-            case ControlMode.Nothing:
-                Rock r = activeObject.GetComponent<Rock>();
-                if (clickedObject)
-                {
-                    Rock activeRock = clickedObject.GetComponent<Rock>();
-                    if (activeRock && activeRock.toBeDug)
-                        c = ToBeDugColor;
-                    clickedObject.Highlight(c);
-                    clickedObject.selected = false;
-                }
-                if (r && r.toBeDug) // rock to be dug
-                    c = ToBeDugColor + highlight * 2; // YELLOW + RED
-                else
-                    c = highlight * 3; // WHITE
-                activeObject.Highlight(c);
-
-                // DEBUG_Binding Working entrypoint
-                // This happens when you click an object in the level.
-                // You need to have "nothing" selection mode (white highliting, If you dont press right mouse button to get there).
-                clickedObject = activeObject;
-                clickedObject.selected = true;
-                clickedObject.OpenWindow();
-#if UNITY_EDITOR
-                Selection.activeObject = clickedObject.gameObject;
-#endif
-                break;
-            case ControlMode.Deconstruct:
-                Building b = activeObject.GetComponent<Building>();
-                if (b)
-                {
-                    b.OrderDeconstruct();
-                    if (b && !b.deconstructing)
-                        c = Color.red;
-                    else
-                        c = Color.red / 2;
-                    b.Highlight(c);
-                }
-                break;
-            case ControlMode.Dig:
-                Rock _r = activeObject.GetComponent<Rock>();
-                if (_r)
-                {
-                    multiSelect.InitDig(
-                        new GridPos(activePos.x, activePos.y, activePos.z),
-                        _r);
-                    drag = true;
-                }
-                break;
-            case ControlMode.Build:
-
-                break;
-        }
-    }
-
-    /// <summary>
-    /// Called when mouse presses up the ClickableObject collider.
-    /// </summary>
-    public void Up()
-    {
-        switch (ActiveControl)
-        {
-            case ControlMode.Nothing:
-            case ControlMode.Deconstruct:
-                // nothing
-                break;
-            case ControlMode.Build:
-                if (blueprintPrefab is Pipe && (blueprintInstance == null || blueprintInstance.CanPlace()))
-                {
-                    if (drag == false)
-                    {
-                        multiSelect.InitPipes(
-                            new GridPos(activePos.x, activePos.y, activePos.z),
-                            blueprintInstance as Pipe);
-                        MyGrid.GetOverlay().MovePlacePipeOverlay(activePos, true);
-                        drag = true;
-
-                        GridPos gridPos = activeObject.GetPos();
-                        MyGrid.SetGridItem(activePos, blueprintInstance, true);
-                        blueprintInstance = null;
-                    }
-                    else
-                    {
-                        if(multiSelect.ClickPipes(activePos))
-                            BlueprintInstance = null;
-                    }
-
-                }
-                else if (blueprintInstance.CanPlace())
-                {
-                    blueprintInstance.PlaceBuilding();
-                    if (shiftKey.IsInProgress() && MyRes.CanAfford(blueprintPrefab.Cost))
-                    {
-                        Blueprint();
-                    }
-                    else
-                    {
-                        BlueprintInstance = null;
-                    }
-                }
-                else
-                {
-                    Debug.LogWarning("Can't place here!!");
-                }
-                break;
-            case ControlMode.Dig:
-                multiSelect.DigMark(activePos, activeObject as Rock);
-                drag = false;
-                Enter(activeObject);
-                break;
-        }
-    }
-
-    #endregion Mouse Events
-
-    #region Multiselecting  
-    
-    #endregion Multiselecting
-
-    #region Colors
-    /// <summary>
-    /// Highlights all materials on toBeChanged to c.
-    /// </summary>
-    /// <param name="c"></param>
-    /// <param name="toBeChanged"></param>
-    /*public void Highlight(Color c, GameObject toBeChanged)
-    {
-        (toBeChanged.GetComponent<ClickableObject>()).Highlight(c);
-    }*/
-    #endregion
 
     #region Control switching
     /// <summary>
@@ -412,29 +174,7 @@ public class GridTiles : MonoBehaviour
         if (multiSelect.Break())
         {
             ChangeSelMode(ControlMode.Nothing);
-            drag = false;
-        }
-    }
-
-    /// <summary>
-    /// Removes clickedObject from selection.
-    /// </summary>
-    public void DeselectObjects()
-    {
-        if (activeObject)
-        {
-            var a = activeObject;
-            Exit(activeObject);
-            activeObject = a;
-        }
-        if (clickedObject)
-        {
-            clickedObject.selected = false;
-            Exit(clickedObject);
-            if (activeObject == null)
-                activeObject = clickedObject;
-            clickedObject = null;
-            SceneRefs.InfoWindow.Close();
+            Drag = false;
         }
     }
 
@@ -448,7 +188,7 @@ public class GridTiles : MonoBehaviour
         {
             if (ActiveControl == ControlMode.Build)
             {
-                if (blueprintPrefab.objectName == blueprintInstance.objectName)
+                if (BlueprintPrefab.objectName == BlueprintInstance.objectName)
                 {
                     ChangeSelMode(ControlMode.Nothing);
                 }
@@ -469,102 +209,74 @@ public class GridTiles : MonoBehaviour
                     ActiveControl = ControlMode.Nothing;
                     break;
                 case ControlMode.Dig:
-                    multiSelect.ClearDig();
-                    drag = false;
+                    ClearDig();
+                    Drag = false;
                     ActiveControl = ControlMode.Nothing;
                     break;
                 case ControlMode.Build:
                     SceneRefs.CameraSceneMover.SetRaycastMask(defaultMask);
-                    if (drag)
+                    if (Drag)
                     {
-                        multiSelect.ClearPipes();
+                        ClearPipes();
                         DeselectBuildingButton?.Invoke();
-                        drag = false;
+                        Drag = false;
                     }
-                    else if (blueprintInstance)
+                    else if (BlueprintInstance)
                         DestroyBlueprint(true);
                     shiftKey.Disable();
                     break;
             }
             DeselectObjects();
-            bool visible = true;
-            Texture2D cur = null;
-            Vector2 vec = new();
-            ActiveControl = mode;
-            switch (mode)
-            {
-                case ControlMode.Nothing:
-                    cur = default;
-                    vec = Vector2.zero;
-                    Enter(activeObject);
-                    break;
-                case ControlMode.Deconstruct:
-                    cur = cursors[0];
-                    vec = new(15, 15);
-                    Enter(activeObject);
-                    break;
-                case ControlMode.Dig:
-                    cur = cursors[1];
-                    vec = new(1, 16);
-                    Enter(activeObject);
-                    break;
-                case ControlMode.Upgrade:
-                    cur = cursors[2];
-                    vec = new(15, 1);
-                    Enter(activeObject);
-                    break;
-                case ControlMode.Build:
-                    cur = default;
-                    vec = Vector2.zero;
-                    if (blueprintPrefab is Pipe)
-                        SceneRefs.CameraSceneMover.SetRaycastMask(pipeMask);
-                    else
-                        SceneRefs.CameraSceneMover.SetRaycastMask(buildingMask);
-                    Blueprint();
-                    shiftKey.Enable();
-                    break;
-            }
-            if (visible)
-            {
-                Cursor.SetCursor(cur, vec, CursorMode.Auto);
-            }
+            EnterMode(mode);
+        }
+    }
+
+    void EnterMode(ControlMode mode)
+    {
+        bool visible = true;
+        Texture2D cur = null;
+        Vector2 vec = new();
+        ActiveControl = mode;
+        switch (mode)
+        {
+            case ControlMode.Nothing:
+                cur = default;
+                vec = Vector2.zero;
+                break;
+            case ControlMode.Deconstruct:
+                cur = cursors[0];
+                vec = new(15, 15);
+                break;
+            case ControlMode.Dig:
+                cur = cursors[1];
+                vec = new(1, 16);
+                break;
+            case ControlMode.Upgrade:
+                cur = cursors[2];
+                vec = new(15, 1);
+                break;
+            case ControlMode.Build:
+                cur = default;
+                vec = Vector2.zero;
+                if (BlueprintPrefab is Pipe)
+                    SceneRefs.CameraSceneMover.SetRaycastMask(pipeMask);
+                else
+                    SceneRefs.CameraSceneMover.SetRaycastMask(buildingMask);
+                Blueprint();
+                shiftKey.Enable();
+                return;
+        }
+        Enter();
+
+
+        if (visible)
+        {
+            Cursor.SetCursor(cur, vec, CursorMode.Auto);
         }
     }
     #endregion
 
 
-    /// <summary>
-    /// Instantiates and sets a copy of a building prefab.
-    /// </summary>
-    void Blueprint()
-    {
-        Quaternion q = new();
-        if (blueprintInstance)
-            q = new(blueprintInstance.transform.rotation.x, blueprintInstance.transform.rotation.y, blueprintInstance.transform.rotation.z, blueprintInstance.transform.rotation.w);
-        GridPos gp = blueprintPrefab.blueprint.moveBy.Rotate(blueprintPrefab.transform.eulerAngles.y);
-        gp = new(
-            activePos.x + gp.x,
-            (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) +
-                (blueprintPrefab is Pipe
-                ? ClickableObjectFactory.PIPE_OFFSET
-                : ClickableObjectFactory.BUILD_OFFSET),
-            activePos.z + gp.z);
-
-        blueprintInstance = Instantiate(
-            blueprintPrefab,
-            new Vector3(gp.x, gp.y, gp.z),
-            q,
-            blueprintPrefab is Pipe
-                ? MyGrid.FindLevelPipes()
-                : MyGrid.FindLevelBuildings());
-        if (blueprintInstance is IFluidWork)
-            ((IFluidWork)blueprintInstance).CreatePipes();
-        blueprintInstance.GetRenderComponents();
-
-        blueprintInstance.maximalProgress = blueprintInstance.CalculateMaxProgress();
-        blueprintInstance.ChangeRenderMode(true);
-        blueprintInstance.Highlight(blueprintInstance.CanPlace() ? Color.blue : Color.red);
-    }
 
     /// <summary>
     /// If the object was selected unselect.(Happens when the object is destroyed)
@@ -572,36 +284,15 @@ public class GridTiles : MonoBehaviour
     /// <param name="cO"></param>
     public void DestroyUnselect(ClickableObject cO)
     {
-        multiSelect.RemoveFromMarked(cO);
+        RemoveFromMarked(cO);
         Exit(cO);
-        if (activeObject && activeObject == cO)
-            activeObject = null;
+        if (ActiveObject && ActiveObject == cO)
+            ActiveObject = null;
         if (cO.selected)
         {
             DeselectObjects();
         }
     }
 
-    /// <summary>
-    /// Destroys the blueprint object and overlaygroup.
-    /// </summary>
-    /// <param name="forgetInstance">If true removes the instance.</param>
-    void DestroyBlueprint(bool forgetInstance)
-    {
-        if (blueprintInstance is Pipe)
-        {
-            Pipe pipe = blueprintInstance as Pipe;
-            for (int i = 0; i < 4; i++)
-                pipe.DisconnectPipe(i, true);
-        }
-        else if (blueprintInstance is IFluidWork)
-        {
-            (blueprintInstance as IFluidWork).DisconnectFromNetwork();
-        }
-        Destroy(blueprintInstance.gameObject);
-        if (forgetInstance)
-            BlueprintInstance = null;
-        else
-            MyGrid.GetOverlay().DestroyBuilingTiles();
-    }
+    
 }

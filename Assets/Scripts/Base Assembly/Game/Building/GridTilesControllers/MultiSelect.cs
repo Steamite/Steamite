@@ -16,7 +16,9 @@ public class MultiSelect : MonoBehaviour
 
 
     /// <summary>Color for selecting what do dig.</summary>
-    public Color toBeDugColor = (Color.yellow + Color.red) / 2;
+    [SerializeField] Color toBeDugColor = (Color.yellow + Color.red) / 2;
+
+    public Color ToBeDugColor => toBeDugColor;
 
     /// <summary>
     /// Called when canceling drag, changes highlight of all rocks in markedTiles.
@@ -61,11 +63,11 @@ public class MultiSelect : MonoBehaviour
     /// Changes the state of rocks in <see cref="tempMarkedTiles"/>, if the first one was marked, cancels them.<br/>
     /// Else marks orders their excavation.
     /// </summary>
-    public void DigMark(GridPos pos, Rock rock)
+    public void DigMark(Rock rock)
     {
         if (tempMarkedTiles.Count == 0)
         {
-            InitDig(pos, rock);
+            InitDig(rock);
             tempMarkedTiles.Add(rock);
         }
 
@@ -142,6 +144,12 @@ public class MultiSelect : MonoBehaviour
         }
         MyGrid.GetOverlay().MovePlacePipeOverlay(activePos, false);
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="pipes"></param>
+    /// <param name="prefab"></param>
     void AddPipe(GridPos pos, Transform pipes, Pipe prefab)
     {
         if(MyGrid.GetGridItem(pos, true) != null)
@@ -158,8 +166,11 @@ public class MultiSelect : MonoBehaviour
         tempMarkedTiles.Add(pipe);
         tempMarkedTilePos.Add(pos);
     }
-
-    public void MarkPipeCheckpoint(GridPos pos)
+    /// <summary>
+    /// Creates a new list of pipes and updates the <see cref="startPos"/>.
+    /// </summary>
+    /// <param name="pos"></param>
+    void MarkPipeCheckpoint(GridPos pos)
     {
         markedTiles.Add(tempMarkedTiles.ToList());
 
@@ -173,12 +184,22 @@ public class MultiSelect : MonoBehaviour
         MyGrid.GetOverlay().AddCheckPointTile(pos);
     }
 
-    public void InitDig(GridPos pos, Rock r)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pos">StartPosition</param>
+    /// <param name="r"></param>
+    public void InitDig(Rock r)
     {
-        startPos = pos;
+        startPos = r.GetPos();
         deselect = r.toBeDug;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="gridPos"></param>
+    /// <param name="pipe"></param>
     public void InitPipes(GridPos gridPos, Pipe pipe)
     {
         startPos = gridPos;
@@ -188,7 +209,11 @@ public class MultiSelect : MonoBehaviour
         tempMarkedTilePos.Clear();
         tempMarkedTilePos.Add(startPos);
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="gridPos"></param>
+    /// <returns></returns>
     public bool ClickPipes(GridPos gridPos)
     {
         if (tempMarkedTiles.Count > 1)
@@ -211,7 +236,10 @@ public class MultiSelect : MonoBehaviour
             return true;
         }
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public bool Break()
     {
         if(markedTiles.Count == 0)
@@ -233,6 +261,9 @@ public class MultiSelect : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void ClearDig()
     {
         foreach (Rock r in tempMarkedTiles)
@@ -241,7 +272,9 @@ public class MultiSelect : MonoBehaviour
         }
         tempMarkedTiles.Clear();
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public void ClearPipes()
     {
         List<Pipe> pipes = tempMarkedTiles.Union(markedTiles.SelectMany(q => q)).Cast<Pipe>().ToList();
@@ -254,6 +287,10 @@ public class MultiSelect : MonoBehaviour
         tempMarkedTiles.Clear();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cO"></param>
     public void RemoveFromMarked(ClickableObject cO)
     {
         int i = tempMarkedTiles.IndexOf(cO);

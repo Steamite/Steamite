@@ -108,7 +108,7 @@ public abstract class ClickableObject : MonoBehaviour,
     {
         //Debug.Log(this);
         SceneRefs.GridTiles.Enter(this);
-        if (SceneRefs.GridTiles.drag)
+        if (SceneRefs.GridTiles.Drag)
             eventData.pointerPress = gameObject;
     }
     /// <summary>
@@ -127,7 +127,7 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <param name="eventData">Mouse data</param>
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        if (SceneRefs.GridTiles.drag == false && eventData.button == PointerEventData.InputButton.Left)
+        if (SceneRefs.GridTiles.Drag == false && eventData.button == PointerEventData.InputButton.Left)
             SceneRefs.GridTiles.Down();
     }
     /// <summary>

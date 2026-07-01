@@ -106,7 +106,7 @@ namespace BottomBar.Building
             {
                 // hide locked blocker
                 element[0][0].style.display = DisplayStyle.None;
-                if (wrappers[index].building == SceneRefs.GridTiles.BuildPrefab)
+                if (wrappers[index].building == SceneRefs.GridTiles.BlueprintPrefab)
                 {
                     element.AddToClassList($"{BUILD_BUTTON_CLASS}-selected");
                 }
