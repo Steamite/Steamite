@@ -20,12 +20,12 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 3
-  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+  m_SubtractiveShadowColor: {r: 0.9716981, g: 0.9716981, b: 0.9716981, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
@@ -94,7 +94,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: b046459ea436efb4d8a2573ab80822a3, type: 2}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: c582ed179182d024ea1085cd3a5e9eed, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1662,6 +1662,7 @@ MonoBehaviour:
     y: 0
   drag: 0
   highlight: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 0.3529412}
+  select: 0
 --- !u!4 &5026351469592114601
 Transform:
   m_ObjectHideFlags: 0
@@ -1736,9 +1737,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: MyCamera
       objectReference: {fileID: 0}
+    - target: {fileID: 1010446617054400077, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1634306986070870791, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_TagString
       value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 2082184269814486755, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_Antialiasing
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2082184269814486755, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_Cameras.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2800808092810616947, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_TagString
@@ -1748,6 +1761,10 @@ PrefabInstance:
       propertyPath: mainShortcuts
       value: 
       objectReference: {fileID: 6086404398923934763}
+    - target: {fileID: 8085144623068063981, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9079333737667581699, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10
@@ -1789,7 +1806,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6314038135591522541, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}

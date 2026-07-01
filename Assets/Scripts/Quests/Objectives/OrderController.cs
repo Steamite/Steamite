@@ -130,16 +130,33 @@ public class OrderController
             orderDifficulty += resAmmount / (float)selType.typeChance;
         }
 
-        Order order = new();
-        order.orderDifficulty = (OrderDifficulty)Mathf.FloorToInt(orderDifficulty);
-        order.TimeToFail = Mathf.RoundToInt(orderGenConfig.timeToFail.Random() * mod * orderDifficulty);
+        Order order = new()
+        {
+            orderDifficulty = (OrderDifficulty)Mathf.FloorToInt(orderDifficulty),
+            TimeToFail = Mathf.RoundToInt(orderGenConfig.timeToFail.Random() * mod * orderDifficulty),
+            objectives =
+            {
+                objective
+            },
+            rewards =
+            {
+                new TrustReward(
+                    Mathf.RoundToInt(
+                        orderGenConfig.trustGain.Random() * mod * orderDifficulty / 2))
+            },
+            penalties =
+            {
+                new TrustPenalty(
+                    Mathf.RoundToInt(
+                        orderGenConfig.trustLoss.Random() * mod * orderDifficulty / 2))
+            }
+        };
+        /*
         order.objectives.Add(objective);
-        order.rewards.Add(new TrustReward(
-            Mathf.RoundToInt(
-                orderGenConfig.trustGain.Random() * mod * orderDifficulty / 2)));
+        order.rewards.Add(;
         order.penalties.Add(new TrustPenalty(
             Mathf.RoundToInt(
-                orderGenConfig.trustLoss.Random() * mod * orderDifficulty / 2)));
+                orderGenConfig.trustLoss.Random() * mod * orderDifficulty / 2)));*/
         return order;
     }
 }
