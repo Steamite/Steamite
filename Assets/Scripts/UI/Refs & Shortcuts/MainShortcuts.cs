@@ -140,6 +140,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
         {
             (item as MonoBehaviour).enabled = true;
         }
+        UIRefs.LevelCamera.enabled = true;
     }
 
     public static string ParseDescription(string description)
