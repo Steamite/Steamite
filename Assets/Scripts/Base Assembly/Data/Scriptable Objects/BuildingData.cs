@@ -13,10 +13,13 @@ public class BuildingWrapper : DataObject
 
     public override string GetName() => b?.objectName;
 
-
+#if UNITY_EDITOR
+    [SerializeField] public int selectedLevel;
+#endif
     [SerializeField] public Sprite preview;
     [NonSerialized] public bool unlocked = true;
     [NonSerialized] public List<Material> materials = new();
+
 
 #if UNITY_EDITOR
     public void SetBuilding(Building _b, byte categoryID, string name = null)
@@ -71,7 +74,7 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
     }
 
 #endif
-    #endregion
+#endregion
 
     public Building GetBuilding(int categ, int id)
     {

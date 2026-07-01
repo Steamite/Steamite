@@ -24,7 +24,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
     protected override void CreateGUI()
     {
         researchData = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.PATH);
-        holder = AssetDatabase.LoadAssetAtPath<StatData>(StatData.EDITOR_PATH);
+        Holder = AssetDatabase.LoadAssetAtPath<StatData>(StatData.EDITOR_PATH);
         base.CreateGUI();
         categorySelector.index = 0;
     }
@@ -37,7 +37,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
         }
         else
         {
-            selectedCategory = new BuildingStatCateg();
+            SelectedCategory = new BuildingStatCateg();
         }
         return boo;
     }
@@ -69,7 +69,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
                     (el) =>
                     {
                         el.itemsSource.Add(new StatPair());
-                        EditorUtility.SetDirty(holder);
+                        EditorUtility.SetDirty(Holder);
                     };
                 listView.makeItem =
                     () =>
@@ -162,7 +162,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
     {
         Stat stat = (Stat)dataGrid.itemsSource[index];
         dataGrid.RefreshItem(index);
-        EditorUtility.SetDirty(holder);
+        EditorUtility.SetDirty(Holder);
         researchData.Categories.SelectMany(q => q.Objects)
             .FirstOrDefault(q =>
                 q.nodeType == NodeType.Stat &&

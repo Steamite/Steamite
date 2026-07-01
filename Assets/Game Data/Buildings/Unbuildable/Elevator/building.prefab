@@ -183,7 +183,7 @@ MonoBehaviour:
     carriers: []
     mods: 
   meshRenderers: []
-  buildingCategories: 0
+  buildingCategories: 1
   blueprint:
     size:
       x: 1
@@ -208,20 +208,52 @@ MonoBehaviour:
         z: 1
         y: 0
       itemType: 3
-  cost:
-    types:
+  costs:
+  - types:
+    - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
     - {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
-    ammounts: 3200000000000000
+    ammounts: 0f00000005000000
     baseResource:
       types:
+      - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
       - {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
-      ammounts: 3200000000000000
+      ammounts: 0f00000005000000
     mod:
       percentMod: 1
       absoluteMod: 0
     money:
-      baseValue: 520
-      currentValue: 520
+      baseValue: 50
+      currentValue: 50
+      mod:
+        percentMod: 1
+        absoluteMod: 0
+  - types: []
+    ammounts: 
+    baseResource:
+      types:
+      - {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
+      ammounts: 0a000000
+    mod:
+      percentMod: 0
+      absoluteMod: 0
+    money:
+      baseValue: 40
+      currentValue: 40
+      mod:
+        percentMod: 1
+        absoluteMod: 0
+  - types: []
+    ammounts: 
+    baseResource:
+      types:
+      - {fileID: 11400000, guid: f9e61f1dd3b0f9d418d535915c9c5770, type: 2}
+      ammounts: 0f000000
+    mod:
+      percentMod: 0
+      absoluteMod: 0
+    money:
+      baseValue: 100
+      currentValue: 100
       mod:
         percentMod: 1
         absoluteMod: 0
@@ -229,12 +261,14 @@ MonoBehaviour:
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 0
+  level: 0
+  maxLevel: 3
   prefabConnection:
     categoryId: 1
     objectId: 1458562700
   assignLimit:
-    baseValue: 3
-    currentValue: 3
+    baseValue: 5
+    currentValue: 5
     mod:
       percentMod: 1
       absoluteMod: 0

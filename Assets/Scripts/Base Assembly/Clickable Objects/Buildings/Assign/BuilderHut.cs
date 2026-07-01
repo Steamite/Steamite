@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using Unity.Properties;
+using UnityEngine;
 
 public class BuilderHut : Building, IBuilderHut
 {
     List<Human> assigned = new();
-    ModifiableInteger assignedLimit = new(3);
+    [SerializeField] ModifiableInteger assignLimit = new(3);
 
     [CreateProperty] public List<Human> Assigned { get => assigned; set => assigned = value; }
-    [CreateProperty] public ModifiableInteger AssignLimit { get => assignedLimit; set => assignedLimit = value; }
+    [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
 
     protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {

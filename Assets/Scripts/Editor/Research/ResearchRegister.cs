@@ -38,7 +38,7 @@ namespace EditorWindows.Research
         {
             activeNode = null;
             showCreateButtons = false;
-            holder = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.EDITOR_PATH);
+            Holder = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.EDITOR_PATH);
             buildingData = AssetDatabase.LoadAssetAtPath<BuildingData>(BuildingData.EDITOR_PATH);
             statData = AssetDatabase.LoadAssetAtPath<StatData>(StatData.EDITOR_PATH);
 
@@ -83,7 +83,7 @@ namespace EditorWindows.Research
             }
             else
             {
-                selectedCategory = new ResearchCategory();
+                SelectedCategory = new ResearchCategory();
                 for (int i = 0; i < tree.childCount; i++)
                 {
                     tree[i][1].Clear();
@@ -118,7 +118,7 @@ namespace EditorWindows.Research
             where T_C : DataCategory<T_O>
             where T_O : DataObject
         {
-            List<ResearchNode> nodes = holder.Categories.SelectMany(q => q.Objects).ToList();
+            List<ResearchNode> nodes = Holder.Categories.SelectMany(q => q.Objects).ToList();
             for (int i = 0; i < data.Categories.Count; i++)
             {
                 T_C categ = data.Categories[i];
@@ -149,7 +149,7 @@ namespace EditorWindows.Research
                 Button addButton = new Button(plus,
                     () =>
                     {
-                        selectedCategory.AddNode(level, (ResearchData)holder);
+                        SelectedCategory.AddNode(level, (ResearchData)Holder);
                         RepaintRow(level);
                     });
                 addButton.AddToClassList("add-button");
@@ -163,9 +163,9 @@ namespace EditorWindows.Research
         void RedoLines(int level)
         {
             int levelIndex = 0, lineCount = 0;
-            foreach (ResearchNode node in selectedCategory.Objects.Where(q => q.level == level))
+            foreach (ResearchNode node in SelectedCategory.Objects.Where(q => q.level == level))
             {
-                tree[level][1].Insert(levelIndex, new ResearchNodeElem(node, this, (ResearchData)holder));
+                tree[level][1].Insert(levelIndex, new ResearchNodeElem(node, this, (ResearchData)Holder));
                 if (node.unlockedBy.Count > 0)
                 {
                     for (int j = 0; j < node.unlockedBy.Count; j++)
@@ -192,7 +192,7 @@ namespace EditorWindows.Research
             int prequiseteIndex = GetIndexInRow(unlockedBy);
             if (prequiseteIndex == -1)
                 return;
-            ResearchNode connectedNode = selectedCategory.Objects.First(q => q.id == unlockedBy);
+            ResearchNode connectedNode = SelectedCategory.Objects.First(q => q.id == unlockedBy);
             Button prequiseteButton = tree
                 [connectedNode.level][1]
                 [prequiseteIndex].Q<Button>("Bot");
@@ -271,15 +271,15 @@ namespace EditorWindows.Research
         /// <returns>True if a node has an adjacent node on the said side.</returns>
         public bool Exists(ResearchNode nodeData, bool left)
         {
-            int index = selectedCategory.Objects.IndexOf(nodeData);
+            int index = SelectedCategory.Objects.IndexOf(nodeData);
             if (left)
                 return
                     index > 0 &&
-                    selectedCategory.Objects[index - 1].level == nodeData.level;
+                    SelectedCategory.Objects[index - 1].level == nodeData.level;
             else
                 return
-                    index < selectedCategory.Objects.Count - 1 &&
-                    selectedCategory.Objects[index + 1].level == nodeData.level;
+                    index < SelectedCategory.Objects.Count - 1 &&
+                    SelectedCategory.Objects[index + 1].level == nodeData.level;
         }
 
         /// <summary>Returns a list of posible assignable buildings for the <paramref name="node"/>.</summary>
@@ -326,9 +326,9 @@ namespace EditorWindows.Research
         /// <param name="moveBy">If -1 then left, if 1 then right.</param>
         public void Move(ResearchNode nodeData, int moveBy)
         {
-            int i = selectedCategory.Objects.IndexOf(nodeData);
-            selectedCategory.Objects[i] = selectedCategory.Objects[i + moveBy];
-            selectedCategory.Objects[i + moveBy] = nodeData;
+            int i = SelectedCategory.Objects.IndexOf(nodeData);
+            SelectedCategory.Objects[i] = SelectedCategory.Objects[i + moveBy];
+            SelectedCategory.Objects[i + moveBy] = nodeData;
             for (int j = nodeData.level; j < 5; j++)
                 RepaintRow(j);
         }
@@ -337,8 +337,8 @@ namespace EditorWindows.Research
         /// <param name="node"></param>
         public void Delete(ResearchNode node)
         {
-            node.DisconnectNodes(selectedCategory.Objects);
-            selectedCategory.Objects.Remove(node);
+            node.DisconnectNodes(SelectedCategory.Objects);
+            SelectedCategory.Objects.Remove(node);
             RepaintRow(node.level);
             SaveValues();
         }
@@ -351,16 +351,16 @@ namespace EditorWindows.Research
         /// <param name="node">Node to want the index.</param>
         /// <returns>Index of a <paramref name="node"/>.</returns>
         public int GetIndexInRow(ResearchNode node) =>
-            selectedCategory.Objects.FindIndex(q => q.id == node.id) -
-            selectedCategory.Objects.FindIndex(q => q.level == node.level);
+            SelectedCategory.Objects.FindIndex(q => q.id == node.id) -
+            SelectedCategory.Objects.FindIndex(q => q.level == node.level);
 
         /// <summary>Gets index of a node by id.</summary>
         /// <param name="id">Id of the node.</param>
         /// <returns>Index of node by <paramref name="id"/></returns>
         public int GetIndexInRow(int id)
         {
-            int i = selectedCategory.Objects.FindIndex(q => q.id == id);
-            return i - selectedCategory.Objects.FindIndex(q => q.level == selectedCategory.Objects[i].level);
+            int i = SelectedCategory.Objects.FindIndex(q => q.id == id);
+            return i - SelectedCategory.Objects.FindIndex(q => q.level == SelectedCategory.Objects[i].level);
         }
 
         #endregion

@@ -275,3 +275,7 @@ BuildButtonList {
 BottomButtonBar > .bottom-button-group > .bottom-button > VisualElement {
     -unity-background-scale-mode: scale-to-fit;
 }
+
+#QuestGroup > #unity-content-and-vertical-scroll-container > #unity-content-viewport {
+    flex-grow: 0;
+}

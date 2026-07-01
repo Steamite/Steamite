@@ -64,3 +64,7 @@ ScrollView .unity-scroll-view {
 IntegerField:disabled {
     display: none;
 }
+
+.unity-radio-button-group__container {
+    flex-direction: row;
+}

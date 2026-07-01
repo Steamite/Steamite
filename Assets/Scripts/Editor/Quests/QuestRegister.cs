@@ -36,7 +36,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
         rewardTypes = TypeCache.GetTypesDerivedFrom(typeof(QuestReward)).ToList();
         penaltyTypes = TypeCache.GetTypesDerivedFrom(typeof(QuestPenalty)).ToList();
 
-        holder = AssetDatabase.LoadAssetAtPath<QuestHolder>(QuestHolder.EDITOR_PATH);
+        Holder = AssetDatabase.LoadAssetAtPath<QuestHolder>(QuestHolder.EDITOR_PATH);
         RecalculateAvailableObjects();
 
         base.CreateGUI();
@@ -52,7 +52,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
     }
     void RecalculateAvailableObjects()
     {
-        IEnumerable<Quest> _quests = holder.Categories.SelectMany(q => q.Objects);
+        IEnumerable<Quest> _quests = Holder.Categories.SelectMany(q => q.Objects);
         Dictionary<int, List<int>> takenQuests = new();
         foreach (var item in _quests)
         {
@@ -64,9 +64,9 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
                     takenQuests.Add(nextQuest.categoryId, new() { nextQuest.objectId });
             }
         }
-        for (int i = 0; i < holder.Categories.Count; i++)
+        for (int i = 0; i < Holder.Categories.Count; i++)
         {
-            QuestCategory category = holder.Categories[i];
+            QuestCategory category = Holder.Categories[i];
             category.availableObjects = category.Objects.ToList();
             if (takenQuests.ContainsKey(i))
             {
@@ -124,14 +124,14 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
             title = "Type",
             makeCell = () =>
             {
-                NextQuestList list = new NextQuestList(holder as QuestHolder);
+                NextQuestList list = new NextQuestList(Holder as QuestHolder);
                 return list;
             },
 
             bindCell = (el, i) =>
             {
                 NextQuestList list = el as NextQuestList;
-                list.Bind(selectedCategory.Objects[i], ref onNextQuestChange, () => onNextQuestChange?.Invoke());
+                list.Bind(SelectedCategory.Objects[i], ref onNextQuestChange, () => onNextQuestChange?.Invoke());
             },
             unbindCell = (el, i) =>
             {
@@ -148,7 +148,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
             bindCell = (el, i) =>
             {
                 (el as ObjectiveGridEditor).Bind(
-                        holder as QuestHolder,
+                        Holder as QuestHolder,
                         dataGrid.itemsSource[i] as Quest,
                         objectiveTypes);
             },
@@ -165,7 +165,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
             bindCell = (el, i) =>
             {
                 (el as QuestRewardEditor).Bind(
-                        holder as QuestHolder,
+                        Holder as QuestHolder,
                         dataGrid.itemsSource[i] as Quest,
                         rewardTypes);
             },
@@ -183,7 +183,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
             bindCell = (el, i) =>
             {
                 (el as QuestPenaltyEditor).Bind(
-                        holder as QuestHolder,
+                        Holder as QuestHolder,
                         dataGrid.itemsSource[i] as Quest,
                         penaltyTypes);
             },
@@ -202,7 +202,7 @@ public class QuestRegister : DataGridWindow<QuestCategory, Quest>
         {
             Quest quest = dataGrid.itemsSource[i] as Quest;
             quest.TimeToFail = ev.newValue;
-            EditorUtility.SetDirty(holder);
+            EditorUtility.SetDirty(Holder);
         }
     }
     #endregion

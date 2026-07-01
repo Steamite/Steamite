@@ -71,7 +71,15 @@ public class SceneLoadingShortucts : MonoBehaviour
             }
             else
             {
-                File.Delete($"{Application.persistentDataPath}/openScene.txt");
+                EditorSceneManager.SaveOpenScenes();
+                string activeSceneName = EditorSceneManager.GetActiveScene().name;
+                if (activeSceneName != "Splash Screen")
+                {
+                    EditorSceneManager.OpenScene($"{scenePath}Splash Screen.unity");
+                    //EditorSceneManager.activeSceneChangedInEditMode += SceneReturn;
+                }
+                EditorApplication.EnterPlaymode();
+                File.WriteAllText($"{Application.persistentDataPath}/openScene.txt", activeSceneName);
             }
         }
         else if (state == PlayModeStateChange.EnteredEditMode)

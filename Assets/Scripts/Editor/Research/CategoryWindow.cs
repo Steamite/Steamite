@@ -12,18 +12,22 @@ namespace EditorWindows
         where CATEG_TYPE : DataCategory<DATA_TYPE>
         where DATA_TYPE : DataObject
     {
-        public CATEG_TYPE selectedCategory;
+        protected CATEG_TYPE selectedCategory;
         protected DataHolder<CATEG_TYPE, DATA_TYPE> holder;
         [SerializeField] VisualTreeAsset windowAsset;
 
         protected DropdownField categorySelector;
         public int categIndex => categorySelector.choices.IndexOf(categorySelector.value);
+
+        public DataHolder<CATEG_TYPE, DATA_TYPE> Holder { get => holder; set => holder = value; }
+        public CATEG_TYPE SelectedCategory { get => selectedCategory; set => selectedCategory = value; }
+
         protected TextField categoryNameField;
         Button createCategory;
         Button categoryRemover;
         VisualElement iconElement;
 
-        public void SaveValues() => EditorUtility.SetDirty(holder);
+        public void SaveValues() => EditorUtility.SetDirty(Holder);
         protected virtual void CreateGUI()
         {
             VisualElement doc = windowAsset.CloneTree();
@@ -34,7 +38,7 @@ namespace EditorWindows
             categoryRemover.clicked += () => RemoveCateg();
 
             categorySelector = doc.Q<DropdownField>("Category-Selctor");
-            categorySelector.choices = holder.CategoryChoices();
+            categorySelector.choices = Holder.CategoryChoices();
             categorySelector.choices.Add("Create new");
             #endregion
 
@@ -46,7 +50,7 @@ namespace EditorWindows
 
         private void OnFocus()
         {
-            if (categorySelector != null && categorySelector.index < holder.Categories.Count)
+            if (categorySelector != null && categorySelector.index < Holder.Categories.Count)
                 LoadCategData(categorySelector.index);
         }
 
@@ -57,10 +61,10 @@ namespace EditorWindows
             TopBar(out iconSelector);
 
             bool categoryExists;
-            if (index < holder.Categories.Count)
+            if (index < Holder.Categories.Count)
             {
                 categoryExists = true;
-                selectedCategory = holder.Categories[index];
+                SelectedCategory = Holder.Categories[index];
 
                 categoryRemover.SetEnabled(true);
                 createCategory.text = "Rename";
@@ -68,14 +72,14 @@ namespace EditorWindows
                 createCategory.clicked -= RenameCateg;
                 createCategory.clicked += RenameCateg;
 
-                iconElement.style.backgroundImage = Background.FromVectorImage(selectedCategory.Icon);
-                iconSelector.value = selectedCategory.Icon;
-                categoryNameField.value = selectedCategory.Name;
+                iconElement.style.backgroundImage = Background.FromVectorImage(SelectedCategory.Icon);
+                iconSelector.value = SelectedCategory.Icon;
+                categoryNameField.value = SelectedCategory.Name;
             }
             else
             {
                 categoryExists = false;
-                selectedCategory = Activator.CreateInstance<CATEG_TYPE>();
+                SelectedCategory = Activator.CreateInstance<CATEG_TYPE>();
 
                 categoryRemover.SetEnabled(false);
                 createCategory.text = "Create new category";
@@ -109,11 +113,11 @@ namespace EditorWindows
 
         void IconChange(ChangeEvent<Object> ev)
         {
-            if (selectedCategory != null && selectedCategory.Icon != (VectorImage)ev.newValue)
+            if (SelectedCategory != null && SelectedCategory.Icon != (VectorImage)ev.newValue)
             {
-                selectedCategory.Icon = (VectorImage)ev.newValue;
-                iconElement.style.backgroundImage = Background.FromVectorImage(selectedCategory.Icon);
-                EditorUtility.SetDirty(holder);
+                SelectedCategory.Icon = (VectorImage)ev.newValue;
+                iconElement.style.backgroundImage = Background.FromVectorImage(SelectedCategory.Icon);
+                EditorUtility.SetDirty(Holder);
             }
         }
 
@@ -122,31 +126,31 @@ namespace EditorWindows
             // The category needs to never be null, even when creating a new one
             createCategory.SetEnabled(
                 ev.newValue.Length > 0 &&
-                selectedCategory.Name != ev.newValue &&
-                holder.Categories.Count(q => q.Name == ev.newValue) == 0);
+                SelectedCategory.Name != ev.newValue &&
+                Holder.Categories.Count(q => q.Name == ev.newValue) == 0);
         }
 
         #region Categ Buttons
         protected virtual void RenameCateg()
         {
             createCategory.SetEnabled(false);
-            selectedCategory.Name = categoryNameField.value;
+            SelectedCategory.Name = categoryNameField.value;
             categorySelector.choices[categorySelector.index] = categoryNameField.value;
             categorySelector.SetValueWithoutNotify(categoryNameField.value);
-            EditorUtility.SetDirty(holder);
+            EditorUtility.SetDirty(Holder);
         }
 
         protected virtual void CreateCateg()
         {
             createCategory.SetEnabled(false);
-            selectedCategory.Name = categoryNameField.value;
-            selectedCategory.Objects = new();
-            selectedCategory.id = holder.UniqueCategID();
-            holder.Categories.Add(selectedCategory);
-            categorySelector.choices.Insert(holder.Categories.Count - 1, selectedCategory.Name);
-            categorySelector.value = selectedCategory.Name;
+            SelectedCategory.Name = categoryNameField.value;
+            SelectedCategory.Objects = new();
+            SelectedCategory.id = Holder.UniqueCategID();
+            Holder.Categories.Add(SelectedCategory);
+            categorySelector.choices.Insert(Holder.Categories.Count - 1, SelectedCategory.Name);
+            categorySelector.value = SelectedCategory.Name;
             categorySelector.MarkDirtyRepaint();
-            EditorUtility.SetDirty(holder);
+            EditorUtility.SetDirty(Holder);
         }
 
         protected virtual bool RemoveCateg()
@@ -156,10 +160,10 @@ namespace EditorWindows
                 "Are you sure you want to delete this category? All data will be lost.",
                 "Confirm", "Cancel"))
             {
-                holder.Categories.RemoveAt(categorySelector.index);
+                Holder.Categories.RemoveAt(categorySelector.index);
                 categorySelector.choices.RemoveAt(categorySelector.index);
                 categorySelector.index = categorySelector.index - 1 > -1 ? categorySelector.index - 1 : 0;
-                EditorUtility.SetDirty(holder);
+                EditorUtility.SetDirty(Holder);
                 return true;
             }
             return false;

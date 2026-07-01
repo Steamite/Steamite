@@ -93,7 +93,7 @@ public class Pipe : Building
         Highlight(new());
 
         SceneRefs.JobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
-        MyRes.PayCostGlobal(cost);
+        MyRes.PayCostGlobal(Cost);
     }
 
     public void ConnectPipe(int _case, Pipe connectedPipe, bool canNext)

@@ -58,6 +58,7 @@ MonoBehaviour:
         description: 
         id: 512409920
         b: {fileID: -8276471774322207939, guid: 68185ba783100ad42998ab6da59d02d8, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: 17f94f26da813984e91e7ac514c22efa, type: 3}
     - rid: 5286523460443963457
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -66,6 +67,7 @@ MonoBehaviour:
         description: 
         id: 1599500820
         b: {fileID: 3249735581231611369, guid: 74dfacf7662e6ee439cfa91a20f4b354, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: 61ddc400ef1828b44aea71e08150614e, type: 3}
     - rid: 5286523460443963458
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -74,6 +76,7 @@ MonoBehaviour:
         description: 
         id: 343481641
         b: {fileID: 2608198296355501892, guid: 72c10e4b0dc8a754fa35ae545bdfda96, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: 844559dcf93745c499f6f30a2b1dd430, type: 3}
     - rid: 5286523460443963459
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -82,14 +85,16 @@ MonoBehaviour:
         description: 
         id: 1169593243
         b: {fileID: -8095187260356523125, guid: 2ffa8c7c60840cf40ac52e767bf304b8, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: 0255a6fef51cb4442a4c4011e20d89b8, type: 3}
     - rid: 8808251701909258314
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
         Name: 
-        description: 
+        description: dsadasdsadas
         id: 1458562700
         b: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: 28711bc89a9f8b244a01e3d359df53d2, type: 3}
     - rid: 8808251703612669980
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -98,6 +103,7 @@ MonoBehaviour:
         description: 
         id: 242703327
         b: {fileID: -4896197024522523346, guid: 83179e38183e2cf4280bd1d2d0600fe8, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: 0ef82ac86a3e2e94298e673ef0925f4d, type: 3}
     - rid: 8808251703612669983
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -106,6 +112,7 @@ MonoBehaviour:
         description: 
         id: 1235511660
         b: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: e2dedb0ab53d02a4a8b0e2eb23c72ddb, type: 3}
     - rid: 8808251703612669985
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -114,6 +121,7 @@ MonoBehaviour:
         description: 
         id: 1915475883
         b: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: 6141d9965f66f6a4097dac7efb27eaa4, type: 3}
     - rid: 8808251703612669986
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -122,6 +130,7 @@ MonoBehaviour:
         description: 
         id: 268937765
         b: {fileID: -5750915001953968721, guid: ee9e7a14f264a9347b18aa26ab4bf3ae, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: 99c47f49e7b31bb458a9f7b76d1fe662, type: 3}
     - rid: 8808251703612669987
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -130,6 +139,7 @@ MonoBehaviour:
         description: 
         id: 640485558
         b: {fileID: 3899939243742089161, guid: 47fed3082c867844ea963e9a17d26576, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: 729a493191982dd44beeec1170baec64, type: 3}
     - rid: 8808251703612669988
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -138,6 +148,7 @@ MonoBehaviour:
         description: 
         id: 1277743679
         b: {fileID: 4676457964629507834, guid: da0ceec4036bc3d44953be9eccb21147, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: af12f7dbf4371724b9331c594fb1b6d4, type: 3}
     - rid: 8808251703612669989
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -146,6 +157,7 @@ MonoBehaviour:
         description: 
         id: 63962023
         b: {fileID: 5046250939739785881, guid: 31ecaffeada030a45935b04c1e9889a5, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: 8d56f6d5e177f0343bf4465b57cb3d33, type: 3}
     - rid: 8808251703612669990
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -154,6 +166,7 @@ MonoBehaviour:
         description: 
         id: 1611848327
         b: {fileID: 8030177481246889903, guid: 6c1663227674e6e44bf2a4d444928f5a, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: c63621c53a7984e41a870e4e0778ed5e, type: 3}
     - rid: 8808251703612669991
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -162,6 +175,7 @@ MonoBehaviour:
         description: 
         id: 1298733611
         b: {fileID: -5511517730131264353, guid: 34114f6e253d3fa439554c199a1ad10b, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: 8831f13d226e4154897c29c1f62d2eed, type: 3}
     - rid: 8808251703612669992
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -170,4 +184,5 @@ MonoBehaviour:
         description: 
         id: 159146180
         b: {fileID: -5037607063443067742, guid: 71345d36f743a7e47a57a60a967e4a78, type: 3}
+        selectedLevel: 0
         preview: {fileID: 21300000, guid: 3c805fc3897ae954594f05dc27600b4d, type: 3}

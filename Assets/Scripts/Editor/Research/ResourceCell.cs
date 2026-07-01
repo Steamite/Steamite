@@ -171,18 +171,20 @@ public partial class ResourceCell : ResourceList
         if (_resource != null)
         {
             showAddRemoveFooter = true;
-            capacityField.labelElement.text = _cost ? "Cost" : "Capacity";
+            capacityField.visible = true;
+            
             if (_resource is MoneyResource _moneyRes)
             {
                 moneyResource = _moneyRes;
                 capacityField.value = +_moneyRes.Money.BaseValue;
                 resource = _moneyRes.EditorResource;
                 capacityField.visible = true;
+                capacityField.label = "Money";
             }
             else
             {
                 resource = _resource;
-                capacityField.visible = false;
+                capacityField.label = "Capacity";
             }
             itemsSource = ToUIRes(resource);
             noneLabel.text = "Empty";
