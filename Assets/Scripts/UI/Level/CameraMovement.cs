@@ -138,6 +138,7 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
                             mouse.y,
                             Screen.height),
                         vec.y)));*/
+
             Vector3 toMove = new(
                 GetSpeed(
                     ref currentMovementX,
