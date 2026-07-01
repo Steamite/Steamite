@@ -7,7 +7,8 @@ public class UIbuttons : MonoBehaviour
         GridTiles gridTiles = SceneRefs.GridTiles;
         if (gridTiles.ActiveControl == (ControlMode)i)
         {
-            gridTiles.activeObject = null;
+            // ???
+            //gridTiles.activeObject = null;
             gridTiles.ChangeSelMode(ControlMode.Nothing);
         }
         else

@@ -87,10 +87,10 @@ namespace BottomBar.Building
             {
                 BuildingWrapper wrapper = buildingData.Categories[categGroup.SelectedChoice].Objects[i];
                 if (wrapper.unlocked && MyRes.CanAfford(wrapper.building.Cost))
-                    SceneRefs.GridTiles.BuildPrefab = wrapper.building;
+                    SceneRefs.GridTiles.BlueprintPrefab = wrapper.building;
             }
             else
-                SceneRefs.GridTiles.BuildPrefab = null;
+                SceneRefs.GridTiles.BlueprintPrefab = null;
         }
 
         public void Open()

@@ -39,7 +39,7 @@ namespace Assets.Scripts.UI.Refs___Shortcuts
                 {
                     fluid.AttachedPipes.ForEach(q => q.RecalculatePipeTransform());
                 }
-                SceneRefs.GridTiles.Enter(SceneRefs.GridTiles.activeObject);
+                SceneRefs.GridTiles.Enter();
             }
         }
 

@@ -55,7 +55,7 @@ public static class MyGrid
     public static void Init()
     {
         AddToGridChange((_, _) => SceneRefs.GridTiles.ChangeSelMode(ControlMode.Nothing));
-        AddToGridChange((_, _) => SceneRefs.GridTiles.Exit(SceneRefs.GridTiles.activeObject));
+        AddToGridChange((_, _) => SceneRefs.GridTiles.Exit());
         AddToGridChange(SceneRefs.Humans.SwitchLevel);
         ChangeGridLevel(0);
     }
