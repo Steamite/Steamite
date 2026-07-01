@@ -51,6 +51,7 @@ QuestElement {
     translate: -100% 0;
     transition-property: color, translate;
     transition-delay: 0s, 0.5s;
+    color: rgb(197, 19, 0);
 }
 
 .completed {
@@ -58,6 +59,7 @@ QuestElement {
     translate: -100% 0;
     transition-property: color, translate;
     transition-delay: 0s, 0.5s;
+    color: rgb(79, 204, 0);
 }
 
 .quest-header {
