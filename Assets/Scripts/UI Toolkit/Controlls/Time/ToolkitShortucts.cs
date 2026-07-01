@@ -5,9 +5,9 @@ using UnityEngine.UIElements;
 
 public class ToolkitShortucts : MonoBehaviour, IAfterLoad
 {
-    [SerializeField] public InputActionAsset inputAsset;
-    public TimeButtons timeButtons;
-    public LevelButtons levelButtons;
+    [SerializeField] InputActionAsset inputAsset;
+    TimeButtons timeButtons;
+    LevelButtons levelButtons;
     //[SerializeField] public RadioButtons levelButtons;
 
     InputAction shift;

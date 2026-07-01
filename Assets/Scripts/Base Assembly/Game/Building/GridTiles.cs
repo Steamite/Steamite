@@ -15,7 +15,8 @@ public enum ControlMode
     /// <summary>Rock digging mode.(If started on marked Rocks, unmarks insted)</summary>
     Dig,
     /// <summary>Building placement mode.</summary>
-    Build
+    Build,
+    Upgrade
 }
 
 /// <summary>Handles Input on the game Grid.</summary>
@@ -499,12 +500,17 @@ public class GridTiles : MonoBehaviour
                     break;
                 case ControlMode.Deconstruct:
                     cur = cursors[0];
-                    vec = new(15f, 15f);
+                    vec = new(15, 15);
                     Enter(activeObject);
                     break;
                 case ControlMode.Dig:
                     cur = cursors[1];
-                    vec = new(1, 16f);
+                    vec = new(1, 16);
+                    Enter(activeObject);
+                    break;
+                case ControlMode.Upgrade:
+                    cur = cursors[2];
+                    vec = new(15, 1);
                     Enter(activeObject);
                     break;
                 case ControlMode.Build:
