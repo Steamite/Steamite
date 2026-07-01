@@ -1,3 +1,4 @@
+using Assets.Scripts.Editor.Buildings.LevelList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ public enum BuildingCategType
 /// </summary>
 public class Building : StorageObject
 {
+    public const int MAX_LEVEL = 3;
     #region Variables
     /// <summary>Used for remembering color.</summary>
     [SerializeField] public List<Renderer> meshRenderers;
@@ -32,9 +34,14 @@ public class Building : StorageObject
 
     /// <summary>Building layout(entry points, anchor, ...).</summary>
     public BuildingGrid blueprint;
+    
+    
     /// <summary>Construction cost in resources.</summary>
-    [SerializeField] protected MoneyResource cost = new();
-    [CreateProperty] public MoneyResource Cost { get => cost; set => cost = value; }
+    [SerializeField, LevelData] protected List<MoneyResource> costs = new();
+    public List<MoneyResource> Costs => costs;
+    [CreateProperty] public MoneyResource Cost => costs[level];
+
+
     /// <summary>Is constructed.</summary>
     public bool constructed;
     /// <summary>Is being deconstructed.</summary>
@@ -44,8 +51,12 @@ public class Building : StorageObject
     /// <summary>.</summary>
     public int maximalProgress;
 
-    [Header("Prefab info")]
-    [SerializeField] public DataAssign prefabConnection;
+    public int level = 0;
+    [Range(1, MAX_LEVEL), SerializeField] 
+    public int maxLevel = 1;
+
+    [Header("Prefab info"), SerializeField] 
+    public DataAssign prefabConnection;
 
     bool isTransparent = false;
     #endregion
@@ -187,7 +198,7 @@ public class Building : StorageObject
         UIUpdate(nameof(LocalRes));
         if (localRes.requests[index].Sum() == 0)
         {
-            if (!constructed && localRes.Same(cost))
+            if (!constructed && localRes.Same(Cost))
             {
                 human.SetJob(JobState.Constructing);
                 localRes.mods[index] = 0;
@@ -339,7 +350,7 @@ public class Building : StorageObject
         r.Manage(localRes, true);
         if (constructed)
         {
-            r.Manage(cost, true);
+            r.Manage(Cost, true);
             for (int i = 0; i < r.ammounts.Count; i++)
             {
                 r.ammounts[i] /= 2;
@@ -347,7 +358,7 @@ public class Building : StorageObject
         }
         else
         {
-            Resource resource = cost - localRes;
+            Resource resource = Cost - localRes;
             MyRes.UpdateResource(resource, true);
         }
         DestoyBuilding(); // destroy self
@@ -441,18 +452,18 @@ public class Building : StorageObject
     /// <returns>Missing resources.</returns>
     public virtual Resource GetDiff(Resource inventory)
     {
-        return inventory.Diff(localRes.Future(), cost);
+        return inventory.Diff(localRes.Future(), Cost);
     }
     /// <summary>Short info for building buttons.</summary>
     public virtual List<string> GetInfoText()
     {
-        return new() { $"<u>Costs</u>:\n{cost}" };
+        return new() { $"<u>Costs</u>:\n{costs}" };
     }
 
     /// <summary>Checks if you can afford the building.</summary>
     public virtual bool CanPlace(bool checkCost = true)
     {
-        bool canPlace = (checkCost ? MyRes.CanAfford(cost) : true) && MyGrid.CanPlace(this);
+        bool canPlace = (checkCost ? MyRes.CanAfford(Cost) : true) && MyGrid.CanPlace(this);
 
         if (this is IFluidWork fluidWork)
         {
@@ -472,8 +483,8 @@ public class Building : StorageObject
         GetComponent<SortingGroup>().sortingLayerName = "Buildings";
 
         Highlight(new());
-        MyRes.UpdateResource(cost, false);
-        MyRes.ManageMoneyGlobal(-cost.Money);
+        MyRes.UpdateResource(Cost, false);
+        MyRes.ManageMoneyGlobal(-Cost.Money);
         SceneRefs.JobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above
         UniqueID();
         MyGrid.SetBuilding(this);
@@ -491,7 +502,7 @@ public class Building : StorageObject
 
     public virtual void InitPrefabData()
     {
-        cost.Init();
+        Cost.Init();
         ((IModifiable)LocalRes.capacity).Init();
 
         #region Interface modifiers
@@ -525,7 +536,7 @@ public class Building : StorageObject
 
     public virtual int CalculateMaxProgress()
     {
-        int result = cost.Sum() * 2;
+        int result = Cost.Sum() * 2;
         if (result == 0)
             result = 1;
         return result;
@@ -539,7 +550,7 @@ public class Building : StorageObject
     {
         objectName = prev.objectName;
         blueprint = prev.blueprint;
-        cost = prev.cost;
+        costs = prev.costs;
     }
 #endif
     #endregion

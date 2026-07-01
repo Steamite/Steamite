@@ -651,16 +651,33 @@ MonoBehaviour:
         z: 1
         y: 0
       itemType: 3
-  cost:
-    types:
-    - {fileID: 11400000, guid: 1d2e942eab98fe943ab9432e5e945d79, type: 2}
-    ammounts: 0a000000
+  costs:
+  - types:
+    - {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
+    - {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
+    ammounts: 0a00000005000000
     baseResource:
       types:
-      - {fileID: 11400000, guid: 1d2e942eab98fe943ab9432e5e945d79, type: 2}
-      ammounts: 0a000000
+      - {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
+      - {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
+      ammounts: 0a00000005000000
     mod:
       percentMod: 1
+      absoluteMod: 0
+    money:
+      baseValue: 40
+      currentValue: 40
+      mod:
+        percentMod: 1
+        absoluteMod: 0
+  - types: []
+    ammounts: 
+    baseResource:
+      types:
+      - {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
+      ammounts: 0a000000
+    mod:
+      percentMod: 0
       absoluteMod: 0
     money:
       baseValue: 50
@@ -668,10 +685,27 @@ MonoBehaviour:
       mod:
         percentMod: 1
         absoluteMod: 0
+  - types: []
+    ammounts: 
+    baseResource:
+      types:
+      - {fileID: 11400000, guid: e592b624b77a5da49a98b4964344738d, type: 2}
+      ammounts: 05000000
+    mod:
+      percentMod: 0
+      absoluteMod: 0
+    money:
+      baseValue: 80
+      currentValue: 80
+      mod:
+        percentMod: 1
+        absoluteMod: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 30
+  level: 0
+  maxLevel: 3
   prefabConnection:
     categoryId: 2
     objectId: 1235511660

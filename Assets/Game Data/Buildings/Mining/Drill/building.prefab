@@ -210,29 +210,55 @@ MonoBehaviour:
         z: 1
         y: 0
       itemType: 3
-  cost:
-    types:
-    - {fileID: 11400000, guid: 1d2e942eab98fe943ab9432e5e945d79, type: 2}
-    - {fileID: 11400000, guid: f9e61f1dd3b0f9d418d535915c9c5770, type: 2}
-    ammounts: 050000000a000000
+  costs:
+  - types: []
+    ammounts: 
     baseResource:
-      types:
-      - {fileID: 11400000, guid: 1d2e942eab98fe943ab9432e5e945d79, type: 2}
-      - {fileID: 11400000, guid: f9e61f1dd3b0f9d418d535915c9c5770, type: 2}
-      ammounts: 050000000a000000
+      types: []
+      ammounts: 
     mod:
-      percentMod: 1
+      percentMod: 0
       absoluteMod: 0
     money:
-      baseValue: 30
-      currentValue: 30
+      baseValue: 0
+      currentValue: 0
       mod:
-        percentMod: 1
+        percentMod: 0
+        absoluteMod: 0
+  - types: []
+    ammounts: 
+    baseResource:
+      types: []
+      ammounts: 
+    mod:
+      percentMod: 0
+      absoluteMod: 0
+    money:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 0
+        absoluteMod: 0
+  - types: []
+    ammounts: 
+    baseResource:
+      types: []
+      ammounts: 
+    mod:
+      percentMod: 0
+      absoluteMod: 0
+    money:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 0
         absoluteMod: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 0
+  level: 0
+  maxLevel: 1
   prefabConnection:
     categoryId: 190792688
     objectId: 1169593243

@@ -20,7 +20,7 @@ public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, Productio
     }
     protected override void CreateGUI()
     {
-        holder = AssetDatabase.LoadAssetAtPath<ProductionRecipeHolder>(ProductionRecipeHolder.EDITOR_PATH);
+        Holder = AssetDatabase.LoadAssetAtPath<ProductionRecipeHolder>(ProductionRecipeHolder.EDITOR_PATH);
         base.CreateGUI();
         rootVisualElement.Q<Button>("Rebind-Create").clicked += async () => await ResFluidTypes.Init();
         categorySelector.index = 0;
@@ -40,7 +40,7 @@ public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, Productio
             bindCell = (el, i) =>
             {
                 IntegerField field = (IntegerField)el;
-                field.value = selectedCategory.Objects[i].timeInTicks;
+                field.value = SelectedCategory.Objects[i].timeInTicks;
                 field.RegisterValueChangedCallback(TimeChange);
             },
             unbindCell = (el, i) =>
@@ -57,7 +57,7 @@ public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, Productio
             {
                 DropdownField field = (DropdownField)el;
                 field.choices = choices;
-                field.value = selectedCategory.Objects[i].GetType().Name;
+                field.value = SelectedCategory.Objects[i].GetType().Name;
                 field.RegisterValueChangedCallback(TypeChange);
             }
         });
@@ -73,7 +73,7 @@ public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, Productio
             bindCell = (el, i) =>
             {
                 DoubleResCell cell = (DoubleResCell)el;
-                cell.Open(selectedCategory.Objects[i], holder, true);
+                cell.Open(SelectedCategory.Objects[i], Holder, true);
             }
         });
 
@@ -89,7 +89,7 @@ public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, Productio
             bindCell = (el, i) =>
             {
                 DoubleResCell cell = (DoubleResCell)el;
-                cell.Open(selectedCategory.Objects[i], holder, false);
+                cell.Open(SelectedCategory.Objects[i], Holder, false);
 /*
                 ResourceCell cell = (ResourceCell)el;
                 cell.Open(selectedCategory.Objects[i].resourceYield, holder, false);*/
@@ -100,17 +100,17 @@ public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, Productio
     {
         int row = ev.target.GetRowIndex();
         int newTypeIndex = choices.IndexOf(ev.newValue);
-        selectedCategory.Objects[row] = Activator.CreateInstance(types[newTypeIndex], selectedCategory.Objects[row]) as ProductionRecipe;
+        SelectedCategory.Objects[row] = Activator.CreateInstance(types[newTypeIndex], SelectedCategory.Objects[row]) as ProductionRecipe;
         
-        EditorUtility.SetDirty(holder);
+        EditorUtility.SetDirty(Holder);
         dataGrid.RefreshItem(row);
     }
 
     void TimeChange(ChangeEvent<int> ev)
     {
         int row = ev.target.GetRowIndex();
-        selectedCategory.Objects[row].timeInTicks = ev.newValue;
-        EditorUtility.SetDirty(holder);
+        SelectedCategory.Objects[row].timeInTicks = ev.newValue;
+        EditorUtility.SetDirty(Holder);
     }
 
 

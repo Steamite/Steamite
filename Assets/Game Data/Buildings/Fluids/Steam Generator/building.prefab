@@ -146,7 +146,7 @@ MonoBehaviour:
     types: []
     ammounts: 
     capacity:
-      baseValue: 0
+      baseValue: 5
       currentValue: 0
       mod:
         percentMod: 1
@@ -200,29 +200,55 @@ MonoBehaviour:
         z: 1
         y: 0
       itemType: 3
-  cost:
-    types:
-    - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
-    - {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
-    ammounts: 050000000a00000000000000
+  costs:
+  - types: []
+    ammounts: 
     baseResource:
-      types:
-      - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
-      - {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
-      ammounts: 050000000a00000000000000
+      types: []
+      ammounts: 
     mod:
-      percentMod: 1
+      percentMod: 0
       absoluteMod: 0
     money:
-      baseValue: 20
-      currentValue: 20
+      baseValue: 0
+      currentValue: 0
       mod:
-        percentMod: 1
+        percentMod: 0
+        absoluteMod: 0
+  - types: []
+    ammounts: 
+    baseResource:
+      types: []
+      ammounts: 
+    mod:
+      percentMod: 0
+      absoluteMod: 0
+    money:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 0
+        absoluteMod: 0
+  - types: []
+    ammounts: 
+    baseResource:
+      types: []
+      ammounts: 
+    mod:
+      percentMod: 0
+      absoluteMod: 0
+    money:
+      baseValue: 0
+      currentValue: 0
+      mod:
+        percentMod: 0
         absoluteMod: 0
   constructed: 0
   deconstructing: 0
   constructionProgress: 0
   maximalProgress: 0
+  level: 0
+  maxLevel: 1
   prefabConnection:
     categoryId: 4
     objectId: 1611848327
@@ -282,7 +308,7 @@ MonoBehaviour:
     types: []
     ammounts: 
     capacity:
-      baseValue: 20
+      baseValue: 15
       currentValue: 0
       mod:
         percentMod: 1

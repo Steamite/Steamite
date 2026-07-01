@@ -350,7 +350,7 @@ namespace EditorWindows.Research
             }
             else if (ev.clickCount == 2)
             {
-                nodeData.DisconnectNodes(editor.selectedCategory.Objects, true);
+                nodeData.DisconnectNodes(editor.SelectedCategory.Objects, true);
                 editor.SaveValues();
                 editor.RepaintRow(nodeData.level);
             }

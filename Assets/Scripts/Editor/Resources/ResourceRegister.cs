@@ -16,7 +16,7 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
     }
     protected override void CreateGUI()
     {
-        holder = AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH);
+        Holder = AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH);
         base.CreateGUI();
         colorField = rootVisualElement.Q<ColorField>();
         rootVisualElement.Q<Button>("Rebind-Create").clicked += async () => await ResFluidTypes.Init();
@@ -28,7 +28,7 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
         bool b = base.LoadCategData(index);
         if (b)
         {
-            colorField.value = selectedCategory.color;
+            colorField.value = SelectedCategory.color;
         }
         else
         {
@@ -47,10 +47,10 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
 
     void CategoryColorChange(ChangeEvent<Color> ev)
     {
-        if (selectedCategory != null && ev.newValue != new Color())
+        if (SelectedCategory != null && ev.newValue != new Color())
         {
-            selectedCategory.color = ev.newValue;
-            EditorUtility.SetDirty(holder);
+            SelectedCategory.color = ev.newValue;
+            EditorUtility.SetDirty(Holder);
         }
     }
 
@@ -160,11 +160,11 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
     private void AssetChange(ChangeEvent<UnityEngine.Object> ev)
     {
         int i = ev.target.GetRowIndex();
-        if (holder.Categories.SelectMany(q => q.Objects).Select(q => q.data).Contains(ev.newValue) == false)
+        if (Holder.Categories.SelectMany(q => q.Objects).Select(q => q.data).Contains(ev.newValue) == false)
         {
             ((ResourceWrapper)dataGrid.itemsSource[i]).data = ev.newValue as ResourceType;
             ((ResourceWrapper)dataGrid.itemsSource[i]).Name = (ev.newValue as ResourceType)?.Name;
-            EditorUtility.SetDirty(holder);
+            EditorUtility.SetDirty(Holder);
 
             dataGrid.RefreshItem(i);
         }
@@ -190,7 +190,7 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
         if (((ResourceWrapper)dataGrid.itemsSource[i]).Name != value)
         {
             ((ResourceWrapper)dataGrid.itemsSource[i]).Name = value;
-            EditorUtility.SetDirty(holder);
+            EditorUtility.SetDirty(Holder);
 
             ((ResourceWrapper)dataGrid.itemsSource[i]).data.Name = value;
             EditorUtility.SetDirty(((ResourceWrapper)dataGrid.itemsSource[i]).data);

@@ -192,9 +192,11 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
                 break;
 
             case InfoMode.Human:
-                Dictionary<string, List<string>> toEnable = new();
-                toEnable.Add("General", new List<string> { "Human Info" });
-                toEnable.Add("Job", new List<string> { "Job Info" });
+                Dictionary<string, List<string>> toEnable = new()
+                {
+                    { "General", new List<string> { "Human Info" } },
+                    { "Job", new List<string> { "Job Info" } }
+                };
                 CreateTabbedView(toEnable, dataSource);
                 break;
 

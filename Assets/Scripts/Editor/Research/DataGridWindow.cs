@@ -1,6 +1,7 @@
 using EditorWindows;
 using System;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, DATA_TYPE>
@@ -25,7 +26,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
         if (boo)
         {
             dataGrid.style.display = DisplayStyle.Flex;
-            dataGrid.itemsSource = selectedCategory.Objects;
+            dataGrid.itemsSource = SelectedCategory.Objects;
         }
         else
         {
@@ -40,16 +41,16 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
     protected virtual void AddEntry(BaseListView _, bool add = true)
     {
         if (add)
-            selectedCategory.Objects.Add((DATA_TYPE)Activator.CreateInstance(typeof(DATA_TYPE), holder.UniqueID()));
+            SelectedCategory.Objects.Add((DATA_TYPE)Activator.CreateInstance(typeof(DATA_TYPE), Holder.UniqueID()));
         dataGrid.RefreshItems();
-        EditorUtility.SetDirty(holder);
+        EditorUtility.SetDirty(Holder);
     }
     protected void RemoveEntry(BaseListView _) => RemoveEntry(_.selectedItem as DATA_TYPE, true);
     protected virtual void RemoveEntry(DATA_TYPE wrapper, bool removeFromGrid)
     {
         if (removeFromGrid)
         {
-            selectedCategory.Objects.Remove(wrapper);
+            SelectedCategory.Objects.Remove(wrapper);
             dataGrid.RefreshItems();
         }
     }
@@ -70,7 +71,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
                 return l;
             };
         dataGrid.columns["id"].bindCell =
-            (el, i) => ((Label)el).text = selectedCategory.Objects[i]?.id.ToString();
+            (el, i) => ((Label)el).text = SelectedCategory.Objects[i]?.id.ToString();
         #endregion
 
         #region Name
@@ -111,6 +112,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
             (el, i) =>
             {
                 TextField field = (TextField)el;
+                field.Unbind();
                 field.UnregisterCallback<FocusOutEvent>(DescrChange);
             }
 
@@ -140,7 +142,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
         if (((DATA_TYPE)dataGrid.itemsSource[i]).Name != value)
         {
             ((DATA_TYPE)dataGrid.itemsSource[i]).Name = value;
-            EditorUtility.SetDirty(holder);
+            EditorUtility.SetDirty(Holder);
         }
     }
     protected virtual void DescrChange(FocusOutEvent ev)
@@ -163,7 +165,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
         if (((DATA_TYPE)dataGrid.itemsSource[i]).description != value)
         {
             ((DATA_TYPE)dataGrid.itemsSource[i]).description = value;
-            EditorUtility.SetDirty(holder);
+            EditorUtility.SetDirty(Holder);
         }
     }
     #endregion

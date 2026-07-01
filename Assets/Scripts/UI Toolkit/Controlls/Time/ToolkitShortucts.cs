@@ -83,7 +83,7 @@ public class ToolkitShortucts : MonoBehaviour, IAfterLoad
 
             if (buildMenu.triggered)
             {
-                ((BuildMenu)UIRefs.BottomBarRoot[1]).Toggle();
+                UIRefs.BottomBarRoot.Q<BuildMenu>().Toggle();
             }
         }
     }
