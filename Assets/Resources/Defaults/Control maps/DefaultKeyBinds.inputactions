@@ -311,15 +311,6 @@
             "id": "a6c9ac32-bc0e-455d-b799-2a6cdb02e49c",
             "actions": [
                 {
-                    "name": "Build Menu",
-                    "type": "Button",
-                    "id": "5c803185-0157-4470-a047-424c2fb9fc5f",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Dig",
                     "type": "Button",
                     "id": "646d2a96-ca2f-481d-ab00-0c876c5b0aa8",
@@ -329,10 +320,19 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Upgrade",
+                    "type": "Button",
+                    "id": "8e51d3ef-c8a8-4b69-9bc8-81ca8f36cce5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Deconstruct",
                     "type": "Button",
                     "id": "d2c83335-ec63-4da5-907d-f7d1836f51e9",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -393,17 +393,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "224f8045-fe57-4c7f-a370-9406005895a8",
-                    "path": "<Keyboard>/b",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Build Menu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "197b16af-2be1-412c-9e70-f0b708aff58a",
@@ -544,6 +533,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Quests",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "12c4cb4d-845f-4f46-8ec9-1bbda8fc70b9",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Upgrade",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

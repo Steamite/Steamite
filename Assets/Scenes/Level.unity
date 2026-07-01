@@ -1532,6 +1532,7 @@ MonoBehaviour:
   cursors:
   - {fileID: 2800000, guid: ae363da8347a847499c9345c5845bf1e, type: 3}
   - {fileID: 2800000, guid: fd2def2a77be87d4382da31006c84430, type: 3}
+  - {fileID: 2800000, guid: d58d0172d0cc7fa4cb39a198a519a6a5, type: 3}
   highlight: {r: 0.33333334, g: 0.33333334, b: 0.33333334, a: 0.33333334}
 --- !u!114 &3891230603216898686
 MonoBehaviour:

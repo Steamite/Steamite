@@ -1,6 +1,8 @@
+using Assets.Scripts.UI.Refs___Shortcuts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Unity.XR.Oculus.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,8 +10,8 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
 {
     InputActionMap bindingMap => inputAsset.actionMaps[1];
 
-    InputAction buildMenu;
     InputAction dig;
+    InputAction upgrade;
     InputAction deconstruction;
     InputAction buildRotate;
     InputAction menu;
@@ -25,8 +27,8 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
 
     public Task BeforeInit()
     {
-        buildMenu = bindingMap.FindAction("Build Menu");
         dig = bindingMap.FindAction("Dig");
+        upgrade = bindingMap.FindAction("Upgrade");
         deconstruction = bindingMap.FindAction("Deconstruct");
         buildRotate = bindingMap.FindAction("Build Rotate");
         menu = bindingMap.FindAction("Menu");
@@ -34,6 +36,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
         research = bindingMap.FindAction("Research");
         trade = bindingMap.FindAction("Trade");
         quests = bindingMap.FindAction("Quests");
+
         instance = this;
         return Task.CompletedTask;
     }
@@ -48,11 +51,20 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
     {
         handleGrid = false;
         handleWindows = win;
+        if (win)
+            instance.MapWindows();
+        else
+        {
+            instance.ClearActions();
+            instance.menu.performed += ShotcutActions.Menu_performed;
+        }
         UIRefs.LevelCamera.enabled = false;
         SceneRefs.GridTiles.activeObject = null;
     }
     public static void EnableInput()
     {
+        instance.ClearActions();
+        instance.MapActions();
         handleGrid = true;
         handleWindows = true;
         UIRefs.LevelCamera.enabled = true;
@@ -61,96 +73,54 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
     private void OnEnable()
     {
         bindingMap.Enable();
+        MapActions();
     }
+
     private void OnDisable()
     {
         bindingMap.Disable();
+        ClearActions();
     }
 
-    void Update()
+    void MapActions()
     {
-        GridTiles gt = SceneRefs.GridTiles;
-        if (handleGrid)
-        {
-            // toggle build menu
-            if (buildMenu.triggered)
-            {
-                // buildMenu = UIRefs.buildBar;
-                /*Transform categories = buildMenu.GetChild(1);
-                buildMenu.gameObject.SetActive(!buildMenu.gameObject.activeSelf);
-                if (buildMenu.gameObject.activeSelf)
-                {
-                    for (int i = 0; i < categories.childCount; i++)
-                    {
-                        categories.GetChild(i).gameObject.SetActive(false);
-                    }
-                    buildMenu.GetChild(1).gameObject.SetActive(false);
-                }*/
-            }
-            // toggle dig
-            if (dig.triggered)
-            {
-                gt.ChangeSelMode(ControlMode.Dig);
-            }
-            // toggle deconstruct
-            else if (deconstruction.triggered)
-            {
-                gt.ChangeSelMode(ControlMode.Deconstruct);
-            }
-            // rotates building
-            else if (buildRotate.triggered)
-            {
-                float axis = buildRotate.ReadValue<float>();
-                if (SceneRefs.GridTiles.ActiveControl == ControlMode.Build)
-                {
-                    Building building = SceneRefs.GridTiles.BlueprintInstance;
-                    if (building is Pipe)
-                        return;
-                    if (axis < 0)
-                    {
-                        building.transform.Rotate(new Vector3(0, 90, 0));
-                    }
-                    else
-                    {
-                        building.transform.Rotate(new Vector3(0, -90, 0));
-                    }
-                    if (building is IFluidWork fluid)
-                    {
-                        fluid.AttachedPipes.ForEach(q => q.RecalculatePipeTransform());
-                    }
-                    SceneRefs.GridTiles.Enter(SceneRefs.GridTiles.activeObject);
-                }
-            }
-        }
+        dig.performed += ShotcutActions.Dig_performed;
+        upgrade.performed += ShotcutActions.Upgrade_performed;
+        deconstruction.performed += ShotcutActions.Deconstruction_performed;
+        buildRotate.performed += ShotcutActions.BuildRotate_performed;
+        shift.performed += ShotcutActions.Shift_performed;
+        shift.canceled += ShotcutActions.Shift_canceled;
 
-        if (shift.inProgress)
-        {
-            if (gt.ActiveControl == ControlMode.Deconstruct)
-            {
-                gt.Enter(gt.activeObject);
-            }
-        }
+        research.performed += ShotcutActions.Research_performed;
+        trade.performed += ShotcutActions.Trade_performed;
+        quests.performed += ShotcutActions.Quests_performed;
 
-        if (handleWindows)
-        {
-            if (research.triggered)
-            {
-                UIRefs.ResearchWindow.ToggleWindow();
-            }
-            else if (trade.triggered)
-            {
-                UIRefs.TradingWindow.ToggleWindow();
-            }
-            else if (quests.triggered)
-            {
-                UIRefs.Quests.ToggleWindow();
-            }
-        }
-        // opens ingame menu
-        if (menu.triggered)
-        {
-            UIRefs.PauseMenu.Toggle();
-        }
+        menu.performed += ShotcutActions.Menu_performed;
+    }
+
+    void ClearActions()
+    {
+        dig.performed -= ShotcutActions.Dig_performed;
+        upgrade.performed -= ShotcutActions.Upgrade_performed;
+        deconstruction.performed -= ShotcutActions.Deconstruction_performed;
+        buildRotate.performed -= ShotcutActions.BuildRotate_performed;
+        shift.performed -= ShotcutActions.Shift_performed;
+        shift.canceled -= ShotcutActions.Shift_canceled;
+
+        research.performed -= ShotcutActions.Research_performed;
+        trade.performed -= ShotcutActions.Trade_performed;
+        quests.performed -= ShotcutActions.Quests_performed;
+
+        menu.performed -= ShotcutActions.Menu_performed;
+    }
+
+    void MapWindows()
+    {
+        ClearActions();
+        research.performed += ShotcutActions.Research_performed;
+        trade.performed += ShotcutActions.Trade_performed;
+        quests.performed += ShotcutActions.Quests_performed;
+        menu.performed += ShotcutActions.Menu_performed;
     }
 
     public static void DisableAll()
@@ -174,28 +144,11 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
 
     public static string ParseDescription(string description)
     {
-        foreach (var action in instance.GetActions())
+        foreach (var action in instance.bindingMap.actions)
         {
             string newString = action.controls.First().displayName.Replace(":", "");
             description = description.Replace(action.name, $"\"{newString}\"");
         }
         return description;
-    }
-
-    List<InputAction> GetActions()
-    {
-        List<InputAction> inputActions = new()
-        {
-            buildMenu,
-            dig,
-            deconstruction,
-            buildRotate,
-            menu,
-            shift,
-            research,
-            trade,
-            quests,
-        };
-        return inputActions;
     }
 }
