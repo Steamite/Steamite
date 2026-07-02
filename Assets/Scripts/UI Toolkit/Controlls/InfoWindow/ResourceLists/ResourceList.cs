@@ -1,4 +1,5 @@
 using Assets.Scripts.UI_Toolkit.Controlls.Universal;
+using LocalMenuUtility;
 using Outposts;
 using System;
 using System.Collections.Generic;
@@ -104,6 +105,7 @@ namespace InfoWindowElements
 
             makeItem = MakeItem;
             bindItem = BindItem;
+            destroyItem = DestroyItem;
             makeNoneElement = MakeNoneElement;
 
             style.flexGrow = 1;
@@ -133,6 +135,12 @@ namespace InfoWindowElements
             
             (el as ResourceTextIcon).SetTextIcon(ConvertString((UIResource)itemsSource[i]), ((UIResource)itemsSource[i]).type);
         }
+
+        protected virtual void DestroyItem(VisualElement el)
+        {
+            (el as ResourceTextIcon).icon.UnregisterLocalMenu();// LocalMenuController.UnregisterMouseEvents();
+        }
+
 
         /// <summary>
         /// Customizible function for creating the empty element.

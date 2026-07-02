@@ -502,7 +502,10 @@ public class Building : StorageObject
 
     public virtual void InitPrefabData()
     {
-        Cost.Init();
+        foreach (var cost in costs)
+        {
+            cost.Init();
+        }
         ((IModifiable)LocalRes.capacity).Init();
 
         #region Interface modifiers
@@ -542,6 +545,27 @@ public class Building : StorageObject
         return result;
     }
 
+    #endregion
+
+    #region Upgrade
+    public bool CanUpgrade()
+    {
+        if (!constructed)
+            return false;
+        if (level >= maxLevel-1)
+            return false;
+        if (!MyRes.CanAfford(Costs[level+1]))
+            return false;
+
+        return true;
+    }
+
+    public void StartUpgrade()
+    {
+        if (!CanUpgrade())
+            return;
+        
+    }
     #endregion
 
     #region Editor

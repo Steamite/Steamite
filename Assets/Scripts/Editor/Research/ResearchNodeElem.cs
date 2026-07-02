@@ -342,7 +342,7 @@ namespace EditorWindows.Research
             if (editor.activeNode != null)
             {
                 int i = editor.GetIndexInRow(editor.activeNode);
-                editor.tree[editor.activeNode.level][1][i]
+                editor.Tree[editor.activeNode.level][1][i]
                     .Q<Button>("Bot").RemoveFromClassList("selected");
                 editor.activeNode.ConnectNode(nodeData);
                 editor.SaveValues();

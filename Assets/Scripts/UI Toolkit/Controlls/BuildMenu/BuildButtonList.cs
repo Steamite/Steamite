@@ -1,4 +1,5 @@
 using AbstractControls;
+using LocalMenuUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -138,28 +139,16 @@ namespace BottomBar.Building
             element[0][1].dataSource = MyRes.resDataSource;
             element[0][1].SetBinding("style.display", binding);
 
-            element.RegisterCallback<PointerEnterEvent>(Hover);
-            element.RegisterCallback<PointerLeaveEvent>(EndHove);
+            element.RegisterLocalMenu(wrappers[index]);
         }
 
         protected void DefaultUnBindItem(VisualElement element, int index)
         {
-            ToolkitUtils.ChangeClassWithoutTransition($"{BUILD_BUTTON_CLASS}-selected", BUILD_BUTTON_CLASS, element);
+            element.ChangeClassWithoutTransition($"{BUILD_BUTTON_CLASS}-selected", BUILD_BUTTON_CLASS);
             element.AddToClassList(BUILD_BUTTON_CLASS);
             element.ClearBindings();
             element.dataSource = null;
-            element.UnregisterCallback<PointerEnterEvent>(Hover);
-            element.UnregisterCallback<PointerLeaveEvent>(EndHove);
-        }
-
-        private void Hover(PointerEnterEvent evt)
-        {
-            int i = ((CustomRadioButton)evt.target).selIndex;
-            ToolkitUtils.localMenu.UpdateContent(wrappers[i], (CustomRadioButton)evt.target);
-        }
-        private void EndHove(PointerLeaveEvent evt)
-        {
-            ToolkitUtils.localMenu.Close();
+            element.UnregisterLocalMenu();//.UnregisterMouseEvents(element);
         }
 
         public override bool Select(int index)

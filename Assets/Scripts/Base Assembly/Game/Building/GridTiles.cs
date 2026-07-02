@@ -213,6 +213,9 @@ public class GridTiles : MonoBehaviour
                     Drag = false;
                     ActiveControl = ControlMode.Nothing;
                     break;
+                case ControlMode.Upgrade:
+                    ActiveControl = ControlMode.Nothing;
+                    break;
                 case ControlMode.Build:
                     SceneRefs.CameraSceneMover.SetRaycastMask(defaultMask);
                     if (Drag)

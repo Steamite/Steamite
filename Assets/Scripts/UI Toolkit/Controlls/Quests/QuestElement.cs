@@ -1,3 +1,4 @@
+using LocalMenuUtility;
 using Objectives;
 using UnityEngine.UIElements;
 
@@ -94,7 +95,8 @@ public partial class QuestElement : VisualElement
             elemGroup.Add(label);
             objectives.Add(elemGroup);
         }
-        RegisterCallback<MouseEnterEvent>((_) => ToolkitUtils.localMenu.UpdateContent(quest, this));
-        RegisterCallback<MouseLeaveEvent>((_) => ToolkitUtils.localMenu.Close());
+        this.RegisterLocalMenu(quest);/*
+        RegisterCallback<MouseEnterEvent>((_) => LocalMenuController.OpenUI(quest, this));
+        RegisterCallback<MouseLeaveEvent>((_) => LocalMenuController.Close());*/
     }
 }

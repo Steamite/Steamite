@@ -1,4 +1,5 @@
-﻿using Outposts;
+﻿using LocalMenuUtility;
+using Outposts;
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,7 +8,7 @@ using UnityEngine.UIElements;
 public partial class ResourceTextIcon : VisualElement
 {
     Label value;
-    VisualElement icon;
+    public VisualElement icon;
 
     public const int ICON_SIZE = 50;
     [UxmlAttribute] public float scale = 1;
@@ -44,26 +45,15 @@ public partial class ResourceTextIcon : VisualElement
         icon.style.minHeight = ICON_SIZE * scale;
         icon.style.maxWidth = ICON_SIZE * scale;
         icon.style.maxHeight = ICON_SIZE * scale;
-        icon.RegisterCallback<PointerEnterEvent>(OnHover);
-        icon.RegisterCallback<PointerLeaveEvent>(OnLeave);
+
     }
 
-    #region Mouse Events
-    void OnHover(PointerEnterEvent evt)
-    {
-        ToolkitUtils.localMenu.UpdateContent(resType, icon);
-    }
-
-    void OnLeave(PointerLeaveEvent evt)
-    {
-        ToolkitUtils.localMenu.Close();
-    }
-    #endregion
     public void SetTextIcon(string newText, ResourceType type)
     {
         value.text = newText;
         icon.style.unityBackgroundImageTintColor = type.color;
         resType = type;
+        icon.RegisterLocalMenu(type);
     }
 
     public void ColorText(Color color)

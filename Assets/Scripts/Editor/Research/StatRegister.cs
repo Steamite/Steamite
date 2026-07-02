@@ -153,7 +153,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
         VisualElement el = (VisualElement)ev.target;
         int i = el.parent.parent.IndexOf(el.parent);
 
-        ListView view = ToolkitUtils.GetParentOfType<ListView>(el);
+        ListView view = el.GetParentOfType<ListView>();
         int j = view.GetRowIndex();
         return new(i, j);
     }

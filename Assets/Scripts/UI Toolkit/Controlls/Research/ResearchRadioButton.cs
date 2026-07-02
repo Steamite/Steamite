@@ -1,4 +1,5 @@
 using AbstractControls;
+using LocalMenuUtility;
 using UnityEngine.UIElements;
 
 namespace ResearchUI
@@ -84,8 +85,7 @@ namespace ResearchUI
             nameLabel.text = node.Name;
             Add(nameLabel);
 
-            RegisterCallback<PointerEnterEvent>(_ => ToolkitUtils.localMenu.UpdateContent(node, this));
-            RegisterCallback<PointerLeaveEvent>(_ => ToolkitUtils.localMenu.Close());
+            this.RegisterLocalMenu(node);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace ResearchUI
                 {
                     UnlockResearch(true);
                     SelectWithoutTransition(false); // updates the group but without checks
-                    ToolkitUtils.GetParentOfType<ResearchRadioButtonGroup>(this).SetSelection(selIndex);
+                    this.GetParentOfType<ResearchRadioButtonGroup>().SetSelection(selIndex);
                 }
                 else
                     UnlockResearch(false);
@@ -127,20 +127,20 @@ namespace ResearchUI
                         node.CurrentTime = 0;
                         MyRes.PayCostGlobal(node.reseachCost);
                     }
-                    ToolkitUtils.localMenu.UpdateContent(node, this, true);
+                    LocalMenuController.OpenUI(node, this, true);
                     base.SelectChange(UpdateGroup);
                     RemoveFromClassList(AVAILABLE_CLASS);
                     return true;
                 }
                 else
                 {
-                    ToolkitUtils.ChangeClassWithoutTransition(AVAILABLE_CLASS, "forceHover", this);
+                    this.ChangeClassWithoutTransition(AVAILABLE_CLASS, "forceHover");
                     ConfirmWindow.window.Open(
                         () =>
                         {
                             // Clear research(queue[WIP]) and select this button.
                             UIRefs.ResearchWindow.SetActive(null);
-                            ToolkitUtils.RemoveClassWithoutTransition("forceHover", this);
+                            this.RemoveClassWithoutTransition("forceHover");
                             Select();
                         },
                         () =>
