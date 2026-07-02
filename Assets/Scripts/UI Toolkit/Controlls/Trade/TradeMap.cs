@@ -1,4 +1,5 @@
 using AbstractControls;
+using LocalMenuUtility;
 using Outposts;
 using System.Collections.Generic;
 using TradeData.Locations;
@@ -8,7 +9,7 @@ using UnityEngine.UIElements;
 namespace TradeWindowElements
 {
     [UxmlElement]
-    public partial class TradeMap : Map, IInitiableUI, IFullScreenWindowElem
+    public partial class TradeMap : Map, IInitiableUI, IClosableElement
     {
         const float DISTANCE_MOD = 2;
         List<LocationButton> locationButtons = new();
@@ -130,10 +131,7 @@ namespace TradeWindowElements
                         UIRefs.TradingWindow.colonyLocation.pos.ToVecUI(),
                         locationGroup);
                 }
-                locationButton.RegisterCallback<MouseEnterEvent>(
-                    q => ToolkitUtils.localMenu.UpdateContent(location, q.target as VisualElement));
-                locationButton.RegisterCallback<MouseLeaveEvent>(
-                    q => ToolkitUtils.localMenu.Close());
+                locationButton.RegisterLocalMenu(location);
                 locationGroup.Add(locationButton);
                 locationButtons.Add(locationButton);
 
@@ -161,13 +159,7 @@ namespace TradeWindowElements
             if (i > 0 && !UIRefs.TradingWindow.outposts[i - 1].exists)
                 outpostButton.enabledSelf = false;
 
-            outpostButton.RegisterCallback<MouseEnterEvent>(
-                q => ToolkitUtils.localMenu.UpdateContent(
-                    outpost,
-                    q.target as VisualElement));
-
-            outpostButton.RegisterCallback<MouseLeaveEvent>(
-                q => ToolkitUtils.localMenu.Close());
+            outpostButton.RegisterLocalMenu(outpost);
 
             outpostElement.Add(outpostButton);
         }
@@ -197,7 +189,7 @@ namespace TradeWindowElements
         {
             if (base.ZoomMap(wheelEvent))
             {
-                locationButtons[locationButtons.Count - 1].RegisterCallbackOnce<GeometryChangedEvent>((_) => ToolkitUtils.localMenu.Move());
+                locationButtons[locationButtons.Count - 1].RegisterCallbackOnce<GeometryChangedEvent>((_) => LocalMenuController.MoveElement(_.target as VisualElement));
                 for (int i = 0; i < locationButtons.Count; i++)
                 {
                     locationButtons[i].RecalculateLayout(zoom);

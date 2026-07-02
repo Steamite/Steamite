@@ -1,3 +1,4 @@
+using LocalMenuUtility;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,8 @@ using UnityEngine.UIElements;
 
 public static class ToolkitUtils
 {
-    public static LocalMenu localMenu;
-
     const string MULTY_COLUMN = "unity-multi-column-view__row-container";
     const string LIST_VIEW = "unity-list-view__item";
-
-    [RuntimeInitializeOnLoadMethod]
-    static void ReloadDomain() => localMenu = null;
 
     /// <summary>
     /// Switches classes on an element with no transition duration, the duration must be on the classes, else it will not be restored afterwards.
@@ -19,7 +15,7 @@ public static class ToolkitUtils
     /// <param name="oldClass">Class that needs to be removed.</param>
     /// <param name="newClass">Class that needs to be added.</param>
     /// <param name="element">Element that needs to change.</param>
-    public static void ChangeClassWithoutTransition(string oldClass, string newClass, VisualElement element)
+    public static void ChangeClassWithoutTransition(this VisualElement element, string oldClass, string newClass)
     {
         if (oldClass != "" && newClass != "" && element != null)
         {
@@ -29,15 +25,16 @@ public static class ToolkitUtils
             element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
         }
     }
-    public static void RemoveClassWithoutTransition(string oldClass, VisualElement element)
+    public static void RemoveClassWithoutTransition(this VisualElement element, string classToRemove)
     {
-        if (oldClass != "" && element != null)
+        if (classToRemove != "" && element != null)
         {
             element.style.transitionDuration = new List<TimeValue> { new TimeValue(0, TimeUnit.Second) };
-            element.RemoveFromClassList(oldClass);
+            element.RemoveFromClassList(classToRemove);
             element.schedule.Execute(() => element.style.transitionDuration = StyleKeyword.Null).ExecuteLater(5);
         }
     }
+
     public static void AddClassWithoutTransition(string newClass, VisualElement element)
     {
         if (newClass != "" && element != null)
@@ -61,13 +58,7 @@ public static class ToolkitUtils
         button.enabledSelf = activate;
     }
 
-    public static VisualElement GetRoot(VisualElement element)
-    {
-        while (element.parent != null)
-            element = element.parent;
-        return element;
-    }
-    public static T GetParentOfType<T>(VisualElement element) where T : VisualElement
+    public static T GetParentOfType<T>(this VisualElement element) where T : VisualElement
     {
         while (element is not T && element.parent != null)
             element = element.parent;
@@ -97,4 +88,9 @@ public static class ToolkitUtils
 
     public static int GetRowIndex(this IEventHandler handler, bool multicolumn = true)
         => GetRowIndex(handler as VisualElement, multicolumn);
+
+    public static void RegisterLocalMenu(this VisualElement element, object data)
+            => LocalMenuController.RegisterMouseEvents(element, data);
+    public static void UnregisterLocalMenu(this VisualElement element)
+            => LocalMenuController.UnregisterMouseEvents(element);
 }

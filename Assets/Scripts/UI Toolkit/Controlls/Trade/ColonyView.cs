@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using LocalMenuUtility;
+using System.Collections.Generic;
 using TradeData.Locations;
 using TradeData.Stats;
 using UnityEngine;
@@ -54,10 +55,8 @@ namespace TradeWindowElements
                 statElem = statElem.ElementAt(0);
                 ((Label)statElem.ElementAt(0)).text = stat.GetText(false);
                 ((Label)statElem.ElementAt(2)).text = stat.name;
-                ((Label)statElem.ElementAt(2)).
-                    RegisterCallback<MouseEnterEvent>((eve) => ShowMenu(eve, stat));
-                ((Label)statElem.ElementAt(2)).
-                    RegisterCallback<MouseLeaveEvent>(HideMenu);
+
+                statElem.ElementAt(2).RegisterLocalMenu(stat);
 
                 statElem = statElem.ElementAt(1);
 
@@ -73,8 +72,7 @@ namespace TradeWindowElements
                 el = group.ElementAt(stateLevel - 1);
                 if (!el.ClassListContains("locked") && !el.ClassListContains("completed"))
                 {
-                    el.UnregisterCallback<MouseEnterEvent, ColonyStat>(ShowMenu);
-                    el.UnregisterCallback<MouseLeaveEvent>(HideMenu);
+                    el.UnregisterLocalMenu();
                     if (el.ClassListContains("available"))
                         el.UnregisterCallback<MouseDownEvent, ColonyStat>(UpgradeStat);
                 }
@@ -97,19 +95,14 @@ namespace TradeWindowElements
                     el.AddToClassList("available");
                     el.RegisterCallback<MouseDownEvent, ColonyStat>(UpgradeStat, stat);
                 }
-                el.RegisterCallback<MouseEnterEvent, ColonyStat>(ShowMenu, stat);
-                el.RegisterCallback<MouseLeaveEvent>(HideMenu);
+                el.RegisterLocalMenu(stat);
             }
             ((Label)group.parent.ElementAt(0)).text = stat.GetText(false);
         }
 
-        void ShowMenu(MouseEnterEvent eve, ColonyStat stat) =>
-            ToolkitUtils.localMenu.UpdateContent(stat, (VisualElement)eve.target);
-        void HideMenu(MouseLeaveEvent _) =>
-            ToolkitUtils.localMenu.Close();
         void UpgradeStat(MouseDownEvent _, ColonyStat stat)
         {
-            HideMenu(null);
+            LocalMenuController.Close(_.target as VisualElement);
             stat.Upgrade();
             RefreshStates();
         }

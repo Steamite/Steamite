@@ -19,15 +19,15 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
     public GameObject endMenu;
     public static int difficulty = 1;
 
-    public OrderController orderController;
+    public OrderController orderController { get; set; }
 
     public List<Quest> finishedQuests;
-    public ObservableCollection<Quest> activeQuests;
+    public ObservableCollection<Quest> activeQuests { get; set; }
 
 
     public List<ExcavationObjective> ExcavationObjectives = new();
     public List<AnyExcavationObjective> AnyExcavationObjectives = new();
-    public List<BuildingObjective> buildingObjectives = new();
+    public List<BuildingObjective> buildingObjectives { get; set; } = new();
 
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 

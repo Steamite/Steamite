@@ -70,7 +70,8 @@ public class MouseEvents : MonoBehaviour
                     if (b)
                     {
                         if (b.deconstructing)
-                            c += Color.red / 2;/*
+                            c += Color.red / 2;
+                        /*
                     else if (!b.constructed)
                         c +=;*/
                     }
@@ -93,17 +94,27 @@ public class MouseEvents : MonoBehaviour
                     gridTiles.CalcTiles(activePos);
                     return;
                 }
-                else if (_r)
+                else if (!_r)
+                    return;
+                
+                if (_r.toBeDug)
                 {
-                    if (_r.toBeDug)
-                    {
-                        c = Color.red;
-                    }
-                    else
-                    {
-                        c = Color.yellow;
-                    }
+                    c = Color.red;
                 }
+                else
+                {
+                    c = Color.yellow;
+                }
+                break;
+            case ControlMode.Upgrade:
+                Building building = enterObject as Building;
+                if (building == null)
+                    return;
+
+                if (building.CanUpgrade())
+                    c = Color.darkGreen;
+                else
+                    c = Color.red;
                 break;
             case ControlMode.Build:
                 Building blueprintPrefab = gridTiles.BlueprintPrefab;
@@ -114,19 +125,17 @@ public class MouseEvents : MonoBehaviour
                     gridTiles.CalcPipes(activePos, blueprintPrefab as Pipe);
                     return;
                 }
-                else
-                {
-                    GridPos grid = blueprintInstance.blueprint.moveBy.Rotate(blueprintInstance.transform.eulerAngles.y);
-                    blueprintInstance.transform.position = new(
-                        activePos.x + grid.x,
-                        (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) +
-                            (blueprintInstance is Pipe
-                            ? ClickableObjectFactory.PIPE_OFFSET
-                            : ClickableObjectFactory.BUILD_OFFSET),
-                        activePos.z + grid.z);
-                    c = blueprintInstance.CanPlace() ? Color.blue : Color.red;
-                    blueprintInstance.Highlight(c);
-                }
+
+                GridPos grid = blueprintInstance.blueprint.moveBy.Rotate(blueprintInstance.transform.eulerAngles.y);
+                blueprintInstance.transform.position = new(
+                    activePos.x + grid.x,
+                    (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) +
+                        (blueprintInstance is Pipe
+                        ? ClickableObjectFactory.PIPE_OFFSET
+                        : ClickableObjectFactory.BUILD_OFFSET),
+                    activePos.z + grid.z);
+                c = blueprintInstance.CanPlace() ? Color.blue : Color.red;
+                blueprintInstance.Highlight(c);
                 return;
         }
         enterObject.Highlight(c);
@@ -169,8 +178,6 @@ public class MouseEvents : MonoBehaviour
                 Building _b = exitObject as Building;
                 if (_b && _b.deconstructing)
                     c = Color.red * 0.75f;
-                else
-                    c = new();
                 break;
             case ControlMode.Dig:
                 Rock _r = exitObject as Rock;
@@ -180,8 +187,6 @@ public class MouseEvents : MonoBehaviour
                         return;
                     else if (_r.toBeDug)
                         c = ToBeDugColor;
-                    else
-                        c = new();
                 }
                 break;
             case ControlMode.Build:
@@ -206,10 +211,13 @@ public class MouseEvents : MonoBehaviour
         }
         Color c = new();
         Material[] m = activeObject.GetComponentsInChildren<MeshRenderer>().Where(q => q != null).Select(q => q.material).ToArray();
+
+        Building building;
+        Rock rock;
         switch (ActiveControl)
         {
             case ControlMode.Nothing:
-                Rock r = activeObject as Rock;
+                rock = activeObject as Rock;
                 if (clickedObject)
                 {
                     Rock activeRock = clickedObject as Rock;
@@ -218,7 +226,7 @@ public class MouseEvents : MonoBehaviour
                     clickedObject.Highlight(c);
                     clickedObject.selected = false;
                 }
-                if (r && r.toBeDug) // rock to be dug
+                if (rock && rock.toBeDug) // rock to be dug
                     c = ToBeDugColor + highlight * 2; // YELLOW + RED
                 else
                     c = highlight * 3; // WHITE
@@ -236,27 +244,30 @@ public class MouseEvents : MonoBehaviour
 #endif
                 break;
             case ControlMode.Deconstruct:
-                Building b = activeObject as Building;
-                if (b)
+                building = activeObject as Building;
+                if (building)
                 {
-                    b.OrderDeconstruct();
-                    if (b && !b.deconstructing)
+                    building.OrderDeconstruct();
+                    if (building && !building.deconstructing)
                         c = Color.red;
                     else
                         c = Color.red / 2;
-                    b.Highlight(c);
+                    building.Highlight(c);
                 }
                 break;
             case ControlMode.Dig:
-                Rock _r = activeObject as Rock;
-                if (_r)
+                rock = activeObject as Rock;
+                if (rock)
                 {
-                    gridTiles.InitDig(_r);
+                    gridTiles.InitDig(rock);
                     drag = true;
                 }
                 break;
+            case ControlMode.Upgrade:
+                building = activeObject as Building;
+                building.StartUpgrade();
+                break;
             case ControlMode.Build:
-
                 break;
         }
     }

@@ -7,7 +7,7 @@ namespace StartMenu
 {
     public class MyMainMenu : MonoBehaviour, IInitiableUI
     {
-        public VisualElement root;
+        VisualElement root;
         VisualElement elements;
         VisualElement blocker;
 

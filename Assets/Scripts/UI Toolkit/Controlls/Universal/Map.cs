@@ -1,3 +1,4 @@
+using LocalMenuUtility;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -221,7 +222,6 @@ namespace AbstractControls
             arrowBottom.style.display = position.y == clamp ? DisplayStyle.None : DisplayStyle.Flex;
 
             mapElem.style.translate = position;
-            ToolkitUtils.localMenu.Move();
         }
         #endregion
     }

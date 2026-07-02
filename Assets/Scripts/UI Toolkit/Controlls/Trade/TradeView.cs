@@ -327,7 +327,7 @@ namespace TradeWindowElements
         {
             if (canTrade)
             {
-                Slider slider = (Slider)ToolkitUtils.GetRoot(this).Q<TradeMap>("Map").ElementAt(0).ElementAt(0).ElementAt(selectedLocationIndex).ElementAt(0);
+                Slider slider = (Slider)panel.visualTree.Q<TradeMap>("Map").ElementAt(0).ElementAt(0).ElementAt(selectedLocationIndex).ElementAt(0);
                 UIRefs.TradingWindow.Trade(
                     new TradeConvoy(
                         GetTradeResources(selectedLocation.Buy, 0),

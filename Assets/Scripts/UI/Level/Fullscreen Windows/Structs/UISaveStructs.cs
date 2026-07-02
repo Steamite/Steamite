@@ -32,7 +32,6 @@ public class TradeSave
     }
 }
 
-[Serializable]
 public class ResearchSave
 {
     public int count;
@@ -112,7 +111,6 @@ public class TradeConvoySave
 }
 
 
-[Serializable]
 public class OutpostSave : LocationSave
 {
     public int level;

@@ -207,7 +207,7 @@ MonoBehaviour:
       types: []
       ammounts: 
     mod:
-      percentMod: 0
+      percentMod: 1
       absoluteMod: 0
     money:
       baseValue: 0

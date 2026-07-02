@@ -14,7 +14,9 @@ namespace EditorWindows.Research
         #region Variables
         [SerializeField] Texture2D plus;
 
-        public ScrollView tree;
+        public ScrollView Tree => tree;
+        ScrollView tree;
+        
         bool showCreateButtons;
 
         public BuildingData buildingData;

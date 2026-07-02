@@ -30,7 +30,7 @@ namespace TradeWindowElements
 
         public TradeButtonGroup(VisualElement elem, int _tradeLocationCount) : base()
         {
-            leftBar = ToolkitUtils.GetRoot(elem).Q<VisualElement>("LeftBar");
+            leftBar = elem.panel.visualTree.Q<VisualElement>("LeftBar");
             if (leftBar != null)
             {
                 label = leftBar[0][0] as TextFieldLabel;

@@ -76,7 +76,7 @@ namespace AbstractControls
         {
             SelectChange(UpdateGroup);
             IsSelected = true;
-            ToolkitUtils.ChangeClassWithoutTransition(styleClass, styleClass + "-selected", this);
+            this.ChangeClassWithoutTransition(styleClass, styleClass + "-selected");
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace AbstractControls
             }
             else
             {
-                ToolkitUtils.ChangeClassWithoutTransition(styleClass + "-selected", styleClass, this);
+                this.ChangeClassWithoutTransition(styleClass + "-selected", styleClass);
             }
             if (rotator != null)
             {
