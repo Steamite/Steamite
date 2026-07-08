@@ -8,7 +8,6 @@
     -unity-font-style: normal;
     font-size: 40px;
     flex-direction: row;
-    display: none;
     background-color: var(--background);
 }
 

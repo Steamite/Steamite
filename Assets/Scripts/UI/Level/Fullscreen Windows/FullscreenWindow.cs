@@ -1,19 +1,29 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public abstract class FullscreenWindow : MonoBehaviour
+public abstract class FullscreenWindow : PanelRendererRoot
 {
-    public VisualElement window;
-    public bool isOpen = false;
-    public virtual void GetWindow()
+    public bool IsOpen { get; set; } = false;
+
+
+    protected override void OnUIReload()
     {
-        window = gameObject.GetComponent<PanelRendererRoot>().Root;
-        window.style.display = DisplayStyle.None;
-        window[0].style.display = DisplayStyle.Flex;
+        base.OnUIReload();
+        if (IsOpen == false)
+            Root.style.display = DisplayStyle.None;
     }
+
+    protected void AddOnLoad(ref Action a) => a += () => RegisterReload(OnDataLoad);
+
+    void OnDataLoad(PanelRenderer panelRenderer, VisualElement rootElement) => OnDataLoadLogic();
+    protected abstract void OnDataLoadLogic();
+
+
+
     public void ToggleWindow()
     {
-        if (isOpen)
+        if (IsOpen)
         {
             CloseWindow();
         }
@@ -28,11 +38,11 @@ public abstract class FullscreenWindow : MonoBehaviour
     {
         if (UIRefs.FullscreenConstraint())
         {
-            isOpen = true;
+            IsOpen = true;
             SceneRefs.GridTiles.DeselectObjects();
             MainShortcuts.DisableInput();
-            SceneRefs.InfoWindow?.Close();
-            window.style.display = DisplayStyle.Flex;
+            InfoWindow.Window.Close();
+            Root.style.display = DisplayStyle.Flex;
             SceneRefs.Tick.UIWindowToggle(false);
         }
     }
@@ -40,9 +50,9 @@ public abstract class FullscreenWindow : MonoBehaviour
     /// <summary>Closing the window, enables shortcuts.</summary>
     public virtual void CloseWindow()
     {
-        isOpen = false;
+        IsOpen = false;
         MainShortcuts.EnableInput();
-        window.style.display = DisplayStyle.None;
+        Root.style.display = DisplayStyle.None;
         SceneRefs.Tick.UIWindowToggle(true);
     }
 }

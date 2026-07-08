@@ -69,7 +69,7 @@ public class MouseEvents : MonoBehaviour
                     Building b = enterObject as Building;
                     if (b)
                     {
-                        if (b.deconstructing)
+                        if (b.Deconstructing)
                             c += Color.red / 2;
                         /*
                     else if (!b.constructed)
@@ -80,7 +80,7 @@ public class MouseEvents : MonoBehaviour
             case ControlMode.Deconstruct:
                 Building _b = enterObject as Building;
                 if (_b)
-                    if (_b.deconstructing)
+                    if (_b.Deconstructing)
                         c = Color.red / 2;
                     else
                         c = Color.red;
@@ -163,7 +163,7 @@ public class MouseEvents : MonoBehaviour
                     c = new();
                 if (r && r.toBeDug)
                     c += ToBeDugColor;
-                else if (b && b.deconstructing)
+                else if (b && b.Deconstructing)
                     c += Color.red / 2;
                 else if (pipe)
                 {
@@ -176,7 +176,7 @@ public class MouseEvents : MonoBehaviour
                 break;
             case ControlMode.Deconstruct:
                 Building _b = exitObject as Building;
-                if (_b && _b.deconstructing)
+                if (_b && _b.Deconstructing)
                     c = Color.red * 0.75f;
                 break;
             case ControlMode.Dig:
@@ -248,7 +248,7 @@ public class MouseEvents : MonoBehaviour
                 if (building)
                 {
                     building.OrderDeconstruct();
-                    if (building && !building.deconstructing)
+                    if (building && !building.Deconstructing)
                         c = Color.red;
                     else
                         c = Color.red / 2;
@@ -355,7 +355,7 @@ public class MouseEvents : MonoBehaviour
             if (activeObject == null)
                 activeObject = clickedObject;
             clickedObject = null;
-            SceneRefs.InfoWindow.Close();
+            InfoWindow.Window.Close();
         }
     }
 }

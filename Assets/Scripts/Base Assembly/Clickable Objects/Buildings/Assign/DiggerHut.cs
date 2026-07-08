@@ -18,7 +18,9 @@ public class DiggerHut : Building, IDiggerHut
     }
     public override void OrderDeconstruct()
     {
-        ((IAssign)this).ClearHumans();
+        if(IsWorking)
+            ((IAssign)this).ClearHumans();
+
         base.OrderDeconstruct();
     }
 }

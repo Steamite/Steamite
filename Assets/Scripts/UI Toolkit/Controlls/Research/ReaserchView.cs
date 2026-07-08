@@ -4,20 +4,21 @@ using UnityEngine.UIElements;
 namespace ResearchUI
 {
     [UxmlElement]
-    public partial class ResearchView : TabView, IInitiableUI, IUIElement
+    public partial class ResearchView : TabView, IInitiableUI<ResearchData>, IUIElement
     {
         int prevGroup;
         List<ResearchRadioButtonGroup> groups;
         Button closeButton;
+
         public ResearchView() : base()
         {
             closeButton = new Button();
             closeButton.AddToClassList("close-button");
             hierarchy.Add(closeButton);
         }
-        public void Init()
+
+        public void Init(ResearchData data)
         {
-            ResearchData data = UIRefs.ResearchWindow.researchData;
             closeButton.clicked += UIRefs.ResearchWindow.CloseWindow;
             Vector2 categWindowSize = new(1920, 1080);
             groups = new List<ResearchRadioButtonGroup>();
@@ -27,6 +28,9 @@ namespace ResearchUI
                 Tab tab = new(category.Name);
                 VisualElement element;
                 tab.tabHeader.Insert(0, element = new VisualElement() { style = { backgroundImage = Background.FromVectorImage(category.Icon) } });
+                tab.tabHeader.style.minWidth = new Length(100 / data.Categories.Count, LengthUnit.Percent);
+                if (i == data.Categories.Count - 1)
+                    tab.tabHeader.style.borderRightWidth = 0;
                 element.AddToClassList("tab-icon");
 
                 ResearchRadioButtonGroup group = new ResearchRadioButtonGroup(category);
@@ -51,8 +55,8 @@ namespace ResearchUI
         {
             if (node?.researched == false)
             {
-                UIRefs.ResearchWindow.SetActive(node);
-                SceneRefs.ShowMessage($"Research Changed {node.Name}");
+                UIRefs.Research.SetActive(node);
+                NotificationController.ShowMessage($"Research Changed {node.Name}");
                 prevGroup = groups.IndexOf(group);
             }
         }

@@ -188,7 +188,7 @@ public class GridTiles : MonoBehaviour
         {
             if (ActiveControl == ControlMode.Build)
             {
-                if (BlueprintPrefab.objectName == BlueprintInstance.objectName)
+                if (BlueprintPrefab.Name == BlueprintInstance.Name)
                 {
                     ChangeSelMode(ControlMode.Nothing);
                 }

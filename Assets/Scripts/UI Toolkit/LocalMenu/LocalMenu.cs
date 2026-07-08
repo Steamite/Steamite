@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 
 namespace LocalMenuUtility
 {
-    public abstract class LocalMenu : MonoBehaviour
+    public abstract class LocalMenu : PanelRendererRoot
     {
         protected const int LOFFSET = 20; // Left offset
         protected const int ROFFSET = 25; // Right offset
@@ -27,11 +27,9 @@ namespace LocalMenuUtility
 
         protected int width = 300;
 
-        public virtual void AfterInit(VisualElement rootElem)
+        protected override void OnUIReload()
         {
-            //ToolkitUtils.SetLocalMenu(this);
-
-            menu = rootElem.Q<VisualElement>("Menu");
+            menu = Root.Q<VisualElement>("Menu");
             menu.pickingMode = PickingMode.Ignore;
             menu.style.display = DisplayStyle.None;
             header = menu.ElementAt(0) as Label;
@@ -73,7 +71,7 @@ namespace LocalMenuUtility
                     break;
                 case BuildingWrapper wrapper:
                     Building building = wrapper.building;
-                    header.text = building.objectName;
+                    header.text = building.Name;
 
                     if (wrapper.unlocked)
                     {
@@ -90,8 +88,9 @@ namespace LocalMenuUtility
                 case TradeLocation tradeLocation:
                     header.text = tradeLocation.Name;
                     secondHeader.text = "trade location";
-                    List<TradeConvoy> convoyList = UIRefs.TradingWindow.GetConvoys();
-                    TradeConvoy convoy = convoyList.FirstOrDefault(q => q.tradeLocation == UIRefs.TradingWindow.tradeLocations.IndexOf(tradeLocation));
+                    List<TradeConvoy> convoyList = UIRefs.Trading.Convoys;
+                    TradeConvoy convoy = convoyList.FirstOrDefault(
+                        q => q.tradeLocation == UIRefs.Trading.TradeLocations.IndexOf(tradeLocation));
                     if (convoy != null)
                         description.text = convoy.ToString();
                     else

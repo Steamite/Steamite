@@ -17,7 +17,7 @@ public class PrefabHolder : ScriptableObject
     {
         for (int i = 0; i < prefabs.Count; i++)
         {
-            if (prefabs[i].objectName.ToUpper() == prefName.ToUpper())
+            if (prefabs[i].Name.ToUpper() == prefName.ToUpper())
                 return prefabs[i] as T;
         }
         Debug.LogError("Could not find Prefab! " + prefName);

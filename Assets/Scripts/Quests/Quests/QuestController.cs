@@ -9,12 +9,10 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
-public class QuestController : FullscreenWindow, IQuestController, IGameDataController<QuestControllerSave>, IUpdatable
+public class QuestController : IGameDataController<QuestControllerSave>, IQuestController, IUpdatable
 {
-    [SerializeField] public GameObject ExcavationIcon;
-    [SerializeField] PanelRendererRoot questCatalogRenderer;
-    IUIElement questCatalog;
-    IUIElement questInteface;
+    public GameObject ExcavationIcon;
+
     public QuestHolder data;
     public GameObject endMenu;
     public static int difficulty = 1;
@@ -51,6 +49,8 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         }
     }
 
+    public bool IsLoaded { get; set; }
+
     public void BuildBuilding(object obj)
     {
         for (int i = buildingObjectives.Count - 1; i > -1; i--)
@@ -76,7 +76,7 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         throw new System.NotImplementedException();
     }
 
-    public async Task LoadState(QuestControllerSave saveData)
+    public override async Task LoadState(QuestControllerSave saveData)
     {
         trust = saveData.trust;
         activeQuests = new();
@@ -98,19 +98,12 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         }
         orderController = new(
                 this,
-                questCatalogRenderer,
                 saveData);
         SceneRefs.Tick.SubscribeToEvent(UpdateTimers, Tick.TimeEventType.Ticks);
 
-        questInteface = UIRefs.BottomBarRoot.Q("QuestGroup") as IUIElement;
-        questInteface.Open(this);
 
-        questCatalog = questCatalogRenderer.Root[0][0].Q("QuestCatalog") as IUIElement;
-
-
-        GetWindow();
-        (questCatalogRenderer.Root[0][1] as Button).clicked += CloseWindow;
-
+        IsLoaded = true;
+        GetComponent<PanelRendererRoot>().Renderer.enabled = true;
     }
 
     public void UpdateTimers()
@@ -129,28 +122,22 @@ public class QuestController : FullscreenWindow, IQuestController, IGameDataCont
         quest.Load(this);
     }
 
-
-
-    #region Window
-    public override void GetWindow()
-    {
-        base.GetWindow();
-    }
-    public override void OpenWindow()
-    {
-        base.OpenWindow();
-        questCatalog.Open(this);
-        orderController.OpenWindow();
-    }
-
-    public override void CloseWindow()
-    {
-        base.CloseWindow();
-    }
-
     public void UIUpdate(string property = "")
     {
         propertyChanged?.Invoke(this, new(property));
     }
-    #endregion
+
+    public override QuestControllerSave SaveState()
+    {
+        QuestControllerSave save = new()
+        {
+            finishedQuests = finishedQuests.Select(q => new QuestSave(q)).ToList(),
+            activeQuests = activeQuests.Select(q => new QuestSave(q)).ToList(),
+            order = orderController.CurrentOrder == null ? null : new(orderController.CurrentOrder),
+            trust = Trust,
+            finishedOrdersCount = orderController.finishedOrdersCount,
+            orderChoiceSaves = orderController.orderChoice.Select(q => new OrderChoiceSave(q)).ToList()
+        };
+        return save;
+    }
 }

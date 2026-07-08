@@ -33,15 +33,13 @@ public interface IResourceProduction : IProduction
     /// <param name="transferPerTick">Max transfer ammount.</param>
     void StoreProdResources(Human human, int transferPerTick)
     {
-        int index = InputResource.carriers.IndexOf(human);
-        if (index == -1)
-            Debug.Log("");
+        StorageRequest request = InputResource.GetRequestByHuman(human);
         CapacityResource resource = new(-1);
         // TODO: IMPROVE
         MyRes.MoveRes(
             resource,
             human.Inventory,
-            InputResource.requests[index],
+            request.resource,
             transferPerTick);
         MyRes.UpdateResource(resource, false);
         InputResource.Manage(resource, true);
@@ -54,7 +52,7 @@ public interface IResourceProduction : IProduction
             ProdStates.requestedSupply = false;
             RefreshStatus();
         }
-        if (InputResource.requests[index].Sum() == 0)
+        if (request.resource.Sum() == 0)
         {
             InputResource.RemoveRequest(human);
 
@@ -130,7 +128,7 @@ public interface IResourceProduction : IProduction
     {
         Building building = this as Building;
 
-        if (building.constructed)
+        if (building.Constructing)
         {
             /*building.transform.GetChild(0).GetChild(0).gameObject.SetActive(Stoped);
             building.transform.GetChild(0).GetChild(1).gameObject.SetActive(!ProdStates.supplied);

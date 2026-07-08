@@ -75,7 +75,7 @@ class BuildEditor : EditorWindow
         }
         else
         {
-            titleContent = new($"Build Editor - {inspectedBuilding.objectName}");
+            titleContent = new($"Build Editor - {inspectedBuilding.Name}");
             int item = 0;
             newMesh = (Mesh)EditorGUILayout.ObjectField(new GUIContent(""), mesh, typeof(Mesh), false, new GUILayoutOption[] { });
             if (newMesh != mesh)

@@ -207,7 +207,7 @@ MonoBehaviour:
       types: []
       ammounts: 
     mod:
-      percentMod: 0
+      percentMod: 1
       absoluteMod: 0
     money:
       baseValue: 0
@@ -221,13 +221,13 @@ MonoBehaviour:
       types: []
       ammounts: 
     mod:
-      percentMod: 0
+      percentMod: 1
       absoluteMod: 0
     money:
       baseValue: 0
       currentValue: 0
       mod:
-        percentMod: 0
+        percentMod: 1
         absoluteMod: 0
   - types: []
     ammounts: 
@@ -235,13 +235,13 @@ MonoBehaviour:
       types: []
       ammounts: 
     mod:
-      percentMod: 0
+      percentMod: 1
       absoluteMod: 0
     money:
       baseValue: 0
       currentValue: 0
       mod:
-        percentMod: 0
+        percentMod: 1
         absoluteMod: 0
   constructed: 0
   deconstructing: 0

@@ -118,7 +118,7 @@ namespace InfoWindowElements
             DataBinding mainBind = SetupResTypes(resource, propName);
             DataBinding dataBinding = secondPropName.CreateBinding();
             dataBinding.sourceToUiConverters.AddConverter((ref ModifiableResource secRes) => UpdateSecondResource(secRes));
-            SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(secondResource)), dataBinding, data);
+            InfoWindow.Window.RegisterTempBinding(new(this, nameof(secondResource)), dataBinding, data);
             return mainBind;
         }
 

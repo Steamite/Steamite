@@ -52,7 +52,7 @@ public static class MyRes
             }
             foreach(Building building in MyGrid.Buildings)
             {
-                if (building.constructed)
+                if (building.IsWorking)
                     UpdateResource(building.LocalRes, true);
                 else
                     UpdateResource(building.Cost - building.LocalRes, false);
@@ -190,8 +190,8 @@ public static class MyRes
                     Resource future = sResource.LocalRes.Future(true);
 
                     MoveRes(resource, future, diff, -1);
-                    sResource.RequestRes(resource, human, -1);
-                    human.destination.RequestRes(new(resource), human, 1);
+                    sResource.RequestRes(resource, human, StorageRequestType.Take);
+                    human.destination.RequestRes(new(resource), human, StorageRequestType.Store);
                     human.SetJob(job);
                     human.lookingForAJob = false;
                     if (diff.Sum() == 0)
@@ -232,7 +232,7 @@ public static class MyRes
             JobData job = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h);
             if (job.interest)
             {
-                job.interest.GetComponent<StorageObject>().RequestRes(h.Inventory, h, 1);
+                job.interest.GetComponent<StorageObject>().RequestRes(h.Inventory, h, StorageRequestType.Store);
                 h.destination = (Building)job.interest;
                 job.job = JobState.Supply;
                 h.SetJob(job);

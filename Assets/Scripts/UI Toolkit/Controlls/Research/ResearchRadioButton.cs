@@ -98,7 +98,7 @@ namespace ResearchUI
                 return;
             if (categ.CheckPrequisite(node, () => UnlockResearch(false)))
             {
-                if (node == UIRefs.ResearchWindow.currentResearch)
+                if (node == UIRefs.Research.CurrentResearch)
                 {
                     UnlockResearch(true);
                     SelectWithoutTransition(false); // updates the group but without checks
@@ -120,7 +120,7 @@ namespace ResearchUI
             }
             else if (state == ButtonState.Available && MyRes.CanAfford(node.reseachCost))
             {
-                if (UIRefs.ResearchWindow.currentResearch == null || UpdateGroup == false)
+                if (UIRefs.Research.CurrentResearch == null || UpdateGroup == false)
                 {
                     if (node.CurrentTime < 0)
                     {
@@ -139,7 +139,7 @@ namespace ResearchUI
                         () =>
                         {
                             // Clear research(queue[WIP]) and select this button.
-                            UIRefs.ResearchWindow.SetActive(null);
+                            UIRefs.Research.SetActive(null);
                             this.RemoveClassWithoutTransition("forceHover");
                             Select();
                         },
@@ -160,7 +160,7 @@ namespace ResearchUI
         {
             AddToClassList(RESEARCH_CLASS);
             state = ButtonState.Researched;
-            UIRefs.ResearchWindow.FinishResearch();
+            UIRefs.Research.FinishResearch();
             Deselect(false);
             if (lineUp != null)
                 lineUp.Fill();

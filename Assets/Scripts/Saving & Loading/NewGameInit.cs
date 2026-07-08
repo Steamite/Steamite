@@ -76,7 +76,7 @@ public class NewGameInit : MonoBehaviour
                 id = i,
                 inventory = new(),
                 jobSave = new() { interestID = -1, destinationID = -1, path = new(), interestType = JobSave.InterestType.Nothing, job = JobState.Free },
-                objectName = $"Human {i}",
+                name = $"Human {i}",
                 sleep = 10,
                 specs = Specializations.Worker,
                 workplaceId = -1

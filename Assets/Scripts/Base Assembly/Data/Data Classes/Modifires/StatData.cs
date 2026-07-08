@@ -151,7 +151,7 @@ namespace BuildingStats
         void DoMod(IModifiable obj, StatPair pair, Building building)
         {
             obj.AddMod(pair);
-            SceneRefs.InfoWindow.buildingCostChange?.Invoke(building);
+            InfoWindow.Window.buildingCostChange?.Invoke(building);
         }
 
         public void AddEffect()

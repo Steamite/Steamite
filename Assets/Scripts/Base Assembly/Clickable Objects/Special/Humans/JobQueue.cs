@@ -117,7 +117,7 @@ public class JobQueue : MonoBehaviour
                     ((StorageObject)human.Job.interest).LocalRes.RemoveRequest(human);
                 if (human.destination)
                 {
-                    if (human.destination.constructed && human.destination is IResourceProduction)
+                    if (human.destination.IsWorking && human.destination is IResourceProduction)
                         ((IResourceProduction)human.destination).InputResource.RemoveRequest(human);
                     else
                         human.destination.LocalRes.RemoveRequest(human);

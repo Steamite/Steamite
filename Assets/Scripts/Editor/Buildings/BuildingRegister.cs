@@ -72,11 +72,13 @@ namespace EditorWindows.Windows
                             if (building != null)
                             {
                                 byte categID = (byte)Holder.Categories.FirstOrDefault(q => q.Name == SelectedCategory.Name).id;
-                                ResearchNode node = nodes.FirstOrDefault(q => q.objectConnection.categoryId == building.prefabConnection.categoryId && q.id == building.prefabConnection.objectId);
+                                ResearchNode node = nodes.FirstOrDefault(q => 
+                                    q.objectConnection.categoryId == building.PrefabConnection.categoryId && 
+                                    q.id == building.PrefabConnection.objectId);
                                 if (node != null)
                                     node.objectConnection.categoryId = categID;
 
-                                building.prefabConnection = new(categID, SelectedCategory.Objects[i].id);
+                                building.PrefabConnection = new(categID, SelectedCategory.Objects[i].id);
                                 SelectedCategory.Objects[i].SetBuilding(SelectedCategory.Objects[i].building, categID);
                                 EditorUtility.SetDirty(SelectedCategory.Objects[i].building);
                             }
@@ -200,7 +202,7 @@ namespace EditorWindows.Windows
                 DestroyImmediate(gameObj);
 
                 AddressableAssetEntry entry = Settings.CreateOrMoveEntry(AssetDatabase.GUIDFromAssetPath(path).ToString(), Group);
-                entry.SetAddress(wrapper.building.objectName);
+                entry.SetAddress(wrapper.building.Name);
                 Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryCreated, Group, true);
             }
             else if (choice == 1)
@@ -215,8 +217,8 @@ namespace EditorWindows.Windows
             base.RemoveEntry(wrapper, removeFromGrid);
             if (wrapper.building)
             {
-                AssetDatabase.MoveAsset($"{BUILDING_PATH}{SelectedCategory.Name}/{wrapper.building?.objectName}", $"{BUILDING_PATH}BCK/{wrapper.building?.objectName}");
-                Settings.RemoveAssetEntry(AssetDatabase.GUIDFromAssetPath($"{BUILDING_PATH}BCK/{wrapper.building?.objectName}").ToString(), Group);
+                AssetDatabase.MoveAsset($"{BUILDING_PATH}{SelectedCategory.Name}/{wrapper.building?.Name}", $"{BUILDING_PATH}BCK/{wrapper.building?.Name}");
+                Settings.RemoveAssetEntry(AssetDatabase.GUIDFromAssetPath($"{BUILDING_PATH}BCK/{wrapper.building?.Name}").ToString(), Group);
                 Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryRemoved, Group, true);
             }
         }
@@ -252,7 +254,7 @@ namespace EditorWindows.Windows
             }
 
             int i = ev.target.GetRowIndex();
-            if (((BuildingWrapper)dataGrid.itemsSource[i]).building.objectName != value)
+            if (((BuildingWrapper)dataGrid.itemsSource[i]).building.Name != value)
             {
                 string oldPath = AssetDatabase.GetAssetPath(
                     ((BuildingWrapper)dataGrid.itemsSource[i]).building)
@@ -270,18 +272,18 @@ namespace EditorWindows.Windows
                     Debug.LogError(result);
                     if (ev.target is TextElement)
                     {
-                        ((TextElement)ev.target).text = ((BuildingWrapper)dataGrid.itemsSource[i]).building.objectName;
+                        ((TextElement)ev.target).text = ((BuildingWrapper)dataGrid.itemsSource[i]).building.Name;
                     }
                     else
                     {
-                        ((TextField)ev.target).value = ((BuildingWrapper)dataGrid.itemsSource[i]).building.objectName;
+                        ((TextField)ev.target).value = ((BuildingWrapper)dataGrid.itemsSource[i]).building.Name;
                     }
                     return;
                 }
 
                 entry.address = value;
                 Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryModified, value, true);
-                ((BuildingWrapper)dataGrid.itemsSource[i]).building.objectName = value;
+                ((BuildingWrapper)dataGrid.itemsSource[i]).building.Name = value;
                 EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
             }
         }

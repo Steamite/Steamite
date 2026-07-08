@@ -227,14 +227,15 @@ MonoBehaviour:
       mod:
         percentMod: 1
         absoluteMod: 0
-  - types: []
-    ammounts: 
+  - types:
+    - {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
+    ammounts: 0a000000
     baseResource:
       types:
       - {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
       ammounts: 0a000000
     mod:
-      percentMod: 0
+      percentMod: 1
       absoluteMod: 0
     money:
       baseValue: 40
@@ -242,14 +243,15 @@ MonoBehaviour:
       mod:
         percentMod: 1
         absoluteMod: 0
-  - types: []
-    ammounts: 
+  - types:
+    - {fileID: 11400000, guid: f9e61f1dd3b0f9d418d535915c9c5770, type: 2}
+    ammounts: 0f000000
     baseResource:
       types:
       - {fileID: 11400000, guid: f9e61f1dd3b0f9d418d535915c9c5770, type: 2}
       ammounts: 0f000000
     mod:
-      percentMod: 0
+      percentMod: 1
       absoluteMod: 0
     money:
       baseValue: 100

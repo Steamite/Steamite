@@ -8,7 +8,6 @@ using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 public class OrderController
 {
-    public IUIElement orderInterface;
     QuestHolder data;
     public List<Order> orderChoice;
     Order currentOrder;
@@ -19,10 +18,9 @@ public class OrderController
 
     public int finishedOrdersCount;
 
-    public OrderController(QuestController _questController, PanelRendererRoot _questCatalog, QuestControllerSave saveData)
+    public OrderController(QuestController _questController, QuestControllerSave saveData)
     {
         data = _questController.data;
-        orderInterface = _questCatalog.Root[0][0].Q("OrderInterface") as IUIElement;
         Quest temp = data.Categories[2].Objects.FirstOrDefault(q => q.id == saveData.order?.objectId);
         if (temp != null)
         {
@@ -72,9 +70,11 @@ public class OrderController
         }
         else
         {
-            orderChoice = new();
-            orderChoice.Add(GenerateOrder());
-            orderChoice.Add(GenerateOrder());
+            orderChoice = new()
+            {
+                GenerateOrder(),
+                GenerateOrder()
+            };
         }
         currentOrder = null; 
     }
@@ -82,11 +82,6 @@ public class OrderController
     public void UpdateTimers()
     {
         currentOrder?.DecreaseTimeToFail(this);
-    }
-
-    public void OpenWindow()
-    {
-        orderInterface.Open(this);
     }
 
     public Order GenerateOrder()

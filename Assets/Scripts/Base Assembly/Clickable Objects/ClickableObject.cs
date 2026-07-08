@@ -28,7 +28,7 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <summary>ID is a unique identifier for each group of objects.</summary>
     public int id = -1;
 
-    public string objectName;
+    [SerializeField] protected string objectName;
 
     public string Name { get => objectName; set => objectName = value; }
     #region Object Operations
@@ -169,7 +169,7 @@ public abstract class ClickableObject : MonoBehaviour,
     {
         if (selected)
         {
-            InfoWindow info = SceneRefs.InfoWindow;
+            InfoWindow info = InfoWindow.Window;
             info.header.Open(this);
             return info;
         }
@@ -202,7 +202,7 @@ public abstract class ClickableObject : MonoBehaviour,
         if (clickable == null)
             clickable = new();
         clickable.id = id;
-        clickable.objectName = objectName;
+        clickable.name = objectName;
 
         return clickable;
     }
@@ -215,7 +215,7 @@ public abstract class ClickableObject : MonoBehaviour,
         id = save.id;
         if (id == -1)
             UniqueID();
-        objectName = save.objectName;
+        objectName = save.name;
     }
 
     #endregion Saving

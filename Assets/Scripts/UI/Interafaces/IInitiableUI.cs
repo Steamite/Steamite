@@ -3,3 +3,8 @@ public interface IInitiableUI
 {
     public void Init();
 }
+
+public interface IInitiableUI<T>
+{
+    public void Init(T data);
+}

@@ -205,7 +205,7 @@ public class LoadGameMenu : DoubleWindow
         else
         {
         }
-        await GameObject.Find("Loading Screen")
+        GameObject.Find("Loading Screen")
             .GetComponent<LoadingScreen>().LoadGame(saves[selectedSave].path, worlds[selectedWorld].ToString());
     }
     #endregion

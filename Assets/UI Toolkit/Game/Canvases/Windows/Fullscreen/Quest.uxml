@@ -1,16 +1,16 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/FullscreenWindow.uss?fileID=7433441132597879392&amp;guid=a3688b27adecf6140830a84a444aaec7&amp;type=3#FullscreenWindow" />
-    <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/QuestCatalog/QuestCatalog.uss?fileID=7433441132597879392&amp;guid=780a5617cf23c334995b7fc7083b4c92&amp;type=3#QuestCatalog" />
-    <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/QuestCatalog/OrderInfo.uss?fileID=7433441132597879392&amp;guid=3b1c5baaef0c8bb4a9ccc391fa5ab108&amp;type=3#OrderInfo" />
-    <Style src="project://database/Assets/UI%20Toolkit/Styles/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button" />
-    <ui:VisualElement name="Root" class="window" style="display: flex;">
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/FullscreenWindow.uss?fileID=7433441132597879392&amp;guid=a3688b27adecf6140830a84a444aaec7&amp;type=3#FullscreenWindow"/>
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/QuestCatalog/QuestCatalog.uss?fileID=7433441132597879392&amp;guid=780a5617cf23c334995b7fc7083b4c92&amp;type=3#QuestCatalog"/>
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Fullscreen%20Windows/QuestCatalog/OrderInfo.uss?fileID=7433441132597879392&amp;guid=3b1c5baaef0c8bb4a9ccc391fa5ab108&amp;type=3#OrderInfo"/>
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Global/Button.uss?fileID=7433441132597879392&amp;guid=9c069573d2a1ca645bcaf03cbee89a38&amp;type=3#Button"/>
+    <ui:VisualElement name="Root" class="window">
         <ui:TabView style="min-width: 100%;">
             <ui:Tab label="Quests" name="Quests" style="min-height: 100%;">
-                <QuestCatalog virtualization-method="DynamicHeight" selection-type="Single" name="QuestCatalog" />
-                <QuestInfo style="padding-right: 10px; padding-top: 10px; padding-bottom: 10px;" />
+                <QuestCatalog virtualization-method="DynamicHeight" selection-type="Single" name="QuestCatalog"/>
+                <QuestInfo style="padding-right: 10px; padding-top: 10px; padding-bottom: 10px;"/>
             </ui:Tab>
-            <OrderInterface name="OrderInterface" />
+            <OrderInterface name="OrderInterface"/>
         </ui:TabView>
-        <ui:Button class="close-button" />
+        <ui:Button class="close-button"/>
     </ui:VisualElement>
 </ui:UXML>

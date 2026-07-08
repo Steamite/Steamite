@@ -4,18 +4,21 @@ using UnityEngine.UIElements;
 [UxmlElement]
 public partial class HumanInfo : InfoWindowControl
 {
-    Label specialization, efficiency, jobType, jobPosition, jobObject;
+    Label specialization, efficiency, jobType, jobPosition, jobObject, inventoryLabel;
     ResourceList inventory;
-
     public override void Open(object data)
     {
         ((IUIElement)inventory).Open(dataSource);
         specialization.text = ((Human)dataSource).specialization.ToString();
 
+        // Inventory size Binding
+        DataBinding inventoryBinding = BindingUtil.CreateBinding(nameof(Human.Inventory));
+        inventoryBinding.sourceToUiConverters.AddConverter((ref CapacityResource inventoryRes) => $"Inventory ({inventoryRes.Sum()}/{inventoryRes.capacity})");
+        InfoWindow.Window.RegisterTempBinding(new(inventoryLabel, "text"), inventoryBinding, dataSource);
         // Efficiency Binding
-        DataBinding binding = BindingUtil.CreateBinding(nameof(Human.Efficiency));
-        binding.sourceToUiConverters.AddConverter((ref Efficiency efficiency) => $"{efficiency.efficiency * 100:0.#}%");
-        SceneRefs.InfoWindow.RegisterTempBinding(new(efficiency, "text"), binding, dataSource);
+        DataBinding efficiencyBinding = BindingUtil.CreateBinding(nameof(Human.Efficiency));
+        efficiencyBinding.sourceToUiConverters.AddConverter((ref Efficiency efficiency) => $"{efficiency.efficiency * 100:0.#}%");
+        InfoWindow.Window.RegisterTempBinding(new(efficiency, "text"), efficiencyBinding, dataSource);
     }
 
     public HumanInfo()
@@ -39,7 +42,7 @@ public partial class HumanInfo : InfoWindowControl
 
         //inventory
         element = new() { name = "Group" };
-        element.Add(new Label("Inventory") { name = "Resource-Header" });
+        element.Add(inventoryLabel = new Label("Inventory") { name = "Resource-Header" });
         element.Add(inventory = new ResourceList());
         inventory.verticalPadding = 2;
         Add(element);

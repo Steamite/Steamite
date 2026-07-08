@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 public partial class OrderSelectionList : VisualElement, IUIElement
 {
     OrderController controller;
-    IUIElement orderInterface;
     public OrderSelectionList()
     {
         Add(new Label("Order selection"));
@@ -17,7 +16,6 @@ public partial class OrderSelectionList : VisualElement, IUIElement
     public void Open(object data)
     {
         controller = data as OrderController;
-        orderInterface = controller.orderInterface;
         hierarchy[1].Clear();
         int i = 0;
         foreach (Order item in controller.orderChoice)
@@ -66,6 +64,6 @@ public partial class OrderSelectionList : VisualElement, IUIElement
         controller.CurrentOrder = order;
 
         controller.orderChoice.Clear();
-        orderInterface.Open(controller);
+        panel.visualTree.Q<OrderInterface>().Open(controller);
     }
 }

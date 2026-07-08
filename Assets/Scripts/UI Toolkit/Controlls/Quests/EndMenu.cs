@@ -66,8 +66,8 @@ public class EndMenu : MonoBehaviour, IUIElement
 
         (element[2] as Button).clicked += async () => await SceneManager.LoadSceneAsync(0);
 
-        UIRefs.PauseMenu.menuContainer.style.display = DisplayStyle.Flex;
-        UIRefs.PauseMenu.menuContainer.pickingMode = PickingMode.Ignore;
-        UIRefs.PauseMenu.menuContainer[0].style.display = DisplayStyle.None;
+        UIRefs.PauseMenu.MenuContainer.style.display = DisplayStyle.Flex;
+        UIRefs.PauseMenu.MenuContainer.pickingMode = PickingMode.Ignore;
+        UIRefs.PauseMenu.MenuContainer[0].style.display = DisplayStyle.None;
     }
 }

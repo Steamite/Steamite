@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 220867751}
+  - component: {fileID: 220867761}
   - component: {fileID: 220867756}
   - component: {fileID: 220867757}
   - component: {fileID: 220867758}
@@ -261,6 +262,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 198ef2ee1ca752c4dbc5d110229e34a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::PanelRendererRoot
+--- !u!114 &220867761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220867750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d26028dc40e1374c92823d11a769012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BaseAssembly::TopMenu
 --- !u!1 &225780439
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,7 +285,6 @@ GameObject:
   - component: {fileID: 225780440}
   - component: {fileID: 225780445}
   - component: {fileID: 225780446}
-  - component: {fileID: 225780447}
   m_Layer: 0
   m_Name: Info Window
   m_TagString: Untagged
@@ -302,12 +314,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225780439}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ece469e808b7936429fb7255bac000ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infoWindowRenderer: {fileID: 225780447}
+  controls: {fileID: 11400000, guid: 6ee198ecedba89642a9145722bc073de, type: 2}
 --- !u!1931382934 &225780446
 PanelRenderer:
   m_ObjectHideFlags: 0
@@ -366,18 +378,6 @@ PanelRenderer:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_Position: 1
---- !u!114 &225780447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 225780439}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 198ef2ee1ca752c4dbc5d110229e34a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BaseAssembly::PanelRendererRoot
 --- !u!1 &405851067
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,9 +472,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a24657491589b44b822a58fad2cfb3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOpen: 0
-  researchData: {fileID: 0}
-  statData: {fileID: 0}
 --- !u!1931382934 &745012311
 PanelRenderer:
   m_ObjectHideFlags: 0
@@ -542,9 +539,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 745012301}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 198ef2ee1ca752c4dbc5d110229e34a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 21c87116ffa32cb488f7fb882d531eeb, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BaseAssembly::PanelRendererRoot
+  m_EditorClassIdentifier: UI::Research
+  IsLoaded: 0
 --- !u!1 &777753790
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,9 +639,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3f6ea6d40a3f84998a0407ca167dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOpen: 0
+  IsLoaded: 0
   ExcavationIcon: {fileID: 3810939084706079344, guid: f1f937d768fd8dc42b817757e8284b7e, type: 3}
-  questCatalogRenderer: {fileID: 782435307}
   data: {fileID: 0}
   endMenu: {fileID: 1588505038}
   finishedQuests: []
@@ -719,9 +716,112 @@ MonoBehaviour:
   m_GameObject: {fileID: 782435302}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 198ef2ee1ca752c4dbc5d110229e34a6, type: 3}
+  m_Script: {fileID: 11500000, guid: a26a11d608c551d45b028cfa42499e7e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BaseAssembly::PanelRendererRoot
+  m_EditorClassIdentifier: Quests::QuestWindow
+--- !u!1 &803709385
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 803709386}
+  - component: {fileID: 803709388}
+  - component: {fileID: 803709387}
+  m_Layer: 0
+  m_Name: Notifications
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &803709386
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803709385}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1524870990}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1931382934 &803709387
+PanelRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803709385}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  serializedVersion: 1
+  m_PanelSettings: {fileID: 11400000, guid: 446c439d435ab0e44afc4b03c126e64a, type: 2}
+  sourceAsset: {fileID: 9197481963319205126, guid: 440a70710bacea74a9a1e63a063c5dfe, type: 3}
+  m_ParentUI: {fileID: 0}
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_Position: 0
+--- !u!114 &803709388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803709385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9972835532e758c4f94e127811b1b7c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &850631606
 GameObject:
   m_ObjectHideFlags: 0
@@ -768,24 +868,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c6b6f1f558a7443b6959ecea9214ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOpen: 0
-  MAX_CONVOYS: 3
-  convoys: []
-  colonyLocation:
-    name: 
-    pos:
-      x: 0
-      z: 0
-      y: 0
-    config:
-      production: []
-      stats: []
-    stats: []
-    production: []
-  tradeLocations: []
-  outposts: []
-  distance: 0
-  outpostLimit: 3
 --- !u!1931382934 &850631611
 PanelRenderer:
   m_ObjectHideFlags: 0
@@ -853,9 +935,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 850631606}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 198ef2ee1ca752c4dbc5d110229e34a6, type: 3}
+  m_Script: {fileID: 11500000, guid: c46b46b6fd85ab045a88f5a4fcf7b529, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BaseAssembly::PanelRendererRoot
+  m_EditorClassIdentifier: UI::Trading
+  IsLoaded: 0
+  convoys: []
 --- !u!1 &897350249
 GameObject:
   m_ObjectHideFlags: 0
@@ -956,9 +1040,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 897350249}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 198ef2ee1ca752c4dbc5d110229e34a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 143beb81e3f865441a5efc68e7213b1d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BaseAssembly::PanelRendererRoot
+  m_EditorClassIdentifier: ToolkitUI::BottomMenu
 --- !u!114 &1068071213 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5996095910553710794, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
@@ -1039,6 +1123,7 @@ Transform:
   - {fileID: 225780440}
   - {fileID: 1855733982}
   - {fileID: 1588505039}
+  - {fileID: 803709386}
   m_Father: {fileID: 1623294176}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1588505038
@@ -1135,9 +1220,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _levelCamera: {fileID: 7072378217534680772}
-  _trading: {fileID: 850631610}
-  _research: {fileID: 745012310}
-  _quests: {fileID: 782435305}
+  _trading: {fileID: 850631612}
+  _tradingWindow: {fileID: 850631610}
+  _research: {fileID: 745012312}
+  _researchWindow: {fileID: 745012310}
+  _quests: {fileID: 782435307}
   _pauseMenu: {fileID: 1708745677}
   _toolkitShotcuts: {fileID: 8277524054700303564}
   _bottomBar: {fileID: 897350252}
@@ -1199,7 +1286,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   confrimWindow: {fileID: 1708745683}
-  menuRenderer: {fileID: 1708745686}
   settings: {fileID: 1708745684}
 --- !u!114 &1708745683
 MonoBehaviour:
@@ -1819,21 +1905,23 @@ MonoBehaviour:
   _jobQueue: {fileID: 2023602334459014216}
   _tick: {fileID: 8150810313726245684}
   _stats: {fileID: 220867751}
-  _miscellaneous: {fileID: 0}
   _infoWindow: {fileID: 225780445}
   _cameraSceneMover: {fileID: 1068071213}
   _researchAdapter: {fileID: 8150810313726245686}
   _questController: {fileID: 782435305}
+  beforeLoads:
+  - {fileID: 1623294178}
+  - {fileID: 4967022013944964016}
+  - {fileID: 4967022013944964017}
+  - {fileID: 6086404398923934763}
+  - {fileID: 6086404398923934763}
   afterLoads:
   - {fileID: 8150810313726245683}
   - {fileID: 7072378217534680772}
   - {fileID: 6086404398923934763}
   - {fileID: 8277524054700303564}
-  beforeLoads:
-  - {fileID: 4967022013944964016}
-  - {fileID: 4967022013944964017}
-  - {fileID: 225780445}
-  - {fileID: 6086404398923934763}
+  - {fileID: 897350252}
+  - {fileID: 220867761}
 --- !u!114 &8150810313726245686
 MonoBehaviour:
   m_ObjectHideFlags: 0

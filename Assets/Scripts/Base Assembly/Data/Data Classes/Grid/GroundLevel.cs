@@ -570,14 +570,15 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <summary>Registers all instantiated buildings.</summary>
     void CreateBuildings(WorldSave save, int level)
     {
-        List<BuildingSave> buildingList = buildings.GetComponentsInChildren<Building>().Select(q =>
+        List<BuildingSave> buildingList = buildings.GetComponentsInChildren<Building>().Select(building =>
         {
-            if (!q.constructed)
-                q.maximalProgress = q.CalculateMaxProgress();
-            if (q is IStorage)
-                ((IStorage)q).SetupStorage(50);
+            if (!building.IsWorking)
+                building.maximalProgress = building.CalculateMaxProgress();
 
-            BuildingSave bSave = q.Save() as BuildingSave;
+            if (building is IStorage storage)
+                storage.SetupStorage(50);
+
+            BuildingSave bSave = building.Save() as BuildingSave;
             bSave.gridPos.y = level;
             return bSave;
         }).ToList();

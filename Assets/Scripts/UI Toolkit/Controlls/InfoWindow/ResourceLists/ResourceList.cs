@@ -181,19 +181,19 @@ namespace InfoWindowElements
                         binding = BindingUtil.CreateBinding(nameof(NeedSourceProduction.LocalRes));
                         binding.sourceToUiConverters.AddConverter((ref StorageResource stored) => ToUIRes(stored));
                     }
-                    SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    InfoWindow.Window.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case StorageObject:
                     binding = BindingUtil.CreateBinding(nameof(StorageObject.LocalRes));
                     binding.sourceToUiConverters.AddConverter((ref StorageResource stored) => ToUIRes(stored));
-                    SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    InfoWindow.Window.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Rock:
                     if (((Rock)data).rockYield != null)
                     {
                         binding = BindingUtil.CreateBinding(nameof(Rock.rockYield));
                         binding.sourceToUiConverters.AddConverter((ref Resource yeild) => ToUIRes(yeild));
-                        SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                        InfoWindow.Window.RegisterTempBinding(new(this, "resources"), binding, data);
                     }
                     else
                     {
@@ -203,12 +203,12 @@ namespace InfoWindowElements
                 case Human:
                     binding = BindingUtil.CreateBinding(nameof(Human.Inventory));
                     binding.sourceToUiConverters.AddConverter((ref CapacityResource inventory) => ToUIRes(inventory));
-                    SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    InfoWindow.Window.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Vein:
                     binding = BindingUtil.CreateBinding(nameof(Vein.Storing));
                     binding.sourceToUiConverters.AddConverter((ref Resource stored) => ToUIRes(stored));
-                    SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, data);
+                    InfoWindow.Window.RegisterTempBinding(new(this, "resources"), binding, data);
                     break;
                 case Outpost outpost:
                     if (cost)

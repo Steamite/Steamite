@@ -67,14 +67,14 @@ namespace TradeWindowElements
             sliderGroup.name = "Sliders";
             mapElem.Add(sliderGroup);
             Slider slider;
-            Vector2 basePos = UIRefs.TradingWindow.colonyLocation.pos.ToVecUI();
-            List<TradeConvoy> convoys = UIRefs.TradingWindow.GetConvoys();
-            for (int i = 0; i < UIRefs.TradingWindow.tradeLocations.Count; i++)
+            Vector2 basePos = UIRefs.Trading.ColonyLocation.pos.ToVecUI();
+            List<TradeConvoy> convoys = UIRefs.Trading.Convoys;
+            for (int i = 0; i < UIRefs.Trading.TradeLocations.Count; i++)
             {
-                Vector2 locationPos = UIRefs.TradingWindow.tradeLocations[i].pos.ToVecUI();
+                Vector2 locationPos = UIRefs.Trading.TradeLocations[i].pos.ToVecUI();
 
                 float distance = Vector2.Distance(basePos, locationPos) / DISTANCE_MOD;
-                UIRefs.TradingWindow.tradeLocations[i].distance = distance;
+                UIRefs.Trading.TradeLocations[i].distance = distance;
 
                 slider = new("", 0, distance);
                 slider.style.width = distance;
@@ -107,7 +107,7 @@ namespace TradeWindowElements
         /// <summary>Creates a location button for all <see cref="TradeLocation"/>s and the <see cref="ColonyLocation"/>.</summary>
         void CreateLocations()
         {
-            int tradeLocationCount = UIRefs.TradingWindow.tradeLocations.Count;
+            int tradeLocationCount = UIRefs.Trading.TradeLocations.Count;
             locationGroup = new(this, tradeLocationCount);
             mapElem.Add(locationGroup);
 
@@ -117,18 +117,18 @@ namespace TradeWindowElements
                 Location location;
                 if (index == -1)
                 {
-                    location = UIRefs.TradingWindow.colonyLocation;
+                    location = UIRefs.Trading.ColonyLocation;
                     locationButton = new(location.pos.ToVecUI(), 0, locationGroup);
                     locationButton.AddToClassList("colony-button");
                 }
                 else
                 {
-                    location = UIRefs.TradingWindow.tradeLocations[index];
+                    location = UIRefs.Trading.TradeLocations[index];
                     locationButton = new TradeLocationButton(
                         location.pos.ToVecUI(),
                         index + 1,
                         (Slider)sliderGroup.ElementAt(index).ElementAt(0),
-                        UIRefs.TradingWindow.colonyLocation.pos.ToVecUI(),
+                        UIRefs.Trading.ColonyLocation.pos.ToVecUI(),
                         locationGroup);
                 }
                 locationButton.RegisterLocalMenu(location);
@@ -141,7 +141,7 @@ namespace TradeWindowElements
 
         void CreateOutposts()
         {
-            for (int i = 0; i < UIRefs.TradingWindow.outpostLimit; i++)
+            for (int i = 0; i < Trading.MAX_OUTPOSTS; i++)
             {
                 index++;
                 CreateOutpost(i);
@@ -153,10 +153,10 @@ namespace TradeWindowElements
         {
             OutpostButton outpostButton = new(locationGroup, index);
             outpostButtons.Add(outpostButton);
-            Outpost outpost = UIRefs.TradingWindow.outposts[i];
+            Outpost outpost = UIRefs.Trading.Outposts[i];
             outpost.OnUpgrade = () => EnableOutpost(i + 1);
 
-            if (i > 0 && !UIRefs.TradingWindow.outposts[i - 1].exists)
+            if (i > 0 && !UIRefs.Trading.Outposts[i - 1].exists)
                 outpostButton.enabledSelf = false;
 
             outpostButton.RegisterLocalMenu(outpost);
@@ -174,7 +174,7 @@ namespace TradeWindowElements
         public void Open(object data)
         {
             locationButtons[0].Select();
-            convoyLabel.text = $"{UIRefs.TradingWindow.AvailableConvoy}/{UIRefs.TradingWindow.MAX_CONVOYS} Convoyes";
+            convoyLabel.text = $"{UIRefs.Trading.AvailableConvoy}/{Trading.MAX_CONVOYS} Convoyes";
 
             Slider slider;
             foreach (TradeConvoy tradeConvoy in (List<TradeConvoy>)data)

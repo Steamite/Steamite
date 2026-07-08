@@ -11,7 +11,7 @@ public class BuildingWrapper : DataObject
     public Building building => b;
     [SerializeField] Building b;
 
-    public override string GetName() => b?.objectName;
+    public override string GetName() => b?.Name;
 
 #if UNITY_EDITOR
     [SerializeField] public int selectedLevel;
@@ -28,8 +28,8 @@ public class BuildingWrapper : DataObject
         if (b)
         {
             if (name != null)
-                b.objectName = name;
-            b.prefabConnection = new(categoryID, id);
+                b.Name = name;
+            b.PrefabConnection = new(categoryID, id);
             EditorUtility.SetDirty(b);
         }
     }
@@ -83,7 +83,7 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
 
     public Building GetBuilding(string name)
     {
-        return Categories[0].Objects.Find(q => q.building.objectName == name).building;
+        return Categories[0].Objects.Find(q => q.building.Name == name).building;
     }
 
     public Pipe GetPipe()

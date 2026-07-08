@@ -110,7 +110,7 @@ public static class HumanActions
     /// <param name="h"></param>
     public static void DoProduction(Human h)
     {
-        if (h.Workplace is IProduction prod)
+        if (h.Workplace is IProduction prod && !(h.Workplace as Building).Upgrading)
         {
             prod.ProgressProduction(h.Efficiency * productionSpeed);
         }
@@ -239,8 +239,8 @@ public static class HumanActions
                         MyRes.FindStorage(r, h);
                         if (h.destination)
                         {
-                            h.destination.RequestRes(r, h, 1);
-                            pickupObject.RequestRes(r, h, -1);
+                            h.destination.RequestRes(r, h, StorageRequestType.Store);
+                            pickupObject.RequestRes(r, h, StorageRequestType.Take);
                             return true;
                         }
                     }
@@ -265,7 +265,7 @@ public static class HumanActions
                             chunkStorage,
                             chunkStorage,
                             h.Inventory.capacity - h.Inventory.Sum());
-                        chunk.RequestRes(toMove, h, -1);
+                        chunk.RequestRes(toMove, h, StorageRequestType.Take);
                         return true;
                     }
                 }
@@ -317,7 +317,7 @@ public static class HumanActions
         List<Building> missingProgress = new();
         foreach (var building in jobQueue.constructions)
         {
-            if (!building.Cost.Same(building.LocalRes.Future()) && building.constructed == false)
+            if (!building.Cost.Same(building.LocalRes.Future()) && building.Constructing == false)
             {
                 missingResoucerces.Add(building);
             }
@@ -346,7 +346,7 @@ public static class HumanActions
         JobQueue jobQueue = SceneRefs.JobQueue;
         if (jobQueue.deconstructions.Count == 0)
             return false;
-        if (FindInterests(jobQueue.deconstructions.Where(q => q.LocalRes.carriers.Count == 0), h, JobState.Deconstructing))
+        if (FindInterests(jobQueue.deconstructions.Where(q => q.LocalRes.HasNoCarriers()), h, JobState.Deconstructing))
         {
             h.Job.interest.GetComponent<Building>().RequestRes(new(), h, 0);
             return true;

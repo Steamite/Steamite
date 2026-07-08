@@ -12,16 +12,6 @@ public class QuestControllerSave
     public List<OrderChoiceSave> orderChoiceSaves;
 
     public QuestControllerSave() { }
-
-    public QuestControllerSave(QuestController controller)
-    {
-        finishedQuests = controller.finishedQuests.Select(q => new QuestSave(q)).ToList();
-        activeQuests = controller.activeQuests.Select(q => new QuestSave(q)).ToList();
-        order = controller.orderController.CurrentOrder == null ? null: new(controller.orderController.CurrentOrder);
-        trust = controller.Trust;
-        finishedOrdersCount = controller.orderController.finishedOrdersCount;
-        orderChoiceSaves = controller.orderController.orderChoice.Select(q => new OrderChoiceSave(q)).ToList();
-    }
 }
 
 public class OrderChoiceSave

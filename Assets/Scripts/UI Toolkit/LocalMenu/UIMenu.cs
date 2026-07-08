@@ -14,11 +14,11 @@ namespace LocalMenuUtility
 
         public VisualElement Anchor => anchor;
 
-        public override void AfterInit(VisualElement rootElem)
+        protected override void OnUIReload()
         {
-            base.AfterInit(rootElem);
+            base.OnUIReload();
 
-            SceneRefs.InfoWindow.buildingCostChange = (building) =>
+            InfoWindow.Window.buildingCostChange = (building) =>
             {
                 if (activeObject == null)
                     return;

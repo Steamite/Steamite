@@ -22,7 +22,7 @@ public class Pipe : Building
     }
     public override int GetHashCode()
     {
-        return HashCode.Combine(base.GetHashCode(), objectName, id);
+        return HashCode.Combine(base.GetHashCode(), Name, id);
     }
 
     public override void FinishBuild()
@@ -222,7 +222,7 @@ public class Pipe : Building
         string s = "";
         foreach (Building b in network.buildings)
         {
-            s += $"{b.objectName}: {b.id}\n";
+            s += $"{b.Name}: {b.id}\n";
         }
         return s;
     }
@@ -252,7 +252,8 @@ public class Pipe : Building
         MyGrid.SetBuilding(this);
         MyGrid.SetGridItem(GetPos(), this, true);
         FindConnections();
-        if (constructed)
+
+        if (Constructing)
             FinishBuild();
     }
 

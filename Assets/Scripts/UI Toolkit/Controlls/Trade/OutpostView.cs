@@ -164,7 +164,7 @@ public partial class OutpostView : TradeMapViewBase
     public override object Open(int i)
     {
         base.Open();
-        outpost = UIRefs.TradingWindow.outposts[i];
+        outpost = UIRefs.Trading.Outposts[i];
         outpostIndex = i;
 
         style.display = DisplayStyle.Flex;

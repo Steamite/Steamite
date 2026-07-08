@@ -91,11 +91,11 @@ namespace InfoWindowElements
 
             DataBinding binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource store) => ToUIRes(store));
-            SceneRefs.InfoWindow.RegisterTempBinding(new(this, "resources"), binding, storage);
+            InfoWindow.Window.RegisterTempBinding(new(this, "resources"), binding, storage);
 
             binding = BindingUtil.CreateBinding(nameof(Building.LocalRes));
             binding.sourceToUiConverters.AddConverter((ref StorageResource store) => $"Capacity: {store.Sum()}/{store.capacity}");
-            SceneRefs.InfoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, storage);
+            InfoWindow.Window.RegisterTempBinding(new(capacityLabel, "text"), binding, storage);
 
             if (storageElems.Count > 0)
             {
@@ -145,15 +145,15 @@ namespace InfoWindowElements
             storage.CanStore[i] = b;
             if(b == false)
             {
-                for (int j = storage.LocalResources.carriers.Count - 1; j > -1; j--)
+                foreach (var request in storage.LocalResources.Requests)
                 {
-                    Resource resource = storage.LocalResources.requests[j];
+                    Resource resource = request.resource;
                     int typeIndex = resource.types.IndexOf(storage.LocalResources.types[i]);
                     if (typeIndex > -1)
                     {
                         if (resource.types.Count == 1)
                         {
-                            Human human = storage.LocalResources.carriers[typeIndex];
+                            Human human = request.carrier;
                             storage.LocalResources.RemoveRequest(human);
                             MyRes.FindStorage(human);
                         }

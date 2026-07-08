@@ -57,7 +57,7 @@ namespace BottomBar.Building
                     itemsSource =
                         _wrappers.Select(
                             q => new RadioBuildButtonData(
-                                q.building.objectName,
+                                q.building.Name,
                                 q.preview,
                                 q.unlocked)
                                 as RadioButtonData).ToList();
@@ -163,7 +163,7 @@ namespace BottomBar.Building
             }
             else if (!wrappers[index].unlocked)
             {
-                UIRefs.ResearchWindow.OpenWindow(wrappers[index]);
+                UIRefs.ResearchWindow.OpenWithFocus(wrappers[index]);
                 return false;
             }
             else if (!MyRes.CanAfford(wrappers[index].building.Cost))
