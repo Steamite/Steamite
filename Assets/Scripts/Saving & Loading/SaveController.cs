@@ -62,7 +62,7 @@ class LoggingValueProvider : IValueProvider
 public class SaveController : MonoBehaviour, IAfterLoad
 {
     /// <summary>Action trigger after a succesful saving(to update ui).</summary>
-    System.Action saveUIAction;
+    Action saveUIAction;
     /// <summary>Name of the world.</summary>
     string worldName;
 
@@ -70,7 +70,11 @@ public class SaveController : MonoBehaviour, IAfterLoad
     public void AfterInit()
     {
         SceneRefs.Tick.SubscribeToEvent(() => SaveGame("", true), Tick.TimeEventType.Day);
-        UIRefs.PauseMenu.Init((s) => SaveGame(s, false), ref saveUIAction);
+        UIRefs.PauseMenu.AddSaveAction((s) => SaveGame(s, false));
+
+        saveUIAction += ((IGridMenu)UIRefs.LoadMenu).UpdateButtonState;
+        saveUIAction += () => ((IGridMenu)UIRefs.SaveDialog).CloseWindow();
+
         worldName = MyGrid.worldName;
     }
 

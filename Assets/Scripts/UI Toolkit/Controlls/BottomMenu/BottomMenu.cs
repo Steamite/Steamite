@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 namespace BottomBar
 {
-    public class BottomMenu : PanelRendererRoot, IAfterLoad
+    public class BottomMenu : InitilizablePanelRenderer, IAfterLoad
     {
         BottomButtonBar bottomButtonBar;
         VisualElement questGroup;
@@ -25,6 +25,11 @@ namespace BottomBar
         }
 
         public void AfterInit()
+        {
+            RegisterLoad();
+        }
+
+        protected override void OnDataLoadLogic()
         {
             bottomButtonBar.Init();
             ((IUIElement)questGroup).Open(SceneRefs.QuestController);

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public abstract class FullscreenWindow : PanelRendererRoot
+public abstract class FullscreenWindow : InitilizablePanelRenderer
 {
     public bool IsOpen { get; set; } = false;
 
@@ -13,13 +13,6 @@ public abstract class FullscreenWindow : PanelRendererRoot
         if (IsOpen == false)
             Root.style.display = DisplayStyle.None;
     }
-
-    protected void AddOnLoad(ref Action a) => a += () => RegisterReload(OnDataLoad);
-
-    void OnDataLoad(PanelRenderer panelRenderer, VisualElement rootElement) => OnDataLoadLogic();
-    protected abstract void OnDataLoadLogic();
-
-
 
     public void ToggleWindow()
     {
