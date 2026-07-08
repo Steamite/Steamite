@@ -23,7 +23,7 @@ namespace InfoWindowElements
                         {
                             mainBinding = SetupResTypes(source.FluidYeild, nameof(NeedSourceProduction.Source) + "."+ nameof(NeedSourceProduction.Source.Storing));
                             mainBinding.sourceToUiConverters.AddConverter((ref Resource fluid) => ToUIRes(fluid));
-                            SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
+                            InfoWindow.Window.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
                             return;
                         }
                         else
@@ -58,13 +58,13 @@ namespace InfoWindowElements
                     noneLabel.style.height = new Length(50, LengthUnit.Pixel);
                     DataBinding binding = BindingUtil.CreateBinding(nameof(Water.Storing));
                     binding.sourceToUiConverters.AddConverter((ref int amm) => $"Water Source:\n {amm}/1");
-                    SceneRefs.InfoWindow.RegisterTempBinding(new BindingContext(noneLabel, "text"), binding, water);
+                    InfoWindow.Window.RegisterTempBinding(new BindingContext(noneLabel, "text"), binding, water);
                     return;
                 default:
                     style.display = DisplayStyle.None;
                     return;
             }
-            SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
+            InfoWindow.Window.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
 
         }
     }

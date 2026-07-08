@@ -133,7 +133,7 @@ public partial class OutpostTradeElem : VisualElement
                         resType,
                         selectedVals[i],
                         false);
-                    money += TradingWindow.RESOURCE_COSTS[resType] * selectedVals[i];
+                    money += Trading.RESOURCE_COSTS[resType] * selectedVals[i];
                 }
                 MyRes.ManageMoneyGlobal(money);
             }

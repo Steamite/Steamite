@@ -90,7 +90,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     /// <param name="transferPerTick"><inheritdoc/></param>
     public override void Store(Human human, int transferPerTick)
     {
-        if (constructed)
+        if (IsWorking)
         {
             ((IResourceProduction)this).StoreProdResources(human, transferPerTick);
         }
@@ -103,7 +103,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     {
         base.Take(h, transferPerTick);
 
-        if (localRes.requests.Count == 0)
+        if (localRes.HasNoCarriers())
         {
             ProdStates.requestedPickup = false;
             ProdStates.space = ResourceYield.Sum() <= localRes.FreeSpace;
@@ -112,10 +112,10 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     }
 
     /// <inheritdoc/>
-    public override void RequestRes(Resource request, Human human, int mod)
+    public override void RequestRes(Resource request, Human human, StorageRequestType mod)
     {
         StorageResource storage = null;
-        if (constructed && mod == 1)
+        if (IsWorking && mod == StorageRequestType.Store)
             storage = InputResource;
         else
             storage = localRes;
@@ -152,43 +152,41 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     public override void OrderDeconstruct()
     {
         JobQueue queue = SceneRefs.JobQueue;
-        if (!constructed)
+        if (Constructing || Deconstructing)
         {
             base.OrderDeconstruct();
         }
-        else
+        else if(!Deconstructing)
         {
-            if (!deconstructing) // start deconstruction now!
-            {
-                // Remove assigned workers
-                ((IAssign)this).ClearHumans();
+            // start deconstruction now!
 
-                //Also Reassing all carriers and transport
-                Human human = null;
-                queue.CancelJob(JobState.Pickup, this);
-                queue.CancelJob(JobState.Supply, this);
-                queue.CancelJob(JobState.Constructing, this);
-                queue.AddJob(JobState.Deconstructing, this);
-                deconstructing = true;
+            // Remove assigned workers
+            ((IAssign)this).ClearHumans();
 
-                human = localRes.ReassignCarriers();
-                if (human)
-                    InputResource.ReassignCarriers(false);
-                else if (InputResource.carriers.Count > 0)
-                {
-                    human = InputResource.carriers[0];
-                    localRes.AddRequest(new(), human, 0);
-                    InputResource.RemoveRequest(human);
-                    InputResource.ReassignCarriers(false);
-                    JobData data = PathFinder.FindPath(new() { this }, human);
-                    data.job = JobState.Deconstructing;
-                    human.SetJob(data, true);
-                }
-            }
-            else // has just been canceled
+            //Also Reassing all carriers and transport
+            Human human;
+            queue.CancelJob(JobState.Pickup, this);
+            queue.CancelJob(JobState.Supply, this);
+            queue.CancelJob(JobState.Constructing, this);
+            queue.AddJob(JobState.Deconstructing, this);
+            Deconstructing = true;
+
+            // remove request for produced resources, and try to find someone for deconstruction
+            human = localRes.ReassignCarriers(JobState.Deconstructing); 
+
+            if (human)
+                InputResource.ClearRequests(); // remove all requests for input resource
+            else
             {
-                base.OrderDeconstruct();
-                return;
+                InputResource.ReassignCarriers(JobState.Deconstructing);
+                /*
+                human = InputResource.carriers[0];
+                localRes.AddRequest(new(), human, 0);
+                InputResource.RemoveRequest(human);
+                InputResource.ReassignCarriers(false);
+                JobData data = PathFinder.FindPath(new() { this }, human);
+                data.job = JobState.Deconstructing;
+                human.SetJob(data, true);*/
             }
         }
     }
@@ -217,6 +215,17 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
 
     #endregion
 
+    #region
+    public override void StartUpgrade()
+    {
+        base.StartUpgrade();
+        if (localRes.HasNoCarriers())
+            InputResource.ReassignCarriers(JobState.Constructing);
+        else
+            InputResource.Clear();
+    }
+    #endregion
+
     #region Placing
     /// <summary>
     /// <inheritdoc/> <br/>
@@ -226,7 +235,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     /// <returns><inheritdoc/></returns>
     public override Resource GetDiff(Resource r)
     {
-        if (!constructed)
+        if (Constructing)
         {
             return base.GetDiff(r);
         }

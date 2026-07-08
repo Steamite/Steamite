@@ -47,7 +47,7 @@ public interface IProduction
     {
         Building building = this as Building;
 
-        if (building.constructed)
+        if (building.IsWorking)
         {
             building.transform.GetChild(0).GetChild(0).gameObject.SetActive(Stoped);
         }

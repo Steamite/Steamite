@@ -10,17 +10,17 @@ public partial class JobInfo : InfoWindowControl
         // Job Binding
         DataBinding binding = BindingUtil.CreateBinding(nameof(Human.Job));
         binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{jobData.job}");
-        SceneRefs.InfoWindow.RegisterTempBinding(new(jobType, "text"), binding, dataSource);
+        InfoWindow.Window.RegisterTempBinding(new(jobType, "text"), binding, dataSource);
 
         // Pos Binding
         binding = BindingUtil.CreateBinding(nameof(Human.Job));
         binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{(jobData.interest ? jobData.interest.GetPos() : "None")}");
-        SceneRefs.InfoWindow.RegisterTempBinding(new(jobPosition, "text"), binding, dataSource);
+        InfoWindow.Window.RegisterTempBinding(new(jobPosition, "text"), binding, dataSource);
 
         // Object Binding
         binding = BindingUtil.CreateBinding(nameof(Human.Job));
-        binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{(jobData.interest ? jobData.interest.objectName : "None")}");
-        SceneRefs.InfoWindow.RegisterTempBinding(new(jobObject, "text"), binding, dataSource);
+        binding.sourceToUiConverters.AddConverter((ref JobData jobData) => $"{(jobData.interest ? jobData.interest.Name : "None")}");
+        InfoWindow.Window.RegisterTempBinding(new(jobObject, "text"), binding, dataSource);
     }
 
     public JobInfo()

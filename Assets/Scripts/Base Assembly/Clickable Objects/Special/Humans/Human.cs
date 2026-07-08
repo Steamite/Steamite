@@ -224,7 +224,7 @@ public class Human : ClickableObject
         HumanSave s = save as HumanSave;
         transform.GetChild(1).GetComponent<MeshRenderer>().material.color = s.color.ConvertColor();
         id = save.id;
-        objectName = save.objectName;
+        objectName = save.name;
         Inventory = new(20);
         // house assigment
         if (s.houseID != -1)

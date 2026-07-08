@@ -164,7 +164,7 @@ namespace TradeWindowElements
                 Debug.LogError("no asset");
 #endif
             base.Open();
-            selectedLocation = UIRefs.TradingWindow.tradeLocations[i];
+            selectedLocation = UIRefs.Trading.TradeLocations[i];
             selectedLocationIndex = i;
 
             BuyMoney = 0;
@@ -176,7 +176,7 @@ namespace TradeWindowElements
             SetDeals(1, selectedLocation.Sell);
             UpdateConfirmButton();
 
-            float time = (2 * selectedLocation.distance) / (TradingWindow.CONVOY_SPEED * Tick.TicksInDay);
+            float time = (2 * selectedLocation.distance) / (Trading.CONVOY_SPEED * Tick.TicksInDay);
             if (time > 1)
                 dateLabel.text = $"{time:F1} d";
             else
@@ -207,9 +207,9 @@ namespace TradeWindowElements
                     SliderInt slider = (SliderInt)deal.ElementAt(1);
                     slider.SetValueWithoutNotify(0);
                     if (categ == 0)
-                        slider.highValue = TradingWindow.CONVOY_STORAGE_LIMIT;
+                        slider.highValue = Trading.CONVOY_STORAGE_LIMIT;
                     else
-                        slider.highValue = Math.Min(globalResources[tradeDeals[i].type], TradingWindow.CONVOY_STORAGE_LIMIT);
+                        slider.highValue = Math.Min(globalResources[tradeDeals[i].type], Trading.CONVOY_STORAGE_LIMIT);
 
                     ((Label)deal.ElementAt(2)).text = $"* {tradeDeals[i].cost} = 0 £";
 
@@ -219,7 +219,7 @@ namespace TradeWindowElements
 
             // Categ header
             deals = ElementAt(categ).ElementAt(0);
-            ((Label)deals.ElementAt(1)).text = $"(0/{TradingWindow.CONVOY_STORAGE_LIMIT})";
+            ((Label)deals.ElementAt(1)).text = $"(0/{Trading.CONVOY_STORAGE_LIMIT})";
             ((Label)deals.ElementAt(2)).text = $"0 £";
         }
         #endregion
@@ -238,7 +238,7 @@ namespace TradeWindowElements
                 {
                     deal = GetDeal(categoryIndex, i);
                     ((SliderInt)deal.ElementAt(1)).highValue =
-                        TradingWindow.CONVOY_STORAGE_LIMIT - (_totalCount - ((SliderInt)deal.ElementAt(1)).value);
+                        Trading.CONVOY_STORAGE_LIMIT - (_totalCount - ((SliderInt)deal.ElementAt(1)).value);
                 }
                 BuyMoney = _totalCost;
                 BuyCount = _totalCount;
@@ -252,7 +252,7 @@ namespace TradeWindowElements
                     ((SliderInt)deal.ElementAt(1)).highValue =
                         Math.Min(
                             MyRes.resDataSource.GlobalResources[selectedLocation.Sell[i].type],
-                            TradingWindow.CONVOY_STORAGE_LIMIT - (_totalCount - ((SliderInt)deal.ElementAt(1)).value));
+                            Trading.CONVOY_STORAGE_LIMIT - (_totalCount - ((SliderInt)deal.ElementAt(1)).value));
                 }
                 SellMoney = _totalCost;
                 SellCount = _totalCount;
@@ -260,7 +260,7 @@ namespace TradeWindowElements
 
             // header elem
             deal = ElementAt(categoryIndex).ElementAt(0);
-            ((Label)deal.ElementAt(1)).text = $"({_totalCount}/{TradingWindow.CONVOY_STORAGE_LIMIT})";
+            ((Label)deal.ElementAt(1)).text = $"({_totalCount}/{Trading.CONVOY_STORAGE_LIMIT})";
             ((Label)deal.ElementAt(2)).text = $"{_totalCost} £";
             #endregion
 
@@ -297,11 +297,11 @@ namespace TradeWindowElements
             ((Label)ElementAt(2).ElementAt(0).ElementAt(1)).text = $"{MyRes.Money - BuyMoney + SellMoney} £";
             canTrade = false;
 
-            if (UIRefs.TradingWindow.ConvoyOnRoute(selectedLocationIndex))
+            if (UIRefs.Trading.ConvoyOnRoute(selectedLocationIndex))
             {
                 confirmButton.text = "<line-height=77%>Convoy already on route";
             }
-            else if (UIRefs.TradingWindow.AvailableConvoy == 0)
+            else if (UIRefs.Trading.AvailableConvoy == 0)
             {
                 confirmButton.text = "No available convoy";
             }
@@ -328,7 +328,7 @@ namespace TradeWindowElements
             if (canTrade)
             {
                 Slider slider = (Slider)panel.visualTree.Q<TradeMap>("Map").ElementAt(0).ElementAt(0).ElementAt(selectedLocationIndex).ElementAt(0);
-                UIRefs.TradingWindow.Trade(
+                UIRefs.Trading.Trade(
                     new TradeConvoy(
                         GetTradeResources(selectedLocation.Buy, 0),
                         SellMoney,
@@ -338,7 +338,7 @@ namespace TradeWindowElements
                     BuyMoney);
                 Open(selectedLocationIndex);
 
-                map.convoyLabel.text = $"{UIRefs.TradingWindow.AvailableConvoy}/{UIRefs.TradingWindow.MAX_CONVOYS} Convoyes";
+                map.convoyLabel.text = $"{UIRefs.Trading.AvailableConvoy}/{Trading.MAX_CONVOYS} Convoyes";
                 slider.RemoveFromClassList("free");
                 slider.AddToClassList("trading");
             }

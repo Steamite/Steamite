@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 /// <summary>Handles scene transitions.</summary>
+[RequireComponent(typeof(PanelRendererRoot))]
 public class LoadingScreen : MonoBehaviour, IUpdatable
 {
     #region Variables
@@ -59,6 +60,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
     #endregion
 
+    
     #region Scene Managment
     /// <summary>Loads the Main Menu scene.</summary>
     public async void OpenMainMenu(bool v)
@@ -72,55 +74,61 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     public async void StartNewGame(string _folderName, string seed = "")
     {
         NewGameInit newGameInit = gameObject.GetComponent<NewGameInit>();
-        WorldSave save;
+        WorldSave worldSave;
         int size;
         bool randomMap = seed != "";
         if (randomMap)
         {
-            save = await gameObject.GetComponent<MapGen>().Generate(seed);
-            size = save.gridSave[0].height;
+            worldSave = await gameObject.GetComponent<MapGen>().Generate(seed);
+            size = worldSave.gridSave[0].height;
         }
         else
         {
             size = testLevels[0].height;
-            newGameInit.CreateGrid(testLevels, out save);
+            newGameInit.CreateGrid(testLevels, out worldSave);
         }
 
-        await StartLoading(_folderName, _folderName,
-            new Save()
-            {
-                gameState = newGameInit.SetNewGameState(),
-                trade = await newGameInit.InitTrade(0),
-                research = await newGameInit.InitResearch(),
-                humans = newGameInit.InitHumans(size),
-                quests = await newGameInit.InitQuests(randomMap),
-                world = save
-            });
+        Save saveData = new Save()
+        {
+            gameState = newGameInit.SetNewGameState(),
+            trade = await newGameInit.InitTrade(0),
+            research = await newGameInit.InitResearch(),
+            humans = newGameInit.InitHumans(size),
+            quests = await newGameInit.InitQuests(randomMap),
+            world = worldSave
+        };
+        StartLoading(_folderName, saveData);
     }
     #endregion
 
     #region Loading Game State
-    public async Task LoadGame(string _folderName, string _worldName)
+    public void LoadGame(string _folderName, string _worldName)
     {
-        await StartLoading(_folderName, _worldName, LoadSavedData(_folderName));
+        StartLoading(_worldName, LoadSavedData(_folderName));
     }
     /// <summary>
     /// Assigns parameters and shows loading screen.<br/>
     /// If called while on "Main Menu" scene unloads it.<br/>
     /// After that loads "Level" scene.
     /// </summary>
-    /// <param name="_folderName">Current folder name.</param>
-    async Task StartLoading(string _folderName, string _worldName, Save save)
+    void StartLoading(string _worldName, Save save)
     {
         worldName = _worldName;
-        VisualElement loadingScreenWindow = transform.GetComponent<PanelRendererRoot>().Root;
-        loadingScreenWindow[0].style.display = DisplayStyle.Flex;
+        PanelRendererRoot root = GetComponent<PanelRendererRoot>();
+        root.RegisterReload(async (panel,rootElem) => await Load(save, rootElem));
+        /*if (root.Root == null)
+        else
+            _ = Load(save, root.Root);*/
+    }
 
-        Label actionText = loadingScreenWindow.Q<Label>("Title");
+    async Task Load(Save save, VisualElement root) {
+
+        root[0].style.display = DisplayStyle.Flex;
+        Label actionText = root.Q<Label>("Title");
         ActionText = "Loading";
         actionText.SetBinding(nameof(ActionText), "text", this);
 
-        ProgressBar progressBar = loadingScreenWindow.Q<ProgressBar>();
+        ProgressBar progressBar = root.Q<ProgressBar>();
         progressBar.value = 0;
         progressBar.SetBinding(
             nameof(ProgressGlobal),
@@ -345,7 +353,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     async Task LoadResearches(ResearchSave researchSave)
     {
         ActionText = "Remembering research";
-        await UIRefs.ResearchWindow.LoadState(researchSave);
+        await UIRefs.Research.LoadState(researchSave);
     }
 
     /// <summary>
@@ -356,7 +364,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     async Task LoadTrade(TradeSave tradeSave)
     {
         ActionText = "Making Deals";
-        await UIRefs.TradingWindow.LoadState(tradeSave);
+        await UIRefs.Trading.LoadState(tradeSave);
     }
 
     async Task LoadQuests(QuestControllerSave questSave)
@@ -364,8 +372,8 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         QuestController controller = SceneRefs.QuestController as QuestController;
         try
         {
-            Task task = controller.LoadState(questSave);
-            await task;
+            ActionText = "Writing quests";
+            await controller.LoadState(questSave);
         }
         catch (Exception e)
         {
@@ -382,7 +390,6 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
             await SceneManager.UnloadSceneAsync("Main Menu");
         await SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
         await GameObject.Find("Scene").GetComponent<SceneRefs>().BeforeLoad();
-        GameObject.Find("UI canvas").GetComponent<UIRefs>().Init();
         MyRes.PreLoad();
     }
 

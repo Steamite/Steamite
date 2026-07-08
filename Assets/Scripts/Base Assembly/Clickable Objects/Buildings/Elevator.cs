@@ -83,9 +83,9 @@ public class Elevator : Building, IStorage, IBuilderHut
     /// <param name="request"><inheritdoc/></param>
     /// <param name="h"><inheritdoc/></param>
     /// <param name="mod"><inheritdoc/></param>
-    public override void RequestRes(Resource request, Human h, int mod)
+    public override void RequestRes(Resource request, Human h, StorageRequestType mod)
     {
-        if (constructed && mod == 1)
+        if (IsWorking && mod == StorageRequestType.Store)
         {
             int spaceToStore = localRes.capacity.currentValue - localRes.Future().Sum();
             Resource transferRes = new();

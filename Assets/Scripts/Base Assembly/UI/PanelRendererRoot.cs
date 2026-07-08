@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.UIElements.PanelRenderer;
 
 [RequireComponent(typeof(PanelRenderer))]
 public class PanelRendererRoot : MonoBehaviour
@@ -8,21 +10,38 @@ public class PanelRendererRoot : MonoBehaviour
     VisualElement root;
     public VisualElement Root => root;
     public PanelRenderer Renderer => GetComponent<PanelRenderer>();
-    Action<VisualElement> reload;
+    List<UIReloadCallback> callbacks = new();
 
-    public void RegisterReload(Action<VisualElement> a) => reload += a;
+    public void RegisterReload(UIReloadCallback callback) 
+    {
+        Renderer.RegisterUIReloadCallback(callback);
+        callbacks.Add(callback);
+    }
     private void OnEnable()
     {
         Renderer.RegisterUIReloadCallback(SaveRoot);
+        foreach (var item in callbacks)
+        {
+            Renderer.RegisterUIReloadCallback(item);
+        }
     }
     private void OnDisable()
     {
         Renderer.UnregisterUIReloadCallback(SaveRoot);
+        foreach (var item in callbacks)
+        {
+            Renderer.UnregisterUIReloadCallback(item);
+        }
     }
 
-    private void SaveRoot(PanelRenderer panelRenderer, VisualElement rootElement)
+    void SaveRoot(PanelRenderer panelRenderer, VisualElement rootElement)
     {
         root = rootElement;
-        reload?.Invoke(root);
+        OnUIReload();
+    }
+
+    protected virtual void OnUIReload()
+    {
+
     }
 }

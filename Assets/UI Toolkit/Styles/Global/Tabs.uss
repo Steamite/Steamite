@@ -53,6 +53,7 @@
     margin-left: 10px;
     margin-top: 0;
     margin-right: 0;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .unity-tab__header:hover > .tab-icon {

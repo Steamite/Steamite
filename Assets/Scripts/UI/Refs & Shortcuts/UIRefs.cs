@@ -1,14 +1,18 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class UIRefs : MonoBehaviour
+public class UIRefs : MonoBehaviour, IBeforeLoad
 {
     static UIRefs instance;
 
     [SerializeField] CameraMovement _levelCamera;
-    [SerializeField] TradingWindow _trading;
-    [SerializeField] ResearchWindow _research;
+    [SerializeField] Trading _trading;
+    [SerializeField] TradingWindow _tradingWindow;
+    [SerializeField] Research _research;
+    [SerializeField] ResearchWindow _researchWindow;
     [SerializeField] FullscreenWindow _quests;
     [SerializeField] Menu _pauseMenu;
     [SerializeField] MonoBehaviour _toolkitShotcuts;
@@ -19,8 +23,10 @@ public class UIRefs : MonoBehaviour
     [SerializeReference] MonoBehaviour _loadMenu;
 
     public static CameraMovement LevelCamera => instance._levelCamera;
-    public static TradingWindow TradingWindow => instance._trading;
-    public static ResearchWindow ResearchWindow => instance._research;
+    public static Trading Trading => instance._trading;
+    public static TradingWindow TradingWindow => instance._tradingWindow;
+    public static Research Research => instance._research;
+    public static ResearchWindow ResearchWindow => instance._researchWindow;
     public static FullscreenWindow Quests => instance._quests;
     public static Menu PauseMenu => instance._pauseMenu;
     public static PanelRendererRoot BottomBar => instance._bottomBar;
@@ -38,12 +44,6 @@ public class UIRefs : MonoBehaviour
 
     [RuntimeInitializeOnLoadMethod]
     static void ReloadDomain() => instance = null;
-    public void Init()
-    {
-        instance = this;
-
-        ((IInitiableUI)BottomBarRoot.Q("BottomButtonBar")).Init();
-    }
 
 
     public static bool WindowConstraint()
@@ -54,11 +54,11 @@ public class UIRefs : MonoBehaviour
             instance._saveDialog.CloseWindow();
         else if (((IGridMenu)instance._loadMenu).IsOpen())
             ((IGridMenu)instance._loadMenu).CloseWindow();
-        else if (instance._research.isOpen)
-            instance._research.CloseWindow();
-        else if (instance._trading.isOpen)
-            instance._trading.CloseWindow();
-        else if (instance._quests.isOpen)
+        else if (instance._researchWindow.IsOpen)
+            instance._researchWindow.CloseWindow();
+        else if (instance._tradingWindow.IsOpen)
+            instance._tradingWindow.CloseWindow();
+        else if (instance._quests.IsOpen)
             instance._quests.CloseWindow();
         else if (SceneRefs.GridTiles.ActiveControl != ControlMode.Nothing)
             SceneRefs.GridTiles.BreakAction();
@@ -70,15 +70,21 @@ public class UIRefs : MonoBehaviour
 
     public static bool FullscreenConstraint()
     {
-        if (instance._research.isOpen)
-            instance._research.CloseWindow();
-        if (instance._trading.isOpen)
-            instance._trading.CloseWindow();
-        if (instance._quests.isOpen)
+        if (instance._researchWindow.IsOpen)
+            instance._researchWindow.CloseWindow();
+        if (instance._tradingWindow.IsOpen)
+            instance._tradingWindow.CloseWindow();
+        if (instance._quests.IsOpen)
             instance._quests.CloseWindow();
         if (SceneRefs.GridTiles.ActiveControl != ControlMode.Nothing)
             SceneRefs.GridTiles.BreakAction();
 
         return true;
+    }
+
+    public Task BeforeInit()
+    {
+        instance = this;
+        return Task.CompletedTask;
     }
 }

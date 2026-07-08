@@ -50,15 +50,10 @@ public class BindingContext
 }
 
 
-/// <summary>Inspection window for everithing in <see cref="InfoMode</summary>
-public class InfoWindow : MonoBehaviour, IBeforeLoad
+/// <summary>Inspection window for everything in <see cref="InfoMode</summary>
+public class InfoWindow : PanelRendererRoot
 {
     #region Variables
-    /// <summary>For styling resouces in UI elements.</summary>
-    //public ResourceSkins resourceSkins;
-
-
-    [SerializeField] PanelRendererRoot infoWindowRenderer;
     /// <summary>Info window text header.</summary>
     public IUIElement header;
     /// <summary>Info window itself.</summary>
@@ -77,17 +72,26 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
 
     public static bool CanZoom = true;
 
-
-
     /// <summary>List containing all temp bindings, are destroyed with object.</summary>
     List<BindingContext> activeBindings = new();
 
     /// <summary>Stores last opened mode. To hide it and remove datasource.</summary>
-    public InfoMode lastInfo { get; private set; }
+    public InfoMode LastInfo { get; private set; }
 
     public Action<Building> buildingCostChange;
 
-    InfoWindowControlHolder controls;
+    [SerializeField] InfoWindowControlHolder controls;
+
+
+    static InfoWindow instance;
+    public static InfoWindow Window => instance;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+    static void ClearInstance() => instance = null;
+    private void Awake()
+    {
+        instance = this;
+    }
     #endregion
 
     public void CreateSecondWindow(string labelTitle, Rect pos)
@@ -106,21 +110,18 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
         window.UnregisterCallback<MouseEnterEvent>(MyOnMouseEnter);
         window.UnregisterCallback<MouseLeaveEvent>(MyOnMouseExit);
     }
-    
-    /// <summary>Fills all control references.</summary>
-    public async Task BeforeInit()
+
+    protected override void OnUIReload()
     {
-        lastInfo = InfoMode.None;
-        VisualElement root = infoWindowRenderer.Root;
-        window = root.Q<VisualElement>("Info-Window");
+        LastInfo = InfoMode.None;
+        window = Root.Q<VisualElement>("Info-Window");
         windowBody = window[1];
 
-        secondWindowAnchor = root[1];
-        secondWindow = root[1][0];
+        secondWindowAnchor = Root[1];
+        secondWindow = Root[1][0];
 
         secondBody = secondWindow[1];
         (secondWindow[0][1] as Button).clicked += CloseSecondWindow;
-        controls = await Addressables.LoadAssetAsync<InfoWindowControlHolder>("InfoWindowControlHolder").Task;
 
         window.style.display = DisplayStyle.None;
 
@@ -162,7 +163,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
     public void Open(object dataSource, InfoMode active)
     {
         Close(false);
-        lastInfo = active;
+        LastInfo = active;
         window.style.display = DisplayStyle.Flex;
         TabView = null;
         window.RegisterCallback<MouseEnterEvent>(MyOnMouseEnter);
@@ -181,7 +182,7 @@ public class InfoWindow : MonoBehaviour, IBeforeLoad
 
             case InfoMode.Building:
                 Building building = (Building)dataSource;
-                if (!building.constructed || building.deconstructing)
+                if (!building.IsWorking)
                 {
                     controls.CreateElementByName("Construction Info", windowBody, dataSource);
                 }

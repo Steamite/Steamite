@@ -20,7 +20,7 @@ public class Pub : Building, IEffectObject
     {
         base.Load(save);
         EffectPos = GetPos() + blueprint.moveBy.Rotate(transform.rotation.eulerAngles.y);
-        if (constructed)
+        if (IsWorking)
             ((IEffectObject)this).UpdateRange(true);
     }
 

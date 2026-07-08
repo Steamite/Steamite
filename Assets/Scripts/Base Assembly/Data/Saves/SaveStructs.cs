@@ -100,7 +100,7 @@ public class BuildsAndChunksSave
 public class ClickableObjectSave
 {
     public int id;
-    public string objectName;
+    public string name;
 }
 
 public class RockSave : ClickableObjectSave
@@ -120,7 +120,7 @@ public class RockSave : ClickableObjectSave
         this.originalIntegrity = originalIntegrity;
         this.integrity = integrity;
         this.toBeDug = toBeDug;
-        objectName = _name;
+        name = _name;
         id = -1;
         hiddenSave = new();
     }
@@ -190,6 +190,7 @@ public class BuildingSave : StorageObjectSave
     public BuildingGrid blueprint;
     public bool constructed;
     public bool deconstructing;
+    public bool upgrading;
     public float constructionProgress;
 
     public DataAssign prefabConnection;
@@ -286,16 +287,11 @@ public class HumanSave : ClickableObjectSave
 }
 public class StorageResSave : ResourceSave
 {
-    [JsonProperty, JsonRequired] public List<ResourceSave> Requests { get; set; }
-
-    public List<int> carriers;
-    public List<int> mod;
+    [JsonProperty, JsonRequired] public List<StorageRequestSave> Requests { get; set; }
 
     public StorageResSave(StorageResource storageResource) : base(storageResource)
     {
-        Requests = storageResource.requests.Select(q => new ResourceSave(q)).ToList();
-        carriers = storageResource.carriers.Select(q => q.id).ToList();
-        mod = storageResource.mods.ToList();
+        Requests = storageResource.Requests.Select(q => new StorageRequestSave(q)).ToList();
     }
     public StorageResSave() : base()
     {
@@ -310,7 +306,7 @@ public class StorageResSave : ResourceSave
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(base.GetHashCode(), types, ammounts, Requests, carriers, mod);
+        return HashCode.Combine(base.GetHashCode(), types, ammounts, Requests);
     }
 }
 public class GameStateSave
@@ -359,6 +355,24 @@ public class ResourceSave
     {
         types = new();
         ammounts = new();
+    }
+}
+
+public class StorageRequestSave
+{
+    public ResourceSave request;
+    public StorageRequestType mod;
+    public int humanId;
+
+    public StorageRequestSave()
+    {
+    }
+
+    public StorageRequestSave(StorageRequest request)
+    {
+        this.request = new(request.resource);
+        this.mod = request.mod;
+        this.humanId = request.carrier.id;
     }
 }
 

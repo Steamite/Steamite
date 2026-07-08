@@ -6,84 +6,48 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
+using static UnityEngine.UIElements.PanelRenderer;
 
-public class ResearchWindow : FullscreenWindow, IGameDataController<ResearchSave>
+[RequireComponent(typeof(Research))]
+public class ResearchWindow : FullscreenWindow
 {
     IUIElement UI;
+    Research research;
 
-    public ResearchNode currentResearch { get; private set; }
-    [HideInInspector] public ResearchData researchData = null;
-    [HideInInspector] public StatData statData = null;
-    public event Action<ResearchNode> researchCompletion;
-
-    public override void GetWindow()
+    private void Awake()
     {
-        base.GetWindow();
-        UI = window.Q<TabView>() as IUIElement;
-        ((IInitiableUI)UI).Init();
-        window.style.display = DisplayStyle.Flex;
-        window.schedule.Execute(() => window.style.display = DisplayStyle.None).ExecuteLater(15);
+        research = GetComponent<Research>();
+        AddOnLoad(ref research.OnLoad);
     }
 
-    public async Task LoadState(ResearchSave researchSave)
+    protected override void OnUIReload()
     {
-        researchData = Instantiate(await Addressables.LoadAssetAsync<ResearchData>(ResearchData.PATH).Task);
-        List<ResearchNode> queue = new();
-        for (int i = 0; i < researchSave.saveData.Count; i++)
-        {
-            for (int j = 0; j < researchSave.saveData[i].Count; j++)
-            {
-                ResearchNode node = researchData.Categories[i].Objects[j];
-                node.CurrentTime = researchSave.saveData[i][j];
-                node.reseachCost.Init();
-            }
-        }
-        foreach ((int cat, int id) queueItem in researchSave.queue)
-        {
-            queue.Add(researchData.Categories[queueItem.cat].Objects.Find(q => q.id == queueItem.id));
-        }
-        if (queue.Count > 0)
-            currentResearch = queue[0];
-        statData = Instantiate(await Addressables.LoadAssetAsync<StatData>(StatData.PATH).Task);
-        GetWindow();
-        SceneRefs.ResearchAdapter.Init(DoResearch);
-        ((IInitiableUI)UIRefs.BottomBarRoot.Q<VisualElement>(className: "build-menu")).Init();
-        InitResearchStats();
+        UI = Root.Q<TabView>() as IUIElement;
+        base.OnUIReload();
     }
 
-    void InitResearchStats()
+    protected override void OnDataLoadLogic()
     {
-        foreach (var categ in researchData.Categories)
-        {
-            foreach (var node in categ.Objects)
-            {
-                if (node.nodeType == NodeType.Stat)
-                {
-                    Stat stat = statData.GetObjectBySaveIndex(node.objectConnection); //q => q.id == node.objectConnection.objectId);
-                    if (node.researched)
-                    {
-                        stat.AddEffect();
-                    }
-                    else
-                    {
-                        node.RegisterFinishCallback(stat.AddEffect);
-                    }
-                }
-            }
-        }
+        ResearchData data = research.GetResearchData();
+        ((IInitiableUI<ResearchData>)UI).Init(data);
     }
+
+
+
+
 
     public override void OpenWindow()
     {
         base.OpenWindow();
-        UI.Open(researchData);
+        UI.Open(null);
     }
 
-    public void OpenWindow(BuildingWrapper wrapper)
+    public void OpenWithFocus(BuildingWrapper wrapper)
     {
         base.OpenWindow();
         int i = 0, j = 0;
-        foreach (var cat in researchData.Categories)
+        List<ResearchCategory> data = research.GetResearchData().Categories;
+        foreach (var cat in data)
         {
             for (j = 0; j < cat.Objects.Count; j++)
             {
@@ -97,30 +61,5 @@ public class ResearchWindow : FullscreenWindow, IGameDataController<ResearchSave
             }
             i++;
         }
-    }
-
-    public void FinishResearch()
-    {
-        SceneRefs.ShowMessage($"Research Finished {currentResearch.Name}");
-        currentResearch = null;
-        // TODO: Assign new one
-        researchCompletion?.Invoke(currentResearch);
-    }
-
-    /// <summary>
-    /// Called by every worker in a research building
-    /// </summary>
-    /// <param name="efficiecy">Ammount to add.</param>
-    public void DoResearch(float efficiecy)
-    {
-        if (currentResearch != null)
-        {
-            currentResearch.CurrentTime += efficiecy * 1;
-        }
-    }
-
-    public void SetActive(ResearchNode newResearch)
-    {
-        currentResearch = newResearch;
     }
 }

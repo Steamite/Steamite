@@ -201,17 +201,17 @@ public class SaveController : MonoBehaviour, IAfterLoad
             WriteSave(
                $"{tmpPath}/Research.json",
                jsonSerializer,
-               new ResearchSave(UIRefs.ResearchWindow));
+               UIRefs.Research.SaveState());
 
             WriteSave(
                $"{tmpPath}/Trade.json",
                jsonSerializer,
-               new TradeSave(UIRefs.TradingWindow));
+               UIRefs.Trading.SaveState());
 
             WriteSave(
                $"{tmpPath}/Quests.json",
                jsonSerializer,
-               new QuestControllerSave(SceneRefs.QuestController as QuestController));
+               (SceneRefs.QuestController as QuestController).SaveState());
 
             if (autoSave)
                 saveName = "autosave";
@@ -219,7 +219,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
         }
         catch (Exception e)
         {
-            SceneRefs.ShowMessage("An error ocured when saving.");
+            NotificationController.ShowMessage("An error ocured when saving.");
             Debug.LogWarning("Saving error: " + e);
             foreach (string file in Directory.GetFiles(tmpPath))
             {
@@ -259,7 +259,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
         }
 
         Directory.Delete($"{tmpPath}");
-        SceneRefs.ShowMessage(autoSave ? "Autosave" : "Saved succesfuly");
+        NotificationController.ShowMessage(autoSave ? "Autosave" : "Saved succesfuly");
         saveUIAction();
     }
 

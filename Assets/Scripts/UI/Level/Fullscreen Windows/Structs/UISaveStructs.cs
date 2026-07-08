@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-[Serializable]
 public class TradeSave
 {
     public string colonyLocation;
@@ -16,16 +15,7 @@ public class TradeSave
     public List<OutpostSave> outposts;
     public int money;
 
-    public TradeSave(TradingWindow trading)
-    {
-        colonyLocation = trading.colonyLocation.Name;
-        prodLevels = trading.colonyLocation.production.Select(q => q.CurrentState).ToList();
-        statLevels = trading.colonyLocation.stats.Select(q => q.CurrentState).ToList();
-        tradeLocations = trading.tradeLocations.Select(q => new TradeLocationSave(q)).ToList();
-        convoys = trading.GetConvoys().Select(q => new TradeConvoySave(q)).ToList();
-        outposts = trading.outposts.Select(q => new OutpostSave(q)).ToList();
-        money = MyRes.Money;
-    }
+    
     public TradeSave()
     {
 
@@ -41,25 +31,6 @@ public class ResearchSave
     public ResearchSave()
     {
 
-    }
-    public ResearchSave(ResearchWindow window)
-    {
-        saveData = new();
-        queue = new();
-
-        count = 0;
-        for (int i = 0; i < window.researchData.Categories.Count; i++)
-        {
-            List<float> saves = new();
-            for (int j = 0; j < window.researchData.Categories[i].Objects.Count; j++)
-            {
-                saves.Add(window.researchData.Categories[i].Objects[j].CurrentTime);
-                if (window.researchData.Categories[i].Objects[j].Equals(window.currentResearch) &&
-                    window.researchData.Categories[i].Objects[j].Name == window.currentResearch.Name)
-                    queue.Add(new(i, window.researchData.Categories[i].Objects[j].id));
-            }
-            saveData.Add(saves);
-        }
     }
 
     public ResearchSave(ResearchData data)

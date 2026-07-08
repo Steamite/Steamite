@@ -80,7 +80,7 @@ public partial class SliderResList : DoubleResList, IUpdatable
                 nameof(resources), nameof(Label.text),
                 (ref List<UIResource> res) =>
                 {
-                    int cost = TradingWindow.RESOURCE_COSTS[resources[i].type];
+                    int cost = Trading.RESOURCE_COSTS[resources[i].type];
                     return $"* {cost} = {(res[x] as DoubleUIResource).secondAmmount * cost}";
                 },
                 this);

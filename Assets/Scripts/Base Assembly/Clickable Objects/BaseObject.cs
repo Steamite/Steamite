@@ -113,7 +113,7 @@ namespace ClickableObjects
         {
             if (selected)
             {
-                InfoWindow info = SceneRefs.InfoWindow;
+                InfoWindow info = InfoWindow.Window;
                 info.header.Open(this);
                 return info;
             }

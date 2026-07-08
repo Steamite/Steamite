@@ -44,14 +44,12 @@ namespace LocalMenuUtility
                 if(i < MENU_COUNT)
                 {
                     UIMenu uiMenu = menuObject.AddComponent<UIMenu>();
-                    root.RegisterReload(uiMenu.AfterInit);
                     uiMenus[i] = uiMenu;
                     menuObject.name = $"UI Menu: {i}";
                 }
                 else
                 {
                     worldMenu = menuObject.AddComponent<WorldMenu>();
-                    root.RegisterReload(worldMenu.AfterInit);
                     menuObject.name = $"World Menu";
                 }
                 menuObject.transform.parent = transform;

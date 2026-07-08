@@ -33,11 +33,9 @@ public class House : Building, IAssign
     /// </summary>
     public override void OrderDeconstruct()
     {
-        base.OrderDeconstruct();
-        if (constructed)
-        {
+        if (IsWorking)
             ((IAssign)this).ClearHumans();
-        }
+        base.OrderDeconstruct();
     }
     #endregion
 

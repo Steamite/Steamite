@@ -5,9 +5,8 @@ using UnityEngine.UIElements;
 
 namespace StartMenu
 {
-    public class MyMainMenu : MonoBehaviour, IInitiableUI
+    public class MyMainMenu : PanelRendererRoot, IInitiableUI
     {
-        VisualElement root;
         VisualElement elements;
         VisualElement blocker;
 
@@ -16,19 +15,14 @@ namespace StartMenu
 
         bool instaLoad = false;
 
-        private void Awake()
+        protected override void OnUIReload()
         {
-            gameObject.GetComponent<PanelRendererRoot>().RegisterReload(Init);
-        }
-        void Init(VisualElement element)
-        {
-            root = element;
-            elements = root.Q<VisualElement>("Elements");
-            blocker = root.Q<VisualElement>("Main-Blocker");
+            elements = Root.Q<VisualElement>("Elements");
+            blocker = Root.Q<VisualElement>("Main-Blocker");
 
             foreach (IToolkitController controller in toolkitControllers)
             {
-                controller.Init(root);
+                controller.Init(Root);
             }
 #if UNITY_EDITOR
             if(instaLoad)
@@ -39,7 +33,7 @@ namespace StartMenu
             }
 #endif
             // opening load menu
-            Button button = root.Q<Button>("Exit-Button");
+            Button button = Root.Q<Button>("Exit-Button");
             button.RegisterCallback<ClickEvent>((_) => Application.Quit());
 
             elements.RegisterCallback<TransitionEndEvent>(

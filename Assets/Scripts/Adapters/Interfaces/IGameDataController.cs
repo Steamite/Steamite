@@ -1,6 +1,17 @@
+using System;
 using System.Threading.Tasks;
+using UnityEngine;
 
-public interface IGameDataController<T>
+public abstract class IGameDataController<T> : MonoBehaviour
 {
-    public Task LoadState(T saveData);
+    public Action OnLoad;
+
+    public abstract Task LoadState(T saveData);
+
+    protected void AfterLoad()
+    {
+        OnLoad?.Invoke();
+    }
+
+    public abstract T SaveState();
 }

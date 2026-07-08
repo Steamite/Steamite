@@ -25,7 +25,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                 if (b != null && !register.ChangedType)
                 {
                     string path = $"{BuildingRegister.BUILDING_PATH}{register.SelectedCategory.Name}";
-                    string _name = b.objectName.Length > 0 ? b.objectName : UnityEngine.Random.Range(0, int.MaxValue).ToString();
+                    string _name = b.Name.Length > 0 ? b.Name : UnityEngine.Random.Range(0, int.MaxValue).ToString();
                     if (!Directory.Exists(path + "/" + _name))
                     {
                         string GUID = AssetDatabase.CreateFolder(path, $"{_name}");

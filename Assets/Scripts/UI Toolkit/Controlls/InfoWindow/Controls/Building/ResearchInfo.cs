@@ -33,10 +33,10 @@ public partial class ResearchInfo : InfoWindowControl
         if (wasOpened == false)
         {
             // Research completion can be assigned only once.
-            UIRefs.ResearchWindow.researchCompletion += RefillData;
+            UIRefs.Research.researchCompletion += RefillData;
             wasOpened = true;
         }
-        RefillData(UIRefs.ResearchWindow.currentResearch);
+        RefillData(UIRefs.Research.CurrentResearch);
     }
 
     /// <summary>
@@ -54,10 +54,10 @@ public partial class ResearchInfo : InfoWindowControl
 
             DataBinding binding = BindingUtil.CreateBinding(nameof(ResearchNode.CurrentTime));
             binding.sourceToUiConverters.AddConverter((ref float dat) => $"{dat:0}/{node.researchTime}");
-            SceneRefs.InfoWindow.RegisterTempBinding(new(progress, nameof(ProgressBar.title)), binding, dataSource);
+            InfoWindow.Window.RegisterTempBinding(new(progress, nameof(ProgressBar.title)), binding, dataSource);
 
             binding = BindingUtil.CreateBinding(nameof(ResearchNode.CurrentTime));
-            SceneRefs.InfoWindow.RegisterTempBinding(new(progress, nameof(ProgressBar.value)), binding, dataSource);
+            InfoWindow.Window.RegisterTempBinding(new(progress, nameof(ProgressBar.value)), binding, dataSource);
         }
         else
         {
@@ -65,7 +65,7 @@ public partial class ResearchInfo : InfoWindowControl
             title.text = "None set";
             progress.title = "0/0";
             progress.value = 0;
-            SceneRefs.InfoWindow.ClearTempBindings();
+            InfoWindow.Window.ClearTempBindings();
         }
     }
 }

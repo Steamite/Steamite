@@ -25,6 +25,8 @@ public class Building : StorageObject
     /// <summary>Used for remembering color.</summary>
     [SerializeField] public List<Renderer> meshRenderers;
 
+
+
     /// <summary>
     /// Mask saying which categories this building belongs to.
     /// </summary>
@@ -41,22 +43,36 @@ public class Building : StorageObject
     public List<MoneyResource> Costs => costs;
     [CreateProperty] public MoneyResource Cost => costs[level];
 
+    public bool IsWorking => !constructing && !Upgrading && !Deconstructing;
 
-    /// <summary>Is constructed.</summary>
-    public bool constructed;
+    /// <inheritdoc cref="constructing"/>
+    public bool Constructing { get => constructing; set => constructing = value; }
+    /// <summary>Is being constructed.</summary>
+    [SerializeField] protected bool constructing;
+
+
+    /// <summary>Is currently being upgraded(from level x => x + 1).</summary>
+    public bool Upgrading { get; set; }
+
+
     /// <summary>Is being deconstructed.</summary>
-    public bool deconstructing;
+    public bool Deconstructing { get; set; }
+
     /// <summary>Progress of construction/deconstruction.</summary>
     [CreateProperty] public float constructionProgress;
     /// <summary>.</summary>
     public int maximalProgress;
 
+    /// <summary>Starts at 0(to avoid index offset for level Lists)</summary>
     public int level = 0;
-    [Range(1, MAX_LEVEL), SerializeField] 
+    
+    /// <summary>The number of levels for this building (minimum is 1, base)</summary>
+    [Range(1, MAX_LEVEL)] 
     public int maxLevel = 1;
 
     [Header("Prefab info"), SerializeField] 
-    public DataAssign prefabConnection;
+    DataAssign prefabConnection;
+    public DataAssign PrefabConnection { get => prefabConnection; set => prefabConnection = value; }
 
     bool isTransparent = false;
     #endregion
@@ -112,7 +128,7 @@ public class Building : StorageObject
         if (info)
         {
             info.Open(this, InfoMode.Building);
-            if (constructed && !deconstructing)
+            if (IsWorking)
                 ToggleInfoComponents(info, new());
         }
         return info;
@@ -138,12 +154,13 @@ public class Building : StorageObject
         if (clickable == null)
             clickable = new BuildingSave();
         BuildingSave save = (clickable as BuildingSave);
-        save.Name = objectName;
+        save.Name = Name;
         save.rotationY = transform.rotation.eulerAngles.y;
 
         save.blueprint = blueprint;
-        save.constructed = constructed;
-        save.deconstructing = deconstructing;
+        save.constructed = Constructing;
+        save.deconstructing = Deconstructing;
+        save.upgrading = Upgrading;
         save.constructionProgress = constructionProgress;
         save.prefabConnection = prefabConnection;
 
@@ -153,10 +170,11 @@ public class Building : StorageObject
     /// <inheritdoc/>
     public override void Load(ClickableObjectSave save)
     {
-        objectName = (save as BuildingSave).Name;
+        Name = (save as BuildingSave).Name;
         blueprint = (save as BuildingSave).blueprint;
-        constructed = (save as BuildingSave).constructed;
-        deconstructing = (save as BuildingSave).deconstructing;
+        Constructing = (save as BuildingSave).constructed;
+        Deconstructing = (save as BuildingSave).deconstructing;
+        Upgrading = (save as BuildingSave).upgrading;
         constructionProgress = (save as BuildingSave).constructionProgress;
         maximalProgress = CalculateMaxProgress();
         localRes.Load((save as BuildingSave).resSave);
@@ -169,7 +187,7 @@ public class Building : StorageObject
             transform.GetChild(i).gameObject.layer = 6;
         GetComponent<SortingGroup>().sortingLayerName = "Buildings";
 
-        if (!constructed)
+        if (Constructing)
         {
             SceneRefs.JobQueue.AddJob(JobState.Constructing, this);
             ChangeRenderMode(true);
@@ -188,20 +206,20 @@ public class Building : StorageObject
     /// <param name="transferPerTick"><inheritdoc/></param>
     public override void Store(Human human, int transferPerTick)
     {
-        int index = localRes.carriers.IndexOf(human);
+        StorageRequest request = localRes.GetRequestByHuman(human);
+
         MyRes.MoveRes(
             localRes,
             human.Inventory,
-            localRes.requests[index],
+            request.resource,
             transferPerTick,
-            !constructed);
+            Constructing);
         UIUpdate(nameof(LocalRes));
-        if (localRes.requests[index].Sum() == 0)
+        if (request.resource.Sum() == 0)
         {
-            if (!constructed && localRes.Same(Cost))
+            if (Constructing && localRes.Same(Cost))
             {
-                human.SetJob(JobState.Constructing);
-                localRes.mods[index] = 0;
+                request.SetRequestToAction(JobState.Constructing);
                 return;
             }
             localRes.RemoveRequest(human);
@@ -235,12 +253,13 @@ public class Building : StorageObject
     /// </summary>
     public virtual void FinishBuild()
     {
-        if (!constructed)
+        if (Constructing)
         {
             ChangeRenderMode(false);
-            constructed = true;
+            Constructing = false;
             if (this is not IStorage)
                 localRes.Dump();
+
             SceneRefs.QuestController.BuildBuilding(this);
         }
 
@@ -253,67 +272,35 @@ public class Building : StorageObject
     #endregion
 
     #region Deconstruction
-    /// <summary>If being constructed delete the building, else toogle deconstruction. <b>TODO: COLOR CHANGING</b></summary>
+    /// <summary>Toogle deconstruction. <b>TODO: COLOR CHANGING</b></summary>
     public virtual void OrderDeconstruct()
     {
         JobQueue queue = SceneRefs.JobQueue;
-        if (constructed) // if contructed
-        {
-            // if there isn't a deconstruction order yet
-            if (!deconstructing)
-            {
-                Human human = null;
-                queue.CancelJob(JobState.Constructing, this);
-                queue.AddJob(JobState.Deconstructing, this);
-
-                human = localRes.ReassignCarriers();
-            }
-            else
-            {
-                queue.CancelJob(JobState.Deconstructing, this);
-                if (constructionProgress == maximalProgress)
-                {
-                    deconstructing = false;
-                    OpenWindow();
-                }
-                else
-                {
-                    queue.AddJob(JobState.Constructing, this);
-                    if (localRes.carriers.Count > 0)
-                    {
-                        localRes.carriers[0].SetJob(JobState.Constructing);
-                    }
-                }
-            }
-            deconstructing = !deconstructing;
-        }
-        else
+        if (Constructing) // if not yet constructed
         {
             // if there are any resources deposited(change to build progress when implemented)
             if (constructionProgress > 0)
             {
-                if (!deconstructing)
+                if (!Deconstructing)
                 {
                     queue.CancelJob(JobState.Constructing, this);
                     queue.AddJob(JobState.Deconstructing, this);
-                    localRes.ReassignCarriers();
+                    localRes.ReassignCarriers(JobState.Deconstructing);
                 }
                 else
                 {
                     queue.AddJob(JobState.Constructing, this);
                     queue.CancelJob(JobState.Deconstructing, this);
-                    if (localRes.carriers.Count > 0)
-                    {
-                        localRes.carriers[0].SetJob(JobState.Constructing);
-                    }
+                    localRes.ReassignCarriers(JobState.Constructing);
                 }
-                deconstructing = !deconstructing;
+                Deconstructing = !Deconstructing;
             }
             else
             {
                 queue.CancelJob(JobState.Constructing, this);
-                foreach (Human carrier in localRes.carriers)
+                foreach (StorageRequest request in localRes.Requests)
                 {
+                    Human carrier = request.carrier;
                     if (carrier.Job.interest != null && carrier.Job.interest != this)
                     {
                         ((Building)carrier.Job.interest).LocalRes.RemoveRequest(carrier);
@@ -323,6 +310,32 @@ public class Building : StorageObject
                 }
                 Deconstruct(GetPos());
             }
+        }
+        else
+        {
+            // if there isn't a deconstruction order yet
+            if (!Deconstructing)
+            {
+                queue.CancelJob(JobState.Constructing, this);
+                queue.AddJob(JobState.Deconstructing, this);
+
+                localRes.ReassignCarriers(JobState.Deconstructing);
+            }
+            else
+            {
+                queue.CancelJob(JobState.Deconstructing, this);
+                if (constructionProgress == maximalProgress)
+                {
+                    Deconstructing = false;
+                    OpenWindow();
+                }
+                else
+                {
+                    queue.AddJob(JobState.Constructing, this);
+                    localRes.ReassignCarriers(JobState.Constructing);
+                }
+            }
+            Deconstructing = !Deconstructing;
         }
     }
 
@@ -348,18 +361,18 @@ public class Building : StorageObject
     {
         Resource r = new();
         r.Manage(localRes, true);
-        if (constructed)
+        if (Constructing)
+        {
+            Resource resource = Cost - localRes;
+            MyRes.UpdateResource(resource, true);
+        }
+        else
         {
             r.Manage(Cost, true);
             for (int i = 0; i < r.ammounts.Count; i++)
             {
                 r.ammounts[i] /= 2;
             }
-        }
-        else
-        {
-            Resource resource = Cost - localRes;
-            MyRes.UpdateResource(resource, true);
         }
         DestoyBuilding(); // destroy self
         return SceneRefs.ObjectFactory.CreateChunk(instantPos, r, true);
@@ -550,29 +563,37 @@ public class Building : StorageObject
     #region Upgrade
     public bool CanUpgrade()
     {
-        if (!constructed)
+        if (Constructing)
+            return false;
+        if (Upgrading)
             return false;
         if (level >= maxLevel-1)
             return false;
-        if (!MyRes.CanAfford(Costs[level+1]))
+        if (!MyRes.CanAfford(costs[level+1]))
             return false;
 
         return true;
     }
 
-    public void StartUpgrade()
+    public virtual void StartUpgrade()
     {
         if (!CanUpgrade())
             return;
-        
+        level++;
+        Upgrading = true;
+        constructionProgress = 0;
+
+        maximalProgress = CalculateMaxProgress();
+        ChangeRenderMode(true);
+        localRes.ReassignCarriers(JobState.Constructing);
     }
     #endregion
 
     #region Editor
 #if UNITY_EDITOR
-    public void Clone(Building prev)
+    public virtual void Clone(Building prev)
     {
-        objectName = prev.objectName;
+        Name = prev.Name;
         blueprint = prev.blueprint;
         costs = prev.costs;
     }

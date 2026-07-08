@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 namespace BottomBar.Building
 {
     [UxmlElement]
-    public partial class BuildMenu : VisualElement, IInitiableUI
+    public partial class BuildMenu : VisualElement, IInitiableUI<ResearchData>
     {
         BuildingData buildingData;
         BuildButtonList buildingList;
@@ -19,7 +19,7 @@ namespace BottomBar.Building
         /// <summary>
         /// Init the
         /// </summary>
-        public void Init()
+        public void Init(ResearchData data)
         {
             buildingData = SceneRefs.ObjectFactory.buildPrefabs;
             foreach (var item in buildingData.Categories)
@@ -31,8 +31,7 @@ namespace BottomBar.Building
                 }
             }
 
-            ResearchData researchData = UIRefs.ResearchWindow.researchData;
-            foreach (var categ in researchData.Categories)
+            foreach (var categ in data.Categories)
             {
                 foreach (var node in categ.Objects)
                 {

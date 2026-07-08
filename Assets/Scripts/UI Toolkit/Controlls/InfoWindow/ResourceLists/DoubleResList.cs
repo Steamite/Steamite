@@ -36,7 +36,7 @@ namespace InfoWindowElements
                         {
                             mainBinding = SetupResTypes(source.ResourceYield, nameof(NeedSourceProduction.Source) + "." + nameof(NeedSourceProduction.Source.Storing));
                             mainBinding.sourceToUiConverters.AddConverter((ref Resource res) => ToUIRes(res));
-                            SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
+                            InfoWindow.Window.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
                             return;
                         }
                         else if (cost && prod.ResourceCost.Sum() > 0)
@@ -100,7 +100,7 @@ namespace InfoWindowElements
                     style.display = DisplayStyle.None;
                     return;
             }
-            SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
+            InfoWindow.Window.RegisterTempBinding(new(this, nameof(resources)), mainBinding, data);
         }
     }
 }

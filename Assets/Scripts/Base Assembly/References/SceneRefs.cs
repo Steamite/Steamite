@@ -21,7 +21,7 @@ public class SceneRefs : MonoBehaviour
 
     [Header("Canvas")]
     [SerializeField] Transform _stats;
-    [SerializeField] PanelRendererRoot _miscellaneous;
+    //[SerializeField] NotificationController _miscellaneous;
     
     [SerializeField] InfoWindow _infoWindow;
     [SerializeField] CameraSceneMovement _cameraSceneMover;
@@ -33,9 +33,8 @@ public class SceneRefs : MonoBehaviour
     /// </summary>
     [SerializeField] MonoBehaviour _questController;
 
-
-    [SerializeReference] List<MonoBehaviour> afterLoads = new();
     [SerializeReference] List<MonoBehaviour> beforeLoads = new();
+    [SerializeReference] List<MonoBehaviour> afterLoads = new();
     #endregion
 
     #region Getters
@@ -46,7 +45,7 @@ public class SceneRefs : MonoBehaviour
     public static Tick Tick => instance._tick;
 
     public static Transform Stats => instance._stats;
-    public static InfoWindow InfoWindow => instance._infoWindow;
+    //public static InfoWindow InfoWindow => instance._infoWindow;
     public static CameraSceneMovement CameraSceneMover => instance._cameraSceneMover;
 
     public static ResearchAdapter ResearchAdapter => instance._researchAdapter;
@@ -75,26 +74,19 @@ public class SceneRefs : MonoBehaviour
         MyGrid.Init();
     }
 
-    /// <summary>
-    /// Displays/replaces the message.
-    /// </summary>
-    /// <param name="text">Message text.</param>
-    public static void ShowMessage(string text) => instance.ShowMsg(text);
+    private void OnValidate()
+    {
+        for (int i = beforeLoads.Count - 1; i >= 0; i--)
+        {
+            if (beforeLoads[i] is not IBeforeLoad)
+                beforeLoads.RemoveAt(i);
+        }
 
-    /// <inheritdoc cref="ShowMessage(string)"/>
-    void ShowMsg(string text)
-    {
-        StopAllCoroutines();
-        StartCoroutine(MessageToggle(text));
-    }
-    /// <summary>
-    /// Shows message for 2 seconds.
-    /// </summary>
-    /// <param name="text">Message text.</param>
-    IEnumerator MessageToggle(string text)
-    {
-        ((Label)_miscellaneous.Root[1]).text = text;
-        yield return new WaitForSecondsRealtime(2f);
-        ((Label)_miscellaneous.Root[1]).text = "";
+        for (int i = afterLoads.Count - 1; i >= 0; i--)
+        {
+            if (afterLoads[i] is not IAfterLoad)
+                afterLoads.RemoveAt(i);
+        }
+
     }
 }

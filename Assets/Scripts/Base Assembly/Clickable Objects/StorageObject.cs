@@ -40,13 +40,14 @@ public abstract class StorageObject : ClickableObject
     /// <param name="transferPerTick">Max resources that can be transfered.</param>
     public virtual void Take(Human h, int transferPerTick)
     {
+        StorageRequest request = localRes.GetRequestByHuman(h);
         MyRes.MoveRes(
             h.Inventory,
             localRes,
-            localRes.requests[localRes.carriers.IndexOf(h)],
+            request.resource,
             transferPerTick);
         UIUpdate(nameof(LocalRes));
-        if (localRes.requests[localRes.carriers.IndexOf(h)].Sum() == 0)
+        if (request.resource.Sum() == 0)
         {
             localRes.RemoveRequest(h);
             JobData data = PathFinder.FindPath(new() { h.destination }, h);
@@ -60,8 +61,8 @@ public abstract class StorageObject : ClickableObject
         }
     }
 
-    /// <inheritdoc cref="StorageResource.AddRequest(Resource, Human, int)"/>
-    public virtual void RequestRes(Resource resource, Human human, int mod)
+    /// <inheritdoc cref="StorageResource.AddRequest(Resource, Human, StorageRequestType)"/>
+    public virtual void RequestRes(Resource resource, Human human, StorageRequestType mod)
     {
         localRes.AddRequest(resource, human, mod);
     }

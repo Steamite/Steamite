@@ -12,8 +12,10 @@ public partial class ChunkInfo : InfoWindowControl
     {
         // Assigned Binding
         DataBinding binding = BindingUtil.CreateBinding(nameof(Chunk.LocalRes));
-        binding.sourceToUiConverters.AddConverter((ref StorageResource res) => $"{(res.carriers.Count > 0 ? res.carriers.First().objectName : "None")}");
-        SceneRefs.InfoWindow.RegisterTempBinding(new(assigned, "text"), binding, dataSource);
+        binding.sourceToUiConverters.AddConverter(
+            (ref StorageResource res) => 
+            $"{res.Requests.FirstOrDefault()?.carrier.Name ?? "None"}");
+        InfoWindow.Window.RegisterTempBinding(new(assigned, "text"), binding, dataSource);
 
 
         contains.Open(data);

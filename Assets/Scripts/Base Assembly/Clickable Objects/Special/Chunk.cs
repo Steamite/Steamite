@@ -93,10 +93,10 @@ public class Chunk : StorageObject
         }
         else
         {
-            int index = localRes.carriers.IndexOf(h);
-            MyRes.MoveRes(h.Inventory, localRes, localRes.requests[index], transferPerTick);
+            StorageRequest request = localRes.GetRequestByHuman(h);
+            MyRes.MoveRes(h.Inventory, localRes, request.resource, transferPerTick);
             UIUpdate(nameof(LocalRes));
-            if (localRes.requests[index].Sum() == 0)
+            if (request.resource.Sum() == 0)
             {
                 localRes.RemoveRequest(h);
                 if (h.Inventory.capacity.currentValue - h.Inventory.Sum() == 0)
@@ -127,7 +127,7 @@ public class Chunk : StorageObject
     /// <param name="resource"><inheritdoc/></param>
     /// <param name="h"><inheritdoc/></param>
     /// <param name="mod"><inheritdoc/></param>
-    public override void RequestRes(Resource resource, Human h, int mod)
+    public override void RequestRes(Resource resource, Human h, StorageRequestType mod)
     {
         resource = new Resource(resource);
         base.RequestRes(resource, h, mod);

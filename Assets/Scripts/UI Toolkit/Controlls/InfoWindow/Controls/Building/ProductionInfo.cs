@@ -117,10 +117,10 @@ namespace InfoWindowViews
 
         void ChangeRecipeClicked()
         {
-            VisualElement window = SceneRefs.InfoWindow.SecondWindow;
+            VisualElement window = InfoWindow.Window.SecondWindow;
             if (window.style.display == DisplayStyle.None)
             {
-                SceneRefs.InfoWindow.CreateSecondWindow("Select Recipe", changeRecipe.worldBound);
+                InfoWindow.Window.CreateSecondWindow("Select Recipe", changeRecipe.worldBound);
                 ListView view = new()
                 {
                     virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight
@@ -167,13 +167,13 @@ namespace InfoWindowViews
                 view.selectionChanged += (list) =>
                 {
                     //ProductionRecipe recipe = list.First() as ProductionRecipe;
-                    SceneRefs.InfoWindow.CloseSecondWindow();
+                    InfoWindow.Window.CloseSecondWindow();
                     (building as IResourceProduction).SetRecipe(view.selectedIndex, true);
                 };
             }
             else
             {
-                SceneRefs.InfoWindow.CloseSecondWindow();
+                InfoWindow.Window.CloseSecondWindow();
             }
         }
         #endregion
@@ -232,18 +232,18 @@ namespace InfoWindowViews
             {
                 binding = BindingUtil.CreateBinding(nameof(ResourceProductionBuilding.LocalRes));
                 binding.sourceToUiConverters.AddConverter((ref StorageResource resource) => $"Space\n{resource.ammounts.Sum()}/{resource.capacity}");
-                SceneRefs.InfoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
+                InfoWindow.Window.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
             }
             else
             {
                 binding = BindingUtil.CreateBinding(nameof(NeedSourceProduction.StoredFluids));
                 binding.sourceToUiConverters.AddConverter((ref CapacityResource fluid) => $"Space\n{fluid.ammounts.Sum()}/{fluid.capacity}");
-                SceneRefs.InfoWindow.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
+                InfoWindow.Window.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
             }
 
             binding = BindingUtil.CreateBinding(nameof(IProduction.ProdSpeed));
             binding.sourceToUiConverters.AddConverter((ref ModifiableFloat speed) => $"Speed\n{speed}x");
-            SceneRefs.InfoWindow.RegisterTempBinding(new(prodSpeedLabel, "text"), binding, data);
+            InfoWindow.Window.RegisterTempBinding(new(prodSpeedLabel, "text"), binding, data);
             UpdateButton();
         }
 

@@ -139,7 +139,7 @@ namespace InfoWindowElements
                 {
                     return time / maxValue;
                 });
-            SceneRefs.InfoWindow.RegisterTempBinding(new(this, nameof(value)), binding, data);
+            InfoWindow.Window.RegisterTempBinding(new(this, nameof(value)), binding, data);
         }
 
         #region Radial Logic

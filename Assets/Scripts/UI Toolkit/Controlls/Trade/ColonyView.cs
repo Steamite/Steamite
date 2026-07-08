@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 namespace TradeWindowElements
 {
     [UxmlElement]
-    public partial class ColonyView : TradeMapViewBase, IInitiableUI
+    public partial class ColonyView : TradeMapViewBase, IInitiableUI<ColonyLocation>
     {
         #region Variables
         VisualTreeAsset statAsset;
@@ -32,10 +32,10 @@ namespace TradeWindowElements
             }
         }
 
-        public void Init()
+        public void Init(ColonyLocation data)
         {
-            CreateStats(0, UIRefs.TradingWindow.colonyLocation.stats);
-            CreateStats(1, UIRefs.TradingWindow.colonyLocation.production);
+            CreateStats(0, data.stats);
+            CreateStats(1, data.production);
         }
 
         void CreateStats(int i, List<ColonyStat> stats)
@@ -112,12 +112,12 @@ namespace TradeWindowElements
             base.Open();
             RefreshStates();
 
-            return UIRefs.TradingWindow.colonyLocation;
+            return UIRefs.Trading.ColonyLocation;
         }
 
         void RefreshStates()
         {
-            ColonyLocation location = UIRefs.TradingWindow.colonyLocation;
+            ColonyLocation location = UIRefs.Trading.ColonyLocation;
 
             VisualElement statGroup = ElementAt(0).ElementAt(1);
 

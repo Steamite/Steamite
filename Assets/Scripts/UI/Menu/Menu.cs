@@ -4,37 +4,36 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class Menu : MonoBehaviour
+public class Menu : PanelRendererRoot
 {
     [SerializeField] ConfirmWindow confrimWindow;
 
-    [SerializeField] PanelRendererRoot menuRenderer;
-
-    public VisualElement menuContainer;
-
     [SerializeField] MonoBehaviour settings;
-    private void Awake()
-    {
-        menuRenderer.RegisterReload((e) =>
-        {
-            menuContainer = e.Q<VisualElement>("Container");
-            menuContainer.style.display = DisplayStyle.None;
-        });
-    }
 
+    public VisualElement MenuContainer { get; set; }
+    bool IsOpen { get; set; }
+
+    protected override void OnUIReload()
+    {
+        MenuContainer = Root.Q<VisualElement>("Container");
+        if(!IsOpen)
+            MenuContainer.style.display = DisplayStyle.None;
+
+    }
 
     public void Init(Action<string> save, ref Action afterSave)
     {
         gameObject.SetActive(true);
         UIRefs.SaveDialog.Init(save);
-        ((IToolkitController)UIRefs.LoadMenu).Init(menuRenderer.Root);
-        ((IToolkitController)settings).Init(menuRenderer.Root);
-        confrimWindow.Init(menuRenderer.Root);
+        ((IToolkitController)UIRefs.LoadMenu).Init(Root);
+        ((IToolkitController)settings).Init(Root);
+        confrimWindow.Init(Root);
+
         /*menuContainer = PanelRenderer.rootVisualElement.Q<VisualElement>("Container");
         menuContainer.style.display = DisplayStyle.None;*/
-        menuContainer.Q<Button>("Close").RegisterCallback<ClickEvent>(Toggle);
-        menuContainer.Q<Button>("Main-Menu").RegisterCallback<ClickEvent>(GoToMainMenu);
-        menuContainer.Q<Button>("Quit").RegisterCallback<ClickEvent>(DoQuit);
+        MenuContainer.Q<Button>("Close").RegisterCallback<ClickEvent>(Toggle);
+        MenuContainer.Q<Button>("Main-Menu").RegisterCallback<ClickEvent>(GoToMainMenu);
+        MenuContainer.Q<Button>("Quit").RegisterCallback<ClickEvent>(DoQuit);
 
         afterSave += ((IGridMenu)UIRefs.LoadMenu).UpdateButtonState;
         afterSave += () => ((IGridMenu)UIRefs.SaveDialog).CloseWindow();
@@ -44,7 +43,7 @@ public class Menu : MonoBehaviour
     {
         if (UIRefs.WindowConstraint())
         {
-            bool menuIsOn = menuContainer.style.display == DisplayStyle.Flex;
+            bool menuIsOn = MenuContainer.style.display == DisplayStyle.Flex;
             if (menuIsOn)
             {
                 if(((IGridMenu)settings).IsOpen())
@@ -63,7 +62,7 @@ public class Menu : MonoBehaviour
             UIRefs.LevelCamera.enabled = menuIsOn;
             UIRefs.LevelCamera.mainCamera.GetComponent<PhysicsRaycaster>().enabled = menuIsOn;
             UIRefs.LevelCamera.mainCamera.GetComponent<Physics2DRaycaster>().enabled = menuIsOn;
-            menuContainer.style.display = menuIsOn ? DisplayStyle.None : DisplayStyle.Flex;
+            MenuContainer.style.display = menuIsOn ? DisplayStyle.None : DisplayStyle.Flex;
         }
     }
 

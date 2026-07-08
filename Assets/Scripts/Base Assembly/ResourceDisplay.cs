@@ -20,10 +20,6 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
     /// <summary>Unused stored resources.</summary>
     MoneyResource resources = new();
 
-    /// <summary>Resource display on the top bar.</summary>
-    IUIElement resourceList;
-    /// <summary>Money bar in the top center.</summary>
-    Label moneyLabel;
     #endregion
 
     #region Properties
@@ -53,22 +49,13 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="fillMoney">If the game is new then set default value for <see cref="Money"/>.</param>
     /// <returns>Empty Resources of all types.</returns>
-    public Resource InitializeResources()
+    public void InitializeResources()
     {
         resources.types = ResFluidTypes.GetResList();
         for (int i = 0; i < resources.types.Count; i++)
         {
             resources.ammounts.Add(0);
         }
-
-        VisualElement root = gameObject.GetComponent<PanelRendererRoot>().Root;
-
-        moneyLabel = root.Q<Label>("Money-Value");
-        moneyLabel.SetBinding(nameof(Money), nameof(Label.text), (ref int _Money) => $"{Money} <color=#FFD700>" + (char)163 + "</color>", this);
-
-        resourceList = root.Q<VisualElement>("Resources") as IUIElement;
-        resourceList.Open(this);
-        return resources;
     }
     #endregion
 }

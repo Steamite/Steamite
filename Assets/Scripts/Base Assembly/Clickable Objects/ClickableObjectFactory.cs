@@ -44,7 +44,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             Quaternion.identity,
             MyGrid.FindLevelRoads(gp.y)); // creates a road on the place of tiles
 
-        replacement.objectName = replacement.objectName.Replace("(Clone)", "");
+        replacement.Name = replacement.Name.Replace("(Clone)", "");
         MyGrid.SetGridItem(gp, replacement);
         if (loading)
         {
@@ -71,7 +71,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         r.rockYield = resource;
         r.Integrity = hardness;
         r.originalIntegrity = hardness;
-        r.objectName = _name;
+        r.Name = _name;
         if (_name == "Dirt")
             r.ColorWithIntegrity();
         else
@@ -96,7 +96,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             gp.ToVec(BUILD_OFFSET),
             Quaternion.Euler(0, rotation, 0),
             MyGrid.FindLevelBuildings(gp.y)).GetComponent<Elevator>();
-        el.objectName = el.objectName.Replace("(Clone)", "");
+        el.Name = el.Name.Replace("(Clone)", "");
         MyGrid.SetBuilding(el, true);
         el.FinishBuild();
         return el;
@@ -146,7 +146,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         h.Inventory = new(20);
         // color for debug
         h.transform.GetChild(1).GetComponent<MeshRenderer>().material = material;
-        h.objectName = $"Human {(i == 0 ? "Red" : i == 1 ? "Yellow" : "White")}";
+        h.Name = $"Human {(i == 0 ? "Red" : i == 1 ? "Yellow" : "White")}";
         return h;
     }
     #endregion
@@ -169,7 +169,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         }
         if (b is IResourceProduction prod)
         {
-            prod.Init(b.constructed, recipeData);
+            prod.Init(b.IsWorking, recipeData);
         }
 
 
@@ -192,7 +192,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         rock.Load(save);
         if (rock.rockYield != null && rock.rockYield.Sum() > 0)
         {
-            rock.Name = save.objectName;
+            rock.Name = save.name;
             MinableRes res = resData.FirstOrDefault(q => q.name == rock.Name);
             if (res == null)
                 res = resData.FirstOrDefault(q => q.name == rock.rockYield.types[rock.rockYield.ammounts.IndexOf(rock.rockYield.ammounts.Max())].ToString());
@@ -292,8 +292,8 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
 
     public List<Material> GetModelMaterials(Building building)
     {
-        var a = buildPrefabs.GetCategByID(building.prefabConnection.categoryId).Objects;
-        var b = a.FirstOrDefault(q => q.id == building.prefabConnection.objectId);
+        var a = buildPrefabs.GetCategByID(building.PrefabConnection.categoryId).Objects;
+        var b = a.FirstOrDefault(q => q.id == building.PrefabConnection.objectId);
         return b.materials;
     }
 

@@ -14,9 +14,9 @@ public partial class ConstructionInfo : InfoWindowControl
         Building building = (Building)data;
         DataBinding binding = BindingUtil.CreateBinding(nameof(Building.constructionProgress));
         binding.sourceToUiConverters.AddConverter((ref float progress) => $"{(progress / building.maximalProgress) * 100:0}%");
-        SceneRefs.InfoWindow.RegisterTempBinding(new BindingContext(progress, "text"), binding, building);
+        InfoWindow.Window.RegisterTempBinding(new BindingContext(progress, "text"), binding, building);
 
-        if (building.deconstructing)
+        if (building.Deconstructing)
         {
             resourceList.style.display = DisplayStyle.None;
             UpdateConstructionText(building);
@@ -91,9 +91,9 @@ public partial class ConstructionInfo : InfoWindowControl
 
     void UpdateConstructionText(Building building)
     {
-        if (building.constructed)
+        if (building.Constructing)
         {
-            if (building.deconstructing)
+            if (building.Deconstructing)
             {
                 status.text = "Deconstructing";
                 button.text = "Cancel deconstruction";
@@ -106,7 +106,7 @@ public partial class ConstructionInfo : InfoWindowControl
         }
         else
         {
-            if (building.deconstructing)
+            if (building.Deconstructing)
             {
                 status.text = "Removing construction";
                 button.text = "Continue construction";
