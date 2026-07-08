@@ -192,6 +192,7 @@ public class BuildingSave : StorageObjectSave
     public bool deconstructing;
     public bool upgrading;
     public float constructionProgress;
+    public int level;
 
     public DataAssign prefabConnection;
 }

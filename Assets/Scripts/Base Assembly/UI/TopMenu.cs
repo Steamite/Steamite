@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine.UIElements;
 
-public class TopMenu : PanelRendererRoot, IAfterLoad
+public class TopMenu : InitilizablePanelRenderer, IAfterLoad
 {
     ResourceDisplay resourceDisplay;
 
@@ -22,11 +22,11 @@ public class TopMenu : PanelRendererRoot, IAfterLoad
 
     public void AfterInit()
     {
-        RegisterReload(Init);
+        RegisterLoad();
     }
 
-    void Init(PanelRenderer renderer, VisualElement element)
-    {        
+    protected override void OnDataLoadLogic()
+    {   
         moneyLabel.SetBinding(
             nameof(ResourceDisplay.Money), 
             nameof(Label.text), 

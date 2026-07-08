@@ -162,6 +162,9 @@ public class Building : StorageObject
         save.deconstructing = Deconstructing;
         save.upgrading = Upgrading;
         save.constructionProgress = constructionProgress;
+        save.level = level;
+
+
         save.prefabConnection = prefabConnection;
 
         return base.Save(save);
@@ -177,6 +180,8 @@ public class Building : StorageObject
         Upgrading = (save as BuildingSave).upgrading;
         constructionProgress = (save as BuildingSave).constructionProgress;
         maximalProgress = CalculateMaxProgress();
+        level = (save as BuildingSave).level;
+        
         localRes.Load((save as BuildingSave).resSave);
         GetRenderComponents();
 

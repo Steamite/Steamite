@@ -395,13 +395,14 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &405851068
-RectTransform:
+--- !u!4 &405851068
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 405851067}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
@@ -409,11 +410,6 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1708745676}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &405851069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -542,7 +538,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21c87116ffa32cb488f7fb882d531eeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UI::Research
-  IsLoaded: 0
 --- !u!1 &777753790
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,13 +555,14 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &777753791
-RectTransform:
+--- !u!4 &777753791
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 777753790}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -574,11 +570,6 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1708745676}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &777753792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -639,7 +630,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3f6ea6d40a3f84998a0407ca167dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsLoaded: 0
   ExcavationIcon: {fileID: 3810939084706079344, guid: f1f937d768fd8dc42b817757e8284b7e, type: 3}
   data: {fileID: 0}
   endMenu: {fileID: 1588505038}
@@ -938,7 +928,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c46b46b6fd85ab045a88f5a4fcf7b529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UI::Trading
-  IsLoaded: 0
   convoys: []
 --- !u!1 &897350249
 GameObject:
@@ -1252,13 +1241,14 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1708745676
-RectTransform:
+--- !u!4 &1708745676
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1708745675}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
@@ -1268,11 +1258,6 @@ RectTransform:
   - {fileID: 405851068}
   m_Father: {fileID: 1524870990}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
 --- !u!114 &1708745677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1285,7 +1270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23a5d6e7699b828488978500e8e58109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  confrimWindow: {fileID: 1708745683}
+  confirmWindow: {fileID: 1708745683}
   settings: {fileID: 1708745684}
 --- !u!114 &1708745683
 MonoBehaviour:
