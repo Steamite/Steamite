@@ -57,7 +57,7 @@ public class CapacityResource : Resource
 
     public bool HasSpace(Resource resource, bool checkTypes = false)
     {
-        bool res = ammounts.Sum() + resource.ammounts.Sum() <= +capacity;
+        bool res = ammounts.Sum() + resource.ammounts.Sum() <= capacity.currentValue;
         if (res == false || checkTypes == false)
             return res;
 

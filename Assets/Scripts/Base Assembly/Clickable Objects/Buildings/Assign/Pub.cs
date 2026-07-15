@@ -9,7 +9,7 @@ public class Pub : Building, IEffectObject
     public List<Road> EffectRoads { get; set; } = new();
     public GridPos EffectPos { get; set; }
 
-    public override void FinishBuild()
+    protected override void FinishBuild()
     {
         base.FinishBuild();
         EffectPos = GetPos() + blueprint.moveBy.Rotate(transform.rotation.eulerAngles.y);

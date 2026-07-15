@@ -91,7 +91,7 @@ public partial class ConstructionInfo : InfoWindowControl
 
     void UpdateConstructionText(Building building)
     {
-        if (building.Constructing)
+        if (building.InConstruction)
         {
             if (building.Deconstructing)
             {

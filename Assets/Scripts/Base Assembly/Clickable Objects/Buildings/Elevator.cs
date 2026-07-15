@@ -1,3 +1,4 @@
+using Assets.Scripts.Editor.Buildings.LevelList;
 using System.Collections.Generic;
 using Unity.Properties;
 using UnityEngine;
@@ -16,8 +17,9 @@ public class Elevator : Building, IStorage, IBuilderHut
     
     [CreateProperty] public List<Human> Assigned { get; set; } = new();
 
-    public ModifiableInteger assignLimit;
-    [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
+
+    [CreateProperty] public AssignData AssignData { get => assignData; set => assignData = value; }
+    [SerializeField] AssignData assignData;
 
     [SerializeField] ulong canStoreInt;
     #endregion
@@ -62,8 +64,7 @@ public class Elevator : Building, IStorage, IBuilderHut
         MyGrid.UnlockLevel(this, GetPos().y);
     }
     #endregion
-
-    public override void FinishBuild()
+    protected override void FinishBuild()
     {
         localRes.ammounts = new();
         ((IStorage)this).FinishStorageConstruction();

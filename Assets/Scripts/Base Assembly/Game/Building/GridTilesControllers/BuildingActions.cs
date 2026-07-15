@@ -75,13 +75,10 @@ public class BuildingActions : MonoBehaviour
             blueprintPrefab is Pipe
                 ? MyGrid.FindLevelPipes()
                 : MyGrid.FindLevelBuildings());
-        if (blueprintInstance is IFluidWork)
-            ((IFluidWork)blueprintInstance).CreatePipes();
-        blueprintInstance.GetRenderComponents();
+        if (blueprintInstance is IFluidWork fluidWork)
+            fluidWork.CreatePipes();
 
-        blueprintInstance.maximalProgress = blueprintInstance.CalculateMaxProgress();
-        blueprintInstance.ChangeRenderMode(true);
-        blueprintInstance.Highlight(blueprintInstance.CanPlace() ? Color.blue : Color.red);
+        blueprintInstance.AfterBlueprint();
     }
 
     /// <summary>
@@ -96,9 +93,9 @@ public class BuildingActions : MonoBehaviour
             for (int i = 0; i < 4; i++)
                 pipe.DisconnectPipe(i, true);
         }
-        else if (blueprintInstance is IFluidWork)
+        else if (blueprintInstance is IFluidWork fluidWork)
         {
-            (blueprintInstance as IFluidWork).DisconnectFromNetwork();
+            fluidWork.DisconnectFromNetwork();
         }
         Destroy(blueprintInstance.gameObject);
         if (forgetInstance)

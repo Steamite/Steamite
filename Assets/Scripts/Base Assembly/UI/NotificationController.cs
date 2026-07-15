@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(PanelRenderer))]
 public class NotificationController : PanelRendererRoot
 {
-    private static readonly WaitForSeconds waitForMessageEnd = new WaitForSeconds(20);
+    private static readonly WaitForSeconds waitForMessageEnd = new WaitForSeconds(2);
     static NotificationController instance;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]

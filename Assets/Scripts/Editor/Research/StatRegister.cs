@@ -23,7 +23,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
     /// <summary>Fills the button style and recalculates head placement</summary>
     protected override void CreateGUI()
     {
-        researchData = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.PATH);
+        researchData = AssetDatabase.LoadAssetAtPath<ResearchData>(ResearchData.EDITOR_PATH);
         Holder = AssetDatabase.LoadAssetAtPath<StatData>(StatData.EDITOR_PATH);
         base.CreateGUI();
         categorySelector.index = 0;
@@ -111,7 +111,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
                         maskField.RegisterValueChangedCallback<int>(PairTypeChange);
 
                         EnumField enumField = el[1] as EnumField;
-                        enumField.value = pair.mod;
+                        enumField.value = pair.statValue.mod;
                         enumField.SetEnabled(pair.mask != 0);
                         enumField.RegisterValueChangedCallback<Enum>(ModChange);
 
@@ -123,11 +123,11 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
 
 
                         FloatField intField = el[3] as FloatField;
-                        intField.value = pair.modAmmount;
+                        intField.value = pair.statValue.modAmmount;
                         intField.RegisterValueChangedCallback<float>(FloatChange);
 
                         Toggle toggle = el[4] as Toggle;
-                        toggle.value = pair.percent;
+                        toggle.value = pair.statValue.percent;
                         toggle.RegisterValueChangedCallback<bool>(PercenageChange);
                     };
                 listView.unbindItem =
@@ -177,7 +177,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
         StatPair pair = ((Stat)dataGrid.itemsSource[pos.y]).pairs[pos.x];
         pair.mask = ev.newValue;
         ((VisualElement)ev.target).parent[1].SetEnabled(pair.mask != 0);
-        ((VisualElement)ev.target).parent[2].SetEnabled(pair.mask != 0 && pair.mod > 0);
+        ((VisualElement)ev.target).parent[2].SetEnabled(pair.mask != 0 && pair.statValue.mod > 0);
 
         SaveStatChange(pos.y);
     }
@@ -187,8 +187,8 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
         Vector2Int pos = GetRowSmall(ev);
 
         StatPair pair = ((Stat)dataGrid.itemsSource[pos.y]).pairs[pos.x];
-        pair.mod = (StatModifiers)ev.newValue;
-        ((VisualElement)ev.target).parent[2].SetEnabled(pair.mask != 0 && pair.mod > 0);
+        pair.statValue.mod = (StatModifiers)ev.newValue;
+        ((VisualElement)ev.target).parent[2].SetEnabled(pair.mask != 0 && pair.statValue.mod > 0);
 
         SaveStatChange(pos.y);
     }
@@ -208,7 +208,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
     {
         Vector2Int pos = GetRowSmall(ev);
 
-        ((Stat)dataGrid.itemsSource[pos.y]).pairs[pos.x].modAmmount = ev.newValue;
+        ((Stat)dataGrid.itemsSource[pos.y]).pairs[pos.x].statValue.modAmmount = ev.newValue;
 
         SaveStatChange(pos.y);
     }
@@ -217,7 +217,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
     {
         Vector2Int pos = GetRowSmall(ev);
 
-        ((Stat)dataGrid.itemsSource[pos.y]).pairs[pos.x].percent = ev.newValue;
+        ((Stat)dataGrid.itemsSource[pos.y]).pairs[pos.x].statValue.percent = ev.newValue;
 
         SaveStatChange(pos.y);
     }

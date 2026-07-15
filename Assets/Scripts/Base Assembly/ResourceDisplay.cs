@@ -33,7 +33,7 @@ public class ResourceDisplay : MonoBehaviour, IUpdatable
     [CreateProperty]
     public int Money
     {
-        get => +resources.Money;
+        get => resources.Money.currentValue;
         set
         {
             resources.Money.currentValue = value;

@@ -89,7 +89,7 @@ public class Chunk : StorageObject
     {
         if (h.destination != null)
         {
-            base.Take(h, transferPerTick);
+            BaseTake(localRes, h, transferPerTick, this, nameof(LocalRes));// .Take(h, transferPerTick);
         }
         else
         {
@@ -101,14 +101,14 @@ public class Chunk : StorageObject
                 localRes.RemoveRequest(h);
                 if (h.Inventory.capacity.currentValue - h.Inventory.Sum() == 0)
                 {
-                    FindS(h);
+                    h.StartStore();
                 }
                 else
                 {
                     // If no other chunks were found try to find a storage.
                     // Else collect the other chunks.
-                    if (!HumanActions.HandleJobTypes(SceneRefs.JobQueue, h, JobState.Cleanup))
-                        FindS(h);
+                    if (!HumanActions.FindPartTimeJobOfType(SceneRefs.JobQueue, h, JobState.Cleanup))
+                        h.StartStore();
                 }
             }
         }
@@ -132,17 +132,6 @@ public class Chunk : StorageObject
         resource = new Resource(resource);
         base.RequestRes(resource, h, mod);
         UIUpdate(nameof(LocalRes));
-    }
-
-    /// <summary>
-    /// Finds storage that can store local resources.
-    /// </summary>
-    /// <param name="h"><see cref="Human"/> that is looking for a place to deposite resources.</param>
-    void FindS(Human h)
-    {
-        MyRes.FindStorage(h);
-        if (!h.Job.interest)
-            Debug.LogError("Fuck, where do I store this?");
     }
     #endregion
 

@@ -176,7 +176,7 @@ public partial class ResourceCell : ResourceList
             if (_resource is MoneyResource _moneyRes)
             {
                 moneyResource = _moneyRes;
-                capacityField.value = +_moneyRes.Money.BaseValue;
+                capacityField.value = _moneyRes.Money.currentValue;
                 resource = _moneyRes.EditorResource;
                 capacityField.visible = true;
                 capacityField.label = "Money";

@@ -1,13 +1,64 @@
+using Assets.Scripts.Editor.Buildings.LevelList;
 using System;
 using System.Collections.Generic;
 using Unity.Properties;
 using UnityEngine;
 
+[Serializable]
+public struct AssignData
+{
+    public ModifiableInteger AssignLimit;
+    
+    public int AssignNumber { get; private set; }
+    public List<Human> Assign { get; private set; }
+
+    public void SetLimit(int limit)
+    {
+        if (AssignLimit == null)
+            AssignLimit = new(limit);
+        else
+            AssignLimit.BaseValue = limit;
+    }
+
+    public bool AddHuman(Human human)
+    {
+        if (AssignNumber == AssignLimit.currentValue)
+            return false;
+        Assign[AssignNumber] = human;
+        AssignNumber++;
+        return true;
+    }
+
+    public void RemoveHuman(Human human)
+    {
+        int i;
+        for (i = 0; i < AssignNumber; i++)
+        {
+            if (Assign[i].id == human.id)
+                break;
+        }
+        Assign[i] = null;
+        for (; i < AssignNumber; i++)
+        {
+            Assign[i] = Assign[i + 1];
+        }
+        AssignNumber--;
+    }
+
+    public void RemoveAll()
+    {
+        Assign.Clear();
+        AssignNumber = 0;
+    }
+}
+
+/// <summary>
+/// Default implementation for Workplaces.
+/// Can be ovewriten for Houses, or other similliar actions.
+/// </summary>
 public interface IAssign
 {
-    [CreateProperty] public List<Human> Assigned { get; set; }
-    /// <summary>Needs to have a field in the class, so it can be serialized.</summary>
-    [CreateProperty] public ModifiableInteger AssignLimit { get; set; }
+    [CreateProperty] public AssignData AssignData { get; set; }
 
     #region Assigment
     /// <summary>
@@ -20,43 +71,22 @@ public interface IAssign
     {
         if (add)
         {
-            if (Assigned.Count == AssignLimit.currentValue)
-                return false;
-            JobData job = PathFinder.FindPath(
-                new List<ClickableObject>() { (ClickableObject)this },
-                human);
-            if (job.interest)
+            if (AssignData.AddHuman(human))
             {
-                Assigned.Add(human);
-                human.transform.SetParent(SceneRefs.Humans.transform.GetChild(1).transform);
-                human.Workplace = this;
-                job.job = JobState.FullTime;
+                if (human.SetWorkplace(this))
+                    return true;
 
-                SceneRefs.JobQueue.FreeHuman(human);
-                if (!human.nightTime)
-                    human.SetJob(job);
-                else
-                    human.SetJob(JobState.FullTime, job.interest);
-                human.Decide();
-                human.lookingForAJob = false;
+                AssignData.RemoveHuman(human);
             }
-            else
-            {
-                Debug.LogError("cant find way here");
-                return false;
-            }
+            return false;
         }
         else
         {
-            Assigned.Remove(human);
-            human.Workplace = null;
-            human.transform.SetParent(SceneRefs.Humans.transform.GetChild(0).transform);
-            human.SetJob(JobState.Free);
-            //human.Idle();
+            human.RemoveWorkplace();
+            AssignData.RemoveHuman(human);
         }
-        ((IUpdatable)this).UIUpdate(nameof(Assigned));
+        ((IUpdatable)this).UIUpdate(nameof(AssignData));
         return true;
-
     }
 
 
@@ -71,10 +101,7 @@ public interface IAssign
 
     public void ClearHumans()
     {
-        for (int i = Assigned.Count-1; i > -1; i--)
-        {
-            ManageAssigned(Assigned[i], false);
-        }
+        AssignData.RemoveAll();
     }
     #endregion
 }

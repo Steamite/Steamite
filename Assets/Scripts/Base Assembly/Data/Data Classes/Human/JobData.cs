@@ -58,4 +58,9 @@ public struct JobData
         job = JobState.Free;
     }
     #endregion
+
+    public static JobData CreateEmpty()
+    {
+        return new(new List<GridPos>(), null);
+    }
 }

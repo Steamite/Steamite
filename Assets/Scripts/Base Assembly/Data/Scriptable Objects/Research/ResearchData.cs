@@ -1,3 +1,4 @@
+using BuildingStats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -230,10 +231,11 @@ namespace ResearchUI
                             break;
                     }
                 }
-                if (pair.percent)
-                    statDescription += $": {pair.mod} {pair.modAmmount}%";
+                StatValue statValue = pair.statValue;
+                if (statValue.percent)
+                    statDescription += $": {statValue.mod} {statValue.modAmmount}%";
                 else
-                    statDescription += $": {pair.mod} by {pair.modAmmount}";
+                    statDescription += $": {statValue.mod} by {statValue.modAmmount}";
             }
             strings = description.Split('$');
             description = $"{strings[0]}${statDescription}";

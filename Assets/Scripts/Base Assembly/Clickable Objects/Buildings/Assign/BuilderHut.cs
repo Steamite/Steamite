@@ -4,21 +4,17 @@ using UnityEngine;
 
 public class BuilderHut : Building, IBuilderHut
 {
-    List<Human> assigned = new();
-    [SerializeField] ModifiableInteger assignLimit = new(3);
-
-    [CreateProperty] public List<Human> Assigned { get => assigned; set => assigned = value; }
-    [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
+    [CreateProperty] public AssignData AssignData { get => assignData; set => assignData = value; }
+    [SerializeField] AssignData assignData;
 
     protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
         toEnable.Add("General", new List<string> { "Assign Info" });
         base.ToggleInfoComponents(info, toEnable);
     }
-    public override void OrderDeconstruct()
+    protected override void StartDeconstruction()
     {
-        if(IsWorking)
-            ((IAssign)this).ClearHumans();
-        base.OrderDeconstruct();
+        ((IAssign)this).ClearHumans();
+        base.StartDeconstruction();
     }
 }

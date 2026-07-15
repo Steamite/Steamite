@@ -18,7 +18,7 @@ public class BuildPipe : Pipe
     {
         ((Building)connectedBuilding).OrderDeconstruct();
     }
-    public override void FinishBuild()
+    protected override void FinishBuild()
     {
         base.FinishBuild();
     }

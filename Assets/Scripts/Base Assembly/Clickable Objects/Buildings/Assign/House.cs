@@ -1,3 +1,4 @@
+using Assets.Scripts.Editor.Buildings.LevelList;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
@@ -5,8 +6,6 @@ using UnityEngine;
 /// <summary>Provides a place to sleep for <see cref="Human"/>s.</summary>
 public class House : Building, IAssign
 {
-    [CreateProperty] public List<Human> Assigned { get; set; } = new();
-    [SerializeField] ModifiableInteger assignLimit;
     bool hasPub;
     public bool HasPub 
     { 
@@ -14,28 +13,29 @@ public class House : Building, IAssign
         set 
         { 
             hasPub = value;
-            foreach (Human human in Assigned)
+            foreach (Human human in assignData.Assign)
             {
                 if(hasPub)
-                    human.ModifyEfficiency(ModType.Pub, 1);
+                    human.SetEfficiencyState(ModType.Pub, 1);
                 else
-                    human.ModifyEfficiency(ModType.Pub, -1);
+                    human.SetEfficiencyState(ModType.Pub, -1);
             }
         } 
     }
 
-    [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
+    [CreateProperty] public AssignData AssignData { get => assignData; set => assignData = value; }
+    [SerializeField] AssignData assignData;
+
 
     #region Deconstruction
     /// <summary>
     /// <inheritdoc/> <br/>
     /// Also sends assigned Humans to the elevator.
     /// </summary>
-    public override void OrderDeconstruct()
+    protected override void StartDeconstruction()
     {
-        if (IsWorking)
-            ((IAssign)this).ClearHumans();
-        base.OrderDeconstruct();
+        ((IAssign)this).ClearHumans();
+        base.StartDeconstruction();
     }
     #endregion
 
@@ -55,7 +55,7 @@ public class House : Building, IAssign
     public override List<string> GetInfoText()
     {
         List<string> strings = base.GetInfoText();
-        strings[0] = $"Can house up to {AssignLimit.currentValue} workers";
+        strings[0] = $"Can house up to {AssignData.AssignLimit} workers";
         return strings;
     }
     #endregion
@@ -71,20 +71,20 @@ public class House : Building, IAssign
     {
         if (add)
         {
-            if (Assigned.Count == AssignLimit.currentValue)
+            if (!AssignData.AddHuman(human))
                 return false;
-            Assigned.Add(human);
+
             human.home = this;
             if(hasPub)
-                human.ModifyEfficiency(ModType.Pub, 1);
+                human.SetEfficiencyState(ModType.Pub, 1);
         }
         else
         {
-            Assigned.Remove(human);
+            AssignData.RemoveHuman(human);
             human.home = null;
-            human.ModifyEfficiency(ModType.Pub, -1);
+            human.SetEfficiencyState(ModType.Pub, 0);
         }
-        UIUpdate(nameof(Assigned));
+        UIUpdate(nameof(AssignData));
         return true;
     }
 
@@ -94,16 +94,15 @@ public class House : Building, IAssign
     /// <returns><returns>Returns homeless <see cref="Human"/>s</returns></returns>
     public List<Human> GetUnassigned()
     {
-        return SceneRefs.Humans.GetHumans().Where(q => !Assigned.Contains(q) && q.home == null).ToList();
+        return SceneRefs.Humans.GetHumans().Where(q => !AssignData.Assign.Contains(q) && q.home == null).ToList();
     }
     #endregion
 
     #region Saving
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
-        if (clickable == null)
-            clickable = new AssignBSave();
-        (clickable as AssignBSave).assigned = Assigned.Select(q => q.id).ToList();
+        clickable ??= new AssignBSave();
+        (clickable as AssignBSave).assigned = AssignData.Assign.Select(q => q.id).ToList();
         return base.Save(clickable);
     }
 

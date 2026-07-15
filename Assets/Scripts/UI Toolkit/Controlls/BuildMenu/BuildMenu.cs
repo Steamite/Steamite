@@ -26,7 +26,7 @@ namespace BottomBar.Building
             {
                 foreach (var wrapper in item.Objects)
                 {
-                    wrapper.building.Cost.Init();
+                    wrapper.Building.Cost.Init();
                     wrapper.unlocked = true;
                 }
             }
@@ -85,8 +85,8 @@ namespace BottomBar.Building
             if (i > -1)
             {
                 BuildingWrapper wrapper = buildingData.Categories[categGroup.SelectedChoice].Objects[i];
-                if (wrapper.unlocked && MyRes.CanAfford(wrapper.building.Cost))
-                    SceneRefs.GridTiles.BlueprintPrefab = wrapper.building;
+                if (wrapper.unlocked && MyRes.CanAfford(wrapper.Building.Cost))
+                    SceneRefs.GridTiles.BlueprintPrefab = wrapper.Building;
             }
             else
                 SceneRefs.GridTiles.BlueprintPrefab = null;

@@ -121,19 +121,19 @@ namespace InfoWindowViews
                 humans = SceneRefs.Humans;
             }
 
-            assignLabel.text = $"Assigned {building.Assigned.Count}/{building.AssignLimit}";
-            DataBinding binding = BindingUtil.CreateBinding(nameof(IAssign.Assigned));
-            binding.sourceToUiConverters.AddConverter((ref List<Human> assig) => $"Assigned {assig.Count}/{building?.AssignLimit}");
+            assignLabel.text = $"Assigned {building.AssignData.AssignNumber}/{building.AssignData.AssignLimit}";
+            DataBinding binding = BindingUtil.CreateBinding(nameof(IAssign.AssignData));
+            binding.sourceToUiConverters.AddConverter((ref AssignData assig) => $"Assigned {assig.AssignNumber}/{assig.AssignLimit}");
             InfoWindow.Window.RegisterTempBinding(new(assignLabel, "text"), binding, building);
 
-            binding = BindingUtil.CreateBinding(nameof(IAssign.AssignLimit));
-            binding.sourceToUiConverters.AddConverter((ref ModifiableInteger assig) => $"Assigned {building.Assigned.Count}/{assig.currentValue}");
+            binding = BindingUtil.CreateBinding(nameof(IAssign.AssignData));
+            binding.sourceToUiConverters.AddConverter((ref AssignData assig) => $"Assigned {assig.AssignNumber}/{assig.AssignLimit}");
             InfoWindow.Window.RegisterTempBinding(new(this, nameof(assignTextCap)), binding, building);
 
             unassigned = building.GetUnassigned();
 
             // create buttons for assigned humans
-            RenderItems(this.Q<ListView>(ASSIGN), building.Assigned);
+            RenderItems(this.Q<ListView>(ASSIGN), building.AssignData.Assign);
             // create buttons for unassigned humans
             RenderItems(this.Q<ListView>(FREE), unassigned);
         }
@@ -143,7 +143,7 @@ namespace InfoWindowViews
         /// </summary>
         /// <param name="listView">List view to change.</param>
         /// <param name="humans">Humans to assign to the listView.</param>
-        void RenderItems(ListView listView, List<Human> humans)
+        void RenderItems(ListView listView, IEnumerable<Human> humans)
         {
             List<Human> rendered = new();
             foreach (Human h in listView.itemsSource)
@@ -193,12 +193,12 @@ namespace InfoWindowViews
             }
             else
             {
-                Human h = building.Assigned.First(q => q.id == id);
+                Human h = building.AssignData.Assign.First(q => q.id == id);
                 if (building.ManageAssigned(h, false))
                     unassigned.Add(h);
             }
 
-            RenderItems(this.Q<ListView>(ASSIGN), building.Assigned);
+            RenderItems(this.Q<ListView>(ASSIGN), building.AssignData.Assign);
             RenderItems(this.Q<ListView>(FREE), unassigned);
         }
         #endregion

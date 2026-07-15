@@ -6,12 +6,19 @@ using UnityEngine;
 [Serializable]
 public class ModifiableInteger : IModifiable
 {
-#if UNITY_EDITOR
-    [JsonIgnore] public int BaseValue { get => baseValue; set => baseValue = value; }
-#endif
+    [JsonIgnore] public int BaseValue 
+    { 
+        get => baseValue; 
+        set 
+        { 
+            baseValue = value;
+            RecalculateMod();
+        } 
+    }
     [SerializeField, JsonProperty] protected int baseValue;
 
     public int currentValue;
+
     [JsonIgnore] public ModValue Modifier { get => mod; set => mod = value; }
     [SerializeField, JsonProperty] ModValue mod;
 
@@ -34,8 +41,6 @@ public class ModifiableInteger : IModifiable
 
     public static int operator -(ModifiableInteger i)
         => -i.currentValue;
-    public static int operator +(ModifiableInteger i)
-        => i.currentValue;
 
     public static int operator -(ModifiableInteger i, int a)
         => i.currentValue - a;
@@ -67,12 +72,4 @@ public class ModifiableInteger : IModifiable
     {
         return base.GetHashCode();
     }
-
-    public void ChangeBaseVal(int v)
-    {
-        baseValue = v;
-        RecalculateMod();
-    }
-
-    public int getBaseVal => baseValue;
 }

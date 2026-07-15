@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 
-/// <summary>Helps with fulfiling resource orders and make logistics more efficient.</summary>
+/// <summary>Helps with fulfiling resource orders and makes logistics more efficient.</summary>
 [Serializable]
 public class StorageResource : CapacityResource
 {
@@ -32,6 +32,17 @@ public class StorageResource : CapacityResource
     }
     #endregion
 
+
+    protected override void Add(ResourceType type, int ammount)
+    {
+        base.Add(type, ammount);
+        casheValid = false;
+    }
+    protected override int Remove(ResourceType type, int change)
+    {
+        casheValid = false;
+        return base.Remove(type, change);
+    }
     #region Requests
     /// <summary>
     /// Adds a request for moving resources.<br/>
@@ -71,15 +82,14 @@ public class StorageResource : CapacityResource
         RemoveRequestAt(index);
     }
 
-    void RemoveRequestAt(int index, bool freeHuman = false)
+    void RemoveRequestAt(int index)
     {
         if (index == -1)
             return;
+        StorageRequest request = requests[index];
 
-        if (requests[index].resource.Sum() > 0)
+        if (request.resource.Sum() > 0)
             casheValid = false;
-        if (freeHuman)
-            requests[index].carrier.SetJob(JobState.Free);
 
         requests.RemoveAt(index);
     }
@@ -93,21 +103,18 @@ public class StorageResource : CapacityResource
         Human human = null;
         if (requests.Count > 0)
         {
-            if (newState != JobState.Free)
-            {
-                human = requests[0].carrier;
-                requests[0].SetRequestToAction(newState);
-            }
-            ClearRequests(1);
+            human = requests[0].carrier;
+            requests[0].SetRequestToAction(newState);
+            RemoveCarriers(1);
         }
         return human;
     }
 
-    public void ClearRequests(int startIndex = 0)
+    public void RemoveCarriers(int startIndex = 0)
     {
-        for (int i = requests.Count - 1; i >= startIndex; i++)
+        for (int i = requests.Count - 1; i >= startIndex; i--)
         {
-            RemoveRequestAt(i, true);
+            requests[i].carrier.SetJob(JobState.Free);
         }
     }
 

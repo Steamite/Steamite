@@ -179,9 +179,6 @@ MonoBehaviour:
       mod:
         percentMod: 1
         absoluteMod: 0
-    requests: []
-    carriers: []
-    mods: 
   meshRenderers: []
   buildingCategories: 1
   blueprint:
@@ -259,8 +256,7 @@ MonoBehaviour:
       mod:
         percentMod: 1
         absoluteMod: 0
-  constructed: 0
-  deconstructing: 0
+  constructing: 0
   constructionProgress: 0
   maximalProgress: 0
   level: 0

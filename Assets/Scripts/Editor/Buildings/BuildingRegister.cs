@@ -68,7 +68,7 @@ namespace EditorWindows.Windows
                         List<ResearchNode> nodes = researchData.Categories.SelectMany(q => q.Objects).Where(q => q.nodeType == NodeType.Building).ToList();
                         for (int i = 0; i < SelectedCategory.Objects.Count; i++)
                         {
-                            Building building = SelectedCategory.Objects[i].building;
+                            Building building = SelectedCategory.Objects[i].Building;
                             if (building != null)
                             {
                                 byte categID = (byte)Holder.Categories.FirstOrDefault(q => q.Name == SelectedCategory.Name).id;
@@ -79,8 +79,8 @@ namespace EditorWindows.Windows
                                     node.objectConnection.categoryId = categID;
 
                                 building.PrefabConnection = new(categID, SelectedCategory.Objects[i].id);
-                                SelectedCategory.Objects[i].SetBuilding(SelectedCategory.Objects[i].building, categID);
-                                EditorUtility.SetDirty(SelectedCategory.Objects[i].building);
+                                SelectedCategory.Objects[i].SetBuilding(SelectedCategory.Objects[i].Building, categID);
+                                EditorUtility.SetDirty(SelectedCategory.Objects[i].Building);
                             }
                         }
                         EditorUtility.SetDirty(researchData);
@@ -202,7 +202,7 @@ namespace EditorWindows.Windows
                 DestroyImmediate(gameObj);
 
                 AddressableAssetEntry entry = Settings.CreateOrMoveEntry(AssetDatabase.GUIDFromAssetPath(path).ToString(), Group);
-                entry.SetAddress(wrapper.building.Name);
+                entry.SetAddress(wrapper.Building.Name);
                 Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryCreated, Group, true);
             }
             else if (choice == 1)
@@ -215,10 +215,10 @@ namespace EditorWindows.Windows
         protected override void RemoveEntry(BuildingWrapper wrapper, bool removeFromGrid)
         {
             base.RemoveEntry(wrapper, removeFromGrid);
-            if (wrapper.building)
+            if (wrapper.Building)
             {
-                AssetDatabase.MoveAsset($"{BUILDING_PATH}{SelectedCategory.Name}/{wrapper.building?.Name}", $"{BUILDING_PATH}BCK/{wrapper.building?.Name}");
-                Settings.RemoveAssetEntry(AssetDatabase.GUIDFromAssetPath($"{BUILDING_PATH}BCK/{wrapper.building?.Name}").ToString(), Group);
+                AssetDatabase.MoveAsset($"{BUILDING_PATH}{SelectedCategory.Name}/{wrapper.Building?.Name}", $"{BUILDING_PATH}BCK/{wrapper.Building?.Name}");
+                Settings.RemoveAssetEntry(AssetDatabase.GUIDFromAssetPath($"{BUILDING_PATH}BCK/{wrapper.Building?.Name}").ToString(), Group);
                 Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryRemoved, Group, true);
             }
         }
@@ -254,10 +254,10 @@ namespace EditorWindows.Windows
             }
 
             int i = ev.target.GetRowIndex();
-            if (((BuildingWrapper)dataGrid.itemsSource[i]).building.Name != value)
+            if (((BuildingWrapper)dataGrid.itemsSource[i]).Building.Name != value)
             {
                 string oldPath = AssetDatabase.GetAssetPath(
-                    ((BuildingWrapper)dataGrid.itemsSource[i]).building)
+                    ((BuildingWrapper)dataGrid.itemsSource[i]).Building)
                     .Replace("/building.prefab", "");
 
                 AddressableAssetEntry entry
@@ -272,19 +272,19 @@ namespace EditorWindows.Windows
                     Debug.LogError(result);
                     if (ev.target is TextElement)
                     {
-                        ((TextElement)ev.target).text = ((BuildingWrapper)dataGrid.itemsSource[i]).building.Name;
+                        ((TextElement)ev.target).text = ((BuildingWrapper)dataGrid.itemsSource[i]).Building.Name;
                     }
                     else
                     {
-                        ((TextField)ev.target).value = ((BuildingWrapper)dataGrid.itemsSource[i]).building.Name;
+                        ((TextField)ev.target).value = ((BuildingWrapper)dataGrid.itemsSource[i]).Building.Name;
                     }
                     return;
                 }
 
                 entry.address = value;
                 Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryModified, value, true);
-                ((BuildingWrapper)dataGrid.itemsSource[i]).building.Name = value;
-                EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).building);
+                ((BuildingWrapper)dataGrid.itemsSource[i]).Building.Name = value;
+                EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).Building);
             }
         }
 

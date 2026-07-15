@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Properties;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine;
 public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
 {
     #region Variables
-    [SerializeField] ModifiableInteger assignLimit;
+    [SerializeField] AssignData assignData;
     [SerializeField][Header("Production")] float productionTime;
     [SerializeField] ModifiableFloat prodSpeed;
 
@@ -26,14 +27,12 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     #endregion
 
     #region Assign
-    [CreateProperty] public List<Human> Assigned { get; set; } = new();
-
-    [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
+    [CreateProperty] public AssignData AssignData { get => assignData; set => assignData = value; }
     #endregion
 
     #region Resources
     [CreateProperty] public ProductionStates ProdStates { get; set; } = new();
-    [CreateProperty] public StorageResource LocalResource { get => LocalRes; }
+    [CreateProperty] public StorageResource ProductionStorage { get; set; } = new();
     [CreateProperty] public StorageResource InputResource { get; set; } = new();
     [CreateProperty] public ModifiableResource ResourceCost { get => resourceCost; set => resourceCost = value; }
     [CreateProperty] public ModifiableResource ResourceYield { get => resourceYield; set => resourceYield = value; }
@@ -63,6 +62,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
         if (clickable == null)
             clickable = new ResProductionBSave();
         (clickable as ResProductionBSave).inputRes = new(InputResource);
+        (clickable as ResProductionBSave).productionRes = new(ProductionStorage);
         (clickable as ProductionBSave).currentTime = CurrentTime;
         (clickable as ProductionBSave).ProdStates = ProdStates;
         (clickable as ProductionBSave).selectedRecipe = SelectedRecipe;
@@ -73,6 +73,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     public override void Load(ClickableObjectSave save)
     {
         InputResource.Load((save as ResProductionBSave).inputRes);
+        ProductionStorage.Load((save as ResProductionBSave).productionRes);
 
         CurrentTime = (save as ProductionBSave).currentTime;
         ProdStates = (save as ProductionBSave).ProdStates;
@@ -101,24 +102,25 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     }
     public override void Take(Human h, int transferPerTick)
     {
-        base.Take(h, transferPerTick);
+        BaseTake(ProductionStorage, h, transferPerTick, this, nameof(ProductionStorage));
 
-        if (localRes.HasNoCarriers())
-        {
-            ProdStates.requestedPickup = false;
-            ProdStates.space = ResourceYield.Sum() <= localRes.FreeSpace;
-            SceneRefs.JobQueue.CancelJob(JobState.Pickup, this);
-        }
+        if (ProductionStorage.HasNoCarriers())
+            ((IResourceProduction)this).CancelPickup(false);
     }
+
+    
 
     /// <inheritdoc/>
     public override void RequestRes(Resource request, Human human, StorageRequestType mod)
     {
         StorageResource storage = null;
-        if (IsWorking && mod == StorageRequestType.Store)
+        if (!IsWorking)
+            storage = LocalRes;
+        else if(mod == StorageRequestType.Store)
             storage = InputResource;
         else
-            storage = localRes;
+            storage = ProductionStorage;
+
         storage.AddRequest(request, human, mod);
     }
 
@@ -126,6 +128,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     public override void TryLink(Human h)
     {
         InputResource.LinkHuman(h);
+        ProductionStorage.LinkHuman(h);
         base.TryLink(h);
     }
     #endregion
@@ -136,59 +139,22 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     /// <inheritdoc/>
     /// And requests resources for production.
     /// </summary>
-    public override void FinishBuild()
+    protected override void FinishBuild()
     {
-        ((IResourceProduction)this).Init(true, SceneRefs.ObjectFactory.recipeData);
         base.FinishBuild();
-        if (ResourceCost.Sum() == 0)
-        {
-            ProdStates.needsResources = false;
-            return;
-        }
+        ((IResourceProduction)this).LoadRecipes(true, SceneRefs.ObjectFactory.recipeData);
     }
 
-
-    /// <inheritdoc/>
-    public override void OrderDeconstruct()
+    protected override void StartDeconstruction()
     {
         JobQueue queue = SceneRefs.JobQueue;
-        if (Constructing || Deconstructing)
-        {
-            base.OrderDeconstruct();
-        }
-        else if(!Deconstructing)
-        {
-            // start deconstruction now!
+        // Remove assigned workers
+        ((IAssign)this).ClearHumans();
 
-            // Remove assigned workers
-            ((IAssign)this).ClearHumans();
+        ((IResourceProduction)this).CancelPickup(false); // removed by base class
+        ((IResourceProduction)this).CancelSupply(true);
 
-            //Also Reassing all carriers and transport
-            Human human;
-            queue.CancelJob(JobState.Pickup, this);
-            queue.CancelJob(JobState.Supply, this);
-            queue.CancelJob(JobState.Constructing, this);
-            queue.AddJob(JobState.Deconstructing, this);
-            Deconstructing = true;
-
-            // remove request for produced resources, and try to find someone for deconstruction
-            human = localRes.ReassignCarriers(JobState.Deconstructing); 
-
-            if (human)
-                InputResource.ClearRequests(); // remove all requests for input resource
-            else
-            {
-                InputResource.ReassignCarriers(JobState.Deconstructing);
-                /*
-                human = InputResource.carriers[0];
-                localRes.AddRequest(new(), human, 0);
-                InputResource.RemoveRequest(human);
-                InputResource.ReassignCarriers(false);
-                JobData data = PathFinder.FindPath(new() { this }, human);
-                data.job = JobState.Deconstructing;
-                human.SetJob(data, true);*/
-            }
-        }
+        base.StartDeconstruction();
     }
 
     /// <summary>
@@ -199,8 +165,12 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     /// <returns><inheritdoc/></returns>
     public override Chunk Deconstruct(GridPos instantPos)
     {
-        SceneRefs.JobQueue.CancelJob(JobState.Supply, this);
+        ((IResourceProduction)this).CancelSupply(true);
+        ((IResourceProduction)this).CancelSupply(true);
+
         Chunk c = base.Deconstruct(instantPos);
+        if (c == null)
+            return null;
         if (InputResource.Sum() > 0)
         {
             if (!c)
@@ -209,6 +179,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
             }
             else
                 c.LocalRes.Manage(InputResource, true);
+            c.LocalRes.Manage(ProductionStorage, true);
         }
         return c;
     }
@@ -218,11 +189,10 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     #region
     public override void StartUpgrade()
     {
+        ((IResourceProduction)this).CancelPickup(false); //cleared by base class
+        ((IResourceProduction)this).CancelSupply(true);
+        
         base.StartUpgrade();
-        if (localRes.HasNoCarriers())
-            InputResource.ReassignCarriers(JobState.Constructing);
-        else
-            InputResource.Clear();
     }
     #endregion
 
@@ -235,82 +205,24 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     /// <returns><inheritdoc/></returns>
     public override Resource GetDiff(Resource r)
     {
-        if (Constructing)
-        {
-            return base.GetDiff(r);
-        }
-        else
+        if (IsWorking)
         {
             Resource cost = new();
             cost.Manage(ResourceCost, true, 2);
             return r.Diff(InputResource.Future(), cost);
         }
+        return base.GetDiff(r);
     }
 
     /// <inheritdoc/>
     public override List<string> GetInfoText()
     {
         List<string> strings = base.GetInfoText();
-        strings[0] = $"Can employ up to {AssignLimit} workers";
+        strings[0] = $"Can employ up to {AssignData.AssignLimit} workers";
         strings.Insert(1, $"<u>Produces</u>: \n{ResourceYield}");
         if (ResourceCost.Sum() > 0)
             strings[1] += $", from: \n{ResourceCost}";
         return strings;
     }
     #endregion
-
-    #region Assign
-    public bool ManageAssigned(Human human, bool add)
-    {
-        if (add)
-        {
-            if (Assigned.Count == assignLimit.currentValue)
-                return false;
-            JobData job = PathFinder.FindPath(
-                new List<ClickableObject>() { this },
-                human);
-            if (job.interest)
-            {
-                Assigned.Add(human);
-                human.transform.SetParent(SceneRefs.Humans.transform.GetChild(1).transform);
-                human.Workplace = this;
-                job.job = JobState.FullTime;
-
-                SceneRefs.JobQueue.FreeHuman(human);
-                if (!human.nightTime)
-                    human.SetJob(job);
-                else
-                    human.SetJob(JobState.FullTime, job.interest);
-                human.Decide();
-                human.lookingForAJob = false;
-
-            }
-            else
-            {
-                Debug.LogError("cant find way here");
-                return false;
-            }
-        }
-        else
-        {
-            Assigned.Remove(human);
-            human.Workplace = null;
-            human.transform.SetParent(SceneRefs.Humans.transform.GetChild(0).transform);
-            human.SetJob(JobState.Free);
-            //human.Idle();
-        }
-        UIUpdate(nameof(Assigned));
-        return true;
-    }
-
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
-    /// <returns></returns>
-    public List<Human> GetUnassigned()
-    {
-        return SceneRefs.Humans.GetPartTime();
-    }
-    #endregion
-
 }

@@ -16,7 +16,7 @@ public class NeedSourceProduction : FluidResProductionBuilding, IResourceProduct
     TileSource source;
     public int ammountPerTick = 3;
 
-    public override void FinishBuild()
+    protected override void FinishBuild()
     {
         UpdateYields(false);
         StoredFluids.types = Source.Storing.types.ToList();

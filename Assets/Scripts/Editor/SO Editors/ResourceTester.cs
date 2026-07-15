@@ -49,7 +49,7 @@ class ResourceTester : IPreprocessBuildWithReport
         {
             for (int j = 0; j < data.Categories[i].Objects.Count; j++)
             {
-                Building building = data.Categories[i].Objects[j].building;
+                Building building = data.Categories[i].Objects[j].Building;
                 if (building != null)
                 {
                     if (CheckResource(building.Cost, building.Name, data.Categories[i].Name, "Production cost"))

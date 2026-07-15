@@ -79,9 +79,12 @@ public class MultiSelect : MonoBehaviour
             {
                 toBeDug.RemoveAll(q => q == markTile);
                 markTile.toBeDug = false;
-                markTile.Highlight(new());
+                markTile.Highlight(default);
+
                 SceneRefs.JobQueue.CancelJob(JobState.Digging, markTile);
-                markTile.Assigned?.SetJob(JobState.Free);
+                if (markTile.Assigned)
+                    markTile.Assigned.Idle();
+                markTile.Assigned = null;
             }
         }
         else

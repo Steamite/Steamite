@@ -22,7 +22,7 @@ namespace LocalMenuUtility
             {
                 if (activeObject == null)
                     return;
-                if (building.Equals(((BuildingWrapper)activeObject).building))
+                if (building.Equals(((BuildingWrapper)activeObject).Building))
                     UpdateContent(activeObject, onlyUpdate: true);
             };
         }
@@ -73,7 +73,6 @@ namespace LocalMenuUtility
                     }
                     else
                     {
-                        costList.style.display = DisplayStyle.Flex;
                         costList.Open(stat.resourceUpgradeCost[anchor.parent.IndexOf(anchor)]);
                         description.text = stat.GetText(anchor.parent.IndexOf(anchor) + 1);
                     }
@@ -103,11 +102,11 @@ namespace LocalMenuUtility
             else
                 anchor = element;
 
-            HandleData();
-
-
             secondHeader.style.display = DisplayStyle.None;
             costList.style.display = DisplayStyle.None;
+
+            HandleData();
+
             width = 300;
 
             if (onlyUpdate == false)

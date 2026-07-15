@@ -65,7 +65,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
             }
             else
             {
-                ((ObjectField)ev.target).SetValueWithoutNotify(((BuildingWrapper)view.itemsSource[i]).building);
+                ((ObjectField)ev.target).SetValueWithoutNotify(((BuildingWrapper)view.itemsSource[i]).Building);
             }
         }
 
@@ -107,14 +107,14 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
         public void TypeChange(ChangeEvent<string> ev)
         {
             int i = ev.target.GetRowIndex();
-            Building prev = ((BuildingWrapper)view.itemsSource[i]).building;
+            Building prev = ((BuildingWrapper)view.itemsSource[i]).Building;
             if (prev != null)
             {
                 Type t = register.BuildingTypes.FirstOrDefault(q => q.Name == ev.newValue);
                 if (t != null && prev.GetType() != t)
                 {
                     Building building = (Building)
-                        ((BuildingWrapper)view.itemsSource[i]).building.gameObject
+                        ((BuildingWrapper)view.itemsSource[i]).Building.gameObject
                         .AddComponent(t);
 
                     building.Clone(prev);
@@ -130,7 +130,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
         public void BlueprintEvent(ClickEvent ev)
         {
             int i = ev.target.GetRowIndex();
-            BuildEditor.ShowWindow(((BuildingWrapper)view.itemsSource[i]).building);
+            BuildEditor.ShowWindow(((BuildingWrapper)view.itemsSource[i]).Building);
         }
 
         public void PreviewClick(ClickEvent ev)
@@ -139,10 +139,10 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
             {
                 int i = ev.target.GetRowIndex();
                 BuildingWrapper wrapper = view.itemsSource[i] as BuildingWrapper;
-                if (wrapper.building)
+                if (wrapper.Building)
                 {
                     wrapper.preview =
-                        GetPrefabPreview(Path.GetDirectoryName(AssetDatabase.GetAssetPath(wrapper.building)));
+                        GetPrefabPreview(Path.GetDirectoryName(AssetDatabase.GetAssetPath(wrapper.Building)));
                     EditorUtility.SetDirty(register.Holder);
                     view.RefreshItem(i);
                 }

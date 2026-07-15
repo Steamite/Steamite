@@ -56,17 +56,17 @@ public partial class FluidInfo : InfoWindowControl
                     DataBinding binding = BindingUtil.CreateBinding(nameof(IFluidWork.StoredFluids));
                     binding.sourceToUiConverters.AddConverter((ref CapacityResource flu) =>
                     {
-                        Debug.Log(flu[t] / (float)+flu.capacity * size);
-                        return new StyleLength(flu[t] / (float)+flu.capacity * size);
+                        Debug.Log(flu[t] / (float)flu.capacity.currentValue * size);
+                        return new StyleLength(flu[t] / (float)flu.capacity.currentValue * size);
                     });
                     InfoWindow.Window.RegisterTempBinding(new BindingContext(container.filledMask, "style." + nameof(VisualElement.style.height)), binding, data);
 
                     binding = BindingUtil.CreateBinding(nameof(IFluidWork.StoredFluids));
-                    binding.sourceToUiConverters.AddConverter((ref CapacityResource flu) => $"{flu.ammounts[x]} / {+flu.capacity}");
+                    binding.sourceToUiConverters.AddConverter((ref CapacityResource flu) => $"{flu.ammounts[x]} / {flu.capacity.currentValue}");
                     InfoWindow.Window.RegisterTempBinding(new BindingContext(container.filledLabel, "text"), binding, data);
 
                     binding = BindingUtil.CreateBinding(nameof(IFluidWork.StoredFluids));
-                    binding.sourceToUiConverters.AddConverter((ref CapacityResource flu) => $"{flu.ammounts[x]} / {+flu.capacity}");
+                    binding.sourceToUiConverters.AddConverter((ref CapacityResource flu) => $"{flu.ammounts[x]} / {flu.capacity.currentValue}");
                     InfoWindow.Window.RegisterTempBinding(new BindingContext(container.emptyLabel, "text"), binding, data);
                 }
                 break;

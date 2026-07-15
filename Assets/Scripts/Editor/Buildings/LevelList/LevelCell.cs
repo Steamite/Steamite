@@ -35,7 +35,7 @@ namespace Assets.Scripts.Editor.Buildings.LevelList
             if (wrapper.selectedLevel == -1)
                 wrapper.selectedLevel = 0;
 
-            Building building = wrapper.building;
+            Building building = wrapper.Building;
             if (building == null)
                 return;
 

@@ -19,7 +19,7 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IInputFlui
 
     [SerializeField] CapacityResource storedFluids;
 
-    public override void FinishBuild()
+    protected override void FinishBuild()
     {
         ProdStates = new FluidProdStates();
         StoredFluids.InitCapacity();// = new(storedFluids.capacity.getBaseVal);
@@ -99,7 +99,7 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IInputFlui
             UIUpdate(nameof(LocalRes));
             if (ProdStates.needsResources)
                 ProdStates.supplied = InputResource.Diff(ResourceCost).Sum() == 0;
-            ProdStates.space = ResourceYield.Sum() <= LocalResource.FreeSpace;
+            ProdStates.space = ResourceYield.Sum() <= ProductionStorage.FreeSpace;
 
             ManageInputRes();
         }

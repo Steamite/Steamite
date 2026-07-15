@@ -155,7 +155,7 @@ namespace InfoWindowElements
                         {
                             Human human = request.carrier;
                             storage.LocalResources.RemoveRequest(human);
-                            MyRes.FindStorage(human);
+                            human.StartStore();
                         }
                         else
                         {

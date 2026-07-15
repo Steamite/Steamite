@@ -170,7 +170,7 @@ public static class MyRes
     /// <param name="human">human to assign</param>
     /// <param name="building">building to assign to, and take diff</param>
     /// <param name="j">job to cancel if all requested resource have been requested</param>
-    public static bool FindResources(Human human, Building building, JobState j)
+    public static bool FindResources(Human human, Building building)
     {
         JobQueue jQ = SceneRefs.JobQueue;
         Resource diff = building.GetDiff(human.Inventory);
@@ -221,28 +221,26 @@ public static class MyRes
     }
 
     /// <summary>
-    /// find and keep path to the storage
+    /// Creates job data for storing the Human Inventory. Call from <see cref="Human.StartStore"/>.
     /// </summary>
     /// <param name="h"></param>
-    public static void FindStorage(Human h)
+    public static JobData FindStorage(Human h)
     {
         if (h.Inventory.Sum() > 0)
         {
             List<IStorage> storages = FilterStorages(h.Inventory, h, true);
             JobData job = PathFinder.FindPath(storages.Cast<ClickableObject>().ToList(), h);
+
             if (job.interest)
             {
-                job.interest.GetComponent<StorageObject>().RequestRes(h.Inventory, h, StorageRequestType.Store);
-                h.destination = (Building)job.interest;
                 job.job = JobState.Supply;
-                h.SetJob(job);
-                return;
+                job.interest.GetComponent<StorageObject>().RequestRes(h.Inventory, h, StorageRequestType.Store);
+                return job;
             }
             SceneRefs.ObjectFactory.CreateChunk(h.GetPos(), h.Inventory, false);
-            h.Inventory.types.Clear();
-            h.Inventory.ammounts.Clear();
         }
-        h.SetJob(JobState.Free);
+        return default;
+        //h.SetJob(JobState.Free);
     }
 
     /// <summary>
@@ -366,11 +364,11 @@ public static class MyRes
         {
             store.DestroyResource(food, 1);
             UpdateResource(new Resource(new() { food }, new() { 1 }), false);
-            human.ModifyEfficiency(ModType.Food, true);
+            human.ModifyEfficiencyState(ModType.Food, true);
         }
         else
         {
-            human.ModifyEfficiency(ModType.Food, false);
+            human.ModifyEfficiencyState(ModType.Food, false);
         }
     }
 
@@ -426,7 +424,7 @@ public static class MyRes
     /// <param name="cost">Resource and money cost.</param>
     public static void PayCostGlobal(MoneyResource cost)
     {
-        PayCostGlobal(cost, +cost.Money);
+        PayCostGlobal(cost, cost.Money.currentValue);
     }
 
     /// <summary>

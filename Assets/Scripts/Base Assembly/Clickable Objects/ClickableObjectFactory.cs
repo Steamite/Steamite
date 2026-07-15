@@ -98,7 +98,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             MyGrid.FindLevelBuildings(gp.y)).GetComponent<Elevator>();
         el.Name = el.Name.Replace("(Clone)", "");
         MyGrid.SetBuilding(el, true);
-        el.FinishBuild();
+        el.ForcedFinishBuild();
         return el;
     }
 
@@ -123,6 +123,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
                 Quaternion.identity,
                 MyGrid.FindLevelChunks(gp.y));
             chunk.Init(resources, updateGlobalResource);
+            resources.Clear();
             return chunk;
         }
         return null;
@@ -141,7 +142,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             specialPrefabs.GetPrefab<Human>("Human"),
             gp.ToVec(HUMAN_OFFSET),
             Quaternion.identity,
-            SceneRefs.Humans.transform.GetChild(0).transform);
+            SceneRefs.Humans.transform);
         h.UniqueID();
         h.Inventory = new(20);
         // color for debug
@@ -157,7 +158,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     {
         GridPos rotate = save.blueprint.moveBy.Rotate(save.rotationY);
         Building b = Instantiate(
-            buildPrefabs.GetObjectBySaveIndex(save.prefabConnection).building,
+            buildPrefabs.GetObjectBySaveIndex(save.prefabConnection).Building,
             new Vector3(save.gridPos.x + rotate.x, (save.gridPos.y * LEVEL_HEIGHT) + BUILD_OFFSET, save.gridPos.z + rotate.z),
             Quaternion.Euler(0, save.rotationY, 0),
             MyGrid.FindLevelBuildings(save.gridPos.y));
@@ -169,7 +170,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
         }
         if (b is IResourceProduction prod)
         {
-            prod.Init(b.IsWorking, recipeData);
+            prod.LoadRecipes(b.IsWorking, recipeData);
         }
 
 
@@ -244,12 +245,11 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <summary>Loads a Human.</summary>
     public Human CreateSavedHuman(HumanSave save)
     {
-        int parent = save.workplaceId > -1 ? 1 : 0;
         Human human = Instantiate(
             specialPrefabs.GetPrefab<Human>("Human"),
             save.gridPos.ToVec(HUMAN_OFFSET),
             Quaternion.Euler(0, save.rotation, 0),
-            SceneRefs.Humans.transform.GetChild(parent));
+            SceneRefs.Humans.transform);
         human.Load(save);
         return human;
     }

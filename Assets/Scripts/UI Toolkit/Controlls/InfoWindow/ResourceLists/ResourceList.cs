@@ -247,7 +247,7 @@ namespace InfoWindowElements
             List<UIResource> temp = new List<UIResource>();
             temp = ToUIRes(res);
             if (res is MoneyResource money && money.Money > 0)
-                temp.Insert(0, new UIResource(+money.Money));
+                temp.Insert(0, new UIResource(money.Money.currentValue));
             resources = temp;
         }
 

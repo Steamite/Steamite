@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -14,7 +15,6 @@ public class JobQueue : MonoBehaviour
     public List<Building> deconstructions = new();
     /// <summary>Production buildings that need input resources.</summary>
     public List<IResourceProduction> supplyNeeded = new();
-    public int Count = 0;
     /// <summary>Chunks and Production buildings that have something to store.</summary>
     public List<StorageObject> pickupNeeded = new();
 
@@ -40,6 +40,16 @@ public class JobQueue : MonoBehaviour
         {
             case JobState.Digging:
                 toBeDug.Add((Rock)interest);
+                var humans = SceneRefs.Humans.GetHumans().Where((q) =>
+                {
+                    return q.Job.job == JobState.FullTime && q.Workplace is IDiggerHut;
+                });
+                foreach (var human in humans)
+                {
+                    if (HumanActions.FindRockToDig(human))
+                        break;
+                }
+
                 break;
             case JobState.Constructing:
                 constructions.Add((Building)interest);
@@ -49,16 +59,16 @@ public class JobQueue : MonoBehaviour
                 break;
             case JobState.Supply:
                 supplyNeeded.Add(interest as IResourceProduction);
-                Count++;
                 break;
             case JobState.Pickup:
-                pickupNeeded.Add((ResourceProductionBuilding)interest);
+                pickupNeeded.Add((StorageObject)interest);
                 break;
         }
     }
 
     /// <summary>
     /// Unregisters a job, either by completion or player canclation.
+    /// Only updates the lists doesn't touch human actions.
     /// </summary>
     /// <param name="job">Which type of job was canceled.</param>
     /// <param name="interest">Job interest to remove.</param>
@@ -68,12 +78,6 @@ public class JobQueue : MonoBehaviour
         {
             case JobState.Digging:
                 toBeDug.RemoveAll(q => q.id == interest.id); // remove from the list
-                Rock rock = ((Rock)interest);
-                if (rock.Assigned != null)
-                {
-                    if (!HumanActions.FindRockToDig(rock.Assigned))
-                        rock.Assigned.SetJob(JobState.Free);
-                }
                 break;
             case JobState.Constructing:
                 constructions.RemoveAll(q => q.id == interest.id); // remove from the list
@@ -84,7 +88,6 @@ public class JobQueue : MonoBehaviour
                 break;
             case JobState.Supply:
                 supplyNeeded.RemoveAll(q => ((ClickableObject)q).id == interest.id);
-                Count--;
                 break;
             case JobState.Pickup:
                 pickupNeeded.RemoveAll(q => q.id == interest.id);
@@ -92,40 +95,4 @@ public class JobQueue : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Takes a human away from a job, 
-    /// if you need to assign a new job but don't want to destroy the previous.
-    /// </summary>
-    /// <param name="human"></param>
-    public void FreeHuman(Human human)
-    {
-        ClickableObject interest = human.Job.interest;
-        if (!interest)
-            return;
-        switch (human.Job.job)
-        {
-            case JobState.Digging:
-                ((Rock)interest).Assigned = null;
-                break;
-            case JobState.Constructing:
-            case JobState.Deconstructing:
-                ((Building)interest).LocalRes.RemoveRequest(human);
-                break;
-            case JobState.Supply:
-            case JobState.Pickup:
-                if (human.Job.interest != human.destination)
-                    ((StorageObject)human.Job.interest).LocalRes.RemoveRequest(human);
-                if (human.destination)
-                {
-                    if (human.destination.IsWorking && human.destination is IResourceProduction)
-                        ((IResourceProduction)human.destination).InputResource.RemoveRequest(human);
-                    else
-                        human.destination.LocalRes.RemoveRequest(human);
-                }
-
-                SceneRefs.ObjectFactory.CreateChunk(human.GetPos(), human.Inventory, false);
-                human.Inventory.Clear();
-                break;
-        }
-    }
 }

@@ -51,7 +51,7 @@ public static class PathFinder
     public static JobData FindPath(List<ClickableObject> objects, Human h, int maxLength = -1)
     {
         if (objects.Count == 0)
-            return new();
+            return JobData.CreateEmpty();
         GridPos _start = h.GetPos();
         Plan plan = Prep(_start, objects, maxLength).Result;
         if (plan.index > -1)
