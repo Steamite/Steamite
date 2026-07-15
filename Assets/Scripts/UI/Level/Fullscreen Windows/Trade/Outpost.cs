@@ -139,7 +139,7 @@ namespace Outposts
                 trade.transform.GetChild(0).GetChild(2).GetChild(trade.outposts.Count-1).GetChild(0).GetComponent<Image>().color = trade.availableColor;*/
             }
             else
-                storedResources.capacity.ChangeBaseVal((level + 1) * 10);
+                storedResources.capacity.BaseValue = (level + 1) * 10;
 
             production.ManageSimple(outpostLevels[level], ResourceAmmount[outpostLevels[level]], true); // upgrades the production
             level++;

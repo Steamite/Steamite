@@ -230,7 +230,7 @@ namespace InfoWindowViews
 
             if((building is NeedSourceProduction source && source.Source is Vein) || building is not FluidResProductionBuilding)
             {
-                binding = BindingUtil.CreateBinding(nameof(ResourceProductionBuilding.LocalRes));
+                binding = BindingUtil.CreateBinding(nameof(IResourceProduction.ProductionStorage));
                 binding.sourceToUiConverters.AddConverter((ref StorageResource resource) => $"Space\n{resource.ammounts.Sum()}/{resource.capacity}");
                 InfoWindow.Window.RegisterTempBinding(new(capacityLabel, "text"), binding, data);
             }

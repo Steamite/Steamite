@@ -23,7 +23,7 @@ public class QuestResourceReward : QuestReward
     public override void ObtainReward()
     {
         MyRes.DeliverToElevator(resource);
-        MyRes.ManageMoneyGlobal(+resource.Money);
+        MyRes.ManageMoneyGlobal(resource.Money.currentValue);
     }
 
     public override void Init()

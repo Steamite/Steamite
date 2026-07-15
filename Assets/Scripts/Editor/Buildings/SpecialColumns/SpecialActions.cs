@@ -13,8 +13,8 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
         public void AssignChange(ChangeEvent<int> ev)
         {
             int i = ev.target.GetRowIndex();
-            ((IAssign)((BuildingWrapper)view.itemsSource[i]).building).AssignLimit.BaseValue = ev.newValue;
-            EditorUtility.SetDirty(((BuildingWrapper)view.itemsSource[i]).building);
+            ((IAssign)((BuildingWrapper)view.itemsSource[i]).Building).AssignData.AssignLimit.BaseValue = ev.newValue;
+            EditorUtility.SetDirty(((BuildingWrapper)view.itemsSource[i]).Building);
         }/*
 
         

@@ -25,7 +25,7 @@ public class Pipe : Building
         return HashCode.Combine(base.GetHashCode(), Name, id);
     }
 
-    public override void FinishBuild()
+    protected override void FinishBuild()
     {
         List<FluidNetwork> connectedNetworks = connectedPipes
             .Where(q => q != null && q.connectedPipe.network.networkID != -1)
@@ -253,7 +253,7 @@ public class Pipe : Building
         MyGrid.SetGridItem(GetPos(), this, true);
         FindConnections();
 
-        if (Constructing)
+        if (InConstruction)
             FinishBuild();
     }
 

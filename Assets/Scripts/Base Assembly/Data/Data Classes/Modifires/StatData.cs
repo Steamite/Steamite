@@ -17,17 +17,21 @@ namespace BuildingStats
     }
 
     [Serializable]
-    public class StatPair
+    public struct StatValue
     {
-        /// <summary>Which buildings are effected.</summary>
-        public int mask;
-        public int underProp = 0;
         /// <summary>Which properies are effected.</summary>
         public StatModifiers mod;
         /// <summary>How much much it effects it.</summary>
         public float modAmmount;
         /// <summary>If the modification is absolute or by a percentage;</summary>
         public bool percent;
+    }
+    [Serializable]
+    public class StatPair
+    {
+        /// <summary>Which buildings are effected.</summary>
+        public int mask;
+        public StatValue statValue;
     }
 
     [Serializable]
@@ -44,14 +48,14 @@ namespace BuildingStats
         /// Masks the buildings by categories.
         /// </summary>
         /// <param name="addStat">If true the stat is added, else it's removed</param>
-        public void Mask(bool addStat)
+        public void ApplyStat(bool addStat)
         {
             // create a mask with the affected categories
             int mask = 0;
             List<Building> buildings = MyGrid.Buildings
                 .Union(SceneRefs.ObjectFactory.buildPrefabs.Categories
                     .SelectMany(q => q.Objects)
-                        .Select(w => w.building)).ToList();
+                        .Select(w => w.Building)).ToList();
             int j = Enum.GetNames(typeof(BuildingCategType)).Length;
             foreach (var pair in pairs)
             {
@@ -67,14 +71,14 @@ namespace BuildingStats
                         {
                             try
                             {
-                                HandleCases(_building, pair);
+                                HandleCases(_building, pair.statValue);
                             }
                             catch (Exception e)
                             {
                                 if (e is InvalidCastException)
                                 {
                                     Debug.LogError(
-                                        $"{_building} doesnt implement inteface containing: ${pair.mod}\n" +
+                                        $"{_building} doesnt implement inteface containing: ${pair.statValue.mod}\n" +
                                         $"{e}");
 
                                 }
@@ -88,53 +92,53 @@ namespace BuildingStats
             }
         }
 
-        void HandleCases(Building building, StatPair pair)
+        void HandleCases(Building building, StatValue statValue)
         {
 
-            switch (pair.mod)
+            switch (statValue.mod)
             {
                 case StatModifiers.Cost:
                     if (building.id == -1)
                     {
                         DoMod(
                             building.Cost,
-                            pair,
+                            statValue,
                             building);
                     }
                     break;
                 case StatModifiers.AssignLimit:
-                    DoMod(
-                        ((IAssign)building).AssignLimit,
-                        pair,
-                        nameof(IAssign.AssignLimit),
+                    DoModWithUpdate(
+                        ((IAssign)building).AssignData.AssignLimit,
+                        statValue,
+                        nameof(IAssign.AssignData),
                         building);
                     break;
                 // TODO TEST THIS(no indicator exists right now)
                 case StatModifiers.ProdSpeed:
-                    DoMod(
+                    DoModWithUpdate(
                         ((IProduction)building).ProdSpeed,
-                        pair,
+                        statValue,
                         nameof(IProduction.ProdSpeed),
                         building);
                     break;
                 case StatModifiers.InputResource:
-                    DoMod(
+                    DoModWithUpdate(
                         ((IResourceProduction)building).ResourceCost,
-                        pair,
+                        statValue,
                         nameof(IResourceProduction.ResourceCost),
                         building);
                     break;
                 case StatModifiers.ProductionYield:
-                    DoMod(
+                    DoModWithUpdate(
                         ((IResourceProduction)building).ResourceYield,
-                        pair,
+                        statValue,
                         nameof(IResourceProduction.ResourceYield),
                         building);
                     break;
                 case StatModifiers.Capacity:
-                    DoMod(
+                    DoModWithUpdate(
                         building.LocalRes.capacity,
-                        pair,
+                        statValue,
                         nameof(building.LocalRes),
                         building);
                     break;
@@ -142,26 +146,26 @@ namespace BuildingStats
             //Debug.Log(pair.mask);
         }
 
-        void DoMod(IModifiable obj, StatPair pair, string propName, Building building)
+        void DoModWithUpdate(IModifiable obj, StatValue statValue, string propName, Building building)
         {
-            obj.AddMod(pair);
+            obj.AddMod(statValue);
             building.UIUpdate(propName);
         }
 
-        void DoMod(IModifiable obj, StatPair pair, Building building)
+        void DoMod(IModifiable obj, StatValue statValue, Building building)
         {
-            obj.AddMod(pair);
+            obj.AddMod(statValue);
             InfoWindow.Window.buildingCostChange?.Invoke(building);
         }
 
         public void AddEffect()
         {
-            Mask(true);
+            ApplyStat(true);
         }
 
         public void RemoveEffect()
         {
-            Mask(false);
+            ApplyStat(false);
         }
     }
     [Serializable]

@@ -60,6 +60,19 @@ public static class HumanActions
                 h.gameObject.SetActive(MyGrid.currentLevel == h.GetPos().y);
             }
             job.path.RemoveAt(0);
+
+            /*if (h.Job.job != JobState.FullTime)
+                return;
+            if (h.Workplace is IDiggerHut)
+            {
+                FindRockToDig(h);
+            }
+            else if(h.Workplace is IBuilderHut)
+            {
+                if (!FindBuildingsToConstruct(h))
+                    FindBuildingsToDeconstruct(h);
+            }*/
+
         }
         else
         {
@@ -99,6 +112,7 @@ public static class HumanActions
         if ((h.Job.interest as Rock).DamageRock(digSpeed * h.Efficiency, h))
         {
             SceneRefs.JobQueue.CancelJob(JobState.Digging, h.Job.interest); // removes job order
+            h.Idle();
         }
     }
     #endregion
@@ -110,7 +124,7 @@ public static class HumanActions
     /// <param name="h"></param>
     public static void DoProduction(Human h)
     {
-        if (h.Workplace is IProduction prod && !(h.Workplace as Building).Upgrading)
+        if (h.Workplace is IProduction prod && !(h.Workplace as Building).IsUpgrading)
         {
             prod.ProgressProduction(h.Efficiency * productionSpeed);
         }
@@ -181,7 +195,7 @@ public static class HumanActions
     }
     #endregion
 
-    #region Idle
+    #region Job Finding
     /// <summary>
     /// Looks for new jobs.
     /// </summary>
@@ -197,7 +211,7 @@ public static class HumanActions
             // go throuh the jobs according to priority
             foreach (JobState j in jobQueue.priority)
             {
-                if (HandleJobTypes(jobQueue, h, j))
+                if (FindPartTimeJobOfType(jobQueue, h, j))
                     return;
             }
         }
@@ -218,17 +232,22 @@ public static class HumanActions
     /// <param name="h"></param>
     /// <param name="j"></param>
     /// <returns>True if job was found and assigned.</returns>
-    public static bool HandleJobTypes(JobQueue jobQueue, Human h, JobState j)
+    public static bool FindPartTimeJobOfType(JobQueue jobQueue, Human h, JobState j)
     {
         switch (j)
         {
             case JobState.Pickup:
                 // if there's any space for it
                 if (MyRes.globalStorageSpace > 0)
-                    if (FindInterests(jobQueue.pickupNeeded.Where(q => q.LocalRes.Future().Sum() > 0), h, j))
+                    if (FindInterests(
+                        jobQueue.pickupNeeded
+                            .Where(q => ((IResourceProduction)q).ProductionStorage.Future().Sum() > 0),
+                        h, 
+                        j))
                     {
-                        Building pickupObject = h.Job.interest as Building;
-                        Resource toMove = pickupObject.LocalRes.Future();
+
+                        IResourceProduction pickupObject = h.Job.interest as IResourceProduction;
+                        Resource toMove = pickupObject.ProductionStorage.Future();
                         CapacityResource r = new(h.Inventory.FreeSpace);
                         MyRes.MoveRes(r,
                             new(toMove),
@@ -240,7 +259,7 @@ public static class HumanActions
                         if (h.destination)
                         {
                             h.destination.RequestRes(r, h, StorageRequestType.Store);
-                            pickupObject.RequestRes(r, h, StorageRequestType.Take);
+                            (pickupObject as Building).RequestRes(r, h, StorageRequestType.Take);
                             return true;
                         }
                     }
@@ -277,11 +296,12 @@ public static class HumanActions
         return false;
     }
 
+    #region Find Interests
     static bool FilterBuilds(IEnumerable<Building> constructions, Human h, JobState j)
     {
         foreach (Building building in constructions)
         {
-            if (MyRes.FindResources(h, building, j))
+            if (MyRes.FindResources(h, building))
                 return true;
         }
         return false;
@@ -317,14 +337,14 @@ public static class HumanActions
         List<Building> missingProgress = new();
         foreach (var building in jobQueue.constructions)
         {
-            if (!building.Cost.Same(building.LocalRes.Future()) && building.Constructing == false)
+            if (!building.Cost.Same(building.LocalRes.Future()) && (building.InConstruction || building.IsUpgrading))
             {
                 missingResoucerces.Add(building);
             }
             else if (building.LocalRes.HasNoCarriers())
                 missingProgress.Add(building);
         }
-
+         
         // builds that are only missing progress not resources
         if (FindInterests(missingProgress, h, JobState.Constructing))
         {
@@ -368,12 +388,17 @@ public static class HumanActions
         {
             if (job == JobState.Pickup || job == JobState.Cleanup)
             {
-                List<StorageObject> objects = new();
+                List<ClickableObject> objects = new();
                 foreach (var item in interests)
                 {
-                    Resource resource = (item as StorageObject).LocalRes.Future();
+                    Resource resource;
+                    if(item is IResourceProduction resProd)
+                        resource =  resProd.ProductionStorage.Future();
+                    else
+                        resource = (item as StorageObject).LocalRes.Future();
+
                     if (resource.ammounts.Sum() > 0 && MyRes.CanStore(resource, h))
-                        objects.Add(item as StorageObject);
+                        objects.Add(item);
                 }
                 interests = objects;
             }
@@ -388,5 +413,6 @@ public static class HumanActions
         }
         return false;
     }
-    #endregion 
+    #endregion
+    #endregion
 }

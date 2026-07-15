@@ -199,8 +199,7 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <returns>Pointer to <paramref name="clickable"/>.</returns>
     public virtual ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
-        if (clickable == null)
-            clickable = new();
+        clickable ??= new();
         clickable.id = id;
         clickable.name = objectName;
 

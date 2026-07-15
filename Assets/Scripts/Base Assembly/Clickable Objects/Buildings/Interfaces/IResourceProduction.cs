@@ -9,8 +9,8 @@ public interface IResourceProduction : IProduction
     /// <summary>Need Production states to work.</summary>
     ProductionStates ProdStates { get; }
 
-    /// <summary>Refence to the <see cref="StorageObject.LocalRes"/>.</summary>
-    StorageResource LocalResource { get; }
+    /// <summary>Storage where produced resources are kept</summary>
+    [CreateProperty] StorageResource ProductionStorage { get; }
 
     /// <summary>The Storage for paying the production cost.</summary>
     [CreateProperty] StorageResource InputResource { get; set; }
@@ -47,18 +47,18 @@ public interface IResourceProduction : IProduction
         ((ClickableObject)this).UIUpdate(nameof(InputResource));
         if (InputResource.Diff(ResourceCost).Sum() == 0)
         {
+
             SceneRefs.JobQueue.CancelJob(JobState.Supply, (ClickableObject)this);
-            ProdStates.supplied = true;
             ProdStates.requestedSupply = false;
+
+
+            ProdStates.supplied = true;
             RefreshStatus();
         }
+
         if (request.resource.Sum() == 0)
         {
-            InputResource.RemoveRequest(human);
-
-            human.destination = null;
             human.SetJob(JobState.Free);
-            return;
         }
     }
     #endregion
@@ -86,13 +86,13 @@ public interface IResourceProduction : IProduction
     void IProduction.Product()
     {
         CurrentTime -= ProdTime;
-        LocalResource.Manage(ResourceYield, true);
-        ((IUpdatable)this).UIUpdate(nameof(Building.LocalRes));
+        ProductionStorage.Manage(ResourceYield, true);
+        ((IUpdatable)this).UIUpdate(nameof(ProductionStorage));
         MyRes.UpdateResource(ResourceYield, true);
 
         if (ProdStates.needsResources)
             ProdStates.supplied = InputResource.Diff(ResourceCost).Sum() == 0;
-        ProdStates.space = ResourceYield.Sum() <= LocalResource.FreeSpace;
+        ProdStates.space = ResourceYield.Sum() <= ProductionStorage.FreeSpace;
         ManageInputRes();
     }
 
@@ -118,7 +118,7 @@ public interface IResourceProduction : IProduction
         else
         {
             InputResource.Manage(ResourceCost, false);
-            ((ClickableObject)this).UIUpdate("InputResource");
+            ((ClickableObject)this).UIUpdate(nameof(InputResource));
             ProdStates.running = true;
             return true;
         }
@@ -128,7 +128,7 @@ public interface IResourceProduction : IProduction
     {
         Building building = this as Building;
 
-        if (building.Constructing)
+        if (building.InConstruction)
         {
             /*building.transform.GetChild(0).GetChild(0).gameObject.SetActive(Stoped);
             building.transform.GetChild(0).GetChild(1).gameObject.SetActive(!ProdStates.supplied);
@@ -138,6 +138,27 @@ public interface IResourceProduction : IProduction
     #endregion
 
     #region Logistics
+
+    void CancelPickup(bool freeHumans)
+    {
+        SceneRefs.JobQueue.CancelJob(JobState.Pickup, (ClickableObject)this);
+        ProdStates.requestedPickup = false;
+
+        ProdStates.space = ProductionStorage.HasSpace(ResourceYield);
+
+        if (freeHumans)
+            ProductionStorage.RemoveCarriers();
+    }
+
+    void CancelSupply(bool freeHumans)
+    {
+        SceneRefs.JobQueue.CancelJob(JobState.Supply, (ClickableObject)this);
+        ProdStates.requestedSupply = false;
+
+        if (freeHumans)
+            InputResource.RemoveCarriers();
+    }
+
     /// <summary>Adds a <see cref="JobState.Supply"/> job order.</summary>
     void RequestRestock(bool force = false)
     {
@@ -151,16 +172,15 @@ public interface IResourceProduction : IProduction
     /// <summary>Adds a <see cref="JobState.Pickup"/> job order.</summary>
     void RequestPickup(bool force = false)
     {
-        if ((ProdStates.requestedPickup == false || force)&& LocalResource.Sum() > 0)
+        if ((ProdStates.requestedPickup == false || force)&& ProductionStorage.Sum() > 0)
         {
             ProdStates.requestedPickup = true;
             SceneRefs.JobQueue.AddJob(JobState.Pickup, (ClickableObject)this);
         }
     }
 
-    void Init(bool constructed, ProductionRecipeHolder holder)
+    void LoadRecipes(bool constructed, ProductionRecipeHolder holder)
     {
-        ProdStates.needsResources = ResourceCost.Sum() > 0;
         Recipes = new();
         foreach (var itemRecipe in RecipeAsssigment)
         {
@@ -171,9 +191,9 @@ public interface IResourceProduction : IProduction
         if (constructed)
         {
             if (Recipes.Count > 0)
+            {
                 SetRecipe(SelectedRecipe, false);
-            RequestRestock(true);
-            RequestPickup(true);
+            }
         }
     }
     #endregion
@@ -197,9 +217,12 @@ public interface IResourceProduction : IProduction
             fluidBuild.StoredFluids.ChangeFluidStorage(fluid.fluidYield.types, fluidBuild);
 
 
-            fluidBuild.InputFluid.capacity.ChangeBaseVal(fluidBuild.FluidCost.Sum() * 2);
+            fluidBuild.InputFluid.capacity.BaseValue = fluidBuild.FluidCost.Sum() * 2;
         }
         ResourceCost = recipe.resourceCost;
+        if (ResourceCost.Sum() > 0)
+            RequestRestock(true);
+
         if(changeYeild)
             ResourceYield = recipe.resourceYield;
         ProdTime = recipe.timeInTicks;

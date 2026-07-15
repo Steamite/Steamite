@@ -12,8 +12,7 @@ public abstract class StorageObject : ClickableObject
     /// <inheritdoc/>
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null)
     {
-        if (clickable == null)
-            clickable = new StorageObjectSave();
+        clickable ??= new StorageObjectSave();
         (clickable as StorageObjectSave).resSave = new(localRes);
         (clickable as StorageObjectSave).gridPos = GetPos(); // used for not rounded values
         return base.Save(clickable);
@@ -38,28 +37,33 @@ public abstract class StorageObject : ClickableObject
     /// </summary>
     /// <param name="h"><see cref="Human"/> that is taking resources.</param>
     /// <param name="transferPerTick">Max resources that can be transfered.</param>
-    public virtual void Take(Human h, int transferPerTick)
+    public abstract void Take(Human h, int transferPerTick);
+
+    protected void BaseTake(StorageResource resource, Human human, int transferPerTick, StorageObject storageObject, string nameOfResource = "")
     {
-        StorageRequest request = localRes.GetRequestByHuman(h);
+        StorageRequest request = resource.GetRequestByHuman(human);
         MyRes.MoveRes(
-            h.Inventory,
-            localRes,
+            human.Inventory,
+            resource,
             request.resource,
             transferPerTick);
-        UIUpdate(nameof(LocalRes));
+        if (nameOfResource != "" && storageObject is IUpdatable updatable)
+            updatable.UIUpdate(nameOfResource);
+
         if (request.resource.Sum() == 0)
         {
-            localRes.RemoveRequest(h);
-            JobData data = PathFinder.FindPath(new() { h.destination }, h);
+            resource.RemoveRequest(human);
+            JobData data = PathFinder.FindPath(new() { human.destination }, human);
             if (data.interest != null)
             {
                 data.job = JobState.Supply;
-                h.SetJob(data, true);
+                human.SetJob(data, canInterrupt: false);
                 return;
             }
-            h.SetJob(JobState.Free);
+            human.SetJob(JobState.Free);
         }
     }
+
 
     /// <inheritdoc cref="StorageResource.AddRequest(Resource, Human, StorageRequestType)"/>
     public virtual void RequestRes(Resource resource, Human human, StorageRequestType mod)

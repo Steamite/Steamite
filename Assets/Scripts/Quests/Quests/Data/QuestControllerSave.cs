@@ -27,7 +27,7 @@ public class OrderChoiceSave
     {
         timeToFail = order.TimeToFail;
         resources = new((order.objectives[0] as ResourceObjective).resource);
-        money = +(order.objectives[0] as ResourceObjective).resource.Money;
+        money = (order.objectives[0] as ResourceObjective).resource.Money.currentValue;
         gain = (order.rewards[0] as TrustReward).gainAmmount;
         penalty = (order.penalties[0] as TrustPenalty).penaltyAmmount;
     }

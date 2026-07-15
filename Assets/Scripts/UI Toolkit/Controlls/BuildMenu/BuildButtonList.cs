@@ -57,7 +57,7 @@ namespace BottomBar.Building
                     itemsSource =
                         _wrappers.Select(
                             q => new RadioBuildButtonData(
-                                q.building.Name,
+                                q.Building.Name,
                                 q.preview,
                                 q.unlocked)
                                 as RadioButtonData).ToList();
@@ -107,7 +107,7 @@ namespace BottomBar.Building
             {
                 // hide locked blocker
                 element[0][0].style.display = DisplayStyle.None;
-                if (wrappers[index].building == SceneRefs.GridTiles.BlueprintPrefab)
+                if (wrappers[index].Building == SceneRefs.GridTiles.BlueprintPrefab)
                 {
                     element.AddToClassList($"{BUILD_BUTTON_CLASS}-selected");
                 }
@@ -127,7 +127,7 @@ namespace BottomBar.Building
                 if (wrappers[index].unlocked == false)
                     return DisplayStyle.None;
 
-                if (MyRes.CanAfford(wrappers[index].building.Cost))
+                if (MyRes.CanAfford(wrappers[index].Building.Cost))
                 {
                     return DisplayStyle.None;
                 }
@@ -166,7 +166,7 @@ namespace BottomBar.Building
                 UIRefs.ResearchWindow.OpenWithFocus(wrappers[index]);
                 return false;
             }
-            else if (!MyRes.CanAfford(wrappers[index].building.Cost))
+            else if (!MyRes.CanAfford(wrappers[index].Building.Cost))
             {
                 SelectedChoice = -1;
                 return false;

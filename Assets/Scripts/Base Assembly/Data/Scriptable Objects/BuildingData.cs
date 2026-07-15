@@ -1,17 +1,22 @@
+using Levels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 [Serializable]
 public class BuildingWrapper : DataObject
 {
-    public Building building => b;
-    [SerializeField] Building b;
+    public Building Building => building;
+    [FormerlySerializedAs("b")]
+    [SerializeField] Building building;
 
-    public override string GetName() => b?.Name;
+    [SerializeReference] public BuildingLevelData levelData;
+
+    public override string GetName() => building?.Name;
 
 #if UNITY_EDITOR
     [SerializeField] public int selectedLevel;
@@ -24,13 +29,13 @@ public class BuildingWrapper : DataObject
 #if UNITY_EDITOR
     public void SetBuilding(Building _b, byte categoryID, string name = null)
     {
-        b = _b;
-        if (b)
+        building = _b;
+        if (building)
         {
             if (name != null)
-                b.Name = name;
-            b.PrefabConnection = new(categoryID, id);
-            EditorUtility.SetDirty(b);
+                building.Name = name;
+            building.PrefabConnection = new(categoryID, id);
+            EditorUtility.SetDirty(building);
         }
     }
 #endif
@@ -41,6 +46,7 @@ public class BuildingWrapper : DataObject
 
     public BuildingWrapper() { }
 }
+
 /// <summary>Helps serialize build categories.</summary>
 [Serializable]
 public class BuildCategWrapper : DataCategory<BuildingWrapper>
@@ -70,7 +76,7 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
     {
         if (newValue == null)
             return false;
-        return Categories.SelectMany(q => q.Objects).Select(q => q.building).Contains(newValue);
+        return Categories.SelectMany(q => q.Objects).Select(q => q.Building).Contains(newValue);
     }
 
 #endif
@@ -78,17 +84,17 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
 
     public Building GetBuilding(int categ, int id)
     {
-        return Categories.FirstOrDefault(q => q.id == categ).Objects.Find(q => q.id == id).building;
+        return Categories.FirstOrDefault(q => q.id == categ).Objects.Find(q => q.id == id).Building;
     }
 
     public Building GetBuilding(string name)
     {
-        return Categories[0].Objects.Find(q => q.building.Name == name).building;
+        return Categories[0].Objects.Find(q => q.Building.Name == name).Building;
     }
 
     public Pipe GetPipe()
     {
-        return Categories[3].Objects.Find(q => q.building is Pipe).building as Pipe;
+        return Categories[3].Objects.Find(q => q.Building is Pipe).Building as Pipe;
     }
 
     public override void Init()
@@ -97,8 +103,8 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
         {
             foreach (var obj in category.Objects)
             {
-                obj.building.InitPrefabData();
-                obj.materials = obj.building.GetComponentsInChildren<Renderer>().Select(q => q.sharedMaterial).ToList();
+                obj.Building.InitPrefabData();
+                obj.materials = obj.Building.GetComponentsInChildren<Renderer>().Select(q => q.sharedMaterial).ToList();
             }
         }
     }

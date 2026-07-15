@@ -73,7 +73,7 @@ namespace InfoWindowElements
         {
             List<UIResource> temp = new List<UIResource>();
             if (res is MoneyResource money && showMoney && money.Money > 0)
-                temp.Add(new DoubleUIResource(MyRes.Money, +money.Money, ResFluidTypes.Money));
+                temp.Add(new DoubleUIResource(MyRes.Money, money.Money.currentValue, ResFluidTypes.Money));
             for (int i = 0; i < res.types.Count; i++)
             {
                 temp.Add(new DoubleUIResource(
@@ -99,7 +99,7 @@ namespace InfoWindowElements
                     hasMoney = true;
                     resources.Add(new DoubleUIResource(
                         MyRes.Money,
-                        +_money.Money,
+                        _money.Money.currentValue,
                         ResFluidTypes.Money));
                 }
             }
@@ -109,6 +109,10 @@ namespace InfoWindowElements
                     0,
                     resource.ammounts[i],
                     resource.types[i]));
+
+            if (hasMoney == false && resource.Sum() == 0)
+                noneLabel.text = "Free";
+
 
             return propName.CreateBinding();
         }

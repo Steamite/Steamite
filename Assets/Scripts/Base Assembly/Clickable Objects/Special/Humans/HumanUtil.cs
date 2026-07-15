@@ -20,7 +20,7 @@ public class HumanUtil : MonoBehaviour
     public List<Human> GetPartTime() => humans.Where(q => q.Workplace == null).ToList();
 
     /// <returns>All Humans.</returns>
-    public List<Human> GetHumans() => humans;
+    public List<Human> GetHumans() => humans.ToList();
 
     /// <returns>Saved <see cref="humans"/>.</returns>
     public HumanSave[] SaveHumans() => humans.Select(q => q.Save() as HumanSave).ToArray();

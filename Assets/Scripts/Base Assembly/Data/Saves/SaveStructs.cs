@@ -231,6 +231,7 @@ public class AssignBSave : BuildingSave
 public class ResProductionBSave : ProductionBSave
 {
     public StorageResSave inputRes;
+    public StorageResSave productionRes;
 }
 public class ProductionBSave : AssignBSave
 {

@@ -25,7 +25,7 @@ public interface IFluidWork
     {
         foreach (BuildPipe buildPipe in AttachedPipes)
         {
-            buildPipe.FinishBuild();
+            buildPipe.ForcedFinishBuild();
         }
     }
 

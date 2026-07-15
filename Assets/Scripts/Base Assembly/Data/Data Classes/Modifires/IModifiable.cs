@@ -27,12 +27,12 @@ public interface IModifiable
     }
     public void RecalculateMod();
 
-    public void AddMod(StatPair pair)
+    public void AddMod(StatValue stat)
     {
-        if (pair.percent)
-            Modifier.percentMod += pair.modAmmount * 0.01f;
+        if (stat.percent)
+            Modifier.percentMod += stat.modAmmount * 0.01f;
         else
-            Modifier.absoluteMod += Mathf.RoundToInt(pair.modAmmount);
+            Modifier.absoluteMod += Mathf.RoundToInt(stat.modAmmount);
         RecalculateMod();
     }
 }

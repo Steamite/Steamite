@@ -17,6 +17,7 @@ namespace InfoWindowElements
         public override void Open(object data)
         {
             DataBinding mainBinding = null;
+            style.display = DisplayStyle.Flex;
             switch (data)
             {
                 case Building building:
@@ -52,7 +53,7 @@ namespace InfoWindowElements
                             mainBinding = SetupResTypes(
                                 prod.ResourceYield,
                                 nameof(IResourceProduction.ResourceYield),
-                                nameof(Building.LocalRes),
+                                nameof(IResourceProduction.ProductionStorage),
                                 data);
                         }
                         else

@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,10 +39,15 @@ public enum Specializations
 /// <summary>Humans walk around the map and complete tasks ordered by the player.</summary>
 public class Human : ClickableObject
 {
+
+#if UNITY_EDITOR
+    TMP_Text JobText => transform.GetChild(0).GetComponent<TMP_Text>();
+#endif
+
     #region Variables
     /// <summary>Determines the rate of proggers when doing a job.</summary>
     [Header("Human stats")]
-    Efficiency efficiency = new();
+    readonly Efficiency efficiency = new();
     /// <summary>Specialization of the worker, provides bonuses in certain areas. (WIP)</summary>
     public Specializations specialization = Specializations.Worker;
     /// <summary>If it's time to go to sleep.</summary>
@@ -53,7 +59,7 @@ public class Human : ClickableObject
 
     /// <summary>Holds data about the current assigment.</summary>
     [Header("Action data")]
-    JobData jData = new();
+    JobData jData = JobData.CreateEmpty();
 
     /// <summary>
     /// Used for delivery jobs, marks the destination.<br/> 
@@ -74,72 +80,181 @@ public class Human : ClickableObject
     [CreateProperty] public CapacityResource Inventory { get => inventory; set => inventory = value; }
 
 
+    #region Efficiency
     /// <inheritdoc cref="efficiency"/>
     [CreateProperty] public float Efficiency => efficiency.efficiency;
     /// <summary>
-    /// Updates efficiency modifiers and UI.
+    /// Moves the efficiency modifier.
     /// </summary>
     /// <param name="_modType"><inheritdoc cref="Efficiency.ManageModifier(ModType, bool)" path="/param[@name='_modType']"/></param>
     /// <param name="improvement"><inheritdoc cref="Efficiency.ManageModifier(ModType, bool)" path="/param[@name='improvement']"/></param>
-    public void ModifyEfficiency(ModType _modType, bool improvement)
+    public void ModifyEfficiencyState(ModType _modType, bool improvement)
     {
         efficiency.ManageModifier(_modType, improvement);
         UIUpdate("Efficiency");
     }
 
     /// <summary>
-    /// Updates efficiency modifiers and UI.
+    /// Sets the efficiency modifier.
     /// </summary>
     /// <param name="_modType"><inheritdoc cref="Efficiency.ManageModifier(ModType, bool)" path="/param[@name='_modType']"/></param>
     /// <param name="state"><inheritdoc cref="Efficiency.SetModifier(ModType, int)" path="/param[@name='state']"/></param>
-    public void ModifyEfficiency(ModType _modType, int state)
+    public void SetEfficiencyState(ModType _modType, int state)
     {
         efficiency.SetModifier(_modType, state);
         UIUpdate("Efficiency");
     }
+    #endregion
 
     /// <inheritdoc cref="jData"/>
     [CreateProperty]
     public JobData Job => jData;
+
+    public bool SetWorkplace(IAssign workplace)
+    {
+        JobData job = PathFinder.FindPath(
+                new List<ClickableObject>() {(ClickableObject)workplace},
+                this);
+        if (!job.interest)
+        {
+            Debug.LogError("cant find way here");
+            return false;
+        }
+
+        Workplace = workplace;
+        job.job = JobState.FullTime;
+
+        if (!nightTime)
+            SetJob(job);
+        else
+            SetJob(JobState.FullTime, job.interest);
+        lookingForAJob = false;
+        return true;
+    }
+
+    public void RemoveWorkplace()
+    {
+        Workplace = null;
+        SetJob(JobState.Free);
+    }
+
     /// <summary>
     /// Updates whole <see cref="jData"/> and updates UI.
     /// </summary>
     /// <param name="data">New <see cref="jData"/></param>
-    public void SetJob(JobData data, bool shouldDecide = true)
-    {
-        jData = data;
-        UIUpdate(nameof(Job));
-        if (shouldDecide)
-            Decide();
-#if UNITY_EDITOR
-        transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
-#endif
-    }
+    public void SetJob(JobData data, bool shouldDecide = true, bool canInterrupt = true)
+        => SetJob(data.job, data.interest, data.path, shouldDecide, canInterrupt);
+
     /// <summary>
     /// Updates a part of <see cref="jData"/>.
     /// </summary>
     /// <param name="state">New job.</param>
     /// <param name="interest">New interest.</param>
     /// <param name="path">New path.</param>
-    public void SetJob(JobState state, ClickableObject interest = null, List<GridPos> path = null, bool shouldDecide = true)
+    public void SetJob(
+        JobState state, 
+        ClickableObject interest = null, 
+        List<GridPos> path = null, 
+        bool shouldDecide = true, 
+        bool canInterrupt = true)
     {
-        if(state == JobState.Free)
+        if(canInterrupt && 
+            state != jData.job && 
+            InterruptHuman(state))
         {
-            SceneRefs.JobQueue.FreeHuman(this);
+            return;
         }
-            
+
         jData.job = state;
-        if (interest)
+
+        if (interest != null)
             jData.interest = interest;
+        else if (state == JobState.Free)
+            jData.interest = null;
+
         if (path != null)
             jData.path = path;
+        else if (state == JobState.Free)
+            jData.path.Clear();
+
         UIUpdate(nameof(Job));
+        
         if (shouldDecide)
             Decide();
 
 #if UNITY_EDITOR
-        transform.GetChild(0).GetComponent<TMP_Text>().text = jData.job.ToString();
-#endif
+        JobText.text = jData.job.ToString();
+#endif        
+    }
+
+
+    /// <summary>
+    /// Takes a human away from a job, 
+    /// if you need to assign a new job but don't want to destroy the previous.
+    /// </summary>
+    /// <param name="human"></param>
+    /// <returns>True if interruption was interrupted.</returns>
+    bool InterruptHuman(JobState newState)
+    {
+        JobData jobData = Job;
+        ClickableObject interest = jobData.interest;
+        if (!interest)
+            return false;
+
+        switch (jobData.job)
+        {
+            case JobState.Digging:
+                ((Rock)interest).Assigned = null;
+                break;
+            case JobState.Constructing:
+            case JobState.Deconstructing:
+                ((Building)interest).LocalRes.RemoveRequest(this);
+                break;
+            case JobState.Supply:
+            case JobState.Pickup:
+                if (newState == JobState.Supply)
+                    return false;
+                // is still picking up the resources
+                if (interest != destination)
+                    ((StorageObject)interest).LocalRes.RemoveRequest(this);
+
+                if (destination)
+                {
+                    if (destination is IResourceProduction resProd)
+                        resProd.InputResource.RemoveRequest(this);
+                    else
+                        destination.LocalRes.RemoveRequest(this);
+                }
+
+                if (Inventory.Sum() == 0)
+                    break;
+
+                if (newState == JobState.Free)
+                {
+                    StartStore();
+                    return true;
+                }
+
+                if (newState != JobState.Supply)
+                    SceneRefs.ObjectFactory.CreateChunk(GetPos(), Inventory, false);
+                break;
+        }
+        return false;
+    }
+
+    public void StartStore()
+    {
+        JobData data = MyRes.FindStorage(this);
+
+        if (data.interest)
+        {
+            destination = (Building)data.interest;
+            SetJob(data, canInterrupt: false);
+            return;
+            //return true;
+        }
+        SetJob(JobState.Free, canInterrupt: false);
+//        return false;
     }
     #endregion
 
@@ -228,13 +343,14 @@ public class Human : ClickableObject
         Inventory = new(20);
         // house assigment
         if (s.houseID != -1)
-            MyGrid.Buildings.Where(q => q.id == s.houseID).
-                SingleOrDefault().GetComponent<House>().ManageAssigned(this, true);
+            MyGrid.Buildings.First(q => q.id == s.houseID)
+                .GetComponent<House>().ManageAssigned(this, true);
 
         // workplace assigment
         if (s.workplaceId != -1)
-            MyGrid.Buildings.Where(q => q.id == s.workplaceId).
-                SingleOrDefault().GetComponent<IAssign>().ManageAssigned(this, true);
+            MyGrid.Buildings.First(q => q.id == s.workplaceId).
+                GetComponent<IAssign>().ManageAssigned(this, true);
+
         SetJob(new JobData(s.jobSave, this));
         Inventory.Manage(new(s.inventory), true);
         specialization = s.specs;
@@ -254,8 +370,10 @@ public class Human : ClickableObject
         if (repetableAction != null)
         {
             repetableAction(this);
+            return;
         }
-        else if (!nightTime)
+        
+        if (!nightTime)
         {
             HumanActions.LookForNew(this);
             if (repetableAction != null)
@@ -293,10 +411,7 @@ public class Human : ClickableObject
         switch (jData.job)
         {
             case JobState.Free:
-                if (Workplace != null)
-                    Idle();
-                else
-                    HumanActions.LookForNew(this);
+                Idle();
                 break;
             case JobState.Digging:
                 ChangeAction(HumanActions.Dig);
@@ -343,12 +458,16 @@ public class Human : ClickableObject
             }
             if (jData.job != JobState.Free)
             {
-                SetJob(JobState.Free, path: new());
+                jData.path.Clear();
+                SetJob(JobState.Free);
             }
             else
                 ChangeAction(null);
+            return;
         }
-        else if (Workplace is IDiggerHut digger)
+
+
+        if (Workplace is IDiggerHut digger)
         {
             if (!HumanActions.FindRockToDig(this))
             {
@@ -359,7 +478,7 @@ public class Human : ClickableObject
                     if (data.interest != null)
                     {
                         data.interest = null;
-                        SetJob(data);
+                        SetJob(data, canInterrupt: false);
                     }
                     Debug.Log("Going to work(dig)!");
                 }
@@ -431,20 +550,20 @@ public class Human : ClickableObject
             _jData = PathFinder.FindPath(new() { home }, this);
             if (_jData.interest)
             {
-                ModifyEfficiency(ModType.House, true);
+                ModifyEfficiencyState(ModType.House, true);
                 if (home.HasPub)
-                    ModifyEfficiency(ModType.Pub, 1);
+                    SetEfficiencyState(ModType.Pub, 1);
                 return _jData;
             }
         }
         _jData = PathFinder.FindPath(new() { MyGrid.GetLevelElevator(GetPos().y) }, this);
-        ModifyEfficiency(ModType.House, false);
-        ModifyEfficiency(ModType.Pub, false);
+        ModifyEfficiencyState(ModType.House, false);
+        ModifyEfficiencyState(ModType.Pub, false);
         if (_jData.interest)
         {
             return _jData;
         }
-        return new();
+        return JobData.CreateEmpty();
     }
     #endregion
 }

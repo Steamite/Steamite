@@ -602,9 +602,6 @@ MonoBehaviour:
       mod:
         percentMod: 1
         absoluteMod: 0
-    requests: []
-    carriers: []
-    mods: 
   meshRenderers: []
   buildingCategories: 2
   blueprint:
@@ -670,14 +667,15 @@ MonoBehaviour:
       mod:
         percentMod: 1
         absoluteMod: 0
-  - types: []
-    ammounts: 
+  - types:
+    - {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
+    ammounts: 0a000000
     baseResource:
       types:
       - {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
       ammounts: 0a000000
     mod:
-      percentMod: 0
+      percentMod: 1
       absoluteMod: 0
     money:
       baseValue: 50
@@ -685,14 +683,15 @@ MonoBehaviour:
       mod:
         percentMod: 1
         absoluteMod: 0
-  - types: []
-    ammounts: 
+  - types:
+    - {fileID: 11400000, guid: e592b624b77a5da49a98b4964344738d, type: 2}
+    ammounts: 05000000
     baseResource:
       types:
       - {fileID: 11400000, guid: e592b624b77a5da49a98b4964344738d, type: 2}
       ammounts: 05000000
     mod:
-      percentMod: 0
+      percentMod: 1
       absoluteMod: 0
     money:
       baseValue: 80
@@ -700,8 +699,7 @@ MonoBehaviour:
       mod:
         percentMod: 1
         absoluteMod: 0
-  constructed: 0
-  deconstructing: 0
+  constructing: 0
   constructionProgress: 0
   maximalProgress: 30
   level: 0

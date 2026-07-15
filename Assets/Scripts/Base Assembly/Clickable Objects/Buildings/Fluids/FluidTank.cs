@@ -9,7 +9,7 @@ public class FluidTank : Building, IFluidWork
     [SerializeField] CapacityResource storedFluid;
     [CreateProperty] public CapacityResource StoredFluids { get => storedFluid; set => storedFluid = value; }
     public ulong TypesToStore;
-    public override void FinishBuild()
+    protected override void FinishBuild()
     {
         StoredFluids.InitCapacity();
         ulong byt = TypesToStore;

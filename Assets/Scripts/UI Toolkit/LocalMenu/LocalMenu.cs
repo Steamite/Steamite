@@ -70,12 +70,11 @@ namespace LocalMenuUtility
                     description.text = node.description.Replace('$', ' ');
                     break;
                 case BuildingWrapper wrapper:
-                    Building building = wrapper.building;
+                    Building building = wrapper.Building;
                     header.text = building.Name;
 
                     if (wrapper.unlocked)
                     {
-                        costList.style.display = DisplayStyle.Flex;
                         costList.Open(building);
                     }
                     else

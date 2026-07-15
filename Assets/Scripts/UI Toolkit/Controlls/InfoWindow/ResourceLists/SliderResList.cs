@@ -100,7 +100,7 @@ public partial class SliderResList : DoubleResList, IUpdatable
     {
         List<UIResource> temp = new List<UIResource>();
         if (res is MoneyResource money && showMoney && money.Money > 0)
-            temp.Add(new DoubleUIResource(MyRes.Money, +money.Money));
+            temp.Add(new DoubleUIResource(MyRes.Money, money.Money.currentValue));
         for (int i = 0; i < res.types.Count; i++)
         {
             temp.Add(new DoubleUIResource(

@@ -5,11 +5,9 @@ using UnityEngine;
 /// <summary>Building that doesn't produce resources but creates research.</summary>
 public class ResearchProduction : Building, IProduction, IAssign
 {
-    [CreateProperty]
-    public List<Human> Assigned { get; set; } = new();
+    [SerializeField] AssignData assignData;
+    [CreateProperty] public AssignData AssignData { get => assignData; set => assignData = value; }
 
-    [SerializeField] ModifiableInteger assignLimit;
-    [CreateProperty] public ModifiableInteger AssignLimit { get => assignLimit; set => assignLimit = value; }
     public float ProdTime { get; set; }
     public float CurrentTime { get; set; }
     [SerializeField] ModifiableFloat modifier;
@@ -38,55 +36,6 @@ public class ResearchProduction : Building, IProduction, IAssign
     public void ProgressProduction(float speed)
     {
         SceneRefs.ResearchAdapter.DoProduction(speed);
-    }
-
-    public bool ManageAssigned(Human human, bool add)
-    {
-        if (add)
-        {
-            if (Assigned.Count == AssignLimit.currentValue)
-                return false;
-            JobData job = PathFinder.FindPath(
-                new List<ClickableObject>() { this },
-                human);
-            if (job.interest)
-            {
-                Assigned.Add(human);
-                human.transform.SetParent(SceneRefs.Humans.transform.GetChild(1).transform);
-                human.Workplace = this;
-                job.job = JobState.FullTime;
-
-                SceneRefs.JobQueue.FreeHuman(human);
-                if (!human.nightTime)
-                    human.SetJob(job, true);
-                else
-                    human.SetJob(
-                        JobState.FullTime,
-                        interest: job.interest,
-                        shouldDecide: true);
-                human.lookingForAJob = false;
-
-            }
-            else
-            {
-                Debug.LogError("cant find way here");
-                return false;
-            }
-        }
-        else
-        {
-            Assigned.Remove(human);
-            human.Workplace = null;
-            human.transform.SetParent(SceneRefs.Humans.transform.GetChild(0).transform);
-            human.Idle();
-        }
-        UIUpdate(nameof(Assigned));
-        return true;
-    }
-
-    public List<Human> GetUnassigned()
-    {
-        return SceneRefs.Humans.GetPartTime();
     }
 
     public void Product()

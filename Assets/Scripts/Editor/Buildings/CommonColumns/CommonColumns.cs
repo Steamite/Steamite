@@ -32,7 +32,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                     ObjectField field = (ObjectField)el;
                     field.allowSceneObjects = false;
                     field.objectType = typeof(Building);
-                    field.value = ((BuildingWrapper)view.itemsSource[i]).building;
+                    field.value = ((BuildingWrapper)view.itemsSource[i]).Building;
                     //field.RegisterValueChangedCallback(actions.AssetChange);
                 };
             view.columns["asset"].unbindCell =
@@ -51,8 +51,8 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                 {
                     DropdownField field = (DropdownField)el;
                     field.choices = register.BuildingTypes.Select(q => q.Name).ToList();//.Select(q => q.Name).Where(q => !q.Contains("Pipe")).ToList();
-                    field.value = ((BuildingWrapper)view.itemsSource[i]).building
-                        ? ((BuildingWrapper)view.itemsSource[i]).building.GetType().ToString()
+                    field.value = ((BuildingWrapper)view.itemsSource[i]).Building
+                        ? ((BuildingWrapper)view.itemsSource[i]).Building.GetType().ToString()
                         : "None";
                     field.RegisterValueChangedCallback(actions.TypeChange);
                 };
@@ -85,7 +85,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                     FieldLevelList<MoneyResource, ResourceCell> cell = el.Q<FieldLevelList<MoneyResource, ResourceCell>>();
 
                     BuildingWrapper wrapper = (BuildingWrapper)view.itemsSource[i];
-                    Building building = wrapper.building;
+                    Building building = wrapper.Building;
                     if (building == null)
                         return;
 
@@ -107,7 +107,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                 {
                     Button button = el.Q<Button>();
                     button.text = "Manage";
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).building;
+                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
                     if (building)
                     {
                         if (building.blueprint.itemList == null ||

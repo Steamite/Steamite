@@ -29,13 +29,15 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 bindCell = (el, i) =>
                 {
                     IntegerField field = el.Q<IntegerField>();
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).building;
+                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
                     field.SetEnabled(false);
                     if (building == null || building is not IAssign assign)
                         return;
                     SerializedObject sO = new(building);
                     field.BindProperty(
-                        sO.FindProperty("assignLimit")
+                        sO
+                        .FindProperty("assignData")
+                        .FindPropertyRelative("AssignLimit")
                         .FindPropertyRelative("baseValue"));
 /*
                     if (((IAssign)building).AssignLimit == null)
@@ -69,10 +71,10 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 bindCell = (el, i) =>
                 {
                     RecipeCell cell = el as RecipeCell;
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).building;
+                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
                     if (building is IResourceProduction production)
                     {
-                        cell.userData = ((BuildingWrapper)view.itemsSource[i]).building;
+                        cell.userData = ((BuildingWrapper)view.itemsSource[i]).Building;
                         cell.Open(production);
                     }
                     else
@@ -230,7 +232,7 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 makeCell = () => new Mask64Field(),
                 bindCell = (el, i) =>
                 {
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).building;
+                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
                     if (building == null)
                         return;
 
@@ -280,7 +282,7 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 bindCell = (el, i) =>
                 {
 
-                    Building b = ((BuildingWrapper)view.itemsSource[i]).building;
+                    Building b = ((BuildingWrapper)view.itemsSource[i]).Building;
                     if (b == null)
                         return;
                     SerializedObject build = new(b);
@@ -308,7 +310,7 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 bindCell = (el, i) =>
                 {
                     el.Clear();
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).building;
+                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
                     if (building == null)
                         return;
 
@@ -365,7 +367,7 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 bindCell = (el, i) =>
                 {
                     el.Clear();
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).building;
+                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
                     if (building == null || building is not IEffectObject effect)
                         return;
 
