@@ -9,3 +9,8 @@ public interface IUIElement
     /// <param name="data"> Object containing data to render.</param>
     public void Open(object data);
 }
+
+public interface IUIElement<T>
+{
+    public void Open(T data);
+}

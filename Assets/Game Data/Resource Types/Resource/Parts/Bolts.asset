@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: Bolts
   color: {r: 0.6603774, g: 0.5366158, b: 0.37068352, a: 1}
   image: {fileID: 0}
+  enumLink: 22

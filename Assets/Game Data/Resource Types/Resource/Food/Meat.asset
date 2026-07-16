@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: Meat
   color: {r: 1, g: 0, b: 0.040395737, a: 1}
   image: {fileID: 0}
+  enumLink: 20

@@ -34,6 +34,8 @@ namespace EditorWindows.Windows
         SpecialColumns specialColumns;
         CommonColumns commonColumns;
 
+        public SerializedObject GetBuildingAt(int i) => new(selectedCategory.Objects[i].Building);
+
         public List<Type> BuildingTypes { get => buildingTypes; set => buildingTypes = value; }
         public bool ChangedType { get => changedType; set => changedType = value; }
         public AddressableAssetSettings Settings { get => settings; set => settings = value; }

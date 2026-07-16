@@ -22,6 +22,12 @@ namespace EditorWindows
         public DataHolder<CATEG_TYPE, DATA_TYPE> Holder { get => holder; set => holder = value; }
         public CATEG_TYPE SelectedCategory { get => selectedCategory; set => selectedCategory = value; }
 
+
+        public SerializedProperty ObjectAt(int i) => categoryObjects.GetArrayElementAtIndex(i);
+        [NonSerialized] public SerializedObject holderObject;
+        [NonSerialized] public SerializedProperty selectedCategoryObject;
+        [NonSerialized] public SerializedProperty categoryObjects;
+
         protected TextField categoryNameField;
         Button createCategory;
         Button categoryRemover;
@@ -30,6 +36,8 @@ namespace EditorWindows
         public void SaveValues() => EditorUtility.SetDirty(Holder);
         protected virtual void CreateGUI()
         {
+            holderObject = new(Holder);
+
             VisualElement doc = windowAsset.CloneTree();
             rootVisualElement.Add(doc);
 
@@ -75,11 +83,21 @@ namespace EditorWindows
                 iconElement.style.backgroundImage = Background.FromVectorImage(SelectedCategory.Icon);
                 iconSelector.value = SelectedCategory.Icon;
                 categoryNameField.value = SelectedCategory.Name;
+
+                selectedCategoryObject = holderObject
+                    .FindProperty(nameof(Holder.Categories))
+                    .GetArrayElementAtIndex(index);
+
+                categoryObjects = selectedCategoryObject
+                    .FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.Objects));
             }
             else
             {
                 categoryExists = false;
                 SelectedCategory = Activator.CreateInstance<CATEG_TYPE>();
+
+                selectedCategoryObject = null;
+                categoryObjects = null;
 
                 categoryRemover.SetEnabled(false);
                 createCategory.text = "Create new category";

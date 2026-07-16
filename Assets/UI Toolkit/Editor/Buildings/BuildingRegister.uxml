@@ -21,7 +21,6 @@
             <engine:Column name="asset" title="Asset" stretchable="true" max-width="200px"/>
             <engine:Column name="name" title="Name" stretchable="true" max-width="200px"/>
             <engine:Column name="type" title="Type" stretchable="true" max-width="150px" min-width="100px"/>
-            <engine:Column name="level" title="Level" stretchable="true"/>
             <engine:Column name="cost" title="Cost" stretchable="true" max-width="300px" min-width="200px"/>
             <engine:Column name="blueprint" title="Blueprint" min-width="75px" max-width="75px" resizable="false" optional="true"/>
         </engine:Columns>

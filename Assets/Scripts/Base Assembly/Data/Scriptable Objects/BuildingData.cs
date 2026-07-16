@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
+
+
 [Serializable]
 public class BuildingWrapper : DataObject
 {
@@ -14,7 +16,7 @@ public class BuildingWrapper : DataObject
     [FormerlySerializedAs("b")]
     [SerializeField] Building building;
 
-    [SerializeReference] public BuildingLevelData levelData;
+    public List<BuildingModifications> modifications;
 
     public override string GetName() => building?.Name;
 

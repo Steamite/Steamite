@@ -39,7 +39,7 @@ namespace Assets.Scripts.Editor.Buildings.LevelList
             if (building == null)
                 return;
 
-            SerializedObject sO = new(building);
+            /*SerializedObject sO = new(building);
             SerializedProperty prop = sO.FindProperty(nameof(Building.maxLevel));
             intSlider.Unbind();
             intSlider.BindProperty(prop);
@@ -56,7 +56,7 @@ namespace Assets.Scripts.Editor.Buildings.LevelList
             for (int j = 0; j < building.maxLevel; j++)
             {
                 choices.Add(j.ToString());
-            }
+            }*/
             /*dropdownField.style.display = DisplayStyle.None;
             dropdownField.choices = choices;
 
@@ -68,7 +68,7 @@ namespace Assets.Scripts.Editor.Buildings.LevelList
             group.style.display = DisplayStyle.Flex;
             //group[1].style.flexDirection = FlexDirection.Row;
             group.SetValueWithoutNotify(wrapper.selectedLevel);
-            group.choices = choices;
+            //group.choices = choices;
             group.UnregisterValueChangedCallback(Refresh);
             group.RegisterValueChangedCallback(Refresh);
 

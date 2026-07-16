@@ -68,3 +68,9 @@ IntegerField:disabled {
 .unity-radio-button-group__container {
     flex-direction: row;
 }
+
+
+
+.unity-multi-column-header__column__title {
+    flex-grow: 1;
+}

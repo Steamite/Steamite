@@ -89,7 +89,7 @@ public class ResourceEditor : PropertyDrawer
             {
                 elem = elem.ElementAt(0);
                 DropdownField field = (DropdownField)elem.ElementAt(0);
-                field.value = ((Resource)property.boxedValue).types[i].Name;
+                field.value = ((Resource)property.boxedValue).types[i].ToString();
                 field.choices = ResFluidTypes.GetResNamesList(new());
                 field.RegisterValueChangedCallback(
                     (enu) =>

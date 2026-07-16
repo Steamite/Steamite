@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: Chalcopyrit
   color: {r: 0.754717, g: 0.45279148, b: 0.11747954, a: 1}
   image: {fileID: 0}
+  enumLink: 1
