@@ -22,24 +22,24 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
         }
 
         public override void CreateColumns()
-        {
+        { 
             #region Asset
             view.columns["asset"].makeCell =
-                () => new ObjectField() { enabledSelf = false };
+                () => new ObjectField() { enabledSelf = false, allowSceneObjects = false, objectType = typeof(Building) };
             view.columns["asset"].bindCell =
                 (el, i) =>
                 {
-                    ObjectField field = (ObjectField)el;
-                    field.allowSceneObjects = false;
-                    field.objectType = typeof(Building);
-                    field.value = ((BuildingWrapper)view.itemsSource[i]).Building;
-                    //field.RegisterValueChangedCallback(actions.AssetChange);
+                    ObjectField field = el as ObjectField;
+                    SerializedProperty wrapper = register.ObjectAt(i);
+                    SerializedProperty building = wrapper.FindPropertyRelative("building");
+
+                    field.BindProperty(building);
                 };
             view.columns["asset"].unbindCell =
                 (el, i) =>
                 {
-                    ObjectField field = (ObjectField)el;
-                    //field.UnregisterValueChangedCallback(actions.AssetChange);
+                    ObjectField field = el as ObjectField;
+                    field.Unbind();
                 };
             #endregion
 
@@ -65,31 +65,35 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
             #endregion
 
             #region Level
-            view.columns["level"].makeCell =
+            /*view.columns["level"].makeCell =
                 () => new LevelCell(view);
             view.columns["level"].bindCell =
                 (el, i) =>
                 {
                     LevelCell cell = el as LevelCell;
                     cell.Open(view.itemsSource[i], i);
-                };
+                };*/
             #endregion
 
             #region Cost
             view.columns["cost"].makeCell =
-                () => new FieldLevelList<MoneyResource, ResourceCell>("costs");//new ResourceCell();
+                () => new ResourceCell();//FieldLevelList<MoneyResource, ResourceCell>("costs");//new ResourceCell();
             view.columns["cost"].bindCell =
                 (el, i) =>
                 {
                     el.parent.focusable = true;
-                    FieldLevelList<MoneyResource, ResourceCell> cell = el.Q<FieldLevelList<MoneyResource, ResourceCell>>();
+                    ResourceCell cell = el.Q<ResourceCell>();
+                    SerializedObject wrapper = register.GetBuildingAt(i);
+                    SerializedProperty cost = wrapper.FindProperty("cost");
 
-                    BuildingWrapper wrapper = (BuildingWrapper)view.itemsSource[i];
-                    Building building = wrapper.Building;
-                    if (building == null)
+                    cell.Open(cost);
+
+                    /*BuildingWrapper wrapper = (BuildingWrapper)view.itemsSource[i];
+                    Building building = wrapper.Building;*/
+                    /*if (building == null)
                         return;
 
-                    cell.Open(building, wrapper.selectedLevel);
+                    cell.Open(building.Cost, building, true);*/
                 };
             #endregion
 
@@ -159,6 +163,22 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                 },
                 width = 50,
                 resizable = false
+            });
+            #endregion
+
+            #region
+            view.columns.Add(new()
+            {
+                makeCell = 
+                    () => new ModificationCell(),
+                bindCell =
+                    (el, i) =>
+                    {
+                        ModificationCell cell = el as ModificationCell;
+
+                        BuildingWrapper wrapper = (BuildingWrapper)view.itemsSource[i];
+                        cell.Open(wrapper);
+                    }
             });
             #endregion
         }

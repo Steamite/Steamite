@@ -28,7 +28,7 @@ namespace Assets.Scripts.Editor.Buildings.LevelList
 
             T_CONTROL control = this[0] as T_CONTROL;
 
-            if (control is ResourceCell cell)
+            /*if (control is ResourceCell cell)
                 cell.Open(
                     building.Costs[selectedLevel],
                     building, 
@@ -36,7 +36,7 @@ namespace Assets.Scripts.Editor.Buildings.LevelList
 
             else if (control is IUIElement elem)
                 elem.Open(
-                    property.GetArrayElementAtIndex(selectedLevel));
+                    property.GetArrayElementAtIndex(selectedLevel));*/
         }
     }
 }

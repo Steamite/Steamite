@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: Wood
   color: {r: 0.3773585, g: 0.18652998, b: 0.04805981, a: 1}
   image: {fileID: 0}
+  enumLink: 19

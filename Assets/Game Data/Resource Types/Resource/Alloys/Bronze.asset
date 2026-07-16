@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: Bronze
   color: {r: 0.8039216, g: 0.49803922, b: 0.19607843, a: 1}
   image: {fileID: 0}
+  enumLink: 12

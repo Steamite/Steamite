@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: Money
   color: {r: 0.6927292, g: 0.735849, b: 0.12842648, a: 1}
   image: {fileID: 0}
+  enumLink: 0

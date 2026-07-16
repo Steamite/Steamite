@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: Cassiterite
   color: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
   image: {fileID: 0}
+  enumLink: 3

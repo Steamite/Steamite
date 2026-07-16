@@ -1,3 +1,4 @@
+using Assets.Scripts.Editor.Buildings;
 using BuildingStats;
 using ResearchUI;
 using System;
@@ -6,6 +7,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 
 public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
 {
@@ -79,64 +81,40 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
 
                         MaskField field = new MaskField(Enum.GetNames(typeof(BuildingCategType)).ToList(), 0);
                         field.style.width = 350;
-
                         element.Add(field);
-                        EnumField enumField = new EnumField(StatModifiers.Cost);
-                        enumField.style.flexGrow = 1;
-                        element.Add(enumField);
 
-                        DropdownField dropdownField = new DropdownField();
-                        //dropdownField.style.width = 200;
-                        dropdownField.style.width = 0;
-                        element.Add(dropdownField);
-
-                        FloatField floatField = new FloatField();
-                        floatField.style.width = 50;
-                        element.Add(floatField);
-
-                        Toggle toggle = new Toggle("%");
-                        toggle.style.flexDirection = FlexDirection.RowReverse;
-                        toggle.Q<Label>().style.paddingLeft = 10;
-                        toggle.Q<Label>().style.minWidth = 40;
-                        toggle.Q<Label>().style.maxWidth = 40;
-                        element.Add(toggle);
+                        element.Add(new StatRow());
                         return element;
                     };
                 listView.bindItem =
                     (el, j) =>
                     {
-                        StatPair pair = ((Stat)dataGrid.itemsSource[i]).pairs[j];
+                        SerializedProperty statPair = categoryObjects
+                            .GetArrayElementAtIndex(i)
+                            .FindPropertyRelative(nameof(Stat.pairs))
+                            .GetArrayElementAtIndex(j);
+
                         MaskField maskField = el[0] as MaskField;
-                        maskField.value = pair.mask;
-                        maskField.RegisterValueChangedCallback<int>(PairTypeChange);
+                        SerializedProperty mask = statPair.FindPropertyRelative(nameof(StatPair.mask));
 
-                        EnumField enumField = el[1] as EnumField;
-                        enumField.value = pair.statValue.mod;
-                        enumField.SetEnabled(pair.mask != 0);
-                        enumField.RegisterValueChangedCallback<Enum>(ModChange);
+                        maskField.BindProperty(mask);
+                        maskField.TrackPropertyValue(mask, (prop) => PairTypeChange(prop, el));
 
-                        /*DropdownField dropdown = el[2] as DropdownField;
-                        dropdown.choices = Enum.GetNames(modifiers[pair.mod]).ToList();
-                        dropdown.value = Enum.GetName(modifiers[pair.mod], pair.underProp);
-                        dropdown.SetEnabled(pair.mask != 0 && pair.mod > 0);
-                        dropdown.RegisterValueChangedCallback<string>(UnderPropChange);*/
+                        StatRow row = el[1] as StatRow;
+                        SerializedProperty statValue = statPair.FindPropertyRelative(nameof(StatPair.statValue));
 
-
-                        FloatField intField = el[3] as FloatField;
-                        intField.value = pair.statValue.modAmmount;
-                        intField.RegisterValueChangedCallback<float>(FloatChange);
-
-                        Toggle toggle = el[4] as Toggle;
-                        toggle.value = pair.statValue.percent;
-                        toggle.RegisterValueChangedCallback<bool>(PercenageChange);
+                        row.Open(statValue);
                     };
                 listView.unbindItem =
                     (el, j) =>
                     {
-                        ((MaskField)el[0]).UnregisterValueChangedCallback<int>(PairTypeChange);
-                        ((EnumField)el[1]).UnregisterValueChangedCallback<Enum>(ModChange);
+
+                        ((MaskField)el[0]).Unbind();
+                        // .UnregisterValueChangedCallback<int>(PairTypeChange);
+                        ((EnumField)el[1]).Unbind();
+                        //.UnregisterValueChangedCallback<Enum>(ModChange);
                         //((DropdownField)el[2]).UnregisterValueChangedCallback<string>(UnderPropChange);
-                        ((FloatField)el[3]).UnregisterValueChangedCallback<float>(FloatChange);
+                        //((FloatField)el[3]).UnregisterValueChangedCallback<float>(FloatChange);
                     };
             },
             unbindCell =
@@ -147,6 +125,13 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
         });
         #endregion
     }
+
+    private void PairTypeChange(SerializedProperty property, VisualElement element)
+    {
+        int mask = property.intValue;
+        element[1].SetEnabled(mask != 0);
+    }
+
     #region Changes
     Vector2Int GetRowSmall<T>(ChangeEvent<T> ev)
     {
@@ -170,6 +155,8 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
                 q.objectConnection.objectId == stat.id).GetDescr(stat);
 
     }
+
+    /*
     void PairTypeChange(ChangeEvent<int> ev)
     {
         Vector2Int pos = GetRowSmall(ev);
@@ -194,6 +181,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
     }
 
 
+    */
     /*void UnderPropChange(ChangeEvent<string> ev)
     {
         Vector2Int pos = GetRowSmall(ev);
@@ -203,6 +191,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
 
         SaveStatChange(pos.y);
     }*/
+    /*
 
     void FloatChange(ChangeEvent<float> ev)
     {
@@ -221,6 +210,6 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
 
         SaveStatChange(pos.y);
     }
-
+*/
     #endregion
 }

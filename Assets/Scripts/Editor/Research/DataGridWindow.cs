@@ -9,6 +9,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
     where DATA_TYPE : DataObject
 {
     protected MultiColumnListView dataGrid;
+    
 
     protected override void CreateGUI()
     {

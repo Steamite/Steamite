@@ -95,179 +95,209 @@ MonoBehaviour:
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Money
+        description: 
         id: 717031148
         data: {fileID: 11400000, guid: c1f62f9e2918d7e44adacadc45cfec2e, type: 2}
     - rid: 8808251703612669953
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: None
+        description: 
         id: 2093675809
         data: {fileID: 11400000, guid: 8fc4cf8feaad5a648bd0c87ee4ff2ca6, type: 2}
     - rid: 8808251703612669954
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Magnetite
+        description: 
         id: 1685203562
         data: {fileID: 11400000, guid: e523913a9c6ce8d4fb05048da649cfc5, type: 2}
     - rid: 8808251703612669955
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Sphalerite
+        description: 
         id: 1872934075
         data: {fileID: 11400000, guid: 18096b245d628204cba4870671dc9616, type: 2}
     - rid: 8808251703612669956
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Chalcopyrit
+        description: 
         id: 761949678
         data: {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
     - rid: 8808251703612669957
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Cassiterite
+        description: 
         id: 102952598
         data: {fileID: 11400000, guid: 2041a4d797e915a4db26715015bb6e3f, type: 2}
     - rid: 8808251703612669958
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Quartz
+        description: 
         id: 1945550173
         data: {fileID: 11400000, guid: 476987d8701b79b42acf9d04564a5ac0, type: 2}
     - rid: 8808251703612669959
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Gold
+        description: 
         id: 1714933517
         data: {fileID: 11400000, guid: 6f13f7cede6861645a353535afb233de, type: 2}
     - rid: 8808251703612669960
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Argentite
+        description: 
         id: 552440526
         data: {fileID: 11400000, guid: cce725a6a24c0cf49ab46fca0bc08325, type: 2}
     - rid: 8808251703612669961
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Coal
+        description: 
         id: 2000038545
         data: {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
     - rid: 8808251703612669962
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Crocidolite
+        description: 
         id: 121546001
         data: {fileID: 11400000, guid: 805781cfa333b674d931c9d7619402df, type: 2}
     - rid: 8808251703612669963
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Gems
+        description: 
         id: 1596552547
         data: {fileID: 11400000, guid: 6d9ae494b146c3941ad8b8f8c8b0ed8e, type: 2}
     - rid: 8808251703612669964
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Sand
+        description: 
         id: 320798641
         data: {fileID: 11400000, guid: 4ea054a86f63a0347b8df6c4c567b716, type: 2}
     - rid: 8808251703612669965
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Brass
+        description: 
         id: 1429914888
         data: {fileID: 11400000, guid: 1347ef2c9f2b3c44cb6f5e843e1d55bb, type: 2}
     - rid: 8808251703612669966
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Bronze
+        description: 
         id: 668925080
         data: {fileID: 11400000, guid: 1d2e942eab98fe943ab9432e5e945d79, type: 2}
     - rid: 8808251703612669967
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Copper
+        description: 
         id: 860360556
         data: {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
     - rid: 8808251703612669968
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Iron
+        description: 
         id: 1464829392
         data: {fileID: 11400000, guid: f9e61f1dd3b0f9d418d535915c9c5770, type: 2}
     - rid: 8808251703612669969
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Steel
+        description: 
         id: 1423859935
         data: {fileID: 11400000, guid: 9ac8915829687d440ae620920a3cb94e, type: 2}
     - rid: 8808251703612669970
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Glass
+        description: 
         id: 78910601
         data: {fileID: 11400000, guid: e592b624b77a5da49a98b4964344738d, type: 2}
     - rid: 8808251703612669971
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Metal
+        description: 
         id: 2004119615
         data: {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
     - rid: 8808251703612669972
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Stone
+        description: 
         id: 1547625187
         data: {fileID: 11400000, guid: 687a668a325a9a745b73e56a837a898a, type: 2}
     - rid: 8808251703612669973
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Wood
+        description: 
         id: 2076291386
         data: {fileID: 11400000, guid: f7c4f80c59f6ab844b9b3c2a5c726c04, type: 2}
     - rid: 8808251703612669974
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Meat
+        description: 
         id: 1609927396
         data: {fileID: 11400000, guid: 373fd337df8db3b4abb922168bbf5647, type: 2}
     - rid: 8808251703612669975
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Mushrooms
+        description: 
         id: 198505638
         data: {fileID: 11400000, guid: 0a6313d780b942247a9feb75238dcfbc, type: 2}
     - rid: 8808251703612669976
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Bolts
+        description: 
         id: 542523082
         data: {fileID: 11400000, guid: 5fcb622e948252c4fb2a7c663a71ea91, type: 2}
     - rid: 8808251703612669977
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Cogwheel
+        description: 
         id: 1449659268
         data: {fileID: 11400000, guid: 6fee85af489f377499eaab602df43f31, type: 2}
     - rid: 8808251703612669978
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Water
+        description: 
         id: 624505154
         data: {fileID: 11400000, guid: 74b820c555e5e6a419fb4205c0a8eb86, type: 2}
     - rid: 8808251703612669979
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Steam
+        description: 
         id: 157595866
         data: {fileID: 11400000, guid: f8a2946e5edf5df46ae20f11393cd418, type: 2}
     - rid: 8808251983391621197
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Lens
+        description: 
         id: 2104595123
         data: {fileID: 11400000, guid: 0225af04b98e951408452b14f0aab218, type: 2}
     - rid: 8808251983391621198
       type: {class: ResourceWrapper, ns: , asm: BaseAssembly}
       data:
         Name: Tools
+        description: 
         id: 2036373634
         data: {fileID: 11400000, guid: ac2f30fb838ec384fb07c52c3f8f6aa8, type: 2}

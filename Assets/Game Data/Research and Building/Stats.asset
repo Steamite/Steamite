@@ -28,8 +28,8 @@ MonoBehaviour:
         description: 
         id: 392309819
         pairs:
-        - mask: 1
-          underProp: 0
-          mod: 2
-          modAmmount: 1
-          percent: 0
+        - mask: 3
+          statValue:
+            mod: 4
+            modAmmount: 15
+            percent: 0

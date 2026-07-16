@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: Copper
   color: {r: 0.72156864, g: 0.4509804, b: 0.2, a: 1}
   image: {fileID: 0}
+  enumLink: 13

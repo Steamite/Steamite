@@ -1,4 +1,5 @@
 using Assets.Scripts.Editor.Buildings.LevelList;
+using BuildingStats;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,9 +41,8 @@ public class Building : StorageObject
     
     
     /// <summary>Construction cost in resources.</summary>
-    [SerializeField, LevelData] protected List<MoneyResource> costs = new();
-    public List<MoneyResource> Costs => costs;
-    [CreateProperty] public MoneyResource Cost => costs[level];
+    [SerializeField] MoneyResource cost;
+    [CreateProperty] public MoneyResource Cost => cost;
 
     public bool IsWorking => !constructing && !IsUpgrading && !Deconstructing && constructionProgress == 0;
 
@@ -64,12 +64,11 @@ public class Building : StorageObject
     /// <summary>.</summary>
     public int maximalProgress;
 
-    /// <summary>Starts at 0(to avoid index offset for level Lists)</summary>
-    public int level = 0;
-    
-    /// <summary>The number of levels for this building (minimum is 1, base)</summary>
-    [Range(1, MAX_LEVEL)] 
-    public int maxLevel = 1;
+    [CreateProperty] public int ModificationSpace => modificationSpace;
+    [SerializeField] int modificationSpace;
+
+    List<StatValue> appliedModifiers;
+
 
     [Header("Prefab info"), SerializeField] 
     DataAssign prefabConnection;
@@ -163,7 +162,8 @@ public class Building : StorageObject
         save.deconstructing = Deconstructing;
         save.upgrading = IsUpgrading;
         save.constructionProgress = constructionProgress;
-        save.level = level;
+        
+        //save.level = level;
 
         save.prefabConnection = prefabConnection;
 
@@ -180,7 +180,6 @@ public class Building : StorageObject
         IsUpgrading = (save as BuildingSave).upgrading;
         constructionProgress = (save as BuildingSave).constructionProgress;
         maximalProgress = CalculateMaxProgress();
-        level = (save as BuildingSave).level;
         
         localRes.Load((save as BuildingSave).resSave);
         GetRenderComponents();
@@ -397,7 +396,7 @@ public class Building : StorageObject
     {
         if (IsUpgrading)
         {
-            level--;
+            //level--;
             Deconstructing = false;
             FinishBuild();
             return null;
@@ -513,7 +512,7 @@ public class Building : StorageObject
     /// <summary>Short info for building buttons.</summary>
     public virtual List<string> GetInfoText()
     {
-        return new() { $"<u>Costs</u>:\n{costs}" };
+        return new() { $"<u>Cost</u>:\n{cost}" };
     }
 
     /// <summary>Checks if you can afford the building.</summary>
@@ -570,8 +569,8 @@ public class Building : StorageObject
 
     public virtual void InitPrefabData()
     {
-        foreach (var cost in costs)
-            cost.Init();
+        //foreach (var cost in costs)
+        cost.Init();
 
         ((IModifiable)LocalRes.capacity).Init();
 
@@ -622,11 +621,11 @@ public class Building : StorageObject
             return false;
         if (IsUpgrading)
             return false;
-        if (level >= maxLevel-1)
+        /*if (level >= maxLevel-1)
             return false;
         if (!MyRes.CanAfford(costs[level+1]))
             return false;
-
+*/
         return true;
     }
 
@@ -634,7 +633,7 @@ public class Building : StorageObject
     {
         if (!CanUpgrade())
             return;
-        level++;
+        //level++;
 
         IsUpgrading = true;
         constructionProgress = 0;
@@ -655,7 +654,8 @@ public class Building : StorageObject
     {
         Name = prev.Name;
         blueprint = prev.blueprint;
-        costs = prev.costs;
+        cost = prev.cost;
+        //costs = prev.costs;
     }
 
 #endif

@@ -46,10 +46,10 @@ namespace Assets.Scripts.Editor.Buildings.LevelList
             }
 
             List<T> source = new();
-            for (int i = 0; i < _building.maxLevel; i++)
+            /*for (int i = 0; i < _building.maxLevel; i++)
             {
                 source.Add(Activator.CreateInstance<T>());
-            }
+            }*/
             Bind();
         }
         protected virtual void Bind()

@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: Gold
   color: {r: 1, g: 0.9027058, b: 0, a: 1}
   image: {fileID: 0}
+  enumLink: 5

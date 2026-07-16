@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: Stone
   color: {r: 0.5433004, g: 0.5309719, b: 0.7169812, a: 1}
   image: {fileID: 0}
+  enumLink: 18
