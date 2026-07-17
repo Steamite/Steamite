@@ -1,46 +1,49 @@
+using Assets.Scripts.Editor.Research;
 using InfoWindowElements;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 [UxmlElement]
-public partial class ResourceCell : ResourceList
+public partial class EditorResourceCell : VisualElement
 {
-    Resource resource;
-    MoneyResource moneyResource;
-    public Object whatToSave;
+    SerializedProperty resourceProperty;
+    EditorResourceList resourceList;
     IntegerField capacityField;
-    Label noneLabel;
-
 
     [UxmlAttribute]
     public List<int> allowedCategories;
-    public ResourceCell() : base()
-    {
 
+    public EditorResourceCell()
+    {
+        resourceList = new();
+        Add(resourceList);
         focusable = true;
+/*
         showEmpty = true;
         unbindItem = UnbindItem;
         onAdd = Add;
         onRemove = Remove;
         allowAdd = true;
         allowRemove = false;
-        selectionType = SelectionType.Single;
+        selectionType = SelectionType.Single;*/
 
         #region Capacity Field
         capacityField = new IntegerField("Capacity");
         capacityField.Q<Label>().style.minWidth = 0;
+        /*capacityField.
         capacityField.RegisterValueChangedCallback<int>(
             (ev) =>
             {
                 if (moneyResource != null)
                     (moneyResource).Money = new(ev.newValue);
                 EditorUtility.SetDirty(whatToSave);
-            });
+            });*/
         capacityField.style.width = new Length(50, LengthUnit.Percent);
         capacityField.style.position = Position.Absolute;
         capacityField.style.left = 0;
@@ -48,7 +51,7 @@ public partial class ResourceCell : ResourceList
         hierarchy.Add(capacityField);
         #endregion
     }
-
+    /*
     #region Item Events
 
     protected virtual void Add(BaseListView _)
@@ -125,7 +128,8 @@ public partial class ResourceCell : ResourceList
         return el;
     }
     #endregion
-
+    */
+/*
     #region Value Updates
     /// <summary>
     /// Changes the ammount of a given type (<paramref name="evt"/>).
@@ -160,47 +164,39 @@ public partial class ResourceCell : ResourceList
         EditorUtility.SetDirty(whatToSave);
     }
     #endregion
+*/
 
-    /// <summary>
-    /// Preps the resource List using <paramref name="_resource"/>.
-    /// </summary>
-    /// <param name="_resource">Editing resource.</param>
-    /// <param name="_whatToSave">Object containing the resource.</param>
-    /// <param name="_cost">Is it a cost resource?</param>
-    public void Open(Resource _resource, Object _whatToSave, bool _cost)
+    public void Unbind()
     {
-        whatToSave = _whatToSave;
-        if (_resource != null)
+        resourceList.Unbind();
+    }
+
+    public void Open(SerializedProperty property)
+    {
+        resourceList.Open(property);
+
+        if (property == null)
+            return;
+
+        switch (property.type)
         {
-            showAddRemoveFooter = true;
-            capacityField.visible = true;
-            
-            if (_resource is MoneyResource _moneyRes)
-            {
-                moneyResource = _moneyRes;
-                capacityField.value = _moneyRes.Money.currentValue;
-                resource = _moneyRes.EditorResource;
-                capacityField.visible = true;
-                capacityField.label = "Money";
-            }
-            else
-            {
-                resource = _resource;
-                capacityField.label = "Capacity";
-            }
-            itemsSource = ToUIRes(resource);
-            noneLabel.text = "Empty";
-            style.display = DisplayStyle.Flex;
-            capacityField.style.display = DisplayStyle.Flex;
-        }
-        else
-        {
-            resource = null;
-            showAddRemoveFooter = false;
-            itemsSource = new List<UIResource>();
-            noneLabel.text = "Nothing";
-            style.display = DisplayStyle.None;
-            capacityField.style.display = DisplayStyle.None;
+            case nameof(CapacityResource):
+                capacityField.BindProperty(
+                    property
+                        .FindPropertyRelative("capacity")
+                        .FindPropertyRelative("baseValue")
+                    );
+                break;
+            case nameof(MoneyResource):
+                capacityField.BindProperty(
+                    property
+                        .FindPropertyRelative("money")
+                        .FindPropertyRelative("baseValue")
+                    );
+                break;
+            default:
+                capacityField.style.display = DisplayStyle.None;
+                break;
         }
     }
 }

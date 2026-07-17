@@ -8,7 +8,10 @@ namespace Levels
     [Serializable]
     public struct BuildingModifications
     {
+        public string name;
+        public int size;
+
         public MoneyResource resource;
-        public StatValue statValue;
+        public List<StatValue> statValues;
     }
 }

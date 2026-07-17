@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; padding-left: 10px; padding-right: 10px;">
+        <ui:VisualElement name="Space" style="flex-grow: 0; flex-direction: row; justify-content: space-between;">
+            <ui:Label text="Space:" name="Label"/>
+            <ui:Label text="###/###" name="Value"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
