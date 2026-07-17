@@ -206,18 +206,20 @@ MonoBehaviour:
         y: 0
       itemType: 3
   cost:
-    types: []
-    ammounts: 
+    types:
+    - {fileID: 11400000, guid: 6f13f7cede6861645a353535afb233de, type: 2}
+    - {fileID: 11400000, guid: cce725a6a24c0cf49ab46fca0bc08325, type: 2}
+    ammounts: 320000000f000000
     baseResource:
       types:
-      - {fileID: 11400000, guid: 476987d8701b79b42acf9d04564a5ac0, type: 2}
-      - {fileID: 11400000, guid: 5fcb622e948252c4fb2a7c663a71ea91, type: 2}
-      ammounts: 3300000013000000
+      - {fileID: 11400000, guid: 6d9ae494b146c3941ad8b8f8c8b0ed8e, type: 2}
+      - {fileID: 11400000, guid: 5730a645627bf974aa5a37489dfabf0f, type: 2}
+      ammounts: 0e00000013000000
     mod:
       percentMod: 1
       absoluteMod: 0
     money:
-      baseValue: 0
+      baseValue: 40
       currentValue: 0
       mod:
         percentMod: 1

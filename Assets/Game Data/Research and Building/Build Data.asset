@@ -98,7 +98,27 @@ MonoBehaviour:
         description: dsadasdsadas
         id: 1458562700
         building: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
-        modifications: []
+        modifications:
+        - name: 13
+          size: 0
+          resource:
+            types:
+            - {fileID: 11400000, guid: 1347ef2c9f2b3c44cb6f5e843e1d55bb, type: 2}
+            - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
+            ammounts: 0f0000000a000000
+            baseResource:
+              types: []
+              ammounts: 
+            mod:
+              percentMod: 0
+              absoluteMod: 0
+            money:
+              baseValue: 0
+              currentValue: 0
+              mod:
+                percentMod: 0
+                absoluteMod: 0
+          statValues: []
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 28711bc89a9f8b244a01e3d359df53d2, type: 3}
     - rid: 8808251703612669980
@@ -118,7 +138,30 @@ MonoBehaviour:
         description: 
         id: 1235511660
         building: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
-        modifications: []
+        modifications:
+        - name: 15
+          size: 0
+          resource:
+            types:
+            - {fileID: 11400000, guid: 476987d8701b79b42acf9d04564a5ac0, type: 2}
+            - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+            ammounts: 1e0000000a000000
+            baseResource:
+              types: []
+              ammounts: 
+            mod:
+              percentMod: 0
+              absoluteMod: 0
+            money:
+              baseValue: 30
+              currentValue: 0
+              mod:
+                percentMod: 0
+                absoluteMod: 0
+          statValues:
+          - mod: 3
+            modAmmount: 50
+            percent: 1
         selectedLevel: 0
         preview: {fileID: 21300000, guid: e2dedb0ab53d02a4a8b0e2eb23c72ddb, type: 3}
     - rid: 8808251703612669985
@@ -128,7 +171,46 @@ MonoBehaviour:
         description: 
         id: 1915475883
         building: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
-        modifications: []
+        modifications:
+        - name: 5
+          size: 0
+          resource:
+            types:
+            - {fileID: 11400000, guid: 6f13f7cede6861645a353535afb233de, type: 2}
+            - {fileID: 11400000, guid: 8fc4cf8feaad5a648bd0c87ee4ff2ca6, type: 2}
+            ammounts: 0a0000000a000000
+            baseResource:
+              types: []
+              ammounts: 
+            mod:
+              percentMod: 0
+              absoluteMod: 0
+            money:
+              baseValue: 0
+              currentValue: 0
+              mod:
+                percentMod: 0
+                absoluteMod: 0
+          statValues: []
+        - name: 1
+          size: 45
+          resource:
+            types:
+            - {fileID: 11400000, guid: 6f13f7cede6861645a353535afb233de, type: 2}
+            ammounts: 0a000000
+            baseResource:
+              types: []
+              ammounts: 
+            mod:
+              percentMod: 0
+              absoluteMod: 0
+            money:
+              baseValue: 0
+              currentValue: 0
+              mod:
+                percentMod: 0
+                absoluteMod: 0
+          statValues: []
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 6141d9965f66f6a4097dac7efb27eaa4, type: 3}
     - rid: 8808251703612669986

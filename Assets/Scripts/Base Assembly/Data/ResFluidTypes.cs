@@ -17,7 +17,7 @@ public static class ResFluidTypes
         {
 #if UNITY_EDITOR
             if (none == null)
-                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.PATH));
+                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH));
 #endif
             return none;
         }
@@ -30,7 +30,7 @@ public static class ResFluidTypes
         {
 #if UNITY_EDITOR
             if (resources == null)
-                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.PATH));
+                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH));
 #endif
             return resources;
         }
@@ -43,7 +43,7 @@ public static class ResFluidTypes
         {
 #if UNITY_EDITOR
             if (fluids == null)
-                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.PATH));
+                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH));
 #endif
             return fluids;
         }
@@ -56,7 +56,7 @@ public static class ResFluidTypes
         {
 #if UNITY_EDITOR
             if (fullRes == null)
-                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.PATH));
+                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH));
 #endif 
             return fullRes;
         }
@@ -172,10 +172,18 @@ public static class ResFluidTypes
         List<ResourceType> results = new();
         foreach (var t in types)
         {
-            results.Add(fullRes.FirstOrDefault(q => q.id == t.categoryId).Objects.FirstOrDefault(q => q.id == t.objectId)?.data);
+            results.Add(LoadType(t));
         }
         return results;
     }
+    public static ResourceType LoadType(DataAssign type)
+    {
+        return fullRes
+            .FirstOrDefault(q => q.id == type.categoryId)
+            .Objects
+            .FirstOrDefault(q => q.id == type.objectId)?.data;
+    }
+
 
     public static DataAssign GetSaveIndex(ResourceType q)
     {

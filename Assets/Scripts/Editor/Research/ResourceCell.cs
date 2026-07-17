@@ -16,10 +16,12 @@ public partial class ResourceCell : ResourceList
     IntegerField capacityField;
     Label noneLabel;
 
+
     [UxmlAttribute]
     public List<int> allowedCategories;
     public ResourceCell() : base()
     {
+
         focusable = true;
         showEmpty = true;
         unbindItem = UnbindItem;

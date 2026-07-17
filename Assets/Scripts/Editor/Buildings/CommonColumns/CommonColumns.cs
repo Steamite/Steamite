@@ -77,20 +77,20 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
 
             #region Cost
             view.columns["cost"].makeCell =
-                () => new ResourceCell();//FieldLevelList<MoneyResource, ResourceCell>("costs");//new ResourceCell();
+                () => new EditorResourceCell();//FieldLevelList<MoneyResource, ResourceCell>("costs");//new ResourceCell();
             view.columns["cost"].bindCell =
                 (el, i) =>
                 {
                     el.parent.focusable = true;
-                    ResourceCell cell = el.Q<ResourceCell>();
+                    EditorResourceCell cell = el.Q<EditorResourceCell>();
                     SerializedObject wrapper = register.GetBuildingAt(i);
                     SerializedProperty cost = wrapper.FindProperty("cost");
 
                     cell.Open(cost);
 
                     /*BuildingWrapper wrapper = (BuildingWrapper)view.itemsSource[i];
-                    Building building = wrapper.Building;*/
-                    /*if (building == null)
+                    Building building = wrapper.Building;
+                    if (building == null)
                         return;
 
                     cell.Open(building.Cost, building, true);*/
@@ -169,6 +169,8 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
             #region
             view.columns.Add(new()
             {
+                title = "Modifications",
+                name = "modifications",
                 makeCell = 
                     () => new ModificationCell(),
                 bindCell =
@@ -176,9 +178,12 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                     {
                         ModificationCell cell = el as ModificationCell;
 
-                        BuildingWrapper wrapper = (BuildingWrapper)view.itemsSource[i];
+                        SerializedProperty wrapper = register.categoryObjects.GetArrayElementAtIndex(i);
                         cell.Open(wrapper);
-                    }
+                    },
+                stretchable = true,
+                
+                    
             });
             #endregion
         }
