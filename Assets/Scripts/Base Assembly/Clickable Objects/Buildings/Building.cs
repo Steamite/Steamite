@@ -1,3 +1,5 @@
+
+
 using Assets.Scripts.Editor.Buildings.LevelList;
 using BuildingStats;
 using System;
@@ -141,6 +143,7 @@ public class Building : StorageObject
     /// <param name="toEnable">List of components to enable in the Visual Element.</param>
     protected virtual void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
     {
+        //toEnable.Add("Modifications", new() { "Modifications" });
         info.CreateTabbedView(toEnable, this);
     }
 
@@ -577,6 +580,7 @@ public class Building : StorageObject
         #region Interface modifiers
         if (this is IAssign assign)
         {
+            assign.AssignData.Init();//= assign.AssignData.Init();
             //((IModifiable)assign.AssignData.SetLimit().SetLevel()).Init();
         }
 

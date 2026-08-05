@@ -1,3 +1,5 @@
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +24,7 @@ namespace BuildingStats
         /// <summary>Which properies are effected.</summary>
         public StatModifiers mod;
         /// <summary>How much much it effects it.</summary>
-        public float modAmmount;
+        public int modAmmount;
         /// <summary>If the modification is absolute or by a percentage;</summary>
         public bool percent;
     }

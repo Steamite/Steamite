@@ -1,3 +1,5 @@
+
+
 using System.Collections.Generic;
 
 /// <summary>Custom made queue to effectivly find paths.</summary>

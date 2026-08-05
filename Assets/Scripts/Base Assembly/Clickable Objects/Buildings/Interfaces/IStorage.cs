@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿
+
+using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
 /// Serves as a store house for the colony.<br/>

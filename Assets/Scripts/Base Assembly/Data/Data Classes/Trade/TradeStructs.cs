@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using UnityEngine;
 
 /// <summary>Customizes Trade deals</summary>

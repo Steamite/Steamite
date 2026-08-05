@@ -147,13 +147,7 @@ MonoBehaviour:
     ammounts: 
     capacity:
       baseValue: 200
-      currentValue: 200
-      mod:
-        percentMod: 1
-        absoluteMod: 0
-    requests: []
-    carriers: []
-    mods: 
+      currentValue: 0
   meshRenderers: []
   buildingCategories: 2
   blueprint:
@@ -200,61 +194,23 @@ MonoBehaviour:
         z: 1
         y: 0
       itemType: 3
-  costs:
-  - types: []
+  cost:
+    types: []
     ammounts: 
     baseResource:
       types: []
       ammounts: 
-    mod:
-      percentMod: 1
-      absoluteMod: 0
     money:
       baseValue: 0
       currentValue: 0
-      mod:
-        percentMod: 1
-        absoluteMod: 0
-  - types: []
-    ammounts: 
-    baseResource:
-      types: []
-      ammounts: 
-    mod:
-      percentMod: 1
-      absoluteMod: 0
-    money:
-      baseValue: 0
-      currentValue: 0
-      mod:
-        percentMod: 1
-        absoluteMod: 0
-  - types: []
-    ammounts: 
-    baseResource:
-      types: []
-      ammounts: 
-    mod:
-      percentMod: 1
-      absoluteMod: 0
-    money:
-      baseValue: 0
-      currentValue: 0
-      mod:
-        percentMod: 1
-        absoluteMod: 0
-  constructed: 0
-  deconstructing: 0
+  constructing: 0
   constructionProgress: 0
   maximalProgress: 0
-  level: 0
-  maxLevel: 1
+  modificationSpace: 0
   prefabConnection:
     categoryId: 190792688
     objectId: 343481641
-  assignLimit:
-    baseValue: 3
-    currentValue: 3
-    mod:
-      percentMod: 1
-      absoluteMod: 0
+  assignData:
+    AssignLimit:
+      baseValue: 3
+      currentValue: 0

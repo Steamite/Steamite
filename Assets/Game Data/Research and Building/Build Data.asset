@@ -109,15 +109,9 @@ MonoBehaviour:
             baseResource:
               types: []
               ammounts: 
-            mod:
-              percentMod: 0
-              absoluteMod: 0
             money:
               baseValue: 0
               currentValue: 0
-              mod:
-                percentMod: 0
-                absoluteMod: 0
           statValues: []
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 28711bc89a9f8b244a01e3d359df53d2, type: 3}
@@ -149,15 +143,9 @@ MonoBehaviour:
             baseResource:
               types: []
               ammounts: 
-            mod:
-              percentMod: 0
-              absoluteMod: 0
             money:
               baseValue: 30
               currentValue: 0
-              mod:
-                percentMod: 0
-                absoluteMod: 0
           statValues:
           - mod: 3
             modAmmount: 50
@@ -182,15 +170,9 @@ MonoBehaviour:
             baseResource:
               types: []
               ammounts: 
-            mod:
-              percentMod: 0
-              absoluteMod: 0
             money:
               baseValue: 0
               currentValue: 0
-              mod:
-                percentMod: 0
-                absoluteMod: 0
           statValues: []
         - name: 1
           size: 45
@@ -201,15 +183,9 @@ MonoBehaviour:
             baseResource:
               types: []
               ammounts: 
-            mod:
-              percentMod: 0
-              absoluteMod: 0
             money:
               baseValue: 0
               currentValue: 0
-              mod:
-                percentMod: 0
-                absoluteMod: 0
           statValues: []
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 6141d9965f66f6a4097dac7efb27eaa4, type: 3}

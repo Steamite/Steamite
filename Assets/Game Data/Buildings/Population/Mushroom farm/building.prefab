@@ -147,13 +147,7 @@ MonoBehaviour:
     ammounts: 
     capacity:
       baseValue: 25
-      currentValue: 25
-      mod:
-        percentMod: 1
-        absoluteMod: 0
-    requests: []
-    carriers: []
-    mods: 
+      currentValue: 0
   meshRenderers: []
   buildingCategories: 2
   blueprint:
@@ -200,89 +194,42 @@ MonoBehaviour:
         z: 1
         y: 0
       itemType: 3
-  costs:
-  - types: []
+  cost:
+    types: []
     ammounts: 
     baseResource:
       types: []
       ammounts: 
-    mod:
-      percentMod: 0
-      absoluteMod: 0
     money:
       baseValue: 0
       currentValue: 0
-      mod:
-        percentMod: 0
-        absoluteMod: 0
-  - types: []
-    ammounts: 
-    baseResource:
-      types: []
-      ammounts: 
-    mod:
-      percentMod: 0
-      absoluteMod: 0
-    money:
-      baseValue: 0
-      currentValue: 0
-      mod:
-        percentMod: 0
-        absoluteMod: 0
-  - types: []
-    ammounts: 
-    baseResource:
-      types: []
-      ammounts: 
-    mod:
-      percentMod: 0
-      absoluteMod: 0
-    money:
-      baseValue: 0
-      currentValue: 0
-      mod:
-        percentMod: 0
-        absoluteMod: 0
-  constructed: 0
-  deconstructing: 0
+  constructing: 0
   constructionProgress: 0
   maximalProgress: 0
-  level: 0
-  maxLevel: 1
+  modificationSpace: 0
   prefabConnection:
     categoryId: 3
     objectId: 640485558
-  assignLimit:
-    baseValue: 3
-    currentValue: 3
-    mod:
-      percentMod: 1
-      absoluteMod: 0
+  assignData:
+    AssignLimit:
+      baseValue: 2
+      currentValue: 0
   productionTime: 2
   prodSpeed:
     baseValue: 1
-    currentValue: 1
-    mod:
-      percentMod: 1
-      absoluteMod: 0
+    currentValue: 0
   resourceCost:
     types: []
     ammounts: 
     baseResource:
       types: []
       ammounts: 
-    mod:
-      percentMod: 1
-      absoluteMod: 0
   resourceYield:
     types: []
-    ammounts: 05000000
+    ammounts: 00000000
     baseResource:
       types: []
       ammounts: 05000000
-    mod:
-      percentMod: 1
-      absoluteMod: 0
   recipesAssigmnet:
   - categoryId: 44722519
     objectId: 1603209656
@@ -292,24 +239,15 @@ MonoBehaviour:
     baseResource:
       types: []
       ammounts: 
-    mod:
-      percentMod: 1
-      absoluteMod: 0
   fluidYeild:
     types: []
     ammounts: 
     baseResource:
       types: []
       ammounts: 
-    mod:
-      percentMod: 1
-      absoluteMod: 0
   storedFluids:
     types: []
     ammounts: 
     capacity:
       baseValue: 0
       currentValue: 0
-      mod:
-        percentMod: 1
-        absoluteMod: 0

@@ -1,3 +1,5 @@
+
+
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -203,20 +205,21 @@ public class UIOverlay : MonoBehaviour
     /// <param name="r">Road with the tile.</param>
     public void ToggleEntryPoints(Road r)
     {
-        if (r)
-            foreach (Building building in r.entryPoints)
+        if (!r)
+            return;
+        foreach (Building building in r.entryPoints)
+        {
+            Transform rect = buildingOverlays.First(q => q.building == building).transform;
+            for (int i = 0; i < rect.childCount; i++)
             {
-                Transform rect = buildingOverlays.First(q => q.building == building).transform;
-                for (int i = 0; i < rect.childCount; i++)
+                GameObject tileObject = rect.GetChild(i).gameObject;
+                if (r.GetPos().Equals(new GridPos(tileObject.transform.position)))
                 {
-                    GameObject tileObject = rect.GetChild(i).gameObject;
-                    if (r.GetPos().Equals(new GridPos(tileObject.transform.position)))
-                    {
-                        tileObject.SetActive(false);
-                        break;
-                    }
+                    tileObject.SetActive(false);
+                    break;
                 }
             }
+        }
     }
 
 
