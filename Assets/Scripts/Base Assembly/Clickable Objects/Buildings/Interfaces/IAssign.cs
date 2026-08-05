@@ -5,12 +5,19 @@ using Unity.Properties;
 using UnityEngine;
 
 [Serializable]
-public struct AssignData
+public class AssignData
 {
     public ModifiableInteger AssignLimit;
-    
-    public int AssignNumber { get; private set; }
+
+    public int AssignNumber => Assign.Count;
     public List<Human> Assign { get; private set; }
+
+
+    public void Init()
+    {
+        ((IModifiable)AssignLimit).Init();
+        Assign = new List<Human>();
+    }
 
     public void SetLimit(int limit)
     {
@@ -24,31 +31,36 @@ public struct AssignData
     {
         if (AssignNumber == AssignLimit.currentValue)
             return false;
-        Assign[AssignNumber] = human;
-        AssignNumber++;
+        Assign.Add(human);
         return true;
     }
 
     public void RemoveHuman(Human human)
     {
-        int i;
+        Assign.Remove(human);
+        /*int i;
         for (i = 0; i < AssignNumber; i++)
         {
             if (Assign[i].id == human.id)
                 break;
         }
+        
         Assign[i] = null;
         for (; i < AssignNumber; i++)
         {
             Assign[i] = Assign[i + 1];
         }
-        AssignNumber--;
+        AssignNumber--;*/
     }
 
     public void RemoveAll()
     {
         Assign.Clear();
-        AssignNumber = 0;
+        /*for (int i = 0; i < Assign.Length; i++)
+        {
+            Assign[i] = null;
+        }
+        AssignNumber = 0;*/
     }
 }
 

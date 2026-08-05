@@ -1,3 +1,5 @@
+
+
 using System;
 
 /// <summary>One tile/node in path, used in pathfinding.</summary>

@@ -1,18 +1,37 @@
-﻿using BuildingStats;
+﻿
+
+using BuildingStats;
 using System;
 using UnityEngine;
 
 [Serializable]
 public class ModValue
 {
-    public float percentMod;
-    public int absoluteMod;
+    public float percentMod { get; private set; }
+    public int absoluteMod { get; private set; }
+
+  /*  ModValue(int percent, int absolute)
+    {
+        percentMod = percent;
+        absoluteMod = absolute;
+    }*/
 
     public ModValue()
     {
         percentMod = 1;
         absoluteMod = 0;
     }
+    public void Init()
+    {
+        percentMod = 1;
+        absoluteMod = 0;
+    }
+
+    public void ModifyPercent(int ammount)
+        => percentMod += ammount;
+
+    public void ModifyAbsolute(int ammount)
+        => absoluteMod += ammount;
 }
 
 public interface IModifiable
@@ -30,9 +49,9 @@ public interface IModifiable
     public void AddMod(StatValue stat)
     {
         if (stat.percent)
-            Modifier.percentMod += stat.modAmmount * 0.01f;
+            Modifier.ModifyPercent(stat.modAmmount);
         else
-            Modifier.absoluteMod += Mathf.RoundToInt(stat.modAmmount);
+            Modifier.ModifyAbsolute(Mathf.RoundToInt(stat.modAmmount));
         RecalculateMod();
     }
 }

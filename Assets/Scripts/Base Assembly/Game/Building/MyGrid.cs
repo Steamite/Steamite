@@ -1,3 +1,5 @@
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -204,9 +206,9 @@ public static class MyGrid
     {
         GridPos gridPos = building.GetPos();
         if (building is Pipe)
-            return levels[gridPos.y].CanPlace(building as Pipe, gridPos);
+            return levels[gridPos.y].CanPlacePipe(building as Pipe, gridPos);
         else
-            return levels[gridPos.y].CanPlace(building, gridPos);
+            return levels[gridPos.y].CanPlaceBuilding(building, gridPos);
     }
 
     #endregion Checking

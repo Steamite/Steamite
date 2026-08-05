@@ -148,12 +148,6 @@ MonoBehaviour:
     capacity:
       baseValue: 5
       currentValue: 0
-      mod:
-        percentMod: 1
-        absoluteMod: 0
-    requests: []
-    carriers: []
-    mods: 
   meshRenderers: []
   buildingCategories: 8
   blueprint:
@@ -200,89 +194,42 @@ MonoBehaviour:
         z: 1
         y: 0
       itemType: 3
-  costs:
-  - types: []
+  cost:
+    types: []
     ammounts: 
     baseResource:
       types: []
       ammounts: 
-    mod:
-      percentMod: 0
-      absoluteMod: 0
     money:
       baseValue: 0
       currentValue: 0
-      mod:
-        percentMod: 0
-        absoluteMod: 0
-  - types: []
-    ammounts: 
-    baseResource:
-      types: []
-      ammounts: 
-    mod:
-      percentMod: 0
-      absoluteMod: 0
-    money:
-      baseValue: 0
-      currentValue: 0
-      mod:
-        percentMod: 0
-        absoluteMod: 0
-  - types: []
-    ammounts: 
-    baseResource:
-      types: []
-      ammounts: 
-    mod:
-      percentMod: 0
-      absoluteMod: 0
-    money:
-      baseValue: 0
-      currentValue: 0
-      mod:
-        percentMod: 0
-        absoluteMod: 0
-  constructed: 0
-  deconstructing: 0
+  constructing: 0
   constructionProgress: 0
   maximalProgress: 0
-  level: 0
-  maxLevel: 1
+  modificationSpace: 0
   prefabConnection:
     categoryId: 4
     objectId: 1611848327
-  assignLimit:
-    baseValue: 2
-    currentValue: 2
-    mod:
-      percentMod: 1
-      absoluteMod: 0
+  assignData:
+    AssignLimit:
+      baseValue: 1
+      currentValue: 0
   productionTime: 2
   prodSpeed:
     baseValue: 1
-    currentValue: 1
-    mod:
-      percentMod: 1
-      absoluteMod: 0
+    currentValue: 0
   resourceCost:
     types: []
-    ammounts: 02000000
+    ammounts: 00000000
     baseResource:
       types: []
       ammounts: 02000000
-    mod:
-      percentMod: 1
-      absoluteMod: 0
   resourceYield:
     types: []
     ammounts: 
     baseResource:
       types: []
       ammounts: 
-    mod:
-      percentMod: 1
-      absoluteMod: 0
   recipesAssigmnet:
   - categoryId: 44722519
     objectId: 874673824
@@ -292,24 +239,15 @@ MonoBehaviour:
     baseResource:
       types: []
       ammounts: 
-    mod:
-      percentMod: 1
-      absoluteMod: 0
   fluidYeild:
     types: []
     ammounts: 05000000
     baseResource:
       types: []
       ammounts: 
-    mod:
-      percentMod: 1
-      absoluteMod: 0
   storedFluids:
     types: []
     ammounts: 
     capacity:
       baseValue: 15
       currentValue: 0
-      mod:
-        percentMod: 1
-        absoluteMod: 0

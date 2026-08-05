@@ -1,3 +1,5 @@
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,7 +92,7 @@ public static class PathFinder
         coordinates.elevPositions = new();
         coordinates.connections = new();
 
-        Building part = MyGrid.GetGridItem(_start).GetComponent<Building>(); // gets tile build reference if standing on it
+        Building part = MyGrid.GetGridItem(_start) as Building; // gets tile build reference if standing on it
         Plan plan = new();
 
         for (int i = 0; i < objects.Count; i++)

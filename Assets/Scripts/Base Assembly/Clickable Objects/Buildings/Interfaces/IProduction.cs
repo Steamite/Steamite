@@ -1,3 +1,5 @@
+
+
 public interface IProduction
 {
     #region Properties
@@ -22,7 +24,7 @@ public interface IProduction
     /// <param name="progress">Ammount to add.</param>
     public void ProgressProduction(float progress)
     {
-        CurrentTime += +ProdSpeed;
+        CurrentTime += ProdSpeed.currentValue;
         ((IUpdatable)this).UIUpdate(nameof(CurrentTime));
         if (CurrentTime >= ProdTime)
             Product();

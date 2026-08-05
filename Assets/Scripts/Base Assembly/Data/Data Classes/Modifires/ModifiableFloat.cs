@@ -1,3 +1,5 @@
+
+
 using System;
 using UnityEngine;
 
@@ -21,7 +23,7 @@ public class ModifiableFloat : IModifiable
 
     public virtual void RecalculateMod()
     {
-        currentValue = (baseValue * Modifier.percentMod) + Modifier.absoluteMod;
+        currentValue = (baseValue * (Modifier.percentMod)) + Modifier.absoluteMod;
     }
     public ModifiableFloat() { }
     public ModifiableFloat(float defValue)
@@ -29,11 +31,6 @@ public class ModifiableFloat : IModifiable
         baseValue = defValue;
         ((IModifiable)this).Init();
     }
-
-    public static float operator -(ModifiableFloat f)
-        => f.currentValue;
-    public static float operator +(ModifiableFloat f)
-        => f.currentValue;
 
     public static float operator -(ModifiableFloat f, int a)
         => f.currentValue - a;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 
 [Serializable]
 public class ProductionRecipe : DataObject
