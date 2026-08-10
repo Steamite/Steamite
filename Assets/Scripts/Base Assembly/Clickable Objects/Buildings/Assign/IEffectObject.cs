@@ -18,10 +18,10 @@ public interface IEffectObject
     void RepaintTiles()
     {
         // TODO
-        if(this is ClickableObject clickable && clickable.selected)
+        /*if(this is ClickableObject clickable && clickable.selected)
             SceneRefs.Overlays.overlay.MarkTiles(
                 EffectRoads.Select(q => q.GetPos()), 
-                Color.green);
+                Color.green);*/
     }
 
     public void RecalculateRange()

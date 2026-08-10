@@ -1,147 +1,157 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-struct XY
-{
-    public int x;
-    public int y;
-
-    public XY(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-}
-
 public class OverlayController : MonoBehaviour, IAfterLoad
 {
-    List<XY> positions;
-    Image[,] images;
-    [SerializeField] Gradient integrityColor;
-    [SerializeField] float maxIntegrity;
-    [SerializeField] Material overlayMaterial;
-    //[SerializeField] Vector2 integrityRange;
+    [SerializeField] Material overlayMapMaterial;
 
-    [SerializeField] InputAction toggleIntegrityOverlay;
-    bool integrity;
+    [SerializeField] Texture2D texture;
+    [SerializeField] Texture2D gradientTexture;
 
+    Image map;
+
+    List<BaseOverlay> overlayModes;
+    int activeOverlay = -1;
+
+    NativeArray<float> overlayValueMap;
+    #region Init
     public void AfterInit()
     {
-        RectTransform rect = transform as RectTransform;
         int grid = MyGrid.GridSize;
-        images = new Image[grid, grid];
-        positions = new();
-        GridPos pos = new();
 
-        for (int x = 0; x < grid; x++)
-        {
-            pos.x = x;
-            for (int y = 0; y < grid; y++)
-            {
-                pos.z = -y;
-                Image image = OverlayUtils.CreateTile(
-                    pos, 
-                    rect, 
-                    pos.ToString());
-                image.gameObject.SetActive(false);
-                image.material = overlayMaterial;
-                image.maskable = false;
-                images[x, y] = image;
-            }
-        }
+        overlayValueMap = new(grid * grid, Allocator.Persistent, NativeArrayOptions.ClearMemory);
 
-        integrity = false;
-        toggleIntegrityOverlay.Enable();
-        toggleIntegrityOverlay.performed += (e) =>
+        CreateOverlayMap(grid);
+        CreateTexture(grid);
+        AttachOverlays();
+    }
+
+    void CreateOverlayMap(int size)
+    {
+        map = new GameObject(
+            "map",
+            typeof(RectTransform), typeof(Image))
+                .GetComponent<Image>();
+
+        map.rectTransform.SetParent(transform, false);
+        map.rectTransform.anchoredPosition = new(size / 2, size / 2);
+        map.rectTransform.sizeDelta = new(size, size);
+
+        map.material = overlayMapMaterial;
+        map.gameObject.SetActive(false);
+    }
+
+    void CreateTexture(int size)
+    {
+        texture = new(size, size, TextureFormat.RFloat, false)
         {
-            if (!integrity)
-                IntegrityOverlay();
-            else
-                ClearTiles();
-            integrity = !integrity;
+            filterMode = FilterMode.Bilinear
         };
+        overlayMapMaterial.SetTexture("_MainTex", texture);
     }
 
-    void ClearTiles()
+    bool CheckBindings(BaseOverlay overlay, int i, List<string> paths)
     {
-        foreach (var item in images)
+        List<string> temp = overlay.input.bindings.Select(q => q.effectivePath).ToList();
+        if (temp.Count == 0 || temp.Any(q => string.IsNullOrEmpty(q)))
         {
-            item.gameObject.SetActive(false);
+            Debug.LogWarning($"No binding set for overlay ({i}) {overlay.name}");
+            return true;
         }
-        /*
-        foreach (var item in positions)
+
+        foreach (var item in temp)
         {
-            images[item.x, item.y].gameObject.SetActive(false);
-        }*/
-        positions.Clear();
-    }
-
-    void ClearAllTiles()
-    {
-        foreach (var item in images)
-        {
-            item.gameObject.SetActive(false);
-        }
-        positions.Clear();
-    }
-
-
-    public void MarkTiles(IEnumerable<GridPos> pos, Color color)
-    {
-        ClearTiles();
-
-        foreach (var item in pos)
-        {
-            XY xy = new((int) item.x, (int) item.z);
-
-            images[xy.x, xy.y].gameObject.SetActive(true);
-            images[xy.x, xy.y].color = color;
-
-            positions.Add(xy);
-        }
-    }
-
-    public void IntegrityOverlay()
-    {
-        ClearTiles();
-
-        int size = MyGrid.GridSize;
-        var grid = MyGrid.GetGridTilesCurrentLevel();
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
+            if (paths.Contains(item))
             {
-                images[i, j].gameObject.SetActive(true);
-
-                images[i, j].color = integrityColor.Evaluate(grid[i, j].Stability / maxIntegrity);
+                Debug.LogWarning($"Binding already used for another overlay ({item}) {overlay.name}");
+                return true;
             }
+            else
+                paths.Add(item);
         }
+        return false;
     }
 
-    /*public void CreateTileOverlay(IEnumerable<GridPos> positions)
+    void AttachOverlays()
     {
-        OverlayGroup = new("GroupOverlay", typeof(RectTransform));
-        OverlayGroup.layer = LayerMask.NameToLayer("Overlays");
-        OverlayGroup.transform.SetParent(transform.GetChild(0));
-
-        RectTransform rect = OverlayGroup.GetComponent<RectTransform>();
-        rect.anchoredPosition3D = new(0, 0, 0);
-        rect.anchorMin = new(0, 0);
-        rect.anchorMax = new(0, 0);
-        rect.localRotation = Quaternion.Euler(180, 0, 0);
-
-
-        foreach (GridPos pos in positions)
+        List<string> paths = new();
+        overlayModes = transform.GetComponentsInChildren<BaseOverlay>().ToList();
+        for (int i = 0; i < overlayModes.Count; i++)
         {
-            RectTransform tile = Instantiate(overlayTile, OverlayGroup.transform).GetComponent<RectTransform>();
-            tile.anchoredPosition = new(pos.x, -pos.z);
-            tile.localRotation = Quaternion.Euler(0, 0, 0);
-            tile.GetComponent<Image>().color = new Color(0f, 1f, 0f, 0.25f);
+            BaseOverlay overlay = overlayModes[i];
+            overlay.SetInputIndex(i);
+            if (CheckBindings(overlay, i, paths))
+                continue;
+
+            overlay.input.performed += ChangeOverlay;
         }
-    }*/
+    }
+    #endregion Init
+
+    private void ChangeOverlay(InputAction.CallbackContext obj)
+    {
+        int i = Mathf.RoundToInt(obj.ReadValue<float>());
+        if (activeOverlay == i)
+        {
+            map.gameObject.SetActive(false);
+            activeOverlay = -1;
+            return;
+        }
+
+        activeOverlay = i;
+
+        // calculate values
+        BaseOverlay overlay = overlayModes[i];
+        overlay.Overlay(overlayValueMap);
+
+        // mark the grid
+        Overlay(overlay.gradient);
+
+        map.gameObject.SetActive(true);
+    }
+
+   
+    void BakeGradient(Gradient gradient)
+    {
+        int resolution = 256; // 256 pixels is plenty for a smooth color ramp
+
+        gradientTexture = new Texture2D(resolution, 1, TextureFormat.RGBA32, false)
+        {
+            // CRITICAL: Set to Clamp so 0.0 and 1.0 values don't wrap around and bleed colors
+            wrapMode = TextureWrapMode.Clamp,
+            filterMode = FilterMode.Bilinear
+        };
+
+        // 2. Sample the C# Gradient and write to the texture
+        Color[] colors = new Color[resolution];
+        for (int i = 0; i < resolution; i++)
+        {
+            // Normalize i to a 0.0 - 1.0 range
+            float t = (float)i / (resolution - 1);
+            colors[i] = gradient.Evaluate(t);
+        }
+
+        gradientTexture.SetPixels(colors);
+        gradientTexture.Apply();
+        overlayMapMaterial.SetTexture("_GradientTex", gradientTexture);
+    }
+    public void Overlay(Gradient gradient)
+    {
+        BakeGradient(gradient);
+
+        texture.SetPixelData(overlayValueMap, 0);
+        texture.Apply();
+    }
+    private void OnDestroy()
+    {
+        overlayValueMap.Dispose();
+    }
 }
