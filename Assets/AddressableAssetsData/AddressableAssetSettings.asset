@@ -15,7 +15,8 @@ MonoBehaviour:
   m_DefaultGroup: 361c7ab7fc512ab4789c81360e3846cb
   m_currentHash:
     serializedVersion: 2
-    Hash: 56d51d7ce26202e5e8115ed3b056eb86
+    Hash: 68a948fea7c64855f567c173b39ddb4b
+  m_ExtractTypeTreeData: 0
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -42,6 +43,7 @@ MonoBehaviour:
   m_BundleRedirectLimit: -1
   m_SharedBundleSettings: 0
   m_SharedBundleSettingsCustomGroupIndex: 0
+  m_simulatedLoadDelay: 0.1
   m_ContiguousBundles: 1
   m_StripUnityVersionFromBundleBuild: 0
   m_DisableVisibleSubAssetRepresentations: 0

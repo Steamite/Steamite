@@ -72,8 +72,6 @@ public class GridTiles : MonoBehaviour
     public void DestroyBlueprint(bool forgetInstance) => buildingActions.DestroyBlueprint(forgetInstance);
     #endregion
 
-
-
     #region Mouse
     ///<inheritdoc cref="MouseEvents.activePos"/>
     public GridPos ActivePos => mouseEvents.activePos;
@@ -115,8 +113,6 @@ public class GridTiles : MonoBehaviour
     ///<inheritdoc cref="MouseEvents.Clear"/>
     public void Clear() => mouseEvents.Clear();
     #endregion
-
-
 
     #region MultiSelect
     ///<inheritdoc cref="MultiSelect.ToBeDugColor"/>

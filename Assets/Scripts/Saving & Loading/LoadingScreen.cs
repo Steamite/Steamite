@@ -229,6 +229,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         catch (Exception e)
         {
             Debug.LogError("Failed to load:" + e);
+            // TODO add a button to return to main menu
         }
     }
 

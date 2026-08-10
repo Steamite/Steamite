@@ -58,6 +58,7 @@ MonoBehaviour:
   buildings: {fileID: 8331111288221992689}
   pipes: {fileID: 3859038626553102039}
   overlays: {fileID: 9097239234769059568}
+  showIntegrity: 1
 --- !u!1 &2681720068060248165
 GameObject:
   m_ObjectHideFlags: 0
@@ -4017,6 +4018,30 @@ PrefabInstance:
       propertyPath: constructed
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      propertyPath: prodSpeed.currentValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      propertyPath: localRes.capacity.currentValue
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      propertyPath: assignData.AssignLimit.currentValue
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      propertyPath: 'resourceCost.ammounts.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      propertyPath: 'resourceCost.ammounts.Array.data[1]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 62586701505083539, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
+      propertyPath: 'resourceYield.ammounts.Array.data[0]'
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4374798361217592970, guid: e0e3521f1366e144a8f1e3113ccef305, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.5
@@ -6282,6 +6307,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: cost.money.currentValue
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: cost.ammounts.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -6486,6 +6515,10 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: localRes.capacity.currentValue
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: 'localRes.ammounts.Array.data[0]'
       value: 50
       objectReference: {fileID: 0}
@@ -6628,6 +6661,10 @@ PrefabInstance:
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: 'localRes.ammounts.Array.data[35]'
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: assignData.AssignLimit.currentValue
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 548421508411422551, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9335,6 +9372,10 @@ PrefabInstance:
       propertyPath: localRes.capacity.currentValue
       value: -1
       objectReference: {fileID: 0}
+    - target: {fileID: 3249735581231611369, guid: 74dfacf7662e6ee439cfa91a20f4b354, type: 3}
+      propertyPath: assignData.AssignLimit.currentValue
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6074975606102391423, guid: 74dfacf7662e6ee439cfa91a20f4b354, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.5
@@ -9670,6 +9711,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: cost.money.currentValue
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: cost.ammounts.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -9874,6 +9919,10 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: localRes.capacity.currentValue
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: 'localRes.ammounts.Array.data[0]'
       value: 50
       objectReference: {fileID: 0}
@@ -10016,6 +10065,10 @@ PrefabInstance:
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: 'localRes.ammounts.Array.data[35]'
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: assignData.AssignLimit.currentValue
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 548421508411422551, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: m_LocalPosition.x
@@ -25949,6 +26002,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: cost.money.currentValue
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: cost.ammounts.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -26153,6 +26210,10 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: localRes.capacity.currentValue
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: 'localRes.ammounts.Array.data[0]'
       value: 50
       objectReference: {fileID: 0}
@@ -26295,6 +26356,10 @@ PrefabInstance:
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: 'localRes.ammounts.Array.data[35]'
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+      propertyPath: assignData.AssignLimit.currentValue
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
       propertyPath: 'localRes.stored.ammount.Array.data[2]'
@@ -29336,6 +29401,14 @@ PrefabInstance:
       propertyPath: constructed
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2608198296355501892, guid: 72c10e4b0dc8a754fa35ae545bdfda96, type: 3}
+      propertyPath: localRes.capacity.currentValue
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608198296355501892, guid: 72c10e4b0dc8a754fa35ae545bdfda96, type: 3}
+      propertyPath: assignData.AssignLimit.currentValue
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5544106027577589464, guid: 72c10e4b0dc8a754fa35ae545bdfda96, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.5
@@ -30939,8 +31012,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
+      propertyPath: modifier.currentValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
       propertyPath: cost.ammounts.Array.size
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278066041812132061, guid: f13d54c177aeb26438817d736c69c281, type: 3}
+      propertyPath: assignData.AssignLimit.currentValue
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7295340286965014690, guid: f13d54c177aeb26438817d736c69c281, type: 3}
       propertyPath: m_Layer

@@ -102,8 +102,8 @@ public struct GridPos
     }
     public Vector2 ToVecUI()
     {
-        if (y != 0)
-            Debug.LogError("Probably wrong assigment");
+        /*if (y != 0)
+            Debug.LogError("Probably wrong assigment");*/
         return new(x, z);
     }
 

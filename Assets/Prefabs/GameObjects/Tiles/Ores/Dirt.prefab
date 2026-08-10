@@ -90,6 +90,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &8243330467784709925
 BoxCollider:
@@ -130,8 +131,7 @@ MonoBehaviour:
   rockYield:
     types: []
     ammounts: 
-  integrity: 1
+  integrity: 2
   originalIntegrity: 0
   toBeDug: 0
-  assetPath: Tile/Road
   isQuest: 0

@@ -12,7 +12,8 @@ public class GroundLevel : MonoBehaviour, IUpdatable
 {
     #region Variables
     /// <summary>grid witdth(x)</summary>
-    [Header("Grid")] public int width = 21;
+    [Header("Grid")] 
+    public int width = 21;
     /// <summary>grid height(y)</summary>
     public int height = 21;
 
@@ -34,9 +35,6 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <summary>Pipe holder</summary>
     public Transform pipes;
 
-    /// <summary>Entrypoint overlay</summary>
-    public UIOverlay overlays;
-
     /// <summary>If the level is unlocked(has a elevator).</summary>
     bool unlocked;
     [CreateProperty] public bool Unlocked { get => unlocked; private set { unlocked = value; UIUpdate(nameof(Unlocked)); } }
@@ -53,7 +51,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     }
 
 #if UNITY_EDITOR
-    [SerializeField] bool showIntegrity = false;
+    [SerializeField] bool showIntegrity = true;
     private void OnDrawGizmos()
     {
         if (EditorApplication.isPlaying)
@@ -172,21 +170,19 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             RecalculateStability(rock, false);
         else if (clickable is Rock rock1)
             RecalculateStability(rock1, true);
-
+        
+        UpdateEffects();
+        
         if (clickable is not Road)
-        {
             return;
-        }
 
-        foreach (Transform t in overlays.GetImagesOnPos(gp))
+// # TODO return?
+        /*foreach (Transform t in overlays.GetImagesOnPos(gp))
         {
             t.gameObject.SetActive(true);
             (clickable as Road).entryPoints.Add(t.parent.GetComponent<GroupOverlay>().building);
             t.localPosition = new(t.localPosition.x, t.localPosition.y, 0);
-        }
-
-        UpdateEffects();
-
+        }*/
     }
 
     void UpdateEffects()
@@ -202,11 +198,12 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         GridPos center = rock.GetPos();
         int x = (int)center.x;
         int y = (int)center.z;
-        for (int i = 0; i < size; i++)
+        for (int i = 1; i < size; i++)
         {
-            Line(x, y + size - i, i+1);
-            Line(x, y - size + i, i+1);
+            Line(x, y + size - i, i);
+            Line(x, y - size + i, i);
         }
+        Line(x, y, size);
     }
 
     void Line(int x, int y, int valueOnCenter)
@@ -215,7 +212,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         int increaseVal;
         for (int i = 1; i < valueOnCenter; i++)
         {
-            increaseVal = valueOnCenter + 1 - i;
+            increaseVal = valueOnCenter - i;
             ModifyIntegrity(x + i, y, increaseVal);
             ModifyIntegrity(x - i, y, increaseVal);
         }
@@ -252,37 +249,56 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <param name="building">Building thats being placed.</param>
     /// <param name="gridPos">building anchor position.</param>
     /// <param name="load">If load is true creates, creates new roads and doesn't recycle entrypoints.</param>
-    public void RegisterBuilding(Building building, GridPos? gridPos = null, bool load = false)
+    public void RegisterBuilding(Building building, GridPos gridPos, bool load = false)
     {
-        GridPos pos = gridPos ?? building.GetPos();
         MyGrid.Buildings.Add(building);
         if(building is Pub pub)
         {
             MyGrid.EffectBuildings.Add(pub);
         }
-        GroupOverlay overlay = overlays.AddBuildingOverlay(pos, building);
+        RectTransform overlayGroup = SceneRefs.Overlays
+            .entryPoints.Create(building);
+        List<EntryTile> entryTiles = new();
 
         for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
         {
             NeededGridItem item = building.blueprint.itemList[i];
             GridPos itemPos = item.pos.Rotate(building.transform.rotation.eulerAngles.y, true);
-            int x = (int)(itemPos.x + pos.x);
-            int y = (int)(pos.z - itemPos.z);
-            Road road = GetGridItem(new(x, y)) as Road;
+            int x = (int)(itemPos.x + gridPos.x);
+            int y = (int)(gridPos.z - itemPos.z);
+            GridPos worldPos = new(x, y);
+            Road road = GetGridItem(worldPos) as Road;
+
+            
             switch (item.itemType)
             {
                 case GridItemType.Road:
                 case GridItemType.Anchor:
                 case GridItemType.Pipe:
-                    overlays.ToggleEntryPoints(road);
-                    SetGridItem(new(x, y), building);
+                    SceneRefs.Overlays.entryPoints.ToggleEntryPoints(road, false);
+                    SetGridItem(worldPos, building);
                     break;
                 case GridItemType.Entrance:
-                    overlays.Add(new(itemPos.x, itemPos.z), overlay, load ? -1 : i);
-                    if(road != null)
+                    bool isActive = false;
+                    if (road != null)
                     {
                         road.entryPoints.Add(building);
                         road.RegisterEffects(building);
+                        isActive = true;
+                    }
+
+                    entryTiles.Add(new(worldPos, isActive));
+                    if (load)
+                    {
+                        SceneRefs.Overlays.entryPoints.AddNew(
+                            new(itemPos.x, itemPos.z),
+                            overlayGroup);
+                    }
+                    else
+                    {
+                        SceneRefs.Overlays.entryPoints.AddFromIndicator(
+                            overlayGroup,
+                            i);
                     }
                     break;
                 case GridItemType.WaterSource:
@@ -292,8 +308,9 @@ public class GroundLevel : MonoBehaviour, IUpdatable
                     break;
             }
         }
+        building.entryPoints = new(entryTiles, overlayGroup);
         if (!load)
-            overlays.DestroyBuilingTiles();
+            SceneRefs.Overlays.blueprintIndicator.DestroyBuilingTiles();
     }
     #endregion Adding to Grid
 
@@ -305,7 +322,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <param name="gridPos">Building position</param>
     public void UnsetBuilding(Building building, GridPos gridPos)
     {
-        overlays.Remove(building, gridPos.y);
+        SceneRefs.Overlays.entryPoints.Remove(building);
         List<Road> _roads = roads.GetComponentsInChildren<Road>().ToList();
         for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
         {
@@ -327,242 +344,6 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         }
     }
     #endregion Removing from Grid
-
-    #region Checks
-    /// <summary>
-    /// Checks if a pipe can be placed on the <paramref name="pos"/> position. <br/>
-    /// Must not be placed over a different pipe.
-    /// </summary>
-    /// <param name="pipe">Pipe to place (used here for visual effects)</param>
-    /// <param name="pos">Position to check if available.</param>
-    /// <returns>If it's ok to build there or not.</returns>
-    public bool CanPlacePipe(Pipe pipe, GridPos pos)
-    {
-        Pipe nextP = grid[(int)pos.x, (int)pos.z].Pipe;
-
-        bool canPlace = 
-            (nextP == null || nextP.id == -1)
-                && GetGridItem(pos) is Road;
-        //if(nextP == null || nextP.Equals(this))
-            pipe.FindConnections(canPlace);/*
-        else
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                pipe.DisconnectPipe(i, true);
-            }
-        }*/
-        return canPlace;
-    }
-
-    /// <summary>
-    /// Checks if a <see cref="Building"/> can be placed at <paramref name="gridPos"/>. <br/>
-    /// Iterates though all tiles in blueprint and marks their state.
-    /// </summary>
-    /// <param name="building">Building that's being placed.</param>
-    /// <param name="gridPos">Anchor position</param>
-    /// <returns>If it's ok to build there or not.</returns>
-    public bool CanPlaceBuilding(Building building, GridPos gridPos)
-    {
-        bool canBuild = true;
-        overlays.MovePlaceOverlay(building);
-        // checks all Parts of a building
-        Transform overlay = overlays.overlayParent;
-        List<Road> foreignObscuredRoads = new();
-        List<Image> foreignEntryOverlay = new();
-        List<Image> entrances = new();
-        int activeEntrances = -1;
-        Vein source = null;
-        for (int i = 0; i < building.blueprint.itemList.Count; i++)
-        {
-            NeededGridItem item = building.blueprint.itemList[i];
-            GridPos itemPos = item.pos.Rotate(building.transform.rotation.eulerAngles.y, true);
-            itemPos.x += gridPos.x;
-            itemPos.z = gridPos.z - itemPos.z;
-            Transform tile = overlay.GetChild(i);
-            Color errC, c;
-            switch (item.itemType)
-            {
-                case GridItemType.Road:
-                    c = new(0, 1, 0, 0.25f);
-                    errC = new(1, 0, 0, 0.25f);
-                    CheckMassObscursion(
-                        itemPos,
-                        tile.GetComponent<Image>(),
-                        c,
-                        errC,
-                        ref canBuild,
-                        foreignObscuredRoads,
-                        foreignEntryOverlay);
-                    break;
-                case GridItemType.Anchor:
-                    c = new(1, 0.843f, 0, 0.25f);
-                    errC = new(1, 0.643f, 0, 0.25f);
-                    CheckMassObscursion(
-                        itemPos,
-                        tile.GetComponent<Image>(),
-                        c,
-                        errC,
-                        ref canBuild,
-                        foreignObscuredRoads,
-                        foreignEntryOverlay);
-                    break;
-                case GridItemType.Entrance:
-                    entrances.Add(tile.GetComponent<Image>());
-                    if (GetGridItem(itemPos) is Road)
-                        activeEntrances++;
-                    break;
-                case GridItemType.WaterSource:
-                    c = new(0.211765f, 0.1686275f, 1, 0.25f);
-                    errC = new(0.8f, 0.2196079f, 1, 0.25f);
-                    CheckWaterPresence(
-                        itemPos,
-                        tile.GetComponent<Image>(),
-                        c,
-                        errC,
-                        ref canBuild);
-                    break;
-                case GridItemType.ResourceSource:
-                    c = new(0.211765f, 0.1686275f, 1, 0.25f);
-                    errC = new(0.8f, 0.2196079f, 1, 0.25f);
-                    CheckVeinPresence(
-                        itemPos,
-                        tile.GetComponent<Image>(),
-                        c,
-                        errC,
-                        ref canBuild,
-                        ref source);
-                    break;
-                case GridItemType.Pipe:
-                    c = new(1f, 0.5490196f, 0f, 0.25f);
-                    errC = new(1, 0, 0, 0.25f);
-                    CheckMassObscursion(
-                        itemPos,
-                        tile.GetComponent<Image>(),
-                        c,
-                        errC,
-                        ref canBuild,
-                        foreignObscuredRoads,
-                        foreignEntryOverlay);
-                    break;
-                default:
-                    continue;
-            }
-            // Move the tile up or down
-            ClickableObject clickableObject = GetGridItem(itemPos);
-            if (clickableObject is Rock)
-                tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 2.01f);
-            else
-                tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 0);
-
-        }
-
-        if (!CheckEntranceObscursion(foreignObscuredRoads, foreignEntryOverlay))
-            canBuild = false;
-        foreach (Image entrance in entrances)
-        {
-            if (activeEntrances == -1)
-            {
-                entrance.color = new(1f, 0.3f, 0.3f, 0.25f);
-                canBuild = false;
-            }
-            else
-                entrance.color = new(0.5f, 0.5f, 0.5f, 0.25f);
-        }
-        return canBuild;
-    }
-
-    void CheckMassObscursion(GridPos pos, Image image, Color baseColor, Color errColor, ref bool canBuild, List<Road> _roads, List<Image> images)
-    {
-        ClickableObject clickable = GetGridItem(pos);
-        if (clickable != null && clickable is Road)
-        {
-            if (GetGridItem(pos, true) == null)
-            {
-                Road road = clickable as Road;
-                if (road.entryPoints.Count > 0)
-                {
-                    _roads.Add(road);
-                    images.Add(image);
-                }
-                image.color = baseColor;
-                return;
-            }
-        }
-        image.color = errColor;
-        canBuild = false;
-    }
-
-
-    void CheckWaterPresence(
-        GridPos pos, Image image,
-        Color baseColor, Color errColor, ref bool canBuild)
-    {
-        ClickableObject clickable = GetGridItem(pos);
-        if (clickable != null && clickable is Water water)
-        {
-            image.color = baseColor;
-            return;
-        }
-        image.color = errColor;
-        canBuild = false;
-    }
-
-    void CheckVeinPresence(
-        GridPos pos, Image image,
-        Color baseColor, Color errColor,
-        ref bool canBuild, ref Vein source)
-    {
-        ClickableObject clickable = GetGridItem(pos);
-        if (clickable != null && clickable is Vein _vein)
-        {
-            if (source == null)
-                source = _vein;
-            if (source == _vein)
-            {
-                image.color = baseColor;
-                return;
-            }
-        }
-        image.color = errColor;
-        canBuild = false;
-    }
-
-    /// <summary>
-    /// Checks if the current building is not obscurring the last entry point of another building.
-    /// </summary>
-    /// <param name="roads">Road tiles that the building is occupying.</param>
-    /// <param name="tiles">All building tiles to mark the states.</param>
-    /// <returns>If it's ok to build there or not.</returns>
-    bool CheckEntranceObscursion(List<Road> roads, List<Image> tiles)
-    {
-        Dictionary<Building, int> buildings = new();
-        bool ok = true;
-
-        foreach (Road road in roads)
-        {
-            foreach (Building build in road.entryPoints)
-            {
-                buildings.TryAdd(build, overlays.GetGroupOverlay(build).GetComponentsInChildren<Image>().Where(q => q.enabled).Count());
-                buildings[build]--;
-                if (buildings[build] == 0)
-                {
-                    List<int> ids = new();
-                    for (int j = 0; j < roads.Count; j++)
-                    {
-                        if (roads[j].entryPoints.Contains(build))
-                        {
-                            //entries[j].gameObject.SetActive(false);
-                            tiles[j].color = new(1, 0, 0, 0.5f);
-                            ok = false;
-                        }
-                    }
-                }
-            }
-        }
-        return ok;
-    }
-    #endregion Checks
 
     #region Game initialization
 
@@ -652,6 +433,11 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         }).ToList();
         buildingList.AddRange(save.objectsSave.buildings);
         save.objectsSave.buildings = buildingList.ToArray();
+    }
+
+    public GridTile[,] GetGrid()
+    {
+        return grid;
     }
 
     #endregion

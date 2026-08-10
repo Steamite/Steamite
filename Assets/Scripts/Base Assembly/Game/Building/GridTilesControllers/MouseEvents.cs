@@ -295,7 +295,7 @@ public class MouseEvents : MonoBehaviour
                         gridTiles.InitPipes(
                             new GridPos(activePos.x, activePos.y, activePos.z),
                             blueprintInstance as Pipe);
-                        MyGrid.GetOverlay().MovePlacePipeOverlay(activePos, true);
+                        SceneRefs.Overlays.blueprintIndicator.MovePlacePipeOverlay(activePos, true);
                         drag = true;
 
                         GridPos gridPos = activeObject.GetPos();
