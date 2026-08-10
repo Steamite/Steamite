@@ -17,7 +17,7 @@ public class BuildingActions : MonoBehaviour
         get => blueprintInstance;
         set
         {
-            MyGrid.GetOverlay().DestroyBuilingTiles();
+            SceneRefs.Overlays.blueprintIndicator.DestroyBuilingTiles();
             blueprintInstance = value;
             if (value == null)
             {
@@ -100,9 +100,10 @@ public class BuildingActions : MonoBehaviour
             fluidWork.DisconnectFromNetwork();
         }
         Destroy(blueprintInstance.gameObject);
+
         if (forgetInstance)
             BlueprintInstance = null;
         else
-            MyGrid.GetOverlay().DestroyBuilingTiles();
+            SceneRefs.Overlays.blueprintIndicator.DestroyBuilingTiles();
     }
 }

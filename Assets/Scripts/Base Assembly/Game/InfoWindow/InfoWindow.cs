@@ -149,8 +149,9 @@ public class InfoWindow : PanelRendererRoot
 
         secondWindow.style.display = DisplayStyle.None;
         secondBody.Clear();
-        
-        MyGrid.GetOverlay().ClearTileOverlay();
+
+        // TODO create function
+        //SceneRefs.Overlays.overlay.ClearTileOverlay();
         activeBindings.Clear();
     }
     #endregion

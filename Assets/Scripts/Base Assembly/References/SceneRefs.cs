@@ -16,6 +16,7 @@ public class SceneRefs : MonoBehaviour
     static SceneRefs instance;
     [Header("GridObjects")]
     [SerializeField] GridTiles _gridTiles;
+    [SerializeField] UIOverlay _overlays;
     [SerializeField] ClickableObjectFactory _objectFactory;
     [SerializeField] HumanUtil _humans;
     [SerializeField] JobQueue _jobQueue;
@@ -41,6 +42,7 @@ public class SceneRefs : MonoBehaviour
 
     #region Getters
     public static GridTiles GridTiles => instance._gridTiles;
+    public static UIOverlay Overlays => instance._overlays;
     public static ClickableObjectFactory ObjectFactory => instance._objectFactory;
     public static HumanUtil Humans => instance._humans;
     public static JobQueue JobQueue => instance._jobQueue;
@@ -60,6 +62,7 @@ public class SceneRefs : MonoBehaviour
     /// <summary>Registers the <see cref="instance"/></summary>
     public async Task BeforeLoad()
     {
+        MyGrid.ReloadDomain();
         instance = this;
 
         foreach (IBeforeLoad beforeLoad in instance.beforeLoads)
@@ -69,7 +72,6 @@ public class SceneRefs : MonoBehaviour
 
     public static void FinishLoad()
     {
-        MyGrid.ReloadDomain();
         foreach (IAfterLoad afterLoad in instance.afterLoads.Cast<IAfterLoad>())
             afterLoad.AfterInit();
         instance.afterLoads = null;

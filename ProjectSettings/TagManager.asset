@@ -64,6 +64,10 @@ TagManager:
   - name: Ignore
     uniqueID: 3667447625
     locked: 0
+  - name: Overlays
+    uniqueID: 3224700439
+    locked: 0
   m_RenderingLayers:
   - Default
   - Outline
+  m_MigratedRenderPipelines: []

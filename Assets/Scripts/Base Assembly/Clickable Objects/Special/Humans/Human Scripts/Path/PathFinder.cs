@@ -108,10 +108,8 @@ public static class PathFinder
                     continue;
                 }
 
-                foreach (RectTransform t in MyGrid.GetOverlay(gp.y).GetGroupOverlay(building)
-                    .GetComponentsInChildren<Image>().Select(q => q.transform))
+                foreach (GridPos entryPos in building.entryPoints.EnabledTiles)
                 {
-                    GridPos entryPos = new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z));
                     if (entryPos.Equals(_start))
                     {
                         plan.path.Add(BuildingStep(entryPos, building.gameObject, 1));
@@ -143,10 +141,11 @@ public static class PathFinder
         foreach (Building el in MyGrid.GetBuildings(q => q is Elevator))
         {
             GridPos gp = el.GetPos();
-            foreach (RectTransform t in MyGrid.GetOverlay(gp.y).GetGroupOverlay(el).GetComponentsInChildren<Image>().Select(q => q.transform))//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance).Skip(1))
+            foreach (GridPos pos in el.entryPoints.EnabledTiles)//item in building.blueprint.itemList.Where(q=> q.itemType == GridItemType.Entrance).Skip(1))
             {
+                // TODO, will work weird for larger elevators
                 coordinates.elevPositions.Add(gp);
-                coordinates.elevEnterPositions.Add(new(Mathf.Floor(t.position.x), gp.y, Mathf.Floor(t.position.z)));
+                coordinates.elevEnterPositions.Add(pos);
                 coordinates.connections.Add(new());
             }
             for (int i = 0; i < 5; i++)
@@ -341,15 +340,21 @@ public static class PathFinder
                     int level = searchCoords.connections[i][j];
                     if (level == checkNode.pos.y)
                         continue;
+
                     GridPos elevatorPos = new GridPos(gp.x, level, gp.z);
-                    PathNode outElevatorNode = new(elevatorPos, inElevatorNode.minCost, inElevatorNode);
+                    PathNode outElevatorNode = new(
+                        elevatorPos, 
+                        inElevatorNode.minCost, 
+                        inElevatorNode);
+
                     ClickableObject el = MyGrid.GetGridItem(elevatorPos);
 
-                    foreach (RectTransform t in MyGrid.GetOverlay(level).GetGroupOverlay(el as Building)
-                        .GetComponentsInChildren<Image>().Select(q => q.transform))
+                    foreach (GridPos pos in (el as Building).entryPoints.EnabledTiles)
                     {
-                        PathNode finishMove =
-                            new(new(Mathf.Round(t.transform.position.x), level, Mathf.Round(t.transform.position.z)), outElevatorNode.minCost + 1, outElevatorNode);
+                        PathNode finishMove = new(
+                            pos, 
+                            outElevatorNode.minCost + 1, 
+                            outElevatorNode);
                         if (Check(finishMove, searchCoords, plan, queue, false))
                         {
                             queue.Enqueue(finishMove);

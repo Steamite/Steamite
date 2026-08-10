@@ -147,7 +147,7 @@ public class MultiSelect : MonoBehaviour
                 (tempMarkedTiles[j] as Building).DestoyBuilding();
             }
         }
-        MyGrid.GetOverlay().MovePlacePipeOverlay(activePos, false);
+        SceneRefs.Overlays.blueprintIndicator.MovePlacePipeOverlay(activePos, false);
     }
     /// <summary>
     /// 
@@ -186,7 +186,7 @@ public class MultiSelect : MonoBehaviour
         //tempMarkedTilePos.Add(pos);
         startPos = pos;
 
-        MyGrid.GetOverlay().AddCheckPointTile(pos);
+        SceneRefs.Overlays.blueprintIndicator.AddCheckPointTile(pos);
     }
 
     /// <summary>
@@ -242,7 +242,7 @@ public class MultiSelect : MonoBehaviour
         }
     }
     /// <summary>
-    /// 
+    /// Only for pipes?
     /// </summary>
     /// <returns></returns>
     public bool Break()
@@ -262,7 +262,7 @@ public class MultiSelect : MonoBehaviour
         markedTiles.RemoveAt(count - 1);
         startPos = tempMarkedTilePos[0];
         SceneRefs.CameraSceneMover.MoveToPosition(tempMarkedTilePos[^1], true);
-        MyGrid.GetOverlay().RemoveCheckPointTile(count + 1);
+        SceneRefs.Overlays.blueprintIndicator.RemoveCheckPointTile(count + 1);
         return false;
     }
 
@@ -287,7 +287,7 @@ public class MultiSelect : MonoBehaviour
         {
             pipes[i].DestoyBuilding();
         }
-        MyGrid.GetOverlay().DestroyBuilingTiles();
+        SceneRefs.Overlays.blueprintIndicator.DestroyBuilingTiles();
         markedTiles.Clear();
         tempMarkedTiles.Clear();
     }

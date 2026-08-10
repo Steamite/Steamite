@@ -17,8 +17,11 @@ public interface IEffectObject
 
     void RepaintTiles()
     {
+        // TODO
         if(this is ClickableObject clickable && clickable.selected)
-            MyGrid.GetOverlay().CreateTileOverlay(EffectRoads.Select(q => q.GetPos()));
+            SceneRefs.Overlays.overlay.MarkTiles(
+                EffectRoads.Select(q => q.GetPos()), 
+                Color.green);
     }
 
     public void RecalculateRange()

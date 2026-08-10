@@ -8,6 +8,7 @@ using UnityEngine;
 /// <summary>Util for managing world data.</summary>
 public static class MyGrid
 {
+
     #region Variables
     /// <summary>Number of Levels in game.</summary>
     public const int NUMBER_OF_LEVELS = 5;
@@ -33,12 +34,11 @@ public static class MyGrid
     /// <summary>All levels.</summary>
     static GroundLevel[] levels;
 
-    /// <summary>Event for switching between levels.</summary>
+    /// <summary>Event for switching between levels (current, new).</summary>
     static Action<int, int> GridChange;
     /// <summary>World name(for saving).</summary>
     public static string worldName;
     public static string startSceneName;
-
     #endregion
 
     #region Getters
@@ -46,9 +46,10 @@ public static class MyGrid
     public static int currentLevel { get; private set; }
     /// <summary>Get grid size.(from one of the levels)</summary>
     public static int gridSize(int level) => levels[level].height;
+    public static int GridSize => gridSize(currentLevel);
     #endregion
 
-    [RuntimeInitializeOnLoadMethod]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
     public static void ReloadDomain() => GridChange = null;
 
     /// <summary>
@@ -61,6 +62,10 @@ public static class MyGrid
         AddToGridChange(SceneRefs.Humans.SwitchLevel);
         ChangeGridLevel(0);
     }
+    /// <summary>
+    /// Adds an event listener to the level change. Calls (oldLevel, newLevel)
+    /// </summary>
+    /// <param name="action">Parameters (oldLevel, newLevel)</param>
     public static void AddToGridChange(Action<int, int> action)
         => GridChange += action;
 
@@ -69,6 +74,9 @@ public static class MyGrid
     {
         return levels[gp.y].GetGridItem(gp, isPipe);
     }
+
+    public static GridTile[,] GetGridTilesCurrentLevel() => GetGridTiles(currentLevel);
+    public static GridTile[,] GetGridTiles(int i) => levels[i].GetGrid();
 
     public static void SetGridItem(GridPos gp, ClickableObject clickable, bool isPipe = false)
     {
@@ -79,12 +87,6 @@ public static class MyGrid
     public static List<T> GetBuildings<T>(Func<T, bool> predicate) => Buildings.Where(q => q is T).Cast<T>().Where(predicate).ToList();
     public static Building GetBuilding(Func<Building, bool> predicate) => Buildings.FirstOrDefault(predicate);
     public static Pipe GetPipes(Func<Pipe, bool> predicate) => Pipes.FirstOrDefault(predicate);
-    public static UIOverlay GetOverlay(int lIndex = -1)
-    {
-        if (lIndex == -1)
-            lIndex = currentLevel;
-        return levels[lIndex].overlays;
-    }
 
     public static Elevator GetLevelElevator(int i)
     {
@@ -206,9 +208,9 @@ public static class MyGrid
     {
         GridPos gridPos = building.GetPos();
         if (building is Pipe)
-            return levels[gridPos.y].CanPlacePipe(building as Pipe, gridPos);
+            return PlacementChecks.CanPlacePipe(building as Pipe, gridPos);
         else
-            return levels[gridPos.y].CanPlaceBuilding(building, gridPos);
+            return PlacementChecks.CanPlaceBuilding(building, gridPos);
     }
 
     #endregion Checking

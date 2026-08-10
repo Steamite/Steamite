@@ -28,7 +28,7 @@ public class Building : StorageObject
     #region Variables
     /// <summary>Used for remembering color.</summary>
     [SerializeField] public List<Renderer> meshRenderers;
-
+    public BuildingEntryPoints entryPoints;
 
 
     /// <summary>
@@ -290,6 +290,10 @@ public class Building : StorageObject
 
         if (this is IFluidWork fluidWork)
             fluidWork.ConnectToNetwork();
+        if (this is IAssign assign)
+            assign.AssignData.Init();
+        if (this is IResourceProduction prod)
+            prod.ProductionStorage.InitCapacity();
     }
     #endregion
 
