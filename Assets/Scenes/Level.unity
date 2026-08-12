@@ -419,6 +419,7 @@ MonoBehaviour:
   overlayMapMaterial: {fileID: 2100000, guid: db68f415a0dda3c4e9c4ae8d8a29e75a, type: 2}
   texture: {fileID: 0}
   gradientTexture: {fileID: 0}
+  overlayFilter: 0
 --- !u!223 &274122779
 Canvas:
   m_ObjectHideFlags: 0
@@ -2475,6 +2476,7 @@ MonoBehaviour:
   - {fileID: 274122778}
   - {fileID: 8277524054700303564}
   - {fileID: 897350252}
+  - {fileID: 220867761}
 --- !u!114 &8150810313726245686
 MonoBehaviour:
   m_ObjectHideFlags: 0

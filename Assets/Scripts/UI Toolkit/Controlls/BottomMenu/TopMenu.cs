@@ -35,11 +35,11 @@ public class TopMenu : InitilizablePanelRenderer, IAfterLoad
     }
 
     protected override void OnDataLoadLogic()
-    {   
+    {
         moneyLabel.SetBinding(
-            nameof(ResourceDisplay.Money), 
-            nameof(Label.text), 
-            (ref int _Money) => $"{_Money} <color=#FFD700>" + (char)163 + "</color>", 
+            nameof(ResourceDisplay.Money),
+            nameof(Label.text),
+            (ref int _Money) => $"{_Money} <color=#FFD700>" + (char)163 + "</color>",
             resourceDisplay);
 
         resourceList.Open(resourceDisplay);
