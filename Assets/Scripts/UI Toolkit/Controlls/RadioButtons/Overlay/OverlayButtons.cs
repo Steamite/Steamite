@@ -5,16 +5,17 @@ using System.Text;
 using UnityEngine.UIElements;
 
 [UxmlElement]
-public partial class OverlayButtons : ShortcutRadioButtonGroup, IInitiableUI
+public partial class OverlayButtons : ShortcutRadioButtonGroup
 {
     public OverlayButtons() : base()
     {
-        
+        AddToClassList("overlay-buttons");
+        style.flexGrow = 0;
     }
 
     public void Init()
     {
-        SetChangeCallback((i) => SceneRefs.Overlays.overlay.ChangeOverlay(i));
+        SetChangeCallback(SceneRefs.Overlays.overlay.ChangeOverlay);
 
         var overlayTypes = SceneRefs.Overlays.overlay.GetButtonOverlayTypes();
         for (int i = 0; i < overlayTypes.Count; i++)

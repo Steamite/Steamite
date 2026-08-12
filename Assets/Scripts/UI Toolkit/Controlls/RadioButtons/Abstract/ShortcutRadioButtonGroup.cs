@@ -7,8 +7,12 @@ public abstract class ShortcutRadioButtonGroup : CustomRadioButtonGroup
 {
     public virtual void OutsideTrigger(int newI)
     {
-        buttons[SelectedChoice].Deselect(true);
+        if(SelectedChoice > -1)
+            buttons[SelectedChoice].Deselect(true);
+        
         SelectedChoice = newI;
-        buttons[newI].Transition();
+        
+        if(newI > -1)
+            buttons[newI].Transition();
     }
 }

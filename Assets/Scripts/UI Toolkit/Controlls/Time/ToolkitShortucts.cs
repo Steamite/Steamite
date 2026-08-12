@@ -10,7 +10,7 @@ public class ToolkitShortucts : MonoBehaviour, IAfterLoad
     [SerializeField] InputActionAsset inputAsset;
     TimeButtons timeButtons;
     LevelButtons levelButtons;
-    OverlayButtons overlayButtons;
+    OverlayElem overlayButtons;
     //[SerializeField] public RadioButtons levelButtons;
 
     InputAction shift;
@@ -41,7 +41,7 @@ public class ToolkitShortucts : MonoBehaviour, IAfterLoad
         levelButtons = rootElement.Q<LevelButtons>();
         levelButtons.Init();
 
-        overlayButtons = rootElement.Q<OverlayButtons>();
+        overlayButtons = rootElement.Q<OverlayElem>();
         overlayButtons.Init();
 
         ProgressBar trustBar = rootElement.Q<ProgressBar>("Trust");
