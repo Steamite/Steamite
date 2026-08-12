@@ -24,7 +24,7 @@ namespace BottomBar
             buildMenu = (BuildMenu)UIRefs.BottomBarRoot.Q<VisualElement>(className: "build-menu");
         }
 
-        public void AfterInit()
+        public void AfterLoad()
         {
             RegisterLoad();
         }

@@ -1,16 +1,22 @@
 using AbstractControls;
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 [UxmlElement]
-public partial class TimeButtons : CustomRadioButtonGroup
+public partial class TimeButtons : ShortcutRadioButtonGroup, IInitiableUI
 {
-    List<int> speedStates = new() { 0, 1, 2, 5 };
-    [UxmlAttribute][Range(0, 3)] int startState;
     public TimeButtons() : base()
     {
+        
+    }
+
+    public void Init()
+    {
+        var speedStates = SceneRefs.Tick.GetSpeedList();
+        buttons = new();
         for (int i = 0; i < speedStates?.Count; i++)
         {
             CustomRadioButton button = new("status-bar-button", i, this);
@@ -24,20 +30,10 @@ public partial class TimeButtons : CustomRadioButtonGroup
             }
             Add(button);
         }
-        SetChangeCallback(
-            (i) => SceneRefs.Tick.ChangeGameSpeed(speedStates[SelectedChoice]));
-    }
+        SetChangeCallback(SceneRefs.Tick.ChangeGameSpeed);
 
-    public void Start()
-    {
-        SelectedChoice = 0;
-        buttons[startState].SelectWithoutTransition(false);
-    }
+        SelectedChoice = SceneRefs.Tick.GetGameSpeed();
 
-    public void OutsideTrigger(int i)
-    {
-        if (SelectedChoice == 0 && i == 0)
-            i = speedStates.IndexOf(Convert.ToInt32(Tick.LastSpeed));
-        buttons[i].Select();
+        buttons[SelectedChoice].SelectWithoutTransition(false);
     }
 }

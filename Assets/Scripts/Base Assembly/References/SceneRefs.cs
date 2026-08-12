@@ -73,7 +73,7 @@ public class SceneRefs : MonoBehaviour
     public static void FinishLoad()
     {
         foreach (IAfterLoad afterLoad in instance.afterLoads.Cast<IAfterLoad>())
-            afterLoad.AfterInit();
+            afterLoad.AfterLoad();
         instance.afterLoads = null;
         MyGrid.Init();
     }

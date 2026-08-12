@@ -3,10 +3,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 using UnityEngine.UIElements;
+[UnityEngine.RequireComponent(typeof(TimeDisplay))]
 
+[UnityEngine.RequireComponent(typeof(ResourceDisplay))]
 public class TopMenu : InitilizablePanelRenderer, IAfterLoad
 {
+    TimeDisplay timeDisplay;
     ResourceDisplay resourceDisplay;
 
     /// <summary>Resource display on the top bar.</summary>
@@ -18,11 +22,14 @@ public class TopMenu : InitilizablePanelRenderer, IAfterLoad
     {
         base.OnUIReload();
         resourceDisplay = GetComponent<ResourceDisplay>();
+        timeDisplay = GetComponent<TimeDisplay>();
+
         moneyLabel = Root.Q<Label>("Money-Value");
         resourceList = Root.Q<VisualElement>("Resources") as IUIElement;
+        timeDisplay.Init(Root);
     }
 
-    public void AfterInit()
+    public void AfterLoad()
     {
         RegisterLoad();
     }

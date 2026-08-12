@@ -192,7 +192,7 @@ public class Building : StorageObject
         gameObject.layer = 6;
         for (int i = 0; i < transform.childCount; i++)
             transform.GetChild(i).gameObject.layer = 6;
-        GetComponent<SortingGroup>().sortingLayerName = "Buildings";
+        
 
         if (InConstruction)
         {
@@ -554,7 +554,6 @@ public class Building : StorageObject
         gameObject.layer = 6;
         for (int i = 0; i < transform.childCount; i++)
             transform.GetChild(i).gameObject.layer = 6;
-        GetComponent<SortingGroup>().sortingLayerName = "Buildings";
 
         Highlight(new());
         MyRes.UpdateResource(Cost, false);

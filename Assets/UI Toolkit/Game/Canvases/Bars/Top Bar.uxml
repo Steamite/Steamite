@@ -2,6 +2,7 @@
     <engine:Template name="Controls" src="project://database/Assets/UI%20Toolkit/Game/Canvases/Windows/Controls.uxml?fileID=9197481963319205126&amp;guid=571ad8fec4ea5d347bd18f59c4338992&amp;type=3#Controls"/>
     <Style src="project://database/Assets/UI%20Toolkit/Styles/TopBar.uss?fileID=7433441132597879392&amp;guid=4fe123aa2d844744b9e1a00d21362590&amp;type=3#TopBar"/>
     <Style src="project://database/Assets/UI%20Toolkit/Styles/StatusBar.uss?fileID=7433441132597879392&amp;guid=b591f8d887031d24b933f7e2268f24d0&amp;type=3#StatusBar"/>
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Top%20Bar/Overlay.uss?fileID=7433441132597879392&amp;guid=79d14677e56132347a4c0420dee1517e&amp;type=3#Overlay"/>
     <engine:VisualElement name="TopBar" class="topBar" style="overflow: visible; justify-content: center;">
         <engine:VisualElement name="time-container" style="flex-direction: row; position: absolute; left: 0; height: 100%; align-self: flex-start;">
             <engine:VisualElement name="TimeDisplay" class="time">
@@ -32,5 +33,6 @@
     <engine:VisualElement name="Money-Background" class="small-window" style="position: relative;">
         <engine:Label text="##### &lt;color=#FFD700&gt;£&lt;/color&gt;" name="Money-Value" class="money"/>
     </engine:VisualElement>
+    <OverlayButtons name="OverlayButtons" style="position: absolute; top: 8%; right: 0; flex-grow: 0; background-color: rgba(46, 46, 46, 0.247);"/>
     <engine:Instance template="Controls" name="Controlls" style="position: absolute; height: 100%; width: 100%; display: none;"/>
 </engine:UXML>

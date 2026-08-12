@@ -1,7 +1,10 @@
 
 
+using NUnit.Framework;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.Android.Gradle;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -70,9 +73,15 @@ public class Tick : MonoBehaviour
 
     [SerializeField] float ticksPerSecond = 4f;
     [SerializeField] float tickTimer = 0f;
+
+    [SerializeField] List<int> speeds;
+    [SerializeField] int speedIndex;
+    [SerializeField] int prevSpeedIndex;
+
+
     float timeToTick;
     float timerSpeed;
-    public static float LastSpeed;
+
     bool uiOpen = false;
     #endregion
 
@@ -174,19 +183,40 @@ public class Tick : MonoBehaviour
 
         timeToTick = 1f / ticksPerSecond;
         timerSpeed = 0;
-        LastSpeed = 1;
+
+        speedIndex = 0;
+        prevSpeedIndex = 1;
+
         tickTimer = 0;
         enabled = false;
     }
     #endregion
 
     #region Speed Managing
-    public void ChangeGameSpeed(float _speed = 0)
+    public List<int> GetSpeedList() => speeds;
+    public int GetGameSpeed() => speedIndex;
+
+    public void ChangeGameSpeed(int i)
     {
-        if(timerSpeed != 0)
-            LastSpeed = timerSpeed;
-        timerSpeed = _speed;
-        enabled = !uiOpen && timerSpeed > 0;
+        if (i == 0 && speedIndex == 0)
+            speedIndex = prevSpeedIndex;
+        else if (i == speedIndex)
+            return;
+        else
+        {
+            prevSpeedIndex = speedIndex;
+            speedIndex = i;
+        }
+
+        timerSpeed = speeds[speedIndex];
+        enabled = !uiOpen && speedIndex > 0;
+    }
+
+
+    public void ChangeGameSpeed(int i, Action<int> a)
+    {
+        ChangeGameSpeed(i);
+        a?.Invoke(speedIndex);
     }
     #endregion
 
@@ -308,5 +338,7 @@ public class Tick : MonoBehaviour
         numberOfDays = gameState.numberOfDays;
         UpdateTime();
     }
+
+
     #endregion
 }

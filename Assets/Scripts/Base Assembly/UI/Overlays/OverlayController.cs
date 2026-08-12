@@ -23,7 +23,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
 
     NativeArray<float> overlayValueMap;
     #region Init
-    public void AfterInit()
+    public void AfterLoad()
     {
         int grid = MyGrid.GridSize;
 
@@ -91,15 +91,17 @@ public class OverlayController : MonoBehaviour, IAfterLoad
             if (CheckBindings(overlay, i, paths))
                 continue;
 
-            overlay.input.performed += ChangeOverlay;
+            overlay.input.performed += ChangeOverlayAction;
         }
     }
     #endregion Init
 
-    private void ChangeOverlay(InputAction.CallbackContext obj)
+    private void ChangeOverlayAction(InputAction.CallbackContext obj)
+        => ChangeOverlay(Mathf.RoundToInt(obj.ReadValue<float>()));
+
+    public void ChangeOverlay(int i)
     {
-        int i = Mathf.RoundToInt(obj.ReadValue<float>());
-        if (activeOverlay == i)
+        if (activeOverlay == i || i == -1)
         {
             map.gameObject.SetActive(false);
             activeOverlay = -1;
@@ -117,7 +119,6 @@ public class OverlayController : MonoBehaviour, IAfterLoad
 
         map.gameObject.SetActive(true);
     }
-
    
     void BakeGradient(Gradient gradient)
     {
@@ -143,6 +144,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         gradientTexture.Apply();
         overlayMapMaterial.SetTexture("_GradientTex", gradientTexture);
     }
+
     public void Overlay(Gradient gradient)
     {
         BakeGradient(gradient);
@@ -150,8 +152,14 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         texture.SetPixelData(overlayValueMap, 0);
         texture.Apply();
     }
+
     private void OnDestroy()
     {
         overlayValueMap.Dispose();
+    }
+
+    public List<BaseOverlay> GetButtonOverlayTypes()
+    {
+        return overlayModes;
     }
 }
