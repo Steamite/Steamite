@@ -1,4 +1,6 @@
 using BottomBar.Building;
+using System;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -8,6 +10,7 @@ public class ToolkitShortucts : MonoBehaviour, IAfterLoad
     [SerializeField] InputActionAsset inputAsset;
     TimeButtons timeButtons;
     LevelButtons levelButtons;
+    OverlayButtons overlayButtons;
     //[SerializeField] public RadioButtons levelButtons;
 
     InputAction shift;
@@ -17,24 +20,31 @@ public class ToolkitShortucts : MonoBehaviour, IAfterLoad
     InputAction level;
     InputAction buildMenu;
 
-
-
-    public void AfterInit()
+    public void AfterLoad()
     {
-        VisualElement bottomBar = UIRefs.TopBarRoot;
+        VisualElement topBar = UIRefs.TopBarRoot;
         shift = inputAsset.actionMaps[1].FindAction("Shift");
 
         gameSpeed = smallShortcuts.FindAction("Game Speed");
         level = smallShortcuts.FindAction("Level");
         buildMenu = smallShortcuts.FindAction("Build Menu");
 
-        timeButtons = bottomBar.Q<TimeButtons>();
-        timeButtons.Start();
+        UIRefs.TopBar.RegisterReload(ReloadUI);
+        enabled = true;
+    }
 
-        levelButtons = bottomBar.Q<LevelButtons>();
-        levelButtons.Start();
+    private void ReloadUI(PanelRenderer panelRenderer, VisualElement rootElement)
+    {
+        timeButtons = rootElement.Q<TimeButtons>();
+        timeButtons.Init();
 
-        ProgressBar trustBar = bottomBar.Q<ProgressBar>("Trust");
+        levelButtons = rootElement.Q<LevelButtons>();
+        levelButtons.Init();
+
+        overlayButtons = rootElement.Q<OverlayButtons>();
+        overlayButtons.Init();
+
+        ProgressBar trustBar = rootElement.Q<ProgressBar>("Trust");
         trustBar.SetBinding(
             nameof(QuestController.Trust),
             nameof(ProgressBar.value),
@@ -45,46 +55,49 @@ public class ToolkitShortucts : MonoBehaviour, IAfterLoad
                 return (float)i;
             },
             SceneRefs.QuestController);
-
-        enabled = true;
     }
 
     private void OnEnable()
     {
         smallShortcuts.Enable();
+
+        gameSpeed.performed += GameSpeed_performed;
+        level.performed += Level_performed;
+        buildMenu.performed += BuildMenu_performed;
     }
     private void OnDisable()
     {
         smallShortcuts.Disable();
+
+        gameSpeed.performed -= GameSpeed_performed;
+        level.performed -= Level_performed;
+        buildMenu.performed -= BuildMenu_performed;
     }
 
-    private void Update()
+    bool CanActivate => MainShortcuts.handleGrid;
+
+    void BuildMenu_performed(InputAction.CallbackContext obj)
     {
-        if (MainShortcuts.handleGrid)
-        {
-            if (shift.inProgress)
-            {
-                if (level.triggered)
-                {
-                    MyGrid.ChangeGridLevel(Mathf.RoundToInt(level.ReadValue<float>()));
-                }
-            }
-            else
-            {
-                // 
-                if (gameSpeed.triggered && gameSpeed.phase == InputActionPhase.Performed)
-                {
-                    int i = Mathf.RoundToInt(gameSpeed.ReadValue<float>());
-                    Debug.Log("New: " + i);
-                    timeButtons.OutsideTrigger(i);
-                }
-            }
+        if (!CanActivate)
+            return;
+        UIRefs.BottomBarRoot.Q<BuildMenu>().Toggle();
+    }
 
+    void Level_performed(InputAction.CallbackContext obj)
+    {
+        if (!CanActivate)
+            return;
 
-            if (buildMenu.triggered)
-            {
-                UIRefs.BottomBarRoot.Q<BuildMenu>().Toggle();
-            }
-        }
+        int i = Mathf.RoundToInt(level.ReadValue<float>());
+        MyGrid.ChangeGridLevel(i);
+    }
+
+    void GameSpeed_performed(InputAction.CallbackContext obj)
+    {
+        if (!CanActivate)
+            return;
+
+        int i = Mathf.RoundToInt(obj.ReadValue<float>());
+        SceneRefs.Tick.ChangeGameSpeed(i, timeButtons.OutsideTrigger);
     }
 }

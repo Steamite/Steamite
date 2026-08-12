@@ -46,7 +46,7 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
 
     float mod;
 
-    public void AfterInit()
+    public void AfterLoad()
     {
         transform.GetChild(0).LookAt(transform);
         cameraMap = mainShortcuts?.inputAsset.actionMaps[0];

@@ -442,7 +442,8 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         humanActivation?.Invoke();
         humanActivation = null;
         SceneRefs.Tick.InitTicks();
-        UIRefs.TopBar.GetComponent<IToolkitController>().Init(UIRefs.TopBarRoot);
+        UIRefs.TopBar.RegisterReload(
+            (a, b) => UIRefs.TopBar.GetComponent<IToolkitController>().Init(b));
     }
 
     public void UIUpdate(string property = "")

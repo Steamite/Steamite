@@ -91,7 +91,6 @@ public class Pipe : Building
                 part.connectedPipe.connectedPipes[connectionOrder[i]].gameObject.layer = 7;
             }
         }
-        GetComponent<SortingGroup>().sortingLayerName = "Pipes";
         Highlight(new());
 
         SceneRefs.JobQueue.AddJob(JobState.Constructing, this); // creates a new job with the data above

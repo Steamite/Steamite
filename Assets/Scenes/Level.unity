@@ -133,7 +133,6 @@ GameObject:
   - component: {fileID: 220867757}
   - component: {fileID: 220867758}
   - component: {fileID: 220867759}
-  - component: {fileID: 220867760}
   m_Layer: 5
   m_Name: Top Bar
   m_TagString: Untagged
@@ -250,18 +249,6 @@ PanelRenderer:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_Position: 0
---- !u!114 &220867760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 220867750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 198ef2ee1ca752c4dbc5d110229e34a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BaseAssembly::PanelRendererRoot
 --- !u!114 &220867761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,7 +258,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 220867750}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d26028dc40e1374c92823d11a769012, type: 3}
+  m_Script: {fileID: 11500000, guid: f4678cd9f1f1c6e4e9f37f259accaedb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::TopMenu
 --- !u!1 &225780439
@@ -595,6 +582,7 @@ MonoBehaviour:
       m_Action: Input
       m_Flags: 0
     m_Flags: 0
+  sprite: {fileID: 21300000, guid: 7c4a7586033eca9449c85deef53778aa, type: 3}
   maxIntegrity: 5
 --- !u!1 &695151492
 GameObject:
@@ -764,6 +752,7 @@ MonoBehaviour:
       m_Action: Toggle Integrity Overlay
       m_Flags: 0
     m_Flags: 0
+  sprite: {fileID: 21300000, guid: 2b61dc557efa942428ac194cfa787fd7, type: 3}
   maxIntegrity: 15
 --- !u!1 &745012301
 GameObject:
@@ -1392,7 +1381,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!20 &908485429
 Camera:
   m_ObjectHideFlags: 0
@@ -1761,7 +1750,7 @@ MonoBehaviour:
   _pauseMenu: {fileID: 1708745677}
   _toolkitShotcuts: {fileID: 8277524054700303564}
   _bottomBar: {fileID: 897350252}
-  _topBar: {fileID: 220867760}
+  _topBar: {fileID: 220867761}
   _saveDialog: {fileID: 777753792}
   _loadMenu: {fileID: 405851069}
 --- !u!1 &1708745675
@@ -2447,6 +2436,9 @@ MonoBehaviour:
   lastTick: 0
   ticksPerSecond: 4
   tickTimer: 0
+  speeds: 00000000010000000300000005000000
+  speedIndex: 0
+  prevSpeedIndex: 0
 --- !u!114 &8150810313726245685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2480,10 +2472,9 @@ MonoBehaviour:
   - {fileID: 8150810313726245683}
   - {fileID: 7072378217534680772}
   - {fileID: 6086404398923934763}
+  - {fileID: 274122778}
   - {fileID: 8277524054700303564}
   - {fileID: 897350252}
-  - {fileID: 220867761}
-  - {fileID: 274122778}
 --- !u!114 &8150810313726245686
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -188,9 +188,6 @@ namespace EditorWindows.Windows
                 }
 
                 GameObject gameObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                SortingGroup sortGroup = gameObj.AddComponent<SortingGroup>();
-                sortGroup.sortingLayerName = "Blueprint";
-                sortGroup.sortingOrder = 10;
                 gameObj.layer = 2;
 
                 gameObj.AddComponent<Building>();

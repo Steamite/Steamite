@@ -555,21 +555,21 @@
             "actions": [
                 {
                     "name": "Game Speed",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "37eb4359-1683-490f-bf93-9c511f9685ae",
-                    "expectedControlType": "",
+                    "expectedControlType": "Integer",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Level",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "3d6282c0-6091-40c3-be3e-2f346d1941ac",
-                    "expectedControlType": "",
+                    "expectedControlType": "Integer",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Build Menu",
@@ -585,7 +585,7 @@
                 {
                     "name": "",
                     "id": "a84da518-dcae-4283-b2f1-c037d5fd3951",
-                    "path": "<Keyboard>/1",
+                    "path": "<Keyboard>/4",
                     "interactions": "",
                     "processors": "Scale(factor=0)",
                     "groups": "",
@@ -596,7 +596,7 @@
                 {
                     "name": "",
                     "id": "d2b3f9b6-2ad9-4147-8862-5568f178fe9a",
-                    "path": "<Keyboard>/2",
+                    "path": "<Keyboard>/5",
                     "interactions": "",
                     "processors": "Scale",
                     "groups": "",
@@ -607,7 +607,7 @@
                 {
                     "name": "",
                     "id": "4a4523ff-a494-4f43-9801-830c99100145",
-                    "path": "<Keyboard>/3",
+                    "path": "<Keyboard>/6",
                     "interactions": "",
                     "processors": "Scale(factor=2)",
                     "groups": "",
@@ -618,7 +618,7 @@
                 {
                     "name": "",
                     "id": "b0ae404d-0f04-41c6-8702-d5a9f8eb7a30",
-                    "path": "<Keyboard>/4",
+                    "path": "<Keyboard>/7",
                     "interactions": "",
                     "processors": "Scale(factor=3)",
                     "groups": "",
@@ -629,7 +629,7 @@
                 {
                     "name": "",
                     "id": "28096aec-dca1-401c-a767-699bc948756f",
-                    "path": "<Keyboard>/5",
+                    "path": "<Keyboard>/8",
                     "interactions": "",
                     "processors": "Scale(factor=4)",
                     "groups": "",

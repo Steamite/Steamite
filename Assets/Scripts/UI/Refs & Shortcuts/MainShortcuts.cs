@@ -41,7 +41,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
         return Task.CompletedTask;
     }
 
-    public void AfterInit()
+    public void AfterLoad()
     {
         enabled = true;
         EnableInput();

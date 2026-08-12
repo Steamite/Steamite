@@ -67,7 +67,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
     string worldName;
 
     #region Init
-    public void AfterInit()
+    public void AfterLoad()
     {
         SceneRefs.Tick.SubscribeToEvent(() => SaveGame("", true), Tick.TimeEventType.Day);
         UIRefs.PauseMenu.AddSaveAction((s) => SaveGame(s, false));

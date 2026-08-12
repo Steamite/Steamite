@@ -7,6 +7,7 @@ public abstract class BaseOverlay : MonoBehaviour
 {
     public Gradient gradient;
     public InputAction input;
+    public Sprite sprite;
 
     public abstract void Overlay(NativeArray<float> overlay);
 
