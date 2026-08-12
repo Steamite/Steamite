@@ -33,6 +33,6 @@
     <engine:VisualElement name="Money-Background" class="small-window" style="position: relative;">
         <engine:Label text="##### &lt;color=#FFD700&gt;£&lt;/color&gt;" name="Money-Value" class="money"/>
     </engine:VisualElement>
-    <OverlayButtons name="OverlayButtons" style="position: absolute; top: 8%; right: 0; flex-grow: 0; background-color: rgba(46, 46, 46, 0.247);"/>
+    <OverlayElem style="position: absolute; top: 8%; right: 0%; align-self: flex-end; align-items: flex-end;"/>
     <engine:Instance template="Controls" name="Controlls" style="position: absolute; height: 100%; width: 100%; display: none;"/>
 </engine:UXML>

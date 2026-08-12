@@ -15,13 +15,29 @@ public class OverlayController : MonoBehaviour, IAfterLoad
 
     [SerializeField] Texture2D texture;
     [SerializeField] Texture2D gradientTexture;
+    [SerializeField] FilterMode overlayFilter;
+
 
     Image map;
 
     List<BaseOverlay> overlayModes;
-    int activeOverlay = -1;
+    int activeOverlayIndex = -1;
+    public int ActiveOvelay => activeOverlayIndex;
 
     NativeArray<float> overlayValueMap;
+
+    public Texture2D GradientTexture => gradientTexture;
+
+
+    event Action<int, BaseOverlay?> OverlayChanged;
+
+    public void AddOverlayChanged(Action<int, BaseOverlay?> action)
+    {
+        OverlayChanged += action;
+        if(activeOverlayIndex > -1)
+            action(activeOverlayIndex, overlayModes[activeOverlayIndex]);
+    }
+
     #region Init
     public void AfterLoad()
     {
@@ -53,7 +69,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     {
         texture = new(size, size, TextureFormat.RFloat, false)
         {
-            filterMode = FilterMode.Bilinear
+            filterMode = overlayFilter
         };
         overlayMapMaterial.SetTexture("_MainTex", texture);
     }
@@ -101,14 +117,15 @@ public class OverlayController : MonoBehaviour, IAfterLoad
 
     public void ChangeOverlay(int i)
     {
-        if (activeOverlay == i || i == -1)
+        if (activeOverlayIndex == i || i == -1)
         {
             map.gameObject.SetActive(false);
-            activeOverlay = -1;
+            activeOverlayIndex = -1;
+            OverlayChanged?.Invoke(activeOverlayIndex, null);
             return;
         }
 
-        activeOverlay = i;
+        activeOverlayIndex = i;
 
         // calculate values
         BaseOverlay overlay = overlayModes[i];
@@ -116,6 +133,8 @@ public class OverlayController : MonoBehaviour, IAfterLoad
 
         // mark the grid
         Overlay(overlay.gradient);
+
+        OverlayChanged?.Invoke(activeOverlayIndex, overlay);
 
         map.gameObject.SetActive(true);
     }
@@ -161,5 +180,10 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     public List<BaseOverlay> GetButtonOverlayTypes()
     {
         return overlayModes;
+    }
+
+    public void ResetListeners()
+    {
+        OverlayChanged = null;
     }
 }
