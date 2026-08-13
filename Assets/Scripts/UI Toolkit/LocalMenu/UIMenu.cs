@@ -77,6 +77,14 @@ namespace LocalMenuUtility
                         description.text = stat.GetText(anchor.parent.IndexOf(anchor) + 1);
                     }
                     break;
+                case GradientMouseData gradientMouse:
+                    header.text = "test";
+                    secondHeader.text = gradientMouse.data.ToString();
+                    description.text = "";
+
+                    secondHeader.style.display = DisplayStyle.Flex;
+                    costList.style.display = DisplayStyle.None;
+                    break;
             }
         }
 

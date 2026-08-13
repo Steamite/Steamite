@@ -420,6 +420,7 @@ MonoBehaviour:
   texture: {fileID: 0}
   gradientTexture: {fileID: 0}
   overlayFilter: 0
+  gridTiles: {fileID: 3114157475242612541}
 --- !u!223 &274122779
 Canvas:
   m_ObjectHideFlags: 0
@@ -584,6 +585,7 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   sprite: {fileID: 21300000, guid: 7c4a7586033eca9449c85deef53778aa, type: 3}
+  Name: 
   maxIntegrity: 5
 --- !u!1 &695151492
 GameObject:
@@ -754,6 +756,7 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   sprite: {fileID: 21300000, guid: 2b61dc557efa942428ac194cfa787fd7, type: 3}
+  Name: 
   maxIntegrity: 15
 --- !u!1 &745012301
 GameObject:
@@ -2469,6 +2472,7 @@ MonoBehaviour:
   - {fileID: 6086404398923934763}
   - {fileID: 4967022013944964016}
   - {fileID: 1222757009}
+  - {fileID: 1855733983}
   afterLoads:
   - {fileID: 8150810313726245683}
   - {fileID: 7072378217534680772}

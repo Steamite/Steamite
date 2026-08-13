@@ -139,6 +139,8 @@ public class MouseEvents : MonoBehaviour
                 c = blueprintInstance.CanPlace() ? Color.blue : Color.red;
                 blueprintInstance.Highlight(c);
                 return;
+            case ControlMode.Overlay:
+                break;
         }
         enterObject.Highlight(c);
     }

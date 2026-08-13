@@ -18,7 +18,9 @@ public enum ControlMode
     Dig,
     /// <summary>Building placement mode.</summary>
     Build,
-    Upgrade
+    Upgrade,
+
+    Overlay
 }
 [RequireComponent(typeof(MouseEvents), typeof(MultiSelect), typeof(BuildingActions))]
 public class GridTiles : MonoBehaviour
@@ -235,30 +237,32 @@ public class GridTiles : MonoBehaviour
     void EnterMode(ControlMode mode)
     {
         bool visible = true;
-        Texture2D cur = null;
-        Vector2 vec = new();
+        Texture2D cursorSprite = null;
+        Vector2 cursorOffset = new();
         ActiveControl = mode;
         switch (mode)
         {
             case ControlMode.Nothing:
-                cur = default;
-                vec = Vector2.zero;
+                cursorSprite = default;
+                cursorOffset = Vector2.zero;
                 break;
             case ControlMode.Deconstruct:
-                cur = cursors[0];
-                vec = new(15, 15);
+                cursorSprite = cursors[0];
+                cursorOffset = new(15, 15);
                 break;
             case ControlMode.Dig:
-                cur = cursors[1];
-                vec = new(1, 16);
+                cursorSprite = cursors[1];
+                cursorOffset = new(1, 16);
                 break;
             case ControlMode.Upgrade:
-                cur = cursors[2];
-                vec = new(15, 1);
+                cursorSprite = cursors[2];
+                cursorOffset = new(15, 1);
                 break;
             case ControlMode.Build:
-                cur = default;
-                vec = Vector2.zero;
+                cursorSprite = default;
+                cursorOffset = Vector2.zero;
+                Cursor.SetCursor(cursorSprite, cursorOffset, CursorMode.Auto);
+
                 if (BlueprintPrefab is Pipe)
                     SceneRefs.CameraSceneMover.SetRaycastMask(pipeMask);
                 else
@@ -266,13 +270,18 @@ public class GridTiles : MonoBehaviour
                 Blueprint();
                 shiftKey.Enable();
                 return;
+            case ControlMode.Overlay:
+
+
+                break;
+
         }
         Enter();
 
 
         if (visible)
         {
-            Cursor.SetCursor(cur, vec, CursorMode.Auto);
+            Cursor.SetCursor(cursorSprite, cursorOffset, CursorMode.Auto);
         }
     }
     #endregion

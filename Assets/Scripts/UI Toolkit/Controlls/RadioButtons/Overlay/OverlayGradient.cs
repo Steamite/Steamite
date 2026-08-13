@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public partial class OverlayGradient : VisualElement
@@ -27,6 +28,10 @@ public partial class OverlayGradient : VisualElement
 
         });
         image.AddToClassList("overlay-gradient-image");
+        image.RegisterCallback<PointerEnterEvent>(Enter);
+        image.RegisterCallback<PointerMoveEvent>(Move);
+
+        image.RegisterCallback<PointerLeaveEvent>(EndMove);
 
         labels = new();
 
@@ -34,6 +39,38 @@ public partial class OverlayGradient : VisualElement
         CreateLabel();
 
         style.display = DisplayStyle.None;
+    }
+
+    private void Enter(PointerEnterEvent evt)
+    {
+        LocalMenuUtility.LocalMenuController.OpenUI(
+                new GradientMouseData(0),
+                this);
+    }
+
+    private void EndMove(PointerLeaveEvent evt)
+    {
+        LocalMenuUtility.LocalMenuController.Close(this);
+    }
+
+    private void Move(PointerMoveEvent evt)
+    {
+        var x = evt.localPosition.x / resolvedStyle.width;
+        
+        Debug.Log($"{resolvedStyle.width}; ({evt.localPosition.x}); ({x})");
+
+        if (SceneRefs.Overlays.overlay.ActiveOverlay is StabilityOverlay stability)
+        {
+            var val = Mathf.RoundToInt(Mathf.Lerp(
+                0, 
+                stability.MaxIntegrity, 
+                x));
+
+            LocalMenuUtility.LocalMenuController.OpenUI(
+                new GradientMouseData(val), 
+                this,
+                true);
+        }
     }
 
     void CreateLabel()

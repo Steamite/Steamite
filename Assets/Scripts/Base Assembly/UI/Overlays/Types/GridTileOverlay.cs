@@ -17,10 +17,10 @@ public abstract class GridTileOverlay : BaseOverlay
             for (int x = 0; x < size; x++)
             {
                 int index = (y * size) + x;
-                overlay[index] = Evaluate(grid, x, y);
+                overlay[index] = Evaluate(grid[x, y]);
             }
         }
     }
 
-    protected abstract float Evaluate(GridTile[,] grid, int x, int y);
+    public abstract float Evaluate(GridTile tile);
 }

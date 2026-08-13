@@ -16,13 +16,17 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     [SerializeField] Texture2D texture;
     [SerializeField] Texture2D gradientTexture;
     [SerializeField] FilterMode overlayFilter;
+    [SerializeField] GridTiles gridTiles;
 
+    public IUIElement worldMenu;
 
     Image map;
 
     List<BaseOverlay> overlayModes;
     int activeOverlayIndex = -1;
-    public int ActiveOvelay => activeOverlayIndex;
+
+    public int ActiveOvelayIndex => activeOverlayIndex;
+    public BaseOverlay ActiveOverlay => overlayModes[activeOverlayIndex];
 
     NativeArray<float> overlayValueMap;
 
@@ -117,11 +121,15 @@ public class OverlayController : MonoBehaviour, IAfterLoad
 
     public void ChangeOverlay(int i)
     {
+        worldMenu.Open(null);
         if (activeOverlayIndex == i || i == -1)
         {
             map.gameObject.SetActive(false);
             activeOverlayIndex = -1;
             OverlayChanged?.Invoke(activeOverlayIndex, null);
+
+            gridTiles.ChangeSelMode(ControlMode.Nothing);
+
             return;
         }
 
@@ -135,6 +143,10 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         Overlay(overlay.gradient);
 
         OverlayChanged?.Invoke(activeOverlayIndex, overlay);
+        if(gridTiles.ActiveControl != ControlMode.Overlay)
+            gridTiles.ChangeSelMode(ControlMode.Overlay);
+        else
+            overlayMapMaterial.SetVector("_MousePos", new(-50, 0, -50));
 
         map.gameObject.SetActive(true);
     }
@@ -185,5 +197,30 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     public void ResetListeners()
     {
         OverlayChanged = null;
+    }
+
+    private void Update()
+    {
+        if (activeOverlayIndex == -1)
+            return;
+        Plane plane = new(Vector3.up, -2.6f);
+
+        Vector3 vector = Mouse.current.position.value;
+        Ray ray = Camera.main.ScreenPointToRay(vector);
+
+        if (plane.Raycast(ray, out float enter))
+        {
+            Vector3 hitPoint = ray.GetPoint(enter);
+            hitPoint.x = MathF.Floor(hitPoint.x + 0.5f);
+            hitPoint.z = MathF.Floor(hitPoint.z + 0.5f);
+            overlayMapMaterial.SetVector("_MousePos", hitPoint);
+            //Debug.Log(hitPoint);
+
+            if (hitPoint.x >= 0 && hitPoint.x < MyGrid.GridSize &&
+                hitPoint.z >= 0 && hitPoint.z < MyGrid.GridSize)
+                worldMenu.Open(MyGrid.GetGridTile((int)hitPoint.x, (int)hitPoint.z));
+            else
+                worldMenu.Open(null);
+        }
     }
 }
