@@ -9,6 +9,8 @@ public abstract class BaseOverlay : MonoBehaviour
     public InputAction input;
     public Sprite sprite;
 
+    public string Name;
+
     public abstract void Overlay(NativeArray<float> overlay);
 
     public void SetInputIndex(int i)

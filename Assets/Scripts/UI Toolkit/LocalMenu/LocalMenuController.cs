@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.Android;
@@ -9,7 +10,7 @@ using UnityEngine.UIElements;
 
 namespace LocalMenuUtility
 {
-    public class LocalMenuController : MonoBehaviour
+    public class LocalMenuController : MonoBehaviour, IBeforeLoad
     {
         [SerializeField] VisualTreeAsset window;
         [SerializeField] PanelSettings settings;
@@ -30,28 +31,34 @@ namespace LocalMenuUtility
 
         void Awake()
         {
+            return;
             instance = this;
             registeredEvents = new();
 
             for (int i = 0; i < MENU_COUNT+1; i++)
             {
                 GameObject menuObject = new();
-                PanelRendererRoot root = menuObject.AddComponent<PanelRendererRoot>();
-                root.Renderer.panelSettings = settings;
-                root.Renderer.visualTreeAsset = window;
-                root.Renderer.sortingOrder = sortingOrder;
+                PanelRendererRoot root;
+                
 
                 if(i < MENU_COUNT)
                 {
-                    UIMenu uiMenu = menuObject.AddComponent<UIMenu>();
-                    uiMenus[i] = uiMenu;
+                    uiMenus[i] = menuObject.AddComponent<UIMenu>();
+                    root = uiMenus[i];
                     menuObject.name = $"UI Menu: {i}";
                 }
                 else
                 {
                     worldMenu = menuObject.AddComponent<WorldMenu>();
+                    SceneRefs.Overlays.overlay.worldMenu = worldMenu;
+                    root = worldMenu;
                     menuObject.name = $"World Menu";
                 }
+
+                root.Renderer.panelSettings = settings;
+                root.Renderer.visualTreeAsset = window;
+                root.Renderer.sortingOrder = sortingOrder;
+
                 menuObject.transform.parent = transform;
             }
         }
@@ -65,6 +72,12 @@ namespace LocalMenuUtility
             {
                 UIMenu menu = GetMenuByObject(data);
                 if (menu != null)
+                {
+                    menu.UpdateContent(data, element, onlyUpdate);
+                    return;
+                }
+                menu = GetMenuByElement(element);
+                if(menu != null)
                 {
                     menu.UpdateContent(data, element, onlyUpdate);
                     return;
@@ -158,6 +171,40 @@ namespace LocalMenuUtility
         void Move(VisualElement visualElement)
         {
             GetMenuByElement(visualElement)?.Move();
+        }
+
+        public Task BeforeInit()
+        {
+            instance = this;
+            registeredEvents = new();
+
+            for (int i = 0; i < MENU_COUNT + 1; i++)
+            {
+                GameObject menuObject = new();
+                PanelRendererRoot root;
+
+
+                if (i < MENU_COUNT)
+                {
+                    uiMenus[i] = menuObject.AddComponent<UIMenu>();
+                    root = uiMenus[i];
+                    menuObject.name = $"UI Menu: {i}";
+                }
+                else
+                {
+                    worldMenu = menuObject.AddComponent<WorldMenu>();
+                    SceneRefs.Overlays.overlay.worldMenu = worldMenu;
+                    root = worldMenu;
+                    menuObject.name = $"World Menu";
+                }
+
+                root.Renderer.panelSettings = settings;
+                root.Renderer.visualTreeAsset = window;
+                root.Renderer.sortingOrder = sortingOrder;
+
+                menuObject.transform.parent = transform;
+            }
+            return Task.CompletedTask;
         }
     }
 }

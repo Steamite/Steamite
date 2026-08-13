@@ -167,9 +167,9 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         grid[x, y].TileBase = clickable;
 
         if (prev is Rock rock)
-            RecalculateStability(rock, false);
+            ModifyStability(rock, false);
         else if (clickable is Rock rock1)
-            RecalculateStability(rock1, true);
+            ModifyStability(rock1, true);
         
         UpdateEffects();
         
@@ -192,36 +192,42 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             item.RecalculateRange();
         }
     }
-    void RecalculateStability(Rock rock, bool add)
+    //void RecalculateStability(Rock rock, )
+    void ModifyStability(Rock rock, bool add)
     {
-        int size = Mathf.RoundToInt(rock.Integrity);
+        int size = Mathf.RoundToInt(rock.originalIntegrity);
         GridPos center = rock.GetPos();
         int x = (int)center.x;
         int y = (int)center.z;
         for (int i = 1; i < size; i++)
         {
-            Line(x, y + size - i, i);
-            Line(x, y - size + i, i);
+            Line(x, y + size - i, i, add);
+            Line(x, y - size + i, i, add);
         }
-        Line(x, y, size);
+        Line(x, y, size, add);
     }
 
-    void Line(int x, int y, int valueOnCenter)
+    void Line(int x, int y, int valueOnCenter, bool add)
     {
-        ModifyIntegrity(x, y, valueOnCenter);
+        ModifyIntegrity(x, y, valueOnCenter, add);
         int increaseVal;
         for (int i = 1; i < valueOnCenter; i++)
         {
             increaseVal = valueOnCenter - i;
-            ModifyIntegrity(x + i, y, increaseVal);
-            ModifyIntegrity(x - i, y, increaseVal);
+            ModifyIntegrity(x + i, y, increaseVal, add);
+            ModifyIntegrity(x - i, y, increaseVal, add);
         }
     }
 
-    void ModifyIntegrity(int x, int y, int change)
+    void ModifyIntegrity(int x, int y, int change, bool add)
     {
         if(CheckBounds(x, y))
-            grid[x, y].IncreaseStability(change);
+        {
+            if(add)
+                grid[x, y].IncreaseStability(change);
+            else
+                grid[x, y].DecreaseStability(change);
+        }
     }
 
 
@@ -382,7 +388,9 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             Rock rock = rocks.GetChild(j).GetComponent<Rock>();
             GridPos vec = rock.GetPos();
             rock.id = j + 1;
-            save.grid[Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.z)] = rock.Save();
+            var rSave = rock.Save() as RockSave;
+            rSave.originalIntegrity = rSave.integrity;
+            save.grid[Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.z)] = rSave;
         }
     }
 
@@ -438,6 +446,11 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     public GridTile[,] GetGrid()
     {
         return grid;
+    }
+
+    public GridTile GetGridTile(int x, int z)
+    {
+        return grid[x, z];
     }
 
     #endregion

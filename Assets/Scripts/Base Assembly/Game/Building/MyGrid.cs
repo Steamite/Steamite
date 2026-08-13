@@ -335,5 +335,9 @@ public static class MyGrid
         }
         return gridSave.width * gridSave.height;
     }
+    public static GridTile GetGridTile(int x, int z)
+    {
+        return levels[currentLevel].GetGridTile(x, z);
+    }
     #endregion
 }

@@ -9,9 +9,9 @@ public class StabilityOverlay : GridTileOverlay
     public float MaxIntegrity => maxIntegrity;
 
 
-    protected override float Evaluate(GridTile[,] grid, int x, int y)
+    public override float Evaluate(GridTile tile)
     {
-        return grid[x, y].Stability / maxIntegrity;
+        return tile.Stability / maxIntegrity;
     }
 }
 
