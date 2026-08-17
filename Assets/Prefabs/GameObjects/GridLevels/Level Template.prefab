@@ -295,6 +295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 114942921115005622}
   - component: {fileID: 1135758614679704061}
+  - component: {fileID: 5904351823465201333}
   m_Layer: 2
   m_Name: Level Template
   m_TagString: Untagged
@@ -334,6 +335,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 21
   height: 21
+  stability: {fileID: 5904351823465201333}
   rocks: {fileID: 4110801998864547646}
   roads: {fileID: 3648922814593868028}
   waters: {fileID: 1739259922143558596}
@@ -342,3 +344,37 @@ MonoBehaviour:
   buildings: {fileID: 5844745823362512448}
   pipes: {fileID: 4897319285753657160}
   showIntegrity: 1
+--- !u!114 &5904351823465201333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8759976554350482202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63d5368c9d60ff04dadfa479c7e0f6d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BaseAssembly::Stability
+  groundLevel: {fileID: 1135758614679704061}
+  StabilityChanceKeys:
+  - Stability: 0
+    Chance: 60
+    Size: 3
+    Value: 3
+  - Stability: 5
+    Chance: 40
+    Size: 3
+    Value: 2
+  - Stability: 10
+    Chance: 20
+    Size: 2
+    Value: 1
+  - Stability: 12
+    Chance: 5
+    Size: 1
+    Value: 1
+  - Stability: 15
+    Chance: 0
+    Size: 1
+    Value: 1
