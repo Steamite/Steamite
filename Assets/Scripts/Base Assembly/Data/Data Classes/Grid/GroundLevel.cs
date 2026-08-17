@@ -1,11 +1,10 @@
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 /// <summary>Util class for managment of each different level.</summary>
 public class GroundLevel : MonoBehaviour, IUpdatable
@@ -19,6 +18,8 @@ public class GroundLevel : MonoBehaviour, IUpdatable
 
     /// <summary>grid itself</summary>
     GridTile[,] grid;
+
+    [SerializeField] Stability stability;
 
     /// <summary>Rock holder</summary>
     [Header("Reference")] public Transform rocks;
@@ -166,10 +167,12 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         ClickableObject prev = grid[x, y].TileBase; 
         grid[x, y].TileBase = clickable;
 
+
+        // loop though all affected rocks and run a chance on all of them,
         if (prev is Rock rock)
-            ModifyStability(rock, false);
+            stability.DecreaseStability(rock);
         else if (clickable is Rock rock1)
-            ModifyStability(rock1, true);
+            stability.IncereaseStability(rock1);
         
         UpdateEffects();
         
@@ -185,6 +188,22 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         }*/
     }
 
+    public bool ChangeGridStability(int x, int y, int change, bool add)
+    {
+        if(CheckBounds(x, y))
+        {
+            if (add)
+                grid[x, y].IncreaseStability(change);
+            else
+                grid[x, y].DecreaseStability(change);
+
+            return true;
+        }
+        return false;
+    }
+
+    
+
     void UpdateEffects()
     {
         foreach (var item in MyGrid.EffectBuildings)
@@ -192,43 +211,10 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             item.RecalculateRange();
         }
     }
-    //void RecalculateStability(Rock rock, )
-    void ModifyStability(Rock rock, bool add)
-    {
-        int size = Mathf.RoundToInt(rock.originalIntegrity);
-        GridPos center = rock.GetPos();
-        int x = (int)center.x;
-        int y = (int)center.z;
-        for (int i = 1; i < size; i++)
-        {
-            Line(x, y + size - i, i, add);
-            Line(x, y - size + i, i, add);
-        }
-        Line(x, y, size, add);
-    }
 
-    void Line(int x, int y, int valueOnCenter, bool add)
-    {
-        ModifyIntegrity(x, y, valueOnCenter, add);
-        int increaseVal;
-        for (int i = 1; i < valueOnCenter; i++)
-        {
-            increaseVal = valueOnCenter - i;
-            ModifyIntegrity(x + i, y, increaseVal, add);
-            ModifyIntegrity(x - i, y, increaseVal, add);
-        }
-    }
 
-    void ModifyIntegrity(int x, int y, int change, bool add)
-    {
-        if(CheckBounds(x, y))
-        {
-            if(add)
-                grid[x, y].IncreaseStability(change);
-            else
-                grid[x, y].DecreaseStability(change);
-        }
-    }
+
+    
 
 
     /// <summary>
