@@ -31,7 +31,7 @@ public class BuildingWrapper : DataObject
 
 
 #if UNITY_EDITOR
-    public void SetBuilding(Building _b, byte categoryID, string name = null)
+    public void SetBuilding(Building _b, int categoryID, string name = null)
     {
         building = _b;
         if (building)

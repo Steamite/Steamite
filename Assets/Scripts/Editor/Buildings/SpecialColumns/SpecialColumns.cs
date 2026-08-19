@@ -386,6 +386,37 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 },
             });
             #endregion
+
+            view.columns.Add(new()
+            {
+                name = "stability",
+                title = "Stability",
+                resizable = true,
+                width = 75,
+                makeCell = () => new IntegerField(),
+                bindCell = (el, i) =>
+                {
+                    IntegerField intField = (IntegerField)el;
+                    intField.Unbind();
+                    intField.style.display = DisplayStyle.None;
+
+                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
+                    if (building is not IStabilitySupport)
+                        return;
+
+                    intField.style.display = DisplayStyle.Flex;
+
+                    SerializedObject serializedObject = new(building);
+                    SerializedProperty prop = serializedObject.FindProperty(
+                        nameof(IStabilitySupport.SupportValue).LowerCamelCase());
+
+                    intField.BindProperty(prop);
+                },
+                unbindCell = (el, i) =>
+                {
+                    el[0].Unbind();
+                },
+            });
         }
     }
 }

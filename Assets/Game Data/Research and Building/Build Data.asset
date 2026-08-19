@@ -42,15 +42,26 @@ MonoBehaviour:
     - rid: 8808251703612669991
     - rid: 8808251703612669992
     Icon: {fileID: 7388822144124034973, guid: 2e6d11d762930904c837fc26e0709d66, type: 3}
-  - id: 190792688
+  - id: 5
     Name: Mining
     Objects:
     - rid: 5286523460443963458
     - rid: 5286523460443963459
+    - rid: 1073264522842341447
     Icon: {fileID: 7388822144124034973, guid: f303754b353b04e4ba464dfb84699356, type: 3}
   references:
     version: 2
     RefIds:
+    - rid: 1073264522842341447
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 274342640
+        building: {fileID: 831291448094531633, guid: 4d0aa17a2f6e7854891a2c1309c07a4c, type: 3}
+        modifications: []
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: c770445d57d1c8041b75bef58b05f5d3, type: 3}
     - rid: 1153726817925070940
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:

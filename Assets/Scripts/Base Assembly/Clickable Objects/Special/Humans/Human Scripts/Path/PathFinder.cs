@@ -12,27 +12,42 @@ public static class PathFinder
 {
     #region Struct
     /// <summary>Holds info about elevators and new interests.</summary>
-    struct SearchCoords
+    class SearchCoords
     {
         /// <summary>Entry points to possible interests, coresponds to <b>entrypoints</b> in <see cref="Prep(GridPos, List{ClickableObject})"/></summary>
-        public List<GridPos> entryPoints;
+        public List<GridPos> targetPositions;
         /// <summary>Entry points to elevators.</summary>
         public List<GridPos> elevEnterPositions;
         /// <summary>Elevator anchors.</summary>
         public List<GridPos> elevPositions;
         /// <summary>Elevator connections, which are purged after one use.</summary>
         public List<List<int>> connections;
-
+        public List<int> targetBindings;
         /// <summary>
         /// Assigns interests.
         /// </summary>
         /// <param name="gridPos"></param>
-        public SearchCoords(GridPos gridPos)
+        public SearchCoords()
         {
-            entryPoints = new() { gridPos };
+            targetPositions = new();
             elevEnterPositions = new();
             elevPositions = new();
             connections = new();
+            targetBindings = new();
+        }
+        public SearchCoords(GridPos finalPos)
+        {
+            targetPositions = new() { finalPos };
+            elevEnterPositions = new();
+            elevPositions = new();
+            connections = new();
+            targetBindings = new();
+        }
+
+        public void AddPoint(GridPos pos, int index)
+        {
+            targetPositions.Add(pos);
+            targetBindings.Add(index);
         }
     }
     #endregion
@@ -85,12 +100,8 @@ public static class PathFinder
     /// <returns>Path to the object and index of the object.</returns>
     async static Task<Plan> Prep(GridPos _start, List<ClickableObject> objects, int maxLength)
     {
-        List<int> entryPoints = new();
+        
         SearchCoords coordinates = new();
-        coordinates.entryPoints = new();
-        coordinates.elevEnterPositions = new();
-        coordinates.elevPositions = new();
-        coordinates.connections = new();
 
         Building part = MyGrid.GetGridItem(_start) as Building; // gets tile build reference if standing on it
         Plan plan = new();
@@ -103,8 +114,20 @@ public static class PathFinder
                 Pipe pipe = building as Pipe;
                 if (pipe)
                 {
-                    coordinates.entryPoints.Add(pipe.GetPos());
-                    entryPoints.Add(i);
+                    coordinates.AddPoint(pipe.GetPos(), i);
+                    continue;
+                }
+
+                if(building.entryPoints.Count == 0)
+                {
+                    GridPos pos = building.GetPos();
+                    foreach (var item in building.blueprint.itemList)
+                    {
+                        GridPos p = pos += item.pos.Rotate(building.transform.rotation.eulerAngles.y, true);
+
+                        coordinates.AddPoint(p, i);
+                    }
+
                     continue;
                 }
 
@@ -119,8 +142,7 @@ public static class PathFinder
                     }
                     else
                     {
-                        coordinates.entryPoints.Add(entryPos);
-                        entryPoints.Add(i);
+                        coordinates.AddPoint(entryPos, i);
                     }
                 }
                 if (part != null && part.id == building.id) // the build that the worker is standing on, is one of the destinations 
@@ -132,8 +154,7 @@ public static class PathFinder
             }
             else
             {
-                coordinates.entryPoints.Add(objects[i].GetPos());
-                entryPoints.Add(i);
+                coordinates.AddPoint(objects[i].GetPos(), i);
             }
         }
 
@@ -164,7 +185,7 @@ public static class PathFinder
             {
                 plan.path.RemoveAt(0);
             }*/
-            plan.index = entryPoints[plan.index];
+            plan.index = coordinates.targetBindings[plan.index];
 
             for (int i = plan.path.LastIndexOf(_start); i >= 0; i--)
             {
@@ -179,21 +200,21 @@ public static class PathFinder
 
     #region Pipes
     /// <summary>
-    /// Finds shortest path connecting <paramref name="startPos"/> and <paramref name="activePos"/>.
+    /// Finds shortest path connecting <paramref name="startPos"/> and <paramref name="destinationPosition"/>.
     /// </summary>
     /// <param name="startPos">Path start position.</param>
-    /// <param name="activePos">Path end position.</param>
+    /// <param name="destinationPosition">Path end position.</param>
     /// <param name="enterObjectType">Object filter, null means anything.</param>
     /// <returns>path</returns>
-    public static List<GridPos> FindPath(GridPos startPos, GridPos activePos, Type enterObjectType, int maxLength = -1)
+    public static List<GridPos> FindPath(GridPos startPos, GridPos destinationPosition, Type enterObjectType, int maxLength = -1)
     {
         Plan p = new();
-        if (!startPos.Equals(activePos))
+        if (!startPos.Equals(destinationPosition))
         {
-            LookForPath(startPos, null, new(activePos), p, enterObjectType, maxLength);
+            LookForPath(startPos, null, new(destinationPosition), p, enterObjectType, maxLength);
             if (p.path.Count == 0)
                 p.path = null;
-            else if (MyGrid.GetGridItem(p.path[p.path.Count - 1]).GetType() != enterObjectType)
+            else if (MyGrid.GetGridItem(p.path[^1]).GetType() != enterObjectType)
                 p.path.RemoveAt(p.path.Count - 1);
         }
         else
@@ -295,9 +316,9 @@ public static class PathFinder
     /// <returns>True to continue, false to end search.</returns>
     static bool Check(PathNode checkNode, SearchCoords searchCoords, Plan plan, Queue queue, bool firstPass = true)
     {
-        for (int i = 0; i < searchCoords.entryPoints.Count; i++)
+        for (int i = 0; i < searchCoords.targetPositions.Count; i++)
         {
-            GridPos pos = searchCoords.entryPoints[i];
+            GridPos pos = searchCoords.targetPositions[i];
             if (!checkNode.pos.Equals(pos))
                 continue;
 

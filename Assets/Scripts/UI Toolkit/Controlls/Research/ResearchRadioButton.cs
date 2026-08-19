@@ -1,5 +1,6 @@
 using AbstractControls;
 using LocalMenuUtility;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace ResearchUI
@@ -65,7 +66,15 @@ namespace ResearchUI
                 VisualElement preview = new();
                 preview.style.rotate = new Rotate(0);
                 preview.AddToClassList("research-button-background");
-                BuildCategWrapper cat = SceneRefs.ObjectFactory.buildPrefabs.GetCategByID(node.objectConnection.categoryId);
+                BuildCategWrapper cat = SceneRefs.ObjectFactory.buildPrefabs
+                    .GetCategByID(node.objectConnection.categoryId);
+                if(cat == null)
+                {
+                    Debug.LogError(
+                        $"Cat: {node.objectConnection.categoryId}, not found" +
+                        $"{node.GetName()}");
+                    return;   
+                }
                 building = cat.Objects.FindIndex(q => q.id == node.objectConnection.objectId);
                 if (building > -1)
                 {

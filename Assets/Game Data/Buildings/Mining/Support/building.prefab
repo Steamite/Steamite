@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &301648529032266235
+--- !u!1 &4020670345113899530
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,12 +8,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5544106027577589464}
-  - component: {fileID: 1969783318210214645}
-  - component: {fileID: 2209024246175813930}
-  - component: {fileID: 4534813788326600551}
-  - component: {fileID: 8144834182365498627}
-  - component: {fileID: 2608198296355501892}
+  - component: {fileID: 2557691488286122964}
+  - component: {fileID: 2963220620132141087}
+  - component: {fileID: 1209267493044118702}
+  - component: {fileID: 1428891404359304572}
+  - component: {fileID: 831291448094531633}
   m_Layer: 2
   m_Name: building
   m_TagString: Untagged
@@ -21,36 +20,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5544106027577589464
+--- !u!4 &2557691488286122964
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 301648529032266235}
+  m_GameObject: {fileID: 4020670345113899530}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 1, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1969783318210214645
+--- !u!33 &2963220620132141087
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 301648529032266235}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &2209024246175813930
+  m_GameObject: {fileID: 4020670345113899530}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &1209267493044118702
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 301648529032266235}
+  m_GameObject: {fileID: 4020670345113899530}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -65,13 +64,13 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &4534813788326600551
+--- !u!23 &1428891404359304572
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 301648529032266235}
+  m_GameObject: {fileID: 4020670345113899530}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -90,7 +89,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f6feb0a57f8d9474b844663dd415df42, type: 2}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114,104 +113,65 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!210 &8144834182365498627
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 301648529032266235}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 10
-  m_SortAtRoot: 0
-  m_Sort3DAs2D: 0
---- !u!114 &2608198296355501892
+--- !u!114 &831291448094531633
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 301648529032266235}
+  m_GameObject: {fileID: 4020670345113899530}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d0e3aa1d72192443bc96320c8ce780c, type: 3}
+  m_Script: {fileID: 11500000, guid: 17133f5b4143aff439e5090c4e804478, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BaseAssembly::DiggerHut
+  m_EditorClassIdentifier: BaseAssembly::StabilityBuilding
   name: 
   id: -1
-  objectName: Digger
+  objectName: Support
   localRes:
     types: []
     ammounts: 
     capacity:
-      baseValue: 200
-      currentValue: 200
+      baseValue: 0
+      currentValue: 0
   cavedInRocks: []
   meshRenderers: []
-  buildingCategories: 2
+  buildingCategories: 0
   blueprint:
     size:
-      x: 2
-      z: 3
-      y: 0
-    moveBy:
-      x: -0.5
-      z: 0.5
-      y: 0
-    anchor:
       x: 1
       z: 1
       y: 0
+    moveBy:
+      x: 0
+      z: 0
+      y: 0
+    anchor:
+      x: 0
+      z: 0
+      y: 0
     itemList:
-    - pos:
-        x: -1
-        z: -1
-        y: 0
-      itemType: 2
-    - pos:
-        x: -1
-        z: 0
-        y: 0
-      itemType: 2
-    - pos:
-        x: -1
-        z: 1
-        y: 0
-      itemType: 3
-    - pos:
-        x: 0
-        z: -1
-        y: 0
-      itemType: 2
     - pos:
         x: 0
         z: 0
         y: 0
       itemType: 1
-    - pos:
-        x: 0
-        z: 1
-        y: 0
-      itemType: 3
   cost:
-    types: []
-    ammounts: 
+    types:
+    - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
+    ammounts: 0f000000
     baseResource:
-      types: []
-      ammounts: 
+      types:
+      - {fileID: 11400000, guid: a44abc271c137774c9f64bcc184eac08, type: 2}
+      ammounts: 0f000000
     money:
-      baseValue: 0
-      currentValue: 0
+      baseValue: 15
+      currentValue: 15
   constructing: 0
   constructionProgress: 0
   maximalProgress: 0
   modificationSpace: 0
   prefabConnection:
     categoryId: 5
-    objectId: 343481641
-  assignData:
-    AssignLimit:
-      baseValue: 3
-      currentValue: 3
+    objectId: 274342640
+  supportValue: 5

@@ -599,6 +599,7 @@ MonoBehaviour:
     capacity:
       baseValue: 5
       currentValue: 0
+  cavedInRocks: []
   meshRenderers: []
   buildingCategories: 2
   blueprint:

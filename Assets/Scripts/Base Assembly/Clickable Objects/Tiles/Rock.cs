@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 /// Makes up most of the map, holds valuable resources. <br/>
 /// Can be Dug out.
 /// </summary>
-public class Rock : ClickableObject
+public class Rock : ClickableObject, IStabilitySupport
 {
     #region Variables
     /// <summary>Data about the rock(set).</summary>
@@ -58,6 +58,13 @@ public class Rock : ClickableObject
             UIUpdate(nameof(Assigned));
         }
     }
+
+    public int SupportValue 
+    { 
+        get => Mathf.RoundToInt(originalIntegrity); 
+        set => originalIntegrity = value; 
+    }
+
     #endregion
 
     #region Basic Operations

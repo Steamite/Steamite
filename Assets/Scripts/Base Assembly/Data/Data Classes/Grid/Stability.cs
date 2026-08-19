@@ -90,7 +90,6 @@ public class Stability : MonoBehaviour
                 }
                 break;
             }
-
         }
         return threshold;
     }
@@ -163,8 +162,20 @@ public class Stability : MonoBehaviour
         LineStability(x, y, size, add, tiles);
     }
     
-    public void IncereaseStability(Rock rock)
+    public void ModifyStability(Rock rock)
         => ChangeStability(rock, true);
+
+    public List<Vector2Int> ChangeStability(int x, int y, int size, bool add)
+    {
+        List<Vector2Int> tiles = new();
+        for (int i = 1; i < size; i++)
+        {
+            LineStability(x, y + size - i, i, add, tiles);
+            LineStability(x, y - size + i, i, add, tiles);
+        }
+        LineStability(x, y, size, add, tiles);
+        return tiles;
+    }
 
     List<Vector2Int> ChangeStability(Rock rock, bool add)
     {
@@ -173,13 +184,8 @@ public class Stability : MonoBehaviour
         GridPos center = rock.GetPos();
         int x = (int)center.x;
         int y = (int)center.z;
-        for (int i = 1; i < size; i++)
-        {
-            LineStability(x, y + size - i, i, add, tiles);
-            LineStability(x, y - size + i, i, add, tiles);
-        }
-        LineStability(x, y, size, add, tiles);
-        return tiles;
+
+        return ChangeStability(x, y, size, add);
     }
 
     void LineStability(
