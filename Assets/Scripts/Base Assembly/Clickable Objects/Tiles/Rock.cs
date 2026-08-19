@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Data;
 using System.Linq;
@@ -163,16 +161,31 @@ public class Rock : ClickableObject
         Integrity -= damage;
         if (Integrity <= 0)
         {
+            integrity = 0;
+            GridPos pos = GetPos();
+            if (MyGrid.GetGroundLevelData(pos.y).TestCavein(this))
+            {
+                if(integrity > 0)
+                {
+                    SceneRefs.JobQueue.CancelJob(JobState.Digging, this);
+                    Assigned = null;
+                    toBeDug = false;
+                    Highlight(new());
+                    return true;
+                }
+            }
+
             if (rockYield?.Sum() > 0)
             {
                 Chunk chunk = SceneRefs.ObjectFactory.CreateChunk(
-                    hiddenSave.assignedType == HiddenType.Nothing 
+                    hiddenSave.assignedType == HiddenType.Nothing
                         ? GetPos()
                         : human.GetPos(),
                     rockYield, true);
                 chunk.transform.GetChild(1).GetComponent<MeshRenderer>().material.color
                     = GetComponent<MeshRenderer>().material.color;
             }
+
             SceneRefs.ObjectFactory.CreateObjectUnderRock(this);
             SceneRefs.QuestController.DigRock(this);
             MyGrid.UnsetRock(this);

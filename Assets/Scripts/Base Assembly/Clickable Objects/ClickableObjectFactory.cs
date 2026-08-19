@@ -63,7 +63,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     /// <param name="resource">Resource resource yeild.</param>
     /// <param name="hardness">Rock hardness.</param>
     /// <param name="_name">Rock name.</param>
-    public void CreateRock(GridPos gp, Color color, Resource resource, int hardness, string _name)
+    public Rock CreateRock(GridPos gp, Color color, Resource resource, int hardness, string _name)
     {
         Rock r = Instantiate(
             tilePrefabs.GetPrefab<Rock>("Dirt"),
@@ -80,6 +80,8 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
             r.GetComponent<Renderer>().material.color = color;
         r.UniqueID();
         MyGrid.SetGridItem(gp, r);
+
+        return r;
     }
 
     #endregion

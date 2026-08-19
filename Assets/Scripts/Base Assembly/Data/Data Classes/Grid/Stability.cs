@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
 public struct CaveinData
 {
     public int Stability;
     public int Chance;
-
     public int Size;
-    public int Value;
+    [FormerlySerializedAs("Value")]
+    public int IntegrityGain;
 }
 
 public class Stability : MonoBehaviour
@@ -19,10 +20,11 @@ public class Stability : MonoBehaviour
     [SerializeField] GroundLevel groundLevel;
     [SerializeField] List<CaveinData> StabilityChanceKeys;
 
-    public void DecreaseStability(Rock rock)
+    public bool DecreaseStability(Rock rock)
     {
         var changedRockPositions = ChangeStability(rock, false);
-        var effectedTiles = changedRockPositions.Select(
+        
+        /*var effectedTiles = changedRockPositions.Select(
             q => groundLevel.GetGridTile(q.x, q.y))
             .ToList();
 
@@ -31,29 +33,39 @@ public class Stability : MonoBehaviour
             GridTile tile = effectedTiles[i];
             int roll = UnityEngine.Random.Range(0, 101);
             int stability = tile.Stability;
-            int threshold = CalculateThreshold(stability);
+            int threshold = CalculateThreshold(stability, out int index);
 
             if (roll < threshold)
             {
-                Cavein(changedRockPositions, i, roll, stability, threshold);
-                return;
+                Cavein(changedRockPositions[i], roll, index, stability, threshold);
+                return true;
             }
-        }
-    }
-
-    private void Cavein(List<Vector2Int> changedRockPositions, int i, int roll, int stability, int threshold)
-    {
-        Debug.Log(
-            $"CAVEIN!!!" +
-            $"chance: {threshold}; roll: {roll}" +
-            $"stability: {stability}; pos: {changedRockPositions[i]}");
+        }*/
         
+        GridPos pos = rock.GetPos();
+        return Cave(pos);
+    }
+    bool Cave(GridPos pos)
+    {
+        var tile = groundLevel.GetGridTile((int)pos.x, (int)pos.z);
+        int roll = UnityEngine.Random.Range(0, 101);
+        int stability = tile.Stability;
+        int threshold = CalculateThreshold(stability, out int index);
 
+        if (roll < threshold)
+        {
+            Cavein(new((int)pos.x, (int)pos.z), roll, index, stability, threshold);
+            return true;
+        }
+        return false;
     }
 
-    int CalculateThreshold(int stability)
+
+    int CalculateThreshold(int stability, out int index)
     {
         int threshold = 0;
+        index = 0;
+
         for (int j = 0; j < StabilityChanceKeys.Count; j++)
         {
             float stabilityKey = StabilityChanceKeys[j].Stability;
@@ -73,6 +85,8 @@ public class Stability : MonoBehaviour
                             StabilityChanceKeys[j - 1].Chance,
                             StabilityChanceKeys[j].Chance,
                             t));
+
+                    index = j;
                 }
                 break;
             }
@@ -81,6 +95,74 @@ public class Stability : MonoBehaviour
         return threshold;
     }
 
+    private void Cavein(Vector2Int position, int roll, int index, int stability, int threshold)
+    {
+        Debug.Log(
+            $"CAVEIN!!!" +
+            $"chance: {threshold}; roll: {roll}" +
+            $"stability: {stability}; pos: {position}");
+
+        int size = StabilityChanceKeys[index].Size;
+        int integrity = StabilityChanceKeys[index].IntegrityGain;
+
+        int x = position.x;
+        int y = position.y;
+
+        for (int i = 1; i < size; i++)
+        {
+            LineCavein(x, y + size - i, i, integrity - (size - i));
+            LineCavein(x, y - size + i, i, integrity - (size - i));
+        }
+        LineCavein(x, y, size, integrity);
+    }
+  
+
+    void LineCavein(int x, int y, int valueOnCenter, int integrity)
+    {
+        CaveinModifier(x, y, integrity);
+        int increaseVal;
+        for (int i = 1; i < valueOnCenter; i++)
+        {
+            increaseVal = integrity - i;
+            CaveinModifier(x + i, y, increaseVal);
+            CaveinModifier(x - i, y, increaseVal);
+        }
+    }
+
+    void CaveinModifier(int x, int y, int increaseVal)
+    {
+        if (!groundLevel.CheckBounds(x, y) || increaseVal <= 0)
+            return;
+        GridTile tile = groundLevel.GetGridTile(x, y);
+        if (tile.TileBase is Rock rock)
+        {
+            rock.originalIntegrity += increaseVal;
+            rock.Integrity += increaseVal;
+            ManageStability(x, y, increaseVal, true);
+        }
+        else
+        {
+            Rock r = SceneRefs.ObjectFactory.CreateRock(
+                new(x, y), 
+                new(), 
+                new(), 
+                increaseVal, 
+                "Dirt");
+            r.Unhide();
+        }
+    }
+
+    void ManageStability(int x, int y, int size, bool add)
+    {
+        List<Vector2Int> tiles = new();
+        for (int i = 1; i < size; i++)
+        {
+            LineStability(x, y + size - i, i, add, tiles);
+            LineStability(x, y - size + i, i, add, tiles);
+        }
+        LineStability(x, y, size, add, tiles);
+    }
+    
     public void IncereaseStability(Rock rock)
         => ChangeStability(rock, true);
 
@@ -93,15 +175,19 @@ public class Stability : MonoBehaviour
         int y = (int)center.z;
         for (int i = 1; i < size; i++)
         {
-            Line(x, y + size - i, i, add, tiles);
-            Line(x, y - size + i, i, add, tiles);
+            LineStability(x, y + size - i, i, add, tiles);
+            LineStability(x, y - size + i, i, add, tiles);
         }
-        Line(x, y, size, add, tiles);
-
+        LineStability(x, y, size, add, tiles);
         return tiles;
     }
 
-    void Line(int x, int y, int valueOnCenter, bool add, List<Vector2Int> tiles)
+    void LineStability(
+        int x, 
+        int y, 
+        int valueOnCenter, 
+        bool add, 
+        List<Vector2Int> tiles)
     {
         ModifyIntegrity(x, y, valueOnCenter, add, tiles);
         int increaseVal;

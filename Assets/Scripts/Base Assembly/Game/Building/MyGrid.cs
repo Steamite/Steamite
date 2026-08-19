@@ -238,7 +238,7 @@ public static class MyGrid
     /// </summary>
     /// <param name="lIndex"></param>
     /// <returns></returns>
-    public static object GetGroundLevelData(int lIndex) => levels[lIndex];
+    public static GroundLevel GetGroundLevelData(int lIndex) => levels[lIndex];
     public static bool IsUnlocked(int lIndex) => levels[lIndex].Unlocked;
     #endregion
 
