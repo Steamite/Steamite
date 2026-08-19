@@ -24,6 +24,12 @@ public enum BuildingCategType
 /// </summary>
 public class Building : StorageObject
 {
+    /// <summary>
+    /// Rocks that caved-in onto the building
+    /// </summary>
+    public List<Rock> cavedInRocks = new();
+
+
     public const int MAX_LEVEL = 3;
     #region Variables
     /// <summary>Used for remembering color.</summary>

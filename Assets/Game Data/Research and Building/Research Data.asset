@@ -45,15 +45,9 @@ MonoBehaviour:
           baseResource:
             types: []
             ammounts: 
-          mod:
-            percentMod: 1
-            absoluteMod: 0
           money:
             baseValue: 5
             currentValue: 5
-            mod:
-              percentMod: 1
-              absoluteMod: 0
         nodeType: 2
         objectConnection:
           categoryId: 3
@@ -77,15 +71,9 @@ MonoBehaviour:
           baseResource:
             types: []
             ammounts: 
-          mod:
-            percentMod: 1
-            absoluteMod: 0
           money:
             baseValue: 0
             currentValue: 0
-            mod:
-              percentMod: 1
-              absoluteMod: 0
         nodeType: 1
         objectConnection:
           categoryId: 1
@@ -110,15 +98,9 @@ MonoBehaviour:
             types:
             - {fileID: 11400000, guid: 1347ef2c9f2b3c44cb6f5e843e1d55bb, type: 2}
             ammounts: 0a000000
-          mod:
-            percentMod: 1
-            absoluteMod: 0
           money:
             baseValue: 0
             currentValue: 0
-            mod:
-              percentMod: 1
-              absoluteMod: 0
         nodeType: 2
         objectConnection:
           categoryId: 3
@@ -142,15 +124,9 @@ MonoBehaviour:
           baseResource:
             types: []
             ammounts: 
-          mod:
-            percentMod: 1
-            absoluteMod: 0
           money:
             baseValue: 0
             currentValue: 0
-            mod:
-              percentMod: 1
-              absoluteMod: 0
         nodeType: 2
         objectConnection:
           categoryId: 4
@@ -174,18 +150,12 @@ MonoBehaviour:
           baseResource:
             types: []
             ammounts: 
-          mod:
-            percentMod: 1
-            absoluteMod: 0
           money:
             baseValue: 0
             currentValue: 0
-            mod:
-              percentMod: 1
-              absoluteMod: 0
         nodeType: 2
         objectConnection:
-          categoryId: 190792688
+          categoryId: 5
           objectId: 1169593243
         unlockedBy: dcf1324a
         unlocks: 

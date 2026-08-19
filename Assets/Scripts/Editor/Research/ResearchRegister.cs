@@ -307,12 +307,21 @@ namespace EditorWindows.Research
             where T_OBJ : DataObject
         {
             List<string> str = new() { "Select" };
-            if (node.objectConnection.categoryId > 0)
+            try
             {
-                if (node.objectConnection.objectId > 0)
-                    str.Add(dataHolder.GetCategByID(node.objectConnection.categoryId).Objects.Find(q => q.id == node.objectConnection.objectId)?.GetName());
-                str.AddRange(dataHolder.GetCategByID(node.objectConnection.categoryId).availableObjects.Select(q => q.GetName()));
+                if (node.objectConnection.categoryId > 0)
+                {
+
+                    if (node.objectConnection.objectId > 0)
+                        str.Add(dataHolder.GetCategByID(node.objectConnection.categoryId)?.Objects.Find(q => q.id == node.objectConnection.objectId)?.GetName());
+                    str.AddRange(dataHolder.GetCategByID(node.objectConnection.categoryId)?.availableObjects.Select(q => q.GetName()));
+                }
             }
+            catch
+            {
+                return new List<string>() { "Error" };
+            }
+            
             return str;
         }
 

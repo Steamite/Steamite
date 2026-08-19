@@ -148,9 +148,7 @@ MonoBehaviour:
     capacity:
       baseValue: 0
       currentValue: 0
-      mod:
-        percentMod: 1
-        absoluteMod: 0
+  cavedInRocks: []
   meshRenderers: []
   buildingCategories: 0
   blueprint:
@@ -173,21 +171,15 @@ MonoBehaviour:
         y: 0
       itemType: 4
   cost:
-    types:
-    - {fileID: 11400000, guid: 8fc4cf8feaad5a648bd0c87ee4ff2ca6, type: 2}
-    ammounts: 00000000
+    types: []
+    ammounts: 
     baseResource:
-      types: []
-      ammounts: 
-    mod:
-      percentMod: 1
-      absoluteMod: 0
+      types:
+      - {fileID: 11400000, guid: 476987d8701b79b42acf9d04564a5ac0, type: 2}
+      ammounts: 28000000
     money:
       baseValue: 0
       currentValue: 0
-      mod:
-        percentMod: 1
-        absoluteMod: 0
   constructing: 0
   constructionProgress: 0
   maximalProgress: 0

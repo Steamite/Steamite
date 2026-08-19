@@ -147,7 +147,8 @@ MonoBehaviour:
     ammounts: 
     capacity:
       baseValue: 10
-      currentValue: 0
+      currentValue: 10
+  cavedInRocks: []
   meshRenderers: []
   buildingCategories: 0
   blueprint:
@@ -218,16 +219,16 @@ MonoBehaviour:
   maximalProgress: 0
   modificationSpace: 0
   prefabConnection:
-    categoryId: 190792688
+    categoryId: 5
     objectId: 1169593243
   assignData:
     AssignLimit:
       baseValue: 2
-      currentValue: 0
+      currentValue: 2
   productionTime: 2
   prodSpeed:
     baseValue: 1
-    currentValue: 0
+    currentValue: 1
   resourceCost:
     types: []
     ammounts: 

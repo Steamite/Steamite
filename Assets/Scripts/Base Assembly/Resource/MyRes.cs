@@ -203,7 +203,7 @@ public static class MyRes
                     }
                     return true;
                 }
-                human.SetJob(job);
+                human.SetJob(job, false);
             }
         }
         return false;

@@ -169,7 +169,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             case Rock rock:
                 if (grid[x, y].TileBase is Road prevRoad)
                     Destroy(prevRoad.gameObject);
-                stability.IncereaseStability(rock);
+                stability.ModifyStability(rock);
                 break;
 /*
             case Road road:
@@ -451,6 +451,11 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     public GridTile GetGridTile(int x, int z)
     {
         return grid[x, z];
+    }
+
+    public void ChangeStability(int x, int y, int supportValue, bool v)
+    {
+        stability.ChangeStability(x, y, supportValue, v);
     }
 
     #endregion

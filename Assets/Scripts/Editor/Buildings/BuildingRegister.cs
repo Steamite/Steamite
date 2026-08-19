@@ -195,7 +195,7 @@ namespace EditorWindows.Windows
                 PrefabUtility.SaveAsPrefabAsset(gameObj, $"{path}{BUILD_NAME}");
                 wrapper.SetBuilding(
                     AssetDatabase.LoadAssetAtPath<Building>($"{path}{BUILD_NAME}"),
-                    (byte)Holder.Categories.First(q => q.Name == SelectedCategory.Name).id,
+                    selectedCategory.id,
                     folderName);
                 wrapper.preview = commonColumns.actions.GetPrefabPreview($"{path}");
                 DestroyImmediate(gameObj);

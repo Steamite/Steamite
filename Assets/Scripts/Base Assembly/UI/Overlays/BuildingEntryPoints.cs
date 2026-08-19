@@ -26,6 +26,7 @@ public class BuildingEntryPoints
     public RectTransform Group => group;
     readonly RectTransform group;
 
+
     public IEnumerable<GridPos> AllTiles 
         => entryTiles.Select(q => q.pos);
     public IEnumerable<GridPos> EnabledTiles
@@ -34,6 +35,7 @@ public class BuildingEntryPoints
     public int Enabled => entryTiles.Count(q => q.isActive);
     public int Disabled => entryTiles.Count(q => !q.isActive);
 
+    public int Count => entryTiles.Count;
 
     public BuildingEntryPoints(List<EntryTile> entryTiles, RectTransform group)
     {

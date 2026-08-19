@@ -173,7 +173,9 @@ public partial class EditorResourceCell : VisualElement
 
     public void Open(SerializedProperty property)
     {
-        resourceList.Open(property);
+
+        resourceList.Open(
+            property.FindPropertyRelative("baseResource"));
 
         if (property == null)
             return;
