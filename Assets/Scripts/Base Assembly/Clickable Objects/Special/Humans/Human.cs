@@ -117,11 +117,11 @@ public class Human : ClickableObject
         JobData job = PathFinder.FindPath(
                 new List<ClickableObject>() {(ClickableObject)workplace},
                 this);
-        if (!job.interest)
+        /*if (!job.interest)
         {
             Debug.LogError("cant find way here");
             return false;
-        }
+        }*/
 
         Workplace = workplace;
         job.job = JobState.FullTime;
@@ -481,6 +481,12 @@ public class Human : ClickableObject
                     {
                         data.interest = null;
                         SetJob(data, canInterrupt: false);
+                    }
+                    else
+                    {
+                        SetJob(data, true, false);
+                        ChangeAction((_) => Idle());
+                        return;
                     }
                     Debug.Log("Going to work(dig)!");
                 }

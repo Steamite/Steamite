@@ -67,7 +67,7 @@ public static class PathFinder
             }
             else if (interest is Rock rock)
             {
-                if (rock)
+                if (rock && plan.path.Count > 0)
                 {
                     plan.path.RemoveAt(plan.path.Count - 1);
                 }

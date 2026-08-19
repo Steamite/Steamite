@@ -76,7 +76,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     void SetGridColor(Vector3Int vec)
     {
         
-        switch (grid[vec.x, vec.y].TileBase)
+        switch (grid[vec.x, vec.z].TileBase)
         {
             case Rock:
                 Gizmos.color = Color.black;
@@ -140,7 +140,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             return grid[x, y].TileBase;
     }
 
-    bool CheckBounds(int x, int y) => !(x < 0 || x >= width || y < 0 || y >= height);
+    public bool CheckBounds(int x, int y) => !(x < 0 || x >= width || y < 0 || y >= height);
 
     /// <summary>
     /// Updates the grid by replacing the content of a tile.
@@ -164,28 +164,42 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             return;
         }
 
-        ClickableObject prev = grid[x, y].TileBase; 
+        switch (clickable)
+        {
+            case Rock rock:
+                if (grid[x, y].TileBase is Road prevRoad)
+                    Destroy(prevRoad.gameObject);
+                stability.IncereaseStability(rock);
+                break;
+/*
+            case Road road:
+                ClickableObject prev = grid[x, y].TileBase;
+                if (prev is Rock)
+                {
+                    UpdateEffects();
+                }
+                break;*/
+        }
+
         grid[x, y].TileBase = clickable;
-
-
-        // loop though all affected rocks and run a chance on all of them,
-        if (prev is Rock rock)
-            stability.DecreaseStability(rock);
-        else if (clickable is Rock rock1)
-            stability.IncereaseStability(rock1);
-        
         UpdateEffects();
-        
+
+        /*
         if (clickable is not Road)
             return;
 
 // # TODO return?
-        /*foreach (Transform t in overlays.GetImagesOnPos(gp))
+        foreach (Transform t in overlays.GetImagesOnPos(gp))
         {
             t.gameObject.SetActive(true);
             (clickable as Road).entryPoints.Add(t.parent.GetComponent<GroupOverlay>().building);
             t.localPosition = new(t.localPosition.x, t.localPosition.y, 0);
         }*/
+    }
+
+    public bool TestCavein(Rock rock)
+    {
+        return stability.DecreaseStability(rock);
     }
 
     public bool ChangeGridStability(int x, int y, int change, bool add)
