@@ -76,9 +76,16 @@ public static class PathFinder
             ClickableObject interest = objects[plan.index];
             if (interest is Building b && interest is not Pipe)
             {
-                // creates last building step(uses start pos if there are no path nodes)
-                if (MyGrid.GetGridItem(_start) != b && plan.foundNormaly)
-                    plan.path.Add(BuildingStep(plan.path.Count > 0 ? plan.path[^1] : _start, b.gameObject, 1));
+                if(b.entryPoints.Count > 0)
+                {
+                    // creates last building step(uses start pos if there are no path nodes)
+                    if (MyGrid.GetGridItem(_start) != b && plan.foundNormaly)
+                        plan.path.Add(BuildingStep(plan.path.Count > 0 ? plan.path[^1] : _start, b.gameObject, 1));
+                }
+                else
+                {
+                    plan.path.RemoveAt(plan.path.Count - 1);
+                }
             }
             else if (interest is Rock rock)
             {
@@ -123,7 +130,9 @@ public static class PathFinder
                     GridPos pos = building.GetPos();
                     foreach (var item in building.blueprint.itemList)
                     {
-                        GridPos p = pos += item.pos.Rotate(building.transform.rotation.eulerAngles.y, true);
+                        GridPos p = pos += item.pos.Rotate(
+                            building.transform.rotation.eulerAngles.y, 
+                            true);
 
                         coordinates.AddPoint(p, i);
                     }
