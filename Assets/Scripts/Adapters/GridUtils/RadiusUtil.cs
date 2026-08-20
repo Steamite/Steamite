@@ -7,11 +7,11 @@ using UnityEngine;
 
 public struct RadiusUtil
 {
-    readonly Vector3Int center;
+    readonly Vector2Int center;
     readonly int size;
     Action<int, int, int> action;
 
-    public RadiusUtil(Vector3Int center, int size, Action<int, int, int> action)
+    public RadiusUtil(Vector2Int center, int size, Action<int, int, int> action)
     {
         this.center = center;
         this.size = size;

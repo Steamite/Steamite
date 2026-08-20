@@ -52,6 +52,16 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         CreateOverlayMap(grid);
         CreateTexture(grid);
         AttachOverlays();
+
+        for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
+        {
+            MyGrid.GetGroundLevelData(i).stability.RegisterChange(() =>
+            {
+                if(activeOverlayIndex > -1 && 
+                    ActiveOverlay.GetType() == typeof(StabilityOverlay))
+                    UpdateOverlay();
+            });
+        }
     }
 
     void CreateOverlayMap(int size)

@@ -298,6 +298,7 @@ public static class MyGrid
     {
         GroundLevel groundLevel = GameObject.Instantiate(templateLevel, new Vector3(0, ClickableObjectFactory.LEVEL_HEIGHT * i, 0), Quaternion.identity, SceneRefs.GridTiles.transform);
         levels[i] = groundLevel;
+        groundLevel.Load();
 
         groundLevel.ClearGrid(gridSave.width);
         groundLevel.gameObject.SetActive(i == 2);

@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 /// <summary>Util class for managment of each different level.</summary>
+[RequireComponent(typeof(Stability))]
 public class GroundLevel : MonoBehaviour, IUpdatable
 {
     #region Variables
@@ -449,6 +450,12 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     public GridTile GetGridTile(int x, int z)
     {
         return grid[x, z];
+    }
+
+    public void Load()
+    {
+        stability = GetComponent<Stability>();
+        stability.Init(this);
     }
 
     #endregion

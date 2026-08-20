@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5898023441544859042}
   - component: {fileID: 8292747787264182705}
+  - component: {fileID: -5008791912109013824}
   m_Layer: 2
   m_Name: Outside
   m_TagString: Untagged
@@ -50,6 +51,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 21
   height: 21
+  Level: 0
+  stability: {fileID: 0}
   rocks: {fileID: 1910636158182974494}
   roads: {fileID: 8459687587329189198}
   waters: {fileID: 417579824795650653}
@@ -57,7 +60,21 @@ MonoBehaviour:
   chunks: {fileID: 4410735163119224341}
   buildings: {fileID: 8331111288221992689}
   pipes: {fileID: 3859038626553102039}
-  overlays: {fileID: 9097239234769059568}
+  showIntegrity: 1
+--- !u!114 &-5008791912109013824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806874339980250123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63d5368c9d60ff04dadfa479c7e0f6d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BaseAssembly::Stability
+  cavein:
+    StabilityChanceKeys: []
 --- !u!1 &2681720068060248165
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,10 +558,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4445e44d3d0c064e80255e74ffdcee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overlayTile: {fileID: 4350976640805172038, guid: 39b39dcf1eb28c5469ce6d2e2e99bd85, type: 3}
-  overlayParent: {fileID: 4384586856775220997}
-  entryPointParent: {fileID: 7081801545496547686}
-  buildingOverlays: []
+  blueprintIndicator: {fileID: 0}
+  entryPoints: {fileID: 0}
+  overlay: {fileID: 0}
 --- !u!1 &7578400423812273585
 GameObject:
   m_ObjectHideFlags: 0
