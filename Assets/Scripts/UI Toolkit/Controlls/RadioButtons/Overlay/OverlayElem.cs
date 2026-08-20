@@ -24,7 +24,7 @@ public partial class OverlayElem : VisualElement, IInitiableUI
     {
         buttons.Init();
 
-        SceneRefs.Overlays.overlay.ResetListeners();
+        SceneRefs.Overlays.overlay.ResetOverlayListeners();
         SceneRefs.Overlays.overlay.AddOverlayChanged(OverlayChange);
     }
 

@@ -7,7 +7,7 @@ using UnityEngine;
 
 public abstract class GridTileOverlay : BaseOverlay
 {
-    public override void Overlay(NativeArray<float> overlay)
+    public override void CalculateOverlay(NativeArray<float> overlay)
     {
         int size = MyGrid.GridSize;
         var grid = MyGrid.GetGridTilesCurrentLevel();

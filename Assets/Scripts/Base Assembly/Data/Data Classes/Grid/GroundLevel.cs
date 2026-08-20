@@ -16,10 +16,12 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <summary>grid height(y)</summary>
     public int height = 21;
 
+    public int Level;
+
     /// <summary>grid itself</summary>
     GridTile[,] grid;
 
-    [SerializeField] Stability stability;
+    public Stability stability;
 
     /// <summary>Rock holder</summary>
     [Header("Reference")] public Transform rocks;
@@ -169,7 +171,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             case Rock rock:
                 if (grid[x, y].TileBase is Road prevRoad)
                     Destroy(prevRoad.gameObject);
-                stability.ModifyStability(rock);
+                stability.ChangeStability(rock, true);
                 break;
 /*
             case Road road:
@@ -195,11 +197,6 @@ public class GroundLevel : MonoBehaviour, IUpdatable
             (clickable as Road).entryPoints.Add(t.parent.GetComponent<GroupOverlay>().building);
             t.localPosition = new(t.localPosition.x, t.localPosition.y, 0);
         }*/
-    }
-
-    public bool TestCavein(Rock rock)
-    {
-        return stability.DecreaseStability(rock);
     }
 
     public bool ChangeGridStability(int x, int y, int change, bool add)
@@ -366,6 +363,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         CreateVeins(save, level);
         CreateBuildings(save, level); // adds Buildings
         gameObject.SetActive(false);
+        Level = level;
     }
 
 
@@ -451,11 +449,6 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     public GridTile GetGridTile(int x, int z)
     {
         return grid[x, z];
-    }
-
-    public void ChangeStability(int x, int y, int supportValue, bool v)
-    {
-        stability.ChangeStability(x, y, supportValue, v);
     }
 
     #endregion

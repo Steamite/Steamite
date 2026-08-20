@@ -134,22 +134,28 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         }
 
         activeOverlayIndex = i;
+        UpdateOverlay();
+    }
 
+
+    void UpdateOverlay()
+    {
         // calculate values
-        BaseOverlay overlay = overlayModes[i];
-        overlay.Overlay(overlayValueMap);
+        BaseOverlay overlay = overlayModes[activeOverlayIndex];
+        overlay.CalculateOverlay(overlayValueMap);
 
         // mark the grid
         Overlay(overlay.gradient);
 
         OverlayChanged?.Invoke(activeOverlayIndex, overlay);
-        if(gridTiles.ActiveControl != ControlMode.Overlay)
+        if (gridTiles.ActiveControl != ControlMode.Overlay)
             gridTiles.ChangeSelMode(ControlMode.Overlay);
         else
             overlayMapMaterial.SetVector("_MousePos", new(-50, 0, -50));
 
         map.gameObject.SetActive(true);
     }
+
    
     void BakeGradient(Gradient gradient)
     {
@@ -194,7 +200,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         return overlayModes;
     }
 
-    public void ResetListeners()
+    public void ResetOverlayListeners()
     {
         OverlayChanged = null;
     }

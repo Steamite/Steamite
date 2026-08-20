@@ -170,7 +170,7 @@ public class Rock : ClickableObject, IStabilitySupport
         {
             integrity = 0;
             GridPos pos = GetPos();
-            if (MyGrid.GetGroundLevelData(pos.y).TestCavein(this))
+            if (MyGrid.GetGroundLevelData(pos.y).stability.ChangeStability(this, false))
             {
                 if(integrity > 0)
                 {
