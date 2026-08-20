@@ -29,7 +29,7 @@ public class StabilityBuilding : Building, IStabilitySupport
     void ApplySupport()
     {
         GridPos pos = GetPos();
-        MyGrid.GetGroundLevelData(pos.y).ChangeStability(
+        MyGrid.GetGroundLevelData(pos.y).stability.ChangeStability(
             (int)pos.x,
             (int)pos.z,
             supportValue,

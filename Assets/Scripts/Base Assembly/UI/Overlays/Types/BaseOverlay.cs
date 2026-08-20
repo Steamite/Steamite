@@ -11,7 +11,7 @@ public abstract class BaseOverlay : MonoBehaviour
 
     public string Name;
 
-    public abstract void Overlay(NativeArray<float> overlay);
+    public abstract void CalculateOverlay(NativeArray<float> overlay);
 
     public void SetInputIndex(int i)
     {

@@ -56,7 +56,7 @@ Material:
     - _UIMaskSoftnessY: 1
     m_Colors:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
-    - _MousePos: {r: 8, g: 2.5999994, b: 8, a: 0}
+    - _MousePos: {r: 2, g: 2.6, b: 12, a: 0}
     - _Vector3: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
