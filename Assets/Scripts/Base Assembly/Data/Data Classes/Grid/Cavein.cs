@@ -17,9 +17,9 @@ public class Cavein
         Stability = stability;
     }
 
-    public bool Cave(Vector3Int center)
+    public bool Cave(Vector2Int center)
     {
-        var tile = Level.GetGridTile(center.x, center.z);
+        var tile = Level.GetGridTile(center.x, center.y);
         int roll = UnityEngine.Random.Range(0, 101);
         int stability = tile.Stability;
         int threshold = CalculateThreshold(stability, out int index);
@@ -66,7 +66,7 @@ public class Cavein
         return threshold;
     }
 
-    private void CaveDestroy(Vector3Int position, int roll, int index, int stability, int threshold)
+    private void CaveDestroy(Vector2Int position, int roll, int index, int stability, int threshold)
     {
         Debug.Log(
             $"CAVEIN!!!" +
@@ -75,14 +75,15 @@ public class Cavein
 
         int size = StabilityChanceKeys[index].Size;
         int integrity = StabilityChanceKeys[index].IntegrityGain;
-
+/*
         int x = position.x;
-        int y = position.y;
+        int y = position.y;*/
 
         RadiusUtil util = new(
             position, 
             size,
             CaveinModifier);
+        util.DoRadius();
     }
 
 

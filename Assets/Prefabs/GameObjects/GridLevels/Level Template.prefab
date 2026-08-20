@@ -336,7 +336,7 @@ MonoBehaviour:
   width: 21
   height: 21
   Level: 0
-  stability: {fileID: 5904351823465201333}
+  stability: {fileID: 0}
   rocks: {fileID: 4110801998864547646}
   roads: {fileID: 3648922814593868028}
   waters: {fileID: 1739259922143558596}
@@ -357,7 +357,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63d5368c9d60ff04dadfa479c7e0f6d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Stability
-  groundLevel: {fileID: 1135758614679704061}
   cavein:
     StabilityChanceKeys:
     - Stability: 0

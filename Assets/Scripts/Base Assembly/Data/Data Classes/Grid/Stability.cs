@@ -17,14 +17,20 @@ public struct CaveinData
 
 public class Stability : MonoBehaviour
 {
-    [SerializeField] GroundLevel groundLevel;
+    GroundLevel groundLevel;
 
-    [SerializeField] Cavein cavein;
-    
-    private void Awake()
+    public Cavein cavein;
+
+    event Action OnChange;
+    public void Init(GroundLevel groundLevel)
     {
+        this.groundLevel = groundLevel;
         cavein.Init(groundLevel, this);
+        OnChange = null;
     }
+
+    public void RegisterChange(Action a)
+        => OnChange += a;
 
     public bool ChangeStability(Rock rock, bool add)
     {
@@ -39,13 +45,15 @@ public class Stability : MonoBehaviour
     public bool ChangeStability(int x, int y, int size, bool add)
     {
         RadiusUtil radiusUtil = new(
-            new(x, groundLevel.Level, y), 
+            new(x, y), 
             size,
             (x, y, am) => ChangeGrid(x, y, am, add));
+        radiusUtil.DoRadius();
 
-        if(add == false)
+        OnChange?.Invoke();
+        if (add == false)
         {
-            return cavein.Cave(new(x, groundLevel.Level, y));
+            return cavein.Cave(new(x, y));
         }
         return true;
     }
@@ -54,5 +62,4 @@ public class Stability : MonoBehaviour
     {
         groundLevel.ChangeGridStability(x, y, size, add);
     }
-
 }
