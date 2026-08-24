@@ -242,7 +242,7 @@ public class MultiSelect : MonoBehaviour
         }
     }
     /// <summary>
-    /// Only for pipes?
+    /// 
     /// </summary>
     /// <returns></returns>
     public bool Break()
