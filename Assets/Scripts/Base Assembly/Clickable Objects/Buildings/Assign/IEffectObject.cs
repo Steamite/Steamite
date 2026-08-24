@@ -17,6 +17,8 @@ public interface IEffectObject
 
     void RepaintTiles()
     {
+
+        //SceneRefs.Overlays.overlay.SetSelectedTiles(EffectRoads.Select(q=> q.GetPos()).ToList());
         // TODO
         /*if(this is ClickableObject clickable && clickable.selected)
             SceneRefs.Overlays.overlay.MarkTiles(

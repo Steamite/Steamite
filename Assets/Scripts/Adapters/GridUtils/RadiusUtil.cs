@@ -43,3 +43,44 @@ public struct RadiusUtil
         }
     }
 }
+
+public struct RadiusScanUtil
+{
+    readonly Vector2Int center;
+    readonly int size;
+
+    public RadiusScanUtil(Vector2Int center, int size)
+    {
+        this.center = center;
+        this.size = size;
+    }
+
+    public List<Vector2Int> DoRadius()
+    {
+        List<Vector2Int> vec = new();
+        for (int i = 1; i < size; i++)
+        {
+            DoLine(center.x, center.y + size - i, i, vec);
+            DoLine(center.x, center.y - size + i, i, vec);
+        }
+        DoLine(center.x, center.y, size, vec);
+
+        return vec;
+    }
+
+    void DoLine(
+        int x,
+        int y,
+        int valueOnCenter,
+        List<Vector2Int> vec)
+    {
+        vec.Add(new(x, y));
+        int increaseVal;
+        for (int i = 1; i < valueOnCenter; i++)
+        {
+            increaseVal = valueOnCenter - i;
+            vec.Add(new(x + i, y));
+            vec.Add(new(x - i, y));
+        }
+    }
+}

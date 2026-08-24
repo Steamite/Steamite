@@ -1241,6 +1241,10 @@ PrefabInstance:
       propertyPath: id
       value: 155
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -1555,6 +1559,10 @@ PrefabInstance:
       propertyPath: id
       value: 251
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -1620,6 +1628,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 243
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -1687,6 +1699,10 @@ PrefabInstance:
       propertyPath: id
       value: 296
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -1753,6 +1769,10 @@ PrefabInstance:
       propertyPath: id
       value: 167
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -1818,6 +1838,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: id
       value: 67
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: m_Name
@@ -1901,6 +1925,10 @@ PrefabInstance:
       propertyPath: id
       value: 236
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -1966,6 +1994,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 118
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -2033,6 +2065,10 @@ PrefabInstance:
       propertyPath: id
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -2098,6 +2134,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 183
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -2165,6 +2205,10 @@ PrefabInstance:
       propertyPath: id
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -2230,6 +2274,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 282
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -2483,6 +2531,10 @@ PrefabInstance:
       propertyPath: id
       value: 86
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -2548,6 +2600,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 149
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -2739,6 +2795,10 @@ PrefabInstance:
       propertyPath: id
       value: 61
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
       value: Metal (9)
@@ -2891,6 +2951,10 @@ PrefabInstance:
       propertyPath: id
       value: 138
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -2956,6 +3020,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 309
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -3085,6 +3153,10 @@ PrefabInstance:
       propertyPath: id
       value: 220
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -3213,6 +3285,10 @@ PrefabInstance:
       propertyPath: id
       value: 26
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -3278,6 +3354,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: id
       value: 53
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
@@ -3369,6 +3449,10 @@ PrefabInstance:
       propertyPath: id
       value: 189
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -3434,6 +3518,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 107
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -3501,6 +3589,10 @@ PrefabInstance:
       propertyPath: id
       value: 99
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -3567,6 +3659,10 @@ PrefabInstance:
       propertyPath: id
       value: 228
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -3632,6 +3728,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -3761,6 +3861,10 @@ PrefabInstance:
       propertyPath: id
       value: 259
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -3826,6 +3930,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 255
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -3893,6 +4001,10 @@ PrefabInstance:
       propertyPath: id
       value: 291
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -3958,6 +4070,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 105
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -4127,6 +4243,10 @@ PrefabInstance:
       propertyPath: id
       value: 93
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -4192,6 +4312,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 261
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -4445,6 +4569,10 @@ PrefabInstance:
       propertyPath: id
       value: 224
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -4511,6 +4639,10 @@ PrefabInstance:
       propertyPath: id
       value: 133
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -4576,6 +4708,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 132
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -4705,6 +4841,10 @@ PrefabInstance:
       propertyPath: id
       value: 256
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -4770,6 +4910,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 265
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -4837,6 +4981,10 @@ PrefabInstance:
       propertyPath: id
       value: 210
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -4902,6 +5050,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 284
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -5093,6 +5245,10 @@ PrefabInstance:
       propertyPath: id
       value: 66
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: m_Name
       value: Stone (7)
@@ -5174,6 +5330,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 272
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -5364,6 +5524,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 161
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -5617,6 +5781,10 @@ PrefabInstance:
       propertyPath: id
       value: 19
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -5744,6 +5912,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -5874,6 +6046,10 @@ PrefabInstance:
       value: 34
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: hiddenSave.ammount
       value: 50
       objectReference: {fileID: 0}
@@ -5987,6 +6163,10 @@ PrefabInstance:
       propertyPath: id
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -6052,6 +6232,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 279
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -6181,6 +6365,10 @@ PrefabInstance:
       propertyPath: id
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -6246,6 +6434,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 178
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -6767,6 +6959,10 @@ PrefabInstance:
       propertyPath: id
       value: 273
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -6832,6 +7028,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 231
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -6899,6 +7099,10 @@ PrefabInstance:
       propertyPath: id
       value: 271
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -6965,6 +7169,10 @@ PrefabInstance:
       propertyPath: id
       value: 84
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -7030,6 +7238,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: id
       value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
@@ -7136,6 +7348,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: id
       value: 71
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: m_Name
@@ -7281,6 +7497,10 @@ PrefabInstance:
       propertyPath: id
       value: 191
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -7347,6 +7567,10 @@ PrefabInstance:
       propertyPath: id
       value: 202
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -7412,6 +7636,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: id
       value: 52
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
@@ -7561,6 +7789,10 @@ PrefabInstance:
       propertyPath: id
       value: 94
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -7688,6 +7920,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 222
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -7817,6 +8053,10 @@ PrefabInstance:
       propertyPath: id
       value: 113
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -7883,6 +8123,10 @@ PrefabInstance:
       propertyPath: id
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -7948,6 +8192,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 277
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -8077,6 +8325,10 @@ PrefabInstance:
       propertyPath: id
       value: 165
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -8142,6 +8394,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 214
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -8209,6 +8465,10 @@ PrefabInstance:
       propertyPath: id
       value: 21
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -8274,6 +8534,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 156
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -8341,6 +8605,10 @@ PrefabInstance:
       propertyPath: id
       value: 257
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -8406,6 +8674,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: id
       value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
@@ -8492,6 +8764,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -8621,6 +8897,10 @@ PrefabInstance:
       propertyPath: id
       value: 276
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -8686,6 +8966,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 108
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -8753,6 +9037,10 @@ PrefabInstance:
       propertyPath: id
       value: 239
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -8818,6 +9106,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: id
       value: 68
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: m_Name
@@ -8900,6 +9192,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 258
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -9029,6 +9325,10 @@ PrefabInstance:
       propertyPath: id
       value: 117
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -9095,6 +9395,10 @@ PrefabInstance:
       propertyPath: id
       value: 28
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -9160,6 +9464,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: id
       value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
@@ -9309,6 +9617,10 @@ PrefabInstance:
       propertyPath: id
       value: 240
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -9453,6 +9765,10 @@ PrefabInstance:
       propertyPath: id
       value: 249
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -9518,6 +9834,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 169
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -9585,6 +9905,10 @@ PrefabInstance:
       propertyPath: id
       value: 143
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -9650,6 +9974,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -10233,6 +10561,10 @@ PrefabInstance:
       propertyPath: id
       value: 211
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -10298,6 +10630,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 212
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -10365,6 +10701,10 @@ PrefabInstance:
       propertyPath: id
       value: 136
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -10431,6 +10771,10 @@ PrefabInstance:
       propertyPath: id
       value: 312
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -10496,6 +10840,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 267
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -10625,6 +10973,10 @@ PrefabInstance:
       propertyPath: id
       value: 285
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -10691,6 +11043,10 @@ PrefabInstance:
       propertyPath: id
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -10756,6 +11112,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: id
       value: 62
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: m_Name
@@ -10839,6 +11199,10 @@ PrefabInstance:
       propertyPath: id
       value: 121
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -10905,6 +11269,10 @@ PrefabInstance:
       propertyPath: id
       value: 175
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -10970,6 +11338,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 287
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -11099,6 +11471,10 @@ PrefabInstance:
       propertyPath: id
       value: 299
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -11164,6 +11540,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 96
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -11293,6 +11673,10 @@ PrefabInstance:
       propertyPath: id
       value: 206
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -11358,6 +11742,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -11425,6 +11813,10 @@ PrefabInstance:
       propertyPath: id
       value: 281
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -11490,6 +11882,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: id
       value: 46
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
@@ -11701,6 +12097,10 @@ PrefabInstance:
       propertyPath: id
       value: 253
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -11767,6 +12167,10 @@ PrefabInstance:
       propertyPath: id
       value: 101
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -11832,6 +12236,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 170
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -11961,6 +12369,10 @@ PrefabInstance:
       propertyPath: id
       value: 142
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -12026,6 +12438,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: id
       value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
@@ -12133,6 +12549,10 @@ PrefabInstance:
       propertyPath: id
       value: 56
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
       value: Metal (2)
@@ -12219,6 +12639,10 @@ PrefabInstance:
       propertyPath: id
       value: 283
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -12284,6 +12708,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 292
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -12351,6 +12779,10 @@ PrefabInstance:
       propertyPath: id
       value: 181
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -12416,6 +12848,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 226
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -12483,6 +12919,10 @@ PrefabInstance:
       propertyPath: id
       value: 308
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -12549,6 +12989,10 @@ PrefabInstance:
       propertyPath: id
       value: 17
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -12614,6 +13058,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 207
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -12764,6 +13212,10 @@ PrefabInstance:
       propertyPath: id
       value: 311
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -12829,6 +13281,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 254
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -12958,6 +13414,10 @@ PrefabInstance:
       propertyPath: id
       value: 49
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
       value: Metal (7)
@@ -13047,6 +13507,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 205
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -13175,6 +13639,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 124
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -13365,6 +13833,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 247
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -13618,6 +14090,10 @@ PrefabInstance:
       propertyPath: id
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -13683,6 +14159,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 184
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -13750,6 +14230,10 @@ PrefabInstance:
       propertyPath: id
       value: 209
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -13816,6 +14300,10 @@ PrefabInstance:
       propertyPath: id
       value: 103
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -13881,6 +14369,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -14196,6 +14688,10 @@ PrefabInstance:
       propertyPath: id
       value: 16
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -14324,6 +14820,10 @@ PrefabInstance:
       propertyPath: id
       value: 266
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -14389,6 +14889,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 157
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -14456,6 +14960,10 @@ PrefabInstance:
       propertyPath: id
       value: 301
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -14521,6 +15029,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 313
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -14588,6 +15100,10 @@ PrefabInstance:
       propertyPath: id
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -14653,6 +15169,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 151
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -14720,6 +15240,10 @@ PrefabInstance:
       propertyPath: id
       value: 120
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -14785,6 +15309,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 182
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -14914,6 +15442,10 @@ PrefabInstance:
       propertyPath: id
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -14979,6 +15511,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 216
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -15046,6 +15582,10 @@ PrefabInstance:
       propertyPath: id
       value: 198
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -15111,6 +15651,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 174
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -15178,6 +15722,10 @@ PrefabInstance:
       propertyPath: id
       value: 232
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -15243,6 +15791,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 153
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -15310,6 +15862,10 @@ PrefabInstance:
       propertyPath: id
       value: 75
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -15375,6 +15931,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: id
       value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: hiddenSave.ammount
@@ -15676,6 +16236,10 @@ PrefabInstance:
       propertyPath: id
       value: 106
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -15741,6 +16305,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: id
       value: 41
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
@@ -15910,6 +16478,10 @@ PrefabInstance:
       propertyPath: id
       value: 314
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -15975,6 +16547,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: id
       value: 59
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
@@ -16124,6 +16700,10 @@ PrefabInstance:
       propertyPath: id
       value: 76
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -16190,6 +16770,10 @@ PrefabInstance:
       propertyPath: id
       value: 27
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -16255,6 +16839,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 114
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -16384,6 +16972,10 @@ PrefabInstance:
       propertyPath: id
       value: 92
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -16512,6 +17104,10 @@ PrefabInstance:
       propertyPath: id
       value: 194
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -16578,6 +17174,10 @@ PrefabInstance:
       propertyPath: id
       value: 294
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -16643,6 +17243,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: id
       value: 47
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
@@ -16730,6 +17334,10 @@ PrefabInstance:
       propertyPath: id
       value: 69
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: m_Name
       value: Stone (9)
@@ -16812,6 +17420,10 @@ PrefabInstance:
       propertyPath: id
       value: 109
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -16877,6 +17489,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: id
       value: 44
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
@@ -16984,6 +17600,10 @@ PrefabInstance:
       propertyPath: id
       value: 58
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
       value: Metal (8)
@@ -17069,6 +17689,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: id
       value: 48
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
@@ -17218,6 +17842,10 @@ PrefabInstance:
       propertyPath: id
       value: 290
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -17283,6 +17911,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -17350,6 +17982,10 @@ PrefabInstance:
       propertyPath: id
       value: 221
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -17415,6 +18051,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 215
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -17482,6 +18122,10 @@ PrefabInstance:
       propertyPath: id
       value: 98
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -17548,6 +18192,10 @@ PrefabInstance:
       propertyPath: id
       value: 104
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -17613,6 +18261,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: id
       value: 43
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
@@ -17719,6 +18371,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 123
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -17848,6 +18504,10 @@ PrefabInstance:
       propertyPath: id
       value: 241
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -17913,6 +18573,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 229
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -17980,6 +18644,10 @@ PrefabInstance:
       propertyPath: id
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -18046,6 +18714,10 @@ PrefabInstance:
       propertyPath: id
       value: 237
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -18111,6 +18783,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 74
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -18240,6 +18916,10 @@ PrefabInstance:
       propertyPath: id
       value: 203
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -18368,6 +19048,10 @@ PrefabInstance:
       propertyPath: id
       value: 111
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -18433,6 +19117,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 208
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -18562,6 +19250,10 @@ PrefabInstance:
       propertyPath: id
       value: 130
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -18690,6 +19382,10 @@ PrefabInstance:
       propertyPath: id
       value: 23
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -18755,6 +19451,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 139
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -18822,6 +19522,10 @@ PrefabInstance:
       propertyPath: id
       value: 188
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -18888,6 +19592,10 @@ PrefabInstance:
       propertyPath: id
       value: 245
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -18953,6 +19661,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 173
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -19082,6 +19794,10 @@ PrefabInstance:
       propertyPath: id
       value: 91
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -19147,6 +19863,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 252
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -19276,6 +19996,10 @@ PrefabInstance:
       propertyPath: id
       value: 131
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -19341,6 +20065,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 275
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -19470,6 +20198,10 @@ PrefabInstance:
       propertyPath: id
       value: 73
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -19535,6 +20267,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 293
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -19602,6 +20338,10 @@ PrefabInstance:
       propertyPath: id
       value: 303
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -19667,6 +20407,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 192
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -19734,6 +20478,10 @@ PrefabInstance:
       propertyPath: id
       value: 18
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -19800,6 +20548,10 @@ PrefabInstance:
       propertyPath: id
       value: 134
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -19865,6 +20617,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: id
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
@@ -20034,6 +20790,10 @@ PrefabInstance:
       propertyPath: id
       value: 297
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -20099,6 +20859,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -20166,6 +20930,10 @@ PrefabInstance:
       propertyPath: id
       value: 95
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -20231,6 +20999,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 264
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -20298,6 +21070,10 @@ PrefabInstance:
       propertyPath: id
       value: 137
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -20363,6 +21139,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 201
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -20430,6 +21210,10 @@ PrefabInstance:
       propertyPath: id
       value: 154
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -20495,6 +21279,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: id
       value: 37
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
@@ -20664,6 +21452,10 @@ PrefabInstance:
       propertyPath: id
       value: 159
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -20729,6 +21521,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 88
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -20796,6 +21592,10 @@ PrefabInstance:
       propertyPath: id
       value: 298
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -20862,6 +21662,10 @@ PrefabInstance:
       propertyPath: id
       value: 213
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -20927,6 +21731,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 116
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -21056,6 +21864,10 @@ PrefabInstance:
       propertyPath: id
       value: 127
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -21121,6 +21933,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 152
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -21188,6 +22004,10 @@ PrefabInstance:
       propertyPath: id
       value: 204
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -21253,6 +22073,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 171
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -21320,6 +22144,10 @@ PrefabInstance:
       propertyPath: id
       value: 82
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -21385,6 +22213,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 110
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -21452,6 +22284,10 @@ PrefabInstance:
       propertyPath: id
       value: 168
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -21517,6 +22353,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 199
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -21584,6 +22424,10 @@ PrefabInstance:
       propertyPath: id
       value: 238
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -21649,6 +22493,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 295
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -21716,6 +22564,10 @@ PrefabInstance:
       propertyPath: id
       value: 102
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -21781,6 +22633,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 248
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -21972,6 +22828,10 @@ PrefabInstance:
       propertyPath: id
       value: 141
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -22099,6 +22959,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -22290,6 +23154,10 @@ PrefabInstance:
       propertyPath: id
       value: 186
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -22355,6 +23223,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 115
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -22422,6 +23294,10 @@ PrefabInstance:
       propertyPath: id
       value: 270
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -22487,6 +23363,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 234
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -22554,6 +23434,10 @@ PrefabInstance:
       propertyPath: id
       value: 29
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -22619,6 +23503,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: id
       value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: hiddenSave.ammount
@@ -22733,6 +23621,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 126
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -22862,6 +23754,10 @@ PrefabInstance:
       propertyPath: id
       value: 280
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -22927,6 +23823,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -23055,6 +23955,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: id
       value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: m_Name
@@ -23201,6 +24105,10 @@ PrefabInstance:
       value: 32
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: hiddenSave.ammount
       value: 50
       objectReference: {fileID: 0}
@@ -23314,6 +24222,10 @@ PrefabInstance:
       propertyPath: id
       value: 268
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -23379,6 +24291,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 235
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -23446,6 +24362,10 @@ PrefabInstance:
       propertyPath: id
       value: 77
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -23511,6 +24431,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 230
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -23640,6 +24564,10 @@ PrefabInstance:
       propertyPath: id
       value: 289
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -23705,6 +24633,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: id
       value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: m_Name
@@ -23788,6 +24720,10 @@ PrefabInstance:
       propertyPath: id
       value: 78
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -23853,6 +24789,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 233
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -23920,6 +24860,10 @@ PrefabInstance:
       propertyPath: id
       value: 140
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -23986,6 +24930,10 @@ PrefabInstance:
       propertyPath: id
       value: 219
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -24051,6 +24999,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 218
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -24243,6 +25195,10 @@ PrefabInstance:
       value: 42
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -24348,6 +25304,10 @@ PrefabInstance:
       propertyPath: id
       value: 306
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -24413,6 +25373,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 145
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -24480,6 +25444,10 @@ PrefabInstance:
       propertyPath: id
       value: 22
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -24545,6 +25513,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: id
       value: 57
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
@@ -24636,6 +25608,10 @@ PrefabInstance:
       propertyPath: id
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -24701,6 +25677,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 135
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -24768,6 +25748,10 @@ PrefabInstance:
       propertyPath: id
       value: 193
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -24833,6 +25817,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 196
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -24900,6 +25888,10 @@ PrefabInstance:
       propertyPath: id
       value: 166
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -24965,6 +25957,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: id
       value: 63
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: m_Name
@@ -25047,6 +26043,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -25176,6 +26176,10 @@ PrefabInstance:
       propertyPath: id
       value: 217
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -25241,6 +26245,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: id
       value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: m_Name
@@ -25325,6 +26333,10 @@ PrefabInstance:
       value: 146
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: pathToAsset
       value: Tile/Hidden Objects/Water
       objectReference: {fileID: 0}
@@ -25394,6 +26406,10 @@ PrefabInstance:
       propertyPath: id
       value: 263
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -25460,6 +26476,10 @@ PrefabInstance:
       propertyPath: id
       value: 79
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -25525,6 +26545,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -25716,6 +26740,10 @@ PrefabInstance:
       propertyPath: id
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
       value: Metal (10)
@@ -25802,6 +26830,10 @@ PrefabInstance:
       propertyPath: id
       value: 83
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -25868,6 +26900,10 @@ PrefabInstance:
       propertyPath: id
       value: 278
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -25933,6 +26969,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 89
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -26474,6 +27514,10 @@ PrefabInstance:
       propertyPath: id
       value: 150
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -26539,6 +27583,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 262
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -26606,6 +27654,10 @@ PrefabInstance:
       propertyPath: id
       value: 185
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -26671,6 +27723,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: id
       value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 1762158a6a095e744a583e0d62597a26, type: 3}
       propertyPath: m_Name
@@ -26753,6 +27809,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 187
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -26882,6 +27942,10 @@ PrefabInstance:
       propertyPath: id
       value: 310
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -26947,6 +28011,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 179
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -27076,6 +28144,10 @@ PrefabInstance:
       propertyPath: id
       value: 246
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -27204,6 +28276,10 @@ PrefabInstance:
       propertyPath: id
       value: 81
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -27269,6 +28345,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 302
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -27336,6 +28416,10 @@ PrefabInstance:
       propertyPath: id
       value: 87
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -27402,6 +28486,10 @@ PrefabInstance:
       propertyPath: id
       value: 119
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -27467,6 +28555,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 148
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -27659,6 +28751,10 @@ PrefabInstance:
       value: 39
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -27826,6 +28922,10 @@ PrefabInstance:
       propertyPath: id
       value: 190
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -27954,6 +29054,10 @@ PrefabInstance:
       propertyPath: id
       value: 274
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -28019,6 +29123,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 307
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -28086,6 +29194,10 @@ PrefabInstance:
       propertyPath: id
       value: 177
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -28152,6 +29264,10 @@ PrefabInstance:
       propertyPath: id
       value: 195
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -28217,6 +29333,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 163
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -28346,6 +29466,10 @@ PrefabInstance:
       propertyPath: id
       value: 227
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -28411,6 +29535,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 244
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -28541,6 +29669,10 @@ PrefabInstance:
       value: 38
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -28645,6 +29777,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 225
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -28779,6 +29915,10 @@ PrefabInstance:
       value: 147
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: pathToAsset
       value: Tile/Hidden Objects/Water
       objectReference: {fileID: 0}
@@ -28848,6 +29988,10 @@ PrefabInstance:
       propertyPath: id
       value: 242
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -28914,6 +30058,10 @@ PrefabInstance:
       propertyPath: id
       value: 260
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -28979,6 +30127,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 122
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -29108,6 +30260,10 @@ PrefabInstance:
       propertyPath: id
       value: 164
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -29173,6 +30329,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: id
       value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -1300758535219116623, guid: aa0bfec7313e7e5428513c0c0fa4c237, type: 3}
       propertyPath: rockYield.type.Array.size
@@ -29342,6 +30502,10 @@ PrefabInstance:
       propertyPath: id
       value: 162
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -29486,6 +30650,10 @@ PrefabInstance:
       propertyPath: id
       value: 51
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
       value: Metal (14)
@@ -29572,6 +30740,10 @@ PrefabInstance:
       propertyPath: id
       value: 286
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -29637,6 +30809,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 269
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -29704,6 +30880,10 @@ PrefabInstance:
       propertyPath: id
       value: 24
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -29769,6 +30949,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -29836,6 +31020,10 @@ PrefabInstance:
       propertyPath: id
       value: 288
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -29901,6 +31089,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 144
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -29968,6 +31160,10 @@ PrefabInstance:
       propertyPath: id
       value: 112
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -30034,6 +31230,10 @@ PrefabInstance:
       propertyPath: id
       value: 304
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -30099,6 +31299,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 158
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -30228,6 +31432,10 @@ PrefabInstance:
       propertyPath: id
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -30356,6 +31564,10 @@ PrefabInstance:
       propertyPath: id
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -30421,6 +31633,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: id
       value: 54
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: b4a5e571ff09a174da8dbf230f178694, type: 3}
       propertyPath: m_Name
@@ -30508,6 +31724,10 @@ PrefabInstance:
       propertyPath: id
       value: 172
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -30573,6 +31793,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 197
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -31124,6 +32348,10 @@ PrefabInstance:
       propertyPath: id
       value: 176
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -31189,6 +32417,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 97
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -31256,6 +32488,10 @@ PrefabInstance:
       propertyPath: id
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -31321,6 +32557,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 305
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
@@ -31454,6 +32694,10 @@ PrefabInstance:
       propertyPath: id
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -31582,6 +32826,10 @@ PrefabInstance:
       propertyPath: id
       value: 129
       objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
       value: Dirt
@@ -31646,6 +32894,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
@@ -31713,6 +32965,10 @@ PrefabInstance:
     - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: id
       value: 223
+      objectReference: {fileID: 0}
+    - target: {fileID: -1300758535219116623, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
+      propertyPath: integrity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 33366249774806201, guid: 0e944bc112cceb3469863f5cb9aee8a1, type: 3}
       propertyPath: m_Name
