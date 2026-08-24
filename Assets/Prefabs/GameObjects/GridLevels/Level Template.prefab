@@ -358,26 +358,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Stability
   cavein:
-    StabilityChanceKeys:
+    stabilityChanceKeys:
     - Stability: 0
-      Chance: 95
-      Size: 0
+      Chance: 80
+      Size: 2
       IntegrityGain: 0
     - Stability: 5
-      Chance: 75
-      Size: 0
+      Chance: 40
+      Size: 1
       IntegrityGain: 0
-    - Stability: 7
-      Chance: 50
-      Size: 0
-      IntegrityGain: 0
-    - Stability: 10
+    - Stability: 8
       Chance: 20
-      Size: 0
+      Size: 1
       IntegrityGain: 0
     - Stability: 12
-      Chance: 10
-      Size: 0
+      Chance: 3
+      Size: 1
       IntegrityGain: 0
     - Stability: 15
       Chance: 0

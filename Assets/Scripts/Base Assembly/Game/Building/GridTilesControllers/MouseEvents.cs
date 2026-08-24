@@ -236,6 +236,14 @@ public class MouseEvents : MonoBehaviour
                     c = highlight * 3; // WHITE
                 activeObject.Highlight(c);
 
+                if (rock)
+                {
+                    RadiusScanUtil util = new(rock.GetPos().ToVecInt(), (int)rock.originalIntegrity);
+                    SceneRefs.Overlays.overlay.SetSelectedTiles(util.DoRadius());
+                }
+                else
+                    SceneRefs.Overlays.overlay.ClearSelectedTiles();
+
                 // DEBUG_Binding Working entrypoint
                 // This happens when you click an object in the level.
                 // You need to have "nothing" selection mode (white highliting, If you dont press right mouse button to get there).
@@ -351,6 +359,7 @@ public class MouseEvents : MonoBehaviour
             var a = activeObject;
             Exit(activeObject);
             activeObject = a;
+            SceneRefs.Overlays.overlay.ClearSelectedTiles();
         }
         if (clickedObject)
         {

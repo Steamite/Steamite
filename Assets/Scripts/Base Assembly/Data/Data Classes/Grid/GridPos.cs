@@ -84,7 +84,12 @@ public struct GridPos
 
     #region Functions
 
-
+    public Vector2Int ToVecInt(float yOffset = 0)
+    {
+        return new(
+            (int)x,
+            (int)z);
+    }
 
     public Vector3 ToVec(float yOffset = 0)
     {

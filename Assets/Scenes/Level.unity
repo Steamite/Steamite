@@ -416,8 +416,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb9cd38ce8bf8c349bf1f0dddb1c928d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::OverlayController
-  overlayMapMaterial: {fileID: 2100000, guid: db68f415a0dda3c4e9c4ae8d8a29e75a, type: 2}
-  texture: {fileID: 0}
+  mainMapMaterial: {fileID: 2100000, guid: db68f415a0dda3c4e9c4ae8d8a29e75a, type: 2}
+  mainTexture: {fileID: 0}
+  selectedTexture: {fileID: 0}
   gradientTexture: {fileID: 0}
   overlayFilter: 0
   gridTiles: {fileID: 3114157475242612541}
@@ -586,7 +587,6 @@ MonoBehaviour:
     m_Flags: 0
   sprite: {fileID: 21300000, guid: 7c4a7586033eca9449c85deef53778aa, type: 3}
   Name: 
-  maxIntegrity: 5
 --- !u!1 &695151492
 GameObject:
   m_ObjectHideFlags: 0
@@ -757,7 +757,6 @@ MonoBehaviour:
     m_Flags: 0
   sprite: {fileID: 21300000, guid: 2b61dc557efa942428ac194cfa787fd7, type: 3}
   Name: 
-  maxIntegrity: 15
 --- !u!1 &745012301
 GameObject:
   m_ObjectHideFlags: 0
@@ -2481,6 +2480,7 @@ MonoBehaviour:
   - {fileID: 8277524054700303564}
   - {fileID: 897350252}
   - {fileID: 220867761}
+  - {fileID: 709068454}
 --- !u!114 &8150810313726245686
 MonoBehaviour:
   m_ObjectHideFlags: 0

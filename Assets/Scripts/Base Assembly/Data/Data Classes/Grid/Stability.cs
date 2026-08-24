@@ -1,19 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-[Serializable]
-public struct CaveinData
-{
-    public int Stability;
-    public int Chance;
-    public int Size;
-    [FormerlySerializedAs("Value")]
-    public int IntegrityGain;
-}
 
 public class Stability : MonoBehaviour
 {

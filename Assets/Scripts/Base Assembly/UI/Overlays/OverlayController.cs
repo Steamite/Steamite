@@ -11,9 +11,12 @@ using UnityEngine.UI;
 
 public class OverlayController : MonoBehaviour, IAfterLoad
 {
-    [SerializeField] Material overlayMapMaterial;
+    [SerializeField] Material mainMapMaterial;
 
-    [SerializeField] Texture2D texture;
+    [SerializeField] Texture2D mainTexture;
+    [SerializeField] Texture2D selectedTexture;
+
+
     [SerializeField] Texture2D gradientTexture;
     [SerializeField] FilterMode overlayFilter;
     [SerializeField] GridTiles gridTiles;
@@ -28,12 +31,15 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     public int ActiveOvelayIndex => activeOverlayIndex;
     public BaseOverlay ActiveOverlay => overlayModes[activeOverlayIndex];
 
-    NativeArray<float> overlayValueMap;
+    NativeArray<float> mainValueMap;
+    NativeArray<float> selectedValueMap;
 
     public Texture2D GradientTexture => gradientTexture;
 
 
     event Action<int, BaseOverlay?> OverlayChanged;
+
+    int gridSize;
 
     public void AddOverlayChanged(Action<int, BaseOverlay?> action)
     {
@@ -45,12 +51,13 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     #region Init
     public void AfterLoad()
     {
-        int grid = MyGrid.GridSize;
+        gridSize = MyGrid.GridSize;
 
-        overlayValueMap = new(grid * grid, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+        mainValueMap = new(gridSize * gridSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
 
-        CreateOverlayMap(grid);
-        CreateTexture(grid);
+        CreateOverlayMap(gridSize);
+        mainTexture = CreateTexture(gridSize, "_MainTex", ref mainValueMap, mainMapMaterial);
+        selectedTexture = CreateTexture(gridSize, "_SelectedTex", ref selectedValueMap, mainMapMaterial);
         AttachOverlays();
 
         for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
@@ -62,6 +69,12 @@ public class OverlayController : MonoBehaviour, IAfterLoad
                     UpdateOverlay();
             });
         }
+        MyGrid.AddToGridChange(GridLevelChange);
+    }
+
+    private void GridLevelChange(int _, int i)
+    {
+        UpdateOverlay();
     }
 
     void CreateOverlayMap(int size)
@@ -75,17 +88,21 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         map.rectTransform.anchoredPosition = new(size / 2, size / 2);
         map.rectTransform.sizeDelta = new(size, size);
 
-        map.material = overlayMapMaterial;
+        map.material = mainMapMaterial;
         map.gameObject.SetActive(false);
     }
 
-    void CreateTexture(int size)
+    Texture2D CreateTexture(int size, string name, ref NativeArray<float> map, Material material)
     {
-        texture = new(size, size, TextureFormat.RFloat, false)
+        Texture2D tex = new(size, size, TextureFormat.RFloat, false)
         {
             filterMode = overlayFilter
         };
-        overlayMapMaterial.SetTexture("_MainTex", texture);
+        map = tex.GetRawTextureData<float>();
+        material.SetTexture(name, tex);
+        
+        
+        return tex;
     }
 
     bool CheckBindings(BaseOverlay overlay, int i, List<string> paths)
@@ -148,11 +165,33 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     }
 
 
+
+    public void ClearSelectedTiles()
+        => SetSelectedTiles(new());
+
+    public void SetSelectedTiles(List<Vector2Int> test)
+    {
+        for (int y = 0; y < gridSize; y++)
+        {
+            for (int x = 0; x < gridSize; x++)
+            {
+                int index = (y * gridSize) + x;
+                selectedValueMap[index] = test.Any(q => q.x == x && q.y == y) ? 1 : 0; 
+            }
+        }
+
+        selectedTexture.SetPixelData(selectedValueMap, 0);
+        selectedTexture.Apply();
+    }
+
     void UpdateOverlay()
     {
+        if (activeOverlayIndex == -1)
+            return;
+
         // calculate values
         BaseOverlay overlay = overlayModes[activeOverlayIndex];
-        overlay.CalculateOverlay(overlayValueMap);
+        overlay.CalculateOverlay(mainValueMap);
 
         // mark the grid
         Overlay(overlay.gradient);
@@ -161,7 +200,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         if (gridTiles.ActiveControl != ControlMode.Overlay)
             gridTiles.ChangeSelMode(ControlMode.Overlay);
         else
-            overlayMapMaterial.SetVector("_MousePos", new(-50, 0, -50));
+            mainMapMaterial.SetVector("_MousePos", new(-50, 0, -50));
 
         map.gameObject.SetActive(true);
     }
@@ -189,20 +228,20 @@ public class OverlayController : MonoBehaviour, IAfterLoad
 
         gradientTexture.SetPixels(colors);
         gradientTexture.Apply();
-        overlayMapMaterial.SetTexture("_GradientTex", gradientTexture);
+        mainMapMaterial.SetTexture("_GradientTex", gradientTexture);
     }
 
     public void Overlay(Gradient gradient)
     {
         BakeGradient(gradient);
 
-        texture.SetPixelData(overlayValueMap, 0);
-        texture.Apply();
+        mainTexture.SetPixelData(mainValueMap, 0);
+        mainTexture.Apply();
     }
 
     private void OnDestroy()
     {
-        overlayValueMap.Dispose();
+        mainValueMap.Dispose();
     }
 
     public List<BaseOverlay> GetButtonOverlayTypes()
@@ -229,7 +268,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
             Vector3 hitPoint = ray.GetPoint(enter);
             hitPoint.x = MathF.Floor(hitPoint.x + 0.5f);
             hitPoint.z = MathF.Floor(hitPoint.z + 0.5f);
-            overlayMapMaterial.SetVector("_MousePos", hitPoint);
+            mainMapMaterial.SetVector("_MousePos", hitPoint);
             //Debug.Log(hitPoint);
 
             if (hitPoint.x >= 0 && hitPoint.x < MyGrid.GridSize &&
