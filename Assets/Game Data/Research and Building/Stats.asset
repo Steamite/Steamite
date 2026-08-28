@@ -17,7 +17,7 @@ MonoBehaviour:
     Name: Stats
     Objects:
     - rid: 5286523460828790844
-    Icon: {fileID: 2800000, guid: abf13685b7e55ff4e960d786dde4c5ba, type: 3}
+    Icon: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -28,8 +28,8 @@ MonoBehaviour:
         description: 
         id: 392309819
         pairs:
-        - mask: 3
+        - mask: 1
           statValue:
-            mod: 4
+            mod: 2
             modAmmount: 15
             percent: 0

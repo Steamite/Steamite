@@ -61,7 +61,7 @@ Material:
     m_Colors:
     - _Border: {r: 0, g: 0.091743566, b: 1, a: 1}
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
-    - _MousePos: {r: 8, g: 2.6000006, b: 9, a: 0}
+    - _MousePos: {r: 11, g: 2.6000001, b: 10, a: 0}
     - _Vector3: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

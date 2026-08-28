@@ -24,31 +24,6 @@ public class Road : ClickableObject
     }
     #endregion
 
-    #region Mouse Events
-    /// <inheritdoc/>
-    public override void OnPointerDown(PointerEventData eventData)
-    {
-        if ((SceneRefs.GridTiles.Drag || SceneRefs.GridTiles.ActiveControl == ControlMode.Build))
-            base.OnPointerDown(eventData);
-    }
-
-    /// <summary>
-    /// If building or digging, calls the base <see cref="ClickableObject.OnPointerUp(PointerEventData)"/>.
-    /// </summary>
-    /// <param name="eventData"><inheritdoc/></param>
-    public override void OnPointerUp(PointerEventData eventData)
-    {
-        if (SceneRefs.GridTiles.Drag || SceneRefs.GridTiles.ActiveControl == ControlMode.Build)
-        {
-            base.OnPointerUp(eventData);
-        }
-        else if (eventData.button != PointerEventData.InputButton.Left)
-        {
-            SceneRefs.GridTiles.BreakAction();
-        }
-    }
-    #endregion Mouse Events
-
     #region Save
     public override ClickableObjectSave Save(ClickableObjectSave clickable = null) => null;
 

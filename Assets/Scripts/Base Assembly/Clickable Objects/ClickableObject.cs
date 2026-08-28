@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Android.Gradle;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
@@ -131,6 +132,7 @@ public abstract class ClickableObject : MonoBehaviour,
     {
         if (SceneRefs.GridTiles.Drag == false && eventData.button == PointerEventData.InputButton.Left)
             SceneRefs.GridTiles.Down();
+
     }
     /// <summary>
     /// If left button was released Triggers <see cref="GridTiles.Up()"/>.<br/>
@@ -139,7 +141,6 @@ public abstract class ClickableObject : MonoBehaviour,
     /// <param name="eventData">Mouse data</param>
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-        //print(gameObject.name + $", {transform.position.x}, {transform.position.z}");
         if (eventData.button == PointerEventData.InputButton.Left)
             SceneRefs.GridTiles.Up();
         else
@@ -148,7 +149,7 @@ public abstract class ClickableObject : MonoBehaviour,
     #endregion Mouse Events
 
     #region Highlighting
-    public virtual void Highlight(Color color)
+    public virtual void Highlight(Color color, bool onlyAdd = true)
     {
         foreach (Material material in
             GetComponentsInChildren<MeshRenderer>()
@@ -156,8 +157,18 @@ public abstract class ClickableObject : MonoBehaviour,
             .Union(GetComponentsInChildren<SkinnedMeshRenderer>()
             .Where(q => q).SelectMany(q => q.materials)))
         {
+            if(onlyAdd)
+                color += HighlightColor();
             material.SetColor("_EmissionColor", color);
         }
+    }
+
+    protected virtual Color HighlightColor()
+    {
+        if (selected)
+            return SceneRefs.GridTiles.SelectionColor;
+        else
+            return default;
     }
     #endregion
 

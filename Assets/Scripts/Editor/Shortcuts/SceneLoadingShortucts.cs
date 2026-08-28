@@ -31,7 +31,7 @@ public class SceneLoadingShortucts : MonoBehaviour
         }
         else
         {
-            Debug.Log("Go to level");
+            //Debug.Log("Go to level");
         }
     }
 /*
