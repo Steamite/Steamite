@@ -24,8 +24,8 @@ public class Overlay : GridTilesMode
         }
         else if(tile is IEffectObject effect)
         {
-            //RadiusScanUtil util = new(effect.EffectPos.ToVecInt(), effect.Range.currentValue);
-            SceneRefs.Overlays.overlay.SetSelectedTiles(effect.EffectRoads.Select(q=> q.GetPos().ToVecInt()).ToList());
+            SceneRefs.Overlays.overlay.SetSelectedTiles(
+                effect.EffectRoads.Select(q => q.GetPos().ToVecInt()).ToList());
         }
         else
             SceneRefs.Overlays.overlay.ClearSelectedTiles();
