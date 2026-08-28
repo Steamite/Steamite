@@ -77,7 +77,10 @@ public class BlueprintIndicator : MonoBehaviour
     /// <summary>Clears all tiles from the <see cref="overlay"/>.</summary>
     public void DestroyBuilingTiles()
     {
+        if (!blueprintEntryPoints)
+            return;
         Destroy(blueprintEntryPoints.gameObject);
+        blueprintEntryPoints = null;
     }
     #endregion Buildings
 

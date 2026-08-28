@@ -38,18 +38,16 @@ public class GridTiles : MonoBehaviour
     public LayerMask pipeMask;
 
     /// <summary>Current active control mode.</summary>
-    public ControlMode ActiveControl { get; private set; } = ControlMode.Nothing;
-    public InputAction shiftKey;
+    public GridTilesMode ActiveControl => controlModes[activeControl];
 
-    /// <summary>Drag started on a marked tile.</summary>
-    public bool deselect = false;
-    
-    
+    [SerializeField] List<GridTilesMode> controlModes;
+
+    public int activeControl = 0;
+
+    public InputAction shiftKey;
+        
     public Action DeselectBuildingButton;
 
-    /// <summary>List of all usable cursors.</summary>
-    [Tooltip("used to help determine control states")] 
-    public Texture2D[] cursors;
     #endregion
 
     #region Building
@@ -90,6 +88,12 @@ public class GridTiles : MonoBehaviour
         set => mouseEvents.activeObject = value; 
     }
 
+    public ClickableObject SelectedObject
+    {
+        get => mouseEvents.selectedObject;
+        set => mouseEvents.selectedObject = value;
+    }
+
     ///<inheritdoc cref="MouseEvents.Exit()"/>
     public void Exit() => mouseEvents.Exit();
 
@@ -118,7 +122,16 @@ public class GridTiles : MonoBehaviour
 
     #region MultiSelect
     ///<inheritdoc cref="MultiSelect.ToBeDugColor"/>
-    public Color ToBeDugColor => multiSelect.ToBeDugColor;
+    //public Color ToBeDugColor => multiSelect.ToBeDugColor;
+
+    public Color SelectionColor => ((Nothing)controlModes[(int)ControlMode.Nothing]).SelectionColor;
+
+    public Color DeconstructColor => controlModes[(int)ControlMode.Deconstruct].highlightColor;
+
+    public Color ToBeTempDugColor => controlModes[(int)ControlMode.Dig].highlightColor;
+    public Color ToBeDugColor => ((Dig)controlModes[(int)ControlMode.Dig]).ToBeDugColor;
+    public Color ToRemoveDugColor => ((Dig)controlModes[(int)ControlMode.Dig]).RemoveColor;
+
 
     ///<inheritdoc cref="MultiSelect.InitPipes(GridPos, Pipe)"/>
     public void InitPipes(GridPos pos, Pipe pipe) => multiSelect.InitPipes(pos, pipe);
@@ -154,6 +167,11 @@ public class GridTiles : MonoBehaviour
         multiSelect = GetComponent<MultiSelect>();
         mouseEvents = GetComponent<MouseEvents>();
         buildingActions = GetComponent<BuildingActions>();
+
+        foreach (GridTilesMode mode in controlModes)
+        {
+            mode.Init(this);
+        }
     }
 
     /// <summary>Called when AltTabing from the game.</summary>
@@ -174,115 +192,46 @@ public class GridTiles : MonoBehaviour
         if (multiSelect.Break())
         {
             ChangeSelMode(ControlMode.Nothing);
+            Enter(ActiveObject);
             Drag = false;
         }
     }
 
+    bool inChange = false;
     /// <summary>
     /// Changes the current tool mod, and manages transitions betwean them.
     /// </summary>
     /// <param name="mode"></param>
     public void ChangeSelMode(ControlMode mode)
     {
-        if (mode == ActiveControl && mode != ControlMode.Nothing)
+        if (inChange)
+            return;
+
+        inChange = true;
+        int i = (int)mode;
+
+        if (i == activeControl)
         {
-            if (ActiveControl == ControlMode.Build)
+            if (ActiveControl.ToggleMod())
             {
-                if (BlueprintPrefab.Name == BlueprintInstance.Name)
-                {
-                    ChangeSelMode(ControlMode.Nothing);
-                }
-                else
-                {
-                    DestroyBlueprint(false);
-                    Blueprint();
-                    return;
-                }
+                inChange = false;
+                ChangeSelMode(ControlMode.Nothing);
             }
-            ChangeSelMode(ControlMode.Nothing);
+            else
+                DeselectObjects();
         }
         else
         {
-            switch (ActiveControl)
-            {
-                case ControlMode.Deconstruct:
-                    ActiveControl = ControlMode.Nothing;
-                    break;
-                case ControlMode.Dig:
-                    ClearDig();
-                    Drag = false;
-                    ActiveControl = ControlMode.Nothing;
-                    break;
-                case ControlMode.Upgrade:
-                    ActiveControl = ControlMode.Nothing;
-                    break;
-                case ControlMode.Build:
-                    SceneRefs.CameraSceneMover.SetRaycastMask(defaultMask);
-                    if (Drag)
-                    {
-                        ClearPipes();
-                        DeselectBuildingButton?.Invoke();
-                        Drag = false;
-                    }
-                    else if (BlueprintInstance)
-                        DestroyBlueprint(true);
-                    shiftKey.Disable();
-                    break;
-            }
+            ActiveControl.ExitMod();
             DeselectObjects();
-            EnterMode(mode);
+            activeControl = i;
+
+
+
+            if (ActiveControl.EnterMod())
+                Enter();
         }
-    }
-
-    void EnterMode(ControlMode mode)
-    {
-        bool visible = true;
-        Texture2D cursorSprite = null;
-        Vector2 cursorOffset = new();
-        ActiveControl = mode;
-        switch (mode)
-        {
-            case ControlMode.Nothing:
-                cursorSprite = default;
-                cursorOffset = Vector2.zero;
-                break;
-            case ControlMode.Deconstruct:
-                cursorSprite = cursors[0];
-                cursorOffset = new(15, 15);
-                break;
-            case ControlMode.Dig:
-                cursorSprite = cursors[1];
-                cursorOffset = new(1, 16);
-                break;
-            case ControlMode.Upgrade:
-                cursorSprite = cursors[2];
-                cursorOffset = new(15, 1);
-                break;
-            case ControlMode.Build:
-                cursorSprite = default;
-                cursorOffset = Vector2.zero;
-                Cursor.SetCursor(cursorSprite, cursorOffset, CursorMode.Auto);
-
-                if (BlueprintPrefab is Pipe)
-                    SceneRefs.CameraSceneMover.SetRaycastMask(pipeMask);
-                else
-                    SceneRefs.CameraSceneMover.SetRaycastMask(buildingMask);
-                Blueprint();
-                shiftKey.Enable();
-                return;
-            case ControlMode.Overlay:
-
-
-                break;
-
-        }
-        Enter();
-
-
-        if (visible)
-        {
-            Cursor.SetCursor(cursorSprite, cursorOffset, CursorMode.Auto);
-        }
+        inChange = false;
     }
     #endregion
 

@@ -674,4 +674,16 @@ public class Building : StorageObject
 #endif
     #endregion
 
+/*
+    public override void Highlight(Color color, bool onlyAdd = true)
+    {
+        base.Highlight(color, onlyAdd);
+    }*/
+    protected override Color HighlightColor()
+    {
+        Color c = base.HighlightColor();
+        if (Deconstructing)
+            c += SceneRefs.GridTiles.DeconstructColor;
+        return c;
+    }
 }

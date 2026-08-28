@@ -32,6 +32,7 @@ public class Rock : ClickableObject, IStabilitySupport
     public HiddenSave HiddenSave { get => hiddenSave; set => hiddenSave = value; }
 
     bool hidden = true;
+    public bool Hidden => hidden;
     public bool isQuest = false;
     #endregion
 
@@ -84,21 +85,26 @@ public class Rock : ClickableObject, IStabilitySupport
     #region Mouse Events
 
     public override void OnPointerDown(PointerEventData eventData)
-    {
-        if (hidden && SceneRefs.GridTiles.ActiveControl == ControlMode.Nothing)
-            return;
+    {/*
+        if (hidden && eventData.button == PointerEventData.InputButton.Left)
+            return; // ignore*/
+
         base.OnPointerDown(eventData);
 
     }
     #endregion
 
     #region Highlight
-    public override void Highlight(Color color)
+    public override void Highlight(Color color, bool onlyAdd = true)
     {
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        if(onlyAdd)
+            color += HighlightColor();
+
+
         if (hidden)
         {
-            if (color == new Color())
+            if (color == default)
             {
                 meshRenderer.enabled = false;
             }
@@ -108,6 +114,14 @@ public class Rock : ClickableObject, IStabilitySupport
             }
         }
         meshRenderer.materials[^1].SetColor("_EmissionColor", color);
+    }
+
+    protected override Color HighlightColor()
+    {
+        Color c = base.HighlightColor();
+        if (toBeDug)
+            c += SceneRefs.GridTiles.ToBeDugColor;
+        return c;
     }
     #endregion
 

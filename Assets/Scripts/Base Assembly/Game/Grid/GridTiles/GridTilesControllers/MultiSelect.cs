@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class MultiSelect : MonoBehaviour
 {
@@ -15,12 +16,6 @@ public class MultiSelect : MonoBehaviour
     List<ClickableObject> tempMarkedTiles = new();
     List<GridPos> tempMarkedTilePos = new();
     List<List<ClickableObject>> markedTiles = new();
-
-
-    /// <summary>Color for selecting what do dig.</summary>
-    [SerializeField] Color toBeDugColor = (Color.yellow + Color.red) / 2;
-
-    public Color ToBeDugColor => toBeDugColor;
 
     /// <summary>
     /// Called when canceling drag, changes highlight of all rocks in markedTiles.
@@ -33,7 +28,7 @@ public class MultiSelect : MonoBehaviour
             {
                 Color c = new();
                 if (r.toBeDug)
-                    c = (Color.yellow + Color.red) / 2;
+                    c = SceneRefs.GridTiles.ToBeDugColor;
                 r.Highlight(c);
             }
         }
@@ -56,7 +51,10 @@ public class MultiSelect : MonoBehaviour
             {
                 filtered.Remove(g);
             }
-            g.Highlight(deselect ? (Color.red / 2) : toBeDugColor);
+            g.Highlight(deselect 
+                ? SceneRefs.GridTiles.ToRemoveDugColor 
+                : SceneRefs.GridTiles.ToBeTempDugColor, 
+                false);
         }
         tempMarkedTiles = filtered;
     }
@@ -94,11 +92,13 @@ public class MultiSelect : MonoBehaviour
             foreach (var dig in toBeDug) // removes to be dug
             {
                 tempMarkedTiles.RemoveAll(q => q == dig);
+                dig.Highlight(default);
             }
             foreach (Rock tile in tempMarkedTiles)
             {
-                toBeDug.Add(tile); // add rock
+                //toBeDug.Add(tile); // add rock
                 tile.toBeDug = true;
+                tile.Highlight(default);
                 SceneRefs.JobQueue.AddJob(JobState.Digging, tile);
             }
         }

@@ -22,7 +22,7 @@ namespace Assets.Scripts.UI.Refs___Shortcuts
         public static void BuildRotate_performed(InputAction.CallbackContext obj)
         {
             float axis = obj.ReadValue<float>();
-            if (SceneRefs.GridTiles.ActiveControl == ControlMode.Build)
+            if (SceneRefs.GridTiles.activeControl == (int)ControlMode.Build)
             {
                 Building building = SceneRefs.GridTiles.BlueprintInstance;
                 if (building is Pipe)

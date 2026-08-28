@@ -48,16 +48,18 @@ public class OverlayController : MonoBehaviour, IAfterLoad
             action(activeOverlayIndex, overlayModes[activeOverlayIndex]);
     }
 
+
     #region Init
     public void AfterLoad()
     {
         gridSize = MyGrid.GridSize;
 
         mainValueMap = new(gridSize * gridSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+        selectedValueMap = new(gridSize * gridSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
 
         CreateOverlayMap(gridSize);
-        mainTexture = CreateTexture(gridSize, "_MainTex", ref mainValueMap, mainMapMaterial);
-        selectedTexture = CreateTexture(gridSize, "_SelectedTex", ref selectedValueMap, mainMapMaterial);
+        mainTexture = CreateTexture(gridSize, "_MainTex",/* mainValueMap,*/ mainMapMaterial);
+        selectedTexture = CreateTexture(gridSize, "_SelectedTex", /*selectedValueMap,*/ mainMapMaterial);
         AttachOverlays();
 
         for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
@@ -92,13 +94,13 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         map.gameObject.SetActive(false);
     }
 
-    Texture2D CreateTexture(int size, string name, ref NativeArray<float> map, Material material)
+    Texture2D CreateTexture(int size, string name/*, NativeArray<float> map*/, Material material)
     {
         Texture2D tex = new(size, size, TextureFormat.RFloat, false)
         {
             filterMode = overlayFilter
         };
-        map = tex.GetRawTextureData<float>();
+        //map = tex.GetRawTextureData<float>();
         material.SetTexture(name, tex);
         
         
@@ -197,7 +199,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         Overlay(overlay.gradient);
 
         OverlayChanged?.Invoke(activeOverlayIndex, overlay);
-        if (gridTiles.ActiveControl != ControlMode.Overlay)
+        if (gridTiles.activeControl != (int)ControlMode.Overlay)
             gridTiles.ChangeSelMode(ControlMode.Overlay);
         else
             mainMapMaterial.SetVector("_MousePos", new(-50, 0, -50));
@@ -242,6 +244,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     private void OnDestroy()
     {
         mainValueMap.Dispose();
+        selectedValueMap.Dispose();
     }
 
     public List<BaseOverlay> GetButtonOverlayTypes()
@@ -254,6 +257,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         OverlayChanged = null;
     }
 
+    public Vector2Int MouseHitPoint;
     private void Update()
     {
         if (activeOverlayIndex == -1)
@@ -265,17 +269,22 @@ public class OverlayController : MonoBehaviour, IAfterLoad
 
         if (plane.Raycast(ray, out float enter))
         {
-            Vector3 hitPoint = ray.GetPoint(enter);
-            hitPoint.x = MathF.Floor(hitPoint.x + 0.5f);
-            hitPoint.z = MathF.Floor(hitPoint.z + 0.5f);
-            mainMapMaterial.SetVector("_MousePos", hitPoint);
-            //Debug.Log(hitPoint);
+            Vector3 mouseHitPoint = ray.GetPoint(enter);
+            mouseHitPoint.x = MathF.Floor(mouseHitPoint.x + 0.5f);
+            mouseHitPoint.z = MathF.Floor(mouseHitPoint.z + 0.5f);
+            mainMapMaterial.SetVector("_MousePos", mouseHitPoint);
 
-            if (hitPoint.x >= 0 && hitPoint.x < MyGrid.GridSize &&
-                hitPoint.z >= 0 && hitPoint.z < MyGrid.GridSize)
-                worldMenu.Open(MyGrid.GetGridTile((int)hitPoint.x, (int)hitPoint.z));
+            if (mouseHitPoint.x >= 0 && mouseHitPoint.x < MyGrid.GridSize &&
+                mouseHitPoint.z >= 0 && mouseHitPoint.z < MyGrid.GridSize)
+                worldMenu.Open(MyGrid.GetGridTile((int)mouseHitPoint.x, (int)mouseHitPoint.z));
             else
                 worldMenu.Open(null);
+
+            MouseHitPoint = new(
+                (int)mouseHitPoint.x,
+                (int)mouseHitPoint.z);
         }
+        else
+            MouseHitPoint = new(-1, -1);
     }
 }

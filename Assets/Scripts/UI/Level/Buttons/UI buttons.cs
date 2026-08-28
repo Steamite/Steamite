@@ -1,18 +1,17 @@
 using UnityEngine;
 
-public class UIbuttons : MonoBehaviour
+/*public class UIbuttons : MonoBehaviour
 {
     public void ToggleAction(int i)
     {
-        GridTiles gridTiles = SceneRefs.GridTiles;
-        if (gridTiles.ActiveControl == (ControlMode)i)
+        GridTiles gridTiles = SceneRefs.GridTiles;*//*
+        if (gridTiles.activeControl == i)
         {
-            // ???
-            //gridTiles.activeObject = null;
             gridTiles.ChangeSelMode(ControlMode.Nothing);
         }
-        else
+        else*//*
             gridTiles.ChangeSelMode((ControlMode)i);
     }
 
 }
+*/
