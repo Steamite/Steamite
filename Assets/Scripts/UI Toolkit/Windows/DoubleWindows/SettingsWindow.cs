@@ -1,6 +1,7 @@
 ﻿using StartMenu;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,6 +16,7 @@ namespace Settings
             new Vector2Int(1920, 1080),
             new Vector2Int(2560, 1440),
         };
+        Resolution[] resolutions;
 
         List<string> screenSettings = new()
         {
@@ -112,12 +114,15 @@ namespace Settings
 
 
             resolutionDropdown = menu.Q<DropdownField>("Resolution-Dropdown");
-            resolutionDropdown.choices = windowSizes.ConvertAll(res => $"{res.x}x{res.y}");
+            resolutions = Screen.resolutions;
+            resolutionDropdown.choices = resolutions.Select(q => $"{q.width}x{q.height}").ToList(); ;// .ConvertAll(res => $"{res.x}x{res.y}");
             resolutionDropdown.RegisterValueChangedCallback((q) => 
             {
-                string[] list = q.newValue.Split('x');
-                data.Width = int.Parse(list[0]);
-                data.Height = int.Parse(list[1]);
+                int i = ((DropdownField)q.target).index;
+                Resolution res = resolutions[i];
+
+                data.Width = res.width;
+                data.Height = res.height;
                 UpdateButtonState();
             });
 

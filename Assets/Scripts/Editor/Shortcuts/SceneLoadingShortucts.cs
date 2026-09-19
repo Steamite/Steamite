@@ -7,11 +7,11 @@ using UnityEngine;
 [InitializeOnLoad]
 public class SceneLoadingShortucts : MonoBehaviour
 {
+    public const string DISABLE_SCENELOADER = "DISABLE_SCENELOADER";
     /// <summary>Base path to the scene folde</summary>
     static readonly string scenePath = "Assets/Scenes/";
     //static readonly string dataPath = "Assets/Editor/EditorData.asset";
     static bool continueGame = false;
-
     /// <summary>
     /// Needs to be initialized to register the event.
     /// </summary>
@@ -51,8 +51,15 @@ public class SceneLoadingShortucts : MonoBehaviour
     /// <param name="state">New state.</param>
     static void OnPlayModeStateChanged(PlayModeStateChange state)
     {
+
         if (state == PlayModeStateChange.ExitingEditMode)
         {
+            if (SessionState.GetBool(DISABLE_SCENELOADER, false))
+            {
+                SessionState.EraseBool(DISABLE_SCENELOADER);
+                return;
+            }
+
             if (EditorSceneManager.GetActiveScene().name != "Main Menu")
             {
                 EditorSceneManager.SaveOpenScenes();
@@ -85,7 +92,14 @@ public class SceneLoadingShortucts : MonoBehaviour
         else if (state == PlayModeStateChange.EnteredEditMode)
         {
             if (File.Exists($"{Application.persistentDataPath}/openScene.txt"))
-                EditorSceneManager.OpenScene($"{scenePath}{File.ReadAllText($"{Application.persistentDataPath}/openScene.txt")}.unity");
+            {
+                string s = $"{scenePath}{File.ReadAllText($"{Application.persistentDataPath}/openScene.txt")}.unity";
+                try
+                {
+                    EditorSceneManager.OpenScene(s);
+                }
+                catch { }
+            }
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
         continueGame = false;
@@ -125,7 +139,7 @@ public class SceneLoadingShortucts : MonoBehaviour
         if (EditorSceneManager.GetActiveScene().name != "LoadingScreen")
         {
             EditorSceneManager.SaveOpenScenes();
-            EditorSceneManager.OpenScene($"{scenePath}LoadingScreen.unity");
+            EditorSceneManager.OpenScene($"{scenePath}Loading Screen.unity");
         }
     }
 }

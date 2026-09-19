@@ -1,5 +1,7 @@
 
 
+using ClickableObjects;
+using NUnit.Framework.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -312,6 +314,7 @@ public static class MyGrid
                     case RockSave:
                         Rock r = SceneRefs.ObjectFactory.CreateSavedRock(gridSave.grid[x, z] as RockSave, new(x, i, z), rockData, dirtMat);
                         r.Hide();
+                        //r.gameObject.SetActive(false);
                         break;
                     case WaterSave:
                         SceneRefs.ObjectFactory.CreateSavedWater(gridSave.grid[x, z] as WaterSave, new(x, i, z));
@@ -320,7 +323,10 @@ public static class MyGrid
                         if (gridSave.grid[x, z] == null)
                         {
                             GridPos pos = new(x, i, z);
-                            roads.Add(SceneRefs.ObjectFactory.CreateRoad(pos));
+                            Road road = SceneRefs.ObjectFactory.CreateRoad(pos);
+                            roads.Add(road);
+                            //road.gameObject.SetActive(false);
+
                         }
                         break;
                 }

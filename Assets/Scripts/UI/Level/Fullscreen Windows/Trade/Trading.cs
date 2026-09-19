@@ -46,7 +46,7 @@ public class Trading : IGameDataController<TradeSave>
     public List<Outpost> Outposts { get => outposts; set => outposts = value; }
     #endregion
 
-    public override async Task LoadState(TradeSave tradeSave)
+    public override async Awaitable LoadState(TradeSave tradeSave)
     {
         TradeHolder tradeHolder = Instantiate(await Addressables.LoadAssetAsync<TradeHolder>($"Colony Locations/{tradeSave.colonyLocation}.asset").Task);
         ColonyLocation = tradeHolder.startingLocation;

@@ -6,7 +6,7 @@ public abstract class IGameDataController<T> : MonoBehaviour
 {
     public Action OnLoad;
 
-    public abstract Task LoadState(T saveData);
+    public abstract Awaitable LoadState(T saveData);
 
     protected void AfterLoad()
     {

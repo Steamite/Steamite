@@ -164,6 +164,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4110801998864547646}
+  - component: {fileID: 1829267687815419331}
   m_Layer: 0
   m_Name: Rocks
   m_TagString: Untagged
@@ -186,6 +187,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8192549997447066428}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &1829267687815419331
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5645814378044229020}
+  m_Mesh: {fileID: 0}
 --- !u!1 &6170899172321013079
 GameObject:
   m_ObjectHideFlags: 0

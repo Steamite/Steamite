@@ -36,6 +36,7 @@ public class SceneRefs : MonoBehaviour
     /// </summary>
     [SerializeField] MonoBehaviour _questController;
 
+    [SerializeReference] List<MonoBehaviour> beforeLoadsAwaitable = new();
     [SerializeReference] List<MonoBehaviour> beforeLoads = new();
     [SerializeReference] List<MonoBehaviour> afterLoads = new();
     #endregion
@@ -60,14 +61,19 @@ public class SceneRefs : MonoBehaviour
     static void ReloadDomain() => instance = null;
 
     /// <summary>Registers the <see cref="instance"/></summary>
-    public async Task BeforeLoad()
+    public async Awaitable BeforeLoad()
     {
         MyGrid.ReloadDomain();
         instance = this;
 
-        foreach (IBeforeLoad beforeLoad in instance.beforeLoads)
+        foreach (IBeforeLoadAwaitable beforeLoad in instance.beforeLoadsAwaitable)
             await beforeLoad.BeforeInit();
+        foreach (IBeforeLoad beforeLoad in instance.beforeLoads)
+            beforeLoad.BeforeInit();
         beforeLoads = null;
+        beforeLoadsAwaitable = null;
+
+        MyRes.PreLoad();
     }
 
     public static void FinishLoad()
@@ -80,6 +86,12 @@ public class SceneRefs : MonoBehaviour
 
     private void OnValidate()
     {
+        for (int i = beforeLoadsAwaitable.Count - 1; i >= 0; i--)
+        {
+            if (beforeLoadsAwaitable[i] is not IBeforeLoadAwaitable)
+                beforeLoadsAwaitable.RemoveAt(i);
+        }
+
         for (int i = beforeLoads.Count - 1; i >= 0; i--)
         {
             if (beforeLoads[i] is not IBeforeLoad)

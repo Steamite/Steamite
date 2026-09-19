@@ -21,7 +21,7 @@ namespace BottomBar
 
             questGroup = Root.Q("QuestGroup");
 
-            buildMenu = (BuildMenu)UIRefs.BottomBarRoot.Q<VisualElement>(className: "build-menu");
+            buildMenu = (BuildMenu)Root.Q<VisualElement>(className: "build-menu");
         }
 
         public void AfterLoad()

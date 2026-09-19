@@ -63,15 +63,15 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     
     #region Scene Managment
     /// <summary>Loads the Main Menu scene.</summary>
-    public async void OpenMainMenu(bool v)
+    public async Awaitable OpenMainMenu(bool v)
     {
-        await SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
+        await SceneManager.LoadSceneAsync("Main Menu", LoadSceneMode.Additive);
         if(!v)
             (GameObject.FindGameObjectWithTag("GameController").GetComponentAtIndex(2) as IInitiableUI).Init();
     }
 
 
-    public async void StartNewGame(string _folderName, string seed = "")
+    public async Awaitable StartNewGame(string _folderName, string seed = "")
     {
         NewGameInit newGameInit = gameObject.GetComponent<NewGameInit>();
         WorldSave worldSave;
@@ -97,14 +97,17 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
             quests = await newGameInit.InitQuests(randomMap),
             world = worldSave
         };
-        StartLoading(_folderName, saveData);
+        await StartLoad(_folderName, saveData);
     }
     #endregion
 
     #region Loading Game State
-    public void LoadGame(string _folderName, string _worldName)
+    public async Awaitable LoadGame(string _worldName, string _folderName)
     {
-        StartLoading(_worldName, LoadSavedData(_folderName));
+        await Awaitable.MainThreadAsync();
+        Save save = LoadSavedData(_folderName);
+        await StartLoad(_worldName, save);
+        //StartLoading(_worldName, LoadSavedData(_folderName));
     }
     /// <summary>
     /// Assigns parameters and shows loading screen.<br/>
@@ -114,14 +117,39 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     void StartLoading(string _worldName, Save save)
     {
         worldName = _worldName;
-        PanelRendererRoot root = GetComponent<PanelRendererRoot>();
-        root.RegisterReload(async (panel,rootElem) => await Load(save, rootElem));
+        PanelRendererRoot panel = GetComponent<PanelRendererRoot>();
+    //    panel.RegisterReload(async (panel,rootElem) => );
         /*if (root.Root == null)
         else
             _ = Load(save, root.Root);*/
     }
 
-    async Task Load(Save save, VisualElement root) {
+    async Awaitable StartLoad(string _worldName, Save save)
+    {
+        worldName = _worldName;
+        var completionSource = new AwaitableCompletionSource();
+        PanelRendererRoot panel = GetComponent<PanelRendererRoot>();
+
+        PanelRenderer.UIReloadCallback onReady = null;
+
+        VisualElement element = null;
+
+        onReady = (pan, el) =>
+        {
+            element = el; 
+            pan.UnregisterUIReloadCallback(onReady);
+
+            completionSource.TrySetResult();
+        };
+
+        panel.RegisterReload(onReady);//.RegisterUIReloadCallback(onReady);
+
+
+        await completionSource.Awaitable;
+        await Load(save, element);
+    }
+
+    async Awaitable Load(Save save, VisualElement root) {
 
         root[0].style.display = DisplayStyle.Flex;
         Label actionText = root.Q<Label>("Title");
@@ -198,7 +226,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// Preps <see cref="SceneRefs"/>, <see cref="SceneRefs"/> and loads saved data.
     /// </summary>
     /// <param name="obj"></param>
-    async Task LoadWorldData(Save save, ProgressBar bar)
+    async Awaitable LoadWorldData(Save save, ProgressBar bar)
     {
         MyGrid.worldName = worldName;
         WorldSave worldSave = save.world;
@@ -217,11 +245,13 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         maxprogress += humanSaves.Length * HUMAN_WEIGHT;
         maxprogress += researchSave.count * RES_WEIGHT;
         bar.highValue = maxprogress;
+        await Awaitable.MainThreadAsync();
+
         try
         {
-            await LoadMap(worldSave);
-            await LoadGameState(gameState);
-            await LoadHumans(humanSaves);
+            LoadMap(worldSave);
+            LoadGameState(gameState);
+            LoadHumans(humanSaves);
             await LoadResearches(researchSave);
             await LoadTrade(tradeSave);
             await LoadQuests(questSave);
@@ -240,7 +270,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="worldSave"></param>
-    Task LoadMap(WorldSave worldSave)
+    void LoadMap(WorldSave worldSave)
     {
         ActionText = "Loading grid";
         LoadGrid(worldSave.gridSave);
@@ -250,7 +280,6 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         LoadChunks(worldSave.objectsSave.chunks);
         ActionText = "Constructing buildings";
         LoadBuildings(worldSave.objectsSave.buildings);
-        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -319,7 +348,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="humanSaves"></param>
-    Task LoadHumans(HumanSave[] humanSaves)
+    void LoadHumans(HumanSave[] humanSaves)
     {
         ActionText = "Kidnaping workers";
         //SceneRefs.Humans.
@@ -328,7 +357,6 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
             SceneRefs.Humans.LoadHuman(save, ref humanActivation);
             ProgressGlobal += HUMAN_WEIGHT;//SceneRefs.Humans.LoadHumans(humanSaves, ref humanActivation, );
         }
-        return Task.CompletedTask;
     }
     #endregion Model Loading
 
@@ -339,11 +367,10 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="gameState"></param>
-    Task LoadGameState(GameStateSave gameState)
+    void LoadGameState(GameStateSave gameState)
     {
         SceneRefs.JobQueue.priority = gameState.priorities;
         SceneRefs.Tick.Load(gameState);
-        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -351,7 +378,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="researchSave"></param>
-    async Task LoadResearches(ResearchSave researchSave)
+    async Awaitable LoadResearches(ResearchSave researchSave)
     {
         ActionText = "Remembering research";
         await UIRefs.Research.LoadState(researchSave);
@@ -362,13 +389,13 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="tradeSave"></param>
-    async Task LoadTrade(TradeSave tradeSave)
+    async Awaitable LoadTrade(TradeSave tradeSave)
     {
         ActionText = "Making Deals";
         await UIRefs.Trading.LoadState(tradeSave);
     }
 
-    async Task LoadQuests(QuestControllerSave questSave)
+    async Awaitable LoadQuests(QuestControllerSave questSave)
     {
         QuestController controller = SceneRefs.QuestController as QuestController;
         try
@@ -385,15 +412,15 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     #endregion Loading Game State
 
 
-    async Task BeforeLevelLoad()
+    async Awaitable BeforeLevelLoad()
     {
         if (GameObject.Find("Main Menu"))
             await SceneManager.UnloadSceneAsync("Main Menu");
         await SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
         await GameObject.Find("Scene").GetComponent<SceneRefs>().BeforeLoad();
-        MyRes.PreLoad();
     }
 
+    IDisposable buttonListener;
     /// <summary>
     /// Things that need to be after both loading and creating a new game.
     /// </summary>
@@ -405,8 +432,23 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         MyRes.ActivateResources();
 
         ActionText = "Press any button";
-        InputSystem.onAnyButtonPress.CallOnce(
+
+        buttonListener = InputSystem.onAnyButtonPress.CallOnce(
             (action) => StartCoroutine(CancelInput()));
+    }
+
+    void RemoveButtonListener()
+    {
+
+        if (buttonListener == null)
+            return;
+
+        buttonListener.Dispose();
+        buttonListener = null;
+    }
+    private void OnDisable()
+    {
+        RemoveButtonListener();
     }
 
     /// <summary>
@@ -423,6 +465,11 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         EnableLevelContollers();
     }
 
+
+#if UNITY_INCLUDE_TESTS
+    public event Action onFinishLoad;
+#endif
+
     /// <summary>
     /// Unloads the loading screen. 
     /// And enables user input.
@@ -433,8 +480,8 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         StopCoroutine(CancelInput());
         for (int i = SceneManager.sceneCount - 1; i > -1; i--)
         {
-            if (SceneManager.GetSceneAt(i).name == "LoadingScreen" && SceneManager.GetSceneAt(i).isLoaded)
-                await SceneManager.UnloadSceneAsync("LoadingScreen");
+            if (SceneManager.GetSceneAt(i).name == "Loading Screen" && SceneManager.GetSceneAt(i).isLoaded)
+                await SceneManager.UnloadSceneAsync("Loading Screen");
         }
 
         SceneRefs.FinishLoad();
@@ -444,6 +491,10 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         SceneRefs.Tick.InitTicks();
         UIRefs.TopBar.RegisterReload(
             (a, b) => UIRefs.TopBar.GetComponent<IToolkitController>().Init(b));
+
+#if UNITY_INCLUDE_TESTS
+        onFinishLoad?.Invoke();
+#endif
     }
 
     public void UIUpdate(string property = "")

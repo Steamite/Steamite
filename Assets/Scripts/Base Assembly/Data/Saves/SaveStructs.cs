@@ -190,7 +190,7 @@ public class BuildingSave : StorageObjectSave
     public float rotationY;
 
     public BuildingGrid blueprint;
-    public bool constructed;
+    public bool InConstruction;
     public bool deconstructing;
     public bool upgrading;
     public float constructionProgress;
@@ -207,7 +207,8 @@ public class StorageBSave : BuildingSave
 
     public void SetupStorage()
     {
-        constructed = true;
+        id = 20;
+        InConstruction = false;
         isMain = true;
         int i = 1;
         canStore = new();

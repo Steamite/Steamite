@@ -167,7 +167,7 @@ public class Building : StorageObject
         save.rotationY = transform.rotation.eulerAngles.y;
 
         save.blueprint = blueprint;
-        save.constructed = InConstruction;
+        save.InConstruction = InConstruction;
         save.deconstructing = Deconstructing;
         save.upgrading = IsUpgrading;
         save.constructionProgress = constructionProgress;
@@ -184,7 +184,7 @@ public class Building : StorageObject
     {
         Name = (save as BuildingSave).Name;
         blueprint = (save as BuildingSave).blueprint;
-        InConstruction = (save as BuildingSave).constructed;
+        InConstruction = (save as BuildingSave).InConstruction;
         Deconstructing = (save as BuildingSave).deconstructing;
         IsUpgrading = (save as BuildingSave).upgrading;
         constructionProgress = (save as BuildingSave).constructionProgress;
@@ -291,15 +291,16 @@ public class Building : StorageObject
             IsUpgrading = false;
         constructionProgress = 0;
 
-        if (selected)
-            OpenWindow();
-
         if (this is IFluidWork fluidWork)
             fluidWork.ConnectToNetwork();
         if (this is IAssign assign)
             assign.AssignData.Init();
         if (this is IResourceProduction prod)
             prod.ProductionStorage.InitCapacity();
+
+
+        if (selected)
+            OpenWindow();
     }
     #endregion
 

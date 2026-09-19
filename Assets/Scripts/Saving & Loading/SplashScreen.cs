@@ -14,27 +14,35 @@ public enum LoadActions
 /// </summary>
 public class SplashScreen : MonoBehaviour
 {
+#if UNITY_INCLUDE_TESTS
+    public Action afterLoad;
+#endif
+
     [NonSerialized] public LoadActions loadAction = LoadActions.MainMenu;
     private async void Awake()
     {
         Time.timeScale = 1;
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = -1;
-        await SceneManager.LoadSceneAsync(1);
+        await SceneManager.LoadSceneAsync("Loading Screen");
 
         await ResFluidTypes.Init();
         LoadingScreen screen = GameObject.Find("Loading Screen").GetComponent<LoadingScreen>();
         switch (loadAction)
         {
             case LoadActions.NewGame:
-                screen.StartNewGame("test - TopGun");
+                await screen.StartNewGame("test - TopGun");
                 break;
             case LoadActions.MainMenu:
-                screen.OpenMainMenu(true);
+                await screen.OpenMainMenu(true);
                 break;
             case LoadActions.LoadGame:
-                screen.OpenMainMenu(false);
+                await screen.OpenMainMenu(false);
                 break;
         }
+
+#if UNITY_INCLUDE_TESTS
+        afterLoad?.Invoke();
+#endif
     }
 }

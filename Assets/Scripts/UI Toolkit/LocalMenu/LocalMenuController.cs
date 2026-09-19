@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
-using UnityEngine.Android;
 using UnityEngine.UIElements;
 
 namespace LocalMenuUtility
@@ -29,7 +27,7 @@ namespace LocalMenuUtility
         static void Clear() => instance = null;
 
 
-        void Awake()
+        /*void Awake()
         {
             return;
             instance = this;
@@ -61,7 +59,7 @@ namespace LocalMenuUtility
 
                 menuObject.transform.parent = transform;
             }
-        }
+        }*/
 
         public static void OpenUI(object data, VisualElement element = null, bool onlyUpdate = false)
             => instance.UI(data, element, onlyUpdate);
@@ -173,7 +171,7 @@ namespace LocalMenuUtility
             GetMenuByElement(visualElement)?.Move();
         }
 
-        public Task BeforeInit()
+        public void BeforeInit()
         {
             instance = this;
             registeredEvents = new();
@@ -204,7 +202,6 @@ namespace LocalMenuUtility
 
                 menuObject.transform.parent = transform;
             }
-            return Task.CompletedTask;
         }
     }
 }

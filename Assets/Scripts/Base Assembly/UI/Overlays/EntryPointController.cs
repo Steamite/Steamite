@@ -108,7 +108,7 @@ public class EntryPointController : MonoBehaviour, IBeforeLoad
             building.Name);
     }
 
-    Task IBeforeLoad.BeforeInit()
+    void IBeforeLoad.BeforeInit()
     {
         RectTransform rect = transform as RectTransform;
         rect.pivot = new(0, 0);
@@ -130,8 +130,6 @@ public class EntryPointController : MonoBehaviour, IBeforeLoad
             level.gameObject.SetActive(false);
         }
         MyGrid.AddToGridChange(ToggleEntryPointLevel);
-
-        return Task.CompletedTask;
     }
 
     private void ToggleEntryPointLevel(int old, int newLevel)

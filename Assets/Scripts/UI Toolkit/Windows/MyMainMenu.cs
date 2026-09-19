@@ -15,23 +15,25 @@ namespace StartMenu
 
         bool instaLoad = false;
 
-        protected override void OnUIReload()
+        protected override async void OnUIReload()
         {
             elements = Root.Q<VisualElement>("Elements");
             blocker = Root.Q<VisualElement>("Main-Blocker");
+
+#if UNITY_EDITOR
+            if (instaLoad)
+            {
+                LoadGameMenu menu = toolkitControllers.Find(q => q is LoadGameMenu) as LoadGameMenu;
+                await menu.Continue();
+                return;
+            }
+#endif
 
             foreach (IToolkitController controller in toolkitControllers)
             {
                 controller.Init(Root);
             }
-#if UNITY_EDITOR
-            if(instaLoad)
-            {
-                LoadGameMenu menu = toolkitControllers.Find(q => q is LoadGameMenu) as LoadGameMenu;
-                menu.Continue(null);
-                return;
-            }
-#endif
+
             // opening load menu
             Button button = Root.Q<Button>("Exit-Button");
             button.RegisterCallback<ClickEvent>((_) => Application.Quit());

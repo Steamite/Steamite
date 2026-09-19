@@ -5,8 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEditor.Overlays;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
@@ -21,7 +19,7 @@ public class Research : IGameDataController<ResearchSave>
     public event Action<ResearchNode> researchCompletion;
     public ResearchData GetResearchData() => researchData;
 
-    public override async Task LoadState(ResearchSave researchSave)
+    public override async Awaitable LoadState(ResearchSave researchSave)
     {
         researchData = Instantiate(await Addressables.LoadAssetAsync<ResearchData>(ResearchData.PATH).Task);
         List<ResearchNode> queue = new();

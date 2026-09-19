@@ -25,4 +25,14 @@ public abstract class BaseOverlay : MonoBehaviour
 
         input.Enable();
     }
+
+    private void OnEnable()
+    {
+        input.Enable();
+    }
+
+    private void OnDisable()
+    {
+        input.Disable();
+    }
 }

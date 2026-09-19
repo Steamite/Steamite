@@ -57,7 +57,7 @@ public class MapGen : MonoBehaviour
     /// </summary>
     /// <param name="_seed">Seed containing all generation paramaters.</param>
     /// <param name="templateLevel">Level template for creating <see cref="GroundLevel"/>s.</param>
-    public async Task<WorldSave> Generate(string _seed)
+    public async Awaitable<WorldSave> Generate(string _seed)
     {
         seed = _seed;
         WorldSave world = new();
@@ -70,7 +70,6 @@ public class MapGen : MonoBehaviour
         world.gridSave = new GridSave[MyGrid.NUMBER_OF_LEVELS];
 
         StorageBSave save = (StorageBSave)elevator.Save();
-        save.id = 20;
         save.gridPos = new(gridSize / 2, 0, gridSize / 2);
         save.SetupStorage();
 

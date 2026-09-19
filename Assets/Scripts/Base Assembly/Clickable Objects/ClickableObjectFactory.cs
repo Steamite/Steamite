@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 /// <summary>Instantiates and fills new Clickable Objects.</summary>
-public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
+public class ClickableObjectFactory : MonoBehaviour, IBeforeLoadAwaitable
 {
     #region Y grid offset
     /// <summary>Height of each level.</summary>
@@ -285,7 +285,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoad
     }
     #endregion Loading Game
 
-    public async Task BeforeInit()
+    public async Awaitable BeforeInit()
     {
         buildPrefabs = await Addressables.LoadAssetAsync<BuildingData>(BuildingData.PATH).Task;
         buildPrefabs.Init();

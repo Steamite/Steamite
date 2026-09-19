@@ -3,6 +3,7 @@ using StartMenu;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -49,7 +50,7 @@ public class LoadGameMenu : DoubleWindow
             });
 
 
-            worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", false, true);
+            worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", true);
             continueButton = root.Q<Button>("Continue-Button");
             if (worlds != null && worlds.Length > 0)
             {
@@ -58,16 +59,13 @@ public class LoadGameMenu : DoubleWindow
             }
             else
                 continueButton.ToggleStyleButton(false);
-            selectedWorld = -1;
         }
         else
         {
             worlds = new Folder[] { new() };
             worlds[0].path = $"{Application.persistentDataPath}/saves/{MyGrid.worldName}";
-            selectedWorld = 0;
             root.Q<Label>("Load-Header").text += " - " + MyGrid.worldName;
         }
-        selectedSave = -1;
 
         #region Save List
         saveElement = menu.Q<VisualElement>("Saves");
@@ -104,12 +102,11 @@ public class LoadGameMenu : DoubleWindow
         if (!isMainMenu)
             CloseWindow();
     }
-
     #region Window Logic
     public override void OpenWindow(ClickEvent _ = null)
     {
         if (isMainMenu)
-            worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", true, true);
+            worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", true);
         if (worlds != null && worlds.Length > 0)
         {
             if (isMainMenu)
@@ -137,7 +134,7 @@ public class LoadGameMenu : DoubleWindow
         bool t = true;
         if (worlds == null || worlds.Length == 0)
         {
-            worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", false, true);
+            worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", true);
             if (worlds.Length == 0)
                 t = false;
         }
@@ -150,7 +147,7 @@ public class LoadGameMenu : DoubleWindow
         {
             menu.Q<Label>("Hint").style.display = DisplayStyle.None;
             menu.Q<VisualElement>("List").style.display = DisplayStyle.Flex;
-            saves = saveGroup.FillItemSource(worlds[selectedWorld].path, true, false);
+            saves = saveGroup.FillItemSource(worlds[selectedWorld].path, false);
             if (saves == null)
             {
                 CloseWindow();
@@ -170,43 +167,46 @@ public class LoadGameMenu : DoubleWindow
 
 
     #region Loading Logic
-    public void Continue(ClickEvent _)
+    public async void Continue(ClickEvent _) => await Continue();
+    public async Awaitable Continue()
     {
+        string path = $"{Application.persistentDataPath}/saves";
+
+        await Awaitable.BackgroundThreadAsync();
+        worlds ??= SaveRadioList.LoadSaves(path, true);
         if (worlds.Length > 0)
         {
-            selectedWorld = 0;
-            saves = saveGroup.FillItemSource(worlds[selectedWorld].path, true, false);
+            saves = SaveRadioList.LoadSaves(worlds[0].path, false);
             if (saves == null)
             {
                 continueButton.ToggleStyleButton(false);
                 return;
             }
-            selectedSave = 0;
-            Load();
+            await Load(worlds[0].path, saves[0].path);
+            Debug.Log("Continue");
         }
     }
 
-    void LoadGame(ClickEvent _)
-    {
-        Load();
-    }
+    async void LoadGame(ClickEvent _) => await Load();
 
-    async void Load()
+    async Awaitable Load()
     {
-        Binding.SetGlobalLogLevel(BindingLogLevel.All);
         if (selectedSave == -1 || selectedSave > saves.Length)
             return;
+        await Load(saves[selectedSave].path, worlds[selectedWorld].ToString());
+    }
+
+    async Awaitable Load(string world, string save)
+    {
+        Binding.SetGlobalLogLevel(BindingLogLevel.All);
+        await Awaitable.MainThreadAsync();
         if (GameObject.Find("Main Menu") == null)
         {
-            Scene scene = SceneManager.GetActiveScene();
-            await SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive); // scene 1 is loading screen
-            await SceneManager.UnloadSceneAsync(scene);
+            await SceneManager.LoadSceneAsync("Loading Screen", LoadSceneMode.Additive); // scene 1 is loading screen
+            await SceneManager.UnloadSceneAsync("Splash Screen");
         }
-        else
-        {
-        }
-        GameObject.Find("Loading Screen")
-            .GetComponent<LoadingScreen>().LoadGame(saves[selectedSave].path, worlds[selectedWorld].ToString());
+        LoadingScreen screen = GameObject.Find("Loading Screen").GetComponent<LoadingScreen>();
+        await screen.LoadGame(world, save);
     }
     #endregion
 

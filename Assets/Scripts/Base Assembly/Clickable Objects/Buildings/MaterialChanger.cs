@@ -11,9 +11,8 @@ public class MaterialChanger : MonoBehaviour, IBeforeLoad
 
     public static Material Opaque => instance.opaqueMaterial;
     public static Material Transparent => instance.transparentMaterial;
-    public Task BeforeInit()
+    public void BeforeInit()
     {
         instance = this;
-        return Task.CompletedTask;
     }
 }

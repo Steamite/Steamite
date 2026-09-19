@@ -76,7 +76,7 @@ public class QuestController : IGameDataController<QuestControllerSave>, IQuestC
         throw new System.NotImplementedException();
     }
 
-    public override async Task LoadState(QuestControllerSave saveData)
+    public override async Awaitable LoadState(QuestControllerSave saveData)
     {
         trust = saveData.trust;
         activeQuests = new();

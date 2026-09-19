@@ -31,7 +31,7 @@ public class NewGameInit : MonoBehaviour
 
     #endregion
     #region Game State
-    public async Task<TradeSave> InitTrade(int selectedColony)
+    public async Awaitable<TradeSave> InitTrade(int selectedColony)
     {
         TradeHolder tradeHolder = await Addressables.LoadAssetAsync<TradeHolder>($"Colony Locations/{baseLocation}.asset").Task;
         TradeSave save = new TradeSave()
@@ -52,7 +52,7 @@ public class NewGameInit : MonoBehaviour
         return save;
     }
 
-    public async Task<ResearchSave> InitResearch()
+    public async Awaitable<ResearchSave> InitResearch()
     {
         ResearchData researchData = Instantiate(await Addressables.LoadAssetAsync<ResearchData>(ResearchData.PATH).Task);
         return new ResearchSave(researchData);
@@ -96,7 +96,7 @@ public class NewGameInit : MonoBehaviour
         };
     }
 
-    public async Task<QuestControllerSave> InitQuests(bool randomMap)
+    public async Awaitable<QuestControllerSave> InitQuests(bool randomMap)
     {
         QuestHolder quest = await Addressables.LoadAssetAsync<QuestHolder>("QuestData").Task;
         QuestControllerSave questSave = new()

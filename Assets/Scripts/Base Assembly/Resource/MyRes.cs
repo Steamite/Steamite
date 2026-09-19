@@ -54,7 +54,7 @@ public static class MyRes
             }
             foreach(Building building in MyGrid.Buildings)
             {
-                if (building.IsWorking)
+                if (!building.InConstruction)
                     UpdateResource(building.LocalRes, true);
                 else
                     UpdateResource(building.Cost - building.LocalRes, false);

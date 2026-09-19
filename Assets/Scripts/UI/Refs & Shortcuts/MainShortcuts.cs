@@ -25,7 +25,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
     static bool handleWindows;
     static MainShortcuts instance;
 
-    public Task BeforeInit()
+    public void BeforeInit()
     {
         dig = bindingMap.FindAction("Dig");
         upgrade = bindingMap.FindAction("Upgrade");
@@ -38,7 +38,6 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
         quests = bindingMap.FindAction("Quests");
 
         instance = this;
-        return Task.CompletedTask;
     }
 
     public void AfterLoad()

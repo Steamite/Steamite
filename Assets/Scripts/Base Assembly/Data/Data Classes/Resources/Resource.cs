@@ -183,6 +183,11 @@ public class Resource
             if (removeEmpty)
             {
                 int i = types.IndexOf(type);
+                if (i == -1)
+                {
+                    Debug.LogWarning("No resource to remove(not present)");
+                    return;
+                }
                 if (ammounts[i] <= 0)
                 {
                     if (ammount < 0)

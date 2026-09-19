@@ -82,9 +82,8 @@ public class UIRefs : MonoBehaviour, IBeforeLoad
         return true;
     }
 
-    public Task BeforeInit()
+    public void BeforeInit()
     {
         instance = this;
-        return Task.CompletedTask;
     }
 }

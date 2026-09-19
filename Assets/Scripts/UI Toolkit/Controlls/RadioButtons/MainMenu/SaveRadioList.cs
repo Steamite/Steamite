@@ -80,36 +80,14 @@ namespace RadioGroups
             contentContainer.SendEvent(GeometryChangedEvent.GetPooled());
         }
 
-        public Folder[] FillItemSource(string path, bool write, bool parentLevel)
+        public Folder[] FillItemSource(string path, bool parentLevel)
         {
             try
             {
                 SelectedChoice = -1;
                 ClearItems();
-                Folder[] folders;
 
-                if (parentLevel)
-                {
-                    string[] paths = Directory.GetDirectories(path);
-                    folders = new Folder[paths.Length];
-                    for (int i = 0; i < paths.Length; i++)
-                    {
-                        try
-                        {
-                            folders[i].date = SortSavesByDate(paths[i]).First().date;
-                            folders[i].path = paths[i];
-                        }
-                        catch
-                        {
-                            //Debug.LogWarning($"wrong folder format in {paths[i]}");
-                        }
-                    }
-                    folders = folders.Where(q => q.path != null).OrderByDescending(q => q.date).ToArray();
-                }
-                else
-                {
-                    folders = SortSavesByDate(path);
-                }
+                Folder[] folders = LoadSaves(path, parentLevel);
                 itemsSource = folders.Select(q =>
                     new RadioSaveButtonData(
                         Path.GetFileNameWithoutExtension(q.path),
@@ -119,11 +97,38 @@ namespace RadioGroups
             }
             catch
             {
-                return null;
             }
+            return null;
         }
+        public static Folder[] LoadSaves(string path, bool parentLevel)
+        {
+            Folder[] folders;
 
-        Folder[] SortSavesByDate(string path)
+            if (parentLevel)
+            {
+                string[] paths = Directory.GetDirectories(path);
+                folders = new Folder[paths.Length];
+                for (int i = 0; i < paths.Length; i++)
+                {
+                    try
+                    {
+                        folders[i].date = SortSavesByDate(paths[i]).First().date;
+                        folders[i].path = paths[i];
+                    }
+                    catch
+                    {
+                        //Debug.LogWarning($"wrong folder format in {paths[i]}");
+                    }
+                }
+                folders = folders.Where(q => q.path != null).OrderByDescending(q => q.date).ToArray();
+            }
+            else
+            {
+                folders = SortSavesByDate(path);
+            }
+            return folders;
+        }
+        static Folder[] SortSavesByDate(string path)
         {
             string[] paths = Directory.GetDirectories(path);
             Folder[] folders = new Folder[paths.Length];
