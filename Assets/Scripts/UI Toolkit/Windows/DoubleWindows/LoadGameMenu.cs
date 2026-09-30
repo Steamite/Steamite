@@ -182,7 +182,7 @@ public class LoadGameMenu : DoubleWindow
                 continueButton.ToggleStyleButton(false);
                 return;
             }
-            await Load(worlds[0].path, saves[0].path);
+            await Load(saves[0].path);
             Debug.Log("Continue");
         }
     }
@@ -193,10 +193,10 @@ public class LoadGameMenu : DoubleWindow
     {
         if (selectedSave == -1 || selectedSave > saves.Length)
             return;
-        await Load(saves[selectedSave].path, worlds[selectedWorld].ToString());
+        await Load(saves[selectedSave].path);
     }
 
-    async Awaitable Load(string world, string save)
+    async Awaitable Load(string _savePath)
     {
         Binding.SetGlobalLogLevel(BindingLogLevel.All);
         await Awaitable.MainThreadAsync();
@@ -206,7 +206,7 @@ public class LoadGameMenu : DoubleWindow
             await SceneManager.UnloadSceneAsync("Splash Screen");
         }
         LoadingScreen screen = GameObject.Find("Loading Screen").GetComponent<LoadingScreen>();
-        await screen.LoadGame(world, save);
+        await screen.LoadGame(_savePath);
     }
     #endregion
 

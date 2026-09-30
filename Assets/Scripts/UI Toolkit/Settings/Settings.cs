@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Unity.Collections;
 using UnityEditor;
@@ -70,9 +71,18 @@ namespace Settings
             settings = data;
             ApplySettings();
         }
-
+        void FixMaxResolution()
+        {
+            var res = Screen.resolutions[^1];
+            if(settings.Height > res.height)
+            {
+                settings.Height = res.height;
+                settings.Width = res.width;
+            }
+        }
         void ApplySettings()
         {
+            FixMaxResolution();
             Screen.SetResolution(settings.Width, settings.Height, settings.fullScreenMode);
             QualitySettings.SetQualityLevel(settings.QualityLevel);
             QualitySettings.vSyncCount = settings.VSync ? 1 : 0;

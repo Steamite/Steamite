@@ -22,8 +22,6 @@ public class SplashScreen : MonoBehaviour
     private async void Awake()
     {
         Time.timeScale = 1;
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = -1;
         await SceneManager.LoadSceneAsync("Loading Screen");
 
         await ResFluidTypes.Init();

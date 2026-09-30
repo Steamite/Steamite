@@ -39,7 +39,12 @@ public struct JobData
                 break;
             case JobSave.InterestType.R:
                 interest = SceneRefs.JobQueue.toBeDug.FirstOrDefault(q => q.id == jobSave.interestID);
-                (interest as Rock).Assigned = human;
+                if(interest == null)
+                {
+                    human.Idle();
+                }
+                else
+                    (interest as Rock).Assigned = human;
                 break;
             case JobSave.InterestType.C:
                 interest = MyGrid.chunks.FirstOrDefault(q => q.id == jobSave.interestID);

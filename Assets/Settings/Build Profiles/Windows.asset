@@ -375,7 +375,7 @@ MonoBehaviour:
     - line: '|     m_APIs: 10000000'
     - line: '|     m_Automatic: 1'
     - line: '|   - m_BuildTarget: WindowsStandaloneSupport'
-    - line: '|     m_APIs: 02000000'
+    - line: '|     m_APIs: 1200000002000000'
     - line: '|     m_Automatic: 0'
     - line: '|   - m_BuildTarget: LinuxStandaloneSupport'
     - line: '|     m_APIs: 15000000'
@@ -809,11 +809,11 @@ MonoBehaviour:
     - rid: 8737604869571477842
       type: {class: WindowsPlatformSettings, ns: UnityEditor.WindowsStandalone, asm: UnityEditor.WindowsStandalone.Extensions}
       data:
-        m_Development: 1
+        m_Development: 0
         m_ConnectProfiler: 1
         m_BuildWithDeepProfilingSupport: 0
         m_BuildWithCodeCoverage: 0
-        m_AllowDebugging: 1
+        m_AllowDebugging: 0
         m_WaitForManagedDebugger: 0
         m_ManagedDebuggerFixedPort: 0
         m_ExplicitNullChecks: 0

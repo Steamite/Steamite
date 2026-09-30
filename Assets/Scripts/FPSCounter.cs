@@ -1,26 +1,62 @@
 using System;
+using System.IO;
+using System.Linq;
+using TMPro;
 using Unity.Profiling;
 using UnityEngine;
 public class FPSCounter : MonoBehaviour
 {
     private ProfilerRecorder activeWorkRecorder;
     private ProfilerRecorder totalTimeRecorder;
+    private ProfilerRecorder gpuTimeRecorder;
     int i;
 
-    [SerializeField]int targetFPS = 60;
+    [SerializeField] int FrameRate = -1;
 
-    public Action<double, double> onUpdate;
+    [SerializeField] bool canCount = false;
+    [SerializeField] bool lockFPS = false;
+
+    public bool CanCount
+    {
+        get => canCount;
+        set
+        {
+            canCount = value;
+            Toggle();
+        }
+    }
+    public Action<double, double, double> onUpdate;
+
+
+    private void Awake()
+    {
+        if(lockFPS)
+        {
+            QualitySettings.vSyncCount = -1;
+            Application.targetFrameRate = FrameRate;
+        }
+
+        Toggle();
+    }
+
+    void Toggle()
+    {
+        enabled = canCount;
+        GetComponent<RenderFPS>().enabled = canCount;
+        GetComponent<PerformanceSaver>().enabled = canCount;
+        transform.GetChild(0).gameObject.SetActive(canCount);
+    }
+
 
     void OnEnable()
     {
 
-        Application.targetFrameRate = targetFPS;
-        QualitySettings.vSyncCount = 0;
         // Tracks pure CPU execution time, ignoring VSync and frame limits
         activeWorkRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Internal, "CPU Main Thread Frame Time");
 
         // Tracks the entire frame duration, including artificial sleep
         totalTimeRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Internal, "CPU Total Frame Time");
+        gpuTimeRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Internal, "GPU Frame Time");
     }
     void Update()
     {
@@ -36,7 +72,8 @@ public class FPSCounter : MonoBehaviour
 
             double realWorkMs = activeWorkRecorder.LastValue / 1_000_000.0;
             double totalMs = totalTimeRecorder.LastValue / 1_000_000.0;
-            onUpdate?.Invoke(realWorkMs, totalMs);
+            double gpuMS = gpuTimeRecorder.LastValue / 1_000_000.0;
+            onUpdate?.Invoke(realWorkMs, totalMs, gpuMS);
         }
     }
 

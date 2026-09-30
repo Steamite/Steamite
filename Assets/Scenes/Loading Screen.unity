@@ -195,7 +195,7 @@ MonoBehaviour:
   maxToRemove: 25
   minToAdd: 1
   maxToAdd: 6
-  gridSizes: 150000001f000000fe000000
+  gridSizes: 150000001f00000000010000
   minableResources:
   - {fileID: 11400000, guid: a8d8035b791c05943ba13e1333106fc9, type: 2}
   - {fileID: 11400000, guid: 1c3d32d887bb74046af6627885ac30b8, type: 2}
@@ -222,7 +222,7 @@ MonoBehaviour:
   numberOfDays: 6
   dayTime: 360
   priority: 00000000020000000300000004000000050000000600000007000000
-  numberOfHumans: 6
+  numberOfHumans: 300
 --- !u!114 &642414934
 MonoBehaviour:
   m_ObjectHideFlags: 0

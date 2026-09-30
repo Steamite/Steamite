@@ -54,7 +54,7 @@ public class PerformanceSaver : MonoBehaviour
         StartAtX = false;
     }
 
-    public void OnUpdate(double realWorkMs, double totalMs)
+    public void OnUpdate(double realWorkMs, double totalMs, double _)
     {
         if (realWorkMs > 0.000f)
         {

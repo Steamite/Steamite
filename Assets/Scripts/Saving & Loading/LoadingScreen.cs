@@ -102,26 +102,12 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
     #endregion
 
     #region Loading Game State
-    public async Awaitable LoadGame(string _worldName, string _folderName)
+    public async Awaitable LoadGame(string _savePath)
     {
         await Awaitable.MainThreadAsync();
-        Save save = LoadSavedData(_folderName);
-        await StartLoad(_worldName, save);
-        //StartLoading(_worldName, LoadSavedData(_folderName));
-    }
-    /// <summary>
-    /// Assigns parameters and shows loading screen.<br/>
-    /// If called while on "Main Menu" scene unloads it.<br/>
-    /// After that loads "Level" scene.
-    /// </summary>
-    void StartLoading(string _worldName, Save save)
-    {
-        worldName = _worldName;
-        PanelRendererRoot panel = GetComponent<PanelRendererRoot>();
-    //    panel.RegisterReload(async (panel,rootElem) => );
-        /*if (root.Root == null)
-        else
-            _ = Load(save, root.Root);*/
+
+        Save save = LoadSavedData(_savePath);
+        await StartLoad(Directory.GetParent(_savePath).Name, save);
     }
 
     async Awaitable StartLoad(string _worldName, Save save)

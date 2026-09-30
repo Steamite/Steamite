@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 379.3435, y: 99.6642}
+  m_SizeDelta: {x: 771.2804, y: 99.6642}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &2127553135311055355
 CanvasRenderer:
@@ -187,7 +187,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_PlaneDistance: 10
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -288,6 +288,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69925358f00ac124a9f15decaec81d90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FPSCounterCanvas
+  FrameRate: 144
+  canCount: 0
 --- !u!114 &3285329109949277682
 MonoBehaviour:
   m_ObjectHideFlags: 0
