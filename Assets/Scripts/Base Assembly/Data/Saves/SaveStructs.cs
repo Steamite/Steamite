@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TradeData.Locations;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class JobSave
@@ -65,6 +66,8 @@ public struct WorldSave
     public BuildsAndChunksSave objectsSave;
     public GridSave[] gridSave;
 }
+
+
 
 public class GridSave
 {

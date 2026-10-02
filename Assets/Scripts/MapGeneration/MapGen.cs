@@ -1,6 +1,10 @@
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.LightTransport;
 using Random = UnityEngine.Random;
 
 /// <summary>Class generating new maps.</summary>
@@ -60,14 +64,17 @@ public class MapGen : MonoBehaviour
     public async Awaitable<WorldSave> Generate(string _seed)
     {
         seed = _seed;
-        WorldSave world = new();
         ParseInput();
 
         #region Generation
 
         minCenter = (gridSize / 2) - 5;
         maxCenter = (gridSize / 2) + 5;
-        world.gridSave = new GridSave[MyGrid.NUMBER_OF_LEVELS];
+
+        WorldSave world = new()
+        {
+            gridSave = new GridSave[MyGrid.NUMBER_OF_LEVELS]
+        };
 
         StorageBSave save = (StorageBSave)elevator.Save();
         save.gridPos = new(gridSize / 2, 0, gridSize / 2);
@@ -80,6 +87,14 @@ public class MapGen : MonoBehaviour
             new ChunkSave[] { },
             new VeinSave[] { });
 
+        await OldGrid(world);
+
+        #endregion
+        return world;
+    }
+
+    async Awaitable OldGrid(WorldSave world)
+    {
         for (level = 0; level < MyGrid.NUMBER_OF_LEVELS; level++)
         {
             GridSave levelSave = new(gridSize, gridSize);
@@ -104,9 +119,6 @@ public class MapGen : MonoBehaviour
             }
             world.gridSave[level] = levelSave;
         }
-
-        #endregion
-        return world;
     }
 
     /// <summary>Extracts parameters from the <see cref="seed"/>.</summary>
