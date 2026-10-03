@@ -1,3 +1,4 @@
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -7,6 +8,17 @@ using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+public struct SaveNew
+{
+    public WorldSaveNew world;
+    public GameStateSave gameState;
+    public HumanSave[] humans;
+    public ResearchSave research;
+    public TradeSave trade;
+    public QuestControllerSave quests;
+}
+
 
 public struct Save
 {

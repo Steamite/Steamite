@@ -47,7 +47,7 @@ public class MapGenNew : MonoBehaviour
     [SerializeField] Elevator elevator;
     #endregion
 
-    public async Awaitable<WorldSaveNew> GenerateNew(string _seed)
+    public async Awaitable<WorldSaveNew> Generate(string _seed)
     {
         seed = _seed;
         ParseInput();
@@ -65,7 +65,8 @@ public class MapGenNew : MonoBehaviour
                     },
                     new ChunkSave[] { },
                     new VeinSave[] { }
-                )
+                ),
+            gridSave = new LevelGridSave[5]
         };
 
         await MakeGrids(world);
@@ -74,26 +75,24 @@ public class MapGenNew : MonoBehaviour
         return world;
     }
 
-    Awaitable MakeGrids(WorldSaveNew world)
+    async Awaitable MakeGrids(WorldSaveNew world)
     {
         int2 levelDim = gridSize.x * world.chunkDimensions;
         int levelSize = levelDim.x * levelDim.y;
 
-        Awaitable.BackgroundThreadAsync();
+        await Awaitable.BackgroundThreadAsync();
 
         for (level = 0; level < MyGrid.NUMBER_OF_LEVELS; level++)
         {
             NativeArray<LevelGridTile> grid = new(levelSize, Allocator.Persistent);
-            LevelGrid levelSave = new(gridSize.x, grid);
+            LevelGridSave levelSave = new(gridSize.x, grid);
 
             map = grid;
             CreateGrid(levelDim, levelSize);
-            //PerlinNoise(level);
 
             world.gridSave[level] = levelSave;
         }
-        Awaitable.MainThreadAsync();
-        return null;
+        await Awaitable.MainThreadAsync();
     }
 
     /// <summary>Extracts parameters from the <see cref="seed"/>.</summary>
@@ -136,12 +135,10 @@ public class MapGenNew : MonoBehaviour
         int2 minPos = center - centerRadius;
         int2 maxPos = center + centerRadius;
 
-        levelDim.x--;
-        levelDim.y--;
 
         for (int i = 0; i < size; i++)
         {
-            if (x == 0 || y == 0 || x == levelDim.x || y == levelDim.y)
+            if (x == 0 || y == 0 || x == (levelDim.x-1) || y == (levelDim.y-1))
             {
                 // keep outside wall
             }
@@ -155,7 +152,7 @@ public class MapGenNew : MonoBehaviour
             }
 
             x++;
-            if (i == levelDim.x)
+            if (x == levelDim.x)
             {
                 x = 0;
                 y++;

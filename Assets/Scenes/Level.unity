@@ -2436,6 +2436,9 @@ GameObject:
   - component: {fileID: 4967022013944964017}
   - component: {fileID: 4967022013944964020}
   - component: {fileID: 4967022013944964019}
+  - component: {fileID: 4967022013944964022}
+  - component: {fileID: 4967022013944964021}
+  - component: {fileID: 4967022013944964023}
   m_Layer: 2
   m_Name: Grid
   m_TagString: Grid
@@ -2519,6 +2522,54 @@ MonoBehaviour:
   drag: 0
   highlight: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 0.3529412}
   select: 1
+--- !u!114 &4967022013944964021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4967022013944964015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 871c36199006afb4b87d0a14349203e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.GridWorld
+--- !u!114 &4967022013944964022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4967022013944964015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4ffb231def50244a559b480e9a487c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.LevelRenderer
+  cameraPosition:
+    x: 0
+    y: 0
+  cameraChunkSize:
+    x: 4
+    y: 4
+  worldMaterial: {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
+--- !u!114 &4967022013944964023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4967022013944964015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b85bcaf0aa4195c4fae31cf7dccf6723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BaseAssembly::MouseListener
+  topHeight: 1
+  lowHeight: 0
+  material: {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
+  world: {fileID: 0}
+  isForcedUpdate: 0
 --- !u!4 &5026351469592114601
 Transform:
   m_ObjectHideFlags: 0

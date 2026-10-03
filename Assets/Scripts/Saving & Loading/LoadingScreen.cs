@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Unity.Mathematics;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -93,7 +94,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
             gameState = newGameInit.SetNewGameState(),
             trade = await newGameInit.InitTrade(0),
             research = await newGameInit.InitResearch(),
-            humans = newGameInit.InitHumans(size),
+            humans = newGameInit.InitHumans(new int2(size, size) / 2),
             quests = await newGameInit.InitQuests(randomMap),
             world = worldSave
         };

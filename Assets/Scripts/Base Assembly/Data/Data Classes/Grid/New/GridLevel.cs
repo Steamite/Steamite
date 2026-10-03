@@ -7,18 +7,18 @@ using Unity.Mathematics;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
-    public struct GameLevel : IDisposable
+    public struct GridLevel : IDisposable
     {
-        NativeArray<LevelGridTile> renderGrid;
+        public static int2 chunkDimensions = new(16, 16);
+        public NativeArray<LevelGridTile> renderGrid;
         NativeArray<MovementAndStabilityData> movementAndStability;
         readonly int size;
-        readonly int2 totalDimensions;
-        public static int2 chunkDimensions = new(16, 16);
-        readonly int2 levelDimensions;
+        public readonly int2 totalDimensions;
+        public readonly int2 levelDimensions;
 
         public readonly int levelNumber;
 
-        public GameLevel(LevelGrid gridSave, int _levelNumber)
+        public GridLevel(LevelGridSave gridSave, int _levelNumber)
         {
             levelNumber = _levelNumber;
             levelDimensions = gridSave.levelDimensions;

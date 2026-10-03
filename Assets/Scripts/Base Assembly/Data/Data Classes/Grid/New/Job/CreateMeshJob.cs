@@ -52,26 +52,26 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             sVertexIndex += 4;
             sTriangleIndex += 6;
 
-            LevelGridTile type = gridData[dataIndex];
-            
-            /*if (type == 0)
+            LevelGridTile tile= gridData[dataIndex];
+            int type = tile.Type;
+
+            /*if (type == 1)
+                CreateOre(type, sVertexIndex, sTriangleIndex, x, y);
+            else */if (type == 2)
                 CreateWalls(index, dataIndex, sVertexIndex, sTriangleIndex, x, y);
-            else if (type > 1)
-                CreateOre(type, sVertexIndex, sTriangleIndex, x, y);*/
         }
 
 
         void CreateTile(int dataIndex, int vertexIndex, int sTriangleIndex, int x, int y)
         {
             // TODO
-            byte val = 0;//;gridData[dataIndex];
+            int val = gridData[dataIndex].Type;
             float uv = val == 0 ? 0.9f : 0.1f;
-            float z = val == 0 ? 0 : 1;
 
-            vertexes[vertexIndex]   = new() { position = new(x,     z, y),      uv = new(uv, 0)};
-            vertexes[vertexIndex+1] = new() { position = new(x + 1, z, y),      uv = new(uv, 0)};
-            vertexes[vertexIndex+2] = new() { position = new(x,     z, y + 1),  uv = new(uv, 0)};
-            vertexes[vertexIndex+3] = new() { position = new(x + 1, z, y + 1),  uv = new(uv, 0)};
+            vertexes[vertexIndex]   = new() { position = new(x,     val, y),      uv = new(uv, 0)};
+            vertexes[vertexIndex+1] = new() { position = new(x + 1, val, y),      uv = new(uv, 0)};
+            vertexes[vertexIndex+2] = new() { position = new(x,     val, y + 1),  uv = new(uv, 0)};
+            vertexes[vertexIndex+3] = new() { position = new(x + 1, val, y + 1),  uv = new(uv, 0)};
 
             triangles[sTriangleIndex]   = vertexIndex;
             triangles[sTriangleIndex+1] = vertexIndex + 2;
@@ -93,7 +93,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// <param name="y"></param>
         void CreateWalls(int index, int dataIndex, int sVertexIndex, int sTriangleIndex, int x, int y)
         {
-            /*if(CheckWallL(index, dataIndex, sVertexIndex, sTriangleIndex, x, y))
+            if (CheckWallL(index, dataIndex, sVertexIndex, sTriangleIndex, x, y))
             {
                 sVertexIndex += 2;
                 sTriangleIndex += 6;
@@ -108,7 +108,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 sVertexIndex += 2;
                 sTriangleIndex += 6;
             }
-            CheckWallB(index, dataIndex, sVertexIndex, sTriangleIndex, x, y);*/
+            CheckWallB(index, dataIndex, sVertexIndex, sTriangleIndex, x, y);
         }
 
         /*
@@ -122,17 +122,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
          *       0 1
          */
 
-        /*bool CheckWallL(int index, int dataIndex, int sVertexIndex, int sTriangleIndex, int x, int z)
+        bool CheckWallL(int index, int dataIndex, int sVertexIndex, int sTriangleIndex, int x, int z)
         {
             // only connect to the existing vertexes
-            int neighbourIndex = dataIndex - 1; 
+            int neighbourIndex = dataIndex - 1;
 
-            if (gridData[neighbourIndex] != 0)
+            if (gridData[neighbourIndex].Type < 2)
             {
                 int v = vertexOffsets[index];
 
-                vertexes[sVertexIndex] = new Vertex() { position = new (x, 1, z), uv = new(0.1f, 0.1f ) }; 
-                vertexes[sVertexIndex+1] = new Vertex() { position = new (x, 1, z+1), uv = new(0.1f, 0.1f ) }; 
+                vertexes[sVertexIndex] = new Vertex() { position = new(x, 1, z), uv = new(0.1f, 0.1f) };
+                vertexes[sVertexIndex + 1] = new Vertex() { position = new(x, 1, z + 1), uv = new(0.1f, 0.1f) };
 
                 // create wall
                 triangles[sTriangleIndex] = v;
@@ -152,13 +152,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             // only connect to the existing vertexes
             int neighbourIndex = dataIndex + 1;
 
-            if (gridData[neighbourIndex] != 0)
+            if (gridData[neighbourIndex].Type < 2)
             {
                 int v = vertexOffsets[index];
 
 
-                vertexes[sVertexIndex] = new Vertex() { position = new(x+1, 1, z), uv = new(0.1f, 0.1f) };
-                vertexes[sVertexIndex + 1] = new Vertex() { position = new(x+1, 1, z+1), uv = new(0.1f, 0.1f) };
+                vertexes[sVertexIndex] = new Vertex() { position = new(x + 1, 1, z), uv = new(0.1f, 0.1f) };
+                vertexes[sVertexIndex + 1] = new Vertex() { position = new(x + 1, 1, z + 1), uv = new(0.1f, 0.1f) };
 
 
                 // create wall
@@ -179,15 +179,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             // only connect to the existing vertexes
             int neighbourIndex = dataIndex + paddedWidth;
 
-            if (gridData[neighbourIndex] != 0)
+            if (gridData[neighbourIndex].Type < 2)
             {
                 int v = vertexOffsets[index];//, v1 = vertexOffsets[neighbourIndex];
 
-                vertexes[sVertexIndex] = new Vertex() { position = new(x, 1, z+1), uv = new(0.1f, 0.1f) };
-                vertexes[sVertexIndex + 1] = new Vertex() { position = new(x+1, 1, z + 1), uv = new(0.1f, 0.1f) };
+                vertexes[sVertexIndex] = new Vertex() { position = new(x, 1, z + 1), uv = new(0.1f, 0.1f) };
+                vertexes[sVertexIndex + 1] = new Vertex() { position = new(x + 1, 1, z + 1), uv = new(0.1f, 0.1f) };
 
                 // create wall
-                triangles[sTriangleIndex] = v  + 2;
+                triangles[sTriangleIndex] = v + 2;
                 triangles[sTriangleIndex + 1] = sVertexIndex;
                 triangles[sTriangleIndex + 2] = sVertexIndex + 1;
 
@@ -204,12 +204,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             // only connect to the existing vertexes
             int neighbourIndex = dataIndex - paddedWidth;
 
-            if (gridData[neighbourIndex] != 0)
+            if (gridData[neighbourIndex].Type < 2)
             {
                 int v = vertexOffsets[index];//, v1 = vertexOffsets[neighbourIndex];
 
                 vertexes[sVertexIndex] = new Vertex() { position = new(x, 1, z), uv = new(0.1f, 0.1f) };
-                vertexes[sVertexIndex + 1] = new Vertex() { position = new(x+1, 1, z), uv = new(0.1f, 0.1f) };
+                vertexes[sVertexIndex + 1] = new Vertex() { position = new(x + 1, 1, z), uv = new(0.1f, 0.1f) };
 
                 // create wall
                 triangles[sTriangleIndex] = v;
@@ -222,12 +222,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 return true;
             }
             return false;
-        }*/
+        }
         #endregion
 
         #region Ores
 
-        void CreateOre(byte type, int sVertexIndex, int sTriangleIndex, float x, float y)
+        void CreateOre(int type, int sVertexIndex, int sTriangleIndex, float x, float y)
         {
             x += 0.5f;
             y += 0.5f;
@@ -265,13 +265,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         const float Radius = 0.3f;
         const float Height = 0.4f;
-        void CreateRequalOre(byte type, int sVertexIndex, int sTriangleIndex, float cX, float cZ)
+        void CreateRequalOre(int type, int sVertexIndex, int sTriangleIndex, float cX, float cZ)
         {
             float angle = (2 * Mathf.PI) / type;
 
             //float offset = MathF.Atan(angle) * Radius;
-            float cos = MathF.Cos(angle);
-            float sin = MathF.Sin(angle);
+            float cos = math.cos(angle);
+            float sin = math.sin(angle);
 
             float x = 0;
             float z = -Radius;

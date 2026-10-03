@@ -2,6 +2,7 @@ using ResearchUI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -62,10 +63,10 @@ public class NewGameInit : MonoBehaviour
     /// Called when creating a new game, creates three new Humans.
     /// </summary>
     /// <param name="humanActivation">Event that links new humans to activation.</param>
-    public HumanSave[] InitHumans(int gridSize)
+    public HumanSave[] InitHumans(int2 centerPosition)
     {
         HumanSave[] saves = new HumanSave[numberOfHumans];
-        GridPos pos = new(gridSize / 2, 0, gridSize / 2);
+        GridPos pos = new(centerPosition.x, 0, centerPosition.y);
         for (int i = 0; i < numberOfHumans; i++)
         {
             saves[i] = new()

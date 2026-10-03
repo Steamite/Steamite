@@ -1,3 +1,4 @@
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -46,6 +47,9 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
 
     float mod;
 
+
+    LevelRenderer levelRender;
+
     public void AfterLoad()
     {
         transform.GetChild(0).LookAt(transform);
@@ -66,6 +70,8 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
         ///mainCamera.GetComponent<AudioListener>().enabled = true;
 
         enabled = true;
+
+        levelRender = GameObject.FindAnyObjectByType<LevelRenderer>();
     }
 
     private void OnEnable()
@@ -80,14 +86,18 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
         cameraMap.Disable();
     }
 
-
+    //bool hasChanged = false;
     void Update()
     {
         mod = isMod.IsInProgress() ? 2 : 1;
+        //hasChanged = false;
 
         Move();
         RotZoom();
         Reset();
+
+        /*if (levelRender && hasChanged)
+            levelRender.SetCameraPosition(new(transform.position.x, transform.position.y));*/
     }
 
     void Reset()
@@ -95,7 +105,7 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
         if (reset.triggered)
         {
             transform.position = new(
-                MyGrid.gridSize(MyGrid.currentLevel) / 2, 
+                MyGrid.gridSize(MyGrid.currentLevel) / 2,
                 MyGrid.currentLevel, 
                 MyGrid.gridSize(MyGrid.currentLevel) / 2);
 
@@ -163,9 +173,9 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
                         vec.y)));
 
             toMove = (transform.rotation * toMove) + transform.position;
-            int gridSize = MyGrid.gridSize(MyGrid.currentLevel);
+            /*int gridSize = MyGrid.gridSize(MyGrid.currentLevel);
             toMove.x = Mathf.Clamp(toMove.x, 0, gridSize);
-            toMove.z = Mathf.Clamp(toMove.z, 0, gridSize);
+            toMove.z = Mathf.Clamp(toMove.z, 0, gridSize);*/
             transform.position = toMove;
         }
 

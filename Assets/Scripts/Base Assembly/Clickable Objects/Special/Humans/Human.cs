@@ -447,6 +447,9 @@ public class Human : ClickableObject
         {
             GridPos pos = GetPos();
             Elevator el = MyGrid.GetLevelElevator(pos.y);// ClickableObject el = Elevator.main;
+            if (el == null)
+                return;
+
             if (!el.IsInside(pos)) // if not standing on the elevator
             {
                 JobData data = PathFinder.FindPath(new() { el }, this);

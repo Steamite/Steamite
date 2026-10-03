@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
-    public class Renderer : MonoBehaviour
+    public class LevelRenderer : MonoBehaviour
     {
         NativeArray<int> toRender;
         int toRenderCount;
@@ -18,12 +18,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         int currentLevel;
         RenderParams renderParams;
 
-        [SerializeField] float2 cameraPosition;
-        [SerializeField] float2 cameraChunkSize;
+        [SerializeField] int2 cameraPosition = new(0,0);
+        [SerializeField] int2 cameraChunkSize;
         [SerializeField] Material worldMaterial;
         GraphicsBuffer buffer;
 
-        int2 levelDimensions;
+        int2[] levelDimensions;
         int2 chunkDimension;
         int chunksCount;
 
@@ -32,28 +32,38 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public void Awake()
         {
             enabled = false;
-            combiner = new(GameLevel.chunkDimensions);
         }
 
-        public void Init(int levelCount, int2[] worldChunkDimensions)
+        public void Init(int levelCount, GridLevel[] levels)
         {
+            chunkDimension = GridLevel.chunkDimensions;
+
+            combiner = new(chunkDimension);
             chunkMeshes = new Mesh[levelCount][];
             dirtyMeshes = new bool[levelCount][];
+            levelDimensions = new int2[levelCount];
+
+
             for (int i = 0; i < levelCount; i++)
             {
-                chunkMeshes[i] = new Mesh[worldChunkDimensions[i].x * worldChunkDimensions[i].y];
-                dirtyMeshes[i] = new bool[worldChunkDimensions[i].x * worldChunkDimensions[i].y];
+                levelDimensions[i] = levels[i].levelDimensions;
+/*
+                chunkMeshes[i] = new Mesh[levelDimensions[i].x * levelDimensions[i].y];
+                dirtyMeshes[i] = new bool[levelDimensions[i].x * levelDimensions[i].y];*/
+
+                chunkMeshes[i] = combiner.GetLevelMeshes(levelDimensions[i], levels[i].renderGrid);
             }
-            renderParams.material = worldMaterial;
+
+            renderParams = new(worldMaterial);
 
             toRender = new NativeArray<int>(50, Allocator.Persistent);
 
-            // create ALL MESHES HERE!!!!
-
-
-
+            ChangeLevel(0);
+            MyGrid.AddToGridChange((_, newI) => ChangeLevel(newI));
             enabled = true;
         }
+
+
 
         private void OnDestroy()
         {
@@ -63,16 +73,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             combiner?.Dispose();
         }
 
-        public void ChangeLevel(int _currentLevel, int2 _worldChunkDimensions, int2 _chunkDimension)
+        public void ChangeLevel(int _currentLevel)
         {
             currentLevel = _currentLevel;
-            levelDimensions = _worldChunkDimensions;
-            chunkDimension = _chunkDimension;
+            chunksCount = levelDimensions[currentLevel].x * levelDimensions[currentLevel].y;
+            // MarkDirty all
         }
 
         public void SetCameraPosition(float2 newPos)
         {
-            cameraPosition = new(newPos.x / chunkDimension.x, newPos.y / chunkDimension.y);
+            cameraPosition = new(Mathf.FloorToInt(newPos.x / chunkDimension.x), Mathf.FloorToInt(newPos.y / chunkDimension.y));
             cameraMoved = true;
         }
 
@@ -83,9 +93,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         private void Update()
         {
-            if (cameraMoved)
+            if (true || cameraMoved)
             {
-                NativeReference<int> nativeRenderCount = new(toRenderCount, Allocator.TempJob);
+                NativeReference<int> nativeRenderCount = new(0, Allocator.TempJob);
                 CullJob job = new()
                 {
                     cameraPosition = cameraPosition,
@@ -94,25 +104,54 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     maxSize = 50,
                     toRender = toRender,
                     toRenderCount = nativeRenderCount,
-                    width = levelDimensions.x
+                    width = levelDimensions[currentLevel].x
                 };
                 job.Run(chunksCount);
 
+                toRenderCount = nativeRenderCount.Value;
                 nativeRenderCount.Dispose();
                 cameraMoved = false;
             }
+
+            /* for (int i = 0; i < chunksCount; i++)
+             {
+                 int y = i / levelDimensions[currentLevel].x;
+                 int x = i - y * levelDimensions[currentLevel].x;
+
+
+                 Graphics.RenderMesh(
+                     renderParams,
+                     chunkMeshes[currentLevel][i], 0, Matrix4x4.TRS(
+                         new Vector3(
+                             x * chunkDimension.x,
+                             0,
+                             y * chunkDimension.y
+                         ),
+                         Quaternion.identity,
+                         Vector3.one));
+             }*/
 
             for (int i = 0; i < toRenderCount; i++)
             {
                 // TODO regenerate dirty chunks
 /*
                 if (dirtyMeshes[currentLevel][toRender[i]])
-                    chunkMeshes[currentLevel][toRender[i]] */ 
+                    chunkMeshes[currentLevel][toRender[i]]*/
+                int j = toRender[i];
+                int y = j / levelDimensions[currentLevel].x;
+                int x = j - y * levelDimensions[currentLevel].x;
 
-                Graphics.RenderMeshIndirect(
-                    renderParams, 
-                    chunkMeshes[currentLevel][toRender[i]], 
-                    buffer);
+
+                Graphics.RenderMesh(
+                    renderParams,
+                    chunkMeshes[currentLevel][j], 0, Matrix4x4.TRS(
+                        new Vector3(
+                            x * chunkDimension.x,
+                            0,
+                            y * chunkDimension.y
+                        ),
+                        Quaternion.identity,
+                        Vector3.one));
             }
         }
     }

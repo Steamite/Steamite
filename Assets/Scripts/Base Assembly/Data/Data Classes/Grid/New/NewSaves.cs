@@ -6,12 +6,12 @@ using Unity.Mathematics;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
-    public struct LevelGrid
+    public struct LevelGridSave
     {
         public int2 levelDimensions;
         public NativeArray<LevelGridTile> grid;
 
-        public LevelGrid(int2 _levelDimensions, NativeArray<LevelGridTile> grid)
+        public LevelGridSave(int2 _levelDimensions, NativeArray<LevelGridTile> grid)
         {
             levelDimensions = _levelDimensions;
 
@@ -19,13 +19,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         }
     }
 
-    public struct WorldSaveNew
+    public class WorldSaveNew
     {
         public BuildsAndChunksSave objectsSave;
-        public LevelGrid[] gridSave;
+        public LevelGridSave[] gridSave;
 
         public int2 chunkDimensions;
     }
-    
-
 }

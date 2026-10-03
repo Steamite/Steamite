@@ -92,6 +92,8 @@ public static class MyGrid
 
     public static Elevator GetLevelElevator(int i)
     {
+        if (levels == null)
+            return null;
         if (IsUnlocked(i))
             return levels[i].ConnectingElevator;
         throw new NotImplementedException($"No elevator on level {i}");

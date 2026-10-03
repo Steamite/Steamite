@@ -1,3 +1,4 @@
+using Assets.Scripts.Saving___Loading;
 using RadioGroups;
 using System.Collections.Generic;
 using System.IO;
@@ -112,7 +113,7 @@ namespace StartMenu
                     if (selectedOption == 0)
                         GameObject.Find("Loading Screen").GetComponent<LoadingScreen>().StartNewGame(worldName);
                     else
-                        GameObject.Find("Loading Screen").GetComponent<LoadingScreen>().StartNewGame(worldName, gameObject.GetComponent<MapGenParameterController>().Seed);
+                        GameObject.Find("Loading Screen New").GetComponent<LoadingScreenNew>().StartNewGame(worldName, gameObject.GetComponent<MapGenParameterController>().Seed);
                 }
                 else
                 {
