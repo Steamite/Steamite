@@ -52,6 +52,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     #region Init
     public void AfterLoad()
     {
+        return;
         gridSize = MyGrid.GridSize;
 
         mainValueMap = new(gridSize * gridSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);

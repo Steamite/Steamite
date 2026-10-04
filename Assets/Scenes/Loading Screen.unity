@@ -437,7 +437,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a8d8035b791c05943ba13e1333106fc9, type: 2}
   - {fileID: 11400000, guid: 1c3d32d887bb74046af6627885ac30b8, type: 2}
   - {fileID: 11400000, guid: fd427511e764df5408494dc7e0e9b586, type: 2}
-  elevator: {fileID: -2855300231450313860, guid: 31ea06da922d0db4baa5d4f59a9c7fce, type: 3}
+  elevator:
+    position: 8398858
+    meshIndex: 0
+    IsConstructing: 0
+    IsDeconstructing: 0
+    resources: 
+    renderIndex: 0
+    canStore: 
+    isMain: 0
 --- !u!114 &854179000
 MonoBehaviour:
   m_ObjectHideFlags: 0

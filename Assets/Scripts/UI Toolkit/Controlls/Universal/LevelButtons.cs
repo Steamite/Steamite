@@ -1,4 +1,5 @@
 using AbstractControls;
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
@@ -13,7 +14,7 @@ public partial class LevelButtons : ShortcutRadioButtonGroup, IInitiableUI
     public void Init()
     {
         buttons = new();
-        for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
+        for (int i = 0; i < GridWorld.LEVEL_COUNT; i++)
         {
             CustomRadioButton button = new("status-bar-button", i, this);
             button.text = $"{i + 1}";
@@ -24,19 +25,19 @@ public partial class LevelButtons : ShortcutRadioButtonGroup, IInitiableUI
         }
 
 
-        SelectedChoice = MyGrid.currentLevel;
+        SelectedChoice = GridWorld.CurrentLevelIndex;
         buttons[SelectedChoice].SelectWithoutTransition(false);
-        
-        SetChangeCallback((i) => MyGrid.ChangeGridLevel(i));
+
+        SetChangeCallback((i) => GridWorld.SetLevel(i));
 
 
-        MyGrid.AddToGridChange((_, newLevel) => OutsideTrigger(newLevel));
+        GridWorld.AttachChange((_, newLevel) => OutsideTrigger(newLevel));
 
 
         object level;
-        for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
+        for (int i = 0; i < GridWorld.LEVEL_COUNT; i++)
         {
-            level = MyGrid.GetGroundLevelData(i);
+            level = GridWorld.GetLevel(i);
             hierarchy[i].SetBinding(
                 nameof(GroundLevel.Unlocked),
                 nameof(enabledSelf),

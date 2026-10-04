@@ -2534,6 +2534,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871c36199006afb4b87d0a14349203e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.GridWorld
+  buildingMeshes:
+  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  buildingMaterial: {fileID: 2100000, guid: dd3fed6aec66e76439d58f3a9573a37a, type: 2}
+  mat2: {fileID: 9219180724257492359, guid: 14db30a77ca5d4c40a8fe5d4b80eebd8, type: 3}
 --- !u!114 &4967022013944964022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2568,7 +2572,6 @@ MonoBehaviour:
   topHeight: 1
   lowHeight: 0
   material: {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
-  world: {fileID: 0}
   isForcedUpdate: 0
 --- !u!4 &5026351469592114601
 Transform:
@@ -2768,6 +2771,7 @@ GameObject:
   - component: {fileID: 8150810313726245684}
   - component: {fileID: 8150810313726245685}
   - component: {fileID: 8150810313726245686}
+  - component: {fileID: 8150810313726245687}
   m_Layer: 0
   m_Name: Scene
   m_TagString: Untagged
@@ -2861,6 +2865,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 942703556d985394885641f6dc830944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8150810313726245687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8150810313726245682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bea225d9aa3f6fa41b56815b700b4bb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.TestRender
+  mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: 9219180724257492359, guid: 14db30a77ca5d4c40a8fe5d4b80eebd8, type: 3}
 --- !u!114 &8277524054700303562
 MonoBehaviour:
   m_ObjectHideFlags: 0

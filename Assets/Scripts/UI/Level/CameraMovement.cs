@@ -96,8 +96,8 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
         RotZoom();
         Reset();
 
-        /*if (levelRender && hasChanged)
-            levelRender.SetCameraPosition(new(transform.position.x, transform.position.y));*/
+        if (levelRender)
+            levelRender.SetCameraPosition(new(transform.position.x, transform.position.z));
     }
 
     void Reset()

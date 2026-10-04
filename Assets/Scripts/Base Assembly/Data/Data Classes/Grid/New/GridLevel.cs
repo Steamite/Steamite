@@ -7,7 +7,7 @@ using Unity.Mathematics;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
-    public struct GridLevel : IDisposable
+    public class GridLevel : IDisposable
     {
         public static int2 chunkDimensions = new(16, 16);
         public NativeArray<LevelGridTile> renderGrid;

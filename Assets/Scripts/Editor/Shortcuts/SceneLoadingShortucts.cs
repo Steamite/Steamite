@@ -72,7 +72,7 @@ public class SceneLoadingShortucts : MonoBehaviour
                 if (continueGame)
                     GameObject.Find("Loader").GetComponent<SplashScreen>().loadAction = LoadActions.LoadGame;
                 else
-                    GameObject.Find("Loader").GetComponent<SplashScreen>().loadAction = LoadActions.NewGame;
+                    GameObject.Find("Loader").GetComponent<SplashScreen>().loadAction = LoadActions.NewGameGen;
                 EditorApplication.EnterPlaymode();
                 File.WriteAllText($"{Application.persistentDataPath}/openScene.txt", activeSceneName);
             }

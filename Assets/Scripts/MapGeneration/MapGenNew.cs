@@ -1,4 +1,5 @@
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Collections;
@@ -44,7 +45,7 @@ public class MapGenNew : MonoBehaviour
     /// <summary>List of resources that are posible to spawn./summary>
     [Header("Resource data")][SerializeField] public List<MinableRes> minableResources;
 
-    [SerializeField] Elevator elevator;
+    [SerializeField] ElevatorData elevator;
     #endregion
 
     public async Awaitable<WorldSaveNew> Generate(string _seed)
@@ -52,19 +53,17 @@ public class MapGenNew : MonoBehaviour
         seed = _seed;
         ParseInput();
 
-        StorageBSave save = (StorageBSave)elevator.Save();
-        save.gridPos = new(gridSize.x / 2, 0, gridSize.y / 2);
-        save.SetupStorage();
+        ElevatorData save = elevator;
+        save.CreateMainElevator(gridSize.x, gridSize.y);
 
         WorldSaveNew world = new()
         {
             chunkDimensions = new(16, 16),
-            objectsSave = new BuildsAndChunksSave(
-                    new BuildingSave[] {
+            objectsSave = new BuildsAndChunksSaveNew(
+                    new BuildingDataNew[] {
                         save
                     },
-                    new ChunkSave[] { },
-                    new VeinSave[] { }
+                    new ChunkSave[] { }
                 ),
             gridSave = new LevelGridSave[5]
         };

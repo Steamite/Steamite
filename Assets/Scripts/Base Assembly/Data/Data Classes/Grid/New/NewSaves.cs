@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Unity.Collections;
@@ -21,9 +22,21 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
     public class WorldSaveNew
     {
-        public BuildsAndChunksSave objectsSave;
+        public BuildsAndChunksSaveNew objectsSave;
         public LevelGridSave[] gridSave;
 
         public int2 chunkDimensions;
+    }
+
+    public class BuildsAndChunksSaveNew
+    {
+        public BuildingDataNew[] buildings;
+        public ChunkSave[] chunks;
+
+        public BuildsAndChunksSaveNew(BuildingDataNew[] _buildings, ChunkSave[] _chunks)
+        {
+            buildings = _buildings;
+            chunks = _chunks;
+        }
     }
 }

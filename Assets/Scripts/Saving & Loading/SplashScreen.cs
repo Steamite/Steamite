@@ -1,3 +1,4 @@
+using Assets.Scripts.Saving___Loading;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,7 +7,8 @@ public enum LoadActions
 {
     NewGame,
     MainMenu,
-    LoadGame
+    LoadGame,
+    NewGameGen
 }
 
 /// <summary>
@@ -18,9 +20,13 @@ public class SplashScreen : MonoBehaviour
     public Action afterLoad;
 #endif
 
-    [NonSerialized] public LoadActions loadAction = LoadActions.MainMenu;
+    [SerializeField] public LoadActions loadAction = LoadActions.NewGameGen;
     private async void Awake()
     {
+
+#if !UNITY_EDITOR
+    loadAction = LoadActions.MainMenu;
+#endif
         Time.timeScale = 1;
         await SceneManager.LoadSceneAsync("Loading Screen");
 
@@ -30,6 +36,9 @@ public class SplashScreen : MonoBehaviour
         {
             case LoadActions.NewGame:
                 await screen.StartNewGame("test - TopGun");
+                break;
+            case LoadActions.NewGameGen:
+                await GameObject.Find("Loading Screen New").GetComponent<LoadingScreenNew>().StartNewGame("test - TopGun", "DA4131C9");
                 break;
             case LoadActions.MainMenu:
                 await screen.OpenMainMenu(true);

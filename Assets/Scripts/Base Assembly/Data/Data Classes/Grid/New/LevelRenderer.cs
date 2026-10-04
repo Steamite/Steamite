@@ -1,4 +1,7 @@
-﻿using Unity.Collections;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
+using System;
+using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -9,7 +12,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     {
         NativeArray<int> toRender;
         int toRenderCount;
-        NativeReference<int> ptr;
         bool cameraMoved;
 
         Mesh[][] chunkMeshes;
@@ -21,7 +23,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         [SerializeField] int2 cameraPosition = new(0,0);
         [SerializeField] int2 cameraChunkSize;
         [SerializeField] Material worldMaterial;
-        GraphicsBuffer buffer;
 
         int2[] levelDimensions;
         int2 chunkDimension;
@@ -58,8 +59,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             toRender = new NativeArray<int>(50, Allocator.Persistent);
 
+            GridWorld.AttachChange((_, newI) => ChangeLevel(newI));
             ChangeLevel(0);
-            MyGrid.AddToGridChange((_, newI) => ChangeLevel(newI));
             enabled = true;
         }
 
@@ -77,7 +78,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             currentLevel = _currentLevel;
             chunksCount = levelDimensions[currentLevel].x * levelDimensions[currentLevel].y;
-            // MarkDirty all
         }
 
         public void SetCameraPosition(float2 newPos)
@@ -153,6 +153,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                         Quaternion.identity,
                         Vector3.one));
             }
+
+            foreach (var item in customRenderers)
+            {
+                item.Render(cameraPosition, cameraChunkSize);
+            }
+        }
+
+        List<ICustomRenderer> customRenderers = new();
+        public void AddRenderer(ICustomRenderer renderer)
+        {
+            customRenderers.Add(renderer);
         }
     }
 }

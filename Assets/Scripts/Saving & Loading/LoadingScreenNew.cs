@@ -177,7 +177,7 @@ namespace Assets.Scripts.Saving___Loading
             // for gridSave
             save.world = new();
             JsonTextReader jsonReader = new(new StreamReader($"{_folderName}/Grid.json"));
-            save.world.objectsSave = jsonSerializer.Deserialize<BuildsAndChunksSave>(jsonReader);
+            save.world.objectsSave = jsonSerializer.Deserialize<BuildsAndChunksSaveNew>(jsonReader);
             jsonReader.Close();
             // for all levels
             save.world.gridSave = new LevelGridSave[MyGrid.NUMBER_OF_LEVELS];
@@ -269,7 +269,6 @@ namespace Assets.Scripts.Saving___Loading
             ActionText = "Spawning chunks";
             LoadChunks(worldSave.objectsSave.chunks);
             ActionText = "Constructing buildings";
-            LoadBuildings(worldSave.objectsSave.buildings);
         }
 
         /// <summary>

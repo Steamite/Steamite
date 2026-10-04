@@ -1,5 +1,7 @@
 
 
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,21 +46,22 @@ public static class MyRes
             {
                 globalStorageSpace += _s.LocalResources.capacity - _s.LocalResources.Sum();
             }
-            foreach (Chunk chunk in MyGrid.chunks)
+            // TODO change resource system
+            /*foreach (Chunk chunk in GridWorld.worldInstance.chunks)
             {
                 UpdateResource(chunk.LocalRes, true);
-            }
+            }*/
             foreach (Human human in SceneRefs.Humans.GetHumans())
             {
                 UpdateResource(human.Inventory, true);
             }
-            foreach(Building building in MyGrid.Buildings)
+            /*foreach (BuildingDataNew building in GridWorld.worldInstance.Buildings)
             {
-                if (!building.InConstruction)
-                    UpdateResource(building.LocalRes, true);
+                if (!building.IsConstructing)
+                    UpdateResource(building.resources, true);
                 else
-                    UpdateResource(building.Cost - building.LocalRes, false);
-            }
+                    UpdateResource(building.resources - building.resources, false);
+            }*/
             resDataSource.UIUpdate(nameof(ResourceDisplay.GlobalResources));
             resDataSource.UIUpdate(nameof(ResourceDisplay.Money));
         }
