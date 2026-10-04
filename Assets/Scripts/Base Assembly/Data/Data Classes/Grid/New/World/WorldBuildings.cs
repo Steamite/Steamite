@@ -1,8 +1,5 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Unity.Android.Gradle.Manifest;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;

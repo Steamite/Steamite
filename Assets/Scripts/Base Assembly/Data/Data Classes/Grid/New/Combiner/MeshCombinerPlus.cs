@@ -41,10 +41,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         int2 worldSize;
         int2 levelDimensions;
         int2 chunkDimensions;
-        int chunkSize;
-        int chunkSizeWithPadding;
+        
+        readonly int chunkSize;
+        readonly int chunkSizeWithPadding;
 
-        int batchSize;
+        readonly int batchSize;
         /// <summary>
         /// Use the highest possible levelDimension
         /// </summary>

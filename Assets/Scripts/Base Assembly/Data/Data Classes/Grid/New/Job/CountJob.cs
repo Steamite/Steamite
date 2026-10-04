@@ -48,7 +48,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             if (gridData[NeighbourDataIndex].Type < 2)
             {
-                vertexes[index] += 2;
+                vertexes[index] += 4;
                 triangles[index] += 6;
             }
         }

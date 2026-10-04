@@ -123,8 +123,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 new(1, 1)
                 ),
             new (
-                new(0, 0),
-                new(1, 0)
+                new(1, 0),
+                new(0, 0)
                 ),
         };
         static readonly float3[] NORMALS =
@@ -152,7 +152,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
                 if (CheckWall(index, dataIndex, sVertexIndex, sTriangleIndex, x, y, val, i)) 
                 {
-                    sVertexIndex += 2;
+                    sVertexIndex += 4;
                     sTriangleIndex += 6;
                 }
             }
@@ -175,15 +175,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         }
 
 
-        static readonly int4[] wallTriangles =
+        static readonly int4 wallTriangle = new(0, 2, 1, 3);
+        /*static readonly int4[] wallTriangles =
         {
-            new(0, 0, 2, 1),
+            new(0, 2, 1, 3),
             //new(0, 0, 0, 0),
-            new(3, 0, 1, 1),
+            new(0, 2, 1, 3),
 
             new(2, 0, 3, 1),
             new(1, 1, 0, 0),
-        };
+        };*/
         private bool CheckWall(int index, int dataIndex, int sVertexIndex, int sTriangleIndex, int x, int z, int val, int i)
         {
             int neighbourIndex = dataIndex + neighbourOffset[i];
@@ -191,27 +192,34 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             if (gridData[neighbourIndex].Type < 2)
             {
                 float2x2 offset = TOP_VERTEX_POS[i];
-
-                int v = vertexOffsets[index];
-
                 vertexes[sVertexIndex] = new Vertex(
-                    new(x + offset.c0.x, 1, z + offset.c0.y),
+                    new(x + offset.c0.x, 0, z + offset.c0.y),
                     NORMALS[i],
                     UV_MAPPING[val]);
 
                 vertexes[sVertexIndex + 1] = new Vertex(
-                    new(x + offset.c1.x, 1, z + offset.c1.y),
+                    new(x + offset.c1.x, 0, z + offset.c1.y),
                     NORMALS[i], 
                     UV_MAPPING[val]);
 
-                // create wall
-                triangles[sTriangleIndex]       = v             + wallTriangles[i].x;
-                triangles[sTriangleIndex + 1]   = sVertexIndex  + wallTriangles[i].y;
-                triangles[sTriangleIndex + 2]   = v             + wallTriangles[i].z;
+                vertexes[sVertexIndex + 2] = new Vertex(
+                    new(x + offset.c0.x, 1, z + offset.c0.y),
+                    NORMALS[i],
+                    UV_MAPPING[val]);
 
-                triangles[sTriangleIndex + 3]   = v             + wallTriangles[i].z;
-                triangles[sTriangleIndex + 4]   = sVertexIndex  + wallTriangles[i].y;
-                triangles[sTriangleIndex + 5]   = sVertexIndex  + wallTriangles[i].w;
+                vertexes[sVertexIndex + 3] = new Vertex(
+                    new(x + offset.c1.x, 1, z + offset.c1.y),
+                    NORMALS[i],
+                    UV_MAPPING[val]);
+
+                // create wall
+                triangles[sTriangleIndex]       = sVertexIndex  + wallTriangle.x;
+                triangles[sTriangleIndex + 1]   = sVertexIndex  + wallTriangle.y;
+                triangles[sTriangleIndex + 2]   = sVertexIndex  + wallTriangle.z;
+
+                triangles[sTriangleIndex + 3]   = sVertexIndex  + wallTriangle.z;
+                triangles[sTriangleIndex + 4]   = sVertexIndex  + wallTriangle.y;
+                triangles[sTriangleIndex + 5]   = sVertexIndex  + wallTriangle.w;
                 return true;
             }
             return false;
