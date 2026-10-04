@@ -4,37 +4,48 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Unity.Collections;
 using Unity.Mathematics;
+using Unity.Properties;
+using UnityEngine.UIElements;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
-    public class GridLevel : IDisposable
+    public class GridLevel : IDisposable, IUpdatable
     {
-        public static int2 chunkDimensions = new(16, 16);
+        public static int chunkDimensions = 16;
         public NativeArray<LevelGridTile> renderGrid;
         NativeArray<MovementAndStabilityData> movementAndStability;
-        readonly int size;
-        public readonly int2 totalDimensions;
-        public readonly int2 levelDimensions;
+
+        public readonly int totalDimensions;
+
+        public int levelOffset;
+        public readonly int levelDimensions;
 
         public readonly int levelNumber;
+        [CreateProperty] public bool Unlocked;
+
+        public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
         public GridLevel(LevelGridSave gridSave, int _levelNumber)
         {
+            // TODO
+            if (_levelNumber == 0)
+                Unlocked = true;
+            //
+
             levelNumber = _levelNumber;
             levelDimensions = gridSave.levelDimensions;
 
-            totalDimensions.x = chunkDimensions.x * levelDimensions.x;
-            totalDimensions.y = chunkDimensions.y * levelDimensions.y;
+            totalDimensions = chunkDimensions * levelDimensions;
 
-            size = totalDimensions.x * totalDimensions.y;
+            int tileCount = totalDimensions * totalDimensions;
 
             renderGrid = gridSave.grid;
 
-            movementAndStability = new NativeArray<MovementAndStabilityData>(size, Allocator.Persistent);
+            movementAndStability = new NativeArray<MovementAndStabilityData>(tileCount, Allocator.Persistent);
 
             // use a lookup array indexed by different tile Types
             // Construct node paths + stability
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < tileCount; i++)
             {
 
                 // TODO: Spawn objects based on save data
@@ -57,19 +68,24 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         }
 
         public void SetTile(int x, int y, int tile)
-            => SetTile(y * totalDimensions.x + x, tile);
+            => SetTile(y * totalDimensions + x, tile);
 
         public void SetTile(int index, int tile)
             => movementAndStability[index] = new(tile);
 
 
         public void SetTile(int x, int y, LevelGridTile tile)
-            => SetTile(y * totalDimensions.x + x, tile);
+            => SetTile(y * totalDimensions + x, tile);
 
         public void SetTile(int index, LevelGridTile tile)
         {
             renderGrid[index] = tile;
             // RE-RENDER / mark dirty 
+        }
+
+        public void UIUpdate(string property = "")
+        {
+            propertyChanged?.Invoke(this, new(property));
         }
     }
 }

@@ -20,18 +20,18 @@ public class SplashScreen : MonoBehaviour
     public Action afterLoad;
 #endif
 
-    [SerializeField] public LoadActions loadAction = LoadActions.NewGameGen;
+#if UNITY_EDITOR
+    public LoadActions loadAction = LoadActions.NewGameGen;
+#endif
     private async void Awake()
     {
-
-#if !UNITY_EDITOR
-    loadAction = LoadActions.MainMenu;
-#endif
         Time.timeScale = 1;
         await SceneManager.LoadSceneAsync("Loading Screen");
 
         await ResFluidTypes.Init();
         LoadingScreen screen = GameObject.Find("Loading Screen").GetComponent<LoadingScreen>();
+
+#if UNITY_EDITOR
         switch (loadAction)
         {
             case LoadActions.NewGame:
@@ -47,6 +47,9 @@ public class SplashScreen : MonoBehaviour
                 await screen.OpenMainMenu(false);
                 break;
         }
+#else
+        await screen.OpenMainMenu(true);
+#endif
 
 #if UNITY_INCLUDE_TESTS
         afterLoad?.Invoke();

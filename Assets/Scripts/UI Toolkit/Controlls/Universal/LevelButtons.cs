@@ -39,7 +39,7 @@ public partial class LevelButtons : ShortcutRadioButtonGroup, IInitiableUI
         {
             level = GridWorld.GetLevel(i);
             hierarchy[i].SetBinding(
-                nameof(GroundLevel.Unlocked),
+                nameof(GridLevel.Unlocked),
                 nameof(enabledSelf),
                 dataSource: level);
         }

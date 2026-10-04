@@ -555,9 +555,6 @@ MonoBehaviour:
     capacity:
       baseValue: 0
       currentValue: 0
-      mod:
-        percentMod: 1
-        absoluteMod: 0
 --- !u!136 &2061501062767528191
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -191,6 +191,9 @@ MonoBehaviour:
   maxRotationY: 20
   minY: 2
   maxY: 20
+  zoomStep: 2
+  zoomSpeed: 4
+  initZoom: 10
   panAmmount: 1
 --- !u!114 &5996095910553710794
 MonoBehaviour:

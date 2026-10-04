@@ -24,9 +24,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         [SerializeField] int2 cameraChunkSize;
         [SerializeField] Material worldMaterial;
 
-        int2[] levelDimensions;
-        int2 chunkDimension;
+        int levelDimension;
+        int levelOffset;
         int chunksCount;
+
 
         MeshCombinerPlus combiner;
 
@@ -37,22 +38,18 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void Init(int levelCount, GridLevel[] levels)
         {
-            chunkDimension = GridLevel.chunkDimensions;
-
-            combiner = new(chunkDimension);
+            combiner = new(GridLevel.chunkDimensions);
             chunkMeshes = new Mesh[levelCount][];
             dirtyMeshes = new bool[levelCount][];
-            levelDimensions = new int2[levelCount];
 
 
             for (int i = 0; i < levelCount; i++)
             {
-                levelDimensions[i] = levels[i].levelDimensions;
-/*
+                /*
                 chunkMeshes[i] = new Mesh[levelDimensions[i].x * levelDimensions[i].y];
                 dirtyMeshes[i] = new bool[levelDimensions[i].x * levelDimensions[i].y];*/
 
-                chunkMeshes[i] = combiner.GetLevelMeshes(levelDimensions[i], levels[i].renderGrid);
+                chunkMeshes[i] = combiner.GetLevelMeshes(levels[i].levelDimensions, levels[i].renderGrid);
             }
 
             renderParams = new(worldMaterial) 
@@ -64,9 +61,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             toRender = new NativeArray<int>(50, Allocator.Persistent);
 
-            GridWorld.AttachChange((_, newI) => ChangeLevel(newI));
-            ChangeLevel(0);
+            GridWorld.AttachChange(OnChange);
+            ChangeLevel(levels[0]);
             enabled = true;
+        }
+
+        void OnChange(int _, int newI)
+        {
+            ChangeLevel(GridWorld.GetLevel(newI));
         }
 
 
@@ -79,15 +81,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             combiner?.Dispose();
         }
 
-        public void ChangeLevel(int _currentLevel)
+        public void ChangeLevel(GridLevel level)
         {
-            currentLevel = _currentLevel;
-            chunksCount = levelDimensions[currentLevel].x * levelDimensions[currentLevel].y;
+            currentLevel = level.levelNumber;
+            chunksCount = level.levelDimensions * level.levelDimensions;
+            levelOffset = level.levelOffset;
+            levelDimension = level.levelDimensions;
         }
 
         public void SetCameraPosition(float2 newPos)
         {
-            cameraPosition = new(Mathf.FloorToInt(newPos.x / chunkDimension.x), Mathf.FloorToInt(newPos.y / chunkDimension.y));
+            cameraPosition = new(Mathf.FloorToInt(newPos.x / GridLevel.chunkDimensions), Mathf.FloorToInt(newPos.y / GridLevel.chunkDimensions));
             cameraMoved = true;
         }
 
@@ -109,7 +113,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     maxSize = 50,
                     toRender = toRender,
                     toRenderCount = nativeRenderCount,
-                    width = levelDimensions[currentLevel].x
+                    width = levelDimension
                 };
                 job.Run(chunksCount);
 
@@ -143,17 +147,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 if (dirtyMeshes[currentLevel][toRender[i]])
                     chunkMeshes[currentLevel][toRender[i]]*/
                 int j = toRender[i];
-                int y = j / levelDimensions[currentLevel].x;
-                int x = j - y * levelDimensions[currentLevel].x;
+                int y = j / levelDimension + levelOffset;
+                int x = j - y * levelDimension + levelOffset;
 
 
                 Graphics.RenderMesh(
                     renderParams,
                     chunkMeshes[currentLevel][j], 0, Matrix4x4.TRS(
                         new Vector3(
-                            x * chunkDimension.x,
+                            x  * GridLevel.chunkDimensions,
                             0,
-                            y * chunkDimension.y
+                            y * GridLevel.chunkDimensions
                         ),
                         Quaternion.identity,
                         Vector3.one));

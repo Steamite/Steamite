@@ -209,7 +209,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 }*/
                 if (renderBatches[i].numberOfItems == 0)
                     continue;
-
+                
                 Graphics.RenderMeshIndirect(renderParams, renderBatches[i].mesh, argBuffer, 1, i*5*sizeof(uint));
             }
         }

@@ -58,7 +58,7 @@ public class MapGenNew : MonoBehaviour
 
         WorldSaveNew world = new()
         {
-            chunkDimensions = new(16, 16),
+            chunkDimensions = 16,
             objectsSave = new BuildsAndChunksSaveNew(
                     new BuildingDataNew[] {
                         save

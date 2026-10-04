@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -52,8 +53,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     #region Init
     public void AfterLoad()
     {
-        return;
-        gridSize = MyGrid.GridSize;
+        gridSize = GridWorld.LargestLevelDimensions;
 
         mainValueMap = new(gridSize * gridSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
         selectedValueMap = new(gridSize * gridSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);

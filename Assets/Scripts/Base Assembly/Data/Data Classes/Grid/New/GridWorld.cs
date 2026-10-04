@@ -15,7 +15,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     {
         public static int LEVEL_COUNT;
         [NonSerialized] public GridLevel[] gridLevels = null;
-        public static object GetLevel(int i) => worldInstance.gridLevels[i];
+        public static GridLevel GetLevel(int i) => worldInstance.gridLevels[i];
 
         int currentLevelIndex;
         public static int CurrentLevelIndex => worldInstance.currentLevelIndex;
@@ -26,6 +26,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         WorldBuildings buildings;
 
         public BuildingDataNew[] Buildings => buildings.buildings;
+        // All levels need to start at the same position, since the center is floating, ...
+        // else it would be possible to expand only in two directions on larger levels instead of all four directions.
+        // preapeare some kind of ofset for each level, and make sure the center is on the same worldspace coordinate every time
+        // save offset in each level, and pass it to the rendrer.
+        public static int LargestLevelDimensions;
+        public static int CenterScaled;
 
         [SerializeField] Mesh[] buildingMeshes;
         [SerializeField] Material buildingMaterial;
@@ -48,10 +54,20 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
 
             GridLevel.chunkDimensions = saveToLoad.chunkDimensions;
+            LargestLevelDimensions = 0;
             for (int i = 0; i < LEVEL_COUNT; i++)
             {
                 gridLevels[i] = new GridLevel(saveToLoad.gridSave[i], i);
+                if (gridLevels[i].levelDimensions > LargestLevelDimensions)
+                {
+                    LargestLevelDimensions = gridLevels[i].levelDimensions;
+                }
             }
+            for (int i = 0; i < LEVEL_COUNT; i++)
+            {
+                gridLevels[i].levelOffset = LargestLevelDimensions - gridLevels[i].levelDimensions;
+            }
+            CenterScaled = (LargestLevelDimensions / 2) * GridLevel.chunkDimensions;
 
             renderer = GetComponent<LevelRenderer>();
             renderer.Init(LEVEL_COUNT, gridLevels);
@@ -66,15 +82,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public LevelGridTile GetTile(int x, int level, int y)
         {
-            return gridLevels[level].renderGrid[gridLevels[level].totalDimensions.x * y + x];
+            return gridLevels[level].renderGrid[gridLevels[level].totalDimensions * y + x];
         }
 
         public LevelGridTile GetActiveTile(int x, int y)
         {
-            int index = gridLevels[0].totalDimensions.x * y + x;
+            int index = gridLevels[0].totalDimensions * y + x;
             if (index < 0 || index >= gridLevels[0].renderGrid.Length)
                 return LevelGridTile.OutsideWall;
-            return gridLevels[0].renderGrid[gridLevels[0].totalDimensions.x * y + x];
+            return gridLevels[0].renderGrid[index];
         }
 
 

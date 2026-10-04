@@ -9,10 +9,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
     public struct LevelGridSave
     {
-        public int2 levelDimensions;
+        public int levelDimensions;
         public NativeArray<LevelGridTile> grid;
 
-        public LevelGridSave(int2 _levelDimensions, NativeArray<LevelGridTile> grid)
+        public LevelGridSave(int _levelDimensions, NativeArray<LevelGridTile> grid)
         {
             levelDimensions = _levelDimensions;
 
@@ -25,7 +25,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public BuildsAndChunksSaveNew objectsSave;
         public LevelGridSave[] gridSave;
 
-        public int2 chunkDimensions;
+        public int chunkDimensions;
     }
 
     public class BuildsAndChunksSaveNew

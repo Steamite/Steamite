@@ -41,18 +41,27 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     [Header("Zoom")]
     [SerializeField] float minY = 3;
     [SerializeField] float maxY = 20;
+    [SerializeField] float zoomStep = 1;
+    [SerializeField] float zoomSpeed = 1;
+    [SerializeField] float initZoom = 10;
+    float currentZoom;
+    float targetZoom = 10;
 
     [Header("Pan")]
     [SerializeField] float panAmmount = 0.1f;
 
     float mod;
+    bool hasMoved = false;
 
+    Transform childCamera;
 
     LevelRenderer levelRender;
 
     public void AfterLoad()
     {
-        transform.GetChild(0).LookAt(transform);
+        childCamera = transform.GetChild(0);
+        childCamera.LookAt(transform);
+
         cameraMap = mainShortcuts?.inputAsset.actionMaps[0];
         move = cameraMap.FindAction("Move");
         rotate = cameraMap.FindAction("Rotate");
@@ -66,20 +75,16 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
 
         SceneRefs.CameraSceneMover.SetRaycastMask(SceneRefs.GridTiles.defaultMask);
         SceneRefs.CameraSceneMover.Toggle(true);
-        //mainCamera.GetComponent<Physics2DRaycaster>().enabled = true;
-        ///mainCamera.GetComponent<AudioListener>().enabled = true;
-
-        enabled = true;
 
         levelRender = GameObject.FindAnyObjectByType<LevelRenderer>();
+        
+        enabled = true;
     }
 
     private void OnEnable()
     {
-        currentMovementX = 0;
-        currentMovementY = 0;
-        currentRotationY = 0;
         cameraMap.Enable();
+        Reset();
     }
     private void OnDisable()
     {
@@ -94,26 +99,37 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
 
         Move();
         RotZoom();
-        Reset();
+        if (reset.triggered)
+            Reset();
 
-        if (levelRender)
+        
+        if (hasMoved && levelRender)
             levelRender.SetCameraPosition(new(transform.position.x, transform.position.z));
+        
+        hasMoved = false;
     }
 
     void Reset()
-    {
-        if (reset.triggered)
-        {
-            transform.position = new(
-                MyGrid.gridSize(MyGrid.currentLevel) / 2,
-                MyGrid.currentLevel, 
-                MyGrid.gridSize(MyGrid.currentLevel) / 2);
+    {        
+        transform.SetPositionAndRotation(
+            new(
+                GridWorld.CenterScaled,
+                0,
+                GridWorld.CenterScaled
+                ), 
+            Quaternion.Euler(0, 0, 0)
+        );
+        currentMovementX = 0;
+        currentMovementY = 0;
+        currentRotationY = 0;
+        targetZoom = initZoom;
+        currentZoom = initZoom;
 
-            transform.rotation = Quaternion.Euler(0, 0, 0);
+        childCamera.localPosition = new(0, 20, -15);
+        childCamera.Translate(0, 0, initZoom);
 
-            transform.GetChild(0).localPosition = new(0, 20, -15);
-            OnEnable();
-        }
+        hasMoved = true;
+        
     }
 
     void Move()
@@ -172,11 +188,16 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
                             Screen.height),
                         vec.y)));
 
-            toMove = (transform.rotation * toMove) + transform.position;
-            /*int gridSize = MyGrid.gridSize(MyGrid.currentLevel);
-            toMove.x = Mathf.Clamp(toMove.x, 0, gridSize);
-            toMove.z = Mathf.Clamp(toMove.z, 0, gridSize);*/
-            transform.position = toMove;
+            if(toMove.magnitude > 0)
+            {
+                hasMoved = true;
+
+                toMove = (transform.rotation * toMove) + transform.position;
+                /*int gridSize = MyGrid.gridSize(MyGrid.currentLevel);
+                toMove.x = Mathf.Clamp(toMove.x, 0, gridSize);
+                toMove.z = Mathf.Clamp(toMove.z, 0, gridSize);*/
+                transform.position = toMove;
+            }
         }
 
     }
@@ -230,14 +251,9 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     {
         float rot = rotate.ReadValue<float>();
 
-        float zoomVal = 0;
-        if (InfoWindow.CanZoom)
-            zoomVal = zoom.ReadValue<Vector2>().y;
+        float zoomVal = zoom.ReadValue<Vector2>().y;
 
-        if (Mathf.Abs(rot) < Mathf.Abs(zoomVal))
-            rot = 0;
-        else
-            zoomVal = 0;
+
         Rot(rot);
         Zoom(zoomVal);
         Pan();
@@ -269,10 +285,14 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     /// <param name="rot">input rotation</param>
     void Rot(float rot)
     {
-        transform.RotateAround(
-            transform.position,
-            Vector3.up,
-            GetSpeed(ref currentRotationY, addRotationY, removeRotationY, maxRotationY, rot));
+        var rotAmmount = GetSpeed(ref currentRotationY, addRotationY, removeRotationY, maxRotationY, rot);
+        if (Mathf.Abs(rotAmmount) > 0)
+        {
+            hasMoved = true;
+            transform.RotateAround(
+                transform.position,
+                Vector3.up, rotAmmount);
+        }
     }
 
     /// <summary>
@@ -281,9 +301,20 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     /// <param name="zoom">Input zoom value.</param>
     void Zoom(float zoom)
     {
-        //print(zoom);
-        zoom = zoom * 200 * Time.unscaledDeltaTime / mod;
-        Transform cam = transform.GetChild(0);
+        zoom = zoom * zoomStep / mod;
+        targetZoom = Mathf.Clamp(targetZoom + zoom, minY, maxY);
+
+        if (Mathf.Approximately(targetZoom, currentZoom))
+            return;
+
+        float nextZoom = Mathf.Lerp(
+            currentZoom, 
+            targetZoom, 
+            zoomSpeed * Time.deltaTime) - currentZoom;
+        currentZoom += nextZoom;
+
+        childCamera.Translate(0, 0, nextZoom);
+        /*
         if (zoom > 0 && cam.localPosition.y > minY)
         {
             float x = minY - (cam.localPosition.y - zoom);
@@ -297,7 +328,7 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
             if (x > 0)
                 zoom += x;
             cam.Translate(new(0, 0, zoom));
-        }
+        }*/
     }
 
     /// <summary>

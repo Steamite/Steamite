@@ -2668,8 +2668,20 @@ PrefabInstance:
       value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 4319378460532599062, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_Intensity
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4319378460532599062, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4319378460532599062, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_Shadows.m_Strength
+      value: 0.775
+      objectReference: {fileID: 0}
+    - target: {fileID: 4543764552897493249, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_UsePipelineSettings
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5435122298766059174, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: far clip plane
