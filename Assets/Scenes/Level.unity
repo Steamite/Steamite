@@ -2535,7 +2535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.GridWorld
   buildingMeshes:
-  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 2212009239438826721, guid: 39f62d40890b9554e9dd560f648c5353, type: 3}
   buildingMaterial: {fileID: 2100000, guid: dd3fed6aec66e76439d58f3a9573a37a, type: 2}
   mat2: {fileID: 9219180724257492359, guid: 14db30a77ca5d4c40a8fe5d4b80eebd8, type: 3}
 --- !u!114 &4967022013944964022
@@ -2645,7 +2645,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2082184269814486755, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_RenderShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2082184269814486755, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_RenderPostProcessing
@@ -2669,7 +2669,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4319378460532599062, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_Shadows.m_Type
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5435122298766059174, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: far clip plane

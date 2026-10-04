@@ -25,7 +25,7 @@ MonoBehaviour:
   m_SupportsTerrainHoles: 0
   m_SupportsHDR: 0
   m_HDRColorBufferPrecision: 0
-  m_MSAA: 1
+  m_MSAA: 4
   m_RenderScale: 1.2
   m_UpscalingFilter: 0
   m_FsrOverrideSharpness: 0
@@ -58,8 +58,8 @@ MonoBehaviour:
   m_ShadowCascadeCount: 4
   m_Cascade2Split: 0.22894824
   m_Cascade3Split: {x: 0.088425905, y: 0.27453703}
-  m_Cascade4Split: {x: 0.067, y: 0.29485187, z: 0.5111295}
-  m_CascadeBorder: 0.4758607
+  m_Cascade4Split: {x: 0.33372253, y: 0.43709326, z: 0.64259493}
+  m_CascadeBorder: 0.14453535
   m_ShadowDepthBias: 1
   m_ShadowNormalBias: 1
   m_AnyShadowsSupported: 1

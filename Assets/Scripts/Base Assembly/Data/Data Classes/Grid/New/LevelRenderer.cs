@@ -55,7 +55,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 chunkMeshes[i] = combiner.GetLevelMeshes(levelDimensions[i], levels[i].renderGrid);
             }
 
-            renderParams = new(worldMaterial);
+            renderParams = new(worldMaterial) 
+            {
+                shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                receiveShadows = true,
+                worldBounds = new Bounds(Vector3.zero, new Vector3(1000, 1000, 1000))
+            };
 
             toRender = new NativeArray<int>(50, Allocator.Persistent);
 
@@ -160,7 +165,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             }
         }
 
-        List<ICustomRenderer> customRenderers = new();
+        readonly List<ICustomRenderer> customRenderers = new();
         public void AddRenderer(ICustomRenderer renderer)
         {
             customRenderers.Add(renderer);

@@ -147,6 +147,9 @@ public class MapGenNew : MonoBehaviour
             }
             else
             {
+                /*if (x == 1 && y == 1)
+                    map[i] = LevelGridTile.Road;
+                else*/
                 map[i] = LevelGridTile.Wall(10);
             }
 

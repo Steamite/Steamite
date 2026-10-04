@@ -16,7 +16,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     internal struct Vertex
     {
         public float3 position;
+        public float3 normal;
         public float2 uv;
+
+        public Vertex(float3 _position, float3 _normal, float2 _uv)
+        {
+            position = _position;
+            normal = _normal;
+            uv = _uv;
+        }
     }
 
     public class MeshCombinerPlus : IDisposable
@@ -27,8 +35,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         NativeArray<int> _triangleCounts;
         NativeArray<int> _vertexOffsets;
         NativeArray<int> _triangleOffsets;
-
         NativeArray<LevelGridTile> _chunkData;
+        NativeArray<int> _neighbourIndexOffsets;
 
         int2 worldSize;
         int2 levelDimensions;
@@ -59,6 +67,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             _vertexOffsets = new NativeArray<int>(chunkSize, Allocator.Persistent);
             _triangleOffsets = new NativeArray<int>(chunkSize, Allocator.Persistent);
+            _neighbourIndexOffsets = new NativeArray<int>(4, Allocator.Persistent);
+            _neighbourIndexOffsets[0] = -1;
+            _neighbourIndexOffsets[1] = 1;
         }
 
         private void ClearArrays()
@@ -73,6 +84,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 _triangleOffsets.Dispose();
             if (_chunkData.IsCreated)
                 _chunkData.Dispose();
+            if (_neighbourIndexOffsets.IsCreated)
+                _neighbourIndexOffsets.Dispose();
         }
 
         public Mesh[] GetLevelMeshes(int2 levelDimension, NativeArray<LevelGridTile> levelData)
@@ -183,11 +196,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             meshData.SetVertexBufferParams(sums.x,
                 new VertexAttributeDescriptor(VertexAttribute.Position, VertexAttributeFormat.Float32, 3),
+                new VertexAttributeDescriptor(VertexAttribute.Normal, VertexAttributeFormat.Float32, 3),
                 new VertexAttributeDescriptor(VertexAttribute.TexCoord0, VertexAttributeFormat.Float32, 2));
             meshData.SetIndexBufferParams(sums.y, UnityEngine.Rendering.IndexFormat.UInt32);
 
 
-
+            _neighbourIndexOffsets[2] = chunkDimensions.x + 2;
+            _neighbourIndexOffsets[3] = -(chunkDimensions.x + 2);
 
             CreateMeshJob meshJob = new()
             {
@@ -201,7 +216,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 vertexes = meshData.GetVertexData<Vertex>(),
                 triangles = meshData.GetIndexData<int>(),
                 chunkWidth = chunkDimensions.x,
-                paddedWidth = chunkDimensions.x + 2
+                paddedWidth = chunkDimensions.x + 2,
+                neighbourOffset = _neighbourIndexOffsets
             };
 
             JobHandle dependencyHandle = default;
@@ -223,6 +239,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             Mesh mesh = new Mesh();
             Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, mesh,
                 MeshUpdateFlags.DontValidateIndices | MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontNotifyMeshUsers);
+           /* mesh.RecalculateNormals();
+            mesh.RecalculateTangents();*/
 
             mesh.bounds = new Bounds
             (

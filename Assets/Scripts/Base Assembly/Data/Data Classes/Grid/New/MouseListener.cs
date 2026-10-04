@@ -96,7 +96,7 @@ public class MouseListener : MonoBehaviour
         pos.y = Mathf.FloorToInt(endPoint.z);// ;
 
         b = world.GetActiveTile(pos.x, pos.y).Type;
-        if (b > 0)
+        if (b < 2)
         {
             SetMaterial(pos, Color.blue * 2, 0.0001f);
             return;
@@ -149,7 +149,7 @@ public class MouseListener : MonoBehaviour
 
             b = world.GetActiveTile(pos.x, pos.y).Type;
 
-            if (b > 0)
+            if (b < 2)
             {
                 SetMaterial(pos, Color.blue * 2, 0.0001f);
                 return;

@@ -14,6 +14,29 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     [BurstCompile]
     public struct CreateMeshJob : IJobFor
     {
+        static readonly float[] TILE_HEIGHT = 
+        { 
+            1, 
+            1, 
+            0, 
+            1.2f, 
+
+            0.2f, 
+            0, 
+            0, 
+            0 
+        };
+
+        static readonly float2[] UV_MAPPING = { 
+            new(0.1f, 0.4f), 
+            new(0.1f, 0.6f), 
+            new(0.6f, 0.1f), 
+            new(1, 1),
+
+            new(1, 1),
+            new(0, 0),
+            new(0, 0),
+            new(1, 0) };
 
 
         [ReadOnly] public NativeArray<LevelGridTile> gridData;
@@ -31,6 +54,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         [ReadOnly] public int chunkWidth;
         [ReadOnly] public int paddedWidth;
+        [ReadOnly] public NativeArray<int> neighbourOffset;
 
         [ReadOnly] public float OreX;
         [ReadOnly] public float OreY;
@@ -47,31 +71,31 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             //int dataIndex = index + paddedWidth + 1 + (y * 2);
             int dataIndex = index + paddedWidth + 1 + (index / (chunkWidth)) * 2;
 
+            LevelGridTile tile = gridData[dataIndex];
+            int type = tile.Type;
 
-            CreateTile(dataIndex, sVertexIndex, sTriangleIndex, x, y);
+            CreateTile(dataIndex, sVertexIndex, sTriangleIndex, x, y, type);
             sVertexIndex += 4;
             sTriangleIndex += 6;
 
-            LevelGridTile tile= gridData[dataIndex];
-            int type = tile.Type;
+            
 
             /*if (type == 1)
                 CreateOre(type, sVertexIndex, sTriangleIndex, x, y);
             else */if (type == 2)
-                CreateWalls(index, dataIndex, sVertexIndex, sTriangleIndex, x, y);
+                CreateWalls(index, dataIndex, sVertexIndex, sTriangleIndex, x, y, type);
         }
 
 
-        void CreateTile(int dataIndex, int vertexIndex, int sTriangleIndex, int x, int y)
+        void CreateTile(int dataIndex, int vertexIndex, int sTriangleIndex, int x, int y, int val)
         {
             // TODO
-            int val = gridData[dataIndex].Type;
-            float uv = val == 0 ? 0.9f : 0.1f;
+            float yHeight = TILE_HEIGHT[val];
 
-            vertexes[vertexIndex]   = new() { position = new(x,     val, y),      uv = new(uv, 0)};
-            vertexes[vertexIndex+1] = new() { position = new(x + 1, val, y),      uv = new(uv, 0)};
-            vertexes[vertexIndex+2] = new() { position = new(x,     val, y + 1),  uv = new(uv, 0)};
-            vertexes[vertexIndex+3] = new() { position = new(x + 1, val, y + 1),  uv = new(uv, 0)};
+            vertexes[vertexIndex]   = new(new(x,     yHeight, y),       upNormal, UV_MAPPING[val]);
+            vertexes[vertexIndex+1] = new(new(x + 1, yHeight, y),       upNormal, UV_MAPPING[val]);
+            vertexes[vertexIndex+2] = new(new(x,     yHeight, y + 1),   upNormal, UV_MAPPING[val]);
+            vertexes[vertexIndex+3] = new(new(x + 1, yHeight, y + 1),   upNormal, UV_MAPPING[val]);
 
             triangles[sTriangleIndex]   = vertexIndex;
             triangles[sTriangleIndex+1] = vertexIndex + 2;
@@ -83,6 +107,36 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         }
 
         #region Walls
+
+        static readonly float2x2[] TOP_VERTEX_POS =
+        {
+            new (
+                new(0, 0),
+                new(0, 1)
+                ),
+            new (
+                new(1, 1),
+                new(1, 0)
+                ),
+            new (
+                new(0, 1),
+                new(1, 1)
+                ),
+            new (
+                new(0, 0),
+                new(1, 0)
+                ),
+        };
+        static readonly float3[] NORMALS =
+        {
+            new(1,0,0),
+            new(-1,0,0),
+            new(0,0,-1),
+            new(0,0,1),
+        };
+        static readonly float3 upNormal = new(0, 1, 0);
+
+
         /// <summary>
         /// Only joins vertexes, doesn't create new ones.
         /// </summary>
@@ -91,24 +145,76 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// <param name="sTriangleIndex"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        void CreateWalls(int index, int dataIndex, int sVertexIndex, int sTriangleIndex, int x, int y)
+        void CreateWalls(int index, int dataIndex, int sVertexIndex, int sTriangleIndex, int x, int y, int val)
+        { 
+            for (int i = 0; i < 4; i++)
+            {
+
+                if (CheckWall(index, dataIndex, sVertexIndex, sTriangleIndex, x, y, val, i)) 
+                {
+                    sVertexIndex += 2;
+                    sTriangleIndex += 6;
+                }
+            }
+            /*if (CheckWallL(index, dataIndex, sVertexIndex, sTriangleIndex, x, y, val))
+            {
+                sVertexIndex += 2;
+                sTriangleIndex += 6;
+            }
+            if (CheckWallR(index, dataIndex, sVertexIndex, sTriangleIndex, x, y, val))
+            {
+                sVertexIndex += 2;
+                sTriangleIndex += 6;
+            }
+            if (CheckWallT(index, dataIndex, sVertexIndex, sTriangleIndex, x, y, val))
+            {
+                sVertexIndex += 2;
+                sTriangleIndex += 6;
+            }
+            CheckWallB(index, dataIndex, sVertexIndex, sTriangleIndex, x, y, val);*/
+        }
+
+
+        static readonly int4[] wallTriangles =
         {
-            if (CheckWallL(index, dataIndex, sVertexIndex, sTriangleIndex, x, y))
+            new(0, 0, 2, 1),
+            //new(0, 0, 0, 0),
+            new(3, 0, 1, 1),
+
+            new(2, 0, 3, 1),
+            new(1, 1, 0, 0),
+        };
+        private bool CheckWall(int index, int dataIndex, int sVertexIndex, int sTriangleIndex, int x, int z, int val, int i)
+        {
+            int neighbourIndex = dataIndex + neighbourOffset[i];
+
+            if (gridData[neighbourIndex].Type < 2)
             {
-                sVertexIndex += 2;
-                sTriangleIndex += 6;
+                float2x2 offset = TOP_VERTEX_POS[i];
+
+                int v = vertexOffsets[index];
+
+                vertexes[sVertexIndex] = new Vertex(
+                    new(x + offset.c0.x, 1, z + offset.c0.y),
+                    NORMALS[i],
+                    UV_MAPPING[val]);
+
+                vertexes[sVertexIndex + 1] = new Vertex(
+                    new(x + offset.c1.x, 1, z + offset.c1.y),
+                    NORMALS[i], 
+                    UV_MAPPING[val]);
+
+                // create wall
+                triangles[sTriangleIndex]       = v             + wallTriangles[i].x;
+                triangles[sTriangleIndex + 1]   = sVertexIndex  + wallTriangles[i].y;
+                triangles[sTriangleIndex + 2]   = v             + wallTriangles[i].z;
+
+                triangles[sTriangleIndex + 3]   = v             + wallTriangles[i].z;
+                triangles[sTriangleIndex + 4]   = sVertexIndex  + wallTriangles[i].y;
+                triangles[sTriangleIndex + 5]   = sVertexIndex  + wallTriangles[i].w;
+                return true;
             }
-            if (CheckWallR(index, dataIndex, sVertexIndex, sTriangleIndex, x, y))
-            {
-                sVertexIndex += 2;
-                sTriangleIndex += 6;
-            }
-            if (CheckWallT(index, dataIndex, sVertexIndex, sTriangleIndex, x, y))
-            {
-                sVertexIndex += 2;
-                sTriangleIndex += 6;
-            }
-            CheckWallB(index, dataIndex, sVertexIndex, sTriangleIndex, x, y);
+            return false;
         }
 
         /*
@@ -121,108 +227,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
          *       2 3
          *       0 1
          */
-
-        bool CheckWallL(int index, int dataIndex, int sVertexIndex, int sTriangleIndex, int x, int z)
-        {
-            // only connect to the existing vertexes
-            int neighbourIndex = dataIndex - 1;
-
-            if (gridData[neighbourIndex].Type < 2)
-            {
-                int v = vertexOffsets[index];
-
-                vertexes[sVertexIndex] = new Vertex() { position = new(x, 1, z), uv = new(0.1f, 0.1f) };
-                vertexes[sVertexIndex + 1] = new Vertex() { position = new(x, 1, z + 1), uv = new(0.1f, 0.1f) };
-
-                // create wall
-                triangles[sTriangleIndex] = v;
-                triangles[sTriangleIndex + 1] = sVertexIndex;
-                triangles[sTriangleIndex + 2] = v + 2;
-
-                triangles[sTriangleIndex + 3] = v + 2;
-                triangles[sTriangleIndex + 4] = sVertexIndex;
-                triangles[sTriangleIndex + 5] = sVertexIndex + 1;
-                return true;
-            }
-            return false;
-        }
-
-        bool CheckWallR(int index, int dataIndex, int sVertexIndex, int sTriangleIndex, int x, int z)
-        {
-            // only connect to the existing vertexes
-            int neighbourIndex = dataIndex + 1;
-
-            if (gridData[neighbourIndex].Type < 2)
-            {
-                int v = vertexOffsets[index];
-
-
-                vertexes[sVertexIndex] = new Vertex() { position = new(x + 1, 1, z), uv = new(0.1f, 0.1f) };
-                vertexes[sVertexIndex + 1] = new Vertex() { position = new(x + 1, 1, z + 1), uv = new(0.1f, 0.1f) };
-
-
-                // create wall
-                triangles[sTriangleIndex] = v + 1;
-                triangles[sTriangleIndex + 1] = v + 3;
-                triangles[sTriangleIndex + 2] = sVertexIndex;
-
-                triangles[sTriangleIndex + 3] = v + 3;
-                triangles[sTriangleIndex + 4] = sVertexIndex + 1;
-                triangles[sTriangleIndex + 5] = sVertexIndex;
-                return true;
-            }
-            return false;
-        }
-
-        bool CheckWallT(int index, int dataIndex, int sVertexIndex, int sTriangleIndex, int x, int z)
-        {
-            // only connect to the existing vertexes
-            int neighbourIndex = dataIndex + paddedWidth;
-
-            if (gridData[neighbourIndex].Type < 2)
-            {
-                int v = vertexOffsets[index];//, v1 = vertexOffsets[neighbourIndex];
-
-                vertexes[sVertexIndex] = new Vertex() { position = new(x, 1, z + 1), uv = new(0.1f, 0.1f) };
-                vertexes[sVertexIndex + 1] = new Vertex() { position = new(x + 1, 1, z + 1), uv = new(0.1f, 0.1f) };
-
-                // create wall
-                triangles[sTriangleIndex] = v + 2;
-                triangles[sTriangleIndex + 1] = sVertexIndex;
-                triangles[sTriangleIndex + 2] = sVertexIndex + 1;
-
-                triangles[sTriangleIndex + 3] = v + 2;
-                triangles[sTriangleIndex + 4] = sVertexIndex + 1;
-                triangles[sTriangleIndex + 5] = v + 3;
-                return true;
-            }
-            return false;
-        }
-
-        bool CheckWallB(int index, int dataIndex, int sVertexIndex, int sTriangleIndex, int x, int z)
-        {
-            // only connect to the existing vertexes
-            int neighbourIndex = dataIndex - paddedWidth;
-
-            if (gridData[neighbourIndex].Type < 2)
-            {
-                int v = vertexOffsets[index];//, v1 = vertexOffsets[neighbourIndex];
-
-                vertexes[sVertexIndex] = new Vertex() { position = new(x, 1, z), uv = new(0.1f, 0.1f) };
-                vertexes[sVertexIndex + 1] = new Vertex() { position = new(x + 1, 1, z), uv = new(0.1f, 0.1f) };
-
-                // create wall
-                triangles[sTriangleIndex] = v;
-                triangles[sTriangleIndex + 1] = v + 1;
-                triangles[sTriangleIndex + 2] = sVertexIndex;
-
-                triangles[sTriangleIndex + 3] = v + 1;
-                triangles[sTriangleIndex + 4] = sVertexIndex + 1;
-                triangles[sTriangleIndex + 5] = sVertexIndex;
-                return true;
-            }
-            return false;
-        }
         #endregion
 
         #region Ores
