@@ -242,7 +242,9 @@ public static class MyGrid
     /// </summary>
     /// <param name="lIndex"></param>
     /// <returns></returns>
+    [Obsolete("obsolete")]
     public static GroundLevel GetGroundLevelData(int lIndex) => levels[lIndex];
+    [Obsolete("obsolete")]
     public static bool IsUnlocked(int lIndex) => levels[lIndex].Unlocked;
     #endregion
 

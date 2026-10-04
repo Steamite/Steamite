@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -29,10 +30,12 @@ public class StabilityBuilding : Building, IStabilitySupport
     void ApplySupport()
     {
         GridPos pos = GetPos();
-        MyGrid.GetGroundLevelData(pos.y).stability.ChangeStability(
+        // TODO
+        /*
+        GridWorld.GetLevel(pos.y).s.ChangeStability(
             (int)pos.x,
             (int)pos.z,
             supportValue,
-            true);
+            true);*/
     }
 }

@@ -63,16 +63,18 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         selectedTexture = CreateTexture(gridSize, "_SelectedTex", /*selectedValueMap,*/ mainMapMaterial);
         AttachOverlays();
 
-        for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
+        for (int i = 0; i < GridWorld.LEVEL_COUNT; i++)
         {
-            MyGrid.GetGroundLevelData(i).stability.RegisterChange(() =>
+
+            // TODO
+            /*GridWorld.GetLevel(i).movementAndStability.RegisterChange(() =>
             {
                 if(activeOverlayIndex > -1 && 
                     ActiveOverlay.GetType() == typeof(StabilityOverlay))
                     UpdateOverlay();
-            });
+            });*/
         }
-        MyGrid.AddToGridChange(GridLevelChange);
+        GridWorld.AttachChange(GridLevelChange);
     }
 
     private void GridLevelChange(int _, int i)

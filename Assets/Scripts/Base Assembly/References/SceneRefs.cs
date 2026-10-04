@@ -1,5 +1,6 @@
 
 
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -81,7 +82,7 @@ public class SceneRefs : MonoBehaviour
         foreach (IAfterLoad afterLoad in instance.afterLoads.Cast<IAfterLoad>())
             afterLoad.AfterLoad();
         instance.afterLoads = null;
-        MyGrid.Init();
+        GridWorld.SetupAttachments();//.Init();
     }
 
     private void OnValidate()

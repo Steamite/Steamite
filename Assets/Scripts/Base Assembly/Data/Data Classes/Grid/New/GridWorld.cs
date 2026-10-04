@@ -112,5 +112,24 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             worldInstance = null;
         }
 
+        public static bool IsUnlocked(int i)
+        {
+            return worldInstance.gridLevels[i].Unlocked;
+        }
+
+        public static void UnlockLevel(Elevator selectedElevator, int selectedLevel)
+        {
+            worldInstance.gridLevels[selectedLevel].Unlocked = true;
+        }
+
+        internal static void SetupAttachments()
+        {
+            // TODO no need to do this I think, I'll replace all of it
+            /*
+            AddToGridChange((_, _) => SceneRefs.GridTiles.ChangeSelMode(ControlMode.Nothing));
+            AddToGridChange((_, _) => SceneRefs.GridTiles.Exit());
+            AddToGridChange(SceneRefs.Humans.SwitchLevel);
+            ChangeGridLevel(0);*/
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     {
         public static int chunkDimensions = 16;
         public NativeArray<LevelGridTile> renderGrid;
-        NativeArray<MovementAndStabilityData> movementAndStability;
+        public NativeArray<MovementAndStabilityData> movementAndStability;
 
         public readonly int totalDimensions;
 

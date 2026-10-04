@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -9,13 +10,14 @@ public class StabilityOverlay : GridTileOverlay, IAfterLoad
 
     public void AfterLoad()
     {
-        MyGrid.AddToGridChange(UpdateGradientIntegrity);
-        UpdateGradientIntegrity(-1, MyGrid.currentLevel);
+        GridWorld.AttachChange(UpdateGradientIntegrity);
+        UpdateGradientIntegrity(-1, GridWorld.CurrentLevelIndex);
     }
 
     void UpdateGradientIntegrity(int _, int newLevel)
     {
-        MaxIntegrity = MyGrid.GetGroundLevelData(newLevel).stability.cavein.MaxIntegrity;
+        // TODO
+        //MaxIntegrity = GridWorld.GetLevel(newLevel).movementAndStability.cavein.MaxIntegrity;
     }
 
     public override float Evaluate(GridTile tile)

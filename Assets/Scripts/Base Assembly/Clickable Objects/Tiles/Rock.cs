@@ -184,7 +184,8 @@ public class Rock : ClickableObject, IStabilitySupport
         {
             integrity = 0;
             GridPos pos = GetPos();
-            if (MyGrid.GetGroundLevelData(pos.y).stability.ChangeStability(this, false))
+            // TODO
+            /*if (MyGrid.GetGroundLevelData(pos.y).stability.ChangeStability(this, false))
             {
                 if(integrity > 0)
                 {
@@ -194,7 +195,7 @@ public class Rock : ClickableObject, IStabilitySupport
                     Highlight(new());
                     return true;
                 }
-            }
+            }*/
 
             if (rockYield?.Sum() > 0)
             {
