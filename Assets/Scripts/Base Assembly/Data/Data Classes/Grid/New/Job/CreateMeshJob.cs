@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
-    [BurstCompile]
+   
     public struct CreateMeshJob : IJobFor
     {
         static readonly float[] TILE_HEIGHT = 
@@ -27,7 +27,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             0 
         };
 
-        static readonly float2[] UV_MAPPING = { 
+        static readonly float2[] UV_MAPPING = 
+        { 
             new(0.1f, 0.4f), 
             new(0.1f, 0.6f), 
             new(0.6f, 0.1f), 
@@ -36,7 +37,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             new(1, 1),
             new(0, 0),
             new(0, 0),
-            new(1, 0) };
+            new(1, 0) 
+        };
 
 
         [ReadOnly] public NativeArray<LevelGridTile> gridData;
@@ -78,11 +80,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             sVertexIndex += 4;
             sTriangleIndex += 6;
 
-            
 
-            /*if (type == 1)
-                CreateOre(type, sVertexIndex, sTriangleIndex, x, y);
-            else */if (type == 2)
+
+            if (type == 1)
+                CreateOre(tile.Style, tile.Amount, sVertexIndex, sTriangleIndex, x, y);
+            else if (type == 2)
                 CreateWalls(index, dataIndex, sVertexIndex, sTriangleIndex, x, y);
         }
 
@@ -156,35 +158,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     sTriangleIndex += 6;
                 }
             }
-            /*if (CheckWallL(index, dataIndex, sVertexIndex, sTriangleIndex, x, y, val))
-            {
-                sVertexIndex += 2;
-                sTriangleIndex += 6;
-            }
-            if (CheckWallR(index, dataIndex, sVertexIndex, sTriangleIndex, x, y, val))
-            {
-                sVertexIndex += 2;
-                sTriangleIndex += 6;
-            }
-            if (CheckWallT(index, dataIndex, sVertexIndex, sTriangleIndex, x, y, val))
-            {
-                sVertexIndex += 2;
-                sTriangleIndex += 6;
-            }
-            CheckWallB(index, dataIndex, sVertexIndex, sTriangleIndex, x, y, val);*/
         }
 
 
         static readonly int4 wallTriangle = new(0, 2, 1, 3);
-        /*static readonly int4[] wallTriangles =
-        {
-            new(0, 2, 1, 3),
-            //new(0, 0, 0, 0),
-            new(0, 2, 1, 3),
-
-            new(2, 0, 3, 1),
-            new(1, 1, 0, 0),
-        };*/
         private bool CheckWall(int index, int dataIndex, int sVertexIndex, int sTriangleIndex, int x, int z, int i)
         {
             int neighbourIndex = dataIndex + neighbourOffset[i];
@@ -225,63 +202,75 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             }
             return false;
         }
-
-        /*
-         *       2 3
-         *       0 1
-         * ---------------
-         * 2 3 | 2 3 | 2 3
-         * 0 1 | 0 1 | 0 1
-         * ---------------
-         *       2 3
-         *       0 1
-         */
         #endregion
 
         #region Ores
 
-        void CreateOre(int type, int sVertexIndex, int sTriangleIndex, float x, float y)
+        void CreateOre(int style, int ammount, int sVertexIndex, int sTriangleIndex, float x, float y)
         {
             x += 0.5f;
             y += 0.5f;
 
-            if (type == 2)
-                CreateThreeOre(sVertexIndex, sTriangleIndex, x, y);
-            else
-                CreateRequalOre(type, sVertexIndex, sTriangleIndex, x, y);
+            if (style == 0)
+                return;
+
+            CreateThreeOre(sVertexIndex, sTriangleIndex, x, y);
+            
+            //else
+            //CreateRequalOre(style, sVertexIndex, sTriangleIndex, x, y);
         }
+
+        static readonly int4[] triangleVertexOffset =
+        {
+            new(-1, -1, 1, -1),
+            new(1, -1, 0, 1),
+            new(0, 1, -1, -1),
+        };
 
         void CreateThreeOre(int sVertexIndex, int sTriangleIndex, float x, float y)
         {
-            vertexes[sVertexIndex] = new Vertex() {   position =    { x = x - OreX,  y = 1,          z = y - OreZ},
-                uv = {x = 0.9f,  y = 0} };
-            vertexes[sVertexIndex+1] = new Vertex() { position =    { x = x,         y = 1,          z = y + OreZ }, 
-                uv = { x = 0.9f, y = 0 } };
-            vertexes[sVertexIndex+2] = new Vertex() { position =    { x = x + OreX,  y = 1,          z = y - OreZ },
-                uv = { x = 0.9f, y = 0 } };
-            vertexes[sVertexIndex+3] = new Vertex() { position =    { x = x,         y = 1 + OreY,   z = y}, 
-                uv = { x = 0.9f, y = 0 } };
+            int vertexIndex = sVertexIndex;
+            int triangleIndex = sTriangleIndex;
+
+            for (int i = 0; i < 3; i++)
+            {
+                // LEFT
+                vertexes[vertexIndex] = new Vertex(
+                    new(x + triangleVertexOffset[i].x * OreX, 1, y + triangleVertexOffset[i].y * OreZ),
+                    new(1),
+                    new(0.9f, 0));
+
+                // TOP
+                vertexes[vertexIndex + 1] = new Vertex(
+                    new(x, 1 + OreY, y),
+                    new(1),
+                    new(0.9f, 0));
+
+                // RIGHT
+                vertexes[vertexIndex + 2] = new Vertex(
+                    new(x + triangleVertexOffset[i].z * OreX, 1, y + triangleVertexOffset[i].w * OreZ),
+                    new(1),
+                    new(0.9f, 0));
 
 
-            triangles[sTriangleIndex] = sVertexIndex;
-            triangles[sTriangleIndex+1] = sVertexIndex + 1;
-            triangles[sTriangleIndex + 2] = sVertexIndex + 3;
-            
-            triangles[sTriangleIndex+3] = sVertexIndex + 1;
-            triangles[sTriangleIndex+4] = sVertexIndex + 2;
-            triangles[sTriangleIndex+5] = sVertexIndex + 3;
-            
-            triangles[sTriangleIndex+6] = sVertexIndex + 2;
-            triangles[sTriangleIndex+7] = sVertexIndex;
-            triangles[sTriangleIndex+8] = sVertexIndex + 3;
+                triangles[triangleIndex]     = vertexIndex;
+                triangles[triangleIndex + 1] = vertexIndex + 1;
+                triangles[triangleIndex + 2] = vertexIndex + 2;
+
+                vertexIndex += 3;
+                triangleIndex += 3;
+            }
         }
 
         const float Radius = 0.3f;
         const float Height = 0.4f;
+
         void CreateRequalOre(int type, int sVertexIndex, int sTriangleIndex, float cX, float cZ)
         {
             float angle = (2 * Mathf.PI) / type;
 
+
+            // TODO create LOOKUP TABLES FOR SIN/COS
             //float offset = MathF.Atan(angle) * Radius;
             float cos = math.cos(angle);
             float sin = math.sin(angle);

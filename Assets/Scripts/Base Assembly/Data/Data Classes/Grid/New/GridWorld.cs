@@ -13,46 +13,40 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     [RequireComponent(typeof(LevelRenderer))]
     public class GridWorld : MonoBehaviour
     {
-        public static int LEVEL_COUNT;
+        public int LEVEL_COUNT;
         [NonSerialized] public GridLevel[] gridLevels = null;
-        public static GridLevel GetLevel(int i) => worldInstance.gridLevels[i];
+        public GridLevel GetLevel(int i) => gridLevels[i];
 
         int currentLevelIndex;
-        public static int CurrentLevelIndex => worldInstance.currentLevelIndex;
-        public static GridLevel CurrentLevel => worldInstance.gridLevels[CurrentLevelIndex];
+        public int CurrentLevelIndex => currentLevelIndex;
+        GridLevel currentLevel;
         
         LevelRenderer renderer;
 
         WorldBuildings buildings;
 
         public BuildingDataNew[] Buildings => buildings.buildings;
-        // All levels need to start at the same position, since the center is floating, ...
-        // else it would be possible to expand only in two directions on larger levels instead of all four directions.
-        // preapeare some kind of ofset for each level, and make sure the center is on the same worldspace coordinate every time
-        // save offset in each level, and pass it to the rendrer.
-        public static int LargestLevelDimensions;
-        public static int CenterScaled;
-        int ScaledOffset;
+
+        public int CenterScaled;
+        [NonSerialized] public int LargestLevelDimensions;
 
         [SerializeField] Mesh[] buildingMeshes;
         [SerializeField] Material buildingMaterial;
         [SerializeField] Material mat2;
 
         Action<int, int> onLevelChange;
-        static GridWorld worldInstance;
         internal IEnumerable<Chunk> chunks;
+        
+        
 
         public void LoadGrid(WorldSaveNew saveToLoad)
         {
-            worldInstance = this;
             onLevelChange = null;
-
+            currentLevelIndex = -1;
 
             LEVEL_COUNT = saveToLoad.gridSave.Length;
             
-            currentLevelIndex = 0;
             gridLevels = new GridLevel[LEVEL_COUNT];
-
 
             GridLevel.chunkDimensions = saveToLoad.chunkDimensions;
             LargestLevelDimensions = saveToLoad.largestDimension;
@@ -64,15 +58,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             CenterScaled = (LargestLevelDimensions / 2) * GridLevel.chunkDimensions;
 
-            renderer = GetComponent<LevelRenderer>();
-            renderer.Init(LEVEL_COUNT, gridLevels);
-
-            GetComponent<MouseListener>().Init(this);
-
             buildings = new WorldBuildings();// )GetComponent<>();
             buildings.LoadState(saveToLoad.objectsSave.buildings);
 
-            renderer.AddRenderer(buildings.SetupRenderer(buildingMeshes, buildingMaterial, mat2));
+
+            renderer = GetComponent<LevelRenderer>();
+            renderer.AddRenderer(buildings.SetupRenderer(buildingMeshes, buildingMaterial, mat2));            
+            renderer.Init(LEVEL_COUNT, gridLevels);
+
+            SetLevel(0);
         }
 
         public LevelGridTile GetTile(int x, int level, int y)
@@ -82,9 +76,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public LevelGridTile GetActiveTile(int x, int y)
         {
-            x -= gridLevels[currentLevelIndex].levelOffsetScaled;
-            y -= gridLevels[currentLevelIndex].levelOffsetScaled;
-            Debug.Log($"{x}, {y}, {gridLevels[currentLevelIndex].levelOffsetScaled}");
+            x -= currentLevel.levelOffsetScaled;
+            y -= currentLevel.levelOffsetScaled;
+            Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
             int index = gridLevels[0].totalDimensions * y + x;
             if (index < 0 || index >= gridLevels[0].renderGrid.Length)
                 return LevelGridTile.OutsideWall;
@@ -92,35 +86,35 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         }
 
 
-        public static void AttachChange(Action<int, int> attach) => worldInstance.onLevelChange += attach;
-        public static void SetLevel(int i) => worldInstance.ChangeLevel(i);
-        public void ChangeLevel(int i)
+        public void AttachChange(Action<int, int> attach) => onLevelChange += attach;
+        public void SetLevel(int i)
         {
             if (i == currentLevelIndex)
                 return;
 
-            onLevelChange?.Invoke(currentLevelIndex, i);
-
+            int x = currentLevelIndex;
             currentLevelIndex = i;
+            currentLevel = gridLevels[i];
+
+            onLevelChange?.Invoke(x, i);
         }
 
         private void OnDestroy()
         {
             buildings.Dispose();
-            worldInstance = null;
         }
 
-        public static bool IsUnlocked(int i)
+        public bool IsUnlocked(int i)
         {
-            return worldInstance.gridLevels[i].Unlocked;
+            return gridLevels[i].Unlocked;
         }
 
-        public static void UnlockLevel(Elevator selectedElevator, int selectedLevel)
+        public void UnlockLevel(Elevator selectedElevator, int selectedLevel)
         {
-            worldInstance.gridLevels[selectedLevel].Unlocked = true;
+            gridLevels[selectedLevel].Unlocked = true;
         }
 
-        internal static void SetupAttachments()
+        internal void SetupAttachments()
         {
             // TODO no need to do this I think, I'll replace all of it
             /*

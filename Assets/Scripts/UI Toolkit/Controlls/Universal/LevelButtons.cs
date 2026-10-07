@@ -13,8 +13,10 @@ public partial class LevelButtons : ShortcutRadioButtonGroup, IInitiableUI
 
     public void Init()
     {
+        GridWorld world = SceneRefs.World;
+
         buttons = new();
-        for (int i = 0; i < GridWorld.LEVEL_COUNT; i++)
+        for (int i = 0; i < world.LEVEL_COUNT; i++)
         {
             CustomRadioButton button = new("status-bar-button", i, this);
             button.text = $"{i + 1}";
@@ -25,19 +27,19 @@ public partial class LevelButtons : ShortcutRadioButtonGroup, IInitiableUI
         }
 
 
-        SelectedChoice = GridWorld.CurrentLevelIndex;
+        SelectedChoice = world.CurrentLevelIndex;
         buttons[SelectedChoice].SelectWithoutTransition(false);
 
-        SetChangeCallback((i) => GridWorld.SetLevel(i));
+        SetChangeCallback((i) => world.SetLevel(i));
 
 
-        GridWorld.AttachChange((_, newLevel) => OutsideTrigger(newLevel));
+        world.AttachChange((_, newLevel) => OutsideTrigger(newLevel));
 
 
         object level;
-        for (int i = 0; i < GridWorld.LEVEL_COUNT; i++)
+        for (int i = 0; i < world.LEVEL_COUNT; i++)
         {
-            level = GridWorld.GetLevel(i);
+            level = world.GetLevel(i);
             hierarchy[i].SetBinding(
                 nameof(GridLevel.Unlocked),
                 nameof(enabledSelf),

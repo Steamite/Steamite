@@ -119,9 +119,9 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     {        
         transform.SetPositionAndRotation(
             new(
-                GridWorld.CenterScaled,
+                SceneRefs.World.CenterScaled,
                 0,
-                GridWorld.CenterScaled
+                SceneRefs.World.CenterScaled
                 ), 
             Quaternion.Euler(0, 0, 0)
         );

@@ -40,11 +40,16 @@ namespace InfoWindowElements
         /// <summary>Button for moving between levels or unlocking new ones.</summary>
         Button moveButton;
 
+
+        GridWorld world;
+
         /// <summary>
         /// Creates a new <see cref="Tab"/> and initializes all parts of the view.
         /// </summary>
         public LevelInfo()
         {
+            world = SceneRefs.World;
+
             LevelData = Resources.Load<LevelPresent>("Holders/Data/Level Present");
             foreach (var item in LevelData.costs)
                 item?.Init();
@@ -162,13 +167,13 @@ namespace InfoWindowElements
                     costList.style.display = DisplayStyle.Flex;
                     costList.Open(this);
                     stateLabel.text = "Not enough resources";
-                    MoveButtonUpdate(true, GridWorld.IsUnlocked(i) ? "Connect" : "Unlock");
+                    MoveButtonUpdate(true, world.IsUnlocked(i) ? "Connect" : "Unlock");
 
                     break;
                 case LevelState.CanUnlock:
                     costList.style.display = DisplayStyle.Flex;
                     costList.Open(this);
-                    if (GridWorld.IsUnlocked(i))
+                    if (world.IsUnlocked(i))
                     {
                         stateLabel.text = "Can connect";
                         MoveButtonUpdate(true, "Connect");
@@ -232,7 +237,7 @@ namespace InfoWindowElements
             switch (levelGroup[SelectedLevel])
             {
                 case LevelState.CanUnlock:
-                    if (GridWorld.IsUnlocked(SelectedLevel))
+                    if (world.IsUnlocked(SelectedLevel))
                     {
                         ConfirmWindow.window.Open(
                             () =>
@@ -242,7 +247,7 @@ namespace InfoWindowElements
                                 SceneRefs.ObjectFactory.CreateElevator(
                                     new(pos.x, SelectedLevel, pos.z),
                                     Mathf.RoundToInt(selectedElevator.transform.eulerAngles.y));
-                                GridWorld.SetLevel(SelectedLevel);
+                                world.SetLevel(SelectedLevel);
                             },
                             $"Connect to level: {SelectedLevel}",
                             $"Do you want to connect to the {LevelData.headers[SelectedLevel]}?",
@@ -257,8 +262,8 @@ namespace InfoWindowElements
                                 GridPos pos = selectedElevator.GetPos();
                                 MyRes.PayCostGlobal(LevelData.costs[SelectedLevel]);
                                 SceneRefs.ObjectFactory.CreateElevator(new(pos.x, SelectedLevel, pos.z));
-                                GridWorld.UnlockLevel(selectedElevator, SelectedLevel);
-                                GridWorld.SetLevel(SelectedLevel);
+                                world.UnlockLevel(selectedElevator, SelectedLevel);
+                                world.SetLevel(SelectedLevel);
                             },
                             "Unlock new level",
                             $"Do you want to unlock the {LevelData.headers[SelectedLevel]}?",
@@ -267,7 +272,7 @@ namespace InfoWindowElements
                     }
                     break;
                 case LevelState.Unlocked:
-                    GridWorld.SetLevel(SelectedLevel);
+                    world.SetLevel(SelectedLevel);
                     break;
                 //case LevelState.Selected:
                 case LevelState.Available:

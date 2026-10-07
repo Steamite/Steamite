@@ -60,6 +60,6 @@ Material:
     - _Range: 0.5001
     m_Colors:
     - _HighlightColor: {r: 0, g: 0, b: 2, a: 2}
-    - _MousePos: {r: 70.5, g: 0, b: 72.5, a: 0}
+    - _MousePos: {r: 51.5, g: 0, b: 56.5, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

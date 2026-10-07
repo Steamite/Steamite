@@ -199,6 +199,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 data.Dispose();
         }
 
+
+        public void OnLevelChange(int levelOffsetScaled)
+        {
+            propertyBlock.SetInt("_LevelOffset", levelOffsetScaled);
+        }
         public void Render(int2 position, int2 range)
         {
             for (int i = 0; i < renderBatches.Length; i++)

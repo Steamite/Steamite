@@ -17,17 +17,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         Mesh[][] chunkMeshes;
         bool[][] dirtyMeshes;
 
-        int currentLevel;
+        GridLevel currentLevel;
+        int chunkCount;
         RenderParams renderParams;
 
         [SerializeField] int2 cameraPosition = new(0,0);
         [SerializeField] int2 cameraChunkSize;
         [SerializeField] Material worldMaterial;
-
-        int levelDimension;
-        int levelOffset;
-        int chunksCount;
-
 
         MeshCombinerPlus combiner;
 
@@ -61,14 +57,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             toRender = new NativeArray<int>(50, Allocator.Persistent);
 
-            GridWorld.AttachChange(OnChange);
+            SceneRefs.World.AttachChange(OnChange);
             ChangeLevel(levels[0]);
             enabled = true;
         }
 
         void OnChange(int _, int newI)
         {
-            ChangeLevel(GridWorld.GetLevel(newI));
+            ChangeLevel(SceneRefs.World.GetLevel(newI));
         }
 
 
@@ -83,17 +79,20 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void ChangeLevel(GridLevel level)
         {
-            currentLevel = level.levelNumber;
-            chunksCount = level.levelDimensions * level.levelDimensions;
-            levelOffset = level.levelOffset;
-            levelDimension = level.levelDimensions;
+            currentLevel = level;
+            chunkCount = currentLevel.levelDimensions * currentLevel.levelDimensions;
+
+            foreach (var item in customRenderers)
+            {
+                item.OnLevelChange(currentLevel.levelOffsetScaled);
+            }
         }
 
         public void SetCameraPosition(float2 newPos)
         {
             cameraPosition = new(
-                Mathf.FloorToInt((newPos.x) / GridLevel.chunkDimensions) - levelOffset, 
-                Mathf.FloorToInt((newPos.y) / GridLevel.chunkDimensions) - levelOffset
+                Mathf.FloorToInt((newPos.x) / GridLevel.chunkDimensions) - currentLevel.levelOffset, 
+                Mathf.FloorToInt((newPos.y) / GridLevel.chunkDimensions) - currentLevel.levelOffset
                 );
           
             cameraMoved = true;
@@ -117,9 +116,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     maxSize = 50,
                     toRender = toRender,
                     toRenderCount = nativeRenderCount,
-                    width = levelDimension
+                    width = currentLevel.levelDimensions
                 };
-                job.Run(chunksCount);
+                job.Run(chunkCount);
 
                 toRenderCount = nativeRenderCount.Value;
                 nativeRenderCount.Dispose();
@@ -151,20 +150,21 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 if (dirtyMeshes[currentLevel][toRender[i]])
                     chunkMeshes[currentLevel][toRender[i]]*/
                 int j = toRender[i];
-                int y = j / levelDimension /*+ levelOffset*/;
-                int x = j - y * levelDimension;
+                int y = j / currentLevel.levelDimensions /*+ levelOffset*/;
+                int x = j - y * currentLevel.levelDimensions;
 
                 Graphics.RenderMesh(
                     renderParams,
-                    chunkMeshes[currentLevel][j], 0, Matrix4x4.TRS(
+                    chunkMeshes[currentLevel.levelNumber][j], 0, Matrix4x4.TRS(
                         new Vector3(
-                            (x + levelOffset) * GridLevel.chunkDimensions,
+                            (x + currentLevel.levelOffset) * GridLevel.chunkDimensions,
                             0,
-                            (y + levelOffset) * GridLevel.chunkDimensions
+                            (y + currentLevel.levelOffset) * GridLevel.chunkDimensions
                         ),
                         Quaternion.identity,
                         Vector3.one));
             }
+
 
             foreach (var item in customRenderers)
             {

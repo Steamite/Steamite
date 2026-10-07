@@ -24,9 +24,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             // TODO switch based on level data
 
             int type = b.Type;
-            /*if (type == 1)
-                CreateOre(index, type);
-            else */if (type == 2)
+            if (type == 1)
+                CreateOre(index, b.Style);
+            else if (type == 2)
                 DoDown(index, dataIndex);
         }
 
@@ -53,23 +53,25 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             }
         }
 
-        /*void CreateOre(int index, int type)
+        void CreateOre(int index, int style)
         {
-            if (type == 1)
-                TreeOre(index);
-            else
-                SizeOre(index, type);
-        }*/
+            if (style == 0)
+                return;
+
+            TreeOre(index);
+            
+            //SizeOre(index, style);
+        }
 
         void TreeOre(int index)
         {
-            vertexes[index] += 4;
+            vertexes[index] += 9;
             triangles[index] += 9;
         }
-        void SizeOre(int index, int count)
+        /*void SizeOre(int index, int count)
         {
-            vertexes[index] += count * 2 + 1;
+            vertexes[index] += count * 5;// * 2 + 1;
             triangles[index] += count * 9;
-        }
+        }*/
     }
 }

@@ -42,5 +42,20 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             hiddenTypeStyleAmount = _hidden;
             durability = _durability;
         }
+
+        public override string ToString()
+        {
+            return hiddenTypeStyleAmount.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            return hiddenTypeStyleAmount.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj.GetHashCode() == GetHashCode();
+        }
     }
 }

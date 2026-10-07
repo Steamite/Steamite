@@ -6,7 +6,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
+using UnityEngine.LightTransport;
 using UnityEngine.UIElements;
 
 /// <summary>Holds references to the most important and frequented classes.</summary>
@@ -40,6 +42,9 @@ public class SceneRefs : MonoBehaviour
     [SerializeReference] List<MonoBehaviour> beforeLoadsAwaitable = new();
     [SerializeReference] List<MonoBehaviour> beforeLoads = new();
     [SerializeReference] List<MonoBehaviour> afterLoads = new();
+
+    [SerializeField] GridWorld _world;
+
     #endregion
 
     #region Getters
@@ -50,12 +55,16 @@ public class SceneRefs : MonoBehaviour
     public static JobQueue JobQueue => instance._jobQueue;
     public static Tick Tick => instance._tick;
 
+    public static GridWorld World => instance._world;
+
     public static Transform Stats => instance._stats;
     //public static InfoWindow InfoWindow => instance._infoWindow;
     public static CameraSceneMovement CameraSceneMover => instance._cameraSceneMover;
 
     public static ResearchAdapter ResearchAdapter => instance._researchAdapter;
     public static IQuestController QuestController => instance._questController as IQuestController;
+
+
     #endregion
 
     [RuntimeInitializeOnLoadMethod]
@@ -82,7 +91,7 @@ public class SceneRefs : MonoBehaviour
         foreach (IAfterLoad afterLoad in instance.afterLoads.Cast<IAfterLoad>())
             afterLoad.AfterLoad();
         instance.afterLoads = null;
-        GridWorld.SetupAttachments();//.Init();
+        World.SetupAttachments();//.Init();
     }
 
     private void OnValidate()

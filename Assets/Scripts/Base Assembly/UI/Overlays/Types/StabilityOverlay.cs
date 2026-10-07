@@ -10,8 +10,7 @@ public class StabilityOverlay : GridTileOverlay, IAfterLoad
 
     public void AfterLoad()
     {
-        GridWorld.AttachChange(UpdateGradientIntegrity);
-        UpdateGradientIntegrity(-1, GridWorld.CurrentLevelIndex);
+        SceneRefs.World.AttachChange(UpdateGradientIntegrity);
     }
 
     void UpdateGradientIntegrity(int _, int newLevel)

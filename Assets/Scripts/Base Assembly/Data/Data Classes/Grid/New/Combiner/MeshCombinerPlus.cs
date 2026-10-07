@@ -246,7 +246,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             mesh.bounds = new Bounds
             (
                 new Vector3(chunkDimensions.x / 2f, 0, chunkDimensions.y / 2f),
-                new Vector3(chunkDimensions.x, 1f, chunkDimensions.y)
+                new Vector3(chunkDimensions.x, 2f, chunkDimensions.y)
             );
 
             return mesh;

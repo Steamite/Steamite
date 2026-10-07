@@ -58,7 +58,8 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     #region Init
     public void AfterLoad()
     {
-        gridSize = GridWorld.LargestLevelDimensions;
+        GridWorld world = SceneRefs.World;
+        gridSize = world.LargestLevelDimensions;
 
         mainValueMap = new(gridSize * gridSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
         selectedValueMap = new(gridSize * gridSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
@@ -68,7 +69,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         selectedTexture = CreateTexture(gridSize, "_SelectedTex", /*selectedValueMap,*/ mainMapMaterial);
         AttachOverlays();
 
-        for (int i = 0; i < GridWorld.LEVEL_COUNT; i++)
+        for (int i = 0; i < world.LEVEL_COUNT; i++)
         {
 
             // TODO
@@ -79,7 +80,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
                     UpdateOverlay();
             });*/
         }
-        GridWorld.AttachChange(GridLevelChange);
+        SceneRefs.World.AttachChange(GridLevelChange);
     }
 
     private void GridLevelChange(int _, int i)

@@ -1,14 +1,15 @@
 
-using UnityEngine;
-using UnityEngine.InputSystem;
-using Unity.Mathematics;
-using Unity.Jobs;
-using System.Collections;
-using Unity.Collections;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using System;
+using System.Collections;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using static UnityEditor.PlayerSettings;
 
-public class MouseListener : MonoBehaviour
+public class MouseListener : MonoBehaviour, IAfterLoad
 {
     [SerializeField] float topHeight;
     [SerializeField] float lowHeight;
@@ -34,15 +35,16 @@ public class MouseListener : MonoBehaviour
 
     private void Awake()
     {
-        if(world == null)
-            enabled = false;
-    }
+        enabled = false;
 
-
-    private void Start()
-    {
         low = new(Vector3.up, new Vector3(0, lowHeight, 0));
         top = new(Vector3.up, new Vector3(0, topHeight, 0));
+    }
+
+    public void AfterLoad()
+    {
+        world = SceneRefs.World;
+        enabled = true;
     }
 
     private void OnDrawGizmos()
@@ -87,7 +89,10 @@ public class MouseListener : MonoBehaviour
         material.SetFloat("_Range", 0.5f + mod); //(b == 0 ? -0.0001f : ));
         material.SetVector("_MousePos", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
         material.SetColor("_HighlightColor", c);
+        activeMousePosition = pos;
     }
+
+    int2 activeMousePosition;
     void BetterMouseTrack(float distance)
     {
         int2 pos = new();
@@ -167,9 +172,38 @@ public class MouseListener : MonoBehaviour
         SetMaterial(pos, Color.red * 2, -0.0001f);
     }
 
-    public void Init(GridWorld gridWorld)
+    [SerializeField] InputAction clickAction;
+    [SerializeField] InputAction breakAction;
+
+    private void OnEnable()
     {
-        world = gridWorld;
-        enabled = true;
+        clickAction.Enable();
+        clickAction.performed += ClickAction_performed;
+
+        breakAction.Enable();
+        breakAction.performed += BreakAction_performed;
     }
+
+    private void OnDisable()
+    {
+        clickAction.performed -= ClickAction_performed;
+        clickAction.Disable();
+        breakAction.performed -= BreakAction_performed;
+        breakAction.Disable();
+    }
+
+
+    private void BreakAction_performed(InputAction.CallbackContext obj)
+    {
+        // TO deselect
+        Debug.Log($"{activeMousePosition} - break");
+        world.GetActiveTile(activeMousePosition.x, activeMousePosition.y);
+    }
+
+    private void ClickAction_performed(InputAction.CallbackContext obj)
+    {
+        // TO select
+        Debug.Log($"{activeMousePosition} - click - {world.GetActiveTile(activeMousePosition.x, activeMousePosition.y)}");
+    }
+
 }

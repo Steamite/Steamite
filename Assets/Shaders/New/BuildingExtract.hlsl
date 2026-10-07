@@ -50,6 +50,7 @@ float3 TransformInstanceVertex2Bit(
     uint gridZ,
     uint GridY,
     uint rot2,
+    float offset,
     float cellSize,
     out float3 Rotation)
 {
@@ -69,8 +70,9 @@ float3 TransformInstanceVertex2Bit(
     rotatedVertex.y = localVertexPosition.y;
     rotatedVertex.z = localVertexPosition.x * s + localVertexPosition.z * c;
     // Translate to grid cell position
-    float3 worldPos = float3((float) gridX * cellSize, GridY, (float) gridZ * cellSize);
-
+    float3 worldPos = float3((float) (gridX * cellSize) + offset, GridY, (float) (gridZ * cellSize) + offset);
+    
+    
     Rotation = float3(0, radians(degTable[rot2]), 0);
     
     return rotatedVertex + worldPos;
@@ -81,9 +83,9 @@ void UnpackBuilding2Bit_float(
     float instanceID,
     float3 localPosition,
     float cellSize,
+    float offset,
     out float3 WorldPosition,
-    out float3 Rotation,
-    out float3 DebugColor)
+    out float3 Rotation)
 {
     uint packedUint = 0;
     uint RotationIndex = 0;
@@ -96,9 +98,7 @@ void UnpackBuilding2Bit_float(
     //#endif
     
     UnpackBuildingData2Bit(packedUint, GridX, GridZ, GridY, RotationIndex);
-    WorldPosition = TransformInstanceVertex2Bit(localPosition, GridX, GridZ, GridY, RotationIndex, cellSize, Rotation);
-    
-    DebugColor = float3((float) GridX / 10.0, 1, (float) GridZ / 10.0);
+    WorldPosition = TransformInstanceVertex2Bit(localPosition, GridX, GridZ, GridY, RotationIndex, offset, cellSize, Rotation);
 }
 
 #endif // BUILDING_UNPACK_2BIT_INCLUDED
