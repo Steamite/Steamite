@@ -1,12 +1,23 @@
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.LightTransport;
 using Random = UnityEngine.Random;
+
+
+[Serializable]
+struct GridSizes
+{
+    public int[] sizes;
+    [NonSerialized] public int[] offsets;
+}
 
 /// <summary>Class generating new maps.</summary>
 public class MapGenNew : MonoBehaviour
@@ -33,12 +44,20 @@ public class MapGenNew : MonoBehaviour
     /// <summary>Maximal to add chance.</summary>
     [SerializeField] int maxToAdd = 6;
 
-    [Header("Map params")][SerializeField] int2[] levelDimensions;
+    [Header("Map params")][SerializeField] GridSizes[] _levelDim;
 
     /// <summary>Chosen size of grid./summary>
-    int2 gridSize;
+    GridSizes levelDimensions;
+    /// <summary>
+    /// Size of the current building level
+    /// </summary>
+    int levelDim;
+    int levelDimScaled;
+
+    int largestDimension;
     /// <summary>Number of the generated level./summary>
     int level;
+
     /// <summary>Level that's being generated at the moment./summary>
     NativeArray<LevelGridTile> map;
 
@@ -53,19 +72,33 @@ public class MapGenNew : MonoBehaviour
         seed = _seed;
         ParseInput();
 
+        int levelCount = levelDimensions.sizes.Length;
+
+        largestDimension = levelDimensions.sizes.Max();
+        levelDimensions.offsets = new int[levelDimensions.sizes.Length];
+
+        for (int i = 0; i < levelDimensions.offsets.Length; i++)
+        {
+            levelDimensions.offsets[i] = (largestDimension - levelDimensions.sizes[i])/2;
+        }
+
+        int chunkSize = 16;
+
         ElevatorData save = elevator;
-        save.CreateMainElevator(gridSize.x, gridSize.y);
+        save.CreateMainElevator((levelDimensions.sizes[0] * chunkSize) / 2);
 
         WorldSaveNew world = new()
         {
-            chunkDimensions = 16,
+            largestDimension = largestDimension,
+            levelCount = levelCount,
+            chunkDimensions = chunkSize,
             objectsSave = new BuildsAndChunksSaveNew(
                     new BuildingDataNew[] {
                         save
                     },
-                    new ChunkSave[] { }
+                    new ChunkSave[0]
                 ),
-            gridSave = new LevelGridSave[5]
+            gridSave = new LevelGridSave[levelCount]
         };
 
         await MakeGrids(world);
@@ -76,18 +109,23 @@ public class MapGenNew : MonoBehaviour
 
     async Awaitable MakeGrids(WorldSaveNew world)
     {
-        int2 levelDim = gridSize.x * world.chunkDimensions;
-        int levelSize = levelDim.x * levelDim.y;
-
         await Awaitable.BackgroundThreadAsync();
 
-        for (level = 0; level < MyGrid.NUMBER_OF_LEVELS; level++)
+        for (level = 0; level < world.levelCount; level++)
         {
-            NativeArray<LevelGridTile> grid = new(levelSize, Allocator.Persistent);
-            LevelGridSave levelSave = new(gridSize.x, grid);
+            levelDim = levelDimensions.sizes[level];
+            levelDimScaled = levelDim * world.chunkDimensions;
+
+            int scaledSize = levelDimScaled * levelDimScaled;
+
+            NativeArray<LevelGridTile> grid = new(scaledSize, Allocator.Persistent);
+            LevelGridSave levelSave = new(
+                levelDim, 
+                levelDimensions.offsets[level], 
+                grid);
 
             map = grid;
-            CreateGrid(levelDim, levelSize);
+            CreateGrid(levelDimScaled, scaledSize);
 
             world.gridSave[level] = levelSave;
         }
@@ -112,7 +150,7 @@ public class MapGenNew : MonoBehaviour
         }
         seed = seed.ToUpper();
 
-        gridSize = levelDimensions[MyMath.HexToDec("" + seed[0]) % 3];
+        levelDimensions = _levelDim[MyMath.HexToDec("" + seed[0]) % 3];
         veinRichness = MyMath.HexToDec("" + seed[1]) % 3;
         veinSize = MyMath.HexToDec("" + seed[2]) % 3;
         veinCount = MyMath.HexToDec("" + seed[3]) % 3;
@@ -121,62 +159,85 @@ public class MapGenNew : MonoBehaviour
         Random.InitState(randomSeed);
     }
 
-    
+
+    int center;
+    int minPos;
+    int maxPos;
     /// <summary>Generates veins on a level.</summary>
-    void CreateGrid(int2 levelDim, int size)
+    void CreateGrid(int levelDimScaled, int size)
     {
         int x = 0;
         int y = 0;
 
-        int2 centerRadius = new int2(5, 5);
+        int centerRadius = 5;
 
-        int2 center = levelDim / 2;
-        int2 minPos = center - centerRadius;
-        int2 maxPos = center + centerRadius;
+        center = levelDimScaled / 2;
+        minPos = center - centerRadius;
+        maxPos = center + centerRadius;
+
+        
+        /*for (int i = 1; i < levelDimScaled; i++)
+            map[i] = LevelGridTile.OutsideWall;
+
+        int topRowStart = levelDimScaled * (levelDimScaled - 1);
+        for (int i = 0; i < levelDimScaled-1; i++)
+            map[topRowStart + i] = LevelGridTile.OutsideWall;
+
+        for (int i = 1; i < levelDimScaled-1; i++)
+        {
+            map[levelDimScaled * i] = LevelGridTile.OutsideWall;
+            map[levelDimScaled * i + 1] = LevelGridTile.OutsideWall;
+        }*/
+
+
 
 
         for (int i = 0; i < size; i++)
         {
-            if (x == 0 || y == 0 || x == (levelDim.x-1) || y == (levelDim.y-1))
+            if (x == 0 || y == 0 || x == (levelDimScaled-1) || y == (levelDimScaled-1))
             {
                 // keep outside wall
             }
-            else if (x > minPos.x && x < maxPos.x && y > minPos.y && y < maxPos.y)
+            else if (x > minPos && x < maxPos && y > minPos && y < maxPos)
             {
                 map[i] = LevelGridTile.Road;
             }
             else
             {
-                /*if (x == 1 && y == 1)
-                    map[i] = LevelGridTile.Road;
-                else*/
                 map[i] = LevelGridTile.Wall(10);
             }
 
             x++;
-            if (x == levelDim.x)
+            if (x == levelDimScaled)
             {
                 x = 0;
                 y++;
             }
         }
+/*
+        for (int i = 0; i < minableResources.Count; i++)
+        {
+            SpiralVein(minableResources[i]);
+        }*/
     }
-}
-    /*
+
+
+
+
     /// <summary>
     /// Creates a resource vein.
     /// </summary>
     /// <param name="minable">Sets the parameters of the vein.</param>
     void SpiralVein(MinableRes minable)
     {
-        int x, z;
-
+        int pos, x, z;
         do
         {
-            x = Random.Range(1, gridSize);
-            z = Random.Range(1, gridSize);
+            x = Random.Range(1, levelDim);
+            z = Random.Range(1, levelDim);
+            pos = z * levelDimScaled + x;
         }
-        while (!CanPlace(x, z));
+        while (!CanPlace(pos, x, z));
         int _veinSize = minable.size[level].Value(veinSize);
 
         while (_veinSize > 0)
@@ -237,14 +298,23 @@ public class MapGenNew : MonoBehaviour
                     x += mod;
                 else
                     y += mod;
-                if (InBounds(x, y) && CanPlace(x, y))
+
+                if (InBounds(x, y))
                 {
-                    map[x, y] = new(minable, minable.richness[level].Value(veinRichness));
-                    numberOfTiles--;
-                    if (numberOfTiles <= 0)
-                        return true;
-                    rockChance -= Random.Range(minToRemove, maxToRemove);
-                    continue;
+                    int pos = y * levelDim;
+                    if (CanPlace(pos, x, y))
+                    {
+                        map[y * levelDimScaled + x] = LevelGridTile.Wall(
+                            1, 
+                            (minable.resource.id & 0xFF) << 5,  
+                            minable.richness[level].Value(veinRichness),
+                            1);
+                        numberOfTiles--;
+                        if (numberOfTiles <= 0)
+                            return true;
+                        rockChance -= Random.Range(minToRemove, maxToRemove);
+                        continue;
+                    }
                 }
             }
             rockChance += Random.Range(minToAdd, maxToAdd);
@@ -258,30 +328,29 @@ public class MapGenNew : MonoBehaviour
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <returns></returns>
-    bool CanPlace(int x, int y)
+    bool CanPlace(int index, int x, int y)
     {
-        if (map[x, y] == null)
+        if (map[index].Type == 0)
         {
-            if (!((x > minCenter && x < maxCenter) && (y > minCenter && y < maxCenter)))
+            if (!((x > minPos && x < maxPos) && (y > minPos && y < maxPos)))
                 return true;
         }
         return false;
     }
     bool InBounds(int x, int y)
     {
-        return (x > 0 && x < gridSize && y > 0 && y < gridSize);
+        return (x > 1 && x < levelDim && y > 1 && y < levelDim);
     }
 
-    #endregion Chunks
-
+    /*
     #region Integrity
     void PerlinNoise(int level)
     {
         float randomX = Random.Range(-500f, 500f);
         float randomY = Random.Range(-500f, 500f);
-        for (int x = 0; x < gridSize; x++)
+        for (int x = 0; x < levelDimScaled; x++)
         {
-            for (int y = 0; y < gridSize; y++)
+            for (int y = 0; y < levelDimScaled; y++)
             {
                 bool changeColor = false;
                 if (map[x, y] == null)
@@ -335,5 +404,5 @@ public class MapGenNew : MonoBehaviour
         return f;
     }
     #endregion
+    */
 }
-*/

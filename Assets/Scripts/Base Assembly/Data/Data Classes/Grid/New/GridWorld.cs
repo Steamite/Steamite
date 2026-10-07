@@ -32,6 +32,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         // save offset in each level, and pass it to the rendrer.
         public static int LargestLevelDimensions;
         public static int CenterScaled;
+        int ScaledOffset;
 
         [SerializeField] Mesh[] buildingMeshes;
         [SerializeField] Material buildingMaterial;
@@ -54,19 +55,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
 
             GridLevel.chunkDimensions = saveToLoad.chunkDimensions;
-            LargestLevelDimensions = 0;
+            LargestLevelDimensions = saveToLoad.largestDimension;
+            
             for (int i = 0; i < LEVEL_COUNT; i++)
             {
                 gridLevels[i] = new GridLevel(saveToLoad.gridSave[i], i);
-                if (gridLevels[i].levelDimensions > LargestLevelDimensions)
-                {
-                    LargestLevelDimensions = gridLevels[i].levelDimensions;
-                }
             }
-            for (int i = 0; i < LEVEL_COUNT; i++)
-            {
-                gridLevels[i].levelOffset = LargestLevelDimensions - gridLevels[i].levelDimensions;
-            }
+
             CenterScaled = (LargestLevelDimensions / 2) * GridLevel.chunkDimensions;
 
             renderer = GetComponent<LevelRenderer>();
@@ -87,6 +82,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public LevelGridTile GetActiveTile(int x, int y)
         {
+            x -= gridLevels[currentLevelIndex].levelOffsetScaled;
+            y -= gridLevels[currentLevelIndex].levelOffsetScaled;
+            Debug.Log($"{x}, {y}, {gridLevels[currentLevelIndex].levelOffsetScaled}");
             int index = gridLevels[0].totalDimensions * y + x;
             if (index < 0 || index >= gridLevels[0].renderGrid.Length)
                 return LevelGridTile.OutsideWall;

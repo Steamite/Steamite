@@ -51,7 +51,7 @@ public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CA
         int i;
         do
         {
-            i = UnityEngine.Random.Range(1, int.MaxValue);
+            i = UnityEngine.Random.Range(1, 0xFFFF);
         } while (Categories.SelectMany(q => q.Objects).Count(q => q.id == i) > 0);
         return i;
     }
@@ -60,7 +60,7 @@ public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CA
         int i;
         do
         {
-            i = UnityEngine.Random.Range(1, int.MaxValue);
+            i = UnityEngine.Random.Range(1, 0xFFFF);
         } while (Categories.Select(q => q.id).Count(q => q == i) > 0);
         return i;
     }

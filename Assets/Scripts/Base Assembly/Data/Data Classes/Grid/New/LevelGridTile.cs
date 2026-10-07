@@ -11,6 +11,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public static readonly LevelGridTile OutsideWall = new LevelGridTile(0, int.MaxValue);
 
         public static LevelGridTile Wall(int durability) => new LevelGridTile(1 << 1, durability);
+        public static LevelGridTile Wall(int type, int style, int ammount, int durability) 
+            => new LevelGridTile(((type & 0xF) << 1) | ((style & 0x7F) << 5) | ((ammount & 0xFFFFF) << 12), durability);
         public static readonly LevelGridTile Road = new LevelGridTile(2 << 1, 0);
 
         public readonly bool Hidden => (hiddenTypeStyleAmount & 1) == 1; // one bit
@@ -27,8 +29,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// </summary>
         public readonly int Type => (hiddenTypeStyleAmount >> 1) & 0xF; // 4 bits => 16 types
 
-        public readonly int Style => (hiddenTypeStyleAmount >> 5) & 0x7F; // 7 bits => 128 styles
-        public readonly int Amount => (hiddenTypeStyleAmount >> 12) & 0xFFFFF; // 20 bits => 1048576 maxAmmount
+        public readonly int Style => (hiddenTypeStyleAmount >> 5) & 0xFF; // 7 bits => 128 styles
+        public readonly int Amount => (hiddenTypeStyleAmount >> 13) & 0x7FFFF; // 19 bits => 19 maxAmmount
 
         // maybe will be changed
         public readonly int Durability => durability & 0xFFFF;

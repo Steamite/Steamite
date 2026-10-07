@@ -91,7 +91,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void SetCameraPosition(float2 newPos)
         {
-            cameraPosition = new(Mathf.FloorToInt(newPos.x / GridLevel.chunkDimensions), Mathf.FloorToInt(newPos.y / GridLevel.chunkDimensions));
+            cameraPosition = new(
+                Mathf.FloorToInt((newPos.x) / GridLevel.chunkDimensions) - levelOffset, 
+                Mathf.FloorToInt((newPos.y) / GridLevel.chunkDimensions) - levelOffset
+                );
+          
             cameraMoved = true;
         }
 
@@ -147,17 +151,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 if (dirtyMeshes[currentLevel][toRender[i]])
                     chunkMeshes[currentLevel][toRender[i]]*/
                 int j = toRender[i];
-                int y = j / levelDimension + levelOffset;
-                int x = j - y * levelDimension + levelOffset;
-
+                int y = j / levelDimension /*+ levelOffset*/;
+                int x = j - y * levelDimension;
 
                 Graphics.RenderMesh(
                     renderParams,
                     chunkMeshes[currentLevel][j], 0, Matrix4x4.TRS(
                         new Vector3(
-                            x  * GridLevel.chunkDimensions,
+                            (x + levelOffset) * GridLevel.chunkDimensions,
                             0,
-                            y * GridLevel.chunkDimensions
+                            (y + levelOffset) * GridLevel.chunkDimensions
                         ),
                         Quaternion.identity,
                         Vector3.one));

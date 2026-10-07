@@ -12,10 +12,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
         protected int indexInList;
 
         /// <summary>
-        /// 00 - 09 - x             <br/>
-        /// 10 - 19 - z             <br/>
-        /// 20 - 22 - y             <br/>
-        /// 23 - 24 - y (rotation)  <br/>
+        /// 00 - 09 - x             0x3FF<br/>
+        /// 10 - 19 - z             0x3FF<br/>
+        /// 20 - 22 - y             0x7  <br/>
+        /// 23 - 24 - y (rotation)  0x3  <br/>
         /// 25 - 31 - construction progress<br/>
         /// </summary>
         public uint position;
@@ -35,8 +35,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
         public List<bool> canStore;
         public bool isMain;
 
-        public void CreateMainElevator(int x, int y)
+        public void CreateMainElevator(int centerPos)
         {
+            position = (uint)(centerPos & 0x3FF | ((centerPos & 0x3FF) << 10)); 
             IsConstructing = false;
             IsDeconstructing = false;
             isMain = true;

@@ -50,6 +50,11 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     }
 
 
+    private void OnDisable()
+    {
+        ClearBindings();
+    }
+
     #region Init
     public void AfterLoad()
     {
@@ -146,6 +151,18 @@ public class OverlayController : MonoBehaviour, IAfterLoad
             overlay.input.performed += ChangeOverlayAction;
         }
     }
+
+    void ClearBindings()
+    {
+        List<string> paths = new();
+        overlayModes = transform.GetComponentsInChildren<BaseOverlay>().ToList();
+        for (int i = 0; i < overlayModes.Count; i++)
+        {
+            BaseOverlay overlay = overlayModes[i];
+            overlay.input.performed -= ChangeOverlayAction;
+        }
+    }
+
     #endregion Init
 
     private void ChangeOverlayAction(InputAction.CallbackContext obj)

@@ -18,6 +18,9 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     [SerializeField] MainShortcuts mainShortcuts;
     [SerializeField] public GameObject mainCamera;
 
+    [SerializeField] MouseListener mouseListener;
+    [SerializeField] LevelRenderer levelRenderer;
+
 
     [Header("General")]
     [SerializeField] float generalSpeed = 3;
@@ -77,7 +80,7 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
         SceneRefs.CameraSceneMover.Toggle(true);
 
         levelRender = GameObject.FindAnyObjectByType<LevelRenderer>();
-        
+        mouseListener = GameObject.FindAnyObjectByType<MouseListener>();
         enabled = true;
     }
 
@@ -104,7 +107,10 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
 
         
         if (hasMoved && levelRender)
+        {
+            mouseListener.isForcedUpdate = true;
             levelRender.SetCameraPosition(new(transform.position.x, transform.position.z));
+        }
         
         hasMoved = false;
     }

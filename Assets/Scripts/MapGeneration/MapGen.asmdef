@@ -2,7 +2,8 @@
     "name": "MapGen",
     "rootNamespace": "",
     "references": [
-        "GUID:eec6b33f4459498449813ad7dd0a5e61"
+        "GUID:eec6b33f4459498449813ad7dd0a5e61",
+        "GUID:113eef093018d984083e3f6cec948ef0"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

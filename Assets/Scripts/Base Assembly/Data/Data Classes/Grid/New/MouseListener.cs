@@ -47,11 +47,16 @@ public class MouseListener : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        Color c = Color.red;
+        c.a = 0.5f;
+        Gizmos.color = c;
         Gizmos.DrawCube(new(0, topHeight, 0), new(1000, 0.1f, 1000));
         Gizmos.DrawLine(ray.origin, topPoint);
-  
-        Gizmos.color = Color.blue;
+
+        c = Color.blue;
+        c.a = 0.5f;
+        Gizmos.color = c;
+        
         Gizmos.DrawCube(new(0, lowHeight, 0), new(1000, 0.1f, 1000));
         Gizmos.DrawLine(topPoint, endPoint);
     }

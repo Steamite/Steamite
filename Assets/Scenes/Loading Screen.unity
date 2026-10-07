@@ -426,13 +426,10 @@ MonoBehaviour:
   maxToRemove: 25
   minToAdd: 1
   maxToAdd: 6
-  levelDimensions:
-  - x: 4
-    y: 4
-  - x: 8
-    y: 8
-  - x: 16
-    y: 16
+  _levelDim:
+  - sizes: 1000000010000000100000001000000010000000
+  - sizes: 080000000800000008000000080000000a000000
+  - sizes: 100000001000000010000000100000001000000010000000
   minableResources:
   - {fileID: 11400000, guid: a8d8035b791c05943ba13e1333106fc9, type: 2}
   - {fileID: 11400000, guid: 1c3d32d887bb74046af6627885ac30b8, type: 2}

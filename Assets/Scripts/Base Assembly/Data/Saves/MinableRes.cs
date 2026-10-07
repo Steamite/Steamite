@@ -33,7 +33,7 @@ public class VeinParameter
 public class MinableRes : ScriptableObject
 {
     /// <summary>Resource type it contains.</summary>
-    [SerializeField] public ResourceType resource;
+    [SerializeField] public ResourceWrapper resource;
     /// <summary>Base integrity of the tile.</summary>
     [SerializeField] public int hardness;
     /// <summary>Color of the tile.</summary>

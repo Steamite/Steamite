@@ -96,7 +96,8 @@ namespace Assets.Scripts.Saving___Loading
                 gameState = newGameInit.SetNewGameState(),
                 trade = await newGameInit.InitTrade(0),
                 research = await newGameInit.InitResearch(),
-                humans = newGameInit.InitHumans((worldSave.chunkDimensions * worldSave.gridSave[0].levelDimensions)/2),
+                //TODO right position (get scaled center with offset)
+                humans = newGameInit.InitHumans(worldSave.chunkDimensions * (worldSave.largestDimension/2)),
                 quests = await newGameInit.InitQuests(randomMap),
                 world = worldSave
             };

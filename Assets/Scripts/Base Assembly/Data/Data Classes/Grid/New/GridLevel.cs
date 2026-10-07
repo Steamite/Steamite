@@ -17,7 +17,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public readonly int totalDimensions;
 
-        public int levelOffset;
+        public readonly int levelOffset;
+        public readonly int levelOffsetScaled;
         public readonly int levelDimensions;
 
         public readonly int levelNumber;
@@ -30,10 +31,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             // TODO
             if (_levelNumber == 0)
                 Unlocked = true;
-            //
 
             levelNumber = _levelNumber;
             levelDimensions = gridSave.levelDimensions;
+
+
+            levelOffset = gridSave.levelOffset;
+            levelOffsetScaled = levelOffset * chunkDimensions; 
 
             totalDimensions = chunkDimensions * levelDimensions;
 
@@ -47,8 +51,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             // Construct node paths + stability
             for (int i = 0; i < tileCount; i++)
             {
-
-                // TODO: Spawn objects based on save data
+                // TODO: reload objects based on save data
+                // NO need to spawn any gameobjects store all in memory
                 // Maybe create methods for creating the data, or completly change the data?
                 // Will need to change saving
                 // Change Road saving 

@@ -18,7 +18,7 @@ public class MapTile
     #region Constructors
     public MapTile(MinableRes _minable, int _resAmmount)
     {
-        resource = new Resource(new() { _minable.resource }, new() { _resAmmount });
+        resource = new Resource(new() { _minable.resource.data }, new() { _resAmmount });
         hardness = _minable.hardness;
         color = _minable.color;
         name = _minable.resource.Name;//minable.resource;
