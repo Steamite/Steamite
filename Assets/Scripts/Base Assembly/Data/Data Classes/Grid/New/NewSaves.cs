@@ -34,10 +34,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
     public class BuildsAndChunksSaveNew
     {
-        public BuildingDataNew[] buildings;
+        public BuildingNew[] buildings;
         public ChunkSave[] chunks;
 
-        public BuildsAndChunksSaveNew(BuildingDataNew[] _buildings, ChunkSave[] _chunks)
+        public BuildsAndChunksSaveNew(BuildingNew[] _buildings, ChunkSave[] _chunks)
         {
             buildings = _buildings;
             chunks = _chunks;

@@ -63,7 +63,7 @@ public class MapGenNew : MonoBehaviour
     /// <summary>List of resources that are posible to spawn./summary>
     [Header("Resource data")][SerializeField] public List<MinableRes> minableResources;
 
-    [SerializeField] ElevatorData elevator;
+    [SerializeField] ElevatorNew elevator;
     #endregion
 
     public async Awaitable<WorldSaveNew> Generate(string _seed)
@@ -83,7 +83,7 @@ public class MapGenNew : MonoBehaviour
 
         int chunkSize = 16;
 
-        ElevatorData save = elevator;
+        ElevatorNew save = elevator;
         save.CreateMainElevator((levelDimensions.sizes[0] * chunkSize) / 2);
 
         WorldSaveNew world = new()
@@ -92,7 +92,7 @@ public class MapGenNew : MonoBehaviour
             levelCount = levelCount,
             chunkDimensions = chunkSize,
             objectsSave = new BuildsAndChunksSaveNew(
-                    new BuildingDataNew[] {
+                    new BuildingNew[] {
                         save
                     },
                     new ChunkSave[0]
@@ -102,6 +102,8 @@ public class MapGenNew : MonoBehaviour
 
         await MakeGrids(world);
 
+        int center = world.gridSave[0].levelDimensions * world.gridSave[0].levelDimensions * GridLevel.chunkDimensions / 2;
+        world.gridSave[0].grid[center] = LevelGridTile.Elevator(0);
 
         return world;
     }
@@ -294,7 +296,6 @@ public class MapGenNew : MonoBehaviour
                     if (CanPlace(pos, x, y))
                     {*/
                         map[pos] = LevelGridTile.Wall(
-                            1, 
                             (minable.resource.id & 0x1F) << 5,  
                             minable.richness[level].Value(veinRichness),
                             1);

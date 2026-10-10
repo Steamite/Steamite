@@ -7,7 +7,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
 {
 
     [Serializable]
-    public class BuildingDataNew
+    public class BuildingNew
     {
         protected int indexInList;
 
@@ -29,7 +29,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
 
 
     [Serializable]
-    public class ElevatorData : BuildingDataNew
+    public class ElevatorNew : BuildingNew
     {
         const int BASE_TEST_STORAGE = 50;
         public List<bool> canStore;

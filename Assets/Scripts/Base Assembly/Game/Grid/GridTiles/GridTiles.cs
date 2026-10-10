@@ -22,7 +22,6 @@ public enum ControlMode
 
     Overlay
 }
-[RequireComponent(typeof(MouseEvents), typeof(MultiSelect), typeof(BuildingActions))]
 public class GridTiles : MonoBehaviour
 {
     #region Variables

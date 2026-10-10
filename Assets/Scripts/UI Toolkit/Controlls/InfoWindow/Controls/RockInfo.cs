@@ -1,3 +1,4 @@
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using InfoWindowElements;
 using UnityEngine.UIElements;
 
@@ -9,6 +10,9 @@ public partial class RockInfo : InfoWindowControl
 
     public override void Open(object data)
     {
+        LevelGridTile gridTiles = (LevelGridTile)data;
+        integrity.text = $"{(gridTiles.Durability >> 16) & 0xFFFF}";
+        /*
         // Assigned Binding
         DataBinding binding = BindingUtil.CreateBinding(nameof(Rock.Assigned));
         binding.sourceToUiConverters.AddConverter((ref Human human) => $"{(human ? human.Name : "None")}");
@@ -18,7 +22,7 @@ public partial class RockInfo : InfoWindowControl
         binding = BindingUtil.CreateBinding(nameof(Rock.Integrity));
         binding.sourceToUiConverters.AddConverter((ref float integrity) => $"{integrity:0.#}");
         InfoWindow.Window.RegisterTempBinding(new(integrity, "text"), binding, dataSource);
-        yeild.Open(data);
+        yeild.Open(data);*/
     }
 
     public RockInfo()

@@ -8,16 +8,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 {
     public class WorldBuildings : IDisposable
     {
-        public BuildingDataNew[] buildings;
+        public BuildingNew[] buildings;
 
         int lastIndex = 0;
         int firstRemovedSpace = int.MaxValue;
 
         BuildingRender render;
 
-        public void LoadState(BuildingDataNew[] newSave)
+        public void LoadState(BuildingNew[] newSave)
         {
-            buildings = new BuildingDataNew[math.max(50, newSave.Length * 2)];
+            buildings = new BuildingNew[math.max(50, newSave.Length * 2)];
 
             foreach (var item in newSave)
             {
@@ -62,7 +62,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             return render;
         }
 
-        int AddBuilding(BuildingDataNew data)
+        int AddBuilding(BuildingNew data)
         {
             int index;
             if(firstRemovedSpace <= lastIndex)
@@ -76,7 +76,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 index = lastIndex;
                 if(lastIndex == buildings.Length)
                 {
-                    BuildingDataNew[] buildingDataNew = new BuildingDataNew[buildings.Length * 2];
+                    BuildingNew[] buildingDataNew = new BuildingNew[buildings.Length * 2];
                     buildings.CopyTo(buildingDataNew, 0);
                     buildings = buildingDataNew;
                 }

@@ -7,6 +7,7 @@ using System.Text;
 using Unity.Mathematics;
 using Unity.Mathematics.Geometry;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
@@ -25,7 +26,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         WorldBuildings buildings;
 
-        public BuildingDataNew[] Buildings => buildings.buildings;
+        public BuildingNew[] Buildings => buildings.buildings;
+
+
 
         public int CenterScaled;
         [NonSerialized] public int LargestLevelDimensions;
@@ -74,16 +77,33 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             return gridLevels[level].renderGrid[gridLevels[level].totalDimensions * y + x];
         }
 
+
         public LevelGridTile GetActiveTile(int x, int y)
         {
             x -= currentLevel.levelOffsetScaled;
             y -= currentLevel.levelOffsetScaled;
             Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
+            
             int index = gridLevels[0].totalDimensions * y + x;
             if (index < 0 || index >= gridLevels[0].renderGrid.Length)
                 return LevelGridTile.OutsideWall;
             return gridLevels[0].renderGrid[index];
         }
+
+        public LevelGridTile GetActiveTile(int x, int y, out int index)
+        {
+            x -= currentLevel.levelOffsetScaled;
+            y -= currentLevel.levelOffsetScaled;
+            Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
+
+            index = gridLevels[0].totalDimensions * y + x;
+            if (index < 0 || index >= gridLevels[0].renderGrid.Length)
+                return LevelGridTile.OutsideWall;
+            return gridLevels[0].renderGrid[index];
+        }
+
+
+
 
 
         public void AttachChange(Action<int, int> attach) => onLevelChange += attach;
@@ -102,6 +122,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         private void OnDestroy()
         {
             buildings.Dispose();
+            foreach (var level in gridLevels)
+            {
+                level.Dispose();
+            }
         }
 
         public bool IsUnlocked(int i)
@@ -114,7 +138,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             gridLevels[selectedLevel].Unlocked = true;
         }
 
-        internal void SetupAttachments()
+        public void SetupAttachments()
         {
             // TODO no need to do this I think, I'll replace all of it
             /*

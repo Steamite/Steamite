@@ -88,8 +88,8 @@ public class Build : GridTilesMode
 
 
     public override void ExitMod()
-    {
-        SceneRefs.CameraSceneMover.SetRaycastMask(gridTiles.defaultMask);
+    {/*
+        SceneRefs.CameraSceneMover.SetRaycastMask(gridTiles.defaultMask);*/
         if (gridTiles.Drag)
         {
             gridTiles.ClearPipes();
@@ -104,11 +104,11 @@ public class Build : GridTilesMode
     public override bool EnterMod()
     {
         base.EnterMod();
-
+/*
         if (gridTiles.BlueprintPrefab is Pipe)
             SceneRefs.CameraSceneMover.SetRaycastMask(gridTiles.pipeMask);
         else
-            SceneRefs.CameraSceneMover.SetRaycastMask(gridTiles.buildingMask);
+            SceneRefs.CameraSceneMover.SetRaycastMask(gridTiles.buildingMask);*/
         gridTiles.Blueprint();
         gridTiles.shiftKey.Enable();
 

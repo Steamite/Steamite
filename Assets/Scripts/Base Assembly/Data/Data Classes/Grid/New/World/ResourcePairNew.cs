@@ -27,7 +27,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
     public static partial class PositionExtansions
     {
-        /// <inheritdoc cref="BuildingDataNew.position"/>
+        /// <inheritdoc cref="BuildingNew.position"/>
         public static int CreatePosionRotation(int x, int y, int z, int rot, int meshId)
             => x & 0x3FF | ((z & 0x3FF) >> 10) | ((y & 0x7) >> 20) | ((rot & 0x3) >> 22) | ((meshId & 0x7F) >> 25);
     }

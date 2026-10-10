@@ -22,10 +22,10 @@ public class CameraSceneMovement : MonoBehaviour
         Vector3 vector = Camera.main.WorldToScreenPoint(pos.ToVec());
         Mouse.current.WarpCursorPosition(vector);
     }
-    public void SetRaycastMask(LayerMask mask)
+    /*public void SetRaycastMask(LayerMask mask)
     {
         raycaster.eventMask = mask;
-    }
+    }*/
 
     public void Toggle(bool enable)
     {

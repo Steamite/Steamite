@@ -5,8 +5,10 @@ using System.Collections;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
+using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.LevelGridTile;
 using static UnityEditor.PlayerSettings;
 
 public class MouseListener : MonoBehaviour, IAfterLoad
@@ -14,7 +16,10 @@ public class MouseListener : MonoBehaviour, IAfterLoad
     [SerializeField] float topHeight;
     [SerializeField] float lowHeight;
 
-    [SerializeField] Material material;
+    /// <summary>
+    /// Grid, Building, Human, ....
+    /// </summary>
+    [SerializeField] Material[] materials;
 
     Plane low;
     Plane top;
@@ -84,15 +89,24 @@ public class MouseListener : MonoBehaviour, IAfterLoad
         BetterMouseTrack(distance);
     }
 
-    void SetMaterial(int2 pos, Color c, float mod)
+    void SetMaterial(int2 pos, int matIndex, Color c, int selectionType, float mod = 0)
     {
-        material.SetFloat("_Range", 0.5f + mod); //(b == 0 ? -0.0001f : ));
-        material.SetVector("_MousePos", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
-        material.SetColor("_HighlightColor", c);
+        for (int i = 0; i < materials.Length; i++)
+        {
+            if (i == matIndex)
+                continue;
+            materials[i].SetFloat("_Range", 0);
+        }
+        materials[matIndex].SetFloat("_Range", 0.5f + mod);
+        materials[matIndex].SetVector("_MousePos", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
+        materials[matIndex].SetColor("_HighlightColor", c);
         activeMousePosition = pos;
+        hoverTile = selectionType;
     }
 
-    int2 activeMousePosition;
+    public int2 activeMousePosition;
+    int hoverTile;
+
     void BetterMouseTrack(float distance)
     {
         int2 pos = new();
@@ -105,16 +119,12 @@ public class MouseListener : MonoBehaviour, IAfterLoad
         pos.x = Mathf.FloorToInt(endPoint.x);// ;
         pos.y = Mathf.FloorToInt(endPoint.z);// ;
 
-        b = world.GetActiveTile(pos.x, pos.y).Type;
-        if (b < 2)
-        {
-            SetMaterial(pos, Color.blue * 2, 0.0001f);
+        var tile = world.GetActiveTile(pos.x, pos.y);
+        int tileType = tile.Type;
+        if (CheckTopObstruction(pos, tileType))
             return;
-        }
 
         float3 dir = ray.direction;
-        float2 diff;
-        float2 min;
 
         int2 step = new(
             dir.x < 0 ? -1 : 1,
@@ -124,86 +134,79 @@ public class MouseListener : MonoBehaviour, IAfterLoad
             dir.z < 0 ? 0 : 1);
 
         //float step;
-
+        int2 prevPos;
         while (true) 
         {
-            diff.x = pos.x + modDir.x - endPoint.x;
-            diff.y = pos.y + modDir.y - endPoint.z;
+            prevPos = pos; 
+            pos = MovePosition(pos, modDir, ref endPoint, dir, step);
+            if (endPoint.y < lowHeight)
+                break;
 
-            min.x = diff.x / dir.x;
-            min.y = diff.y / dir.z;
+            tile = world.GetActiveTile(pos.x, pos.y);
+            tileType = tile.Type;
 
-            if (min.x < min.y)
-            {
-                endPoint.x = pos.x + modDir.x;
-                endPoint.y += min.x * dir.y;
-                endPoint.z += min.x * dir.z;
-                
-                if (endPoint.y < lowHeight)
-                    break;
-
-                pos.x += step.x;
-            }
-            else
-            {
-                endPoint.x += min.y * dir.x;
-                endPoint.y += min.y * dir.y;
-                endPoint.z = pos.y + modDir.y;
-
-                if (endPoint.y < lowHeight)
-                    break;
-
-                pos.y += step.y;
-            }
-            
-
-            b = world.GetActiveTile(pos.x, pos.y).Type;
-
-            if (b < 2)
-            {
-                SetMaterial(pos, Color.blue * 2, 0.0001f);
+            if (CheckTopObstruction(pos, tileType))
                 return;
-            }
 
-            i++;
-            if (i > 10)
+            if (CheckMidObstruction(pos, tileType))
                 return;
         }
-        SetMaterial(pos, Color.red * 2, -0.0001f);
+
+        // mark road
+        SetMaterial(prevPos, 0, Color.red * 2, tile.Type, - 0.0002f);
     }
 
-    [SerializeField] InputAction clickAction;
-    [SerializeField] InputAction breakAction;
-
-    private void OnEnable()
+    int2 MovePosition(int2 pos, float2 modDir, ref Vector3 endPoint, float3 dir, int2 step)
     {
-        clickAction.Enable();
-        clickAction.performed += ClickAction_performed;
+        float2 diff;
+        diff.x = pos.x + modDir.x - endPoint.x;
+        diff.y = pos.y + modDir.y - endPoint.z;
 
-        breakAction.Enable();
-        breakAction.performed += BreakAction_performed;
+        float2 min;
+        min.x = diff.x / dir.x;
+        min.y = diff.y / dir.z;
+
+        if (min.x < min.y)
+        {
+            endPoint.x = pos.x + modDir.x;
+            endPoint.y += min.x * dir.y;
+            endPoint.z += min.x * dir.z;
+
+            pos.x += step.x;
+        }
+        else
+        {
+            endPoint.x += min.y * dir.x;
+            endPoint.y += min.y * dir.y;
+            endPoint.z = pos.y + modDir.y;
+
+            pos.y += step.y;
+        }
+        return pos;
     }
 
-    private void OnDisable()
+    bool CheckTopObstruction(int2 pos, int tileType)
     {
-        clickAction.performed -= ClickAction_performed;
-        clickAction.Disable();
-        breakAction.performed -= BreakAction_performed;
-        breakAction.Disable();
+        if (tileType < (int)TileType.Road)
+        {
+            SetMaterial(pos, 0, Color.blue * 2, tileType, 0.0001f);
+            return true;
+        }
+        else if (tileType == (int)TileType.Building)
+        {
+            SetMaterial(pos, 1, Color.blue * 2, tileType);
+        }
+        return false;
     }
 
-
-    private void BreakAction_performed(InputAction.CallbackContext obj)
+    bool CheckMidObstruction(int2 pos, int tileType)
     {
-        // TO deselect
-        Debug.Log($"{activeMousePosition} - break");
-        world.GetActiveTile(activeMousePosition.x, activeMousePosition.y);
-    }
+        if(tileType == (int)TileType.Road || tileType == (int)TileType.Empty)
+        {
+            // querry a human/chunk spatial hash table
 
-    private void ClickAction_performed(InputAction.CallbackContext obj)
-    {
-        // TO select
-        Debug.Log($"{activeMousePosition} - click - {world.GetActiveTile(activeMousePosition.x, activeMousePosition.y)}");
+            //SetMaterial()
+        }
+        return false;
     }
-
 }

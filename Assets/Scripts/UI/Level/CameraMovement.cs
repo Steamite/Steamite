@@ -1,4 +1,5 @@
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,7 +19,7 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     [SerializeField] MainShortcuts mainShortcuts;
     [SerializeField] public GameObject mainCamera;
 
-    [SerializeField] MouseListener mouseListener;
+    [SerializeField] MouseController mouseListener;
     [SerializeField] LevelRenderer levelRenderer;
 
 
@@ -76,11 +77,11 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
         isMod = mainShortcuts?.inputAsset.actionMaps[1].FindAction("Shift");
 
 
-        SceneRefs.CameraSceneMover.SetRaycastMask(SceneRefs.GridTiles.defaultMask);
+        //SceneRefs.CameraSceneMover.SetRaycastMask(SceneRefs.GridTiles.defaultMask);
         SceneRefs.CameraSceneMover.Toggle(true);
 
         levelRender = GameObject.FindAnyObjectByType<LevelRenderer>();
-        mouseListener = GameObject.FindAnyObjectByType<MouseListener>();
+        mouseListener = GameObject.FindAnyObjectByType<MouseController>();
         enabled = true;
     }
 

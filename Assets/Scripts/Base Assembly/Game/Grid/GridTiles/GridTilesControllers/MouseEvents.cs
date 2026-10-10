@@ -8,7 +8,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[RequireComponent(typeof(GridTiles))]
 public class MouseEvents : MonoBehaviour
 {
     GridTiles gridTiles;

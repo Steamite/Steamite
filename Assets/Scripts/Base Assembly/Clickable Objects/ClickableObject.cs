@@ -109,9 +109,9 @@ public abstract class ClickableObject : MonoBehaviour,
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
         //Debug.Log(this);
-        SceneRefs.GridTiles.Enter(this);
-        if (SceneRefs.GridTiles.Drag)
-            eventData.pointerPress = gameObject;
+        //SceneRefs.GridTiles.Enter(this);
+        /*if (SceneRefs.GridTiles.Drag)
+            eventData.pointerPress = gameObject;*/
     }
     /// <summary>
     /// Triggers <see cref="GridTiles.Exit(ClickableObject)"/>.<br/>
@@ -119,19 +119,19 @@ public abstract class ClickableObject : MonoBehaviour,
     /// </summary>
     /// <param name="eventData">Mouse data</param>
     public virtual void OnPointerExit(PointerEventData eventData)
-    {
+    {/*
         SceneRefs.GridTiles.Exit(this);
-        eventData.pointerPress = null;
+        eventData.pointerPress = null;*/
     }
     /// <summary>
     /// If not dragging and the button pressed was the left one, triggers <see cref="GridTiles.Down()"/>.
     /// </summary>
     /// <param name="eventData">Mouse data</param>
     public virtual void OnPointerDown(PointerEventData eventData)
-    {
+    {/*
         if (SceneRefs.GridTiles.Drag == false && eventData.button == PointerEventData.InputButton.Left)
             SceneRefs.GridTiles.Down();
-
+*/
     }
     /// <summary>
     /// If left button was released Triggers <see cref="GridTiles.Up()"/>.<br/>
@@ -139,11 +139,11 @@ public abstract class ClickableObject : MonoBehaviour,
     /// </summary>
     /// <param name="eventData">Mouse data</param>
     public virtual void OnPointerUp(PointerEventData eventData)
-    {
+    {/*
         if (eventData.button == PointerEventData.InputButton.Left)
             SceneRefs.GridTiles.Up();
         else
-            SceneRefs.GridTiles.BreakAction();
+            SceneRefs.GridTiles.BreakAction();*/
     }
     #endregion Mouse Events
 

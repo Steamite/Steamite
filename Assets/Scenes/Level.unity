@@ -135,7 +135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &52733409
 Transform:
   m_ObjectHideFlags: 0
@@ -144,12 +144,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 52733408}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 206732441787875933}
+  m_Father: {fileID: 977506020}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &52733410
 MonoBehaviour:
@@ -428,7 +428,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &258749763
 Transform:
   m_ObjectHideFlags: 0
@@ -437,12 +437,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 258749762}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 206732441787875933}
+  m_Father: {fileID: 977506020}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &258749764
 MonoBehaviour:
@@ -515,7 +515,7 @@ MonoBehaviour:
   selectedTexture: {fileID: 0}
   gradientTexture: {fileID: 0}
   overlayFilter: 0
-  gridTiles: {fileID: 3114157475242612541}
+  gridTiles: {fileID: 0}
   MouseHitPoint: {x: 0, y: 0}
 --- !u!223 &274122779
 Canvas:
@@ -557,7 +557,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &284615617
 Transform:
   m_ObjectHideFlags: 0
@@ -566,12 +566,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 284615616}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 206732441787875933}
+  m_Father: {fileID: 977506020}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &284615618
 MonoBehaviour:
@@ -778,7 +778,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &533075847
 Transform:
   m_ObjectHideFlags: 0
@@ -787,12 +787,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 533075846}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 206732441787875933}
+  m_Father: {fileID: 977506020}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &533075848
 MonoBehaviour:
@@ -1711,12 +1711,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 971749947}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 206732441787875933}
+  m_Father: {fileID: 977506020}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &971749949
 MonoBehaviour:
@@ -1727,13 +1727,127 @@ MonoBehaviour:
   m_GameObject: {fileID: 971749947}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61ffa585bdf41d84a9940e727ab3d411, type: 3}
+  m_Script: {fileID: 11500000, guid: e76f92ab7defdf74fbf1614ded5e5b0b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BaseAssembly::Nothing
+  m_EditorClassIdentifier: BaseAssembly::NothingNew
   cursor: {fileID: 0}
   cursorOffset: {x: 0, y: 0}
-  highlightColor: {r: 0.33, g: 0.33, b: 0.33, a: 0.32941177}
+  highlightColor: {r: 0, g: 0, b: 0, a: 0}
+  ToggleMod: 1
   select: 0
+--- !u!1 &977506019
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 977506020}
+  - component: {fileID: 977506021}
+  - component: {fileID: 977506022}
+  m_Layer: 0
+  m_Name: MouseEvents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &977506020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977506019}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 971749948}
+  - {fileID: 533075847}
+  - {fileID: 1903098573}
+  - {fileID: 284615617}
+  - {fileID: 52733409}
+  - {fileID: 258749763}
+  m_Father: {fileID: 7751514193011626992}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &977506021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977506019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef994bce31189fe4ab2e9538a230f47d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.MouseController
+  activeMode: {fileID: 0}
+  world: {fileID: 0}
+  topHeight: 1
+  lowHeight: 0
+  lastPos:
+    x: 0
+    y: 0
+  hoverMousePosition:
+    x: 0
+    y: 0
+  hoverTileType: 0
+  isForcedUpdate: 1
+  materials:
+  - {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
+  - {fileID: 2100000, guid: dd3fed6aec66e76439d58f3a9573a37a, type: 2}
+  - {fileID: 2100000, guid: 166e19725f4ea4c46af762dc0e251d0b, type: 2}
+--- !u!114 &977506022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977506019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6ea3e419c6e064993acac5063ee62c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BaseAssembly::MouseClicker
+  clickAction:
+    m_Name: Click
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: d1f0bcea-9ada-4250-80d4-dbc82831055a
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: f4e5b53c-625e-4287-8e86-151aaf6456ec
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Click
+      m_Flags: 0
+    m_Flags: 0
+  breakAction:
+    m_Name: Break
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: f513fb6d-b93d-47b4-b610-6c78fe03069c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 3b216132-7430-4770-9278-c160e03e8b8a
+      m_Path: <Mouse>/rightButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Break
+      m_Flags: 0
+    m_Flags: 0
 --- !u!114 &1068071213 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5996095910553710794, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
@@ -2206,7 +2320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1903098573
 Transform:
   m_ObjectHideFlags: 0
@@ -2215,12 +2329,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1903098572}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 206732441787875933}
+  m_Father: {fileID: 977506020}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1903098574
 MonoBehaviour:
@@ -2251,13 +2365,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 971749948}
-  - {fileID: 533075847}
-  - {fileID: 1903098573}
-  - {fileID: 284615617}
-  - {fileID: 52733409}
-  - {fileID: 258749763}
+  m_Children: []
   m_Father: {fileID: 7751514193011626992}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &421873189272607880
@@ -2319,55 +2427,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &3114157475242612541
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4967022013944964015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b89c037a29ee5a446aaebd9fbd82346c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  multiSelect: {fileID: 4967022013944964018}
-  mouseEvents: {fileID: 0}
-  buildingActions: {fileID: 0}
-  buildingMask:
-    serializedVersion: 2
-    m_Bits: 1587
-  defaultMask:
-    serializedVersion: 2
-    m_Bits: 2035
-  pipeMask:
-    serializedVersion: 2
-    m_Bits: 689
-  controlModes:
-  - {fileID: 971749949}
-  - {fileID: 533075848}
-  - {fileID: 1903098574}
-  - {fileID: 284615618}
-  - {fileID: 52733410}
-  - {fileID: 258749764}
-  activeControl: 0
-  shiftKey:
-    m_Name: Shift Key
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 8f7430d7-e35b-4d95-a394-52fcd885a11c
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: ea9e443f-cf30-422a-a8ac-7b8a2f18ab68
-      m_Path: <Keyboard>/shift
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Shift Key
-      m_Flags: 0
-    m_Flags: 0
 --- !u!1 &3537406075961022054
 GameObject:
   m_ObjectHideFlags: 0
@@ -2430,39 +2489,17 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 206732441787875933}
-  - component: {fileID: 4967022013944964018}
-  - component: {fileID: 3114157475242612541}
-  - component: {fileID: 4967022013944964016}
   - component: {fileID: 4967022013944964017}
-  - component: {fileID: 4967022013944964020}
-  - component: {fileID: 4967022013944964019}
   - component: {fileID: 4967022013944964022}
   - component: {fileID: 4967022013944964021}
-  - component: {fileID: 4967022013944964023}
+  - component: {fileID: 4967022013944964024}
   m_Layer: 2
-  m_Name: Grid
+  m_Name: Renderer
   m_TagString: Grid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &4967022013944964016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4967022013944964015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebfd1ada44c7f48418d30999b7397aa0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildPrefabs: {fileID: 0}
-  tilePrefabs: {fileID: 11400000, guid: 8df949a33652dbf41967796a41eace3e, type: 2}
-  specialPrefabs: {fileID: 11400000, guid: 5e85ccb93c567d64cb0f47d2049664b8, type: 2}
-  PipeConnectionPrefab: {fileID: 6402951971433127325, guid: 5852de1a953b4494da398cd3d7d46e7a, type: 3}
-  recipeData: {fileID: 0}
 --- !u!114 &4967022013944964017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2477,51 +2514,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opaqueMaterial: {fileID: 2100000, guid: 53b082ebb47dbf642aca567c53d62751, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 70b0af3bc4134144c84cb2af04028a8f, type: 2}
---- !u!114 &4967022013944964018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4967022013944964015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0704fd5b41724b745b3ddbf718c48a91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BaseAssembly::MultiSelect
---- !u!114 &4967022013944964019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4967022013944964015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0756347e0cb9a1489da4376585c6121, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BaseAssembly::BuildingActions
---- !u!114 &4967022013944964020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4967022013944964015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22d987d4132581c41b6e37aeb5258036, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BaseAssembly::MouseEvents
-  selectedObject: {fileID: 0}
-  activeObject: {fileID: 0}
-  activePos:
-    x: 0
-    z: 0
-    y: 0
-  drag: 0
-  highlight: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 0.3529412}
-  select: 1
 --- !u!114 &4967022013944964021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2559,7 +2551,7 @@ MonoBehaviour:
     x: 4
     y: 4
   worldMaterial: {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
---- !u!114 &4967022013944964023
+--- !u!114 &4967022013944964024
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2568,47 +2560,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4967022013944964015}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b85bcaf0aa4195c4fae31cf7dccf6723, type: 3}
+  m_Script: {fileID: 11500000, guid: ebfd1ada44c7f48418d30999b7397aa0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BaseAssembly::MouseListener
-  topHeight: 1
-  lowHeight: 0
-  material: {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
-  isForcedUpdate: 0
-  clickAction:
-    m_Name: Click
-    m_Type: 1
-    m_ExpectedControlType: Button
-    m_Id: 8fa5f4d2-642b-46bf-8d9c-c8b5727ce19f
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 12d13fd9-165f-4a35-849a-d3b8b9d6902d
-      m_Path: <Mouse>/leftButton
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Click
-      m_Flags: 0
-    m_Flags: 0
-  breakAction:
-    m_Name: Break
-    m_Type: 1
-    m_ExpectedControlType: Button
-    m_Id: 53694c9b-7ee1-4663-b074-2d1026076dea
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 87fa70f4-aa65-4d06-98bf-fe0c8f7b479f
-      m_Path: <Mouse>/rightButton
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Break
-      m_Flags: 0
-    m_Flags: 0
+  m_EditorClassIdentifier: BaseAssembly::ClickableObjectFactory
+  buildPrefabs: {fileID: 11400000, guid: 116323b1eb6a60342a1b0796e74ac72d, type: 2}
+  tilePrefabs: {fileID: 11400000, guid: 8df949a33652dbf41967796a41eace3e, type: 2}
+  specialPrefabs: {fileID: 11400000, guid: 5e85ccb93c567d64cb0f47d2049664b8, type: 2}
+  PipeConnectionPrefab: {fileID: 0}
+  recipeData: {fileID: 11400000, guid: db1598235bbab6947a5097d2decd0e69, type: 2}
 --- !u!4 &5026351469592114601
 Transform:
   m_ObjectHideFlags: 0
@@ -2802,6 +2761,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 206732441787875933}
+  - {fileID: 977506020}
   - {fileID: 421873189272607880}
   - {fileID: 1623294176}
   m_Father: {fileID: 5026351469592114601}
@@ -2873,9 +2833,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dafe754b39b8f945914d138eb297e25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridTiles: {fileID: 3114157475242612541}
+  _gridTiles: {fileID: 0}
   _overlays: {fileID: 6047015280065324895}
-  _objectFactory: {fileID: 4967022013944964016}
+  _objectFactory: {fileID: 4967022013944964024}
   _humans: {fileID: 3891230603216898686}
   _jobQueue: {fileID: 2023602334459014216}
   _tick: {fileID: 8150810313726245684}
@@ -2884,8 +2844,7 @@ MonoBehaviour:
   _cameraSceneMover: {fileID: 1068071213}
   _researchAdapter: {fileID: 8150810313726245686}
   _questController: {fileID: 782435305}
-  beforeLoadsAwaitable:
-  - {fileID: 4967022013944964016}
+  beforeLoadsAwaitable: []
   beforeLoads:
   - {fileID: 1623294178}
   - {fileID: 4967022013944964017}
@@ -2901,7 +2860,7 @@ MonoBehaviour:
   - {fileID: 897350252}
   - {fileID: 220867761}
   - {fileID: 709068454}
-  - {fileID: 4967022013944964023}
+  - {fileID: 977506021}
   _world: {fileID: 4967022013944964021}
 --- !u!114 &8150810313726245686
 MonoBehaviour:

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-[RequireComponent(typeof(GridTiles))]
 public class BuildingActions : MonoBehaviour
 {
     GridTiles gridTiles;

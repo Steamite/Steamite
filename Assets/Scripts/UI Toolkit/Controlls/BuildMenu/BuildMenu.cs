@@ -67,7 +67,7 @@ namespace BottomBar.Building
             categGroup.SetChangeCallback(CategChange);
             Add(categGroup);
 
-            SceneRefs.GridTiles.DeselectBuildingButton = () => buildingList.Select(-1);
+            //SceneRefs.GridTiles.DeselectBuildingButton = () => buildingList.Select(-1);
             style.display = DisplayStyle.None;
             opened = false;
         }

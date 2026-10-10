@@ -175,6 +175,7 @@ public class InfoWindow : PanelRendererRoot
         switch (active)
         {
             case InfoMode.None:
+                controls.CreateElementByName("Vein Info", windowBody, null);
                 break;
             case InfoMode.Water:
                 controls.CreateElementByName("Water Info", windowBody, dataSource);
@@ -218,6 +219,8 @@ public class InfoWindow : PanelRendererRoot
         }
     }
 
+
+    
     private void MyOnMouseEnter(MouseEnterEvent evt)
     {
         CanZoom = false;
