@@ -211,6 +211,7 @@ public class MapGenNew : MonoBehaviour
                 SpiralVein(minableResources[i]);
             }
         }
+
         await Awaitable.BackgroundThreadAsync();
     }
 

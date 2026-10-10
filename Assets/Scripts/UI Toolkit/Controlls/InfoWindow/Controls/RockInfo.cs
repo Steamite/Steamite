@@ -11,7 +11,8 @@ public partial class RockInfo : InfoWindowControl
     public override void Open(object data)
     {
         LevelGridTile gridTiles = (LevelGridTile)data;
-        integrity.text = $"{(gridTiles.Durability >> 16) & 0xFFFF}";
+        integrity.text = $"{gridTiles.Durability & 0xFFFF}";
+        
         /*
         // Assigned Binding
         DataBinding binding = BindingUtil.CreateBinding(nameof(Rock.Assigned));

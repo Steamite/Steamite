@@ -184,7 +184,7 @@ public class InfoWindow : PanelRendererRoot
         switch (active)
         {
             case InfoMode.None:
-                controls.CreateElementByName("Vein Info", windowBody, null);
+                controls.CreateElementByName("General Info", windowBody, null);
                 break;
             case InfoMode.Water:
                 controls.CreateElementByName("Water Info", windowBody, dataSource);

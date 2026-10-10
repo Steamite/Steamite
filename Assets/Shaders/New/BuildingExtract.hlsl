@@ -50,6 +50,7 @@ float3 TransformInstanceVertex2Bit(
     uint gridZ,
     uint GridY,
     uint rot2,
+    float3 buildingSize,
     float offset,
     float cellSize,
     out float3 Rotation)
@@ -66,9 +67,9 @@ float3 TransformInstanceVertex2Bit(
 
     // Compute Y-rotation around center
     float3 rotatedVertex;
-    rotatedVertex.x = localVertexPosition.x * c - localVertexPosition.z * s;
-    rotatedVertex.y = localVertexPosition.y;
-    rotatedVertex.z = localVertexPosition.x * s + localVertexPosition.z * c;
+    rotatedVertex.x = (localVertexPosition.x + buildingSize.x) * c - (localVertexPosition.z + buildingSize.z) * s;
+    rotatedVertex.y = localVertexPosition.y + buildingSize.y;
+    rotatedVertex.z = (localVertexPosition.x + buildingSize.x) * s + (localVertexPosition.z + buildingSize.z) * c;
     // Translate to grid cell position
     float3 worldPos = float3((float) (gridX * cellSize) + offset, GridY, (float) (gridZ * cellSize) + offset);
     
@@ -84,6 +85,7 @@ void UnpackBuilding2Bit_float(
     float3 localPosition,
     float cellSize,
     float offset,
+    float3 buildingSize,
     out float3 WorldPosition,
     out float3 Rotation)
 {
@@ -92,13 +94,15 @@ void UnpackBuilding2Bit_float(
     uint GridY;
     uint GridX;
     uint GridZ;
-    //#if defined(UNITY_SUPPORT_INSTANCING)
-        // Fetch the uint for this specific instance using the Instance ID
-        packedUint = _BuildingInstanceBuffer[(uint)instanceID].data;
-    //#endif
+
+#if defined(SHADERGRAPH_PREVIEW)
+    packedUint = 0;
+#else
+    packedUint = _BuildingInstanceBuffer[(uint) instanceID].data;
+#endif
     
     UnpackBuildingData2Bit(packedUint, GridX, GridZ, GridY, RotationIndex);
-    WorldPosition = TransformInstanceVertex2Bit(localPosition, GridX, GridZ, GridY, RotationIndex, offset, cellSize, Rotation);
+    WorldPosition = TransformInstanceVertex2Bit(localPosition, GridX, GridZ, GridY, RotationIndex, buildingSize, offset, cellSize, Rotation);
 }
 
 #endif // BUILDING_UNPACK_2BIT_INCLUDED
