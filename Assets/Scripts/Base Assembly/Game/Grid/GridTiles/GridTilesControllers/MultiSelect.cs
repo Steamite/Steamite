@@ -45,11 +45,11 @@ public class MultiSelect : MonoBehaviour
             if (!deselect && toBeDug.Contains(g))
             {
                 filtered.Remove(g);
-            }
+            }/*
             g.Highlight(deselect 
                 ? SceneRefs.GridTiles.ToRemoveDugColor 
                 : SceneRefs.GridTiles.ToBeTempDugColor, 
-                false);
+                false);*/
         }
         tempMarkedTiles = filtered;
     }

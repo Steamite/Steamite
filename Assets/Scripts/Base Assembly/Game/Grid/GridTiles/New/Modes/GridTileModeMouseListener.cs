@@ -120,7 +120,8 @@ public abstract partial class GridTilesModeNew : MonoBehaviour
         }
         else if (tileType == TileType.Building)
         {
-            controller.SetMaterial(pos, 1, Color.blue * 2, tileType, tile.Amount);
+            controller.SetMaterial(pos, 1, Color.blue * 2, tileType, tile.Amount, 2);
+            return true;
         }
         return false;
     }

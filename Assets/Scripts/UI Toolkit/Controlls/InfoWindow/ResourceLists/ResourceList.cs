@@ -4,6 +4,7 @@ using Outposts;
 using System;
 using System.Collections.Generic;
 using Unity.Properties;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 
@@ -220,7 +221,9 @@ namespace InfoWindowElements
                     SetResWithoutBinding(res);
                     return;
                 default:
-                    throw new NotImplementedException();
+
+                    Debug.LogError(new NotImplementedException());
+                    return;
             }
         }
 

@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 public class CameraSceneMovement : MonoBehaviour
 {
-    [SerializeField] PhysicsRaycaster raycaster;
+    //[SerializeField] PhysicsRaycaster raycaster;
 
     public AudioListener Listener { get; set; }
 
@@ -29,7 +29,7 @@ public class CameraSceneMovement : MonoBehaviour
 
     public void Toggle(bool enable)
     {
-        raycaster.enabled = enable;
+        //raycaster.enabled = enable;
     }
 
     public void MoveToLevel(int currentLevel)

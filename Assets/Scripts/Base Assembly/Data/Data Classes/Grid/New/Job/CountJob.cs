@@ -1,7 +1,6 @@
 ﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
-using Unity.Mathematics;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
@@ -16,14 +15,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         [ReadOnly] public int paddedWidth;
         public void Execute(int index)
         {
-            
-            CreateTile(index);
             int dataIndex = index + paddedWidth + 1 + (index / (chunkWidth)) * 2;
-
             LevelGridTile b = gridData[dataIndex];
             // TODO switch based on level data
 
             int type = b.Type;
+/*
+            if (type == (int)TileType.Building)
+                return;
+*/
+            CreateTile(index);
+
             if (type == 1)
                 CreateOre(index, b.Style);
             else if (type == 2)

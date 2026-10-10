@@ -39,9 +39,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _CellSize: 1
+    - _LevelOffset: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    m_Colors: []
+    - _Range: 0
+    m_Colors:
+    - _HighlightColor: {r: 0, g: 0, b: 2, a: 2}
+    - _MousePos: {r: 80.5, g: 0, b: 80.5, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &6266913003831658514

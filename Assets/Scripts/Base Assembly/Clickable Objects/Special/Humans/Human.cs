@@ -43,7 +43,7 @@ public class Human : ClickableObject
 {
 
 #if UNITY_EDITOR
-    TMP_Text JobText => transform.GetChild(0).GetComponent<TMP_Text>();
+    //TMP_Text JobText => transform.GetChild(0).GetComponent<TMP_Text>();
 #endif
 
     #region Variables
@@ -185,7 +185,7 @@ public class Human : ClickableObject
             Decide();
 
 #if UNITY_EDITOR
-        JobText.text = jData.job.ToString();
+        //JobText.text = jData.job.ToString();
 #endif        
     }
 

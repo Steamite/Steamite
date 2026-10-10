@@ -1787,6 +1787,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.MouseController
   activeMode: {fileID: 0}
+  activeModeIndex: 0
   world: {fileID: 0}
   topHeight: 1
   lowHeight: 0
@@ -1796,12 +1797,15 @@ MonoBehaviour:
   hoverMousePosition:
     x: 0
     y: 0
-  hoverTileType: 0
+  hoverObjectIndex: 0
+  hoverObjectType: 0
   isForcedUpdate: 1
   materials:
   - {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
   - {fileID: 2100000, guid: dd3fed6aec66e76439d58f3a9573a37a, type: 2}
   - {fileID: 2100000, guid: 166e19725f4ea4c46af762dc0e251d0b, type: 2}
+  clickedType: 0
+  clickedIndex: 0
 --- !u!114 &977506022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2682,6 +2686,10 @@ PrefabInstance:
       propertyPath: far clip plane
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 5435122298766059174, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: m_OcclusionCulling
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5942235836049368455, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -2833,7 +2841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dafe754b39b8f945914d138eb297e25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridTiles: {fileID: 0}
+  _mouseController: {fileID: 977506021}
   _overlays: {fileID: 6047015280065324895}
   _objectFactory: {fileID: 4967022013944964024}
   _humans: {fileID: 3891230603216898686}
@@ -2853,6 +2861,7 @@ MonoBehaviour:
   - {fileID: 1222757009}
   afterLoads:
   - {fileID: 8150810313726245683}
+  - {fileID: 977506021}
   - {fileID: 7072378217534680772}
   - {fileID: 6086404398923934763}
   - {fileID: 274122778}
@@ -2860,7 +2869,6 @@ MonoBehaviour:
   - {fileID: 897350252}
   - {fileID: 220867761}
   - {fileID: 709068454}
-  - {fileID: 977506021}
   _world: {fileID: 4967022013944964021}
 --- !u!114 &8150810313726245686
 MonoBehaviour:

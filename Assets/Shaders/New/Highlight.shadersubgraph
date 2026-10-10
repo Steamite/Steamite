@@ -252,12 +252,7 @@
         "preventRotation": false
     },
     "m_Path": "Sub Graphs",
-    "m_DeprecateSubgraph": false,
-    "m_DeprecateSubgraphMessage": "",
     "m_GraphPrecision": 1,
-    "m_CustomPragmas": [],
-    "m_CustomDefines": [],
-    "m_CustomIncludes": [],
     "m_PreviewMode": 0,
     "m_OutputNode": {
         "m_Id": "6b97960fe1ef466da1e1dabf3d06d31c"
@@ -371,7 +366,7 @@
             "x": 212.4998779296875,
             "y": -112.5,
             "width": 208.0,
-            "height": 301.99993896484375
+            "height": 301.99993896484377
         }
     },
     "m_Slots": [
@@ -675,7 +670,7 @@
     "m_Guid": {
         "m_GuidSerialized": "c06fda44-ad67-4162-9cd7-b6b13185a83b"
     },
-    "promotedFromAssetID": "",
+    "promotedFromAssetID": "ddc6ba0dced97514ea3590fe56c6f73f",
     "promotedFromCategoryName": "",
     "promotedOrdering": -1,
     "m_Name": "Range",
@@ -782,7 +777,7 @@
             "x": -715.5,
             "y": -76.5,
             "width": 208.0,
-            "height": 301.99993896484375
+            "height": 301.99993896484377
         }
     },
     "m_Slots": [
@@ -845,7 +840,7 @@
     "m_Guid": {
         "m_GuidSerialized": "3d1d342f-393f-4a78-8198-6f76bcd466a6"
     },
-    "promotedFromAssetID": "",
+    "promotedFromAssetID": "ddc6ba0dced97514ea3590fe56c6f73f",
     "promotedFromCategoryName": "",
     "promotedOrdering": -1,
     "m_Name": "MousePos",
@@ -938,8 +933,8 @@
             "serializedVersion": "2",
             "x": 787.5,
             "y": -112.49993896484375,
-            "width": 207.99993896484375,
-            "height": 302.00006103515625
+            "width": 207.99993896484376,
+            "height": 302.00006103515627
         }
     },
     "m_Slots": [
@@ -1006,10 +1001,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 637.5,
-            "y": 38.500091552734375,
-            "width": 0.0,
-            "height": 0.0
+            "x": 575.0000610351563,
+            "y": -146.00001525878907,
+            "width": 151.99993896484376,
+            "height": 33.99999237060547
         }
     },
     "m_Slots": [
@@ -1210,7 +1205,7 @@
             "x": -995.5,
             "y": -233.5,
             "width": 208.0,
-            "height": 314.00006103515625
+            "height": 314.00006103515627
         }
     },
     "m_Slots": [
@@ -1435,10 +1430,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 62.4998779296875,
-            "y": 38.499969482421875,
-            "width": 0.0,
-            "height": 0.0
+            "x": 46.999977111816409,
+            "y": -129.0,
+            "width": 107.99999237060547,
+            "height": 34.0
         }
     },
     "m_Slots": [
@@ -1493,7 +1488,7 @@
     "m_Guid": {
         "m_GuidSerialized": "876e6c4f-de72-4df9-99b0-4a212dc57695"
     },
-    "promotedFromAssetID": "",
+    "promotedFromAssetID": "ddc6ba0dced97514ea3590fe56c6f73f",
     "promotedFromCategoryName": "",
     "promotedOrdering": -1,
     "m_Name": "HighlightColor",

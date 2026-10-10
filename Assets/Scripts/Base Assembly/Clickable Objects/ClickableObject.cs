@@ -164,10 +164,11 @@ public abstract class ClickableObject : MonoBehaviour,
 
     protected virtual Color HighlightColor()
     {
+        return default;/*
         if (selected)
             return SceneRefs.GridTiles.SelectionColor;
         else
-            return default;
+            return default;*/
     }
     #endregion
 

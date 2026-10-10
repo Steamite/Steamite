@@ -1,6 +1,7 @@
 
 
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ public class SceneRefs : MonoBehaviour
     public static bool isInit => instance != null;
     static SceneRefs instance;
     [Header("GridObjects")]
-    [SerializeField] GridTiles _gridTiles;
+    [SerializeField] MouseController _mouseController;
     [SerializeField] UIOverlay _overlays;
     [SerializeField] ClickableObjectFactory _objectFactory;
     [SerializeField] HumanUtil _humans;
@@ -48,7 +49,7 @@ public class SceneRefs : MonoBehaviour
     #endregion
 
     #region Getters
-    public static GridTiles GridTiles => instance._gridTiles;
+    public static MouseController MouseController => instance._mouseController;
     public static UIOverlay Overlays => instance._overlays;
     public static ClickableObjectFactory ObjectFactory => instance._objectFactory;
     public static HumanUtil Humans => instance._humans;
@@ -63,6 +64,8 @@ public class SceneRefs : MonoBehaviour
 
     public static ResearchAdapter ResearchAdapter => instance._researchAdapter;
     public static IQuestController QuestController => instance._questController as IQuestController;
+
+    public static GridTiles GridTiles => throw new NotImplementedException();
 
 
     #endregion

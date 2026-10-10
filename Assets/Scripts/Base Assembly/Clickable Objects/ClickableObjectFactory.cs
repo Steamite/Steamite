@@ -210,7 +210,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoadAwaitable
         if (rock.toBeDug)
         {
             SceneRefs.JobQueue.toBeDug.Add(rock);
-            rock.Highlight(SceneRefs.GridTiles.ToBeDugColor);
+            //rock.Highlight(SceneRefs.GridTiles.ToBeDugColor);
         }
         return rock;
     }

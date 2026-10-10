@@ -82,7 +82,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             x -= currentLevel.levelOffsetScaled;
             y -= currentLevel.levelOffsetScaled;
-            Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
+            //Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
             
             int index = gridLevels[0].totalDimensions * y + x;
             if (index < 0 || index >= gridLevels[0].renderGrid.Length)
@@ -94,7 +94,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             x -= currentLevel.levelOffsetScaled;
             y -= currentLevel.levelOffsetScaled;
-            Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
+            //Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
 
             index = gridLevels[0].totalDimensions * y + x;
             if (index < 0 || index >= gridLevels[0].renderGrid.Length)

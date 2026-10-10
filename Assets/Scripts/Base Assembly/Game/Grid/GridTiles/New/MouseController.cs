@@ -32,6 +32,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         public int activeModeIndex;
 
         public GridWorld world;
+        MouseClicker mouseClicker;
 
         [Header("Mouse Listener")]
         [SerializeField] float topHeight;
@@ -52,11 +53,14 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         /// Grid, Building, Human, ....
         /// </summary>
         [SerializeField] Material[] materials;
+        [Header("Clicked Data")]
+        public int clickedType;
+        public int clickedIndex;
 
         public void AfterLoad()
         {
-            hoverMousePosition = default;
-            hoverObjectIndex = default;
+            hoverMousePosition = -1;
+            hoverObjectIndex = -1;
             hoverObjectType = default;
 
             modes = new GridTilesModeNew[transform.childCount];
@@ -70,7 +74,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
             ChangeSelMode(0);
 
-            GetComponent<MouseClicker>().Init(this);
+            mouseClicker = GetComponent<MouseClicker>();
+            mouseClicker.Init(this);
 
             low = new(Vector3.up, new Vector3(0, lowHeight, 0));
             top = new(Vector3.up, new Vector3(0, topHeight, 0));
@@ -126,6 +131,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
 
         bool inChange = false;
+        
+
         /// <summary>
         /// Changes the current tool mod, and manages transitions betwean them.
         /// </summary>
@@ -139,6 +146,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             int i = (int)mode;
             activeModeIndex = i;
             activeMode = modes[i];
+
+            InfoWindow.Window.Close();
 /*
             if (i == activeMode)
             {
@@ -162,6 +171,18 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
                     Enter();
             }*/
             inChange = false;
+        }
+
+        public void DeselectObjects()
+        {
+            clickedType = -1;
+            clickedIndex = -1;
+        }
+
+        public void ToggleMouse(bool handleGrid)
+        {
+            enabled = handleGrid;
+            mouseClicker.enabled = handleGrid;
         }
     }
 }

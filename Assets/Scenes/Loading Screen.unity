@@ -404,7 +404,7 @@ MonoBehaviour:
   numberOfDays: 6
   dayTime: 360
   priority: 00000000020000000300000004000000050000000600000007000000
-  numberOfHumans: 300
+  numberOfHumans: 0
 --- !u!114 &854178999
 MonoBehaviour:
   m_ObjectHideFlags: 0

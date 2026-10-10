@@ -60,8 +60,8 @@ public class UIRefs : MonoBehaviour, IBeforeLoad
             instance._tradingWindow.CloseWindow();
         else if (instance._quests.IsOpen)
             instance._quests.CloseWindow();
-        else if (SceneRefs.GridTiles.activeControl != (int)ControlMode.Nothing)
-            SceneRefs.GridTiles.BreakAction();
+        /*else if (SceneRefs.GridTiles.activeControl != (int)ControlMode.Nothing)
+            SceneRefs.GridTiles.BreakAction();*/
         else
             return true;
 

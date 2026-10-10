@@ -45,11 +45,15 @@ public class NothingNew : GridTilesModeNew
 
     public override void DownObject()
     {
-        var tile = controller.world.GetActiveTile(controller.hoverMousePosition.x, controller.hoverMousePosition.y);
+        var tile = controller.world.GetActiveTile(controller.hoverMousePosition.x, controller.hoverMousePosition.y, out int index);
+
         switch (controller.hoverObjectType)
         {
             case TileType.Wall:
                 InfoWindow.Window.Open(tile, InfoMode.Rock);
+
+                controller.clickedType = tile.Type;
+                controller.clickedIndex = index;
                 Debug.Log(tile);
                 break;
             case TileType.Road:

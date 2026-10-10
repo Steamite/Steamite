@@ -129,7 +129,13 @@ public class InfoWindow : PanelRendererRoot
 
         VisualElement bar = window[0];
         header = bar[0] as IUIElement;
-        bar.Q<Button>("Close").RegisterCallback<ClickEvent>((_) => SceneRefs.GridTiles.DeselectObjects());
+        
+        bar.Q<Button>("Close").RegisterCallback<ClickEvent>(Deselect);
+    }
+
+    void Deselect(ClickEvent ev)
+    {
+        Close();
     }
 
     #region Reseting Bindings
@@ -144,7 +150,10 @@ public class InfoWindow : PanelRendererRoot
         CanZoom = true;
 
         if (hide)
+        {
+            SceneRefs.MouseController.DeselectObjects(); 
             window.style.display = DisplayStyle.None;
+        }
         windowBody.Clear();
 
         secondWindow.style.display = DisplayStyle.None;

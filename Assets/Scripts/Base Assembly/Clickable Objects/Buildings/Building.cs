@@ -438,7 +438,7 @@ public class Building : StorageObject
     /// </summary>
     public virtual void DestoyBuilding()
     {
-        SceneRefs.GridTiles.DestroyUnselect(this);
+        //SceneRefs.GridTiles.DestroyUnselect(this);
         if (id > -1 || this is Pipe)
         {
             MyGrid.UnsetBuilding(this);

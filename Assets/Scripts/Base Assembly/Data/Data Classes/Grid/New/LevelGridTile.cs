@@ -72,7 +72,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public static LevelGridTile Elevator(int index)
         {
             LevelGridTile tile = new(
-                0 | (((int)TileType.Building & 0xF) << 4) | ((index & 0x3FFFF) << 13), 
+                0 | (((int)TileType.Building & 0xF) << 1) | ((index & 0x3FFFF) << 13), 
                 0);
             return tile;
         }

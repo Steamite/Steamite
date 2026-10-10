@@ -75,6 +75,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             LevelGridTile tile = gridData[dataIndex];
             int type = tile.Type;
+/*
+            if (type == (int)TileType.Building)
+                return;*/
 
             CreateTile(dataIndex, sVertexIndex, sTriangleIndex, x, y, type);
             sVertexIndex += 4;

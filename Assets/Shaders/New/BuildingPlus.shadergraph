@@ -40,6 +40,9 @@
         },
         {
             "m_Id": "63db847ebe7247ecb84a49da5bc40152"
+        },
+        {
+            "m_Id": "eb8b9d0a4aca48e49ef950e2ef676e70"
         }
     ],
     "m_GroupDatas": [],
@@ -69,6 +72,20 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "50dabbc915e7428a846879dbc7724067"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "eb8b9d0a4aca48e49ef950e2ef676e70"
+                },
+                "m_SlotId": 2
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "fbb38a0aac5b4b37bdb1e8be69813acb"
                 },
                 "m_SlotId": 0
             }
@@ -196,6 +213,33 @@
     "m_ObjectId": "31059d0cba284be39db2a79bb87fa6f8",
     "m_Name": "",
     "m_ChildObjectList": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
+    "m_ObjectId": "36f19eb08a414cf7880bc240d928d7ec",
+    "m_Id": 2,
+    "m_DisplayName": "_Highlight",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_HideConnector": false,
+    "m_ShaderOutputName": "_Highlight",
+    "m_StageCapability": 3,
+    "m_CustomBinding": "",
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_Labels": []
 }
 
 {
@@ -665,6 +709,44 @@
     },
     "m_Labels": [],
     "m_Space": 3
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.SubGraphNode",
+    "m_ObjectId": "eb8b9d0a4aca48e49ef950e2ef676e70",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Highlight",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -511.0,
+            "y": 409.0,
+            "width": 208.0,
+            "height": 288.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "36f19eb08a414cf7880bc240d928d7ec"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_SerializedSubGraph": "{\n    \"subGraph\": {\n        \"fileID\": -5475051401550479605,\n        \"guid\": \"ddc6ba0dced97514ea3590fe56c6f73f\",\n        \"type\": 3\n    }\n}",
+    "m_PropertyGuids": [],
+    "m_PropertyIds": [],
+    "m_Dropdowns": [],
+    "m_DropdownSelectedEntries": []
 }
 
 {

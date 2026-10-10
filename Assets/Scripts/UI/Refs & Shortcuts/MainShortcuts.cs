@@ -57,8 +57,10 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
             instance.ClearActions();
             instance.menu.performed += ShotcutActions.Menu_performed;
         }
+
         UIRefs.LevelCamera.enabled = false;
-        SceneRefs.GridTiles.ActiveObject = null;
+        SceneRefs.MouseController.ToggleMouse(handleGrid);// = false;
+        //SceneRefs.GridTiles.ActiveObject = null;
     }
     public static void EnableInput()
     {
@@ -67,6 +69,7 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
         handleGrid = true;
         handleWindows = true;
         UIRefs.LevelCamera.enabled = true;
+        SceneRefs.MouseController.ToggleMouse(handleGrid);
     }
 
     private void OnEnable()

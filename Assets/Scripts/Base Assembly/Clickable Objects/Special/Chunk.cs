@@ -116,7 +116,7 @@ public class Chunk : StorageObject
         }
         if (localRes.Sum() == 0)
         {
-            SceneRefs.GridTiles.DestroyUnselect(this);
+            //SceneRefs.GridTiles.DestroyUnselect(this);
             MyGrid.chunks.Remove(this);
             Destroy(gameObject);
         }

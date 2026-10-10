@@ -119,8 +119,8 @@ public class Rock : ClickableObject, IStabilitySupport
     protected override Color HighlightColor()
     {
         Color c = base.HighlightColor();
-        if (toBeDug)
-            c += SceneRefs.GridTiles.ToBeDugColor;
+        /*if (toBeDug)
+            c += SceneRefs.GridTiles.ToBeDugColor;*/
         return c;
     }
     #endregion

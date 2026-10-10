@@ -84,7 +84,8 @@ public class MapGenNew : MonoBehaviour
         int chunkSize = 16;
 
         ElevatorNew save = elevator;
-        save.CreateMainElevator((levelDimensions.sizes[0] * chunkSize) / 2);
+        int centerPos = (levelDimensions.sizes[0] * chunkSize) / 2;
+        save.CreateMainElevator(centerPos);
 
         WorldSaveNew world = new()
         {
@@ -102,8 +103,9 @@ public class MapGenNew : MonoBehaviour
 
         await MakeGrids(world);
 
-        int center = world.gridSave[0].levelDimensions * world.gridSave[0].levelDimensions * GridLevel.chunkDimensions / 2;
-        world.gridSave[0].grid[center] = LevelGridTile.Elevator(0);
+        int width = levelDimensions.sizes[0] * chunkSize;
+        int c = centerPos * width + centerPos;
+        world.gridSave[0].grid[c] = LevelGridTile.Elevator(0);
 
         return world;
     }
