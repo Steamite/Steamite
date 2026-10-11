@@ -6,6 +6,7 @@ using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.PlayerSettings;
 
 namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 {
@@ -113,23 +114,44 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         {
             ClearMaterial(matIndex);
 
-            materials[matIndex].SetVector("_Range", new(0.5f + mod, 0.5f + mod));
-            materials[matIndex].SetVector("_MousePos", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
-            materials[matIndex].SetColor("_HighlightColor", c);
+            materials[matIndex].SetVector("_HoverRange", new(0.5f + mod, 0.5f + mod));
+            materials[matIndex].SetVector("_HoverPosition", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
+            materials[matIndex].SetColor("_HoverColor", c);
             
             hoverMousePosition = pos;
             hoverObjectType = hoverType;
             hoverObjectIndex = hoverIndex;
         }
+
+        public void SetSelectionMaterial(int2 pos, int matIndex, Color color, float mod = 0)
+        {
+            ClearMaterialSelect(matIndex);
+            materials[matIndex].SetVector("_SelectionRange", new(0.5f + mod, 0.5f + mod));
+            materials[matIndex].SetVector("_SelectionPosition", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
+            materials[matIndex].SetColor("_SelectionColor", color);
+
+            hoverMousePosition = pos;
+        }
+
         void ClearMaterial(int matIndex = -1)
         {
             for (int i = 0; i < materials.Length; i++)
             {
                 if (i == matIndex)
                     continue;
-                materials[i].SetVector("_Range", default);
+                materials[i].SetVector("_HoverRange", default);
             }
         }
+        void ClearMaterialSelect(int matIndex = -1)
+        {
+            for (int i = 0; i < materials.Length; i++)
+            {
+                if (i == matIndex)
+                    continue;
+                materials[i].SetVector("_SelectionRange", default);
+            }
+        }
+
 
         public void BreakAction()
         {
@@ -188,6 +210,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
         public void DeselectObjects()
         {
+            ClearMaterialSelect();
             clickedType = -1;
             clickedIndex = -1;
         }

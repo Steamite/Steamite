@@ -53,24 +53,29 @@ public class NothingNew : GridTilesModeNew
             case TileType.Wall:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.Rock);
 
+                controller.SetSelectionMaterial(controller.hoverMousePosition, 0, Color.orange, 0.0001f);
+
                 controller.clickedType = tile.Type;
                 controller.clickedIndex = index;
 
-                controller.DamageClickedRock();
+                //controller.DamageClickedRock();
                 Debug.Log(tile);
                 break;
             case TileType.Road:
             case TileType.Empty:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.None);
 
+                controller.SetSelectionMaterial(controller.hoverMousePosition, 0, Color.purple, -0.0001f);
+
                 controller.clickedType = tile.Type;
                 controller.clickedIndex = index;
 
-                controller.DamageClickedRock();
+                //controller.DamageClickedRock();
                 break;
             case TileType.Building:
             case TileType.Elevator:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.Rock);
+                controller.SetSelectionMaterial(controller.hoverMousePosition, 1, new(0,1,0), +0.0001f);
                 break;
 
         }

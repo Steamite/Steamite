@@ -37,6 +37,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _DigTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: b9dda97341b82c6439d44ce02fb2cbde, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -59,8 +63,15 @@ Material:
     - _QueueOffset: 0
     - _Range: 0.5001
     m_Colors:
+    - _DigColor: {r: 0, g: 0, b: 0, a: 1}
     - _HighlightColor: {r: 0, g: 0, b: 2, a: 2}
+    - _HoverColor: {r: 0, g: 0, b: 2, a: 2}
+    - _HoverPosition: {r: 71.5, g: 0, b: 81.5, a: 0}
+    - _HoverRange: {r: 0.5001, g: 0.5001, b: 0, a: 0}
     - _MousePos: {r: 70.5, g: 0, b: 72.5, a: 0}
     - _Range: {r: 0.5001, g: 0.5001, b: 0, a: 0}
+    - _SelectionColor: {r: 0.627451, g: 0.1254902, b: 0.9411765, a: 1}
+    - _SelectionPosition: {r: 80.5, g: 0, b: 82.5, a: 0}
+    - _SelectionRange: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

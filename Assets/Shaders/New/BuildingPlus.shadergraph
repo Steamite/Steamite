@@ -42,7 +42,7 @@
             "m_Id": "63db847ebe7247ecb84a49da5bc40152"
         },
         {
-            "m_Id": "eb8b9d0a4aca48e49ef950e2ef676e70"
+            "m_Id": "94ce0aa37d3e4fb1a6809f1600a6ec4f"
         }
     ],
     "m_GroupDatas": [],
@@ -79,9 +79,9 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
-                    "m_Id": "eb8b9d0a4aca48e49ef950e2ef676e70"
+                    "m_Id": "94ce0aa37d3e4fb1a6809f1600a6ec4f"
                 },
-                "m_SlotId": 2
+                "m_SlotId": 1
             },
             "m_InputSlot": {
                 "m_Node": {
@@ -218,33 +218,6 @@
     "m_ObjectId": "31059d0cba284be39db2a79bb87fa6f8",
     "m_Name": "",
     "m_ChildObjectList": []
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
-    "m_ObjectId": "36f19eb08a414cf7880bc240d928d7ec",
-    "m_Id": 2,
-    "m_DisplayName": "_Highlight",
-    "m_SlotType": 1,
-    "m_Hidden": false,
-    "m_HideConnector": false,
-    "m_ShaderOutputName": "_Highlight",
-    "m_StageCapability": 3,
-    "m_CustomBinding": "",
-    "m_Value": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0,
-        "w": 0.0
-    },
-    "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0,
-        "w": 0.0
-    },
-    "m_Labels": []
 }
 
 {
@@ -573,6 +546,44 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.SubGraphNode",
+    "m_ObjectId": "94ce0aa37d3e4fb1a6809f1600a6ec4f",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Hover Selection Highlight",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -510.9999694824219,
+            "y": 346.0000305175781,
+            "width": 208.0,
+            "height": 295.9999694824219
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "ce7390a8da7a45ba8934aff484d2d903"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_SerializedSubGraph": "{\n    \"subGraph\": {\n        \"fileID\": -5475051401550479605,\n        \"guid\": \"7bb7d0d3146f4d2449ae92b1657829a0\",\n        \"type\": 3\n    }\n}",
+    "m_PropertyGuids": [],
+    "m_PropertyIds": [],
+    "m_Dropdowns": [],
+    "m_DropdownSelectedEntries": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.BlockNode",
     "m_ObjectId": "9fc582cc5d664d2091e82c9f3b01ab3f",
     "m_Group": {
@@ -667,6 +678,33 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
+    "m_ObjectId": "ce7390a8da7a45ba8934aff484d2d903",
+    "m_Id": 1,
+    "m_DisplayName": "HighlightColor",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_HideConnector": false,
+    "m_ShaderOutputName": "HighlightColor",
+    "m_StageCapability": 3,
+    "m_CustomBinding": "",
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
     "m_ObjectId": "d94be392a0964016b0c92bad529e59fd",
     "m_Id": 2,
@@ -714,44 +752,6 @@
     },
     "m_Labels": [],
     "m_Space": 3
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.SubGraphNode",
-    "m_ObjectId": "eb8b9d0a4aca48e49ef950e2ef676e70",
-    "m_Group": {
-        "m_Id": ""
-    },
-    "m_Name": "Highlight",
-    "m_DrawState": {
-        "m_Expanded": true,
-        "m_Position": {
-            "serializedVersion": "2",
-            "x": -511.0,
-            "y": 409.0,
-            "width": 208.0,
-            "height": 288.0
-        }
-    },
-    "m_Slots": [
-        {
-            "m_Id": "36f19eb08a414cf7880bc240d928d7ec"
-        }
-    ],
-    "synonyms": [],
-    "m_Precision": 0,
-    "m_PreviewExpanded": true,
-    "m_DismissedVersion": 0,
-    "m_PreviewMode": 0,
-    "m_CustomColors": {
-        "m_SerializableColors": []
-    },
-    "m_SerializedSubGraph": "{\n    \"subGraph\": {\n        \"fileID\": -5475051401550479605,\n        \"guid\": \"ddc6ba0dced97514ea3590fe56c6f73f\",\n        \"type\": 3\n    }\n}",
-    "m_PropertyGuids": [],
-    "m_PropertyIds": [],
-    "m_Dropdowns": [],
-    "m_DropdownSelectedEntries": []
 }
 
 {
