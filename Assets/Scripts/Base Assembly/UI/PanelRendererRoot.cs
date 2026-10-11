@@ -12,9 +12,11 @@ public class PanelRendererRoot : MonoBehaviour
     VisualElement root;
     public VisualElement Root => root;
     public PanelRenderer Renderer => GetComponent<PanelRenderer>();
-    List<UIReloadCallback> callbacks = new();
+    readonly List<VersionedUIReloadCallback> callbacks = new();
 
-    public void RegisterReload(UIReloadCallback callback) 
+
+
+    public void RegisterReload(VersionedUIReloadCallback callback) 
     {
         Renderer.RegisterUIReloadCallback(callback);
         callbacks.Add(callback);
@@ -36,7 +38,7 @@ public class PanelRendererRoot : MonoBehaviour
         }
     }
 
-    void SaveRoot(PanelRenderer panelRenderer, VisualElement rootElement)
+    void SaveRoot(PanelRenderer panelRenderer, VisualElement rootElement, int version)
     {
         root = rootElement;
         OnUIReload();

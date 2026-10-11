@@ -120,11 +120,11 @@ namespace Assets.Scripts.Saving___Loading
             var completionSource = new AwaitableCompletionSource();
             PanelRendererRoot panel = GetComponent<PanelRendererRoot>();
 
-            PanelRenderer.UIReloadCallback onReady = null;
+            PanelRenderer.VersionedUIReloadCallback onReady = null;
 
             VisualElement element = null;
 
-            onReady = (pan, el) =>
+            onReady = (pan, el, version) =>
             {
                 element = el;
                 pan.UnregisterUIReloadCallback(onReady);
@@ -456,13 +456,18 @@ namespace Assets.Scripts.Saving___Loading
             humanActivation?.Invoke();
             humanActivation = null;
             SceneRefs.Tick.InitTicks();
-            UIRefs.TopBar.RegisterReload(
-                (a, b) => UIRefs.TopBar.GetComponent<IToolkitController>().Init(b));
+            UIRefs.TopBar.RegisterReload(TopBarStart);
 
 #if UNITY_INCLUDE_TESTS
             onFinishLoad?.Invoke();
 #endif
         }
+
+        void TopBarStart(PanelRenderer panelRenderer, VisualElement rootElement, int version)
+        {
+            UIRefs.TopBar.GetComponent<IToolkitController>().Init(rootElement);
+        }
+
 
         public void UIUpdate(string property = "")
         {

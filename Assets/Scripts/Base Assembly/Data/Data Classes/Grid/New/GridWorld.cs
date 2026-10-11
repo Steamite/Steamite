@@ -147,5 +147,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             AddToGridChange(SceneRefs.Humans.SwitchLevel);
             ChangeGridLevel(0);*/
         }
+/*
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gridPos"></param>
+        /// <returns></returns>
+        public bool DamageRock(int3 gridPos, int ammount)
+        {
+
+        }*/
     }
 }

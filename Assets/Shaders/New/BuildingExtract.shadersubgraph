@@ -164,7 +164,12 @@
         "preventRotation": false
     },
     "m_Path": "Sub Graphs",
+    "m_DeprecateSubgraph": false,
+    "m_DeprecateSubgraphMessage": "",
     "m_GraphPrecision": 1,
+    "m_CustomPragmas": [],
+    "m_CustomDefines": [],
+    "m_CustomIncludes": [],
     "m_PreviewMode": 2,
     "m_OutputNode": {
         "m_Id": "0155e7225bf74c5ea9e68e5746f79889"
@@ -344,7 +349,7 @@
             "serializedVersion": "2",
             "x": -526.0000610351563,
             "y": 0.000007152557373046875,
-            "width": 265.00006103515627,
+            "width": 265.00006103515625,
             "height": 142.0000457763672
         }
     },

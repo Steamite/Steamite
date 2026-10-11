@@ -38,11 +38,11 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     public Texture2D GradientTexture => gradientTexture;
 
 
-    event Action<int, BaseOverlay?> OverlayChanged;
+    event Action<int, BaseOverlay> OverlayChanged;
 
     int gridSize;
 
-    public void AddOverlayChanged(Action<int, BaseOverlay?> action)
+    public void AddOverlayChanged(Action<int, BaseOverlay> action)
     {
         OverlayChanged += action;
         if(activeOverlayIndex > -1)

@@ -33,7 +33,7 @@ public class ToolkitShortucts : MonoBehaviour, IAfterLoad
         enabled = true;
     }
 
-    private void ReloadUI(PanelRenderer panelRenderer, VisualElement rootElement)
+    private void ReloadUI(PanelRenderer panelRenderer, VisualElement rootElement, int version)
     {
         timeButtons = rootElement.Q<TimeButtons>();
         timeButtons.Init();

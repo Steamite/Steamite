@@ -8,7 +8,7 @@ namespace Assets.Scripts.UI.Refs___Shortcuts
 {
     public static class ShotcutActions
     {
-        static bool isShift;
+        /*static bool isShift;
         public static void Shift_canceled(InputAction.CallbackContext obj)
         {
             isShift = false;
@@ -17,7 +17,7 @@ namespace Assets.Scripts.UI.Refs___Shortcuts
         public static void Shift_performed(InputAction.CallbackContext obj)
         {
             isShift = true;
-        }
+        }*/
 
         public static void BuildRotate_performed(InputAction.CallbackContext obj)
         {

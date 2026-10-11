@@ -90,8 +90,8 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
         upgrade.performed += ShotcutActions.Upgrade_performed;
         deconstruction.performed += ShotcutActions.Deconstruction_performed;
         buildRotate.performed += ShotcutActions.BuildRotate_performed;
-        shift.performed += ShotcutActions.Shift_performed;
-        shift.canceled += ShotcutActions.Shift_canceled;
+        /*shift.performed += ShotcutActions.Shift_performed;
+        shift.canceled += ShotcutActions.Shift_canceled;*/
 
         research.performed += ShotcutActions.Research_performed;
         trade.performed += ShotcutActions.Trade_performed;
@@ -106,9 +106,9 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
         upgrade.performed -= ShotcutActions.Upgrade_performed;
         deconstruction.performed -= ShotcutActions.Deconstruction_performed;
         buildRotate.performed -= ShotcutActions.BuildRotate_performed;
-        shift.performed -= ShotcutActions.Shift_performed;
+        /*shift.performed -= ShotcutActions.Shift_performed;
         shift.canceled -= ShotcutActions.Shift_canceled;
-
+*/
         research.performed -= ShotcutActions.Research_performed;
         trade.performed -= ShotcutActions.Trade_performed;
         quests.performed -= ShotcutActions.Quests_performed;

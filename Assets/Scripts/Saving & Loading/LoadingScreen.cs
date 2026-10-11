@@ -113,6 +113,8 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
 
     async Awaitable StartLoad(string _worldName, Save save)
     {
+        await Awaitable.WaitForSecondsAsync(1);
+        /*
         worldName = _worldName;
         var completionSource = new AwaitableCompletionSource();
         PanelRendererRoot panel = GetComponent<PanelRendererRoot>();
@@ -133,7 +135,7 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
 
 
         await completionSource.Awaitable;
-        await Load(save, element);
+        await Load(save, element);*/
     }
 
     async Awaitable Load(Save save, VisualElement root) {
@@ -476,8 +478,10 @@ public class LoadingScreen : MonoBehaviour, IUpdatable
         humanActivation?.Invoke();
         humanActivation = null;
         SceneRefs.Tick.InitTicks();
+        // Deprecated
+        /*
         UIRefs.TopBar.RegisterReload(
-            (a, b) => UIRefs.TopBar.GetComponent<IToolkitController>().Init(b));
+            (a, b) => UIRefs.TopBar.GetComponent<IToolkitController>().Init(b));*/
 
 #if UNITY_INCLUDE_TESTS
         onFinishLoad?.Invoke();
