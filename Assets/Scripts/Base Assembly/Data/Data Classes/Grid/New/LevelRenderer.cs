@@ -5,7 +5,6 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {

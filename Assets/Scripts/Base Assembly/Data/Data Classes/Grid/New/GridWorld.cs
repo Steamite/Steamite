@@ -7,8 +7,6 @@ using System.Text;
 using Unity.Mathematics;
 using Unity.Mathematics.Geometry;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {

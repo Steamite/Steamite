@@ -14,7 +14,8 @@ public class NothingNew : GridTilesModeNew
     public Color SelectionColor => highlightColor * 2;
 
     public override void EnterObject(int type, int index)
-    {/*
+    {
+        /*
         Color color;
 
         if ( .selected)// if active

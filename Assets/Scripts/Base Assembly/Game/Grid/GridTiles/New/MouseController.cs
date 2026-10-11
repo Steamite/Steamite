@@ -113,7 +113,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         {
             ClearMaterial(matIndex);
 
-            materials[matIndex].SetFloat("_Range", 0.5f + mod);
+            materials[matIndex].SetVector("_Range", new(0.5f + mod, 0.5f + mod));
             materials[matIndex].SetVector("_MousePos", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
             materials[matIndex].SetColor("_HighlightColor", c);
             
@@ -127,7 +127,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             {
                 if (i == matIndex)
                     continue;
-                materials[i].SetFloat("_Range", 0);
+                materials[i].SetVector("_Range", default);
             }
         }
 
