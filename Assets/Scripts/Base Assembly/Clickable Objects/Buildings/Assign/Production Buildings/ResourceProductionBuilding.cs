@@ -50,7 +50,7 @@ public class ResourceProductionBuilding : Building, IAssign, IResourceProduction
     /// If there's no other component in <see href="toEnable"/> adds "Production", and fills it.
     /// </summary>
     /// <inheritdoc/>
-    protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
+    protected override void ToggleInfoComponents(InfoWindowAdapter info, Dictionary<string, List<string>> toEnable)
     {
         toEnable.TryAdd("General", new List<string> { "Production Info", "Assign Info" });
         base.ToggleInfoComponents(info, toEnable);

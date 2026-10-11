@@ -36,7 +36,7 @@ public class FluidResProductionBuilding : ResourceProductionBuilding, IInputFlui
     }
 
     #region Window
-    protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
+    protected override void ToggleInfoComponents(InfoWindowAdapter info, Dictionary<string, List<string>> toEnable)
     {
         toEnable.Add("General", new List<string> { "Production Info", "Assign Info" });
         toEnable.Add("Fluids", new List<string> { "Fluid Info" });

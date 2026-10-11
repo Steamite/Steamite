@@ -131,11 +131,11 @@ public class Rock : ClickableObject, IStabilitySupport
     /// And opens the info window with <see cref="InfoMode.Rock"/>.
     /// </summary>
     /// <returns><inheritdoc/></returns>
-    public override InfoWindow OpenWindow()
+    public override InfoWindowAdapter OpenWindow()
     {
         if (hidden)
             return null;
-        InfoWindow info = base.OpenWindow();
+        InfoWindowAdapter info = base.OpenWindow();
         info.Open(this, InfoMode.Rock);
         return info;
     }

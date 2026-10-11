@@ -9,7 +9,7 @@ public class DiggerHut : Building, IDiggerHut
     [CreateProperty] public AssignData AssignData { get => assignData; set => assignData = value; }
     [SerializeField] AssignData assignData;
 
-    protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
+    protected override void ToggleInfoComponents(InfoWindowAdapter info, Dictionary<string, List<string>> toEnable)
     {
         toEnable.Add("General", new List<string> { "Assign Info" });
         base.ToggleInfoComponents(info, toEnable);

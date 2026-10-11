@@ -19,10 +19,10 @@ public class ResearchProduction : Building, IProduction, IAssign
     #region Window
     /// <summary>
     /// Adds "Research" to <paramref name="toEnable"/>. <br/>
-    /// <inheritdoc cref="Building.ToggleInfoComponents(InfoWindow, List{string})"/>
+    /// <inheritdoc cref="Building.ToggleInfoComponents(InfoWindowAdapter, List{string})"/>
     /// </summary>
     /// <inheritdoc/>
-    protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
+    protected override void ToggleInfoComponents(InfoWindowAdapter info, Dictionary<string, List<string>> toEnable)
     {
         toEnable.Add("General", new List<string> { "Research Info", "Assign Info" });
         base.ToggleInfoComponents(info, toEnable);

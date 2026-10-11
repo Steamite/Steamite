@@ -21,7 +21,7 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
         Holder = AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH);
         base.CreateGUI();
         colorField = rootVisualElement.Q<ColorField>();
-        rootVisualElement.Q<Button>("Rebind-Create").clicked += async () => await ResFluidTypes.Init();
+        rootVisualElement.Q<Button>("Rebind-Create").clicked += () => ResFluidTypes.EditorInit();
         categorySelector.index = 0;
     }
 

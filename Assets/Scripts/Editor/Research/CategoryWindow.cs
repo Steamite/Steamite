@@ -65,6 +65,7 @@ namespace EditorWindows
         #region Category Switching
         protected virtual bool LoadCategData(int index)
         {
+            ResFluidTypes.EditorInit();
             ObjectField iconSelector;
             TopBar(out iconSelector);
 

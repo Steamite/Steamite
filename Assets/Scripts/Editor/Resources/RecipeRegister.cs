@@ -22,7 +22,7 @@ public class RecipeRegister : DataGridWindow<ProductionRecipeCategory, Productio
     {
         Holder = AssetDatabase.LoadAssetAtPath<ProductionRecipeHolder>(ProductionRecipeHolder.EDITOR_PATH);
         base.CreateGUI();
-        rootVisualElement.Q<Button>("Rebind-Create").clicked += async () => await ResFluidTypes.Init();
+        rootVisualElement.Q<Button>("Rebind-Create").clicked += () => ResFluidTypes.EditorInit();
         categorySelector.index = 0;
     }
     protected override void CreateColumns()

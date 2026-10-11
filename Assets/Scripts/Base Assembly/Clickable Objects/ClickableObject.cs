@@ -178,12 +178,12 @@ public abstract class ClickableObject : MonoBehaviour,
     /// </summary>
     /// <param name="first">Prepare the window.</param>
     /// <returns>Info window reference, if the object is not selected throwns an error.</returns>
-    public virtual InfoWindow OpenWindow()
+    public virtual InfoWindowAdapter OpenWindow()
     {
         if (selected)
         {
-            InfoWindow info = InfoWindow.Window;
-            info.header.Open(this);
+            InfoWindowAdapter info = InfoWindowAdapter.Window;
+            //info.header.Open(this);
             return info;
         }
         Debug.LogWarning($"Object \"{this}\" not selected, why open window?");

@@ -102,7 +102,7 @@ public partial class OutpostView : TradeMapViewBase
             }
         };
         root.Add(newView);
-        newView.Add(dropdownField = new() { choices = ResFluidTypes.GetOutpostTypes() });
+        newView.Add(dropdownField = new() { choices = ResFluidTypes.GetOutpostTypes });
         dropdownField.index = 0;
 
         newView.Add(costList = new(true, "cost") { showMoney = true });

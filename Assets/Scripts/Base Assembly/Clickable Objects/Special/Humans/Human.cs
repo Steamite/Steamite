@@ -306,9 +306,9 @@ public class Human : ClickableObject
     /// And opens the info window with <see cref="InfoMode.Human"/>.
     /// </summary>
     /// <returns><inheritdoc/></returns>
-    public override InfoWindow OpenWindow()
+    public override InfoWindowAdapter OpenWindow()
     {
-        InfoWindow info = base.OpenWindow();
+        InfoWindowAdapter info = base.OpenWindow();
         info.Open(this, InfoMode.Human);
         return info;
     }

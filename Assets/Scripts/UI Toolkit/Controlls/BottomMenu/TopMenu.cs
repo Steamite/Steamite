@@ -18,13 +18,18 @@ public class TopMenu : InitilizablePanelRenderer, IAfterLoad
     /// <summary>Money bar in the top center.</summary>
     Label moneyLabel;
 
+    private void Awake()
+    {
+        resourceDisplay = GetComponent<ResourceDisplay>();
+        timeDisplay = GetComponent<TimeDisplay>();
+    }
+
     protected override void OnUIReload()
     {
         base.OnUIReload();
-        resourceDisplay = GetComponent<ResourceDisplay>();
-        timeDisplay = GetComponent<TimeDisplay>();
-
+        Root[0].MarkElementAsMouseObscurer();
         moneyLabel = Root.Q<Label>("Money-Value");
+        moneyLabel.MarkElementAsMouseObscurer();
         resourceList = Root.Q<VisualElement>("Resources") as IUIElement;
         timeDisplay.Init(Root);
     }

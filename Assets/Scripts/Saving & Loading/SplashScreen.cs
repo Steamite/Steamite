@@ -23,7 +23,7 @@ public class SplashScreen : MonoBehaviour
 #if UNITY_EDITOR
     public LoadActions loadAction = LoadActions.NewGameGen;
 #endif
-    private async void Awake()
+    private async Awaitable Start()
     {
         Time.timeScale = 1;
         await SceneManager.LoadSceneAsync("Loading Screen");

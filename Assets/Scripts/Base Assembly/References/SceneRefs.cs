@@ -30,7 +30,7 @@ public class SceneRefs : MonoBehaviour
     [SerializeField] Transform _stats;
     //[SerializeField] NotificationController _miscellaneous;
     
-    [SerializeField] InfoWindow _infoWindow;
+    [SerializeField] InfoWindowAdapter _infoWindow;
     [SerializeField] CameraSceneMovement _cameraSceneMover;
 
     [Header("Adapters")]

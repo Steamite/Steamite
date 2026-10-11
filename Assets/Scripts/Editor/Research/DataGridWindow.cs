@@ -14,6 +14,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
     protected override void CreateGUI()
     {
         base.CreateGUI();
+
         dataGrid = rootVisualElement.Q<MultiColumnListView>("Data");
         dataGrid.onAdd = (el) => AddEntry(el);
         dataGrid.onRemove = RemoveEntry;

@@ -81,11 +81,19 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             top = new(Vector3.up, new Vector3(0, topHeight, 0));
         }
 
-
+        static float2 maxDim = new(1920, 1080);
 
         public void Update()
         {
-            Vector2 mousePos = Mouse.current.position.value;
+            // maybe move to avoid querrying each frame
+            maxDim.x = Screen.width;
+            maxDim.y = Screen.height;
+
+
+            Vector2 mousePos = math.clamp(
+                Mouse.current.position.value, 
+                0,
+                maxDim);
             if (!isForcedUpdate && Mathf.Approximately(mousePos.x, lastPos.x) && Mathf.Approximately(mousePos.y, lastPos.y))
                 return;
 
@@ -103,12 +111,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         
         public void SetMaterial(int2 pos, int matIndex, Color c, TileType hoverType, int hoverIndex, float mod = 0)
         {
-            for (int i = 0; i < materials.Length; i++)
-            {
-                if (i == matIndex)
-                    continue;
-                materials[i].SetFloat("_Range", 0);
-            }
+            ClearMaterial(matIndex);
+
             materials[matIndex].SetFloat("_Range", 0.5f + mod);
             materials[matIndex].SetVector("_MousePos", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
             materials[matIndex].SetColor("_HighlightColor", c);
@@ -116,6 +120,15 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             hoverMousePosition = pos;
             hoverObjectType = hoverType;
             hoverObjectIndex = hoverIndex;
+        }
+        void ClearMaterial(int matIndex = -1)
+        {
+            for (int i = 0; i < materials.Length; i++)
+            {
+                if (i == matIndex)
+                    continue;
+                materials[i].SetFloat("_Range", 0);
+            }
         }
 
         public void BreakAction()
@@ -147,7 +160,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             activeModeIndex = i;
             activeMode = modes[i];
 
-            InfoWindow.Window.Close();
+            InfoWindowAdapter.Window.Close();
 /*
             if (i == activeMode)
             {
@@ -183,6 +196,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         {
             enabled = handleGrid;
             mouseClicker.enabled = handleGrid;
+            if (handleGrid == false)
+                ClearMaterial();
         }
     }
 }

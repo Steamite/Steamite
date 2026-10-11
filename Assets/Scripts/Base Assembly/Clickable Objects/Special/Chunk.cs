@@ -23,9 +23,9 @@ public class Chunk : StorageObject
 
     #region Window
     /// <inheritdoc/>
-    public override InfoWindow OpenWindow()
+    public override InfoWindowAdapter OpenWindow()
     {
-        InfoWindow info = base.OpenWindow();
+        InfoWindowAdapter info = base.OpenWindow();
         info.Open(this, InfoMode.Chunk);
         return info;
     }

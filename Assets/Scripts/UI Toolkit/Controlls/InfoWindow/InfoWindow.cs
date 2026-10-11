@@ -1,31 +1,11 @@
-
+﻿
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
-/// <summary>All groups of objects that can be inspected. For switching info window views.</summary>
-public enum InfoMode
-{
-    /// <summary>Nothing is selected.</summary>
-    None,
-    /// <summary><see cref="global::Building"/> is selected.</summary>
-    Building,
-    /// <summary><see cref="global::Human"/> is selected.</summary>
-    Human,
-    /// <summary><see cref="global::Rock"/> is selected.</summary>
-    Rock,
-    /// <summary><see cref="global::Chunk"/> is selected.</summary>
-    Chunk,
-    /// <summary><see cref="global::Water"/> is selected.</summary>
-    Water,
-    /// <summary><see cref="global::Vein"/> is selected.</summary>
-    Vein,
-}
-
 /// <summary>
 /// A temporary binding context that only exists for the time of inspection.<br/>
 /// Used by ALL <see cref="InfoWindow"/> bindings.
@@ -53,7 +33,7 @@ public class BindingContext
 
 
 /// <summary>Inspection window for everything in <see cref="InfoMode</summary>
-public class InfoWindow : PanelRendererRoot
+public class InfoWindow : PanelRendererRoot, IUIInfoWindow
 {
     #region Variables
     /// <summary>Info window text header.</summary>
@@ -71,8 +51,6 @@ public class InfoWindow : PanelRendererRoot
     VisualElement secondWindowAnchor;
 
     TabView TabView;
-
-    public static bool CanZoom = true;
 
     /// <summary>List containing all temp bindings, are destroyed with object.</summary>
     List<BindingContext> activeBindings = new();
@@ -99,18 +77,14 @@ public class InfoWindow : PanelRendererRoot
     public void CreateSecondWindow(string labelTitle, Rect pos)
     {
         secondWindowAnchor.style.bottom = 1080 - pos.y;
-        secondWindowAnchor.style.left = pos.x + pos.width/2;
+        secondWindowAnchor.style.left = pos.x + pos.width / 2;
         (secondWindow[0][0] as Label).text = labelTitle;
         secondWindow.style.display = DisplayStyle.Flex;
-        window.RegisterCallback<MouseEnterEvent>(MyOnMouseEnter);
-        window.RegisterCallback<MouseLeaveEvent>(MyOnMouseExit);
     }
     public void CloseSecondWindow()
     {
         secondWindow.style.display = DisplayStyle.None;
         secondBody.Clear();
-        window.UnregisterCallback<MouseEnterEvent>(MyOnMouseEnter);
-        window.UnregisterCallback<MouseLeaveEvent>(MyOnMouseExit);
     }
 
     protected override void OnUIReload()
@@ -123,17 +97,18 @@ public class InfoWindow : PanelRendererRoot
         secondWindow = Root[1][0];
 
         secondBody = secondWindow[1];
+        secondBody.MarkElementAsMouseObscurer();
         (secondWindow[0][1] as Button).clicked += CloseSecondWindow;
 
         window.style.display = DisplayStyle.None;
 
         VisualElement bar = window[0];
         header = bar[0] as IUIElement;
-        
-        bar.Q<Button>("Close").RegisterCallback<ClickEvent>(Deselect);
+
+        bar.Q<Button>("Close").RegisterCallback<ClickEvent>(CloseButton);
     }
 
-    void Deselect(ClickEvent ev)
+    void CloseButton(ClickEvent ev)
     {
         Close();
     }
@@ -145,13 +120,11 @@ public class InfoWindow : PanelRendererRoot
     /// <param name="hide">Defauly true, if true hide the window.</param>
     public void Close(bool hide = true)
     {
-        window.UnregisterCallback<MouseEnterEvent>(MyOnMouseEnter);
-        window.UnregisterCallback<MouseLeaveEvent>(MyOnMouseExit);
-        CanZoom = true;
+        window.MarkElementAsMouseObscurer();
 
         if (hide)
         {
-            SceneRefs.MouseController.DeselectObjects(); 
+            SceneRefs.MouseController.DeselectObjects();
             window.style.display = DisplayStyle.None;
         }
         windowBody.Clear();
@@ -178,8 +151,6 @@ public class InfoWindow : PanelRendererRoot
         LastInfo = active;
         window.style.display = DisplayStyle.Flex;
         TabView = null;
-        window.RegisterCallback<MouseEnterEvent>(MyOnMouseEnter);
-        window.RegisterCallback<MouseLeaveEvent>(MyOnMouseExit);
         //window.style.width = new Length(25, LengthUnit.Percent);
         switch (active)
         {
@@ -201,7 +172,7 @@ public class InfoWindow : PanelRendererRoot
                 }
                 else
                 {
-                    
+                    //CreateTabbedView();
                 }
                 break;
 
@@ -226,20 +197,6 @@ public class InfoWindow : PanelRendererRoot
                 Close();
                 break;
         }
-    }
-
-
-    
-    private void MyOnMouseEnter(MouseEnterEvent evt)
-    {
-        CanZoom = false;
-        //Debug.Log("Cant " + evt.currentTarget);
-    }
-
-    private void MyOnMouseExit(MouseLeaveEvent evt)
-    {
-        CanZoom = true;
-        //Debug.Log("Can " + evt.currentTarget);
     }
 
     public void CreateTabbedView(Dictionary<string, List<string>> controlsToCreate, System.Object building)

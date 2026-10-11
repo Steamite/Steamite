@@ -34,7 +34,7 @@ public abstract class FullscreenWindow : InitilizablePanelRenderer
             IsOpen = true;
             SceneRefs.GridTiles.DeselectObjects();
             MainShortcuts.DisableInput();
-            InfoWindow.Window.Close();
+            InfoWindowAdapter.Window.Close();
             Root.style.display = DisplayStyle.Flex;
             SceneRefs.Tick.UIWindowToggle(false);
         }

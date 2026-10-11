@@ -121,7 +121,7 @@ public class MouseEvents : MonoBehaviour
             if (activeObject == null)
                 activeObject = selectedObject;
             selectedObject = null;
-            InfoWindow.Window.Close();
+            InfoWindowAdapter.Window.Close();
         }
     }
 }

@@ -35,7 +35,7 @@ public class FluidTank : Building, IFluidWork
         base.DestoyBuilding();
     }
 
-    protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
+    protected override void ToggleInfoComponents(InfoWindowAdapter info, Dictionary<string, List<string>> toEnable)
     {
         toEnable.Add("Fluids", new List<string> { "Fluid Info" });
         base.ToggleInfoComponents(info, toEnable);

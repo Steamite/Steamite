@@ -50,7 +50,7 @@ public class NothingNew : GridTilesModeNew
         switch (controller.hoverObjectType)
         {
             case TileType.Wall:
-                InfoWindow.Window.Open(tile, InfoMode.Rock);
+                InfoWindowAdapter.Window.Open(tile, InfoMode.Rock);
 
                 controller.clickedType = tile.Type;
                 controller.clickedIndex = index;
@@ -58,11 +58,11 @@ public class NothingNew : GridTilesModeNew
                 break;
             case TileType.Road:
             case TileType.Empty:
-                InfoWindow.Window.Open(tile, InfoMode.None);
+                InfoWindowAdapter.Window.Open(tile, InfoMode.None);
                 break;
             case TileType.Building:
             case TileType.Elevator:
-                InfoWindow.Window.Open(tile, InfoMode.Rock);
+                InfoWindowAdapter.Window.Open(tile, InfoMode.Rock);
                 break;
 
         }

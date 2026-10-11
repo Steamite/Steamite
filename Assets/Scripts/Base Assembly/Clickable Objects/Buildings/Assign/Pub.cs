@@ -38,7 +38,7 @@ public class Pub : Building, IEffectObject
         ((IEffectObject)this).UpdateRange(false);
     }
 
-    protected override void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
+    protected override void ToggleInfoComponents(InfoWindowAdapter info, Dictionary<string, List<string>> toEnable)
     {
         toEnable.Add("General", new List<string> { "General Info" });
         ((IEffectObject)this).RepaintTiles();

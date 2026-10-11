@@ -93,4 +93,22 @@ public static class ToolkitUtils
             => LocalMenuController.RegisterMouseEvents(element, data);
     public static void UnregisterLocalMenu(this VisualElement element)
             => LocalMenuController.UnregisterMouseEvents(element);
+
+    public static void MarkElementAsMouseObscurer(this VisualElement element)
+    {
+        static void Enter(PointerEnterEvent ev)
+        {
+            SceneRefs.MouseController.ToggleMouse(false);
+            Debug.Log($"disable mouse: {(VisualElement)ev.target}");
+        }
+        static void Exit(PointerLeaveEvent ev)
+        {
+            SceneRefs.MouseController.ToggleMouse(true);
+            Debug.Log($"enable mouse: {(VisualElement)ev.target}");
+        }
+
+
+        element.RegisterCallback<PointerEnterEvent>(Enter);
+        element.RegisterCallback<PointerLeaveEvent>(Exit);
+    }
 }

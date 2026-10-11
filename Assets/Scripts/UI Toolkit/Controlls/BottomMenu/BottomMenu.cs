@@ -18,10 +18,14 @@ namespace BottomBar
         {
             base.OnUIReload();
             bottomButtonBar = Root.Q("BottomButtonBar") as BottomButtonBar;
+            bottomButtonBar.MarkElementAsMouseObscurer();
 
             questGroup = Root.Q("QuestGroup");
+            questGroup.MarkElementAsMouseObscurer();
 
             buildMenu = (BuildMenu)Root.Q<VisualElement>(className: "build-menu");
+            buildMenu.MarkElementAsMouseObscurer();
+
         }
 
         public void AfterLoad()

@@ -43,8 +43,9 @@ MonoBehaviour:
           types: []
           ammounts: 
           baseResource:
-            types: []
-            ammounts: 
+            types:
+            - {fileID: 11400000, guid: 476987d8701b79b42acf9d04564a5ac0, type: 2}
+            ammounts: 00000000i
           money:
             baseValue: 5
             currentValue: 5
@@ -53,7 +54,7 @@ MonoBehaviour:
           categoryId: 3
           objectId: 640485558
         unlockedBy: 
-        unlocks: 04c2f730
+        unlocks: 04c2f730i
         lineColor: {r: 1, g: 0, b: 0, a: 1}
     - rid: 5286523460828790840
       type: {class: ResearchNode, ns: ResearchUI, asm: BaseAssembly}
@@ -79,7 +80,7 @@ MonoBehaviour:
           categoryId: 1
           objectId: 392309819
         unlockedBy: 
-        unlocks: 04c2f730
+        unlocks: 04c2f730i
         lineColor: {r: 1, g: 0, b: 0, a: 1}
     - rid: 5286523460828790841
       type: {class: ResearchNode, ns: ResearchUI, asm: BaseAssembly}
@@ -97,7 +98,7 @@ MonoBehaviour:
           baseResource:
             types:
             - {fileID: 11400000, guid: 1347ef2c9f2b3c44cb6f5e843e1d55bb, type: 2}
-            ammounts: 0a000000
+            ammounts: 0a000000i
           money:
             baseValue: 0
             currentValue: 0
@@ -105,7 +106,7 @@ MonoBehaviour:
         objectConnection:
           categoryId: 3
           objectId: 512409920
-        unlockedBy: c8efda3c3850b01a
+        unlockedBy: c8efda3c3850b01ai
         unlocks: 
         lineColor: {r: 1, g: 0, b: 0, a: 1}
     - rid: 5286523460828790842
@@ -132,7 +133,7 @@ MonoBehaviour:
           categoryId: 4
           objectId: 1611848327
         unlockedBy: 
-        unlocks: 3efc6309
+        unlocks: 3efc6309i
         lineColor: {r: 1, g: 0, b: 0, a: 1}
     - rid: 5286523460828790843
       type: {class: ResearchNode, ns: ResearchUI, asm: BaseAssembly}
@@ -157,6 +158,6 @@ MonoBehaviour:
         objectConnection:
           categoryId: 5
           objectId: 1169593243
-        unlockedBy: dcf1324a
+        unlockedBy: dcf1324ai
         unlocks: 
         lineColor: {r: 1, g: 0, b: 0, a: 1}

@@ -128,11 +128,11 @@ public class Building : StorageObject
     /// Also toggle contsructed view, and other child elements.
     /// </summary>
     /// <returns><inheritdoc/></returns>
-    public sealed override InfoWindow OpenWindow()
+    public sealed override InfoWindowAdapter OpenWindow()
     {
         // DEBUG_Binding Common init
         // Opens the info window (if selected) and switches what is displayed.
-        InfoWindow info = base.OpenWindow();
+        InfoWindowAdapter info = base.OpenWindow();
         if (info)
         {
             info.Open(this, InfoMode.Building);
@@ -145,12 +145,12 @@ public class Building : StorageObject
     /// <summary>
     /// Opens and fills needed components in "Building" VisualElement.
     /// </summary>
-    /// <param name="info"><see cref="InfoWindow"/> supplied from <see cref="OpenWindow"/>.</param>
+    /// <param name="info"><see cref="InfoWindowAdapter"/> supplied from <see cref="OpenWindow"/>.</param>
     /// <param name="toEnable">List of components to enable in the Visual Element.</param>
-    protected virtual void ToggleInfoComponents(InfoWindow info, Dictionary<string, List<string>> toEnable)
+    protected virtual void ToggleInfoComponents(InfoWindowAdapter info, Dictionary<string, List<string>> toEnable)
     {
         //toEnable.Add("Modifications", new() { "Modifications" });
-        info.CreateTabbedView(toEnable, this);
+        //info.CreateTabbedView(toEnable, this);
     }
 
 

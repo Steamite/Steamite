@@ -3,9 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
+using static UnityEngine.Analytics.IAnalytic;
 
 public static class ResFluidTypes
 {
@@ -13,80 +16,49 @@ public static class ResFluidTypes
     public static ResourceType Money;
 
     static ResourceType none;
-    public static ResourceType None
-    {
-        get
-        {
-#if UNITY_EDITOR
-            if (none == null)
-                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH));
-#endif
-            return none;
-        }
-    }
+    public static ResourceType None => none;
 
     static List<ResourceType> resources;
-    static List<ResourceType> Resources
-    {
-        get
-        {
-#if UNITY_EDITOR
-            if (resources == null)
-                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH));
-#endif
-            return resources;
-        }
-    }
 
     static List<ResourceType> fluids;
-    static List<ResourceType> Fluids
-    {
-        get
-        {
-#if UNITY_EDITOR
-            if (fluids == null)
-                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH));
-#endif
-            return fluids;
-        }
-    }
 
     static List<ResourceTypeCategory> fullRes;
-    public static List<ResourceTypeCategory> FullRes
+    public static List<ResourceTypeCategory> FullRes => fullRes;
+
+    public static async Awaitable Init()
     {
-        get
-        {
-#if UNITY_EDITOR
-            if (fullRes == null)
-                InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH));
-#endif 
-            return fullRes;
-        }
-    }
-#if UNITY_EDITOR
-    [MenuItem("Custom Editors/Refresh Resource _&r", priority = 0)]
-    [InitializeOnLoadMethod]
-#endif
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-    public static async Task Init()
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-    {
-#if UNITY_EDITOR
-        data = AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH);
-#else
-        data = await Addressables.LoadAssetAsync<ResourceData>(ResourceData.PATH).Task;
-#endif
-        InitFill(data);
+        InitFill(await Addressables.LoadAssetAsync<ResourceData>(ResourceData.PATH).Task);
     }
 
-    static void InitFill(ResourceData data)
+#if UNITY_EDITOR
+    static bool loaded = false;
+    [InitializeOnLoadMethod]
+    public static void Clear()
     {
-        fullRes = data.Categories;
+        loaded = false;
+    }
+
+    [MenuItem("Custom Editors/Refresh Resource _&r", priority = 0)]
+    public static void EditorInit()
+    {
+        if (loaded == true)
+            return;
+
+        InitFill(AssetDatabase.LoadAssetAtPath<ResourceData>(ResourceData.EDITOR_PATH));
+        loaded = true;
+    }
+#endif
+
+    static void InitFill(ResourceData _data)
+    {
+        data = _data;
+        fullRes = _data.Categories;
         resources = fullRes.Skip(1).SkipLast(1).SelectMany(q => q.Objects).Select(q => q.data).ToList();
 
         fluids = fullRes[^1].Objects.Select(q => q.data).ToList();
         none = fullRes[0].Objects.First(q => q.Name == "None").data;
         Money = fullRes[0].Objects.First(q => q.Name == "Money").data;
+        Debug.Log("Resources loaded");
     }
 
     public static ResourceType GetTypeByName(string name)
@@ -100,7 +72,7 @@ public static class ResFluidTypes
 
     public static ResourceType GetResByName(string name)
     {
-        ResourceType type = Resources.FirstOrDefault(q => q.Name == name);
+        ResourceType type = resources.FirstOrDefault(q => q.Name == name);
         if (type == null)
         {
             if (name == "None")
@@ -113,7 +85,7 @@ public static class ResFluidTypes
 
     public static ResourceType GetFluidByName(string name)
     {
-        ResourceType type = Fluids.FirstOrDefault(q => q.Name == name);
+        ResourceType type = fluids.FirstOrDefault(q => q.Name == name);
         if (type == null)
         {
             if (name == "None")
@@ -123,28 +95,29 @@ public static class ResFluidTypes
     }
 
     public static ResourceType GetResByIndex(int i)
-        => Resources[i];
-    public static int GetResMax()
-        => Resources.Count;
-
-    public static ResourceType GetFluidByIndex(int index)
-        => Fluids[index];
-    public static List<string> GetOutpostTypes()
     {
-        return new List<string>
+        return resources[i];
+    }
+    
+    public static int GetResMax() => resources.Count;
+    
+
+    public static ResourceType GetFluidByIndex(int index) => fluids[index];
+    
+    public static List<string> GetOutpostTypes = new()
         {
             "None",
             "Meat",
             "Wood"
         };
-    }
+
     public static List<string> GetResNamesList()
-        => Resources.Select(q => q.Name).ToList();
+        => resources.Select(q => q.Name).ToList();
     public static List<string> GetResNamesList(List<int> allowedCategories)
     {
         List<string> names = new();
         //#if UNITY_EDITOR
-        names.Add(None.Name);
+        names.Add(none.Name);
         //#endif
         if (allowedCategories == null || allowedCategories.Count == 0)
             foreach (var category in fullRes)
@@ -161,13 +134,13 @@ public static class ResFluidTypes
         return names;
     }
     public static List<ResourceType> GetResList()
-        => Resources.Skip(2).ToList();
+        => resources.Skip(2).ToList();
 
     public static int GetResourceIndex(ResourceType resourceType)
-        => Resources.IndexOf(resourceType);
+        => resources.IndexOf(resourceType);
 
     public static List<string> GetFluidNames()
-        => Fluids.Select(q => q.Name).ToList();
+        => fluids.Select(q => q.Name).ToList();
 
     public static List<ResourceType> LoadTypeList(List<DataAssign> types)
     {

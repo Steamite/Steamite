@@ -23,24 +23,24 @@ namespace Outposts
     public class Outpost : Location
     {
         public static Dictionary<ResourceType, int> ResourceCosts = new()
-        {
+        {/*
             { ResFluidTypes.GetResByName("Coal"),  1 },
             { ResFluidTypes.GetResByName("Metal"), 2 },
             { ResFluidTypes.GetResByName("Stone"), 1 },
-            { ResFluidTypes.GetResByName("Meat"),  1 },
+            { ResFluidTypes.GetResByName("Meat"),  1 },*/
         };
 
         public static Dictionary<ResourceType, int> ResourceAmmount = new()
-        {
+        {/*
             { ResFluidTypes.GetResByName("Coal"), 10 },
             { ResFluidTypes.GetResByName("Stone"), 7 },
             { ResFluidTypes.GetResByName("Metal"), 5 },
             { ResFluidTypes.GetResByName("Wood"), 10 },
-            { ResFluidTypes.GetResByName("Meat"), 10 },
+            { ResFluidTypes.GetResByName("Meat"), 10 },*/
         };
 
         public static List<UpgradeCost> UpgradeCosts = new()
-        {
+        {/*
             new
             (
                 2,
@@ -70,7 +70,7 @@ namespace Outposts
                     new(){40},
                     750
                 )
-            ),
+            ),*/
         };
 
         public const int MAX_LEVEL = 3;

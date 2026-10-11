@@ -319,6 +319,7 @@ GameObject:
   - component: {fileID: 225780440}
   - component: {fileID: 225780445}
   - component: {fileID: 225780446}
+  - component: {fileID: 225780447}
   m_Layer: 0
   m_Name: Info Window
   m_TagString: Untagged
@@ -353,7 +354,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ece469e808b7936429fb7255bac000ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controls: {fileID: 11400000, guid: 6ee198ecedba89642a9145722bc073de, type: 2}
 --- !u!1931382934 &225780446
 PanelRenderer:
   m_ObjectHideFlags: 0
@@ -412,6 +412,19 @@ PanelRenderer:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_Position: 1
+--- !u!114 &225780447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 225780439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a68fce34aa4ab840af3166909b01b0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ToolkitUI::InfoWindow
+  controls: {fileID: 11400000, guid: 6ee198ecedba89642a9145722bc073de, type: 2}
 --- !u!1 &258749762
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,6 +769,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tracker
       objectReference: {fileID: 0}
+    - target: {fileID: 8868148422912160912, guid: 750f96801c6f2904dbeec6cf384f82e9, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8791998716917513930, guid: 750f96801c6f2904dbeec6cf384f82e9, type: 3}
@@ -904,6 +921,7 @@ MonoBehaviour:
       m_Action: Input
       m_Flags: 0
     m_Flags: 0
+    m_Priority: 0
   sprite: {fileID: 21300000, guid: 7c4a7586033eca9449c85deef53778aa, type: 3}
   Name: 
 --- !u!1 &695151492
@@ -1074,6 +1092,7 @@ MonoBehaviour:
       m_Action: Toggle Integrity Overlay
       m_Flags: 0
     m_Flags: 0
+    m_Priority: 0
   sprite: {fileID: 21300000, guid: 2b61dc557efa942428ac194cfa787fd7, type: 3}
   Name: 
 --- !u!1 &745012301
@@ -1835,6 +1854,7 @@ MonoBehaviour:
       m_Action: Click
       m_Flags: 0
     m_Flags: 0
+    m_Priority: 0
   breakAction:
     m_Name: Break
     m_Type: 1
@@ -1852,6 +1872,7 @@ MonoBehaviour:
       m_Action: Break
       m_Flags: 0
     m_Flags: 0
+    m_Priority: 0
 --- !u!114 &1068071213 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5996095910553710794, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
@@ -2410,7 +2431,7 @@ MonoBehaviour:
   constructions: []
   deconstructions: []
   pickupNeeded: []
-  priority: 040000000500000006000000020000000300000007000000
+  priority: 040000000500000006000000020000000300000007000000i
 --- !u!1 &2029702140026209828
 GameObject:
   m_ObjectHideFlags: 0
@@ -2826,7 +2847,7 @@ MonoBehaviour:
   lastTick: 0
   ticksPerSecond: 4
   tickTimer: 0
-  speeds: 00000000010000000300000005000000
+  speeds: 00000000010000000300000005000000i
   speedIndex: 0
   prevSpeedIndex: 0
 --- !u!114 &8150810313726245685
