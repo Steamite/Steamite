@@ -41,6 +41,7 @@ namespace Assets.Scripts.UI_Toolkit.Controlls.Universal
             });
             VisualElement container = new();
             container.AddToClassList("res-list-container");
+            container.MarkElementAsMouseObscurer();
             body.Add(container);
             Add(body);
         }

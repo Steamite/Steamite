@@ -86,6 +86,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
         public void Update()
         {
+            if (obscured)
+                return;
             // maybe move to avoid querrying each frame
             maxDim.x = Screen.width;
             maxDim.y = Screen.height;
@@ -112,7 +114,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         
         public void SetMaterial(int2 pos, int matIndex, Color c, TileType hoverType, int hoverIndex, float mod = 0)
         {
-            ClearMaterial(matIndex);
+            ClearHoverMaterial(matIndex);
 
             materials[matIndex].SetVector("_HoverRange", new(0.5f + mod, 0.5f + mod));
             materials[matIndex].SetVector("_HoverPosition", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
@@ -133,7 +135,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             hoverMousePosition = pos;
         }
 
-        void ClearMaterial(int matIndex = -1)
+        void ClearHoverMaterial(int matIndex = -1)
         {
             for (int i = 0; i < materials.Length; i++)
             {
@@ -152,9 +154,18 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             }
         }
 
+        public void Click()
+        {
+            if (obscured)
+                return;
+            activeMode.DownObject();
+        }
 
         public void BreakAction()
         {
+            if (obscured)
+                return;
+
             /*if (multiSelect.Break())
             {*/
                 ChangeSelMode(ControlMode.Nothing);
@@ -220,8 +231,21 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             enabled = handleGrid;
             mouseClicker.enabled = handleGrid;
             if (handleGrid == false)
-                ClearMaterial();
+            {
+                ClearHoverMaterial();
+            }
         }
+
+        public bool obscured = false;
+        public void ObscureMouse(bool _obscure)
+        {
+            obscured = _obscure;
+            if (_obscure == true)
+            {
+                ClearHoverMaterial();
+            }
+        }
+
 
         [SerializeField]
         int damageAmmount = 4;

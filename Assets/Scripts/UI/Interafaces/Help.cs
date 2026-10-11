@@ -4,12 +4,24 @@ using UnityEngine.UIElements;
 
 public class Help : PanelRendererRoot
 {
+    VisualElement controls;
     protected override void OnUIReload()
     {
-        VisualElement controls = Root.Q<VisualElement>("Controlls");
+        controls = Root.Q<VisualElement>("Controlls");
         
         
-        Root.Q<Button>("help-button").clicked += () => { controls.style.display = DisplayStyle.Flex; };
-        controls.Q<Button>("Save-Close-Button").clicked += () => { controls.style.display = DisplayStyle.None; };
+        Root.Q<Button>("help-button").clicked += OpenHelp;
+        controls.Q<Button>("Save-Close-Button").clicked += CloseHelp;
+    }
+
+    void OpenHelp()
+    {
+        MainShortcuts.DisableInput(true);
+        controls.style.display = DisplayStyle.Flex;
+    }
+    void CloseHelp()
+    {
+        MainShortcuts.EnableInput();
+        controls.style.display = DisplayStyle.None;
     }
 }

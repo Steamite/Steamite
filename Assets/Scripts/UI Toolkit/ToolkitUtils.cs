@@ -98,12 +98,14 @@ public static class ToolkitUtils
     {
         static void Enter(PointerEnterEvent ev)
         {
-            SceneRefs.MouseController.ToggleMouse(false);
+            SceneRefs.MouseController.ObscureMouse(true);
+            UIRefs.LevelCamera.CanZoom = false;
             Debug.Log($"disable mouse: {(VisualElement)ev.target}");
         }
         static void Exit(PointerLeaveEvent ev)
         {
-            SceneRefs.MouseController.ToggleMouse(true);
+            SceneRefs.MouseController.ObscureMouse(false);
+            UIRefs.LevelCamera.CanZoom = true;
             Debug.Log($"enable mouse: {(VisualElement)ev.target}");
         }
 

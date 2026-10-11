@@ -48,6 +48,6 @@ public class MouseClicker : MonoBehaviour
 
     private void ClickAction_performed(InputAction.CallbackContext obj)
     {
-        controller.activeMode.DownObject();
+        controller.Click();
     }
 }

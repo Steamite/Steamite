@@ -57,6 +57,8 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     float mod;
     bool hasMoved = false;
 
+    public bool CanZoom = true;
+
     Transform childCamera;
 
     LevelRenderer levelRender;
@@ -262,7 +264,8 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
 
 
         Rot(rot);
-        Zoom(zoomVal);
+        if(CanZoom)
+            Zoom(zoomVal);
         Pan();
     }
 
