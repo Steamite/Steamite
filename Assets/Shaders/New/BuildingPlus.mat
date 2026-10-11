@@ -50,7 +50,7 @@ Material:
     - _HoverRange: {r: 0, g: 0, b: 0, a: 0}
     - _MousePos: {r: 80.5, g: 0, b: 80.5, a: 0}
     - _Range: {r: 0, g: 0, b: 0, a: 0}
-    - _SelectionColor: {r: 1, g: 0.3882353, b: 0.2784314, a: 1}
+    - _SelectionColor: {r: 0, g: 1, b: 0, a: 1}
     - _SelectionPosition: {r: 80.5, g: 0, b: 80.5, a: 0}
     - _SelectionRange: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

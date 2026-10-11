@@ -7,42 +7,14 @@ using UnityEngine;
 
 public class NothingNew : GridTilesModeNew
 {
-#if UNITY_EDITOR
-    [SerializeField] bool select;
-#endif
+    [Header("Colors")]
+    [SerializeField] Color hoverColor;
+    [SerializeField] Color selectionColor;
 
-    public Color SelectionColor => highlightColor * 2;
-
-    public override void EnterObject(int type, int index)
+    private void Awake()
     {
-        /*
-        Color color;
-
-        if ( .selected)// if active
-            color = SelectionColor; // WHITE
-        else
-            color = highlightColor; // WHITE / 3
-
-        if (enterObject is Rock r && r.toBeDug) // if rock is to be dug
-            color += gridTiles.ToBeDugColor; // DUGCOLOR
-        else if (enterObject is Building b && b.Deconstructing)
-            color += Color.red / 2;
-
-        enterObject.Highlight(color);*/
+        SetHoverColor(hoverColor);
     }
-/*
-    public override void ExitObject(ClickableObject exitObject)
-    {
-        Color c = default;
-
-        if (exitObject == gridTiles.ActiveObject)
-            gridTiles.ActiveObject = null;
-
-        if (exitObject is Building b && b.Deconstructing)
-            c += Color.red / 2;
-
-        exitObject.Highlight(c);
-    }*/
 
     public override void DownObject()
     {
@@ -53,64 +25,29 @@ public class NothingNew : GridTilesModeNew
             case TileType.Wall:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.Rock);
 
-                controller.SetSelectionMaterial(controller.hoverMousePosition, 0, Color.orange, 0.0001f);
+                controller.SetSelectionMaterial(controller.hoverMousePosition, 0, selectionColor, 0.0001f);
 
                 controller.clickedType = tile.Type;
                 controller.clickedIndex = index;
 
-                //controller.DamageClickedRock();
                 Debug.Log(tile);
                 break;
             case TileType.Road:
             case TileType.Empty:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.None);
 
-                controller.SetSelectionMaterial(controller.hoverMousePosition, 0, Color.purple, -0.0001f);
+                controller.SetSelectionMaterial(controller.hoverMousePosition, 0, selectionColor, -0.0001f);
 
                 controller.clickedType = tile.Type;
                 controller.clickedIndex = index;
 
-                //controller.DamageClickedRock();
                 break;
             case TileType.Building:
             case TileType.Elevator:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.Rock);
-                controller.SetSelectionMaterial(controller.hoverMousePosition, 1, new(0,1,0), +0.0001f);
+                controller.SetSelectionMaterial(controller.hoverMousePosition, 1, selectionColor, +0.0001f);
                 break;
 
         }
-
-        /*
-        if (gridTiles.ActiveObject is Road road)
-            return;
-        if (gridTiles.ActiveObject is Rock r && r.Hidden)
-            return;
-
-        gridTiles.DeselectObjects();
-*/
-        /*
-                if (gridTiles.SelectedObject is Rock activeRock)
-                {
-                    if (activeRock && activeRock.toBeDug)
-                        c = gridTiles.ToBeDugColor;
-                    gridTiles.SelectedObject.Highlight(c);
-                    gridTiles.SelectedObject.selected = false;
-                }
-                if (rock && rock.toBeDug) // rock to be dug
-                    c = gridTiles.ToBeDugColor + highlightColor * 2; // YELLOW + RED
-                else
-                    c = highlightColor * 3; // WHITE
-                gridTiles.ActiveObject.Highlight(c);
-        */
-        /*gridTiles.SelectedObject = gridTiles.ActiveObject;
-        gridTiles.SelectedObject.selected = true;
-        gridTiles.SelectedObject.OpenWindow();
-        gridTiles.Enter();*/
-
-    }
-
-    public override void UpObject()
-    {
-        // nothing
     }
 }

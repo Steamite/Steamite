@@ -9,6 +9,8 @@ using static Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.LevelGridTi
 
 public abstract partial class GridTilesModeNew : MonoBehaviour
 {
+    Color _hoverColor = new(1,1,1);
+    protected void SetHoverColor(Color hoverColor) => _hoverColor = hoverColor;
     Vector3 topPoint;
     Vector3 endPoint;
     Ray ray;
@@ -76,7 +78,7 @@ public abstract partial class GridTilesModeNew : MonoBehaviour
         }
 
         // mark road
-        controller.SetMaterial(prevPos, 0, Color.red * 2, (TileType)tile.Type, index, -0.001f);
+        controller.SetMaterial(prevPos, 0, _hoverColor, (TileType)tile.Type, index, -0.001f);
     }
 
     int2 MovePosition(int2 pos, float2 modDir, ref Vector3 endPoint, float3 dir, int2 step)
@@ -115,12 +117,12 @@ public abstract partial class GridTilesModeNew : MonoBehaviour
         TileType tileType = (TileType)tile.Type;
         if (tileType < TileType.Road)
         {
-            controller.SetMaterial(pos, 0, Color.blue * 2, tileType, index, 0.0001f);
+            controller.SetMaterial(pos, 0, _hoverColor, tileType, index, 0.0001f);
             return true;
         }
         else if (tileType == TileType.Building)
         {
-            controller.SetMaterial(pos, 1, Color.blue * 2, tileType, tile.Amount, 2);
+            controller.SetMaterial(pos, 1, _hoverColor, tileType, tile.Amount, 2);
             return true;
         }
         return false;

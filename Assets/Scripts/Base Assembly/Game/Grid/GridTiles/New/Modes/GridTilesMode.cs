@@ -13,10 +13,6 @@ public abstract partial class GridTilesModeNew : MonoBehaviour
     [SerializeField] Texture2D cursor;
     [SerializeField] Vector2 cursorOffset;
 
-    [Header("Highlight")]
-    public Color highlightColor;
-
-    [Header("Controlls")]
     protected MouseController controller;
 
     /// <summary>
