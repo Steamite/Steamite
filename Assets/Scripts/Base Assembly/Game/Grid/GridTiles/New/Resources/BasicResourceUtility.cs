@@ -18,7 +18,35 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Resources
                 }
             }
         }
-        
+
+        public static void Remove(byte[] destinationTypes, short[] destinationValues, byte[] toAddTypes, short[] toAddValues)
+        {
+            for (int i = 0; i < toAddTypes.Length; i++)
+            {
+                for (int j = 0; j < destinationTypes.Length; j++)
+                {
+                    destinationValues[j] -= (short)math.select(0, toAddValues[i], destinationTypes[j] == toAddTypes[i]);
+                }
+            }
+        }
+
+        public static void MoveWithoutCap(byte[] destinationTypes, short[] destinationValues, byte[] toAddTypes, short[] toAddValues)
+        {
+            for (int i = 0; i < toAddTypes.Length; i++)
+            {
+                for (int j = 0; j < destinationTypes.Length; j++)
+                {
+                    short change = (short)math.select(
+                        0, 
+                        toAddValues[i], 
+                        destinationTypes[j] == toAddTypes[i]);
+
+                    destinationValues[j] += change;
+                    toAddValues[i] -= change;
+                }
+            }
+        }
+
         /*
 
         protected virtual int Remove(ResourceType type, int change)

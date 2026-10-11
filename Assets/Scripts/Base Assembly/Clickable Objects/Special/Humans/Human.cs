@@ -309,7 +309,7 @@ public class Human : ClickableObject
     public override InfoWindowAdapter OpenWindow()
     {
         InfoWindowAdapter info = base.OpenWindow();
-        info.Open(this, InfoMode.Human);
+        //info.Open(this, InfoMode.Human);
         return info;
     }
     #endregion Window

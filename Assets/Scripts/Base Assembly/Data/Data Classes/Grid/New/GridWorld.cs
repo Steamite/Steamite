@@ -152,24 +152,25 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// </summary>
         /// <param name="gridPos"></param>
         /// <returns></returns>
-        public bool DamageRock(int pos, int ammount, int level = 0)
+        public void DamageRock(int pos, int ammount, int level = 0)
         {
             GridLevel gridLevel = gridLevels[level];
             //int pos = gridLevel.levelDimensionsScaled * gridPos.y + gridPos.x;
             LevelGridTile tile = gridLevel.renderGrid[pos];
             tile.durability -= ammount;
+            
             if (tile.durability <= 0)
             {
-                gridLevel.SetTile(pos, LevelGridTile.Road);
-                
+                tile = LevelGridTile.Road;
+                gridLevel.SetTile(pos, tile);
                 renderer.UpdateMesh(level, pos, gridLevel);
-                
-                return true;
             }
+            else
+            {
+                gridLevel.SetTile(pos, tile);
 
-
-            gridLevel.SetTile(pos, tile);
-            return false;
+            }
+            SceneRefs.MouseController.UpdateTileUI(pos, level);
         }
 
         public void MakeRoad(int pos, int level = 0)

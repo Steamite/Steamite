@@ -10,7 +10,7 @@ public class Vein : TileSource
     public override InfoWindowAdapter OpenWindow()
     {
         InfoWindowAdapter info = base.OpenWindow();
-        info.Open(this, InfoMode.Vein);
+        //info.Open(this, InfoMode.Vein);
         return info;
     }
     public override object RemoveFromSource(int ammount, bool remove)

@@ -42,7 +42,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         [SerializeField] float2 lastPos;
 
         [Header("Hover Temp Data")]
-        public int2 hoverMousePosition;
+        public int2 hoverWorldPosition;
         public int hoverObjectIndex;
         public TileType hoverObjectType;
 
@@ -60,7 +60,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
         public void AfterLoad()
         {
-            hoverMousePosition = -1;
+            hoverWorldPosition = -1;
             hoverObjectIndex = -1;
             hoverObjectType = default;
 
@@ -120,7 +120,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             materials[matIndex].SetVector("_HoverPosition", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
             materials[matIndex].SetColor("_HoverColor", c);
             
-            hoverMousePosition = pos;
+            hoverWorldPosition = pos;
             hoverObjectType = hoverType;
             hoverObjectIndex = hoverIndex;
         }
@@ -132,7 +132,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             materials[matIndex].SetVector("_SelectionPosition", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
             materials[matIndex].SetColor("_SelectionColor", color);
 
-            hoverMousePosition = pos;
+            hoverWorldPosition = pos;
         }
 
         void ClearHoverMaterial(int matIndex = -1)
@@ -249,6 +249,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
         [SerializeField]
         int damageAmmount = 4;
+        internal int2 clickedWorldPosition;
+
         [ContextMenu("DamageRock")]
         public void DamageClickedRock()
         {
@@ -261,6 +263,17 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
                 world.MakeRoad(clickedIndex);
 
             isForcedUpdate = true;
+        }
+
+        public void UpdateTileUI(int pos, int level)
+        {
+            // only mode one can select elements
+            if (activeModeIndex != 0 
+                || level != SceneRefs.World.CurrentLevelIndex 
+                || pos != clickedIndex)
+                return;
+
+            ((NothingNew)modes[0]).RefreshDownedTile();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,15 +19,29 @@ public class NothingNew : GridTilesModeNew
 
     public override void DownObject()
     {
-        var tile = controller.world.GetActiveTile(controller.hoverMousePosition.x, controller.hoverMousePosition.y, out int index);
+        var tile = controller.world.GetActiveTile(
+            controller.hoverWorldPosition.x, 
+            controller.hoverWorldPosition.y, 
+            out int index);
+        HandleSelectionTypes(tile, index, controller.hoverWorldPosition);
+    }
 
-        switch (controller.hoverObjectType)
+    public void RefreshDownedTile()
+    {
+        var tile = controller.world.gridLevels[0].renderGrid[controller.clickedIndex];
+        HandleSelectionTypes(tile, controller.clickedIndex, controller.clickedWorldPosition);
+    }
+
+    void HandleSelectionTypes(LevelGridTile tile, int index, int2 worldPos)
+    {
+        switch ((TileType)tile.Type)
         {
             case TileType.Wall:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.Rock);
 
-                controller.SetSelectionMaterial(controller.hoverMousePosition, 0, selectionColor, 0.0001f);
+                controller.SetSelectionMaterial(worldPos, 0, selectionColor, 0.0001f);
 
+                controller.clickedWorldPosition = worldPos;
                 controller.clickedType = tile.Type;
                 controller.clickedIndex = index;
 
@@ -36,8 +51,9 @@ public class NothingNew : GridTilesModeNew
             case TileType.Empty:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.None);
 
-                controller.SetSelectionMaterial(controller.hoverMousePosition, 0, selectionColor, -0.0001f);
+                controller.SetSelectionMaterial(worldPos, 0, selectionColor, -0.0001f);
 
+                controller.clickedWorldPosition = worldPos;
                 controller.clickedType = tile.Type;
                 controller.clickedIndex = index;
 
@@ -45,9 +61,8 @@ public class NothingNew : GridTilesModeNew
             case TileType.Building:
             case TileType.Elevator:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.Rock);
-                controller.SetSelectionMaterial(controller.hoverMousePosition, 1, selectionColor, +0.0001f);
+                controller.SetSelectionMaterial(worldPos, 1, selectionColor, +0.0001f);
                 break;
-
         }
     }
 }

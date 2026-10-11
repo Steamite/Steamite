@@ -135,7 +135,7 @@ public class Building : StorageObject
         InfoWindowAdapter info = base.OpenWindow();
         if (info)
         {
-            info.Open(this, InfoMode.Building);
+            //info.Open(this, InfoMode.Building);
             if (IsWorking)
                 ToggleInfoComponents(info, new());
         }

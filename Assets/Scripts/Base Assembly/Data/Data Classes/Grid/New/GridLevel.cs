@@ -5,6 +5,7 @@ using System.Text;
 using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Properties;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
@@ -81,7 +82,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public void SetTile(int index, LevelGridTile tile)
         {
             renderGrid[index] = tile;
-            // RE-RENDER / mark dirty 
         }
 
         public void UIUpdate(string property = "")
