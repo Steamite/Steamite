@@ -15,11 +15,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public NativeArray<LevelGridTile> renderGrid;
         public NativeArray<MovementAndStabilityData> movementAndStability;
 
-        public readonly int totalDimensions;
-
         public readonly int levelOffset;
         public readonly int levelOffsetScaled;
         public readonly int levelDimensions;
+        public readonly int levelDimensionsScaled;
 
         public readonly int levelNumber;
         [CreateProperty] public bool Unlocked;
@@ -34,14 +33,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             levelNumber = _levelNumber;
             levelDimensions = gridSave.levelDimensions;
-
+            levelDimensionsScaled = levelDimensions * chunkDimensions;
 
             levelOffset = gridSave.levelOffset;
-            levelOffsetScaled = levelOffset * chunkDimensions; 
+            levelOffsetScaled = levelOffset * chunkDimensions;
 
-            totalDimensions = chunkDimensions * levelDimensions;
-
-            int tileCount = totalDimensions * totalDimensions;
+            int tileCount = levelDimensionsScaled * levelDimensionsScaled;
 
             renderGrid = gridSave.grid;
 
@@ -72,14 +69,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         }
 
         public void SetTile(int x, int y, int tile)
-            => SetTile(y * totalDimensions + x, tile);
+            => SetTile(y * levelDimensionsScaled + x, tile);
 
         public void SetTile(int index, int tile)
             => movementAndStability[index] = new(tile);
 
 
         public void SetTile(int x, int y, LevelGridTile tile)
-            => SetTile(y * totalDimensions + x, tile);
+            => SetTile(y * levelDimensionsScaled + x, tile);
 
         public void SetTile(int index, LevelGridTile tile)
         {

@@ -199,5 +199,21 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             if (handleGrid == false)
                 ClearMaterial();
         }
+
+        [SerializeField]
+        int damageAmmount = 4;
+        [ContextMenu("DamageRock")]
+        public void DamageClickedRock()
+        {
+            if (clickedIndex == -1)
+                return;
+
+            if (clickedType == 1)
+                world.DamageRock(clickedIndex, damageAmmount);
+            else if (clickedType == (int)TileType.Road)
+                world.MakeRoad(clickedIndex);
+
+            isForcedUpdate = true;
+        }
     }
 }

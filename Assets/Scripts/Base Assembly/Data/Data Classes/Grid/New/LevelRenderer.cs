@@ -5,6 +5,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
@@ -176,6 +177,50 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public void AddRenderer(ICustomRenderer renderer)
         {
             customRenderers.Add(renderer);
+        }
+
+        public void UpdateMesh(int levelIndex, int tileIndex, GridLevel gridLevel)
+        {
+            int y = tileIndex / gridLevel.levelDimensionsScaled;
+            int x = tileIndex % gridLevel.levelDimensionsScaled;
+
+            int2 chunkPos = new 
+                int2(x, y) / GridLevel.chunkDimensions;
+
+            int chunkIndex = (chunkPos.y * gridLevel.levelDimensions) + chunkPos.x;
+
+            // neighbours 
+            CheckNeighbours(y, chunkPos.y, chunkPos, new(0, 1), chunkIndex, gridLevel.levelDimensions, gridLevel);
+            CheckNeighbours(x, chunkPos.x, chunkPos, new(1, 0), chunkIndex, 1, gridLevel);
+
+            UpdateChunk(levelIndex, gridLevel, chunkPos, chunkIndex);
+        }
+
+        private void UpdateChunk(int levelIndex, GridLevel gridLevel, int2 chunkPos, int chunkIndex)
+        {
+            Mesh m = combiner.GetNewMesh(chunkPos, gridLevel);
+            chunkMeshes[levelIndex][chunkIndex] = m;
+        }
+
+        void CheckNeighbours(int toModulo, int axisPosition, int2 chunkPos, int2 change, int chunkIndex, int chunkIndexOffset, GridLevel level)
+        {
+            toModulo %= GridLevel.chunkDimensions;
+
+            if (toModulo == 0)
+            {
+                if (axisPosition > 0)
+                {
+                    UpdateChunk(level.levelNumber, level, chunkPos - change, chunkIndex - chunkIndexOffset);
+                }
+
+            }
+            else if (toModulo == GridLevel.chunkDimensions - 1)
+            {
+                if (axisPosition < level.levelDimensions - 1)
+                {
+                    UpdateChunk(level.levelNumber, level, chunkPos + change, chunkIndex + chunkIndexOffset);
+                }
+            }
         }
     }
 }

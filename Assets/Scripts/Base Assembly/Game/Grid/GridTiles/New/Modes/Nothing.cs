@@ -54,11 +54,18 @@ public class NothingNew : GridTilesModeNew
 
                 controller.clickedType = tile.Type;
                 controller.clickedIndex = index;
+
+                controller.DamageClickedRock();
                 Debug.Log(tile);
                 break;
             case TileType.Road:
             case TileType.Empty:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.None);
+
+                controller.clickedType = tile.Type;
+                controller.clickedIndex = index;
+
+                controller.DamageClickedRock();
                 break;
             case TileType.Building:
             case TileType.Elevator:

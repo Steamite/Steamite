@@ -8,6 +8,7 @@ using Unity.Mathematics;
 using Unity.Mathematics.Geometry;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.PlayerSettings;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
@@ -74,7 +75,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public LevelGridTile GetTile(int x, int level, int y)
         {
-            return gridLevels[level].renderGrid[gridLevels[level].totalDimensions * y + x];
+            return gridLevels[level].renderGrid[gridLevels[level].levelDimensionsScaled * y + x];
         }
 
 
@@ -84,7 +85,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             y -= currentLevel.levelOffsetScaled;
             //Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
             
-            int index = gridLevels[0].totalDimensions * y + x;
+            int index = gridLevels[0].levelDimensionsScaled * y + x;
             if (index < 0 || index >= gridLevels[0].renderGrid.Length)
                 return LevelGridTile.OutsideWall;
             return gridLevels[0].renderGrid[index];
@@ -96,7 +97,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             y -= currentLevel.levelOffsetScaled;
             //Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
 
-            index = gridLevels[0].totalDimensions * y + x;
+            index = gridLevels[0].levelDimensionsScaled * y + x;
             if (index < 0 || index >= gridLevels[0].renderGrid.Length)
                 return LevelGridTile.OutsideWall;
             return gridLevels[0].renderGrid[index];
@@ -147,15 +148,37 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             AddToGridChange(SceneRefs.Humans.SwitchLevel);
             ChangeGridLevel(0);*/
         }
-/*
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="gridPos"></param>
         /// <returns></returns>
-        public bool DamageRock(int3 gridPos, int ammount)
+        public bool DamageRock(int pos, int ammount, int level = 0)
         {
+            GridLevel gridLevel = gridLevels[level];
+            //int pos = gridLevel.levelDimensionsScaled * gridPos.y + gridPos.x;
+            LevelGridTile tile = gridLevel.renderGrid[pos];
+            tile.durability -= ammount;
+            if (tile.durability <= 0)
+            {
+                gridLevel.SetTile(pos, LevelGridTile.Road);
+                
+                renderer.UpdateMesh(level, pos, gridLevel);
+                
+                return true;
+            }
 
-        }*/
+
+            gridLevel.SetTile(pos, tile);
+            return false;
+        }
+
+        public void MakeRoad(int pos, int level = 0)
+        {
+            GridLevel gridLevel = gridLevels[level];
+            gridLevel.SetTile(pos, LevelGridTile.Wall(10));
+            renderer.UpdateMesh(level, pos, gridLevel);
+        }
     }
 }

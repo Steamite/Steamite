@@ -7,7 +7,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
     public enum TileType
     {
-        Boarder,
+        Border,
         Wall,
         Road,
         Empty,
@@ -24,7 +24,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     {
         public int hiddenTypeStyleAmount;
         public int durability;
-        public static readonly LevelGridTile OutsideWall = new LevelGridTile((int)TileType.Boarder, int.MaxValue);
+        public static readonly LevelGridTile OutsideWall = new LevelGridTile((int)TileType.Border, int.MaxValue);
 
         public static LevelGridTile Wall(int durability) => new LevelGridTile((int)TileType.Wall << 1, durability);
         

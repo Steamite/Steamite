@@ -93,8 +93,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             levelDimensions = levelDimension;
             worldSize = new(levelDimensions.x * chunkDimensions.x, levelDimensions.y * chunkDimensions.y);
-            int startX = -1;
-            int startY = -1;
+            int startX = 0;
+            int startY = 0;
 
             Mesh[] meshes = new Mesh[levelDimensions.x * levelDimensions.y];
             int subMeshIndex = 0;
@@ -109,15 +109,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     startX += chunkDimensions.x;
                 }
 
-                startX = -1;
+                startX = 0;
                 startY += chunkDimensions.y;
             }
             return meshes;
         }
 
-        public Mesh GetNewMesh(int2 chunkPosition, NativeArray<LevelGridTile> levelData)
+        public Mesh GetNewMesh(int2 chunkPosition, GridLevel levelData)
         {
-            return ComposeChunk(chunkPosition * chunkDimensions, levelData);
+            worldSize = new(levelData.levelDimensionsScaled, levelData.levelDimensionsScaled);
+
+            return ComposeChunk(chunkPosition * chunkDimensions, levelData.renderGrid);
         }
 
         Mesh ComposeChunk(int2 startPosition, NativeArray<LevelGridTile> levelData)
@@ -131,7 +133,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         void FillChunkData(int2 start, NativeArray<LevelGridTile> chunkData, NativeArray<LevelGridTile> levelData)
         {
             int chunkIndex = 0;
-            
+            start.x--;
+            start.y--;
+
             for (int i = 0; i < chunkDimensions.y + 2; i++)
             {
                 int worldY = start.y + i;
