@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 
 namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 {
@@ -72,7 +74,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             }
             world = SceneRefs.World;
 
-            ChangeSelMode(0);
+            activeModeIndex = 0;
+            activeMode = modes[0];
 
             mouseClicker = GetComponent<MouseClicker>();
             mouseClicker.Init(this);
@@ -83,6 +86,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
         static float2 maxDim = new(1920, 1080);
 
+        float distance;
+        Ray ray;
         public void Update()
         {
             if (obscured)
@@ -102,15 +107,25 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             lastPos = mousePos;
             isForcedUpdate = false;
 
-            Ray ray = Camera.main.ScreenPointToRay(mousePos);
+            ray = Camera.main.ScreenPointToRay(mousePos);
 
-            if (!top.Raycast(ray, out float distance))
+            if (!top.Raycast(ray, out distance))
+                return;
+
+            MouseListen();
+        }
+
+        void MouseListen()
+        {
+            ray = Camera.main.ScreenPointToRay((Vector2)lastPos);
+
+            if (!top.Raycast(ray, out distance))
                 return;
 
             activeMode.MouseTrack(distance, lowHeight, low, ray);
         }
 
-        
+
         public void SetMaterial(int2 pos, int matIndex, Color c, TileType hoverType, int hoverIndex, float mod = 0)
         {
             ClearHoverMaterial(matIndex);
@@ -134,7 +149,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             hoverWorldPosition = pos;
         }
 
-        void ClearHoverMaterial(int matIndex = -1)
+        public void ClearHoverMaterial(int matIndex = -1)
         {
             for (int i = 0; i < materials.Length; i++)
             {
@@ -153,11 +168,16 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             }
         }
 
-        public void Click()
+        public void MouseDown()
         {
             if (obscured)
                 return;
             activeMode.DownObject();
+        }
+
+        public void MouseUp()
+        {
+            activeMode.UpObject();
         }
 
         public void BreakAction()
@@ -189,14 +209,12 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
             inChange = true;
             int i = (int)mode;
-            activeModeIndex = i;
-            activeMode = modes[i];
 
             InfoWindowAdapter.Window.Close();
-/*
-            if (i == activeMode)
+
+            if (i == activeModeIndex)
             {
-                if (ActiveControl.ToggleMod())
+                if (activeMode.ToggleMod)
                 {
                     inChange = false;
                     ChangeSelMode(ControlMode.Nothing);
@@ -206,15 +224,16 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             }
             else
             {
-                ActiveControl.ExitMod();
+                activeMode.ExitMod();
+                
                 DeselectObjects();
-                activeControl = i;
+                activeModeIndex = i;
+                activeMode = modes[i];
 
-
-
-                if (ActiveControl.EnterMod())
-                    Enter();
-            }*/
+                activeMode.EnterMod();
+                
+                MouseListen();
+            }
             inChange = false;
         }
 
@@ -251,15 +270,12 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         internal int2 clickedWorldPosition;
 
         [ContextMenu("DamageRock")]
-        public void DamageClickedRock()
+        public void DamageClickedRock(TileType type, int index)
         {
-            if (clickedIndex == -1)
-                return;
-
-            if (clickedType == 1)
-                world.DamageRock(clickedIndex, damageAmmount);
-            else if (clickedType == (int)TileType.Road)
-                world.MakeRoad(clickedIndex);
+            if(type == TileType.Wall)
+                world.DamageRock(index, damageAmmount);
+            else if (type == TileType.Road)
+                world.MakeRoad(index);
 
             isForcedUpdate = true;
         }
@@ -274,5 +290,6 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
             ((NothingNew)modes[0]).RefreshDownedTile();
         }
+
     }
 }

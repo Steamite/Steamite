@@ -65,6 +65,7 @@ public class SceneRefs : MonoBehaviour
     public static ResearchAdapter ResearchAdapter => instance._researchAdapter;
     public static IQuestController QuestController => instance._questController as IQuestController;
 
+    [Obsolete("Do not use")]
     public static GridTiles GridTiles => throw new NotImplementedException();
 
 

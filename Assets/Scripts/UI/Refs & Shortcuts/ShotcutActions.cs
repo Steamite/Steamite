@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,7 +20,7 @@ namespace Assets.Scripts.UI.Refs___Shortcuts
         public static void BuildRotate_performed(InputAction.CallbackContext obj)
         {
             float axis = obj.ReadValue<float>();
-            if (SceneRefs.GridTiles.activeControl == (int)ControlMode.Build)
+            if (SceneRefs.GridTiles.activeControl == (int)ControlModeOld.Build)
             {
                 Building building = SceneRefs.GridTiles.BlueprintInstance;
                 if (building is Pipe)
@@ -45,17 +43,17 @@ namespace Assets.Scripts.UI.Refs___Shortcuts
 
         public static void Deconstruction_performed(InputAction.CallbackContext obj)
         {
-            SceneRefs.GridTiles.ChangeSelMode(ControlMode.Deconstruct);
+            SceneRefs.MouseController.ChangeSelMode(ControlMode.Deconstruct);
         }
 
         public static void Upgrade_performed(InputAction.CallbackContext obj)
         {
-            SceneRefs.GridTiles.ChangeSelMode(ControlMode.Upgrade);
+            SceneRefs.MouseController.ChangeSelMode(ControlMode.Upgrade);
         }
 
         public static void Dig_performed(InputAction.CallbackContext obj)
         {
-            SceneRefs.GridTiles.ChangeSelMode(ControlMode.Dig);
+            SceneRefs.MouseController.ChangeSelMode(ControlMode.Dig);
         }
 
 

@@ -170,7 +170,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             JobHandle countHandle;
             if (batchSize == -1)
             {
-                job.Run(chunkSize);
+                try
+                {
+                    job.Run(chunkSize);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                }
             }
             else
             {
@@ -230,7 +237,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             JobHandle meshCreationHandle;
             if (batchSize == -1)
             {
-                meshJob.Run(chunkSize);
+                try
+                {
+                    meshJob.Run(chunkSize);
+                }
+                catch(Exception e)
+                {
+                    Debug.Log(e);
+                }
             }
             else
             {
@@ -238,14 +252,20 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 meshCreationHandle.Complete();
             }
 
-            meshData.subMeshCount = 1;
-            meshData.SetSubMesh(0, new UnityEngine.Rendering.SubMeshDescriptor(0, sums.y));
-
-            Mesh mesh = new Mesh();
-            Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, mesh,
-                MeshUpdateFlags.DontValidateIndices | MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontNotifyMeshUsers);
-           /* mesh.RecalculateNormals();
-            mesh.RecalculateTangents();*/
+            Mesh mesh = new Mesh(); ;
+            try
+            {
+                meshData.subMeshCount = 1;
+                meshData.SetSubMesh(0, new UnityEngine.Rendering.SubMeshDescriptor(0, sums.y));
+                            
+                Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, mesh,
+                    MeshUpdateFlags.DontValidateIndices | MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontNotifyMeshUsers);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+            
 
             mesh.bounds = new Bounds
             (
@@ -255,12 +275,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             return mesh;
         }
-/*
-        public Mesh RegenerateChunk(int2 position, NativeArray<LevelGridData> levelData)
-        {
-            ComposeChunk(position, levelData, out Mesh mesh);
-            return mesh;
-        }*/
 
         public void Dispose()
         {

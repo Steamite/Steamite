@@ -36,6 +36,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public readonly bool Hidden => (hiddenTypeStyleAmount & 1) == 1; // one bit
 
         public readonly int Type => (hiddenTypeStyleAmount >> 1) & 0xF; // 4 bits => 16 types
+        public readonly TileType TType => (TileType)((hiddenTypeStyleAmount >> 1) & 0xF); // 4 bits => 16 types
         
         public readonly int Style => (hiddenTypeStyleAmount >> 5) & 0xFF; // 8 bits => 256 styles 
         /// <summary>

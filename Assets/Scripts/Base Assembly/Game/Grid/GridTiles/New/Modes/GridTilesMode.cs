@@ -1,11 +1,6 @@
-﻿using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Unity.Mathematics;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
 using UnityEngine;
-using UnityEngine.LightTransport;
-using static Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.LevelGridTile;
 
 public abstract partial class GridTilesModeNew : MonoBehaviour
 {
@@ -39,10 +34,6 @@ public abstract partial class GridTilesModeNew : MonoBehaviour
     {
         Cursor.SetCursor(cursor, cursorOffset, CursorMode.ForceSoftware);
     }
-
-    public virtual void EnterObject(int type, int index) { }
-
-    public virtual void ExitObject(int type, int index) { }
 
     public virtual void DownObject() { }
 

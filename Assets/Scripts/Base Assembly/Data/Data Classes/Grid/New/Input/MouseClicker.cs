@@ -27,14 +27,17 @@ public class MouseClicker : MonoBehaviour
     {
         clickAction.Enable();
         clickAction.performed += ClickAction_performed;
+        clickAction.canceled += ClickAction_canceled;
 
         breakAction.Enable();
         breakAction.performed += BreakAction_performed;
     }
 
+
     private void OnDisable()
     {
         clickAction.performed -= ClickAction_performed;
+        clickAction.canceled -= ClickAction_canceled;
         clickAction.Disable();
         breakAction.performed -= BreakAction_performed;
         breakAction.Disable();
@@ -48,6 +51,11 @@ public class MouseClicker : MonoBehaviour
 
     private void ClickAction_performed(InputAction.CallbackContext obj)
     {
-        controller.Click();
+        controller.MouseDown();
+    }
+
+    private void ClickAction_canceled(InputAction.CallbackContext obj)
+    {
+        controller.MouseUp();
     }
 }

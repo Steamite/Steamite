@@ -1,63 +1,90 @@
-﻿using System;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Mathematics;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
-public class DigNew : GridTilesMode
+public class DigNew : GridTilesModeNew
 {
-    public Color RemoveColor;
+    [SerializeField] Color RemoveColor;
+    [SerializeField] Color toBeDugColor;
+    [SerializeField] Color toBeDugColorRoad;
 
-    [SerializeField] public Color ToBeDugColor;
+    bool drag = false;
 
-    public override void EnterObject(ClickableObject enterObject)
+
+    public override void MouseTrack(float distance, float lowHeight, Plane low, Ray _ray)
     {
-        Rock _r = enterObject as Rock;
-        if (gridTiles.Drag)
-        {
-            gridTiles.CalcTiles(gridTiles.ActivePos);
-            return;
-        }
-        else if (!_r)
-            return;
+        int2 lastPos = controller.hoverWorldPosition;
 
-        if (_r.toBeDug)
-            enterObject.Highlight(RemoveColor, false);
+        base.MouseTrack(distance, lowHeight, low, _ray);
+
+        if(drag == true && !lastPos.Equals(controller.hoverWorldPosition))
+        {
+            DownObject();
+        }
+    }
+
+    protected override bool CheckTopObstruction(int2 pos, int index, LevelGridTile tile)
+    {
+        TileType tileType = tile.TType;
+
+        if (tileType == TileType.Wall)
+            controller.SetMaterial(pos, 0, toBeDugColor, tileType, index, 0.0001f);
         else
-            enterObject.Highlight(highlightColor);
+            return false;
+
+
+        return true;
     }
 
-    public override void ExitObject(ClickableObject exitObject)
+    protected override bool CheckMidObstruction(int2 pos, int index, LevelGridTile tileType)
     {
-        if (exitObject is Rock rock)
-        {
-            if (gridTiles.Drag)
-                return;
-            rock.Highlight(default);
-        }
+        return false;
     }
+
+    protected override void FallbackColor(LevelGridTile tile, int index, int2 pos)
+    {
+        TileType type = tile.TType;
+        if (type == TileType.Road || type == TileType.Empty)
+            controller.SetMaterial(pos, 0, toBeDugColor, type, index, -0.0001f);
+
+        else
+            controller.ClearHoverMaterial();
+    }
+
+
 
     public override void DownObject()
     {
-        if (gridTiles.ActiveObject is Rock rock)
-        {
-            gridTiles.InitDig(rock);
-            gridTiles.Drag = true;
-        }
+        var tile = controller.world.GetActiveTile(
+            controller.hoverWorldPosition.x,
+            controller.hoverWorldPosition.y,
+            out int index);
+        HandleSelectionTypes(tile, index, controller.hoverWorldPosition);
+        
+        drag = true;
     }
 
     public override void UpObject()
     {
-        if(gridTiles.ActiveObject is Rock rock)
-        {
-            gridTiles.DigMark(rock);
-            gridTiles.Drag = false;
-            gridTiles.Enter();
-        }
+        drag = false;
     }
 
-    public override void ExitMod()
+    void HandleSelectionTypes(LevelGridTile tile, int index, int2 worldPos)
     {
-        gridTiles.ClearDig();
-        gridTiles.Drag = false;
+        TileType type = tile.TType;
+        switch (type)
+        {
+            case TileType.Wall:
+                controller.DamageClickedRock(type, index);
+                break;
+            case TileType.Road:
+            case TileType.Empty:
+                controller.DamageClickedRock(type, index);
+                break;
+        }
     }
 }

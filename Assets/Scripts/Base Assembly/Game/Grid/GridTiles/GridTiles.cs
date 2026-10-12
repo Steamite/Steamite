@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>Handles different control states for <see cref="GridTiles"/>.</summary>
-public enum ControlMode
+public enum ControlModeOld
 {
     /// <summary>Basic inspection mode.</summary>
     Nothing,
@@ -123,13 +123,13 @@ public class GridTiles : MonoBehaviour
     ///<inheritdoc cref="MultiSelect.ToBeDugColor"/>
     //public Color ToBeDugColor => multiSelect.ToBeDugColor;
 
-    public Color SelectionColor => ((Nothing)controlModes[(int)ControlMode.Nothing]).SelectionColor;
+    public Color SelectionColor => ((Nothing)controlModes[(int)ControlModeOld.Nothing]).SelectionColor;
 
-    public Color DeconstructColor => controlModes[(int)ControlMode.Deconstruct].highlightColor;
+    public Color DeconstructColor => controlModes[(int)ControlModeOld.Deconstruct].highlightColor;
 
-    public Color ToBeTempDugColor => controlModes[(int)ControlMode.Dig].highlightColor;
-    public Color ToBeDugColor => ((Dig)controlModes[(int)ControlMode.Dig]).ToBeDugColor;
-    public Color ToRemoveDugColor => ((Dig)controlModes[(int)ControlMode.Dig]).RemoveColor;
+    public Color ToBeTempDugColor => controlModes[(int)ControlModeOld.Dig].highlightColor;
+    public Color ToBeDugColor => ((Dig)controlModes[(int)ControlModeOld.Dig]).ToBeDugColor;
+    public Color ToRemoveDugColor => ((Dig)controlModes[(int)ControlModeOld.Dig]).RemoveColor;
 
 
     ///<inheritdoc cref="MultiSelect.InitPipes(GridPos, Pipe)"/>
@@ -190,7 +190,7 @@ public class GridTiles : MonoBehaviour
     {
         if (multiSelect.Break())
         {
-            ChangeSelMode(ControlMode.Nothing);
+            ChangeSelMode(ControlModeOld.Nothing);
             Enter(ActiveObject);
             Drag = false;
         }
@@ -201,7 +201,7 @@ public class GridTiles : MonoBehaviour
     /// Changes the current tool mod, and manages transitions betwean them.
     /// </summary>
     /// <param name="mode"></param>
-    public void ChangeSelMode(ControlMode mode)
+    public void ChangeSelMode(ControlModeOld mode)
     {
         if (inChange)
             return;
@@ -214,7 +214,7 @@ public class GridTiles : MonoBehaviour
             if (ActiveControl.ToggleMod())
             {
                 inChange = false;
-                ChangeSelMode(ControlMode.Nothing);
+                ChangeSelMode(ControlModeOld.Nothing);
             }
             else
                 DeselectObjects();

@@ -178,7 +178,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
             activeOverlayIndex = -1;
             OverlayChanged?.Invoke(activeOverlayIndex, null);
 
-            gridTiles.ChangeSelMode(ControlMode.Nothing);
+            gridTiles.ChangeSelMode(ControlModeOld.Nothing);
 
             return;
         }
@@ -220,8 +220,8 @@ public class OverlayController : MonoBehaviour, IAfterLoad
         Overlay(overlay.gradient);
 
         OverlayChanged?.Invoke(activeOverlayIndex, overlay);
-        if (gridTiles.activeControl != (int)ControlMode.Overlay)
-            gridTiles.ChangeSelMode(ControlMode.Overlay);
+        if (gridTiles.activeControl != (int)ControlModeOld.Overlay)
+            gridTiles.ChangeSelMode(ControlModeOld.Overlay);
         else
             mainMapMaterial.SetVector("_MousePos", new(-50, 0, -50));
 

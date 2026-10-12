@@ -1751,7 +1751,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BaseAssembly::NothingNew
   cursor: {fileID: 0}
   cursorOffset: {x: 0, y: 0}
-  ToggleMod: 1
+  ToggleMod: 0
   hoverColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0.7019608}
   selectionColor: {r: 1, g: 0, b: 0, a: 0.77254903}
 --- !u!1 &977506019
@@ -1813,7 +1813,7 @@ MonoBehaviour:
   lastPos:
     x: 0
     y: 0
-  hoverMousePosition:
+  hoverWorldPosition:
     x: 0
     y: 0
   hoverObjectIndex: 0
@@ -1825,6 +1825,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 166e19725f4ea4c46af762dc0e251d0b, type: 2}
   clickedType: 0
   clickedIndex: 0
+  obscured: 0
   damageAmmount: 10
 --- !u!114 &977506022
 MonoBehaviour:
@@ -2346,7 +2347,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1903098573
 Transform:
   m_ObjectHideFlags: 0
@@ -2371,14 +2372,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1903098572}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c50f9717091c0fb4ca717445c1fc3960, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f912f1f63f227a4ea010272e4d813fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.GridTilesModes.Dig
   cursor: {fileID: 2800000, guid: fd2def2a77be87d4382da31006c84430, type: 3}
   cursorOffset: {x: 1, y: 15}
-  highlightColor: {r: 1, g: 0.8792537, b: 0, a: 1}
+  ToggleMod: 1
   RemoveColor: {r: 1, g: 0, b: 0, a: 1}
-  ToBeDugColor: {r: 1, g: 0.5221451, b: 0, a: 1}
+  toBeDugColor: {r: 0.9528302, g: 0.6099841, b: 0, a: 0.8666667}
+  toBeDugColorRoad: {r: 0.1724813, g: 0.7169812, b: 0.18409552, a: 0.8235294}
 --- !u!4 &206732441787875933
 Transform:
   m_ObjectHideFlags: 0
@@ -2557,7 +2559,6 @@ MonoBehaviour:
   buildingMeshes:
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   buildingMaterial: {fileID: 2100000, guid: dd3fed6aec66e76439d58f3a9573a37a, type: 2}
-  mat2: {fileID: 9219180724257492359, guid: 14db30a77ca5d4c40a8fe5d4b80eebd8, type: 3}
 --- !u!114 &4967022013944964022
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>Util for managing world data.</summary>
+[Obsolete]
 public static class MyGrid
 {
 
@@ -59,7 +60,7 @@ public static class MyGrid
     /// </summary>
     public static void Init()
     {
-        AddToGridChange((_, _) => SceneRefs.GridTiles.ChangeSelMode(ControlMode.Nothing));
+        AddToGridChange((_, _) => SceneRefs.GridTiles.ChangeSelMode(ControlModeOld.Nothing));
         AddToGridChange((_, _) => SceneRefs.GridTiles.Exit());
         AddToGridChange(SceneRefs.Humans.SwitchLevel);
         ChangeGridLevel(0);

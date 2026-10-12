@@ -21,7 +21,7 @@ public class BuildingActions : MonoBehaviour
             if (value == null)
             {
                 gridTiles.DeselectBuildingButton?.Invoke();
-                gridTiles.ChangeSelMode(ControlMode.Nothing);
+                gridTiles.ChangeSelMode(ControlModeOld.Nothing);
             }
         }
     }
@@ -39,10 +39,10 @@ public class BuildingActions : MonoBehaviour
             if (value == null)
             {
                 if (blueprintInstance != null)
-                    gridTiles.ChangeSelMode(ControlMode.Nothing);
+                    gridTiles.ChangeSelMode(ControlModeOld.Nothing);
             }
             else
-                gridTiles.ChangeSelMode(ControlMode.Build);
+                gridTiles.ChangeSelMode(ControlModeOld.Build);
         }
     }
 

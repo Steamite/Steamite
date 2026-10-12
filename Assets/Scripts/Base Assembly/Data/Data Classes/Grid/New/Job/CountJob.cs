@@ -17,12 +17,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             int dataIndex = index + paddedWidth + 1 + (index / (chunkWidth)) * 2;
             LevelGridTile b = gridData[dataIndex];
-            // TODO switch based on level data
 
             int type = b.Type;
 
+
             if (type == (int)TileType.Building)
+            {
+                vertexes[index] = 0;
+                triangles[index] = 0;
                 return;
+            }
 
             CreateTile(index);
 

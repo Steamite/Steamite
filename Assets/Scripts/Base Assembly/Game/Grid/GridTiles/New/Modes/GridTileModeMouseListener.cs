@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
-using static Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.LevelGridTile;
 
 public abstract partial class GridTilesModeNew : MonoBehaviour
 {
@@ -78,9 +76,9 @@ public abstract partial class GridTilesModeNew : MonoBehaviour
         }
 
         // mark road
-        controller.SetMaterial(prevPos, 0, _hoverColor, (TileType)tile.Type, index, -0.001f);
+        // NewMethod(tile, index, prevPos);
+        FallbackColor(tile, index, prevPos);
     }
-
     int2 MovePosition(int2 pos, float2 modDir, ref Vector3 endPoint, float3 dir, int2 step)
     {
         float2 diff;
@@ -110,7 +108,10 @@ public abstract partial class GridTilesModeNew : MonoBehaviour
         return pos;
     }
 
-
+    protected virtual void FallbackColor(LevelGridTile tile, int index, int2 prevPos)
+    {
+        controller.SetMaterial(prevPos, 0, _hoverColor, (TileType)tile.Type, index, -0.001f);
+    }
 
     protected virtual bool CheckTopObstruction(int2 pos, int index, LevelGridTile tile)
     {
@@ -139,5 +140,4 @@ public abstract partial class GridTilesModeNew : MonoBehaviour
         }
         return false;
     }
-
 }

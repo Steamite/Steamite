@@ -89,7 +89,7 @@ public class ToolkitShortucts : MonoBehaviour, IAfterLoad
             return;
 
         int i = Mathf.RoundToInt(level.ReadValue<float>());
-        MyGrid.ChangeGridLevel(i);
+        SceneRefs.World.SetLevel(i);
     }
 
     void GameSpeed_performed(InputAction.CallbackContext obj)
