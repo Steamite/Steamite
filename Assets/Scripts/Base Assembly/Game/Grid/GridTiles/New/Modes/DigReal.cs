@@ -12,15 +12,9 @@ public class DigReal : GridTilesModeNew
     [SerializeField] Color toBeDugColor;
     [SerializeField] Color toBeDugColorRoad;
 
-    [SerializeField] Texture2D toDigTexture;
+    [SerializeField] LevelRenderer renderer;
     
     bool drag = false;
-
-    public override void InitMode(MouseController _mouseController)
-    {
-        base.InitMode(_mouseController);
-        toDigTexture = new(SceneRefs.World.LargestLevelDimensions, SceneRefs.World.LargestLevelDimensions);
-    }
 
 
     public override void MouseTrack(float distance, float lowHeight, Plane low, Ray _ray)
@@ -83,18 +77,15 @@ public class DigReal : GridTilesModeNew
         // EndCalc
     }
 
-    void CalculateChanges()
-    {
-
-    }
-
     void HandleSelectionTypes(LevelGridTile tile, int index, int2 worldPos)
     {
         TileType type = tile.TType;
         switch (type)
         {
             case TileType.Wall:
-                
+                int worldIndex = SceneRefs.World.GetWorldIndex(worldPos);
+                renderer.toDigArray[worldIndex] = byte.MaxValue;
+                renderer.UpdateToDigTexture();
                 break;
         }
     }

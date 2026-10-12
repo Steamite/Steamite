@@ -20,7 +20,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         int currentLevelIndex;
         public int CurrentLevelIndex => currentLevelIndex;
         GridLevel currentLevel;
-        
+        public GridLevel CurrentLevel => currentLevel;
         LevelRenderer renderer;
 
         WorldBuildings buildings;
@@ -31,11 +31,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public int CenterScaled;
         [NonSerialized] public int LargestLevelDimensions;
+        [NonSerialized] public int LargestLevelDimensionsScaled;
 
         [SerializeField] Mesh[] buildingMeshes;
         [SerializeField] Material buildingMaterial;
         Action<int, int> onLevelChange;
-        internal IEnumerable<Chunk> chunks;
+        public List<Chunk> chunks;
         
         
 
@@ -50,7 +51,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             GridLevel.chunkDimensions = saveToLoad.chunkDimensions;
             LargestLevelDimensions = saveToLoad.largestDimension;
-            
+            LargestLevelDimensionsScaled = LargestLevelDimensions * GridLevel.chunkDimensions;
+
+
+
             for (int i = 0; i < LEVEL_COUNT; i++)
             {
                 gridLevels[i] = new GridLevel(saveToLoad.gridSave[i], i);
@@ -66,7 +70,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             renderer.AddRenderer(buildings.SetupRenderer(
                 buildingMeshes, 
                 buildingMaterial));            
-            renderer.Init(LEVEL_COUNT, gridLevels);
+            renderer.Init(LEVEL_COUNT, gridLevels, LargestLevelDimensions * saveToLoad.chunkDimensions);
 
             SetLevel(0);
         }
@@ -179,5 +183,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             gridLevel.SetTile(pos, LevelGridTile.Wall(10));
             renderer.UpdateMesh(level, pos, gridLevel);
         }
+
+        public int GetWorldIndex(int2 worldPosition) => worldPosition.y * LargestLevelDimensionsScaled + worldPosition.x;
     }
 }

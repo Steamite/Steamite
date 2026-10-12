@@ -25,14 +25,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         [SerializeField] int2 cameraChunkSize;
         [SerializeField] Material worldMaterial;
 
+        [SerializeField] Texture2D toDigTexture;
+
         MeshCombinerPlus combiner;
 
         public void Awake()
         {
             enabled = false;
         }
-
-        public void Init(int levelCount, GridLevel[] levels)
+        
+        [NonSerialized] public NativeArray<byte> toDigArray;
+        public void Init(int levelCount, GridLevel[] levels, int maxSize)
         {
             combiner = new(GridLevel.chunkDimensions);
             chunkMeshes = new Mesh[levelCount][];
@@ -41,12 +44,19 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             for (int i = 0; i < levelCount; i++)
             {
-                /*
-                chunkMeshes[i] = new Mesh[levelDimensions[i].x * levelDimensions[i].y];
-                dirtyMeshes[i] = new bool[levelDimensions[i].x * levelDimensions[i].y];*/
-
                 chunkMeshes[i] = combiner.GetLevelMeshes(levels[i].levelDimensions, levels[i].renderGrid);
             }
+
+            toDigTexture = new(maxSize, maxSize, TextureFormat.R8, false)
+            {
+                filterMode = FilterMode.Point
+            };
+            worldMaterial.SetFloat(Shader.PropertyToID("_Width"), maxSize);
+            worldMaterial.SetFloat(Shader.PropertyToID("_Height"), maxSize);
+
+            worldMaterial.SetTexture(Shader.PropertyToID("_DigTexture"), toDigTexture);
+            toDigArray = new NativeArray<byte>(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+            UpdateToDigTexture();
 
             renderParams = new(worldMaterial) 
             {
@@ -62,6 +72,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             enabled = true;
         }
 
+
+        public void UpdateToDigTexture()
+        {
+            toDigTexture.SetPixelData(toDigArray, 0);
+            toDigTexture.Apply(false, false);
+        }
+
         void OnChange(int _, int newI)
         {
             ChangeLevel(SceneRefs.World.GetLevel(newI));
@@ -73,7 +90,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             if (toRender.IsCreated)
                 toRender.Dispose();
-            
+            if(toDigArray.IsCreated)
+                toDigArray.Dispose();
             combiner?.Dispose();
         }
 
