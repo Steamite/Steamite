@@ -32,20 +32,23 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             }
         }
 
-        public BuildingRender SetupRenderer(Mesh[] meshes, Material buildingMaterial, Material mat2)
+        public BuildingRender SetupRenderer(Mesh[] meshes, Material buildingMaterial)
         {
+
+
+            CombineInstance combineInstance;
             uint[] counts = new uint[meshes.Length];
-            uint2[] instanceData = new uint2[lastIndex];
+            BuildingRenderData[] instanceData = new BuildingRenderData[lastIndex];
 
             for (int i = 0; i < lastIndex; i++)
             {
                 if (buildings[i] == null)
                     continue;
                 counts[buildings[i].meshIndex]++;
-                instanceData[i] = new(buildings[i].position, buildings[i].meshIndex);
+                instanceData[i] = buildings[i].renderData; //new(, buildings[i].meshIndex);
             }
 
-            render = new(buildingMaterial, mat2);
+            render = new(buildingMaterial);
             int[] indexes = render.UploadBuildingData(meshes, counts, instanceData);
 
             int x = 0;
@@ -84,7 +87,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 lastIndex++;
             }
 
-            render?.CreateBuilding(new(data.position, data.meshIndex));
+            render?.CreateBuilding(data.renderData);
 
             return index;
         }

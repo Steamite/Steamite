@@ -5,12 +5,9 @@ using System.Text;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings
 {
-
     [Serializable]
-    public class BuildingNew
+    public struct BuildingRenderData
     {
-        protected int indexInList;
-
         /// <summary>
         /// 00 - 09 - x             0x3FF<br/>
         /// 10 - 19 - z             0x3FF<br/>
@@ -19,6 +16,21 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
         /// 25 - 31 - construction progress<br/>
         /// </summary>
         public uint position;
+        /// <summary>
+        /// 00 - 03 - x
+        /// 04 - 07 - y
+        /// </summary>
+        public byte blueprintSize;
+        public uint meshIndex;
+    }
+
+    [Serializable]
+    public class BuildingNew
+    {
+        protected int indexInList;
+
+        public BuildingRenderData renderData;
+
         public uint meshIndex;
         public bool IsConstructing;
         public bool IsDeconstructing;
@@ -37,7 +49,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
 
         public void CreateMainElevator(int centerPos)
         {
-            position = (uint)(centerPos & 0x3FF | ((centerPos & 0x3FF) << 10)); 
+            renderData.position = (uint)(centerPos & 0x3FF | ((centerPos & 0x3FF) << 10)); 
             IsConstructing = false;
             IsDeconstructing = false;
             isMain = true;

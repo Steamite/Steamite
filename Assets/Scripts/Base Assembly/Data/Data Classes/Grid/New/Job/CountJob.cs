@@ -20,10 +20,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             // TODO switch based on level data
 
             int type = b.Type;
-/*
+
             if (type == (int)TileType.Building)
                 return;
-*/
+
             CreateTile(index);
 
             if (type == 1)

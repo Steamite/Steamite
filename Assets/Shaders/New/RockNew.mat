@@ -71,7 +71,7 @@ Material:
     - _MousePos: {r: 70.5, g: 0, b: 72.5, a: 0}
     - _Range: {r: 0.5001, g: 0.5001, b: 0, a: 0}
     - _SelectionColor: {r: 1, g: 0, b: 0, a: 0.77254903}
-    - _SelectionPosition: {r: 101.5, g: 0, b: 90.5, a: 0}
-    - _SelectionRange: {r: 0.4999, g: 0.4999, b: 0, a: 0}
+    - _SelectionPosition: {r: 81.5, g: 0, b: 78.5, a: 0}
+    - _SelectionRange: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

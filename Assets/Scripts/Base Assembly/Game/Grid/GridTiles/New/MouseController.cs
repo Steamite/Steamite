@@ -6,7 +6,6 @@ using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.PlayerSettings;
 
 namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 {

@@ -64,20 +64,19 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void Execute(int index)
         {
-            int sVertexIndex = vertexOffsets[index];
-            int sTriangleIndex = triangleOffsets[index];
-
             int x = index % chunkWidth;
             int y = index / chunkWidth;
 
-            //int dataIndex = index + paddedWidth + 1 + (y * 2);
             int dataIndex = index + paddedWidth + 1 + (index / (chunkWidth)) * 2;
 
             LevelGridTile tile = gridData[dataIndex];
             int type = tile.Type;
-/*
+
             if (type == (int)TileType.Building)
-                return;*/
+                return;
+
+            int sVertexIndex = vertexOffsets[index];
+            int sTriangleIndex = triangleOffsets[index];
 
             CreateTile(dataIndex, sVertexIndex, sTriangleIndex, x, y, type);
             sVertexIndex += 4;

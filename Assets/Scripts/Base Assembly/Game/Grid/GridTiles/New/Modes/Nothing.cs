@@ -44,7 +44,6 @@ public class NothingNew : GridTilesModeNew
                 controller.clickedWorldPosition = worldPos;
                 controller.clickedType = tile.Type;
                 controller.clickedIndex = index;
-
                 Debug.Log(tile);
                 break;
             case TileType.Road:
@@ -56,7 +55,6 @@ public class NothingNew : GridTilesModeNew
                 controller.clickedWorldPosition = worldPos;
                 controller.clickedType = tile.Type;
                 controller.clickedIndex = index;
-
                 break;
             case TileType.Building:
             case TileType.Elevator:

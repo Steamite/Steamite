@@ -34,8 +34,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         [SerializeField] Mesh[] buildingMeshes;
         [SerializeField] Material buildingMaterial;
-        [SerializeField] Material mat2;
-
         Action<int, int> onLevelChange;
         internal IEnumerable<Chunk> chunks;
         
@@ -65,7 +63,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
 
             renderer = GetComponent<LevelRenderer>();
-            renderer.AddRenderer(buildings.SetupRenderer(buildingMeshes, buildingMaterial, mat2));            
+            renderer.AddRenderer(buildings.SetupRenderer(
+                buildingMeshes, 
+                buildingMaterial));            
             renderer.Init(LEVEL_COUNT, gridLevels);
 
             SetLevel(0);
@@ -170,7 +170,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 gridLevel.SetTile(pos, tile);
 
             }
-            SceneRefs.MouseController.UpdateTileUI(pos, level);
+            //SceneRefs.MouseController.UpdateTileUI(pos, level);
         }
 
         public void MakeRoad(int pos, int level = 0)

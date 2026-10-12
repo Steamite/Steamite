@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 using UnityEngine.XR;
 
@@ -11,9 +13,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 {
     struct RenderBatch
     {
-        public Mesh mesh;
         public uint startIndex;
-        public uint size;
         public uint numberOfItems;
         public uint currentAssigned;
     }
@@ -33,71 +33,107 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         RenderBatch[] renderBatches;
 
         private RenderParams renderParams;
-        private RenderParams renderParamsSingle;
         private MaterialPropertyBlock propertyBlock;
 
         int totalCapacity;
-        NativeArray<uint> args;
+        /// <summary>
+        /// Instance buffer arguments (mesh and instance numbers)
+        /// </summary>
+        GraphicsBuffer.IndirectDrawIndexedArgs[] args;
+
         /// <summary>
         /// RenderData
         /// </summary>
         NativeArray<uint> data;
 
-        public BuildingRender(Material buildingMaterial, Material tempMaterial)
+        Mesh mergedMesh;
+
+        public BuildingRender(Material buildingMaterial)
         {
             propertyBlock = new();
-            renderParams = new(buildingMaterial) { matProps = propertyBlock, worldBounds = new Bounds(Vector3.zero, new Vector3(100000, 10000, 100000)) };/*
-            {
-                matProps = propertyBlock,
-                material = buildingMaterial,
-                shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                receiveShadows = true,
-                worldBounds = new Bounds(Vector3.zero, new Vector3(1000, 1000, 1000))
-            };*/
-            renderParamsSingle = new(tempMaterial);
-        }
-        public int[] UploadBuildingData(Mesh[] meshes, uint[] count, uint2[] instanceData)
-        {
-            InitBatches(meshes, count);
 
-            SetupArgBuffer();
+            propertyBlock.SetFloat("_CellSize", 1);
+            propertyBlock.SetFloat("_HeightY", 1);
+
+            renderParams = new(buildingMaterial) 
+            { 
+                matProps = propertyBlock, 
+                worldBounds = new Bounds(Vector3.zero, new Vector3(100000, 10000, 100000)) 
+            };
+
+        }
+        public int[] UploadBuildingData(Mesh[] meshes, uint[] count, BuildingRenderData[] instanceData)
+        {
+            SetupArgBuffer(meshes.Length);
+
+            InitBatches(meshes, count);
 
             return RealocateInstanceBuffer(instanceData);
         }
 
         void InitBatches(Mesh[] meshes, uint[] count)
         {
+            CombineInstance[] combines = new CombineInstance[meshes.Length];
+
             renderBatches = new RenderBatch[meshes.Length];
             uint offset = 0;
+            uint indexStart  = 0;
+            uint vertexStart = 0;
+
             for (int i = 0; i < meshes.Length; i++)
             {
+                Mesh srcMesh = meshes[i];
+                CombineInstance combineInstance = new()
+                {
+                    mesh = srcMesh,
+                    transform = Matrix4x4.identity
+                };
+                combines[i] = combineInstance;
+
                 renderBatches[i] = new()
                 {
-                    mesh = meshes[i],
                     numberOfItems = count[i],
-                    size = math.min(count[i] * 2, 10),
                     startIndex = offset
                 };
-                offset += renderBatches[i].size; 
+
+                uint indexCount = srcMesh.GetIndexCount(0);
+
+                args[i] = new GraphicsBuffer.IndirectDrawIndexedArgs()
+                {
+                    indexCountPerInstance = indexCount,
+                    instanceCount = renderBatches[i].numberOfItems,
+                    startIndex = indexStart,
+                    baseVertexIndex = vertexStart,
+                    startInstance = renderBatches[i].startIndex,
+                };
+
+                indexStart += indexCount;
+                vertexStart += (uint)srcMesh.vertexCount;
+
+                offset += math.min(count[i] * 2, 10); 
             }
             totalCapacity = (int)offset;
+
+            mergedMesh = new()
+            {
+                indexFormat = IndexFormat.UInt32,
+            };
+            mergedMesh.CombineMeshes(combines, true, true);
+            mergedMesh.UploadMeshData(true);
+
+            argBuffer.SetData(args);
         }
 
-        void SetupArgBuffer()
+        void SetupArgBuffer(int length)
         {
-            if(argBuffer != null && argBuffer.IsValid())
+            args = new GraphicsBuffer.IndirectDrawIndexedArgs[length];
+
+            if (argBuffer != null && argBuffer.IsValid())
                 argBuffer.Dispose();
 
-            argBuffer = new(
-                GraphicsBuffer.Target.IndirectArguments, 
-                renderBatches.Length * 5, 
-                sizeof(uint));
-
-            args = new NativeArray<uint>(renderBatches.Length * 5, Allocator.Persistent);
-            UpdateArgs();
-
-            propertyBlock.SetFloat("_CellSize", 1);
-            propertyBlock.SetFloat("_HeightY", 1);
+            argBuffer = new(GraphicsBuffer.Target.IndirectArguments,
+                length,
+                20);
         }
 
         /// <summary>
@@ -112,36 +148,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 RenderBatch batch = renderBatches[i];
 
                 startIndex = i * 5;
-                args[startIndex + 0] = batch.mesh.GetIndexCount(0);
-                args[startIndex + 1] = batch.numberOfItems;
-                args[startIndex + 2] = batch.mesh.GetIndexStart(0);
-                args[startIndex + 3] = batch.mesh.GetBaseVertex(0);
-                args[startIndex + 4] = batch.startIndex;
+                args[i].instanceCount = batch.numberOfItems;
+                args[i].startIndex = batch.startIndex;
             }
-            argBuffer.SetData(args, startElement*5, startElement*5, (renderBatches.Length - startElement)*5);
+            argBuffer.SetData(args);
         }
 
-        /// <summary>
-        /// Update only one argument, Used when an item is added but the collection doesn't need to be resized.
-        /// </summary>
-        /// <param name="startElement"></param>
-        void UpdateArg(int startElement)
-        {
-            int startIndex = startElement * 5;
-
-            RenderBatch batch = renderBatches[startElement];
-
-            args[startIndex + 0] = batch.mesh.GetIndexCount(0);
-            args[startIndex + 1] = batch.numberOfItems;
-            args[startIndex + 2] = batch.mesh.GetIndexStart(0);
-            args[startIndex + 3] = batch.mesh.GetBaseVertex(0);
-            args[startIndex + 4] = batch.startIndex;
-
-            argBuffer.SetData(args, startElement*5, startElement*5, 5);
-        }
-
-
-        int[] RealocateInstanceBuffer(uint2[] instanceData)
+        int[] RealocateInstanceBuffer(BuildingRenderData[] instanceData)
         {
             if(instanceBuffer != null && instanceBuffer.IsValid())
                 instanceBuffer.Dispose();
@@ -156,9 +169,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             data = new NativeArray<uint>(totalCapacity, Allocator.Persistent);
             for (int i = 0; i < instanceData.Length; i++)
             {
-                int batchIndex = (int)instanceData[i].y;
+                int batchIndex = (int)instanceData[i].meshIndex;
                 int index = (int)(renderBatches[batchIndex].startIndex + renderBatches[batchIndex].currentAssigned);
-                data[index] = instanceData[i].x;
+                data[index] = instanceData[i].position;
 
                 indexes[i] = index;
                 renderBatches[batchIndex].currentAssigned++;
@@ -170,12 +183,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             return indexes;
         }
 
-        public void UpdateBuilding(int index, uint data)
+        public void UpdateBuilding(int index, BuildingRenderData data)
         {
             
         }
 
-        public void CreateBuilding(uint2 data)
+        public void CreateBuilding(BuildingRenderData data)
         {
 
             //UpdateArg(data.y);
@@ -186,6 +199,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             //UpdateArg(data.y)
         }
 
+
         public void Dispose()
         {
             if (instanceBuffer != null && instanceBuffer.IsValid())
@@ -193,8 +207,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             if (argBuffer != null && argBuffer.IsValid())
                 argBuffer.Dispose();
 
-            if (args != null && args.IsCreated)
-                args.Dispose();
             if (data != null && data.IsCreated)
                 data.Dispose();
         }
@@ -204,19 +216,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         {
             propertyBlock.SetInt("_LevelOffset", levelOffsetScaled);
         }
+
         public void Render(int2 position, int2 range)
         {
-            for (int i = 0; i < renderBatches.Length; i++)
-            {
-                /*for (int j = 0; j < renderBatches[i].numberOfItems; j++)
-                {
-                    Graphics.RenderMesh(renderParamsSingle, renderBatches[i].mesh, 0, Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one));
-                }*/
-                if (renderBatches[i].numberOfItems == 0)
-                    continue;
-                
-                Graphics.RenderMeshIndirect(renderParams, renderBatches[i].mesh, argBuffer, 1, i*5*sizeof(uint));
-            }
+            Graphics.RenderMeshIndirect(
+                renderParams,
+                mergedMesh,
+                argBuffer,
+                1,
+                0);
         }
     }
 }

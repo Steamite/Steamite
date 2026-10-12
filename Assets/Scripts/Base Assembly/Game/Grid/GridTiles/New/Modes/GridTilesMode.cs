@@ -47,4 +47,5 @@ public abstract partial class GridTilesModeNew : MonoBehaviour
     public virtual void DownObject() { }
 
     public virtual void UpObject() { }
+
 }

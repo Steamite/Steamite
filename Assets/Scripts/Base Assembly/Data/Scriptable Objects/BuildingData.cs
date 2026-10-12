@@ -15,7 +15,6 @@ using UnityEngine.UIElements;
 public class BuildingWrapper : DataObject
 {
     public Building Building => building;
-    [FormerlySerializedAs("b")]
     [SerializeField] Building building;
 
     public List<BuildingModifications> modifications;
