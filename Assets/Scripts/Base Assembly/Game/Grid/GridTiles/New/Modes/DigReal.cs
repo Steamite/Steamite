@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DigReal : GridTilesModeNew
 {
@@ -25,7 +26,7 @@ public class DigReal : GridTilesModeNew
 
         if (drag == true && !lastPos.Equals(controller.hoverWorldPosition))
         {
-            DownObject();
+            CalculateTiles();
         }
     }
 
@@ -46,47 +47,125 @@ public class DigReal : GridTilesModeNew
         return false;
     }
 
-    protected override void FallbackColor(LevelGridTile tile, int index, int2 pos)
+    protected override void FallbackColor(LevelGridTile tile, int index, int2 worldPosition)
     {
         controller.ClearHoverMaterial();
+        controller.hoverWorldPosition = worldPosition;
     }
-
 
 
     public override void DownObject()
     {
-        var tile = controller.world.GetActiveTile(
+        /*var tile = controller.world.GetActiveTile(
             controller.hoverWorldPosition.x,
             controller.hoverWorldPosition.y,
-            out int index);
+            out int index);*/
         
         if (drag == false)
             InitDrag();
 
-        HandleSelectionTypes(tile, index, controller.hoverWorldPosition);
+        CalculateTiles();
+        /*
+                HandleSelectionTypes(tile, index, controller.hoverWorldPosition);*/
     }
 
+    int2 startDragWorldPos;
+    int2 lastDragWorldPos;
+    bool removing;
     void InitDrag()
     {
         drag = true;
+        startDragWorldPos = controller.hoverWorldPosition;
+        lastDragWorldPos = startDragWorldPos;
+        Debug.Log("startDrag");
+        int worldIndex = SceneRefs.World.GetWorldIndex(startDragWorldPos);
+        removing = renderer.realToDigArray.GetBits(worldIndex) == 1;
+        if(removing)
+            Debug.Log("removing");
     }
 
     public override void UpObject()
     {
         drag = false;
-        // EndCalc
+
+        int2 minPos = math.min(startDragWorldPos, lastDragWorldPos);
+        int2 maxPos = math.max(startDragWorldPos, lastDragWorldPos);
+
+
+        int2 position;
+        int worldIndex;
+
+        for (int y = minPos.y; y <= maxPos.y; y++)
+        {
+            position.y = y;
+            position.x = minPos.x;
+
+            worldIndex = SceneRefs.World.GetWorldIndex(position);
+            for (int x = minPos.x; x <= maxPos.x; x++)
+            {
+                if (SceneRefs.World.GetActiveTile(x, y).TType == TileType.Wall)
+                {
+                    renderer.realToDigArray.Set(worldIndex, !removing);
+                    renderer.toDigRenderGrid[worldIndex] = (byte)(removing ? 0: 255);
+                }
+                else
+                {
+                    renderer.toDigRenderGrid[worldIndex] = 0;
+                }
+                worldIndex++;
+            }
+        }
+        renderer.UpdateToDigTexture();
     }
 
-    void HandleSelectionTypes(LevelGridTile tile, int index, int2 worldPos)
+    void CalculateTiles()
     {
-        TileType type = tile.TType;
-        switch (type)
+        int2 newPosition = controller.hoverWorldPosition;
+
+        int2 minPos = math.min(startDragWorldPos, newPosition);
+        int2 maxPos = math.max(startDragWorldPos, newPosition);
+
+        int2 totMin = math.min(minPos, lastDragWorldPos);
+        int2 totMax = math.max(maxPos, lastDragWorldPos);
+
+        int2 position;
+        int worldIndex;
+
+        for (int y = totMin.y; y <= totMax.y; y++)
         {
-            case TileType.Wall:
-                int worldIndex = SceneRefs.World.GetWorldIndex(worldPos);
-                renderer.toDigArray[worldIndex] = byte.MaxValue;
-                renderer.UpdateToDigTexture();
-                break;
+            position.y = y;
+            position.x = totMin.x;
+            worldIndex = SceneRefs.World.GetWorldIndex(position);
+
+            bool clear = y < minPos.y || y > maxPos.y;
+            for (int x = totMin.x; x <= totMax.x; x++)
+            {
+                bool isUnSet = renderer.realToDigArray.GetBits(worldIndex) == 0;
+                if (clear || x < minPos.x || x > maxPos.x)
+                {
+                    if (isUnSet)
+                    {
+                        renderer.toDigRenderGrid[worldIndex] = 0;
+                    }
+                    else if (removing)
+                    {
+                        renderer.toDigRenderGrid[worldIndex] = 255;
+                    }
+                }
+                else
+                {
+                    if (isUnSet)
+                        renderer.toDigRenderGrid[worldIndex] = (byte)(removing ? 90 : 200);
+                    else if(removing)
+                    {
+                        renderer.toDigRenderGrid[worldIndex] = 115;
+                    }
+                }
+                worldIndex++;
+            }
         }
+
+        renderer.UpdateToDigTexture();
+        lastDragWorldPos = newPosition;
     }
 }

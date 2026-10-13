@@ -34,7 +34,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             enabled = false;
         }
         
-        [NonSerialized] public NativeArray<byte> toDigArray;
+        [NonSerialized] public NativeArray<byte> toDigRenderGrid;
+        [NonSerialized] public NativeBitArray realToDigArray;
         public void Init(int levelCount, GridLevel[] levels, int maxSize)
         {
             combiner = new(GridLevel.chunkDimensions);
@@ -55,7 +56,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             worldMaterial.SetFloat(Shader.PropertyToID("_Height"), maxSize);
 
             worldMaterial.SetTexture(Shader.PropertyToID("_DigTexture"), toDigTexture);
-            toDigArray = new NativeArray<byte>(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+            toDigRenderGrid = new NativeArray<byte>(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+            realToDigArray = new NativeBitArray(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
             UpdateToDigTexture();
 
             renderParams = new(worldMaterial) 
@@ -75,7 +77,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void UpdateToDigTexture()
         {
-            toDigTexture.SetPixelData(toDigArray, 0);
+            toDigTexture.SetPixelData(toDigRenderGrid, 0);
             toDigTexture.Apply(false, false);
         }
 
@@ -90,8 +92,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             if (toRender.IsCreated)
                 toRender.Dispose();
-            if(toDigArray.IsCreated)
-                toDigArray.Dispose();
+            if(toDigRenderGrid.IsCreated)
+                toDigRenderGrid.Dispose();
+            if (realToDigArray.IsCreated)
+                realToDigArray.Dispose();
             combiner?.Dispose();
         }
 
