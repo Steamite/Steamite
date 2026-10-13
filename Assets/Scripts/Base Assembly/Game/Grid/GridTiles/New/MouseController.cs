@@ -267,7 +267,10 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
         [SerializeField]
         int damageAmmount = 4;
-        internal int2 clickedWorldPosition;
+        public int2 clickedWorldPosition;
+
+        public int buildingType;
+        public int buildingIndex;
 
         [ContextMenu("DamageRock")]
         public void DamageClickedRock(TileType type, int index)
@@ -291,5 +294,9 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             ((NothingNew)modes[0]).RefreshDownedTile();
         }
 
+        public void SetBlueprint(BuildingWrapper wrapper)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

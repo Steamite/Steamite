@@ -1,5 +1,6 @@
 
 
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using Levels;
 using System;
 using System.Collections.Generic;
@@ -14,23 +15,25 @@ using UnityEngine.UIElements;
 [Serializable]
 public class BuildingWrapper : DataObject
 {
-    public Building Building => building;
-    [SerializeField] Building building;
+    public BuildingNew Building => building;
+    [SerializeField] BuildingNew building;
 
     public List<BuildingModifications> modifications;
-
-    public override string GetName() => building?.Name;
-
+    public MoneyResource Cost;
 #if UNITY_EDITOR
     [SerializeField] public int selectedLevel;
 #endif
     [SerializeField] public Sprite preview;
+    [SerializeField] public Mesh mesh;
+    
+    public BuildingGrid blueprint;
+
     [NonSerialized] public bool unlocked = true;
-    [NonSerialized] public List<Material> materials = new();
+
 
 
 #if UNITY_EDITOR
-    public void SetBuilding(Building _b, int categoryID, string name = null)
+    /*public void SetBuilding( _b, int categoryID, string name = null)
     {
         building = _b;
         if (building)
@@ -40,7 +43,7 @@ public class BuildingWrapper : DataObject
             building.PrefabConnection = new(categoryID, id);
             EditorUtility.SetDirty(building);
         }
-    }
+    }*/
 #endif
 
     public BuildingWrapper(int _id) : base(_id)
@@ -48,6 +51,11 @@ public class BuildingWrapper : DataObject
     }
 
     public BuildingWrapper() { }
+
+    public void SetBuilding(BuildingNew building)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 /// <summary>Helps serialize build categories.</summary>
@@ -74,41 +82,33 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
     #region Editor
 #if UNITY_EDITOR
     public new const string EDITOR_PATH = "Assets/Game Data/Research and Building/Build Data.asset";
-
-    public bool ContainsBuilding(Building newValue)
-    {
-        if (newValue == null)
-            return false;
-        return Categories.SelectMany(q => q.Objects).Select(q => q.Building).Contains(newValue);
-    }
-
 #endif
 #endregion
 
-    public Building GetBuilding(int categ, int id)
+    /*public BuildingNew GetBuilding(int categ, int id)
     {
-        return Categories.FirstOrDefault(q => q.id == categ).Objects.Find(q => q.id == id).Building;
-    }
+        //return Categories.FirstOrDefault(q => q.id == categ).Objects.Find(q => q.id == id).Building;
+    }*/
 
-    public Building GetBuilding(string name)
+    public BuildingNew GetBuilding(string name)
     {
-        return Categories[0].Objects.Find(q => q.Building.Name == name).Building;
+        return Categories[0].Objects.Find(q => q.Name == name).Building;
     }
-
+/*
     public Pipe GetPipe()
     {
         return Categories[3].Objects.Find(q => q.Building is Pipe).Building as Pipe;
-    }
+    }*/
 
     public override void Init()
     {
-        foreach (var category in Categories)
+        /*foreach (var category in Categories)
         {
             foreach (var obj in category.Objects)
             {
-                obj.Building.InitPrefabData();
-                obj.materials = obj.Building.GetComponentsInChildren<Renderer>().Select(q => q.sharedMaterial).ToList();
+                //obj.Building.InitPrefabData();
+                //obj.materials = obj.mesh.GetComponentsInChildren<Renderer>().Select(q => q.sharedMaterial).ToList();
             }
-        }
+        }*/
     }
 }

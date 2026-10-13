@@ -1,5 +1,7 @@
 
 
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -95,6 +97,8 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoadAwaitable
     /// <returns></returns>
     public Elevator CreateElevator(GridPos gp, int rotation = 0)
     {
+        throw new NotImplementedException();
+            /*
         Elevator el = Instantiate(
             buildPrefabs.GetBuilding("Elevator"),
             gp.ToVec(BUILD_OFFSET),
@@ -103,7 +107,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoadAwaitable
         el.Name = el.Name.Replace("(Clone)", "");
         MyGrid.SetBuilding(el, true);
         el.ForcedFinishBuild();
-        return el;
+        return el;*/
     }
 
     /// <summary>
@@ -160,8 +164,8 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoadAwaitable
     /// <summary>Loads a building.</summary>
     public void CreateSavedBuilding(BuildingSave save)
     {
-        GridPos rotate = save.blueprint.moveBy.Rotate(save.rotationY);
-        Building b = Instantiate(
+        /*GridPos rotate = save.blueprint.moveBy.Rotate(save.rotationY);
+        BuildingNew b = Instantiate(
             buildPrefabs.GetObjectBySaveIndex(save.prefabConnection).Building,
             new Vector3(save.gridPos.x + rotate.x, (save.gridPos.y * LEVEL_HEIGHT) + BUILD_OFFSET, save.gridPos.z + rotate.z),
             Quaternion.Euler(0, save.rotationY, 0),
@@ -178,7 +182,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoadAwaitable
         }
 
 
-        MyGrid.SetBuilding(b, true);
+        MyGrid.SetBuilding(b, true);*/
     }
 
     /// <summary>Loads a Rock.</summary>
@@ -262,18 +266,19 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoadAwaitable
     {
         if (save == null)
             return;
-
+/*
         Pipe pipe = Instantiate(
             buildPrefabs.GetPipe(),
             pos.ToVec(PIPE_OFFSET),
             Quaternion.identity,
             MyGrid.FindLevelPipes(pos.y));
-        pipe.Load(save);
+        pipe.Load(save);*/
     }
 
     public BuildPipe CreateBuildingPipe(GridPos localPos, IFluidWork building)
     {
-        BuildPipe pipe = Instantiate(
+        throw new NotImplementedException();
+        /*BuildPipe pipe = Instantiate(
             buildPrefabs.GetBuilding(BuildPipe.BUILD_PIPE_PREF_NAME) as BuildPipe,
             localPos.ToVec(PIPE_OFFSET),
             Quaternion.identity,
@@ -281,7 +286,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoadAwaitable
         pipe.RecalculatePipeTransform();
         pipe.connectedBuilding = building;
         pipe.UniqueID();
-        return pipe;
+        return pipe;*/
     }
     #endregion Loading Game
 
@@ -291,9 +296,9 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoadAwaitable
         buildPrefabs.Init();
         recipeData = await Addressables.LoadAssetAsync<ProductionRecipeHolder>(ProductionRecipeHolder.PATH).Task;
         recipeData.Init();
-        pipeMaterial = buildPrefabs.GetBuilding(BuildPipe.BUILD_PIPE_PREF_NAME).GetComponent<Renderer>().sharedMaterial;
+        //pipeMaterial = buildPrefabs.GetBuilding(BuildPipe.BUILD_PIPE_PREF_NAME).GetComponent<Renderer>().sharedMaterial;
     }
-
+/*
     public List<Material> GetModelMaterials(Building building)
     {
         var a = buildPrefabs.GetCategByID(building.PrefabConnection.categoryId).Objects;
@@ -304,7 +309,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoadAwaitable
     public Material GetPipeMaterial()
     {
         return pipeMaterial;
-    }
+    }*/
 
     public void CreateObjectUnderRock(Rock rock)
     {

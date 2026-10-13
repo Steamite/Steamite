@@ -1,144 +1,237 @@
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using System;
+using Unity.Mathematics;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /// <summary>The Blueprint editor window for mapping buildings to grid.</summary>
 class BuildEditor : EditorWindow
 {
     #region Variables
     /// <summary>Target blueprint.</summary>
-    static BuildingGrid actBuild;
+    BuildingGrid actBuild;
     /// <summary>Bulding the modifing blueprint belongs to.</summary>
-    static Building inspectedBuilding;
+    static SerializedProperty blueprint;
     /// <summary>Map of the blueprint.</summary>
-    static GridItemType[,] gridItemTypes;
+    GridItemType[] gridItemTypes;
     /// <summary>Can only be saved if there are any changes.</summary>
-    static bool canSave;
+    bool canSave;
     /// <summary>Each building can only have ONE anchor.</summary>
-    static bool hasAnchor;
-    /// <summary>Width of <see cref="gridItemTypes"/>.</summary>
-    static int width;
-    /// <summary>Height of <see cref="gridItemTypes"/>.</summary>
-    static int height;
-    /// <summary>Number of optiuons in <see cref="GridItemType"/><summary>
-    static int maxItem = Enum.GetNames(typeof(GridItemType)).Length;
+    bool hasAnchor;
 
-    static Mesh mesh;
-    static Mesh newMesh;
+    int2 size;
+
+    /// <summary>Number of optiuons in <see cref="GridItemType"/><summary>
+    int maxItem = Enum.GetNames(typeof(GridItemType)).Length - 1;
+
     #endregion
 
     #region Opening
     /// <summary>
     /// Keeps just only one instance of this window, and fills it.
     /// </summary>
-    /// <param name="_building">Building with the blueprint to modify.</param>
-    public static void ShowWindow(Building _building)
+    /// <param name="_buildingWrapper">Building with the blueprint to modify.</param>
+    public static void ShowWindow(SerializedProperty _buildingWrapper)
     {
+        blueprint = _buildingWrapper.FindPropertyRelative(nameof(BuildingWrapper.blueprint));
+        var v = GetWindow<BuildEditor>();
+        v.maxSize = new(900, 900);
+        v.minSize = new(600, 600);
+    }
+
+    void LoadData()
+    {
+        if (blueprint == null)
+        {
+            Close();
+            return;
+        }
+
+        PropertyField field = new();
+        var sizeProp = blueprint.FindPropertyRelative(nameof(BuildingGrid.size));
+        field.BindProperty(sizeProp);
+        field.TrackPropertyValue(sizeProp, SizeChange);
+
+        rootVisualElement.Add(field);
+
+        VisualElement fields = new()
+        {
+            style =
+            {
+                marginBottom = 15,
+                marginTop = 15,
+                height = 30,
+                flexDirection = FlexDirection.Row
+            }
+        };
+        rootVisualElement.Add(fields);
+        var names = Enum.GetNames(typeof(GridItemType));
+
+        for (int i = 0; i < names.Length; i++)
+        {
+            string nam = names[i];
+            fields.Add(new Label(nam) 
+            { 
+                style = 
+                { 
+                    flexGrow = 1, 
+                    maxWidth = new Length(100f/names.Length, LengthUnit.Percent), 
+                    backgroundColor = ChangeColor((GridItemType)i),
+                    unityTextAlign = TextAnchor.MiddleCenter
+                } 
+            });
+        }
+        
+
+
         canSave = false;
         hasAnchor = false;
-        actBuild = _building.blueprint;
-        inspectedBuilding = _building;
-        GridPos pos;
-        if (actBuild.itemList != null && actBuild.itemList.Count > 0)
+
+        size = (int2)blueprint.FindPropertyRelative(nameof(BuildingGrid.size)).boxedValue;
+        
+        var itemArray = blueprint.FindPropertyRelative(nameof(BuildingGrid.itemArray));
+        int length = itemArray.arraySize;
+        gridItemTypes = new GridItemType[length];
+
+        for (int i = 0; i < length; i++)
         {
-            width = (int)actBuild.size.x;
-            height = (int)actBuild.size.z;
-            if (width > 0 && height > 0)
-                gridItemTypes = new GridItemType[width, height];
-            for (int i = 0; i < actBuild.itemList.Count; i++)
-            {
-                pos = actBuild.itemList[i].pos;
-                gridItemTypes[(int)(pos.x + actBuild.anchor.x), (int)(pos.z + actBuild.anchor.z)] = actBuild.itemList[i].itemType;
-                if (actBuild.itemList[i].itemType == GridItemType.Anchor)
-                    hasAnchor = true;
-            }
+            gridItemTypes[i] = (GridItemType)itemArray.GetArrayElementAtIndex(i).enumValueIndex;
+            if (gridItemTypes[i] == GridItemType.Anchor)
+                hasAnchor = true;
         }
-        else
-        {
-            width = 0;
-            height = 0;
-            gridItemTypes = null;
-        }
-        //mesh = inspectedBuilding.GetComponent<MeshFilter>().sharedMesh;
-        var v = GetWindow(typeof(BuildEditor));
-        v.maxSize = new(600, 600);
-        v.minSize = new(200, 200);
+
+        CreateGrid();
     }
     #endregion
 
-    void OnGUI()
+    void CreateGUI()
     {
-        if (actBuild == null)
+        LoadData();
+    }
+
+    void SizeChange(SerializedProperty ev)
+    {
+        size = (int2)ev.boxedValue;
+        int newSize = size.x * size.y;
+        
+        var itemArray = blueprint.FindPropertyRelative(nameof(BuildingGrid.itemArray));
+        itemArray.arraySize = newSize;
+        blueprint.serializedObject.ApplyModifiedProperties();
+
+        int length = newSize;
+
+        gridItemTypes = new GridItemType[length];
+
+        for (int i = 0; i < length; i++)
         {
-            GUILayout.Label(new GUIContent("NO BUILDING SELECTED"));
-            titleContent = new($"Build Editor - None");
+            gridItemTypes[i] = (GridItemType)itemArray.GetArrayElementAtIndex(i).enumValueIndex;
+            if (gridItemTypes[i] == GridItemType.Anchor)
+                hasAnchor = true;
         }
-        else
+
+        UpdateGrid();
+    }
+
+
+    VisualElement buttonContainer;
+    void CreateGrid()
+    {
+        rootVisualElement.Add(buttonContainer = new() { style = {flexDirection = FlexDirection.ColumnReverse, flexGrow = 1} });
+        UpdateGrid();
+    }
+
+    void UpdateGrid()
+    {
+        hasAnchor = false;
+        buttonContainer.Clear();
+        int i = 0;
+        for (int x = 0; x < size.x; x++)
         {
-            titleContent = new($"Build Editor - {inspectedBuilding.Name}");
-            int item = 0;
-            newMesh = (Mesh)EditorGUILayout.ObjectField(new GUIContent(""), mesh, typeof(Mesh), false, new GUILayoutOption[] { });
-            if (newMesh != mesh)
+            VisualElement row = new() { style = { flexDirection = FlexDirection.Row, flexGrow = 1 } };
+            for (int y = 0; y < size.y; y++)
             {
-                mesh = newMesh;
-                inspectedBuilding.GetComponent<MeshFilter>().sharedMesh = mesh;
-                EditorUtility.SetDirty(inspectedBuilding);
-            }
-
-            width = EditorGUILayout.IntField(new GUIContent("size x: "), width);
-            height = EditorGUILayout.IntField(new GUIContent("size y: "), height);
-
-            if (width > 0 & height > 0)
-            {
-                ManageGrid();
-                GUI.enabled = canSave;
-                if (canSave)
-                    GUI.backgroundColor = Color.red;
-
-                SaveButton();
-                GUI.enabled = true;
-                GUI.backgroundColor = Color.gray;
-                GUILayout.BeginHorizontal();
-                for (int i = 0; i < width; i++)
+                Label label = new()
                 {
-                    GUILayout.BeginVertical();
-                    for (int j = 0; j < height; j++)
+                    userData = i,
+                    style =
                     {
-                        GridButton(i, j, item);
+                        unityTextAlign = TextAnchor.MiddleCenter,
+                        flexGrow = 1,
+                        maxWidth = new Length(100f/size.x, LengthUnit.Percent)
                     }
-                    GUILayout.EndVertical();
-                }
-                GUILayout.EndHorizontal();
+                };
+                label.style.backgroundColor = ChangeColor(gridItemTypes[i]);
+                label.text = gridItemTypes[i].ToString();
+                if (gridItemTypes[i] == GridItemType.Anchor)
+                    hasAnchor = true;
+                label.RegisterCallback<PointerDownEvent>(Button_clicked);
+
+                row.Add(label);
+                i++;
             }
+            buttonContainer.Add(row);
         }
     }
 
-    /// <summary>
-    /// Looks for changes in width and height and calls resizes the grid when needed.
-    /// </summary>
-    void ManageGrid()
+    void Button_clicked(PointerDownEvent ev)
     {
-        if (gridItemTypes == null)
+        Label label = (Label)ev.target;
+        int i = (int)label.userData;
+
+        if(ev.button == 0)
         {
-            canSave = true;
-            gridItemTypes = new GridItemType[width, height];
-        }
-        else if (gridItemTypes.GetLength(0) != width || gridItemTypes.GetLength(1) != height)
-        {
-            canSave = true;
-            GridItemType[,] tmpItems = new GridItemType[width, height];
-            hasAnchor = false;
-            for (int i = 0; i < width & i < gridItemTypes.GetLength(0); i++)
+            if ((int)gridItemTypes[i] == maxItem)
+                gridItemTypes[i] = 0;
+            else
             {
-                for (int j = 0; j < height & j < gridItemTypes.GetLength(1); j++)
+                if (gridItemTypes[i] == GridItemType.Anchor)
                 {
-                    tmpItems[i, j] = gridItemTypes[i, j];
-                    if (tmpItems[i, j] == GridItemType.Anchor)
+                    hasAnchor = false;
+                }
+
+                gridItemTypes[i] += 1;
+
+                if (gridItemTypes[i] == GridItemType.Anchor)
+                {
+                    if (hasAnchor)
+                        gridItemTypes[i] = GridItemType.Anchor+1;
+                    else
                         hasAnchor = true;
                 }
             }
-            gridItemTypes = tmpItems;
         }
+        else if(ev.button == 1) 
+        {
+            if (gridItemTypes[i] == 0)
+                gridItemTypes[i] = (GridItemType)maxItem;
+            else
+            {
+                if (gridItemTypes[i] == GridItemType.Anchor)
+                {
+                    hasAnchor = false;
+                }
+
+                gridItemTypes[i] -= 1;
+
+                if (gridItemTypes[i] == GridItemType.Anchor)
+                {
+                    if (hasAnchor)
+                        gridItemTypes[i] = 0;
+                    else
+                        hasAnchor = true;
+                }
+            }
+        }
+
+        label.style.backgroundColor = ChangeColor(gridItemTypes[i]);
+        label.text = gridItemTypes[i].ToString();
+
+        var en = blueprint.FindPropertyRelative(nameof(BuildingGrid.itemArray)).GetArrayElementAtIndex(i);
+        en.enumValueIndex = (int)gridItemTypes[i];
+
+        blueprint.serializedObject.ApplyModifiedProperties();
     }
 
     #region Buttons
@@ -146,138 +239,38 @@ class BuildEditor : EditorWindow
     /// Colors the button by it's value.
     /// </summary>
     /// <param name="gridItem">Value of the button.</param>
-    void ChangeColor(GridItemType gridItem)
+    Color ChangeColor(GridItemType gridItem)
     {
+        Color c;
         switch (gridItem)
         {
             case GridItemType.None:
-                GUI.backgroundColor = Color.black;
+                c = Color.black;
                 break;
             case GridItemType.Anchor:
-                GUI.backgroundColor = Color.green;
+                c = Color.green;
                 break;
             case GridItemType.Road:
-                GUI.backgroundColor = Color.yellow;
+                c = Color.yellow;
                 break;
             case GridItemType.Entrance:
-                GUI.backgroundColor = Color.white;
+                c = Color.white;
                 break;
             case GridItemType.Pipe:
-                GUI.backgroundColor = Color.darkOrange;
+                c = Color.darkOrange;
                 break;
             case GridItemType.WaterSource:
-                GUI.backgroundColor = Color.blue;
+                c = Color.blue;
                 break;
             case GridItemType.ResourceSource:
-                GUI.backgroundColor = Color.blue;
+                c = Color.brown;
+                break;
+            default:
+                c = Color.black;
                 break;
         }
-    }
 
-    /// <summary>
-    /// Creates a button for saving.
-    /// </summary>
-    void SaveButton()
-    {
-        if (GUILayout.Button(new GUIContent("Save")))
-        {
-            GridItemType actItem;
-            Vector2 center = new();
-            int centerChild = 0;
-            Vector2 anchor = new();
-            actBuild.itemList = new();
-
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    actItem = gridItemTypes[i, j];
-                    if (actItem == GridItemType.None)
-                        continue;
-                    actBuild.itemList.Add(new(new(i, j), actItem));
-                    if (actItem == GridItemType.Pipe || actItem == GridItemType.Road || actItem == GridItemType.Anchor)
-                    {
-                        center += new Vector2(i, j);
-                        centerChild++;
-                        if (actItem == GridItemType.Anchor)
-                        {
-                            anchor = new(i, j);
-                        }
-                    }
-                }
-            }
-            foreach (NeededGridItem elem in actBuild.itemList)
-            {
-                elem.pos.x -= anchor.x;
-                elem.pos.z = elem.pos.z - anchor.y;
-            }
-            if (centerChild > 0)
-                center = center / centerChild;
-
-            actBuild.moveBy.x = center.x - anchor.x;
-            actBuild.moveBy.z = anchor.y - center.y;
-            actBuild.anchor = new(anchor.x, anchor.y);
-            actBuild.size = new(width, height);
-            canSave = false;
-            EditorUtility.SetDirty(inspectedBuilding);
-        }
-    }
-
-    /// <summary>
-    /// Handles rendering and input from blueprint buttons.
-    /// </summary>
-    /// <param name="i">x cord</param>
-    /// <param name="j">y cord</param>
-    /// <param name="item">value</param>
-    void GridButton(int i, int j, int item)
-    {
-        ChangeColor(gridItemTypes[i, j]);
-        if (GUILayout.Button(new GUIContent(gridItemTypes[i, j].ToString()), GUILayout.MaxWidth(position.width / width)))
-        {
-            if (Event.current.button == 0)
-            {
-                if (gridItemTypes[i, j] == GridItemType.Anchor)
-                    hasAnchor = false;
-                item = (int)gridItemTypes[i, j] + 1;
-                if (item == maxItem)
-                {
-                    item = 0;
-                }
-                else if (item == (int)GridItemType.Anchor)
-                {
-                    if (hasAnchor == false)
-                        hasAnchor = true;
-                    else
-                        item++;
-                }
-                gridItemTypes[i, j] = (GridItemType)item;
-            }
-            else if (Event.current.button == 1)
-            {
-                if (gridItemTypes[i, j] == GridItemType.Anchor)
-                    hasAnchor = false;
-                item = (int)gridItemTypes[i, j] - 1;
-                if (item == -1)
-                {
-                    item = maxItem - 1;
-                }
-                else if (item == (int)GridItemType.Anchor)
-                {
-                    if (hasAnchor == false)
-                        hasAnchor = true;
-                    else
-                        item--;
-                }
-                gridItemTypes[i, j] = (GridItemType)item;
-            }
-            else if (Event.current.button == 2)
-            {
-                if (gridItemTypes[i, j] == GridItemType.Anchor)
-                    hasAnchor = false;
-                gridItemTypes[i, j] = GridItemType.None;
-            }
-            canSave = true;
-        }
+        return c / 2;
     }
     #endregion
 }

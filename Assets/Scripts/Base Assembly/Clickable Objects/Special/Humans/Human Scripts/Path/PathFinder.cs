@@ -128,13 +128,14 @@ public static class PathFinder
                 if(building.entryPoints.Count == 0)
                 {
                     GridPos pos = building.GetPos();
-                    foreach (var item in building.blueprint.itemList)
+                    foreach (var item in building.blueprint.itemArray)
                     {
-                        GridPos p = pos += item.pos.Rotate(
+                        // TODO FIX!!!
+                       /* GridPos p = pos += item.pos.Rotate(
                             building.transform.rotation.eulerAngles.y, 
                             true);
 
-                        coordinates.AddPoint(p, i);
+                        coordinates.AddPoint(p, i);*/
                     }
 
                     continue;

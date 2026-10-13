@@ -30,9 +30,9 @@ public class BlueprintIndicator : MonoBehaviour
             blueprintEntryPoints.gameObject.layer = LayerMask.NameToLayer("Entry Points");
 
             
-            foreach (NeededGridItem item in building.blueprint.itemList)
+            foreach (GridItemType item in building.blueprint.itemArray)
             {
-                GridPos itemPos = item.pos;
+                /*GridPos itemPos = item.pos;
                 itemPos.z = -itemPos.z;
                 Image tile = OverlayUtils.CreateTile(
                     itemPos, 
@@ -58,18 +58,18 @@ public class BlueprintIndicator : MonoBehaviour
                         color = Color.darkViolet;
                         break;
                 }
-                tile.color = color;
+                tile.color = color;*/
             }
         }
 
-        GridPos gp = building.blueprint.moveBy.Rotate(building.transform.rotation.eulerAngles.y);
+        /*GridPos gp = building.blueprint.moveBy.Rotate(building.transform.rotation.eulerAngles.y);
 
         blueprintEntryPoints.localRotation =
             Quaternion.Euler(180, 0, building.transform.rotation.eulerAngles.y);
 
         blueprintEntryPoints.anchoredPosition = new(
             building.transform.position.x - gp.x,
-            building.transform.position.z - gp.z);
+            building.transform.position.z - gp.z);*/
 
         return blueprintEntryPoints;
     }

@@ -1,6 +1,7 @@
 
 
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 /// <summary>
@@ -148,4 +149,41 @@ public struct GridPos
 
 
     #endregion
+}
+
+public static class PositionUtils
+{
+    /// <summary>
+    /// Rotates the <paramref name="offset"/> by rotation.
+    /// </summary>
+    /// <param name="offset">Original value.</param>
+    /// <param name="rotation">Dermining value</param>
+    /// <param name="isTile">If it's a building or a tile.</param>
+    /// <returns>Rotated <paramref name="offset"/>.</returns>
+    public static int2 Rotate(this int2 pos, float rotation, bool isTile = false)
+    {
+        int2 rotatedPosition;
+        switch (rotation)
+        {
+            case 90:
+                if (isTile)
+                    rotatedPosition = new(-pos.y, pos.x);
+                else
+                    rotatedPosition = new(pos.y, -pos.x);
+                break;
+            case 180:
+                rotatedPosition = new(-pos.x, -pos.y);
+                break;
+            case 270:
+                if (isTile)
+                    rotatedPosition = new(pos.y, -pos.x);
+                else
+                    rotatedPosition = new(-pos.y, pos.x);
+                break;
+            default:
+                rotatedPosition = pos;
+                break;
+        }
+        return rotatedPosition;
+    }
 }

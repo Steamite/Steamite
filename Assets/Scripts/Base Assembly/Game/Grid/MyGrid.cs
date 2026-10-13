@@ -189,7 +189,7 @@ public static class MyGrid
         else
         {
             SceneRefs.GridTiles.DestroyUnselect(building);
-            if (building.blueprint.itemList.Count > 0)
+            /*if (building.blueprint.itemList.Count > 0)
             {
                 levels[gridPos.y].UnsetBuilding(building, gridPos);
             }
@@ -197,7 +197,7 @@ public static class MyGrid
             if(building is Pub pub)
             {
                 EffectBuildings.Remove(building as Pub);
-            }
+            }*/
         }
         GameObject.Destroy(building.gameObject);
     }

@@ -10,12 +10,13 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
     public class SpecialActions : ColumnActions
     {
 
-        public void AssignChange(ChangeEvent<int> ev)
+        /*public void AssignChange(ChangeEvent<int> ev)
         {
             int i = ev.target.GetRowIndex();
             ((IAssign)((BuildingWrapper)view.itemsSource[i]).Building).AssignData.AssignLimit.BaseValue = ev.newValue;
             EditorUtility.SetDirty(((BuildingWrapper)view.itemsSource[i]).Building);
-        }/*
+        }*/
+        /*
 
         
         public void ProdTimeChange(ChangeEvent<int> ev)

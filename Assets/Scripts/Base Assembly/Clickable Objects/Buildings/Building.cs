@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -22,6 +23,7 @@ public enum BuildingCategType
 /// Class for buildings, which can be constructed on free tiles. 
 /// Each building needs atleast one free access point.
 /// </summary>
+[Obsolete]
 public class Building : StorageObject
 {
     /// <summary>
@@ -95,18 +97,18 @@ public class Building : StorageObject
     /// <returns><inheritdoc/></returns>
     public override GridPos GetPos()
     {
-        GridPos pos = blueprint.moveBy.Rotate(transform.rotation.eulerAngles.y);
+        int2 pos = blueprint.moveBy.Rotate(transform.rotation.eulerAngles.y);
         return new(
             transform.position.x - pos.x,
             (transform.position.y - 1) / 2,
-            transform.position.z - pos.z);
+            transform.position.z - pos.y);
     }
 
     public virtual bool IsInside(GridPos pos)
     {
         GridPos buildAnchor = GetPos();
         pos = pos - buildAnchor;
-        for (int i = 0; i < blueprint.itemList.Count; i++)
+        /*for (int i = 0; i < blueprint.itemList.Count; i++)
         {
             NeededGridItem item = blueprint.itemList[i];
             if (item.itemType == GridItemType.Road || item.itemType == GridItemType.Anchor)
@@ -117,7 +119,7 @@ public class Building : StorageObject
                     return true;
                 }
             }
-        }
+        }*/
         return false;
     }
     #endregion
@@ -457,7 +459,7 @@ public class Building : StorageObject
     /// <param name="transparent">Requested render mode.</param>
     public virtual void ChangeRenderMode(bool transparent)
     {
-        isTransparent = transparent;
+        /*isTransparent = transparent;
         Material mat;
         if (isTransparent)
         {
@@ -477,7 +479,7 @@ public class Building : StorageObject
                 else
                     UpdateRenderMode(i, materials[i]);
             }
-        }
+        }*/
     }
 
     protected virtual void UpdateRenderMode(int i, Material material)

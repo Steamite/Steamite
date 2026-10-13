@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Editor.Buildings.LevelList;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using Assets.Scripts.Editor.Buildings.LevelList;
 using Assets.Scripts.Editor.Columns;
 using EditorWindows.Windows;
 using System;
@@ -22,26 +23,37 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
         }
 
         public override void CreateColumns()
-        { 
-            #region Asset
-            view.columns["asset"].makeCell =
-                () => new ObjectField() { enabledSelf = false, allowSceneObjects = false, objectType = typeof(Building) };
-            view.columns["asset"].bindCell =
-                (el, i) =>
-                {
-                    ObjectField field = el as ObjectField;
-                    SerializedProperty wrapper = register.ObjectAt(i);
-                    SerializedProperty building = wrapper.FindPropertyRelative("building");
+        {
+            view.columns["name"].makeCell = () =>
+            {
+                return new TextField();
+            };
+            view.columns["name"].bindCell = (el, i) =>
+            {
+                TextField field = (TextField)el;
+                field.BindProperty(register.GetBuildingWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.Name)));
+            };
+            view.columns["name"].unbindCell = (el, i) =>
+            {
+                TextField field = (TextField)el;
+                field.Unbind();
+            };
 
-                    field.BindProperty(building);
-                };
-            view.columns["asset"].unbindCell =
-                (el, i) =>
-                {
-                    ObjectField field = el as ObjectField;
-                    field.Unbind();
-                };
-            #endregion
+            view.columns["description"].makeCell = () =>
+            {
+                return new TextField() { multiline = true, };
+            };
+            view.columns["description"].bindCell = (el, i) =>
+            {
+                TextField field = (TextField)el;
+                field.BindProperty(register.GetBuildingWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.description)));
+            };
+            view.columns["description"].unbindCell = (el, i) =>
+            {
+                TextField field = (TextField)el;
+                field.Unbind();
+            };
+
 
             #region Type
             view.columns["type"].makeCell =
@@ -51,9 +63,9 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                 {
                     DropdownField field = (DropdownField)el;
                     field.choices = register.BuildingTypes.Select(q => q.Name).ToList();//.Select(q => q.Name).Where(q => !q.Contains("Pipe")).ToList();
-                    field.value = ((BuildingWrapper)view.itemsSource[i]).Building
-                        ? ((BuildingWrapper)view.itemsSource[i]).Building.GetType().ToString()
-                        : "None";
+
+                    // register.GetBuildingWrapperAt(i).FindPropertyRelative("building").type
+                    field.value = register.GetBuildingWrapperAt(i).FindPropertyRelative("building").type;//((BuildingWrapper)view.itemsSource[i]).Building.GetType().ToString();
                     field.RegisterValueChangedCallback(actions.TypeChange);
                 };
             view.columns["type"].unbindCell =
@@ -82,18 +94,9 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                 (el, i) =>
                 {
                     el.parent.focusable = true;
+
                     EditorResourceCell cell = el.Q<EditorResourceCell>();
-                    SerializedObject wrapper = register.GetBuildingAt(i);
-                    SerializedProperty cost = wrapper.FindProperty("cost");
-
-                    cell.Open(cost);
-
-                    /*BuildingWrapper wrapper = (BuildingWrapper)view.itemsSource[i];
-                    Building building = wrapper.Building;
-                    if (building == null)
-                        return;
-
-                    cell.Open(building.Cost, building, true);*/
+                    cell.Open(register.GetBuildingWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.Cost)));
                 };
             #endregion
 
@@ -106,13 +109,15 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                     b.style.justifyContent = Justify.Center;
                     return b;
                 };
+            
             view.columns["blueprint"].bindCell =
                 (el, i) =>
                 {
                     Button button = el.Q<Button>();
                     button.text = "Manage";
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
-                    if (building)
+                    button.RegisterCallback<ClickEvent>(actions.BlueprintEvent);
+
+                    /*if (building)
                     {
                         if (building.blueprint.itemList == null ||
                             building.blueprint.itemList.Count == 0 ||
@@ -128,13 +133,13 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                             button.style.color = Color.white;
                         }
 
-                        button.RegisterCallback<ClickEvent>(actions.BlueprintEvent);
+                        
                         button.SetEnabled(true);
                     }
                     else
                     {
                         button.SetEnabled(false);
-                    }
+                    }*/
                 };
             view.columns["blueprint"].unbindCell =
                 (el, i) =>
@@ -151,9 +156,11 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                 makeCell = () => new VisualElement(),
                 bindCell = (el, i) =>
                 {
-                    el.RegisterCallback<ClickEvent>(actions.PreviewClick);
-                    el.style.backgroundImage = new StyleBackground(((BuildingWrapper)view.itemsSource[i]).preview);
-
+                    //el.RegisterCallback<ClickEvent>(actions.PreviewClick);
+/*
+                    el.style.backgroundImage =
+                        new StyleBackground((Sprite)register.GetBuildingWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.preview)).boxedValue);
+*/
                     el.style.width = 50;
                     el.style.height = 50;
                 },

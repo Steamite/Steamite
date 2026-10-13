@@ -2,18 +2,21 @@
 
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>A "Blueprint" containing the grid data of a building.</summary>
 [Serializable]
-public class BuildingGrid
+public struct BuildingGrid
 {
     /// <summary>Dimensions of the building.</summary>
-    [SerializeField] public GridPos size;
+    [SerializeField] public int2 size;
     /// <summary>Anchor offset from the center(position).</summary>
-    [SerializeField] public GridPos moveBy;
+    [SerializeField] public int2 moveBy;
     /// <summary>Relative anchor position.</summary>
-    [SerializeField] public GridPos anchor;
+    [SerializeField] public int2 anchor;
     /// <summary>List of tiles.</summary>
-    [SerializeField] public List<NeededGridItem> itemList;
+    [FormerlySerializedAs("itemList")]
+    [SerializeField] public GridItemType[] itemArray;
 }

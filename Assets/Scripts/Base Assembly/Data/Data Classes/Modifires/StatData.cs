@@ -1,5 +1,6 @@
 
 
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,9 +53,11 @@ namespace BuildingStats
         /// <param name="addStat">If true the stat is added, else it's removed</param>
         public void ApplyStat(bool addStat)
         {
+            return;
+            /*
             // create a mask with the affected categories
             int mask = 0;
-            List<Building> buildings = MyGrid.Buildings
+            List<BuildingNew> buildings = MyGrid.Buildings
                 .Union(SceneRefs.ObjectFactory.buildPrefabs.Categories
                     .SelectMany(q => q.Objects)
                         .Select(w => w.Building)).ToList();
@@ -91,7 +94,7 @@ namespace BuildingStats
                         newMask = newMask >> 1;
                     }
                 }
-            }
+            }*/
         }
 
         void HandleCases(Building building, StatValue statValue)

@@ -56,11 +56,12 @@ public static class PlacementChecks
         Vein source = null;
 
         Color errC, c;
-        for (int i = 0; i < building.blueprint.itemList.Count; i++)
+        /*for (int i = 0; i < building.blueprint.itemList.Count; i++)
         {
             NeededGridItem item = building.blueprint.itemList[i];
             Transform tile = overlay.GetChild(i);
 
+            // TODO
             GridPos itemPos = item.pos
                 .Rotate(building.transform.rotation.eulerAngles.y, true);
             itemPos.x += gridPos.x;
@@ -135,12 +136,12 @@ public static class PlacementChecks
             }
             // Move the tile up or down
             ClickableObject clickableObject = MyGrid.GetGridItem(itemPos);
-            /*if (clickableObject is Rock)
+            if (clickableObject is Rock)
                 tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 0);
             else
-                tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 0);*/
+                tile.localPosition = new(tile.localPosition.x, tile.localPosition.y, 0);
 
-        }
+        }*/
 
         if (!CheckEntranceObscursion(foreignObscuredRoads, foreignEntryOverlay))
             canBuild = false;

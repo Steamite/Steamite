@@ -37,6 +37,20 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
 
         public List<int> resources;
         public int renderIndex;
+
+
+
+        /// <summary>
+        /// In playmode use index, but when saving and loading switch for indexes. <b/>
+        /// Allows reodering building in the register and keeping an optimal search time in the playmode
+        /// </summary>
+        public byte categoryIndex;
+        public byte buildingIndex;
+
+        public void CopyFrom(BuildingNew prev)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

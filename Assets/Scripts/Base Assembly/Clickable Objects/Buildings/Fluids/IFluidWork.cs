@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 public interface IFluidWork
 {
     List<BuildPipe> AttachedPipes { get; set; }
@@ -109,7 +110,7 @@ public interface IFluidWork
 
     void CreatePipes(bool loading = false)
     {
-        AttachedPipes = new();
+        /*AttachedPipes = new();
         Building building = (Building)this;
         GridPos buildPos = building.GetPos();
         for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
@@ -118,7 +119,8 @@ public interface IFluidWork
             NeededGridItem item = building.blueprint.itemList[i];
             if (item.itemType == GridItemType.Pipe)
             {
-                GridPos itemPos = item.pos.Rotate(building.transform.rotation.eulerAngles.y, true);
+                // TODO
+                int2 itemPos = item.pos.Rotate(building.transform.rotation.eulerAngles.y, true);
                 itemPos.x += buildPos.x;
                 itemPos.z = buildPos.z - itemPos.z;
                 AttachedPipes.Add(
@@ -130,7 +132,7 @@ public interface IFluidWork
         {
             PlacePipes();
             ConnectToNetwork();
-        }
+        }*/
     }
 
     public bool HasSpace(Resource fluid)

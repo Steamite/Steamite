@@ -6,7 +6,7 @@ using UnityEngine;
 public class Build : GridTilesMode
 {
     public override void EnterObject(ClickableObject enterObject)
-    {
+    {/*
         Building blueprintPrefab = gridTiles.BlueprintPrefab;
         Building blueprintInstance = gridTiles.BlueprintInstance;
 
@@ -26,7 +26,7 @@ public class Build : GridTilesMode
                 : ClickableObjectFactory.BUILD_OFFSET),
             gridTiles.ActivePos.z + grid.z);
         c = blueprintInstance.CanPlace() ? Color.blue : Color.red;
-        blueprintInstance.Highlight(c);
+        blueprintInstance.Highlight(c);*/
     }    
 
     public override void UpObject()

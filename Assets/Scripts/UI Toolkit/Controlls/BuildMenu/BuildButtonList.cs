@@ -3,6 +3,7 @@ using LocalMenuUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -34,13 +35,15 @@ namespace BottomBar.Building
 
             Init(changeAction);
             contentContainer.AddToClassList("build-bar");
-            SetItemSource(null);
+            SetItemSource(null, -1);
 
             unbindItem = DefaultUnBindItem;
         }
 
-        public void SetItemSource(List<BuildingWrapper> _wrappers)
+        int categoryIndex;
+        public void SetItemSource(List<BuildingWrapper> _wrappers, int _categoryIndex)
         {
+            categoryIndex = _categoryIndex;
             wrappers = _wrappers;
             if (_wrappers == null)
             {
@@ -57,7 +60,7 @@ namespace BottomBar.Building
                     itemsSource =
                         _wrappers.Select(
                             q => new RadioBuildButtonData(
-                                q.Building.Name,
+                                q.Name,
                                 q.preview,
                                 q.unlocked)
                                 as RadioButtonData).ToList();
@@ -107,7 +110,10 @@ namespace BottomBar.Building
             {
                 // hide locked blocker
                 element[0][0].style.display = DisplayStyle.None;
-                if (wrappers[index].Building == SceneRefs.GridTiles.BlueprintPrefab)
+                // USE INDEXES CREATE INIT FUNCTION
+                if (
+                    categoryIndex == SceneRefs.MouseController.buildingType && 
+                    index == SceneRefs.MouseController.buildingIndex)
                 {
                     element.AddToClassList($"{BUILD_BUTTON_CLASS}-selected");
                 }
@@ -127,7 +133,7 @@ namespace BottomBar.Building
                 if (wrappers[index].unlocked == false)
                     return DisplayStyle.None;
 
-                if (MyRes.CanAfford(wrappers[index].Building.Cost))
+                if (MyRes.CanAfford(wrappers[index].Cost))
                 {
                     return DisplayStyle.None;
                 }
@@ -166,7 +172,7 @@ namespace BottomBar.Building
                 UIRefs.ResearchWindow.OpenWithFocus(wrappers[index]);
                 return false;
             }
-            else if (!MyRes.CanAfford(wrappers[index].Building.Cost))
+            else if (!MyRes.CanAfford(wrappers[index].Cost))
             {
                 SelectedChoice = -1;
                 return false;

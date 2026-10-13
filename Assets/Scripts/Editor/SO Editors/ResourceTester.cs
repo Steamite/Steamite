@@ -1,3 +1,4 @@
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using ResearchUI;
 using System.Linq;
 using UnityEditor;
@@ -49,7 +50,8 @@ class ResourceTester : IPreprocessBuildWithReport
         {
             for (int j = 0; j < data.Categories[i].Objects.Count; j++)
             {
-                Building building = data.Categories[i].Objects[j].Building;
+                // TODO
+                /*BuildingNew building = data.Categories[i].Objects[j];
                 if (building != null)
                 {
                     if (CheckResource(building.Cost, building.Name, data.Categories[i].Name, "Production cost"))
@@ -63,7 +65,7 @@ class ResourceTester : IPreprocessBuildWithReport
                         if (CheckResource(res.ResourceYield, building.Name, data.Categories[i].Name, "Production Yeild"))
                             succes = false;
                     }
-                }
+                }*/
             }
         }
 

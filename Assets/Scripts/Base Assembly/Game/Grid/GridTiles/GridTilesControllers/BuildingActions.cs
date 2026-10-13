@@ -56,7 +56,7 @@ public class BuildingActions : MonoBehaviour
     /// Instantiates and sets a copy of a building prefab.
     /// </summary>
     public void Blueprint()
-    {
+    {/*
         Quaternion q = new();
         if (blueprintInstance)
             q = new(blueprintInstance.transform.rotation.x, blueprintInstance.transform.rotation.y, blueprintInstance.transform.rotation.z, blueprintInstance.transform.rotation.w);
@@ -79,7 +79,7 @@ public class BuildingActions : MonoBehaviour
         if (blueprintInstance is IFluidWork fluidWork)
             fluidWork.CreatePipes();
 
-        blueprintInstance.AfterBlueprint();
+        blueprintInstance.AfterBlueprint();*/
     }
 
     /// <summary>

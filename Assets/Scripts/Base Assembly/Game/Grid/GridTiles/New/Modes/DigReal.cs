@@ -56,17 +56,10 @@ public class DigReal : GridTilesModeNew
 
     public override void DownObject()
     {
-        /*var tile = controller.world.GetActiveTile(
-            controller.hoverWorldPosition.x,
-            controller.hoverWorldPosition.y,
-            out int index);*/
-        
         if (drag == false)
             InitDrag();
 
         CalculateTiles();
-        /*
-                HandleSelectionTypes(tile, index, controller.hoverWorldPosition);*/
     }
 
     int2 startDragWorldPos;

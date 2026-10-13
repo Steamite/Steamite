@@ -1,3 +1,4 @@
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using Assets.Scripts.Editor.Buildings.CommonColumns;
 using Assets.Scripts.Editor.Buildings.SpecialColumns;
 using ResearchUI;
@@ -27,19 +28,23 @@ namespace EditorWindows.Windows
         
 
         bool changedType;
-
+/*
         AddressableAssetSettings settings;
-        AddressableAssetGroup group;
+        AddressableAssetGroup group;*/
 
         SpecialColumns specialColumns;
         CommonColumns commonColumns;
 
-        public SerializedObject GetBuildingAt(int i) => new(selectedCategory.Objects[i].Building);
+        SerializedObject holderObject;
+        SerializedProperty selectedCategoryProperty;
+        SerializedProperty selectedCategoryBuildingsProperty;
+        public SerializedProperty GetBuildingWrapperAt(int i) =>
+            selectedCategoryBuildingsProperty.GetArrayElementAtIndex(i);
 
         public List<Type> BuildingTypes { get => buildingTypes; set => buildingTypes = value; }
         public bool ChangedType { get => changedType; set => changedType = value; }
-        public AddressableAssetSettings Settings { get => settings; set => settings = value; }
-        public AddressableAssetGroup Group { get => group; set => group = value; }
+        /*public AddressableAssetSettings Settings { get => settings; set => settings = value; }
+        public AddressableAssetGroup Group { get => group; set => group = value; }*/
 
         [MenuItem("Custom Editors/Building register %g", priority = 14)]
         public static void Open()
@@ -52,14 +57,15 @@ namespace EditorWindows.Windows
         #region Overrides
         protected override void CreateGUI()
         {
-            BuildingTypes = TypeCache.GetTypesDerivedFrom(typeof(Building)).ToList();
+            BuildingTypes = TypeCache.GetTypesDerivedFrom(typeof(BuildingNew)).ToList();
             Holder = AssetDatabase.LoadAssetAtPath<BuildingData>(BuildingData.EDITOR_PATH);
+            holderObject = new(Holder);
 
             #region Grid
             base.CreateGUI();
             #endregion
 
-            rebindButton = rootVisualElement.Q<Button>("Rebind-Buildings");
+            /*rebindButton = rootVisualElement.Q<Button>("Rebind-Buildings");
             rebindButton.enabledSelf = false;
             rebindButton.clicked +=
                 () =>
@@ -88,40 +94,8 @@ namespace EditorWindows.Windows
                         EditorUtility.SetDirty(researchData);
                         EditorUtility.SetDirty(Holder);
                     }
-                };
+                };*/
             categorySelector.index = 0;
-        }
-        protected override void RenameCateg()
-        {
-            AssetDatabase.MoveAsset($"{BUILDING_PATH}{SelectedCategory.Name}", $"{BUILDING_PATH}{categoryNameField.text}");
-            if (Group != null)
-            {
-                Group.Name = categoryNameField.text;
-                Settings.SetDirty(AddressableAssetSettings.ModificationEvent.GroupRenamed, Group, true, false);
-            }
-            base.RenameCateg();
-        }
-        protected override void CreateCateg()
-        {
-            base.CreateCateg();
-            AssetDatabase.CreateFolder($"Buildings", SelectedCategory.Name);
-            Group = Settings.CreateGroup(SelectedCategory.Name, false, false, true, new() { }, new Type[0]);
-            Settings.SetDirty(AddressableAssetSettings.ModificationEvent.GroupAdded, Group, true, false);
-        }
-
-        protected override bool RemoveCateg()
-        {
-            if (base.RemoveCateg())
-            {
-                AssetDatabase.MoveAsset($"{BUILDING_PATH}{SelectedCategory.Name}", $"{BUILDING_PATH}BCK/{SelectedCategory.Name}");
-                Settings.RemoveGroup(Settings.FindGroup(SelectedCategory.Name));
-                Settings.SetDirty(AddressableAssetSettings.ModificationEvent.GroupRemoved, Group, true, false);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
 
         private void OnDestroy()
@@ -140,20 +114,24 @@ namespace EditorWindows.Windows
         #region Category Switching
         protected override bool LoadCategData(int index)
         {
-            Settings = AddressableAssetSettingsDefaultObject.Settings;
+            //Settings = AddressableAssetSettingsDefaultObject.Settings;
             bool boo = base.LoadCategData(index);
             if (boo)
             {
-                Group = Settings.FindGroup(SelectedCategory.Name);
+                selectedCategoryProperty = holderObject.FindProperty(nameof(BuildingData.Categories)).GetArrayElementAtIndex(index);
+                selectedCategoryBuildingsProperty = selectedCategoryProperty.FindPropertyRelative(nameof(BuildCategWrapper.Objects));
+                /*dataGrid.itemsSource = null;*/
+                dataGrid.BindProperty(selectedCategoryBuildingsProperty);
+
                 for (int i = 0; i < SelectedCategory.columnStates?.Count; i++)
                     dataGrid.columns[i].visible = SelectedCategory.columnStates[i];
-                rebindButton.enabledSelf = true;
+                ///rebindButton.enabledSelf = true;
             }
             else
             {
                 SelectedCategory = new BuildCategWrapper();
                 SelectedCategory.Objects = new();
-                rebindButton.enabledSelf = false;
+                //rebindButton.enabledSelf = false;
             }
             return boo;
         }
@@ -163,55 +141,16 @@ namespace EditorWindows.Windows
 
 
         #region Entry managment
-        protected override void AddEntry(BaseListView _, bool add = false)
+        /*protected override void AddEntry(BaseListView _, bool add = false)
         {
             BuildingWrapper wrapper = new(Holder.UniqueID());
-            int choice = EditorUtility.DisplayDialogComplex("Register a new building",
-                "Do you want to fill the new entry or create an empty one?",
-                "Filled", "Cancel", "Empty");
-            if (choice == 0)
-            {
-                int i = 0;
-                string folderName;
-                string path;
-                while (true)
-                {
-                    folderName = $"Dummy{i}";
-                    path = $"{BUILDING_PATH}{SelectedCategory.Name}/{folderName}";
-                    if (AssetDatabase.IsValidFolder(path))
-                    {
-                        i++;
-                        continue;
-                    }
-                    AssetDatabase.CreateFolder($"{BUILDING_PATH}{SelectedCategory.Name}", folderName);
-                    break;
-                }
-
-                GameObject gameObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                gameObj.layer = 2;
-
-                gameObj.AddComponent<Building>();
-                gameObj.GetComponent<BoxCollider>().isTrigger = true;
-                PrefabUtility.SaveAsPrefabAsset(gameObj, $"{path}{BUILD_NAME}");
-                wrapper.SetBuilding(
-                    AssetDatabase.LoadAssetAtPath<Building>($"{path}{BUILD_NAME}"),
-                    selectedCategory.id,
-                    folderName);
-                wrapper.preview = commonColumns.actions.GetPrefabPreview($"{path}");
-                DestroyImmediate(gameObj);
-
-                AddressableAssetEntry entry = Settings.CreateOrMoveEntry(AssetDatabase.GUIDFromAssetPath(path).ToString(), Group);
-                entry.SetAddress(wrapper.Building.Name);
-                Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryCreated, Group, true);
-            }
-            else if (choice == 1)
-                return;
+            wrapper.SetBuilding(new());
             SelectedCategory.Objects.Add(wrapper);
             base.AddEntry(_, false);
-        }
+        }*/
 
-        public void RemoveEntryPublic(BuildingWrapper wrapper, bool removeFromGrid) => RemoveEntry(wrapper, removeFromGrid);
-        protected override void RemoveEntry(BuildingWrapper wrapper, bool removeFromGrid)
+        //public void RemoveEntryPublic(BuildingWrapper wrapper, bool removeFromGrid) => RemoveEntry(wrapper, removeFromGrid);
+        /*protected override void RemoveEntry(BuildingWrapper wrapper, bool removeFromGrid)
         {
             base.RemoveEntry(wrapper, removeFromGrid);
             if (wrapper.Building)
@@ -220,71 +159,21 @@ namespace EditorWindows.Windows
                 Settings.RemoveAssetEntry(AssetDatabase.GUIDFromAssetPath($"{BUILDING_PATH}BCK/{wrapper.Building?.Name}").ToString(), Group);
                 Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryRemoved, Group, true);
             }
-        }
+        }*/
         #endregion
 
 
         #region Columns
         protected override void CreateColumns()
         {
-            base.CreateColumns();
+            //base.CreateColumns();
+
             commonColumns = new(dataGrid, this);
             commonColumns.CreateColumns();
 
 
-            specialColumns = new SpecialColumns(dataGrid);
+            specialColumns = new SpecialColumns(dataGrid, this);
             specialColumns.CreateColumns();
-        }
-
-        protected override void NameChange(FocusOutEvent ev)
-        {
-            string value;
-            if (ev.target is TextElement)
-            {
-                TextElement field = (TextElement)ev.target;
-                value = field.text.Trim(' ');
-                field.text = value;
-            }
-            else
-            {
-                TextField field = (TextField)ev.target;
-                value = field.value.Trim(' ');
-                field.value = value;
-            }
-
-            int i = ev.target.GetRowIndex();
-            if (((BuildingWrapper)dataGrid.itemsSource[i]).Building.Name != value)
-            {
-                string oldPath = AssetDatabase.GetAssetPath(
-                    ((BuildingWrapper)dataGrid.itemsSource[i]).Building)
-                    .Replace("/building.prefab", "");
-
-                AddressableAssetEntry entry
-                    = Group.GetAssetEntry(
-                        AssetDatabase.GUIDFromAssetPath(oldPath).ToString());
-
-                string result = AssetDatabase.MoveAsset(
-                        $"{oldPath}",
-                        $"{BUILDING_PATH}{SelectedCategory.Name}/{value}");
-                if (result != "")
-                {
-                    Debug.LogError(result);
-                    if (ev.target is TextElement)
-                    {
-                        ((TextElement)ev.target).text = ((BuildingWrapper)dataGrid.itemsSource[i]).Building.Name;
-                    }
-                    else
-                    {
-                        ((TextField)ev.target).value = ((BuildingWrapper)dataGrid.itemsSource[i]).Building.Name;
-                    }
-                    return;
-                }
-
-                entry.address = value;
-                Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryModified, value, true);
-                ((BuildingWrapper)dataGrid.itemsSource[i]).Building.Name = value;
-                EditorUtility.SetDirty(((BuildingWrapper)dataGrid.itemsSource[i]).Building);
-            }
         }
 
         #endregion

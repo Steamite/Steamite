@@ -13,17 +13,17 @@ public class Pub : Building, IEffectObject
 
     protected override void FinishBuild()
     {
-        base.FinishBuild();
+        /*base.FinishBuild();
         EffectPos = GetPos() + blueprint.moveBy.Rotate(transform.rotation.eulerAngles.y);
-        ((IEffectObject)this).UpdateRange(true);
+        ((IEffectObject)this).UpdateRange(true);*/
     }
 
     public override void Load(ClickableObjectSave save)
     {
-        base.Load(save);
+        /*base.Load(save);
         EffectPos = GetPos() + blueprint.moveBy.Rotate(transform.rotation.eulerAngles.y);
         if (IsWorking)
-            ((IEffectObject)this).UpdateRange(true);
+            ((IEffectObject)this).UpdateRange(true);*/
     }
 
     public override void InitPrefabData()

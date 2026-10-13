@@ -26,7 +26,7 @@ namespace BottomBar.Building
             {
                 foreach (var wrapper in item.Objects)
                 {
-                    wrapper.Building.Cost.Init();
+                    wrapper.Cost.Init();
                     wrapper.unlocked = true;
                 }
             }
@@ -75,9 +75,9 @@ namespace BottomBar.Building
         void CategChange(int i)
         {
             if (i == -1)
-                buildingList.SetItemSource(null);
+                buildingList.SetItemSource(null, -1);
             else
-                buildingList.SetItemSource(buildingData.Categories[i].Objects);
+                buildingList.SetItemSource(buildingData.Categories[i].Objects, i);
         }
 
         void BlueprintChange(int i)
@@ -85,11 +85,11 @@ namespace BottomBar.Building
             if (i > -1)
             {
                 BuildingWrapper wrapper = buildingData.Categories[categGroup.SelectedChoice].Objects[i];
-                if (wrapper.unlocked && MyRes.CanAfford(wrapper.Building.Cost))
-                    SceneRefs.GridTiles.BlueprintPrefab = wrapper.Building;
+                if (wrapper.unlocked && MyRes.CanAfford(wrapper.Cost))
+                    SceneRefs.MouseController.SetBlueprint(wrapper);
             }
             else
-                SceneRefs.GridTiles.BlueprintPrefab = null;
+                SceneRefs.MouseController.SetBlueprint(null);
         }
 
         public void Open()

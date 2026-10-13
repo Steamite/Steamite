@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
@@ -35,7 +36,7 @@ namespace Assets.Scripts.Editor.Buildings.LevelList
             if (wrapper.selectedLevel == -1)
                 wrapper.selectedLevel = 0;
 
-            Building building = wrapper.Building;
+            BuildingNew building = wrapper.Building;
             if (building == null)
                 return;
 

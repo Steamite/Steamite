@@ -1,4 +1,5 @@
-﻿using InfoWindowElements;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using InfoWindowElements;
 using Outposts;
 using ResearchUI;
 using System.Collections.Generic;
@@ -67,12 +68,11 @@ namespace LocalMenuUtility
                     description.text = node.description.Replace('$', ' ');
                     break;
                 case BuildingWrapper wrapper:
-                    Building building = wrapper.Building;
-                    header.text = building.Name;
+                    header.text = wrapper.Name;
 
                     if (wrapper.unlocked)
                     {
-                        costList.Open(building);
+                        costList.Open(wrapper.Building);
                     }
                     else
                     {

@@ -1,4 +1,8 @@
-﻿using Assets.Scripts.Editor.Columns;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using Assets.Scripts.Editor.Columns;
+using Assets.Scripts.Editor.Shortcuts;
+using EditorWindows.Windows;
+using NUnit.Framework.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +15,10 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
 {
     public class SpecialColumns : ColumnCreators<SpecialActions>
     {
-        public SpecialColumns(MultiColumnListView _view) : base(_view)
+        BuildingRegister register;
+        public SpecialColumns(MultiColumnListView _view, BuildingRegister _register) : base(_view)
         {
+            register = _register;
         }
 
         public override void CreateColumns()
@@ -29,31 +35,24 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 bindCell = (el, i) =>
                 {
                     IntegerField field = el.Q<IntegerField>();
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
-                    field.SetEnabled(false);
-                    if (building == null || building is not IAssign assign)
-                        return;
-                    SerializedObject sO = new(building);
-                    field.BindProperty(
-                        sO
-                        .FindProperty("assignData")
-                        .FindPropertyRelative("AssignLimit")
-                        .FindPropertyRelative("baseValue"));
-/*
-                    if (((IAssign)building).AssignLimit == null)
+
+                    var building = register.GetBuildingWrapperAt(i).FindPropertyRelative("building");
+
+                    if (building.GetPropertyType() is IAssign)
                     {
-                        ((IAssign)building).AssignLimit = new();
-                        EditorUtility.SetDirty(building);
+                        field.enabledSelf = true;
+                        building
+                            .FindPropertyRelative("assignData")
+                            .FindPropertyRelative("AssignLimit")
+                            .FindPropertyRelative("baseValue");
                     }
-                    field.value = ((IAssign)building).AssignLimit.BaseValue;
-                    field.RegisterValueChangedCallback(actions.AssignChange);*/
-                    field.SetEnabled(true);
+                    else
+                        field.enabledSelf = false;
                 },
                 unbindCell = (el, i) =>
                 {
                     IntegerField field = el.Q<IntegerField>();
                     el.Unbind();
-                    //field.UnregisterValueChangedCallback(actions.AssignChange);
                 }
             });
             #endregion
@@ -69,157 +68,24 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 resizable = false,
                 makeCell = () => new RecipeCell(),
                 bindCell = (el, i) =>
-                {
+                {/*
+                    var building = register.GetBuildingWrapperAt(i).FindPropertyRelative("building");
+
                     RecipeCell cell = el as RecipeCell;
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
-                    if (building is IResourceProduction production)
+                    
+                    if (building.boxedValue is IResourceProduction production)
                     {
                         cell.userData = ((BuildingWrapper)view.itemsSource[i]).Building;
                         cell.Open(production);
                     }
                     else
-                        cell.Open(null);
+                        cell.Open(null);*/
                 },
                 unbindCell = (el, i) =>
                 {
-                    IntegerField field = el.Q<IntegerField>();
+                    RecipeCell cell = el as RecipeCell;
                 }
             });
-            /*
-            #region Time
-            view.columns.Add(new()
-            {
-                name = "prodTime",
-                title = "Prod. time",
-                width = 75,
-                resizable = false,
-                makeCell = () => new IntegerField(),
-                bindCell = (el, i) =>
-                {
-                    IntegerField field = el.Q<IntegerField>();
-                    if (((BuildingWrapper)view.itemsSource[i]).building is IProduction)
-                    {
-                        field.SetEnabled(true);
-                        field.value = Convert.ToInt32(((IProduction)((BuildingWrapper)view.itemsSource[i]).building).ProdTime);
-                        field.RegisterValueChangedCallback(ProdTimeChange);
-                    }
-                    else
-                        field.SetEnabled(false);
-                },
-                unbindCell = (el, i) =>
-                {
-                    IntegerField field = el.Q<IntegerField>();
-                    field.UnregisterValueChangedCallback(ProdTimeChange);
-                }
-            });
-            #endregion
-
-            #region Input
-
-            view.columns.Add(new()
-            {
-                name = "prodCost",
-                title = "Input",
-                minWidth = view.columns["cost"].minWidth,
-                maxWidth = view.columns["cost"].maxWidth,
-                resizable = true,
-
-                makeCell = () =>
-                {
-                    VisualElement element = new VisualElement()
-                    {
-                        style =
-                        {
-                            flexDirection = FlexDirection.Column
-                        }
-                    };
-                    element.Add(new ResourceCell());
-                    element.Add(new Label("Fluid:") { name = "fluidLabel"});
-                    element.Add(new ResourceCell());
-                    return element;
-                },
-                bindCell = (el, i) =>
-                {
-                    el.parent.focusable = true;
-                    ResourceCell rCell = el[0] as ResourceCell;
-                    Building b = ((BuildingWrapper)view.itemsSource[i]).building;
-                    if (b is IResourceProduction resProd)
-                        rCell.Open(
-                            resProd.ResourceCost.EditorResource,
-                            b, false);
-                    else
-                        rCell.Open(null, null, false);
-                    
-                    ResourceCell fCell = el[2] as ResourceCell;
-                    if (b is FluidResProductionBuilding fluidProd)
-                    {
-                        el.Q<Label>("fluidLabel").style.display = DisplayStyle.Flex;
-                        fCell.Open(
-                            fluidProd.FluidCost,
-                            b, false);
-                    }
-                    else
-                    {
-                        el.Q<Label>("fluidLabel").style.display = DisplayStyle.None;
-                        fCell.Open(null, null, false);
-                    }
-                }
-            });
-            #endregion
-
-            #region Yeild
-            view.columns.Add(new()
-            {
-                name = "prod",
-                title = "Yield",
-                minWidth = view.columns["cost"].minWidth,
-                maxWidth = view.columns["cost"].maxWidth,
-                resizable = true,
-
-                makeCell = () => 
-                {
-                    VisualElement element = new VisualElement()
-                    {
-                        style =
-                        {
-                            flexDirection = FlexDirection.Column
-                        }
-                    };
-                    element.Add(new ResourceCell());
-                    element.Add(new Label("Fluid:") { name = "fluidLabel" });
-                    element.Add(new ResourceCell());
-                    return element;
-                },
-                bindCell = (el, i) =>
-                {
-                    el.parent.focusable = true;
-                    ResourceCell cell = el[0] as ResourceCell;
-                    Building b = ((BuildingWrapper)view.itemsSource[i]).building;
-                    if (b is IResourceProduction)
-                        cell.Open(
-                            ((IResourceProduction)b)?.ResourceYield.EditorResource,
-                            ((BuildingWrapper)view.itemsSource[i]).building, false);
-                    else
-                        cell.Open(null, null, false);
-
-                    ResourceCell fCell = el[2] as ResourceCell;
-                    if (b is FluidResProductionBuilding fluidProd)
-                    {
-                        el.Q<Label>("fluidLabel").style.display = DisplayStyle.Flex;
-                        fCell.Open(
-                            fluidProd.FluidYeild,
-                            b, false);
-                    }
-                    else
-                    {
-                        el.Q<Label>("fluidLabel").style.display = DisplayStyle.None;
-                        fCell.Open(null, null, false);
-                    }
-                }
-            });
-            
-            #endregion
-            */
             #endregion
 
             #region Storing
@@ -232,31 +98,29 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 makeCell = () => new Mask64Field(),
                 bindCell = (el, i) =>
                 {
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
-                    if (building == null)
-                        return;
+                    var building = register.GetBuildingWrapperAt(i).FindPropertyRelative("building");
 
 
                     Mask64Field field = (Mask64Field)el;
-
-                    SerializedObject sO = new(building);
-
-                    if (building is IStorage storage)
+                    if (building.GetPropertyType() is IStorage storage)
                     {
                         el.style.display = DisplayStyle.Flex;
                         List<string> choices = ResFluidTypes.GetResNamesList();
                         field.choices = choices;
 
-                        field.BindProperty(sO.FindProperty("canStoreInt"));
+                        field.BindProperty(
+                            register.GetBuildingWrapperAt(i)
+                            .FindPropertyRelative("building")
+                            .FindPropertyRelative("canStoreInt"));
                     }
-                    else if (building is FluidTank tank)
+                    /*else if (building is FluidTank tank)
                     {
                         el.style.display = DisplayStyle.Flex;
                         List<string> choices = ResFluidTypes.GetFluidNames();
                         field.choices = choices;
 
                         field.BindProperty(sO.FindProperty(nameof(FluidTank.TypesToStore)));
-                    }
+                    }*/
                     else
                     {
                         el.style.display = DisplayStyle.None;
@@ -281,15 +145,12 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 makeCell = () => new MaskField(),
                 bindCell = (el, i) =>
                 {
+                    // TODO maybe move to the building instead of the wrapper?
 
-                    Building b = ((BuildingWrapper)view.itemsSource[i]).Building;
-                    if (b == null)
-                        return;
-                    SerializedObject build = new(b);
-
-                    MaskField field = (MaskField)el;
+                    /*MaskField field = (MaskField)el;
                     field.choices = Enum.GetNames(typeof(BuildingCategType)).ToList();
-                    field.BindProperty(build.FindProperty("buildingCategories"));
+                    */
+                    //field.BindProperty(build.FindPropertyRelative("buildingCategories"));
                 },
                 unbindCell = (el, i) =>
                 {
@@ -309,8 +170,10 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 makeCell = () => new VisualElement(),
                 bindCell = (el, i) =>
                 {
+                    // TODO
+                    /*
                     el.Clear();
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
+                    BuildingNew building = ((BuildingWrapper)view.itemsSource[i]).Building;
                     if (building == null)
                         return;
 
@@ -342,7 +205,7 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                             sO.FindProperty("storedFluids")
                             .FindPropertyRelative(nameof(CapacityResource.capacity))
                             .FindPropertyRelative("baseValue"));
-                    }
+                    }*/
 
                 },
                 unbindCell = (el, i) =>
@@ -363,26 +226,26 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 title = "Range",
                 resizable = true,
                 width = 75,
-                makeCell = () => new VisualElement(),
+                makeCell = () =>  new IntegerField(),
                 bindCell = (el, i) =>
                 {
-                    el.Clear();
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
-                    if (building == null || building is not IEffectObject effect)
-                        return;
+                    IntegerField field = el as IntegerField;
+                    var building = register.GetBuildingWrapperAt(i).FindPropertyRelative("building");
 
-                    IntegerField field = new();
-                    el.Add(field);
-                    SerializedObject sO = new(building);
+                    if (building.GetPropertyType() is not IEffectObject effect)
+                    {
+                        field.enabledSelf = false;
+                        return;
+                    }
+
                     effect.Range ??= new(-1);
-                    field.BindProperty(sO.FindProperty("range").FindPropertyRelative("baseValue"));
+                    building
+                        .FindPropertyRelative("range")
+                        .FindPropertyRelative("baseValue");
                 },
                 unbindCell = (el, i) =>
                 {
-                    if (el.childCount == 0)
-                        return;
-                    el[0].Unbind();
-                    el.Clear();
+                    (el as IntegerField).Unbind();
                 },
             });
             #endregion
@@ -397,18 +260,20 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 bindCell = (el, i) =>
                 {
                     IntegerField intField = (IntegerField)el;
-                    intField.Unbind();
-                    intField.style.display = DisplayStyle.None;
 
-                    Building building = ((BuildingWrapper)view.itemsSource[i]).Building;
-                    if (building is not IStabilitySupport)
+                    var building = register.GetBuildingWrapperAt(i).FindPropertyRelative("building");
+
+                    if (building.GetPropertyType() is not IStabilitySupport)
+                    {
+                        intField.enabledSelf = false;
                         return;
+                    }
+                    intField.enabledSelf = true;
 
-                    intField.style.display = DisplayStyle.Flex;
-
-                    SerializedObject serializedObject = new(building);
-                    SerializedProperty prop = serializedObject.FindProperty(
-                        nameof(IStabilitySupport.SupportValue).LowerCamelCase());
+                    SerializedProperty prop = 
+                        building.FindPropertyRelative(
+                        nameof(IStabilitySupport.SupportValue)
+                        .LowerCamelCase());
 
                     intField.BindProperty(prop);
                 },

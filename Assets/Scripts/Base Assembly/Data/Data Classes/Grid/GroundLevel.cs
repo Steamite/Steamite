@@ -255,6 +255,8 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <param name="load">If load is true creates, creates new roads and doesn't recycle entrypoints.</param>
     public void RegisterBuilding(Building building, GridPos gridPos, bool load = false)
     {
+        // TODO
+        /*
         MyGrid.Buildings.Add(building);
         if(building is Pub pub)
         {
@@ -314,7 +316,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
         }
         building.entryPoints = new(entryTiles, overlayGroup);
         if (!load)
-            SceneRefs.Overlays.blueprintIndicator.DestroyBuilingTiles();
+            SceneRefs.Overlays.blueprintIndicator.DestroyBuilingTiles();*/
     }
     #endregion Adding to Grid
 
@@ -326,7 +328,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
     /// <param name="gridPos">Building position</param>
     public void UnsetBuilding(Building building, GridPos gridPos)
     {
-        SceneRefs.Overlays.entryPoints.Remove(building);
+        /*SceneRefs.Overlays.entryPoints.Remove(building);
         List<Road> _roads = roads.GetComponentsInChildren<Road>().ToList();
         for (int i = building.blueprint.itemList.Count - 1; i > -1; i--)
         {
@@ -345,7 +347,7 @@ public class GroundLevel : MonoBehaviour, IUpdatable
                     SetGridItem(new(x, y), r);
                     break;
             }
-        }
+        }*/
     }
     #endregion Removing from Grid
 
