@@ -1,36 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Mathematics;
 using UnityEngine;
 
-public class BuildNew : GridTilesMode
+public class BuildNew : GridTilesModeNew
 {
-    public override void EnterObject(ClickableObject enterObject)
+    BuildingWrapper wrapper;
+
+    public override void MouseTrack(float distance, float lowHeight, Plane low, Ray _ray)
     {
-        /*Building blueprintPrefab = gridTiles.BlueprintPrefab;
-        Building blueprintInstance = gridTiles.BlueprintInstance;
+        int2 lastPos = controller.hoverWorldPosition;
 
-        if (gridTiles.Drag)
+        base.MouseTrack(distance, lowHeight, low, _ray);
+        if (!lastPos.Equals(controller.hoverWorldPosition))
         {
-            gridTiles.CalcPipes(gridTiles.ActivePos, blueprintPrefab as Pipe);
-            return;
-        }
 
-        Color c;
-        GridPos grid = blueprintInstance.blueprint.moveBy.Rotate(blueprintInstance.transform.eulerAngles.y);
-        blueprintInstance.transform.position = new(
-            gridTiles.ActivePos.x + grid.x,
-            (MyGrid.currentLevel * ClickableObjectFactory.LEVEL_HEIGHT) +
-                (blueprintInstance is Pipe
-                ? ClickableObjectFactory.PIPE_OFFSET
-                : ClickableObjectFactory.BUILD_OFFSET),
-            gridTiles.ActivePos.z + grid.z);
-        c = blueprintInstance.CanPlace() ? Color.blue : Color.red;
-        blueprintInstance.Highlight(c);*/
-    }    
+        }
+    }
+
 
     public override void UpObject()
-    {
+    {/*
         Building blueprintPrefab = gridTiles.BlueprintPrefab;
         Building blueprintInstance = gridTiles.BlueprintInstance;
         if (blueprintPrefab is Pipe && (blueprintInstance == null || blueprintInstance.CanPlace()))
@@ -71,10 +62,10 @@ public class BuildNew : GridTilesMode
         else
         {
             Debug.LogWarning("Can't place here!!");
-        }
+        }*/
     }
 
-    public override bool ToggleMod()
+    /*public override bool ToggleMod()
     {
 
         if (gridTiles.BlueprintPrefab.Name != gridTiles.BlueprintInstance.Name)
@@ -84,13 +75,13 @@ public class BuildNew : GridTilesMode
             return false;
         }
         return true;
-    }
+    }*/
 
 
     public override void ExitMod()
     {
         //SceneRefs.CameraSceneMover.SetRaycastMask(gridTiles.defaultMask);
-        if (gridTiles.Drag)
+        /*if (gridTiles.Drag)
         {
             gridTiles.ClearPipes();
             gridTiles.DeselectBuildingButton?.Invoke();
@@ -98,7 +89,7 @@ public class BuildNew : GridTilesMode
         }
         else if (gridTiles.BlueprintInstance)
             gridTiles.DestroyBlueprint(true);
-        gridTiles.shiftKey.Disable();
+        gridTiles.shiftKey.Disable();*/
     }
 
     public override bool EnterMod()
@@ -108,10 +99,11 @@ public class BuildNew : GridTilesMode
         if (gridTiles.BlueprintPrefab is Pipe)
             SceneRefs.CameraSceneMover.SetRaycastMask(gridTiles.pipeMask);
         else
-            SceneRefs.CameraSceneMover.SetRaycastMask(gridTiles.buildingMask);*/
+            SceneRefs.CameraSceneMover.SetRaycastMask(gridTiles.buildingMask);
         gridTiles.Blueprint();
-        gridTiles.shiftKey.Enable();
+        gridTiles.shiftKey.Enable();*/
 
         return false;
     }
+
 }

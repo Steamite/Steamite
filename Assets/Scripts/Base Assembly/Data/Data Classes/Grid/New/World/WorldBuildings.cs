@@ -34,9 +34,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
         public BuildingRender SetupRenderer(Mesh[] meshes, Material buildingMaterial)
         {
-
-
-            CombineInstance combineInstance;
             uint[] counts = new uint[meshes.Length];
             BuildingRenderData[] instanceData = new BuildingRenderData[lastIndex];
 
@@ -44,12 +41,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             {
                 if (buildings[i] == null)
                     continue;
-                counts[buildings[i].meshIndex]++;
+                counts[buildings[i].renderData.meshIndex]++;
                 instanceData[i] = buildings[i].renderData; //new(, buildings[i].meshIndex);
             }
 
             render = new(buildingMaterial);
-            int[] indexes = render.UploadBuildingData(meshes, counts, instanceData);
+            int[] indexes = render.UploadStartingBuildingData(meshes, counts, instanceData);
 
             int x = 0;
             for (int i = 0; i < lastIndex; i++)
@@ -87,7 +84,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 lastIndex++;
             }
 
-            render?.CreateBuilding(data.renderData);
+            //render?.CreateBuilding(data.renderData);
 
             return index;
         }

@@ -35,7 +35,15 @@ public class DigReal : GridTilesModeNew
         TileType tileType = tile.TType;
 
         if (tileType == TileType.Wall)
-            controller.SetMaterial(pos, 0, toBeDugColor, tileType, index, 0.0001f);
+        {
+            int worldIndex = SceneRefs.World.GetWorldIndex(pos);
+
+            if (renderer.realToDigArray.GetBits(worldIndex) == 1)
+                controller.SetMaterial(pos, 0, RemoveColor, tileType, index, 0.0001f);
+            else
+                controller.SetMaterial(pos, 0, toBeDugColor, tileType, index, 0.0001f);
+
+        }
         else
             return false;
 

@@ -31,7 +31,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
 
         public BuildingRenderData renderData;
 
-        public uint meshIndex;
         public bool IsConstructing;
         public bool IsDeconstructing;
 

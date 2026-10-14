@@ -30,9 +30,6 @@ public abstract partial class GridTilesModeNew : MonoBehaviour
         Gizmos.DrawLine(topPoint, endPoint);
     }
 
-
-
-
     public virtual void MouseTrack(float distance, float lowHeight, Plane low, Ray _ray)
     {
         int2 pos = new();
