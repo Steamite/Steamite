@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class DigNew : GridTilesModeNew
 {

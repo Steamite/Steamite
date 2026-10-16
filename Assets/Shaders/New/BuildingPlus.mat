@@ -46,13 +46,13 @@ Material:
     m_Colors:
     - _HighlightColor: {r: 0, g: 0, b: 2, a: 2}
     - _HoverColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0.7019608}
-    - _HoverPosition: {r: 80.5, g: 0, b: 80.5, a: 0}
+    - _HoverPosition: {r: 81.5, g: 0, b: 80.5, a: 0}
     - _HoverRange: {r: 0, g: 0, b: 0, a: 0}
     - _MousePos: {r: 80.5, g: 0, b: 80.5, a: 0}
     - _Range: {r: 0, g: 0, b: 0, a: 0}
     - _SelectionColor: {r: 1, g: 0, b: 0, a: 0.77254903}
     - _SelectionPosition: {r: 80.5, g: 0, b: 80.5, a: 0}
-    - _SelectionRange: {r: 0, g: 0, b: 0, a: 0}
+    - _SelectionRange: {r: 0.5001, g: 0.5001, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &6266913003831658514

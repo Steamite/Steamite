@@ -52,13 +52,16 @@ public class LoadGameMenu : DoubleWindow
 
             worlds = worldGroup.FillItemSource($"{Application.persistentDataPath}/saves", true);
             continueButton = root.Q<Button>("Continue-Button");
+            continueButton.enabledSelf = false;
+            // TODO UNCOMMENT
+            /*
             if (worlds != null && worlds.Length > 0)
             {
                 continueButton.RegisterCallback<ClickEvent>(Continue);
                 continueButton.ToggleStyleButton(true);
             }
             else
-                continueButton.ToggleStyleButton(false);
+                continueButton.ToggleStyleButton(false);*/
         }
         else
         {

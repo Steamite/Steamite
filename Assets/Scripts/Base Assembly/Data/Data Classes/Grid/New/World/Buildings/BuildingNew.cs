@@ -50,6 +50,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
         {
             throw new NotImplementedException();
         }
+
+        internal BuildingNew Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

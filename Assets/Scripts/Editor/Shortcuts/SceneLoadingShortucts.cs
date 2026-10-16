@@ -68,11 +68,11 @@ public class SceneLoadingShortucts : MonoBehaviour
                 {
                     EditorSceneManager.OpenScene($"{scenePath}Splash Screen.unity");
                     //EditorSceneManager.activeSceneChangedInEditMode += SceneReturn;
-                }
+                }/*
                 if (continueGame)
                     GameObject.Find("Loader").GetComponent<SplashScreen>().loadAction = LoadActions.LoadGame;
                 else
-                    GameObject.Find("Loader").GetComponent<SplashScreen>().loadAction = LoadActions.NewGameGen;
+                    GameObject.Find("Loader").GetComponent<SplashScreen>().loadAction = LoadActions.NewGameGen;*/
                 EditorApplication.EnterPlaymode();
                 File.WriteAllText($"{Application.persistentDataPath}/openScene.txt", activeSceneName);
             }

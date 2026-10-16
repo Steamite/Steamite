@@ -8,7 +8,8 @@ struct PackedBuilding
 
 // Declare the buffer set via MaterialPropertyBlock
 //#if defined(UNITY_SUPPORT_INSTANCING)
-    StructuredBuffer<PackedBuilding> _BuildingInstanceBuffer;
+StructuredBuffer<PackedBuilding> _BuildingInstanceBuffer;
+int _Offset;
 //#endif
 /*
  Bit Layout Breakdown (32-bit uint):
@@ -86,23 +87,48 @@ void UnpackBuilding2Bit_float(
     float cellSize,
     float offset,
     float3 buildingSize,
+
     out float3 WorldPosition,
     out float3 Rotation)
+    //out float3 Color)
 {
     uint packedUint = 0;
     uint RotationIndex = 0;
     uint GridY;
     uint GridX;
     uint GridZ;
-
+    
+    #if defined(UNITY_ANY_INSTANCING_ENABLED)
+        #if defined(SHADER_API_D3D11) || defined(SHADER_API_D3D12)
+            instanceID = _Offset + (uint)instanceID;
+        #else
+            instanceID = _Offset + unity_InstanceID;
+        #endif
+    
+        /*uint bufferCount, bufferStride;
+        _BuildingInstanceBuffer.GetDimensions(bufferCount, bufferStride);
+    
+        if (instanceID >= bufferCount)
+        {
+        // Collapse invalid vertices to origin so they don't render or crash
+            WorldPosition = float3(0, 0, 0);
+            Color = float3(0, 1, 0);
+            return;
+        }*/
+    #endif
+    
 #if defined(SHADERGRAPH_PREVIEW)
     packedUint = 0;
 #else
+    
+    
     packedUint = _BuildingInstanceBuffer[(uint) instanceID].data;
 #endif
     
     UnpackBuildingData2Bit(packedUint, GridX, GridZ, GridY, RotationIndex);
     WorldPosition = TransformInstanceVertex2Bit(localPosition, GridX, GridZ, GridY, RotationIndex, buildingSize, offset, cellSize, Rotation);
+    
+    //Color = float3(instanceID, instanceID, instanceID);
 }
 
 #endif // BUILDING_UNPACK_2BIT_INCLUDED

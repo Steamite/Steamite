@@ -19,14 +19,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             LevelGridTile b = gridData[dataIndex];
 
             int type = b.Type;
-
+/*
 
             if (type == (int)TileType.Building)
             {
                 vertexes[index] = 0;
                 triangles[index] = 0;
                 return;
-            }
+            }*/
 
             CreateTile(index);
 

@@ -31,6 +31,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         GridTilesModeNew[] modes;
         public GridTilesModeNew activeMode;
 
+        BuildModeNew buildMode;
+
         public int activeModeIndex;
 
         public GridWorld world;
@@ -73,6 +75,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
                 modes[i].InitMode(this);
             }
             world = SceneRefs.World;
+
+            buildMode = (BuildModeNew)modes[(int)ControlMode.Build];
 
             activeModeIndex = 0;
             activeMode = modes[0];
@@ -296,7 +300,14 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
         public void SetBlueprint(BuildingWrapper wrapper)
         {
-            throw new NotImplementedException();
+            if (wrapper == null)
+            {
+                buildMode.SetBlueprint(null);
+                return;
+            }
+            if (activeModeIndex != (int)ControlMode.Build)
+                ChangeSelMode(ControlMode.Build);
+            buildMode.SetBlueprint(wrapper);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         int lastIndex = 0;
         int firstRemovedSpace = int.MaxValue;
 
-        BuildingRender render;
+        BuildingRenderer render;
 
         public void LoadState(BuildingNew[] newSave)
         {
@@ -32,7 +32,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             }
         }
 
-        public BuildingRender SetupRenderer(Mesh[] meshes, Material buildingMaterial)
+        public BuildingRenderer SetupRenderer(Mesh[] meshes, Material buildingMaterial)
         {
             uint[] counts = new uint[meshes.Length];
             BuildingRenderData[] instanceData = new BuildingRenderData[lastIndex];
@@ -44,9 +44,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 counts[buildings[i].renderData.meshIndex]++;
                 instanceData[i] = buildings[i].renderData; //new(, buildings[i].meshIndex);
             }
+            // DEBUG
 
             render = new(buildingMaterial);
-            int[] indexes = render.UploadStartingBuildingData(meshes, counts, instanceData);
+            int[] indexes = render.UploadBuildingData(meshes, counts, instanceData);
 
             int x = 0;
             for (int i = 0; i < lastIndex; i++)

@@ -1,12 +1,22 @@
-﻿using System;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class BuildNew : GridTilesModeNew
+public class BuildModeNew : GridTilesModeNew
 {
     BuildingWrapper wrapper;
+
+    BuildingRenderer buildingRenderer;
+    public override void InitMode(MouseController _mouseController)
+    {
+        base.InitMode(_mouseController);
+    }
+
 
     public override void MouseTrack(float distance, float lowHeight, Plane low, Ray _ray)
     {
@@ -106,4 +116,20 @@ public class BuildNew : GridTilesModeNew
         return false;
     }
 
+    BuildingNew newBuilding;
+    
+    public void SetBlueprint(BuildingWrapper _wrapper)
+    {
+        if(wrapper != _wrapper)
+        {
+            wrapper = _wrapper;
+            newBuilding = wrapper.Building.Clone();
+            int offset = SceneRefs.World.CurrentLevel.levelOffsetScaled;
+            int2 fixedPos = controller.hoverWorldPosition - offset;
+            uint pos = (uint)((fixedPos.x & 0x3FF) | ((fixedPos.y&0xFF) << 10));
+
+            newBuilding.renderData.position =  pos;
+            buildingRenderer.CreateBlueprint(newBuilding.renderData);
+        }
+    }
 }

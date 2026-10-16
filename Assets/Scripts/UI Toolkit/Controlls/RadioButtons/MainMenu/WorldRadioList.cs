@@ -13,8 +13,9 @@ namespace RadioGroups
         public WorldRadioGroup() : base()
         {
             style.justifyContent = Justify.SpaceAround;
-            CustomRadioButton button = new("unity-button", 0, this) { text = "Predefined" };
-            button = new("unity-button", 1, this) { text = "Generated" };
+            CustomRadioButton pre = new("unity-button", 0, this) { text = "Predefined" };
+            pre.style.display = DisplayStyle.None;
+            CustomRadioButton gen = new("unity-button", 1, this) { text = "Generated" };
         }
         public override void AddButton(CustomRadioButton button)
         {
@@ -24,7 +25,7 @@ namespace RadioGroups
         }
         public void Open()
         {
-            buttons[0].Select();
+            buttons[1].Select();
         }
     }
 }

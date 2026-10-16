@@ -107,8 +107,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
 
 
-
-
         public void AttachChange(Action<int, int> attach) => onLevelChange += attach;
         public void SetLevel(int i)
         {

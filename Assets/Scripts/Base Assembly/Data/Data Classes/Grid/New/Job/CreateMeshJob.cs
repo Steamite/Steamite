@@ -35,9 +35,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             new(1, 1),
 
             new(1, 1),
-            new(0, 0),
-            new(0, 0),
-            new(1, 0) 
+            new(0, 0),            
+            new(0.6f, 0.1f),
+            new(0.6f, 0.1f),
         };
 
 
@@ -72,8 +72,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             LevelGridTile tile = gridData[dataIndex];
             int type = tile.Type;
 
-            if (type == (int)TileType.Building)
-                return;
+           /* if (type == (int)TileType.Building)
+                return;*/
 
             int sVertexIndex = vertexOffsets[index];
             int sTriangleIndex = triangleOffsets[index];

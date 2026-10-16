@@ -63,7 +63,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -105,7 +104,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -147,7 +145,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -189,7 +186,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -231,7 +227,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -279,7 +274,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -302,29 +296,30 @@ MonoBehaviour:
               currentValue: 0
           statValues: []
         Cost:
-          types: []
-          ammounts: 
+          types:
+          - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+          ammounts: 32000000i
           baseResource:
             types:
             - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
             ammounts: 32000000i
           money:
             baseValue: 15
-            currentValue: 0
+            currentValue: 15
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 28711bc89a9f8b244a01e3d359df53d2, type: 3}
         mesh: {fileID: 0}
         blueprint:
           size:
-            x: 3
-            y: 3
+            x: 2
+            y: 2
           moveBy:
             x: 0
             y: 0
           anchor:
             x: 0
             y: 0
-          itemArray: 030000000100000000000000000000000200000005000000020000000200000002000000i
+          itemArray: 03000000030000000200000001000000i
     - rid: 8808251703612669980
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
@@ -336,7 +331,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -378,7 +372,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -437,7 +430,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -506,7 +498,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -548,7 +539,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -590,7 +580,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -632,7 +621,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -674,7 +662,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -716,7 +703,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
@@ -758,7 +744,6 @@ MonoBehaviour:
             position: 0
             blueprintSize: 0
             meshIndex: 0
-          meshIndex: 0
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 

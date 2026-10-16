@@ -570,7 +570,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &284615617
 Transform:
   m_ObjectHideFlags: 0
@@ -595,12 +595,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 284615616}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13bc09eb1046ef64582852e4664429da, type: 3}
+  m_Script: {fileID: 11500000, guid: dd42fa97ed6ba9148b3928538447d2bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Build
   cursor: {fileID: 0}
   cursorOffset: {x: 0, y: 0}
-  highlightColor: {r: 0, g: 0, b: 0, a: 0}
+  ToggleMod: 1
 --- !u!1 &405851067
 GameObject:
   m_ObjectHideFlags: 0
@@ -1788,8 +1788,8 @@ Transform:
   - {fileID: 971749948}
   - {fileID: 533075847}
   - {fileID: 1903098573}
-  - {fileID: 1186186385}
   - {fileID: 284615617}
+  - {fileID: 1186186385}
   - {fileID: 52733409}
   - {fileID: 258749763}
   m_Father: {fileID: 7751514193011626992}
@@ -1828,6 +1828,11 @@ MonoBehaviour:
   clickedIndex: 0
   obscured: 0
   damageAmmount: 10
+  clickedWorldPosition:
+    x: 0
+    y: 0
+  buildingType: 0
+  buildingIndex: 0
 --- !u!114 &977506022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2393,7 +2398,7 @@ GameObject:
   - component: {fileID: 1903098573}
   - component: {fileID: 1903098574}
   m_Layer: 2
-  m_Name: Dig
+  m_Name: DigReal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2610,6 +2615,7 @@ MonoBehaviour:
   CenterScaled: 0
   buildingMeshes:
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
   buildingMaterial: {fileID: 2100000, guid: dd3fed6aec66e76439d58f3a9573a37a, type: 2}
   chunks: []
 --- !u!114 &4967022013944964022

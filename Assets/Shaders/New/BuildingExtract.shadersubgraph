@@ -367,7 +367,7 @@
             "m_Id": "79a4656c77424028b0b8e71c5c55160b"
         },
         {
-            "m_Id": "a4943dbdcdc54df5b50965afdc143cc2"
+            "m_Id": "da522b74718c4af2be3502e6e70ef798"
         },
         {
             "m_Id": "0023092831824329ae5088afe79afe6a"
@@ -512,31 +512,6 @@
     "m_Hidden": false,
     "m_HideConnector": false,
     "m_ShaderOutputName": "WorldPosition",
-    "m_StageCapability": 3,
-    "m_CustomBinding": "",
-    "m_Value": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0
-    },
-    "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0
-    },
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
-    "m_ObjectId": "a4943dbdcdc54df5b50965afdc143cc2",
-    "m_Id": 7,
-    "m_DisplayName": "New",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_HideConnector": false,
-    "m_ShaderOutputName": "New",
     "m_StageCapability": 3,
     "m_CustomBinding": "",
     "m_Value": {
@@ -702,8 +677,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -774.0,
-            "y": -77.0,
+            "x": -745.0,
+            "y": -99.99999237060547,
             "width": 110.0,
             "height": 77.0
         }
@@ -823,6 +798,31 @@
     "m_Hidden": false,
     "m_HideConnector": false,
     "m_ShaderOutputName": "localPosition",
+    "m_StageCapability": 3,
+    "m_CustomBinding": "",
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
+    "m_ObjectId": "da522b74718c4af2be3502e6e70ef798",
+    "m_Id": 7,
+    "m_DisplayName": "Offset",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_HideConnector": false,
+    "m_ShaderOutputName": "Offset",
     "m_StageCapability": 3,
     "m_CustomBinding": "",
     "m_Value": {
