@@ -22,11 +22,20 @@ public class BuildModeNew : GridTilesModeNew
     {
         base.InitMode(_mouseController);
         buildingRenderer = renderer.GetCustomRenderer(0) as BuildingRenderer;
-        SetHoverColor(new Color());
     }
 
     public void AttachToWrapperChange(Action<BuildingWrapper> action) => onWrapperChange += action;
 
+    protected override bool CheckTopObstruction(int2 pos, int index, LevelGridTile tile)
+    {
+        TileType tileType = (TileType)tile.Type;
+        if (tileType < TileType.Road)
+        {
+            controller.SetMaterial(pos, 0, hoverColor, tileType, index, 0.0001f);
+            return true;
+        }
+        return false;
+    }
 
 
     public override void MouseTrack(float distance, float lowHeight, Plane low, Ray _ray)

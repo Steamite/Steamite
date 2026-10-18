@@ -39,22 +39,61 @@ class BuildEditor : EditorWindow
         var v = GetWindow<BuildEditor>();
         v.maxSize = new(900, 900);
         v.minSize = new(600, 600);
+
+        v.titleContent = new(_buildingWrapper.FindPropertyRelative(nameof(BuildingWrapper.Name)).stringValue);
+
+        v.Load();
     }
 
-    void LoadData()
+
+    PropertyField meshField;
+    PropertyField sizeField;
+
+    void Load()
     {
         if (blueprint == null)
         {
-            Close();
+            meshField.Unbind();
+            sizeField.Unbind();
+            hasAnchor = false;
+            size = new();
             return;
         }
 
-        PropertyField field = new();
+        meshField.BindProperty(blueprint.FindPropertyRelative(nameof(BuildingGrid.mesh)));
+        
         var sizeProp = blueprint.FindPropertyRelative(nameof(BuildingGrid.size));
-        field.BindProperty(sizeProp);
-        field.TrackPropertyValue(sizeProp, SizeChange);
+        sizeField.BindProperty(sizeProp);
+        sizeField.TrackPropertyValue(sizeProp, SizeChange);
 
-        rootVisualElement.Add(field);
+        size = (int2)blueprint.FindPropertyRelative(nameof(BuildingGrid.size)).boxedValue;
+
+        LoadGrid();
+
+        RenderGrid();
+    }
+
+    void LoadGrid()
+    {
+        var itemArray = blueprint.FindPropertyRelative(nameof(BuildingGrid.itemArray));
+        int length = itemArray.arraySize;
+        gridItemTypes = new GridItemType[length];
+
+        hasAnchor = false;
+        for (int i = 0; i < length; i++)
+        {
+            gridItemTypes[i] = (GridItemType)itemArray.GetArrayElementAtIndex(i).enumValueIndex;
+            if (gridItemTypes[i] == GridItemType.Anchor)
+                SetAnchor(i, false);
+        }
+    }
+
+    #endregion
+
+    void CreateGUI()
+    {
+        rootVisualElement.Add(meshField = new());
+        rootVisualElement.Add(sizeField = new());
 
         VisualElement fields = new()
         {
@@ -72,43 +111,18 @@ class BuildEditor : EditorWindow
         for (int i = 0; i < names.Length; i++)
         {
             string nam = names[i];
-            fields.Add(new Label(nam) 
-            { 
-                style = 
-                { 
-                    flexGrow = 1, 
-                    maxWidth = new Length(100f/names.Length, LengthUnit.Percent), 
+            fields.Add(new Label(nam)
+            {
+                style =
+                {
+                    flexGrow = 1,
+                    maxWidth = new Length(100f/names.Length, LengthUnit.Percent),
                     backgroundColor = ChangeColor((GridItemType)i),
                     unityTextAlign = TextAnchor.MiddleCenter
-                } 
+                }
             });
         }
-        
-
-
-        canSave = false;
-        hasAnchor = false;
-
-        size = (int2)blueprint.FindPropertyRelative(nameof(BuildingGrid.size)).boxedValue;
-        
-        var itemArray = blueprint.FindPropertyRelative(nameof(BuildingGrid.itemArray));
-        int length = itemArray.arraySize;
-        gridItemTypes = new GridItemType[length];
-
-        for (int i = 0; i < length; i++)
-        {
-            gridItemTypes[i] = (GridItemType)itemArray.GetArrayElementAtIndex(i).enumValueIndex;
-            if (gridItemTypes[i] == GridItemType.Anchor)
-                hasAnchor = true;
-        }
-
-        CreateGrid();
-    }
-    #endregion
-
-    void CreateGUI()
-    {
-        LoadData();
+        rootVisualElement.Add(buttonContainer = new() { style = { flexDirection = FlexDirection.ColumnReverse, flexGrow = 1 } });
     }
 
     void SizeChange(SerializedProperty ev)
@@ -117,40 +131,40 @@ class BuildEditor : EditorWindow
         int newSize = size.x * size.y;
         
         var itemArray = blueprint.FindPropertyRelative(nameof(BuildingGrid.itemArray));
+        int length = itemArray.arraySize;
         itemArray.arraySize = newSize;
+
+        for (int i = length; i < newSize; i++)
+            itemArray.GetArrayElementAtIndex(i).enumValueIndex = 0;
+
         blueprint.serializedObject.ApplyModifiedProperties();
 
-        int length = newSize;
 
-        gridItemTypes = new GridItemType[length];
+        gridItemTypes = new GridItemType[newSize];
 
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < newSize; i++)
         {
             gridItemTypes[i] = (GridItemType)itemArray.GetArrayElementAtIndex(i).enumValueIndex;
             if (gridItemTypes[i] == GridItemType.Anchor)
-                hasAnchor = true;
+                SetAnchor(i);
         }
+        
 
-        UpdateGrid();
+        RenderGrid();
     }
 
 
     VisualElement buttonContainer;
-    void CreateGrid()
-    {
-        rootVisualElement.Add(buttonContainer = new() { style = {flexDirection = FlexDirection.ColumnReverse, flexGrow = 1} });
-        UpdateGrid();
-    }
 
-    void UpdateGrid()
+    void RenderGrid()
     {
-        hasAnchor = false;
         buttonContainer.Clear();
         int i = 0;
-        for (int x = 0; x < size.x; x++)
+
+        for (int xa = 0; xa < size.y; xa++)
         {
             VisualElement row = new() { style = { flexDirection = FlexDirection.Row, flexGrow = 1 } };
-            for (int y = 0; y < size.y; y++)
+            for (int x = 0; x < size.x; x++)
             {
                 Label label = new()
                 {
@@ -164,8 +178,6 @@ class BuildEditor : EditorWindow
                 };
                 label.style.backgroundColor = ChangeColor(gridItemTypes[i]);
                 label.text = gridItemTypes[i].ToString();
-                if (gridItemTypes[i] == GridItemType.Anchor)
-                    hasAnchor = true;
                 label.RegisterCallback<PointerDownEvent>(Button_clicked);
 
                 row.Add(label);
@@ -196,9 +208,9 @@ class BuildEditor : EditorWindow
                 if (gridItemTypes[i] == GridItemType.Anchor)
                 {
                     if (hasAnchor)
-                        gridItemTypes[i] = GridItemType.Anchor+1;
+                        gridItemTypes[i] = GridItemType.Anchor + 1;
                     else
-                        hasAnchor = true;
+                        SetAnchor(i);
                 }
             }
         }
@@ -220,7 +232,7 @@ class BuildEditor : EditorWindow
                     if (hasAnchor)
                         gridItemTypes[i] = 0;
                     else
-                        hasAnchor = true;
+                        SetAnchor(i);
                 }
             }
         }
@@ -232,6 +244,24 @@ class BuildEditor : EditorWindow
         en.enumValueIndex = (int)gridItemTypes[i];
 
         blueprint.serializedObject.ApplyModifiedProperties();
+    }
+
+    void SetAnchor(int i, bool updateBlueprint = true)
+    {
+        if (updateBlueprint)
+        {
+            blueprint.FindPropertyRelative(nameof(BuildingGrid.anchorIndex)).intValue = i;
+
+            int y = i / size.x;
+            int x = i % size.x;
+            if (gridItemTypes[0] == GridItemType.Entrance)
+                y -= 1;
+
+            blueprint.FindPropertyRelative(nameof(BuildingGrid.moveBy)).boxedValue = new int2(x, y);
+
+            blueprint.serializedObject.ApplyModifiedProperties();
+        }
+        hasAnchor = true;
     }
 
     #region Buttons

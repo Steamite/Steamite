@@ -74,20 +74,6 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
-                    "m_Id": "4cde14786a1a489eae0799e237ac873c"
-                },
-                "m_SlotId": 0
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "2f2062bb546443f7ab2c50cd3a61fee6"
-                },
-                "m_SlotId": 7
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
                     "m_Id": "b68be024d2114dacb45a218b8af9add0"
                 },
                 "m_SlotId": 0
@@ -347,10 +333,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -526.0000610351563,
-            "y": 0.000007152557373046875,
-            "width": 265.00006103515625,
-            "height": 142.0000457763672
+            "x": -536.0,
+            "y": 2.9999969005584717,
+            "width": 264.9999694824219,
+            "height": 166.00001525878906
         }
     },
     "m_Slots": [
@@ -365,9 +351,6 @@
         },
         {
             "m_Id": "79a4656c77424028b0b8e71c5c55160b"
-        },
-        {
-            "m_Id": "da522b74718c4af2be3502e6e70ef798"
         },
         {
             "m_Id": "0023092831824329ae5088afe79afe6a"
@@ -798,31 +781,6 @@
     "m_Hidden": false,
     "m_HideConnector": false,
     "m_ShaderOutputName": "localPosition",
-    "m_StageCapability": 3,
-    "m_CustomBinding": "",
-    "m_Value": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0
-    },
-    "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0
-    },
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
-    "m_ObjectId": "da522b74718c4af2be3502e6e70ef798",
-    "m_Id": 7,
-    "m_DisplayName": "Offset",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_HideConnector": false,
-    "m_ShaderOutputName": "Offset",
     "m_StageCapability": 3,
     "m_CustomBinding": "",
     "m_Value": {

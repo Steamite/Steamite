@@ -9,16 +9,13 @@ struct PackedBuilding
 // Declare the buffer set via MaterialPropertyBlock
 //#if defined(UNITY_SUPPORT_INSTANCING)
 StructuredBuffer<PackedBuilding> _BuildingInstanceBuffer;
+StructuredBuffer<float2> _BatchGroupBuffer;
 int _Offset;
+int _GroupIndex;
 //#endif
 /*
  Bit Layout Breakdown (32-bit uint):
  -------------------------------------------------------------
- Bits [00 .. 11] : X Grid Position (12 bits -> range 0..4095)
- Bits [12 .. 23] : Z Grid Position (12 bits -> range 0..4095)
- Bits [24 .. 25] : Y Rotation      (2 bits  -> 0: Down, 1: Right, 2: Up, 3: Left)
- Bits [26 .. 31] : Unused / Extra Flags (6 bits free for variant IDs, damage states, etc.)
-
 /// 00 - 09 - x             <br/>
 /// 10 - 19 - z             <br/>
 /// 20 - 22 - y             <br/>
@@ -51,7 +48,6 @@ float3 TransformInstanceVertex2Bit(
     uint gridZ,
     uint GridY,
     uint rot2,
-    float3 buildingSize,
     float offset,
     float cellSize,
     out float3 Rotation)
@@ -66,11 +62,13 @@ float3 TransformInstanceVertex2Bit(
     float c = cosTable[rot2];
     float s = sinTable[rot2];
 
+    float2 buildingSize = _BatchGroupBuffer[_GroupIndex];
+    
     // Compute Y-rotation around center
     float3 rotatedVertex;
-    rotatedVertex.x = (localVertexPosition.x + buildingSize.x) * c - (localVertexPosition.z + buildingSize.z) * s;
-    rotatedVertex.y = localVertexPosition.y + buildingSize.y;
-    rotatedVertex.z = (localVertexPosition.x + buildingSize.x) * s + (localVertexPosition.z + buildingSize.z) * c;
+    rotatedVertex.x = (localVertexPosition.x + buildingSize.x) * c - (localVertexPosition.z + buildingSize.y) * s;
+    rotatedVertex.y = localVertexPosition.y;
+    rotatedVertex.z = (localVertexPosition.x + buildingSize.x) * s + (localVertexPosition.z + buildingSize.y) * c;
     // Translate to grid cell position
     float3 worldPos = float3((float) (gridX * cellSize) + offset, GridY, (float) (gridZ * cellSize) + offset);
     
@@ -86,7 +84,6 @@ void UnpackBuilding2Bit_float(
     float3 localPosition,
     float cellSize,
     float offset,
-    float3 buildingSize,
 
     out float3 WorldPosition,
     out float3 Rotation)
@@ -126,7 +123,7 @@ void UnpackBuilding2Bit_float(
 #endif
     
     UnpackBuildingData2Bit(packedUint, GridX, GridZ, GridY, RotationIndex);
-    WorldPosition = TransformInstanceVertex2Bit(localPosition, GridX, GridZ, GridY, RotationIndex, buildingSize, offset, cellSize, Rotation);
+    WorldPosition = TransformInstanceVertex2Bit(localPosition, GridX, GridZ, GridY, RotationIndex, offset, cellSize, Rotation);
     
     //Color = float3(instanceID, instanceID, instanceID);
 }

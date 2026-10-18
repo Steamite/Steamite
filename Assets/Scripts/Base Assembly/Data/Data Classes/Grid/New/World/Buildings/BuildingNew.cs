@@ -27,8 +27,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
     [Serializable]
     public class BuildingNew
     {
-        protected int indexInList;
-
         public BuildingRenderData renderData;
 
         public bool IsConstructing = false;
@@ -36,8 +34,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
 
         public List<int> resources;
         public int renderIndex;
-
-
 
         /// <summary>
         /// In playmode use index, but when saving and loading switch for indexes. <b/>
@@ -56,14 +52,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
             BuildingNew building = new();
             building.categoryIndex = categoryIndex;
             building.wrapperIndex = wrapperIndex;
+            building.renderData = renderData;
 
             return building;
         }
 
-        public void SetBindingIndex(int catIndex, int wrapIndex)
+        public void SetBindingIndex(int catIndex, int wrapIndex, uint meshIndex)
         {
             categoryIndex = (byte)catIndex;
             wrapperIndex = (byte)wrapIndex;
+            renderData.meshIndex = meshIndex;
         }
     }
 

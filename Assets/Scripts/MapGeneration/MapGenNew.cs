@@ -90,15 +90,16 @@ public class MapGenNew : MonoBehaviour
 
         BuildingNew[] buildingSaves = new BuildingNew[4];
         buildingSaves[0] = save;
+        uint pos = save.renderData.position;
 
-        save = new() { renderData = new() { meshIndex = 0, position = save.renderData.position + 1 } };
+        save = new() { renderData = new() { meshIndex = 0, position = pos + 1 } };
         buildingSaves[1] = save;
 
 
-        save = new() { renderData = new() { meshIndex = 1, position = (uint)(save.renderData.position+1) } };
+        save = new() { renderData = new() { meshIndex = 1, position = pos + 2 } };
         buildingSaves[2] = save;
 
-        save = new() { renderData = new() { meshIndex = 1, position = save.renderData.position + 1 } };
+        save = new() { renderData = new() { meshIndex = 1, position = pos + 3 } };
         buildingSaves[3] = save;
 
 

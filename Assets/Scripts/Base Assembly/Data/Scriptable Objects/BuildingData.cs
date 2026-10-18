@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
@@ -22,7 +23,6 @@ public class BuildingWrapper : DataObject
     [SerializeField] public int selectedLevel;
 #endif
     [SerializeField] public Sprite preview;
-    [SerializeField] public Mesh mesh;
     
     public BuildingGrid blueprint;
 
@@ -76,6 +76,7 @@ public class BuildCategWrapper : DataCategory<BuildingWrapper>
 [CreateAssetMenu(fileName = "BuildButtonCategory", menuName = "UI Data/BuildButton Holder", order = 1)]
 public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapper>
 {
+    public Mesh defaultMesh;
     public new const string PATH = "Build Data";
     #region Editor
 #if UNITY_EDITOR
@@ -100,12 +101,30 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
 
     public override void Init()
     {
+        int meshIndex = 0;
         for (int i = 0; i < Categories.Count; i++)
         {
             for (int j = 0; j < Categories[i].Objects.Count; j++)
             {
-                Categories[i].Objects[j].Building.SetBindingIndex(i, j);
+                if(Categories[i].Objects[j].blueprint.mesh == null)
+                    Categories[i].Objects[j].blueprint.mesh = defaultMesh;
+
+                Categories[i].Objects[j].Building.SetBindingIndex(i, j, (uint)meshIndex);
+                meshIndex++;
             }
         }
+    }
+
+    public List<BuildingWrapper> GetAllObjects()
+    {
+        List<BuildingWrapper> wrappers = new();
+        foreach (var categ in Categories)
+        {
+            foreach (var wrapper in categ.Objects)
+            {
+                wrappers.Add(wrapper);
+            }
+        }
+        return wrappers;
     }
 }

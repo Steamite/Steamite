@@ -49,6 +49,7 @@ MonoBehaviour:
     - rid: 5286523460443963459
     - rid: 1073264522842341447
     Icon: {fileID: 7388822144124034973, guid: f303754b353b04e4ba464dfb84699356, type: 3}
+  defaultMesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
   references:
     version: 2
     RefIds:
@@ -62,13 +63,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 15
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 4
+          wrapperIndex: 2
         modifications: []
         Cost:
           types: []
@@ -81,7 +82,6 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: c770445d57d1c8041b75bef58b05f5d3, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
             x: 0
@@ -89,9 +89,8 @@ MonoBehaviour:
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 
     - rid: 1153726817925070940
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -103,13 +102,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 6
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 2
+          wrapperIndex: 2
         modifications: []
         Cost:
           types: []
@@ -122,7 +121,6 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 17f94f26da813984e91e7ac514c22efa, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
             x: 0
@@ -130,9 +128,8 @@ MonoBehaviour:
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 
     - rid: 5286523460443963457
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -144,13 +141,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 7
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 2
+          wrapperIndex: 3
         modifications: []
         Cost:
           types: []
@@ -163,7 +160,6 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 61ddc400ef1828b44aea71e08150614e, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
             x: 0
@@ -171,9 +167,8 @@ MonoBehaviour:
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 
     - rid: 5286523460443963458
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -185,13 +180,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 13
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 4
+          wrapperIndex: 0
         modifications: []
         Cost:
           types: []
@@ -204,7 +199,6 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 844559dcf93745c499f6f30a2b1dd430, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
             x: 0
@@ -212,9 +206,8 @@ MonoBehaviour:
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 
     - rid: 5286523460443963459
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -226,13 +219,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 14
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 4
+          wrapperIndex: 1
         modifications: []
         Cost:
           types: []
@@ -245,7 +238,6 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 0255a6fef51cb4442a4c4011e20d89b8, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
             x: 0
@@ -253,9 +245,8 @@ MonoBehaviour:
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 
     - rid: 8808251701909258314
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -279,7 +270,7 @@ MonoBehaviour:
           resources: 
           renderIndex: 0
           categoryIndex: 0
-          buildingIndex: 0
+          wrapperIndex: 0
         modifications:
         - name: 13
           size: 0
@@ -308,18 +299,16 @@ MonoBehaviour:
             currentValue: 15
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 28711bc89a9f8b244a01e3d359df53d2, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
-            x: 2
+            x: 1
             y: 2
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
-          itemArray: 03000000030000000200000001000000i
+          anchorIndex: 1
+          mesh: {fileID: -5495902117074765545, guid: 8f5253ba88aeb2845a76034f8276b888, type: 3}
+          itemArray: 0300000001000000i
     - rid: 8808251703612669980
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
@@ -330,13 +319,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 1
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
           categoryIndex: 0
-          buildingIndex: 0
+          wrapperIndex: 1
         modifications: []
         Cost:
           types: []
@@ -349,18 +338,16 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 0ef82ac86a3e2e94298e673ef0925f4d, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
-            x: 15
-            y: 5
+            x: 1
+            y: 1
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
-          itemArray: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000i
+          anchorIndex: 0
+          mesh: {fileID: 4493585093827132993, guid: 831baef4def44414b9acbdf0ad30d414, type: 3}
+          itemArray: 01000000i
     - rid: 8808251703612669983
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
@@ -371,13 +358,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 2
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 1
+          wrapperIndex: 0
         modifications:
         - name: 15
           size: 0
@@ -407,18 +394,16 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: e2dedb0ab53d02a4a8b0e2eb23c72ddb, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
-            x: 0
-            y: 0
+            x: 2
+            y: 3
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
-          itemArray: 
+          anchorIndex: 2
+          mesh: {fileID: 4711208715938537054, guid: 3b724b687592c5242bcb72117d8faa08, type: 3}
+          itemArray: 030000000300000001000000020000000200000002000000i
     - rid: 8808251703612669985
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
@@ -429,13 +414,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 3
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 1
+          wrapperIndex: 1
         modifications:
         - name: 5
           size: 0
@@ -475,18 +460,16 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 6141d9965f66f6a4097dac7efb27eaa4, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
-            x: 0
-            y: 0
+            x: 3
+            y: 3
           moveBy:
-            x: 0
-            y: 0
-          anchor:
-            x: 0
-            y: 0
-          itemArray: 
+            x: 2
+            y: 1
+          anchorIndex: 5
+          mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+          itemArray: 030000000300000003000000020000000200000001000000020000000200000002000000i
     - rid: 8808251703612669986
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
@@ -497,13 +480,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 4
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 2
+          wrapperIndex: 0
         modifications: []
         Cost:
           types: []
@@ -516,7 +499,6 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 99c47f49e7b31bb458a9f7b76d1fe662, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
             x: 0
@@ -524,9 +506,8 @@ MonoBehaviour:
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 
     - rid: 8808251703612669987
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -538,13 +519,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 5
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 2
+          wrapperIndex: 1
         modifications: []
         Cost:
           types: []
@@ -557,7 +538,6 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 729a493191982dd44beeec1170baec64, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
             x: 0
@@ -565,9 +545,8 @@ MonoBehaviour:
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 
     - rid: 8808251703612669988
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -579,13 +558,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 8
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 3
+          wrapperIndex: 0
         modifications: []
         Cost:
           types: []
@@ -598,7 +577,6 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: af12f7dbf4371724b9331c594fb1b6d4, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
             x: 0
@@ -606,9 +584,8 @@ MonoBehaviour:
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 
     - rid: 8808251703612669989
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -620,13 +597,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 9
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 3
+          wrapperIndex: 1
         modifications: []
         Cost:
           types: []
@@ -639,7 +616,6 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 8d56f6d5e177f0343bf4465b57cb3d33, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
             x: 0
@@ -647,9 +623,8 @@ MonoBehaviour:
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 
     - rid: 8808251703612669990
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -661,13 +636,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 10
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 3
+          wrapperIndex: 2
         modifications: []
         Cost:
           types: []
@@ -680,7 +655,6 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: c63621c53a7984e41a870e4e0778ed5e, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
             x: 0
@@ -688,9 +662,8 @@ MonoBehaviour:
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 
     - rid: 8808251703612669991
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -702,13 +675,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 11
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 3
+          wrapperIndex: 3
         modifications: []
         Cost:
           types: []
@@ -721,7 +694,6 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 8831f13d226e4154897c29c1f62d2eed, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
             x: 0
@@ -729,9 +701,8 @@ MonoBehaviour:
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 
     - rid: 8808251703612669992
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
@@ -743,13 +714,13 @@ MonoBehaviour:
           renderData:
             position: 0
             blueprintSize: 0
-            meshIndex: 0
+            meshIndex: 12
           IsConstructing: 0
           IsDeconstructing: 0
           resources: 
           renderIndex: 0
-          categoryIndex: 0
-          buildingIndex: 0
+          categoryIndex: 3
+          wrapperIndex: 4
         modifications: []
         Cost:
           types: []
@@ -762,7 +733,6 @@ MonoBehaviour:
             currentValue: 0
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 3c805fc3897ae954594f05dc27600b4d, type: 3}
-        mesh: {fileID: 0}
         blueprint:
           size:
             x: 0
@@ -770,7 +740,6 @@ MonoBehaviour:
           moveBy:
             x: 0
             y: 0
-          anchor:
-            x: 0
-            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 

@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Text;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -11,6 +12,14 @@ using UnityEngine.XR;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 {
+
+    public struct BuildingGroupData
+    {
+        public Mesh mesh;
+        public int2 moveBy;
+        public uint count;
+    }
+
     struct RenderBatch
     {
         public Mesh mesh;
@@ -46,8 +55,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         /// RenderData
         /// </summary>
         NativeArray<uint> instanceData;
+        NativeArray<float2> batchGroupData;
+        GraphicsBuffer batchGroupBuffer;
 
-        Mesh mergedMesh;
 
         public BuildingRenderer(Material buildingMaterial)
         {
@@ -63,11 +73,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             };
 
         }
-        public int[] UploadBuildingData(Mesh[] meshes, uint[] count, BuildingRenderData[] instanceData)
-        {
-            SetupArgBuffer(meshes.Length);
 
-            InitBatches(meshes, count);
+        public int[] UploadBuildingData(BuildingGroupData[] buildingGroups, BuildingRenderData[] instanceData)
+        {
+            SetupArgBuffer(buildingGroups.Length);
+
+            InitBatches(buildingGroups);
 
             var renderIndexes = RealocateInstanceBuffer(instanceData);
 
@@ -76,20 +87,31 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             return renderIndexes;
         }
 
-        void InitBatches(Mesh[] meshes, uint[] count)
+        void InitBatches(BuildingGroupData[] meshes)
         {
             renderBatches = new RenderBatch[meshes.Length];
+            
+            batchGroupData = new NativeArray<float2>(meshes.Length, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+            batchGroupBuffer = new(GraphicsBuffer.Target.Structured,
+                meshes.Length,
+                8);
+
             int offset = 1;
             for (int i = 0; i < meshes.Length; i++)
             {
-                renderBatches[i] = new()
-                {
-                    mesh = meshes[i],
-                    size = (int)math.max(count[i] * 2, INCREASE_AMMOUNT),
-                    startIndex = offset
-                };
+                renderBatches[i].mesh = meshes[i].mesh;
+                renderBatches[i].size = (int)math.max(meshes[i].count * 2, INCREASE_AMMOUNT);
+                renderBatches[i].startIndex = offset;
+
+                batchGroupData[i] = new(meshes[i].moveBy.x, meshes[i].moveBy.y);
+
+
                 offset += renderBatches[i].size;
             }
+
+            batchGroupBuffer.SetData(batchGroupData);
+            propertyBlock.SetBuffer("_BatchGroupBuffer", batchGroupBuffer);
+            
             totalCapacity = offset;
         }
 
@@ -151,12 +173,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
             return indexes;
         }
-
-        public void UpdateBuilding(int index, BuildingRenderData data)
-        {
-
-        }
-
         public void RemoveBuilding(int index, int batch)
         {
             //UpdateArg(data.y)
@@ -172,6 +188,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
             if (instanceData != null && instanceData.IsCreated)
                 instanceData.Dispose();
+
+            if (batchGroupData != null && batchGroupData.IsCreated)
+                batchGroupData.Dispose();
         }
 
 
@@ -281,6 +300,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             if (selectedBlueprint > -1)
             {
                 propertyBlock.SetInt("_Offset", 0);
+                propertyBlock.SetInt("_GroupIndex", selectedBlueprint);
                 Graphics.RenderMeshIndirect(renderParams, renderBatches[selectedBlueprint].mesh, argBuffer, 1);
             }
 
@@ -289,6 +309,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 if (renderBatches[i].numberOfItems == 0)
                     continue;
                 propertyBlock.SetInt("_Offset", renderBatches[i].startIndex);
+                propertyBlock.SetInt("_GroupIndex", i);
                 Graphics.RenderMeshIndirect(renderParams, renderBatches[i].mesh, argBuffer, 1, i + 1);
             }
         }

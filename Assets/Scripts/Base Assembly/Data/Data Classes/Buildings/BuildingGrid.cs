@@ -15,7 +15,9 @@ public struct BuildingGrid
     /// <summary>Anchor offset from the center(position).</summary>
     [SerializeField] public int2 moveBy;
     /// <summary>Relative anchor position.</summary>
-    [SerializeField] public int2 anchor;
+    [SerializeField] public int anchorIndex;
+
+    [SerializeField] public Mesh mesh;
     /// <summary>List of tiles.</summary>
     [FormerlySerializedAs("itemList")]
     [SerializeField] public GridItemType[] itemArray;

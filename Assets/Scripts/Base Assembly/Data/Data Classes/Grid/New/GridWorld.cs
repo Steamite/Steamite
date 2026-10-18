@@ -65,9 +65,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
 
             renderer = GetComponent<LevelRenderer>();
-            renderer.AddRenderer(WorldBuildings.SetupRenderer(
-                buildingMeshes, 
-                buildingMaterial));            
+            renderer.AddRenderer(WorldBuildings.SetupRenderer(buildingMaterial));
             renderer.Init(LEVEL_COUNT, gridLevels, LargestLevelDimensions * saveToLoad.chunkDimensions);
 
             SetLevel(0);

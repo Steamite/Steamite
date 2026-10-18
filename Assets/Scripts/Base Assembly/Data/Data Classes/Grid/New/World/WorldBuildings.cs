@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         int lastIndex = 0;
         int firstRemovedSpace = int.MaxValue;
 
-        BuildingRenderer render;
+        BuildingRenderer buildingRenderer;
 
         public void LoadState(BuildingNew[] newSave)
         {
@@ -34,22 +35,29 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             }
         }
 
-        public BuildingRenderer SetupRenderer(Mesh[] meshes, Material buildingMaterial)
+        public BuildingRenderer SetupRenderer(Material buildingMaterial)
         {
-            uint[] counts = new uint[meshes.Length];
-            BuildingRenderData[] instanceData = new BuildingRenderData[lastIndex];
+            List<BuildingWrapper> wrappers = SceneRefs.ObjectFactory.buildPrefabs.GetAllObjects();
 
+            BuildingGroupData[] buildingGroups = new BuildingGroupData[wrappers.Count];
+
+            for (int i = 0; i < buildingGroups.Length; i++)
+            {
+                buildingGroups[i].mesh = wrappers[i].blueprint.mesh;
+                buildingGroups[i].moveBy = wrappers[i].blueprint.moveBy;
+            }
+
+            BuildingRenderData[] instanceData = new BuildingRenderData[lastIndex];
             for (int i = 0; i < lastIndex; i++)
             {
                 if (buildings[i] == null)
                     continue;
-                counts[buildings[i].renderData.meshIndex]++;
-                instanceData[i] = buildings[i].renderData; //new(, buildings[i].meshIndex);
+                buildingGroups[buildings[i].renderData.meshIndex].count++;
+                instanceData[i] = buildings[i].renderData; 
             }
-            // DEBUG
 
-            render = new(buildingMaterial);
-            int[] indexes = render.UploadBuildingData(meshes, counts, instanceData);
+            buildingRenderer = new(buildingMaterial);
+            int[] indexes = buildingRenderer.UploadBuildingData(buildingGroups, instanceData);
 
             int x = 0;
             for (int i = 0; i < lastIndex; i++)
@@ -62,7 +70,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 buildings[i].renderIndex = indexes[i-x];
             }
 
-            return render;
+            return buildingRenderer;
         }
 
         int AddBuilding(BuildingNew data)
@@ -114,7 +122,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
         public void Dispose()
         {
-            render?.Dispose();
+            buildingRenderer?.Dispose();
         }
 
         public void PlaceBuilding(int2 worldPos, BuildingNew newBuilding)

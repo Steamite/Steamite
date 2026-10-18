@@ -9,13 +9,7 @@ using UnityEngine;
 public class NothingNew : GridTilesModeNew
 {
     [Header("Colors")]
-    [SerializeField] Color hoverColor;
     [SerializeField] Color selectionColor;
-
-    private void Awake()
-    {
-        SetHoverColor(hoverColor);
-    }
 
     public override void DownObject()
     {
