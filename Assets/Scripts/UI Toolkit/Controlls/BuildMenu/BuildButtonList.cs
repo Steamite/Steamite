@@ -38,6 +38,14 @@ namespace BottomBar.Building
             SetItemSource(null, -1);
 
             unbindItem = DefaultUnBindItem;
+            SceneRefs.MouseController.buildMode.AttachToWrapperChange((wrapper) => 
+            { 
+                if (wrapper == null) 
+                {
+                    RefreshItem(_selID);
+                    _selID = -1;
+                } 
+            });
         }
 
         int categoryIndex;
@@ -104,16 +112,15 @@ namespace BottomBar.Building
 
         protected override void DefaultBindItem(VisualElement element, int index)
         {
-            base.DefaultBindItem(element, index);
-            //element.style.display = DisplayStyle.Flex;
+            base.DefaultBindItem(element, index); 
+            //element.RemoveFromClassList($"{BUILD_BUTTON_CLASS}-selected");
             if (((RadioBuildButtonData)itemsSource[index]).unlocked)
             {
                 // hide locked blocker
                 element[0][0].style.display = DisplayStyle.None;
                 // USE INDEXES CREATE INIT FUNCTION
-                if (
-                    categoryIndex == SceneRefs.MouseController.buildingType && 
-                    index == SceneRefs.MouseController.buildingIndex)
+                if (categoryIndex == SceneRefs.MouseController.buildMode.categoryIndex && 
+                    index == SceneRefs.MouseController.buildMode.wrapperIndex)
                 {
                     element.AddToClassList($"{BUILD_BUTTON_CLASS}-selected");
                 }
@@ -150,11 +157,15 @@ namespace BottomBar.Building
 
         protected void DefaultUnBindItem(VisualElement element, int index)
         {
-            element.ChangeClassWithoutTransition($"{BUILD_BUTTON_CLASS}-selected", BUILD_BUTTON_CLASS);
+            if (categoryIndex != SceneRefs.MouseController.buildMode.categoryIndex||
+                    index != SceneRefs.MouseController.buildMode.wrapperIndex)
+            {
+                element.ChangeClassWithoutTransition($"{BUILD_BUTTON_CLASS}-selected", BUILD_BUTTON_CLASS);
+            }
             element.AddToClassList(BUILD_BUTTON_CLASS);
             element.ClearBindings();
             element.dataSource = null;
-            element.UnregisterLocalMenu();//.UnregisterMouseEvents(element);
+            element.UnregisterLocalMenu();
         }
 
         public override bool Select(int index)

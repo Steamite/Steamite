@@ -86,10 +86,10 @@ namespace BottomBar.Building
             {
                 BuildingWrapper wrapper = buildingData.Categories[categGroup.SelectedChoice].Objects[i];
                 if (wrapper.unlocked && MyRes.CanAfford(wrapper.Cost))
-                    SceneRefs.MouseController.SetBlueprint(wrapper);
+                    SceneRefs.MouseController.buildMode.SetBlueprint(wrapper);
             }
             else
-                SceneRefs.MouseController.SetBlueprint(null);
+                SceneRefs.MouseController.buildMode.SetBlueprint(null);
         }
 
         public void Open()

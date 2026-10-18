@@ -57,7 +57,8 @@ namespace EditorWindows.Windows
         #region Overrides
         protected override void CreateGUI()
         {
-            BuildingTypes = TypeCache.GetTypesDerivedFrom(typeof(BuildingNew)).ToList();
+            buildingTypes = TypeCache.GetTypesDerivedFrom<BuildingNew>().ToList();
+            buildingTypes.Prepend(typeof(BuildingNew));
             Holder = AssetDatabase.LoadAssetAtPath<BuildingData>(BuildingData.EDITOR_PATH);
             holderObject = new(Holder);
 

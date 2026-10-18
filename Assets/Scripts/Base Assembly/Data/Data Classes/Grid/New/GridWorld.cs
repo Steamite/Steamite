@@ -23,9 +23,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public GridLevel CurrentLevel => currentLevel;
         LevelRenderer renderer;
 
-        WorldBuildings buildings;
-
-        public BuildingNew[] Buildings => buildings.buildings;
+        public WorldBuildings WorldBuildings;
 
 
 
@@ -62,12 +60,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             CenterScaled = (LargestLevelDimensions / 2) * GridLevel.chunkDimensions;
 
-            buildings = new WorldBuildings();// )GetComponent<>();
-            buildings.LoadState(saveToLoad.objectsSave.buildings);
+            WorldBuildings = new WorldBuildings();// )GetComponent<>();
+            WorldBuildings.LoadState(saveToLoad.objectsSave.buildings);
 
 
             renderer = GetComponent<LevelRenderer>();
-            renderer.AddRenderer(buildings.SetupRenderer(
+            renderer.AddRenderer(WorldBuildings.SetupRenderer(
                 buildingMeshes, 
                 buildingMaterial));            
             renderer.Init(LEVEL_COUNT, gridLevels, LargestLevelDimensions * saveToLoad.chunkDimensions);
@@ -122,7 +120,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         private void OnDestroy()
         {
-            buildings.Dispose();
+            WorldBuildings.Dispose();
             foreach (var level in gridLevels)
             {
                 level.Dispose();

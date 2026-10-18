@@ -36,6 +36,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         
         [NonSerialized] public NativeArray<byte> toDigRenderGrid;
         [NonSerialized] public NativeBitArray realToDigArray;
+        public ICustomRenderer GetCustomRenderer(int index) => customRenderers[index];
+
         public void Init(int levelCount, GridLevel[] levels, int maxSize)
         {
             combiner = new(GridLevel.chunkDimensions);
@@ -243,5 +245,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 }
             }
         }
+
     }
 }

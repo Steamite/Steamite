@@ -59,15 +59,23 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
         public void TypeChange(ChangeEvent<string> ev)
         {
             int i = ev.target.GetRowIndex();
-            BuildingWrapper wrapper = (BuildingWrapper)view.itemsSource[i];
-            BuildingNew prev = wrapper.Building;
-            if (prev != null)
+            var wrapperProperty = register.GetBuildingWrapperAt(i);
+            
+            // Is there a building?
+            if(((BuildingWrapper)wrapperProperty.boxedValue).Building == null)
+            {
+                wrapperProperty.FindPropertyRelative(nameof(BuildingWrapper.Building)).boxedValue = new BuildingNew();
+                wrapperProperty.serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            }
+
+            BuildingWrapper wrapper = (BuildingWrapper)wrapperProperty.boxedValue;
+            if (wrapper.Building != null)
             {
                 Type t = register.BuildingTypes.FirstOrDefault(q => q.Name == ev.newValue);
-                if (t != null && prev.GetType() != t)
+                if (t != null && wrapper.Building.GetType() != t)
                 {
                     BuildingNew building = (BuildingNew)Activator.CreateInstance(t);
-                    building.CopyFrom(prev);
+                    building.CopyFrom(wrapper.Building);
 
                     wrapper.SetBuilding(building);
 

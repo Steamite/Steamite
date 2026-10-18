@@ -364,8 +364,8 @@ MonoBehaviour:
     - rid: 8808251703612669983
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
-        Name: 
-        description: 
+        Name: abcd
+        description: "\t"
         id: 1235511660
         building:
           renderData:
@@ -422,7 +422,7 @@ MonoBehaviour:
     - rid: 8808251703612669985
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
-        Name: 
+        Name: 2
         description: 
         id: 1915475883
         building:

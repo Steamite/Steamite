@@ -78,7 +78,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void SetTile(int x, int y, LevelGridTile tile)
             => SetTile(y * levelDimensionsScaled + x, tile);
-
+        public void SetTileByWorldPos(int2 pos, LevelGridTile tile)
+        {
+            pos -= levelOffsetScaled;
+            SetTile(pos.y * levelDimensionsScaled + pos.x, tile);
+        }
         public void SetTile(int index, LevelGridTile tile)
         {
             renderGrid[index] = tile;

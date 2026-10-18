@@ -31,7 +31,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         GridTilesModeNew[] modes;
         public GridTilesModeNew activeMode;
 
-        BuildModeNew buildMode;
+        public BuildModeNew buildMode;
 
         public int activeModeIndex;
 
@@ -273,8 +273,6 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         int damageAmmount = 4;
         public int2 clickedWorldPosition;
 
-        public int buildingType;
-        public int buildingIndex;
 
         [ContextMenu("DamageRock")]
         public void DamageClickedRock(TileType type, int index)
@@ -298,16 +296,26 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             ((NothingNew)modes[0]).RefreshDownedTile();
         }
 
-        public void SetBlueprint(BuildingWrapper wrapper)
+        #region Shift
+        public bool isShiftPressed;
+        [SerializeField] InputAction shift;
+        private void OnEnable()
         {
-            if (wrapper == null)
-            {
-                buildMode.SetBlueprint(null);
-                return;
-            }
-            if (activeModeIndex != (int)ControlMode.Build)
-                ChangeSelMode(ControlMode.Build);
-            buildMode.SetBlueprint(wrapper);
+            shift.Enable();
+            shift.performed += ShiftAction;
+            shift.canceled += ShiftAction;
         }
+
+
+        private void OnDisable()
+        {
+            shift.Disable();
+            shift.performed -= ShiftAction;
+            shift.canceled -= ShiftAction;
+        }
+
+        private void ShiftAction(InputAction.CallbackContext obj)
+            => isShiftPressed = obj.performed;
+        #endregion
     }
 }

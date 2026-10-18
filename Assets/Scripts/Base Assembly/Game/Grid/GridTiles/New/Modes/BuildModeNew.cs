@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
 using System;
@@ -6,16 +7,26 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BuildModeNew : GridTilesModeNew
 {
     BuildingWrapper wrapper;
 
+    [SerializeField] LevelRenderer renderer;
     BuildingRenderer buildingRenderer;
+
+    event Action<BuildingWrapper> onWrapperChange;
+
     public override void InitMode(MouseController _mouseController)
     {
         base.InitMode(_mouseController);
+        buildingRenderer = renderer.GetCustomRenderer(0) as BuildingRenderer;
+        SetHoverColor(new Color());
     }
+
+    public void AttachToWrapperChange(Action<BuildingWrapper> action) => onWrapperChange += action;
+
 
 
     public override void MouseTrack(float distance, float lowHeight, Plane low, Ray _ray)
@@ -25,7 +36,9 @@ public class BuildModeNew : GridTilesModeNew
         base.MouseTrack(distance, lowHeight, low, _ray);
         if (!lastPos.Equals(controller.hoverWorldPosition))
         {
+            uint pos = BuildPositionEncode(controller.hoverWorldPosition);
 
+            buildingRenderer.MoveBlueprint(pos);
         }
     }
 
@@ -87,49 +100,65 @@ public class BuildModeNew : GridTilesModeNew
         return true;
     }*/
 
+    public override void DownObject()
+    {
+        var t = SceneRefs.World.CurrentLevel.renderGrid[controller.hoverObjectIndex].TType;
+        if (t != TileType.Empty && t != TileType.Road)
+            return;
+
+
+        SceneRefs.World.WorldBuildings.PlaceBuilding(
+            controller.hoverWorldPosition, 
+            newBuilding);
+
+        buildingRenderer.PlaceBlueprint(controller.isShiftPressed);
+        
+        if(!controller.isShiftPressed)
+            controller.ChangeSelMode(ControlMode.Nothing);
+    }
 
     public override void ExitMod()
     {
-        //SceneRefs.CameraSceneMover.SetRaycastMask(gridTiles.defaultMask);
-        /*if (gridTiles.Drag)
-        {
-            gridTiles.ClearPipes();
-            gridTiles.DeselectBuildingButton?.Invoke();
-            gridTiles.Drag = false;
-        }
-        else if (gridTiles.BlueprintInstance)
-            gridTiles.DestroyBlueprint(true);
-        gridTiles.shiftKey.Disable();*/
-    }
-
-    public override bool EnterMod()
-    {
-        base.EnterMod();
-/*
-        if (gridTiles.BlueprintPrefab is Pipe)
-            SceneRefs.CameraSceneMover.SetRaycastMask(gridTiles.pipeMask);
-        else
-            SceneRefs.CameraSceneMover.SetRaycastMask(gridTiles.buildingMask);
-        gridTiles.Blueprint();
-        gridTiles.shiftKey.Enable();*/
-
-        return false;
+        wrapper = null;
+        buildingRenderer.DestroyBlueprint();
+        onWrapperChange?.Invoke(wrapper);
     }
 
     BuildingNew newBuilding;
-    
+    public int categoryIndex;
+    public int wrapperIndex;
+
     public void SetBlueprint(BuildingWrapper _wrapper)
     {
-        if(wrapper != _wrapper)
+        if (_wrapper == null || _wrapper == wrapper)
         {
-            wrapper = _wrapper;
-            newBuilding = wrapper.Building.Clone();
-            int offset = SceneRefs.World.CurrentLevel.levelOffsetScaled;
-            int2 fixedPos = controller.hoverWorldPosition - offset;
-            uint pos = (uint)((fixedPos.x & 0x3FF) | ((fixedPos.y&0xFF) << 10));
-
-            newBuilding.renderData.position =  pos;
-            buildingRenderer.CreateBlueprint(newBuilding.renderData);
+            controller.ChangeSelMode(ControlMode.Nothing);
+            return;
         }
+        else if(controller.activeModeIndex != (int)ControlMode.Build)
+        {
+            controller.ChangeSelMode(ControlMode.Build);
+        }
+
+        // new wrapper set
+        wrapper = _wrapper;
+
+        wrapperIndex = wrapper.Building.wrapperIndex;
+        categoryIndex = wrapper.Building.categoryIndex;
+
+        newBuilding = wrapper.Building.Clone();
+        uint encodedPosition = BuildPositionEncode(controller.hoverWorldPosition);
+
+        newBuilding.renderData.position =  encodedPosition;
+        buildingRenderer.CreateBlueprint(newBuilding.renderData);
+
+        onWrapperChange?.Invoke(wrapper);
+    }
+
+    uint BuildPositionEncode(int2 testPost)
+    {
+        int offset = SceneRefs.World.CurrentLevel.levelOffsetScaled;
+        int2 fixedPos = testPost - offset;
+        return (uint)((fixedPos.x & 0x3FF) | ((fixedPos.y & 0xFF) << 10));
     }
 }

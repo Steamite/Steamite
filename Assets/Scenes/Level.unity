@@ -601,6 +601,7 @@ MonoBehaviour:
   cursor: {fileID: 0}
   cursorOffset: {x: 0, y: 0}
   ToggleMod: 1
+  renderer: {fileID: 4967022013944964022}
 --- !u!1 &405851067
 GameObject:
   m_ObjectHideFlags: 0
@@ -1833,6 +1834,25 @@ MonoBehaviour:
     y: 0
   buildingType: 0
   buildingIndex: 0
+  isShiftPressed: 0
+  shift:
+    m_Name: Shift
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 3c8d4231-8cfb-4e38-8a73-255a94fc17b1
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: bad8e7cf-bc56-4a26-be5f-aabd7ac4e288
+      m_Path: <Keyboard>/shift
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shift
+      m_Flags: 0
+    m_Flags: 0
+    m_Priority: 0
 --- !u!114 &977506022
 MonoBehaviour:
   m_ObjectHideFlags: 0

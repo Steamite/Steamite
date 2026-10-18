@@ -31,8 +31,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
 
         public BuildingRenderData renderData;
 
-        public bool IsConstructing;
-        public bool IsDeconstructing;
+        public bool IsConstructing = false;
+        public bool IsDeconstructing = false;
 
         public List<int> resources;
         public int renderIndex;
@@ -44,16 +44,19 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
         /// Allows reodering building in the register and keeping an optimal search time in the playmode
         /// </summary>
         public byte categoryIndex;
-        public byte buildingIndex;
+        public byte wrapperIndex;
 
-        public void CopyFrom(BuildingNew prev)
+        public virtual void CopyFrom(BuildingNew prev)
         {
-            throw new NotImplementedException();
         }
 
-        internal BuildingNew Clone()
+        public virtual BuildingNew Clone()
         {
-            throw new NotImplementedException();
+            BuildingNew building = new();
+            building.categoryIndex = categoryIndex;
+            building.wrapperIndex = wrapperIndex;
+
+            return building;
         }
     }
 
@@ -64,6 +67,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
         const int BASE_TEST_STORAGE = 50;
         public List<bool> canStore;
         public bool isMain;
+
+        // Resource
 
         public void CreateMainElevator(int centerPos)
         {

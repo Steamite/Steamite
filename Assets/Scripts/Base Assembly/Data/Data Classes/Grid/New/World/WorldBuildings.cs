@@ -3,9 +3,11 @@ using System;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 {
+    [Serializable]
     public class WorldBuildings : IDisposable
     {
         public BuildingNew[] buildings;
@@ -113,6 +115,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         public void Dispose()
         {
             render?.Dispose();
+        }
+
+        public void PlaceBuilding(int2 worldPos, BuildingNew newBuilding)
+        {
+            AddBuilding(newBuilding);
+            SceneRefs.World.CurrentLevel.SetTileByWorldPos(worldPos, LevelGridTile.Elevator(0));
         }
     }
 }
