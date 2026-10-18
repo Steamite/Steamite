@@ -252,12 +252,18 @@ class BuildEditor : EditorWindow
         {
             blueprint.FindPropertyRelative(nameof(BuildingGrid.anchorIndex)).intValue = i;
 
-            int y = i / size.x;
-            int x = i % size.x;
+            int y = size.y;
             if (gridItemTypes[0] == GridItemType.Entrance)
                 y -= 1;
+            if (y == 1)
+                y = 2;
 
-            blueprint.FindPropertyRelative(nameof(BuildingGrid.moveBy)).boxedValue = new int2(x, y);
+            int x = size.x;
+            if (x == 1)
+                x = 2;
+
+
+            blueprint.FindPropertyRelative(nameof(BuildingGrid.renderSize)).boxedValue = new float2(x / 2f, y / 2f);
 
             blueprint.serializedObject.ApplyModifiedProperties();
         }

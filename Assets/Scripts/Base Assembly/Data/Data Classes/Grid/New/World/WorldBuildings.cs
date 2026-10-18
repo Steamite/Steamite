@@ -44,7 +44,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             for (int i = 0; i < buildingGroups.Length; i++)
             {
                 buildingGroups[i].mesh = wrappers[i].blueprint.mesh;
-                buildingGroups[i].moveBy = wrappers[i].blueprint.moveBy;
+                buildingGroups[i].meshSizeHalved = wrappers[i].blueprint.renderSize;
             }
 
             BuildingRenderData[] instanceData = new BuildingRenderData[lastIndex];

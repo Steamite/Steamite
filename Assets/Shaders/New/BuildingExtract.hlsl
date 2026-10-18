@@ -58,17 +58,28 @@ float3 TransformInstanceVertex2Bit(
     static const float sinTable[4] = { 0.0, 1.0, 0.0, -1.0 };
     static const float degTable[4] = { 0.0, 90, 180, 270 };
     
+    static const float2 offsetTable[4] = 
+    { 
+        float2(0, 0),
+        float2(1, 0),
+        float2(1, 1),
+        float2(0, 1),
+    };
     
     float c = cosTable[rot2];
     float s = sinTable[rot2];
-
-    float2 buildingSize = _BatchGroupBuffer[_GroupIndex];
     
-    // Compute Y-rotation around center
+    float2 rotatedPos;
+    rotatedPos.x = localVertexPosition.x * c - localVertexPosition.z * s;
+    rotatedPos.y = localVertexPosition.x * s + localVertexPosition.z * c;
+    
+    float2 off = offsetTable[rot2] * _BatchGroupBuffer[_GroupIndex];
+    
     float3 rotatedVertex;
-    rotatedVertex.x = (localVertexPosition.x + buildingSize.x) * c - (localVertexPosition.z + buildingSize.y) * s;
+    rotatedVertex.x = rotatedPos.x + off.x;
     rotatedVertex.y = localVertexPosition.y;
-    rotatedVertex.z = (localVertexPosition.x + buildingSize.x) * s + (localVertexPosition.z + buildingSize.y) * c;
+    rotatedVertex.z = rotatedPos.y + off.y;
+    
     // Translate to grid cell position
     float3 worldPos = float3((float) (gridX * cellSize) + offset, GridY, (float) (gridZ * cellSize) + offset);
     

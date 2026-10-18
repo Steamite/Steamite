@@ -18,6 +18,9 @@ public class BuildModeNew : GridTilesModeNew
 
     event Action<BuildingWrapper> onWrapperChange;
 
+
+
+
     public override void InitMode(MouseController _mouseController)
     {
         base.InitMode(_mouseController);
@@ -45,9 +48,9 @@ public class BuildModeNew : GridTilesModeNew
         base.MouseTrack(distance, lowHeight, low, _ray);
         if (!lastPos.Equals(controller.hoverWorldPosition))
         {
-            uint pos = BuildPositionEncode(controller.hoverWorldPosition);
+            BuildPositionUpdate(controller.hoverWorldPosition);
 
-            buildingRenderer.MoveBlueprint(pos);
+            buildingRenderer.MoveBlueprint(buildingPos);
         }
     }
 
@@ -118,7 +121,7 @@ public class BuildModeNew : GridTilesModeNew
 
         SceneRefs.World.WorldBuildings.PlaceBuilding(
             controller.hoverWorldPosition, 
-            newBuilding);
+            buildingBlueprint);
 
         buildingRenderer.PlaceBlueprint(controller.isShiftPressed);
         
@@ -136,7 +139,7 @@ public class BuildModeNew : GridTilesModeNew
         onWrapperChange?.Invoke(wrapper);
     }
 
-    BuildingNew newBuilding;
+    BuildingNew buildingBlueprint;
     public int categoryIndex;
     public int wrapperIndex;
 
@@ -158,19 +161,50 @@ public class BuildModeNew : GridTilesModeNew
         wrapperIndex = wrapper.Building.wrapperIndex;
         categoryIndex = wrapper.Building.categoryIndex;
 
-        newBuilding = wrapper.Building.Clone();
-        uint encodedPosition = BuildPositionEncode(controller.hoverWorldPosition);
+        buildingBlueprint = wrapper.Building.Clone();
+        BuildPositionUpdate(controller.hoverWorldPosition);
 
-        newBuilding.renderData.position =  encodedPosition;
-        buildingRenderer.CreateBlueprint(newBuilding.renderData);
+        buildingBlueprint.renderData.position = buildingPos;
+        buildingRenderer.CreateBlueprint(buildingBlueprint.renderData);
 
         onWrapperChange?.Invoke(wrapper);
     }
 
-    uint BuildPositionEncode(int2 testPost)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="newWorldPosition"></param>
+    /// <param name="restOfPosition"></param>
+    /// <returns>Packed position, should keep rotation.</returns>
+    void BuildPositionUpdate(int2 newWorldPosition)
     {
         int offset = SceneRefs.World.CurrentLevel.levelOffsetScaled;
-        int2 fixedPos = testPost - offset;
-        return (uint)((fixedPos.x & 0x3FF) | ((fixedPos.y & 0xFF) << 10));
+        int2 fixedPos = newWorldPosition - offset;
+
+        uint maskedPosition = (uint)(buildingPos & ~0x3FFFFF);
+        buildingPos = (uint)((fixedPos.x & 0x3FF) | ((fixedPos.y & 0x3FF) << 10)) | maskedPosition;
+    }
+
+
+    uint buildingPos;
+    public void Rotate(bool clockwise)
+    {
+        uint rot = (buildingPos >> 23) & 0x3;
+        if (clockwise)
+        {
+            rot++;
+            if (rot == 4)
+                rot = 0;
+        }
+        else
+        {
+            if (rot == 0)
+                rot = 4;
+            rot--;
+        }
+
+        rot = (rot & 0x3) << 23;
+        buildingPos = (uint)((buildingPos & ~(0x3 << 23)) | rot);
+        buildingRenderer.MoveBlueprint(buildingPos);
     }
 }

@@ -20,11 +20,14 @@ namespace Assets.Scripts.UI.Refs___Shortcuts
         public static void BuildRotate_performed(InputAction.CallbackContext obj)
         {
             float axis = obj.ReadValue<float>();
-            if (SceneRefs.GridTiles.activeControl == (int)ControlModeOld.Build)
-            {
+            if (SceneRefs.MouseController.activeModeIndex == (int)ControlModeOld.Build)
+            {/*
                 Building building = SceneRefs.GridTiles.BlueprintInstance;
                 if (building is Pipe)
-                    return;
+                    return;*/
+
+                SceneRefs.MouseController.buildMode.Rotate(axis > 0);
+/*
                 if (axis < 0)
                 {
                     building.transform.Rotate(new Vector3(0, 90, 0));
@@ -37,7 +40,7 @@ namespace Assets.Scripts.UI.Refs___Shortcuts
                 {
                     fluid.AttachedPipes.ForEach(q => q.RecalculatePipeTransform());
                 }
-                SceneRefs.GridTiles.Enter();
+                SceneRefs.GridTiles.Enter();*/
             }
         }
 

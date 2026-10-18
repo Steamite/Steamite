@@ -13,7 +13,7 @@ public struct BuildingGrid
     /// <summary>Dimensions of the building.</summary>
     [SerializeField] public int2 size;
     /// <summary>Anchor offset from the center(position).</summary>
-    [SerializeField] public int2 moveBy;
+    [SerializeField] public float2 renderSize;
     /// <summary>Relative anchor position.</summary>
     [SerializeField] public int anchorIndex;
 

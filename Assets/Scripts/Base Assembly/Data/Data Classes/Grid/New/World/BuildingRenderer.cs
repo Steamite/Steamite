@@ -16,7 +16,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
     public struct BuildingGroupData
     {
         public Mesh mesh;
-        public int2 moveBy;
+        public float2 meshSizeHalved;
         public uint count;
     }
 
@@ -103,7 +103,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 renderBatches[i].size = (int)math.max(meshes[i].count * 2, INCREASE_AMMOUNT);
                 renderBatches[i].startIndex = offset;
 
-                batchGroupData[i] = new(meshes[i].moveBy.x, meshes[i].moveBy.y);
+                batchGroupData[i] = new(meshes[i].meshSizeHalved.x, meshes[i].meshSizeHalved.y);
 
 
                 offset += renderBatches[i].size;

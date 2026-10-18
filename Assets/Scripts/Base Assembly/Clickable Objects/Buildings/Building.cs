@@ -97,7 +97,7 @@ public class Building : StorageObject
     /// <returns><inheritdoc/></returns>
     public override GridPos GetPos()
     {
-        int2 pos = blueprint.moveBy.Rotate(transform.rotation.eulerAngles.y);
+        int2 pos = new(); //blueprint.renderSize.Rotate(transform.rotation.eulerAngles.y);
         return new(
             transform.position.x - pos.x,
             (transform.position.y - 1) / 2,
