@@ -46,6 +46,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
         public byte categoryIndex;
         public byte wrapperIndex;
 
+
         public virtual void CopyFrom(BuildingNew prev)
         {
         }
@@ -57,6 +58,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
             building.wrapperIndex = wrapperIndex;
 
             return building;
+        }
+
+        public void SetBindingIndex(int catIndex, int wrapIndex)
+        {
+            categoryIndex = (byte)catIndex;
+            wrapperIndex = (byte)wrapIndex;
         }
     }
 

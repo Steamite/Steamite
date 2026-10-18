@@ -602,6 +602,8 @@ MonoBehaviour:
   cursorOffset: {x: 0, y: 0}
   ToggleMod: 1
   renderer: {fileID: 4967022013944964022}
+  categoryIndex: 0
+  wrapperIndex: 0
 --- !u!1 &405851067
 GameObject:
   m_ObjectHideFlags: 0
@@ -1808,6 +1810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.MouseController
   activeMode: {fileID: 0}
+  buildMode: {fileID: 0}
   activeModeIndex: 0
   world: {fileID: 0}
   topHeight: 1
@@ -1832,8 +1835,6 @@ MonoBehaviour:
   clickedWorldPosition:
     x: 0
     y: 0
-  buildingType: 0
-  buildingIndex: 0
   isShiftPressed: 0
   shift:
     m_Name: Shift
@@ -2632,6 +2633,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.GridWorld
   LEVEL_COUNT: 0
+  WorldBuildings:
+    buildings: []
   CenterScaled: 0
   buildingMeshes:
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
@@ -2954,7 +2957,8 @@ MonoBehaviour:
   _cameraSceneMover: {fileID: 1068071213}
   _researchAdapter: {fileID: 8150810313726245686}
   _questController: {fileID: 782435305}
-  beforeLoadsAwaitable: []
+  beforeLoadsAwaitable:
+  - {fileID: 4967022013944964024}
   beforeLoads:
   - {fileID: 1623294178}
   - {fileID: 4967022013944964017}

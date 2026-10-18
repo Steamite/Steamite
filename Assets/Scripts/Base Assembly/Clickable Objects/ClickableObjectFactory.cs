@@ -34,6 +34,8 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoadAwaitable
     #endregion
     Material pipeMaterial;
 
+    
+
     #region Tiles
     /// <summary>
     /// Creates a new <see cref="Road"/> and registers it on Grid.
@@ -294,6 +296,7 @@ public class ClickableObjectFactory : MonoBehaviour, IBeforeLoadAwaitable
     {
         buildPrefabs = await Addressables.LoadAssetAsync<BuildingData>(BuildingData.PATH).Task;
         buildPrefabs.Init();
+
         recipeData = await Addressables.LoadAssetAsync<ProductionRecipeHolder>(ProductionRecipeHolder.PATH).Task;
         recipeData.Init();
         //pipeMaterial = buildPrefabs.GetBuilding(BuildPipe.BUILD_PIPE_PREF_NAME).GetComponent<Renderer>().sharedMaterial;

@@ -77,13 +77,14 @@ public class SceneRefs : MonoBehaviour
     /// <summary>Registers the <see cref="instance"/></summary>
     public async Awaitable BeforeLoad()
     {
-        MyGrid.ReloadDomain();
+        //MyGrid.ReloadDomain();
         instance = this;
 
         foreach (IBeforeLoadAwaitable beforeLoad in instance.beforeLoadsAwaitable)
             await beforeLoad.BeforeInit();
         foreach (IBeforeLoad beforeLoad in instance.beforeLoads)
             beforeLoad.BeforeInit();
+
         beforeLoads = null;
         beforeLoadsAwaitable = null;
 

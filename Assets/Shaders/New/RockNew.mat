@@ -74,12 +74,12 @@ Material:
     - _DigColor: {r: 0.773, g: 0.75913054, b: 0, a: 0.3764706}
     - _HighlightColor: {r: 0, g: 0, b: 2, a: 2}
     - _HoverColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0.7019608}
-    - _HoverPosition: {r: 64.5, g: 0, b: 70.5, a: 0}
+    - _HoverPosition: {r: 71.5, g: 0, b: 72.5, a: 0}
     - _HoverRange: {r: 0.5001, g: 0.5001, b: 0, a: 0}
     - _MousePos: {r: 70.5, g: 0, b: 72.5, a: 0}
     - _Range: {r: 0.5001, g: 0.5001, b: 0, a: 0}
     - _SelectionColor: {r: 1, g: 0, b: 0, a: 0.77254903}
-    - _SelectionPosition: {r: 91.5, g: 0, b: 74.5, a: 0}
+    - _SelectionPosition: {r: 89.5, g: 0, b: 78.5, a: 0}
     - _SelectionRange: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -120,6 +120,9 @@ public class BuildModeNew : GridTilesModeNew
     public override void ExitMod()
     {
         wrapper = null;
+        categoryIndex = -1;
+        wrapperIndex = -1;
+
         buildingRenderer.DestroyBlueprint();
         onWrapperChange?.Invoke(wrapper);
     }

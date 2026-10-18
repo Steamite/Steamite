@@ -100,13 +100,12 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
 
     public override void Init()
     {
-        /*foreach (var category in Categories)
+        for (int i = 0; i < Categories.Count; i++)
         {
-            foreach (var obj in category.Objects)
+            for (int j = 0; j < Categories[i].Objects.Count; j++)
             {
-                //obj.Building.InitPrefabData();
-                //obj.materials = obj.mesh.GetComponentsInChildren<Renderer>().Select(q => q.sharedMaterial).ToList();
+                Categories[i].Objects[j].Building.SetBindingIndex(i, j);
             }
-        }*/
+        }
     }
 }

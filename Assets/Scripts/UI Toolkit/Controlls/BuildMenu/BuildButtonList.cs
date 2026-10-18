@@ -42,11 +42,15 @@ namespace BottomBar.Building
             { 
                 if (wrapper == null) 
                 {
+                    doNotRemoveFast = true;
                     RefreshItem(_selID);
+                    doNotRemoveFast = false;
                     _selID = -1;
                 } 
             });
         }
+        bool doNotRemoveFast;
+
 
         int categoryIndex;
         public void SetItemSource(List<BuildingWrapper> _wrappers, int _categoryIndex)
@@ -122,7 +126,7 @@ namespace BottomBar.Building
                 if (categoryIndex == SceneRefs.MouseController.buildMode.categoryIndex && 
                     index == SceneRefs.MouseController.buildMode.wrapperIndex)
                 {
-                    element.AddToClassList($"{BUILD_BUTTON_CLASS}-selected");
+                    element.ChangeClassWithoutTransition(BUILD_BUTTON_CLASS, $"{BUILD_BUTTON_CLASS}-selected");
                 }
             }
             else
@@ -157,7 +161,12 @@ namespace BottomBar.Building
 
         protected void DefaultUnBindItem(VisualElement element, int index)
         {
-            if (categoryIndex != SceneRefs.MouseController.buildMode.categoryIndex||
+            if (doNotRemoveFast) 
+            { 
+                doNotRemoveFast = false;
+                element.RemoveFromClassList($"{BUILD_BUTTON_CLASS}-selected");
+            }
+            else if (categoryIndex != SceneRefs.MouseController.buildMode.categoryIndex||
                     index != SceneRefs.MouseController.buildMode.wrapperIndex)
             {
                 element.ChangeClassWithoutTransition($"{BUILD_BUTTON_CLASS}-selected", BUILD_BUTTON_CLASS);
