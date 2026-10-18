@@ -112,16 +112,53 @@ public class BuildModeNew : GridTilesModeNew
         return true;
     }*/
 
+
+    readonly static int[] cosTable = { 1, 0, -1, 0 };
+    readonly static int[] sinTable = { 0, 1, 0, -1 };
     public override void DownObject()
     {
-        var t = SceneRefs.World.CurrentLevel.renderGrid[controller.hoverObjectIndex].TType;
-        if (t != TileType.Empty && t != TileType.Road)
-            return;
+        int2 size = wrapper.blueprint.size;
+        size.y -= 1;
 
+        uint rot = (buildingPos >> 23) & 0x3;
+
+        int x = size.x * cosTable[rot] - size.y * sinTable[rot];
+        int y = size.x * sinTable[rot] + size.y * cosTable[rot];
+        size.x = x;
+        size.y = y;
+
+        int2 world = controller.hoverWorldPosition;
+        
+        if(size.x < 0)
+        {
+            world.x += size.x + 1;
+            size.x = -size.x;
+        }
+        if (size.y < 0)
+        {
+            world.y += size.y + 1;
+            size.y = -size.y;
+        }
+        int originalX = world.x;
+
+        for (int j = 0; j < size.y; j++)
+        {
+            for (int i = 0; i < size.x; i++)
+            {
+                var a = SceneRefs.World.GetActiveTile(world.x, world.y).TType;
+                if (a != TileType.Empty && a != TileType.Road)
+                    return;
+
+                world.x++;
+            }
+            world.x = originalX;
+            world.y++;
+        }
 
         SceneRefs.World.WorldBuildings.PlaceBuilding(
             controller.hoverWorldPosition, 
-            buildingBlueprint);
+            wrapper, 
+            buildingPos);
 
         buildingRenderer.PlaceBlueprint(controller.isShiftPressed);
         
@@ -162,7 +199,7 @@ public class BuildModeNew : GridTilesModeNew
         categoryIndex = wrapper.Building.categoryIndex;
 
         buildingBlueprint = wrapper.Building.Clone();
-        BuildPositionUpdate(controller.hoverWorldPosition);
+        BuildPositionUpdate(controller.hoverWorldPosition, true);
 
         buildingBlueprint.renderData.position = buildingPos;
         buildingRenderer.CreateBlueprint(buildingBlueprint.renderData);
@@ -176,12 +213,14 @@ public class BuildModeNew : GridTilesModeNew
     /// <param name="newWorldPosition"></param>
     /// <param name="restOfPosition"></param>
     /// <returns>Packed position, should keep rotation.</returns>
-    void BuildPositionUpdate(int2 newWorldPosition)
+    void BuildPositionUpdate(int2 newWorldPosition, bool discardRot = false)
     {
         int offset = SceneRefs.World.CurrentLevel.levelOffsetScaled;
         int2 fixedPos = newWorldPosition - offset;
 
         uint maskedPosition = (uint)(buildingPos & ~0x3FFFFF);
+        if (discardRot)
+            maskedPosition = 0;
         buildingPos = (uint)((fixedPos.x & 0x3FF) | ((fixedPos.y & 0x3FF) << 10)) | maskedPosition;
     }
 

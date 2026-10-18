@@ -125,10 +125,48 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             buildingRenderer?.Dispose();
         }
 
-        public void PlaceBuilding(int2 worldPos, BuildingNew newBuilding)
+        readonly static int[] cosTable = { 1, 0, -1, 0 };
+        readonly static int[] sinTable = { 0, 1, 0, -1 };
+        public void PlaceBuilding(int2 worldPos, BuildingWrapper wrapper, uint buildingPos)
         {
-            AddBuilding(newBuilding);
-            SceneRefs.World.CurrentLevel.SetTileByWorldPos(worldPos, LevelGridTile.Elevator(0));
+            AddBuilding(wrapper.Building);
+
+            int2 size = wrapper.blueprint.size;
+            size.y -= 1;
+            uint rot = (buildingPos >> 23) & 0x3;
+
+
+
+            int x = size.x * cosTable[rot] - size.y * sinTable[rot];
+            int y = size.x * sinTable[rot] + size.y * cosTable[rot];
+            size.x = x;
+            size.y = y;
+
+            int2 world = worldPos;
+
+
+            if (size.x < 0)
+            {
+                world.x += size.x + 1;
+                size.x = -size.x;
+            }
+            if (size.y < 0)
+            {
+                world.y += size.y + 1;
+                size.y = -size.y;
+            }
+            int originalX = world.x;
+
+            for (int j = 0; j < size.y; j++)
+            {
+                for (int i = 0; i < size.x; i++)
+                {
+                    SceneRefs.World.CurrentLevel.SetTileByWorldPos(world, LevelGridTile.Elevator(0));
+                    world.x++;
+                }
+                world.x = originalX;
+                world.y++;
+            }
         }
     }
 }
