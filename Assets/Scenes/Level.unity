@@ -598,6 +598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd42fa97ed6ba9148b3928538447d2bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Build
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
   cursor: {fileID: 0}
   cursorOffset: {x: 0, y: 0}
   ToggleMod: 1
@@ -798,7 +799,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &533075847
 Transform:
   m_ObjectHideFlags: 0
@@ -823,12 +824,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 533075846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f664b18854145664d84cfb5c8f521418, type: 3}
+  m_Script: {fileID: 11500000, guid: 01adb41dc3396854b8d0bfded22728fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Deconstruct
+  hoverColor: {r: 0.6226415, g: 0, b: 0, a: 1}
   cursor: {fileID: 2800000, guid: ae363da8347a847499c9345c5845bf1e, type: 3}
   cursorOffset: {x: 15, y: 15}
-  highlightColor: {r: 1, g: 0, b: 0, a: 1}
+  ToggleMod: 1
 --- !u!1 &640560561
 GameObject:
   m_ObjectHideFlags: 0
@@ -1752,10 +1754,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e76f92ab7defdf74fbf1614ded5e5b0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::NothingNew
+  hoverColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0.7019608}
   cursor: {fileID: 0}
   cursorOffset: {x: 0, y: 0}
   ToggleMod: 0
-  hoverColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0.7019608}
   selectionColor: {r: 1, g: 0, b: 0, a: 0.77254903}
 --- !u!1 &977506019
 GameObject:
@@ -1957,6 +1959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f912f1f63f227a4ea010272e4d813fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.GridTilesModes.Dig
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
   cursor: {fileID: 2800000, guid: fd2def2a77be87d4382da31006c84430, type: 3}
   cursorOffset: {x: 1, y: 15}
   ToggleMod: 1
@@ -2452,6 +2455,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f818ed399b7c3a440a66870bdefc2459, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.GridTilesModes.Dig
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
   cursor: {fileID: 2800000, guid: fd2def2a77be87d4382da31006c84430, type: 3}
   cursorOffset: {x: 1, y: 15}
   ToggleMod: 1

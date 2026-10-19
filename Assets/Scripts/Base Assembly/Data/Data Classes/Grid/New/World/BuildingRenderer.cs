@@ -173,9 +173,38 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
             return indexes;
         }
-        public void RemoveBuilding(int index, int batch)
+
+        public int RemoveBuilding(int index)
         {
-            //UpdateArg(data.y)
+            int batchIndex = -1;
+            for (int i = 0; i < renderBatches.Length; i++)
+            {
+                if ((renderBatches[i].startIndex + renderBatches[i].numberOfItems) > index)
+                {
+                    batchIndex = i;
+                    break;
+                }    
+            }
+
+            var b = renderBatches[batchIndex];
+
+            int end = b.startIndex + (int)b.numberOfItems;
+
+            for (int i = index; i < end; i++)
+            {
+                instanceData[i] = instanceData[i + 1]; 
+            }
+
+            renderBatches[batchIndex].numberOfItems--;
+            args[batchIndex + 1].instanceCount -= 1;
+
+
+            argBuffer.SetData(args, batchIndex + 1, batchIndex + 1, 1);
+
+            int numberOfChanges = end - index;
+            instanceBuffer.SetData(instanceData, index, index, numberOfChanges);
+
+            return numberOfChanges;
         }
 
 

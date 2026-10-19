@@ -341,13 +341,13 @@ MonoBehaviour:
         blueprint:
           size:
             x: 1
-            y: 1
+            y: 2
           renderSize:
-            x: 0
-            y: 0
-          anchorIndex: 0
+            x: 1
+            y: 1
+          anchorIndex: 1
           mesh: {fileID: 4493585093827132993, guid: 831baef4def44414b9acbdf0ad30d414, type: 3}
-          itemArray: 01000000i
+          itemArray: 0300000001000000i
     - rid: 8808251703612669983
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:

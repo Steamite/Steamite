@@ -1,49 +1,39 @@
-﻿using System;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
-public class DeconstructNew : GridTilesMode
+public class DeconstructNew : GridTilesModeNew
 {
-    public override void EnterObject(ClickableObject enterObject)
+    protected override bool CheckTopObstruction(int2 pos, int index, LevelGridTile tile)
     {
-        if (enterObject is Building _b)
+        TileType tileType = (TileType)tile.Type;
+        if (tileType >= TileType.Building)
         {
-            Color color;
-
-            if (_b.Deconstructing)
-                color = Color.red / 2;
-            else
-                color = Color.red;
-
-            _b.Highlight(color);
+            controller.SetBuildingHighligh(pos, true, tile.Amount, hoverColor);
+            return true;
         }
+        return false;
     }
 
-    public override void ExitObject(ClickableObject exitObject)
+
+    public override void MouseTrack(float distance, float lowHeight, Plane low, Ray _ray)
     {
-        if (exitObject is Building b)
+        int2 lastPos = controller.hoverWorldPosition;
+
+        base.MouseTrack(distance, lowHeight, low, _ray);
+        if (!lastPos.Equals(controller.hoverWorldPosition))
         {
-            if (b.Deconstructing)
-                b.Highlight(Color.red * 0.75f);
-            else
-                b.Highlight(default);
         }
     }
 
     public override void DownObject()
     {
-        if (gridTiles.ActiveObject is Building building)
-        {
-            building.OrderDeconstruct();
-
-            Color c;
-            if (building && !building.Deconstructing)
-                c = highlightColor;
-            else
-                c = highlightColor / 2;
-
-            building.Highlight(c);
-        }
+        if (controller.hoverObjectType < TileType.Building)
+            return;
+        SceneRefs.World.WorldBuildings.RemoveBuilding(controller.hoverObjectIndex);
     }
 }

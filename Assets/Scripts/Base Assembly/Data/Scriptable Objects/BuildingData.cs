@@ -125,4 +125,9 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
         }
         return wrappers;
     }
+
+    public BuildingWrapper GetBuilding(byte categoryIndex, byte wrapperIndex)
+    {
+        return Categories[categoryIndex].Objects[wrapperIndex];
+    }
 }
