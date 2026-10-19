@@ -40,9 +40,6 @@
         },
         {
             "m_Id": "63db847ebe7247ecb84a49da5bc40152"
-        },
-        {
-            "m_Id": "94ce0aa37d3e4fb1a6809f1600a6ec4f"
         }
     ],
     "m_GroupDatas": [],
@@ -68,20 +65,6 @@
                     "m_Id": "63db847ebe7247ecb84a49da5bc40152"
                 },
                 "m_SlotId": 3
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "50dabbc915e7428a846879dbc7724067"
-                },
-                "m_SlotId": 0
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "94ce0aa37d3e4fb1a6809f1600a6ec4f"
-                },
-                "m_SlotId": 1
             },
             "m_InputSlot": {
                 "m_Node": {
@@ -371,7 +354,7 @@
             "serializedVersion": "2",
             "x": -511.0,
             "y": -1.0,
-            "width": 208.0,
+            "width": 248.0,
             "height": 344.0
         }
     },
@@ -395,8 +378,18 @@
         "m_SerializableColors": []
     },
     "m_SerializedSubGraph": "{\n    \"subGraph\": {\n        \"fileID\": -5475051401550479605,\n        \"guid\": \"cb78f88f297ab45498faef3af277dbe0\",\n        \"type\": 3\n    }\n}",
-    "m_PropertyGuids": [],
-    "m_PropertyIds": [],
+    "m_PropertyGuids": [
+        "9c3b3470-1911-4ee1-9340-a5632f65373b",
+        "4c789d19-e2d8-4943-b777-80c1f00001ae",
+        "2b3019b0-7882-41e9-978b-8312cfcfc965",
+        "2b47c8ce-8a9d-463b-8431-fe533079772f"
+    ],
+    "m_PropertyIds": [
+        -1974990627,
+        1790576774,
+        496182634,
+        301271783
+    ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
 }
@@ -484,9 +477,9 @@
     "m_StageCapability": 2,
     "m_CustomBinding": "",
     "m_Value": {
-        "x": 1.0,
-        "y": 0.0,
-        "z": 0.0
+        "x": 0.698113203048706,
+        "y": 0.698113203048706,
+        "z": 0.698113203048706
     },
     "m_DefaultValue": {
         "x": 0.5,
@@ -544,44 +537,6 @@
         "z": 0.0
     },
     "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.SubGraphNode",
-    "m_ObjectId": "94ce0aa37d3e4fb1a6809f1600a6ec4f",
-    "m_Group": {
-        "m_Id": ""
-    },
-    "m_Name": "Hover Selection Highlight",
-    "m_DrawState": {
-        "m_Expanded": true,
-        "m_Position": {
-            "serializedVersion": "2",
-            "x": -511.0,
-            "y": 346.0,
-            "width": 208.0,
-            "height": 296.0
-        }
-    },
-    "m_Slots": [
-        {
-            "m_Id": "ce7390a8da7a45ba8934aff484d2d903"
-        }
-    ],
-    "synonyms": [],
-    "m_Precision": 0,
-    "m_PreviewExpanded": true,
-    "m_DismissedVersion": 0,
-    "m_PreviewMode": 0,
-    "m_CustomColors": {
-        "m_SerializableColors": []
-    },
-    "m_SerializedSubGraph": "{\n    \"subGraph\": {\n        \"fileID\": -5475051401550479605,\n        \"guid\": \"7bb7d0d3146f4d2449ae92b1657829a0\",\n        \"type\": 3\n    }\n}",
-    "m_PropertyGuids": [],
-    "m_PropertyIds": [],
-    "m_Dropdowns": [],
-    "m_DropdownSelectedEntries": []
 }
 
 {
@@ -676,33 +631,6 @@
     "m_SupportsLODCrossFade": false,
     "m_CustomEditorGUI": "",
     "m_SupportVFX": false
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
-    "m_ObjectId": "ce7390a8da7a45ba8934aff484d2d903",
-    "m_Id": 1,
-    "m_DisplayName": "HighlightColor",
-    "m_SlotType": 1,
-    "m_Hidden": false,
-    "m_HideConnector": false,
-    "m_ShaderOutputName": "HighlightColor",
-    "m_StageCapability": 3,
-    "m_CustomBinding": "",
-    "m_Value": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0,
-        "w": 0.0
-    },
-    "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0,
-        "w": 0.0
-    },
-    "m_Labels": []
 }
 
 {

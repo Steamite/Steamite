@@ -119,9 +119,9 @@ public class MapGenNew : MonoBehaviour
 
         int c = centerPos * _width + centerPos;
         world.gridSave[0].grid[c] = LevelGridTile.Elevator(0);
-        world.gridSave[0].grid[c + 1] = LevelGridTile.Elevator(0);
-        world.gridSave[0].grid[c + 2] = LevelGridTile.Elevator(0);
-        world.gridSave[0].grid[c + 3] = LevelGridTile.Elevator(0);
+        world.gridSave[0].grid[c + 1] = LevelGridTile.Elevator(1);
+        world.gridSave[0].grid[c + 2] = LevelGridTile.Elevator(2);
+        world.gridSave[0].grid[c + 3] = LevelGridTile.Elevator(3);
 
         return world;
     }

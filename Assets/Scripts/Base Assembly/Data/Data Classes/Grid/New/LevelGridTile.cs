@@ -77,5 +77,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 0);
             return tile;
         }
+
+        public static LevelGridTile Building(int v)
+        {
+            LevelGridTile tile = new((((int)TileType.Building & 0xF) << 1) | (v & 0x3FFFF) << 13, 0);
+            return tile;
+        }
     }
 }

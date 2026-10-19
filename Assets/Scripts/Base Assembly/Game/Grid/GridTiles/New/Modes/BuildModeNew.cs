@@ -157,10 +157,11 @@ public class BuildModeNew : GridTilesModeNew
 
         SceneRefs.World.WorldBuildings.PlaceBuilding(
             controller.hoverWorldPosition, 
-            wrapper, 
+            wrapper,
+            buildingBlueprint, 
             buildingPos);
 
-        buildingRenderer.PlaceBlueprint(controller.isShiftPressed);
+        buildingBlueprint.renderIndex = buildingRenderer.PlaceBlueprint(controller.isShiftPressed);
         
         if(!controller.isShiftPressed)
             controller.ChangeSelMode(ControlMode.Nothing);
@@ -195,11 +196,13 @@ public class BuildModeNew : GridTilesModeNew
         // new wrapper set
         wrapper = _wrapper;
 
-        wrapperIndex = wrapper.Building.wrapperIndex;
-        categoryIndex = wrapper.Building.categoryIndex;
-
         buildingBlueprint = wrapper.Building.Clone();
         BuildPositionUpdate(controller.hoverWorldPosition, true);
+
+
+        wrapperIndex = buildingBlueprint.wrapperIndex;
+        categoryIndex = buildingBlueprint.categoryIndex;
+
 
         buildingBlueprint.renderData.position = buildingPos;
         buildingRenderer.CreateBlueprint(buildingBlueprint.renderData);

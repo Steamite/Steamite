@@ -86,6 +86,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
             low = new(Vector3.up, new Vector3(0, lowHeight, 0));
             top = new(Vector3.up, new Vector3(0, topHeight, 0));
+            ClearHoverMaterial();
+            ClearSelectMaterial();
         }
 
         static float2 maxDim = new(1920, 1080);
@@ -143,9 +145,28 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             hoverObjectIndex = hoverIndex;
         }
 
+        public void SetBuildingHighligh(bool hover = true, int renderIndex = -1, Color color = default)
+        {
+            if (renderIndex != -1)
+                renderIndex = SceneRefs.World.WorldBuildings.buildings[renderIndex].renderIndex;
+            if (hover)
+            {
+                ClearHoverMaterial(1);
+                materials[1].SetFloat("_HoverIndex", renderIndex);
+                materials[1].SetColor("_HoverColor", color);
+            }
+            else
+            {
+                ClearSelectMaterial(1);
+                materials[1].SetFloat("_SelectionIndex", renderIndex);
+                materials[1].SetColor("_SelectionColor", color);
+            }
+        }
+
+
         public void SetSelectionMaterial(int2 pos, int matIndex, Color color, float mod = 0)
         {
-            ClearMaterialSelect(matIndex);
+            ClearSelectMaterial(matIndex);
             materials[matIndex].SetVector("_SelectionRange", new(0.5f + mod, 0.5f + mod));
             materials[matIndex].SetVector("_SelectionPosition", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
             materials[matIndex].SetColor("_SelectionColor", color);
@@ -157,19 +178,30 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         {
             for (int i = 0; i < materials.Length; i++)
             {
-                if (i == matIndex)
+                if (i == matIndex || i == 1)
                     continue;
                 materials[i].SetVector("_HoverRange", default);
             }
+
+
+            if (matIndex == 1)
+                return;
+            materials[1].SetFloat("_HoverIndex", -1);
         }
-        void ClearMaterialSelect(int matIndex = -1)
+        void ClearSelectMaterial(int matIndex = -1)
         {
             for (int i = 0; i < materials.Length; i++)
             {
-                if (i == matIndex)
+                if (i == matIndex || i == 1)
                     continue;
                 materials[i].SetVector("_SelectionRange", default);
+
             }
+
+
+            if (matIndex == 1)
+                return;
+            materials[1].SetFloat("_SelectionIndex", -1);
         }
 
         public void MouseDown()
@@ -243,7 +275,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
         public void DeselectObjects()
         {
-            ClearMaterialSelect();
+            ClearSelectMaterial();
             clickedType = -1;
             clickedIndex = -1;
         }

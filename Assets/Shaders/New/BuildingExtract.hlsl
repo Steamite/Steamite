@@ -97,7 +97,8 @@ void UnpackBuilding2Bit_float(
     float offset,
 
     out float3 WorldPosition,
-    out float3 Rotation)
+    out float3 Rotation,
+    out float instanceIDFixed)
     //out float3 Color)
 {
     uint packedUint = 0;
@@ -108,21 +109,10 @@ void UnpackBuilding2Bit_float(
     
     #if defined(UNITY_ANY_INSTANCING_ENABLED)
         #if defined(SHADER_API_D3D11) || defined(SHADER_API_D3D12)
-            instanceID = _Offset + (uint)instanceID;
+            instanceIDFixed = _Offset + (uint)instanceID;
         #else
-            instanceID = _Offset + unity_InstanceID;
+            instanceIDFixed = _Offset + unity_InstanceID;
         #endif
-    
-        /*uint bufferCount, bufferStride;
-        _BuildingInstanceBuffer.GetDimensions(bufferCount, bufferStride);
-    
-        if (instanceID >= bufferCount)
-        {
-        // Collapse invalid vertices to origin so they don't render or crash
-            WorldPosition = float3(0, 0, 0);
-            Color = float3(0, 1, 0);
-            return;
-        }*/
     #endif
     
 #if defined(SHADERGRAPH_PREVIEW)
@@ -130,7 +120,7 @@ void UnpackBuilding2Bit_float(
 #else
     
     
-    packedUint = _BuildingInstanceBuffer[(uint) instanceID].data;
+    packedUint = _BuildingInstanceBuffer[(uint) instanceIDFixed].data;
 #endif
     
     UnpackBuildingData2Bit(packedUint, GridX, GridZ, GridY, RotationIndex);

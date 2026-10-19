@@ -183,6 +183,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         {
             if (instanceBuffer != null && instanceBuffer.IsValid())
                 instanceBuffer.Dispose();
+            if (batchGroupBuffer != null && batchGroupBuffer.IsValid())
+                batchGroupBuffer.Dispose();
+
             if (argBuffer != null && argBuffer.IsValid())
                 argBuffer.Dispose();
 
@@ -215,7 +218,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         }
 
         const int INCREASE_AMMOUNT = 5;
-        public void PlaceBlueprint(bool canContinue)
+        public int PlaceBlueprint(bool clearBlueprint)
         {
             int dataIndex = (int)(renderBatches[selectedBlueprint].startIndex + renderBatches[selectedBlueprint].numberOfItems);
             renderBatches[selectedBlueprint].numberOfItems++;
@@ -225,8 +228,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
             instanceData[dataIndex] = instanceData[0];
             instanceBuffer.SetData(instanceData, dataIndex, dataIndex, 1);
-            if(!canContinue)
+            if(clearBlueprint)
                 selectedBlueprint = -1;
+
+            return dataIndex;
         }
 
         void UpdateArgCount(int batchIndex)

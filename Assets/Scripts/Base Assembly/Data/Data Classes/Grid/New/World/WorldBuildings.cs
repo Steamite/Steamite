@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 {
@@ -59,15 +58,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             buildingRenderer = new(buildingMaterial);
             int[] indexes = buildingRenderer.UploadBuildingData(buildingGroups, instanceData);
 
-            int x = 0;
             for (int i = 0; i < lastIndex; i++)
             {
-                if (buildings[i] == null)
-                {
-                    x--;
-                    continue;
-                }
-                buildings[i].renderIndex = indexes[i-x];
+                buildings[i].renderIndex = indexes[i];
             }
 
             return buildingRenderer;
@@ -127,15 +120,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
         readonly static int[] cosTable = { 1, 0, -1, 0 };
         readonly static int[] sinTable = { 0, 1, 0, -1 };
-        public void PlaceBuilding(int2 worldPos, BuildingWrapper wrapper, uint buildingPos)
+        public void PlaceBuilding(int2 worldPos, BuildingWrapper wrapper, BuildingNew buildingData, uint buildingPos)
         {
-            AddBuilding(wrapper.Building);
-
+            int arrayIndex = AddBuilding(buildingData);
             int2 size = wrapper.blueprint.size;
             size.y -= 1;
             uint rot = (buildingPos >> 23) & 0x3;
-
-
 
             int x = size.x * cosTable[rot] - size.y * sinTable[rot];
             int y = size.x * sinTable[rot] + size.y * cosTable[rot];
@@ -161,7 +151,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             {
                 for (int i = 0; i < size.x; i++)
                 {
-                    SceneRefs.World.CurrentLevel.SetTileByWorldPos(world, LevelGridTile.Elevator(0));
+                    SceneRefs.World.CurrentLevel.SetTileByWorldPos(
+                        world, 
+                        LevelGridTile.Building(arrayIndex));
                     world.x++;
                 }
                 world.x = originalX;

@@ -53,7 +53,7 @@ public class NothingNew : GridTilesModeNew
             case TileType.Building:
             case TileType.Elevator:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.Rock);
-                controller.SetSelectionMaterial(worldPos, 1, selectionColor, +0.0001f);
+                controller.SetBuildingHighligh(false, tile.Amount, selectionColor);
                 break;
         }
     }

@@ -39,17 +39,20 @@ Material:
     m_Ints: []
     m_Floats:
     - _CellSize: 1
+    - _HoverIndex: -1
     - _LevelOffset: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Range: 0
+    - _SelectedIndex: 0
     m_Colors:
     - _HighlightColor: {r: 0, g: 0, b: 2, a: 2}
     - _HoverColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0.7019608}
-    - _HoverPosition: {r: 78.5, g: 0, b: 83.5, a: 0}
+    - _HoverPosition: {r: 80.5, g: 0, b: 80.5, a: 0}
     - _HoverRange: {r: 0, g: 0, b: 0, a: 0}
     - _MousePos: {r: 80.5, g: 0, b: 80.5, a: 0}
     - _Range: {r: 0, g: 0, b: 0, a: 0}
+    - _SelectColor: {r: 1, g: 1, b: 1, a: 1}
     - _SelectionColor: {r: 1, g: 0, b: 0, a: 0.77254903}
     - _SelectionPosition: {r: 77.5, g: 0, b: 77.5, a: 0}
     - _SelectionRange: {r: 0, g: 0, b: 0, a: 0}
