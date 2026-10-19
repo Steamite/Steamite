@@ -260,6 +260,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                     tempInstanceData[i] = instanceData[i];
                 }
 
+                SceneRefs.World.WorldBuildings.UpdateRenderIndexes(renderBatches[index + 1].startIndex, INCREASE_AMMOUNT);
                 // Move start Indexes
                 for (int i = index+1; i < renderBatches.Length; i++)
                 {
@@ -273,6 +274,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 {
                     tempInstanceData[i] = instanceData[i-INCREASE_AMMOUNT];
                 }
+
 
                 instanceData.Dispose();
                 instanceData = tempInstanceData;

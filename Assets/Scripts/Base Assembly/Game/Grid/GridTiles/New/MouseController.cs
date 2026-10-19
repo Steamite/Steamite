@@ -145,21 +145,30 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             hoverObjectIndex = hoverIndex;
         }
 
-        public void SetBuildingHighligh(bool hover = true, int renderIndex = -1, Color color = default)
+        public void SetBuildingHighligh(int2 pos, bool hover, int buildingIndex = -1, Color color = default)
         {
+            int renderIndex = buildingIndex;
             if (renderIndex != -1)
-                renderIndex = SceneRefs.World.WorldBuildings.buildings[renderIndex].renderIndex;
+                renderIndex = SceneRefs.World.WorldBuildings.buildings[buildingIndex].renderIndex;
+
             if (hover)
             {
                 ClearHoverMaterial(1);
                 materials[1].SetFloat("_HoverIndex", renderIndex);
                 materials[1].SetColor("_HoverColor", color);
+
+
+                hoverWorldPosition = pos;
+                hoverObjectType = TileType.Building;
+                hoverObjectIndex = buildingIndex;
             }
             else
             {
                 ClearSelectMaterial(1);
-                materials[1].SetFloat("_SelectionIndex", renderIndex);
-                materials[1].SetColor("_SelectionColor", color);
+                materials[1].SetFloat("_SelectedIndex", renderIndex);
+                materials[1].SetColor("_SelectedColor", color);
+                
+                hoverWorldPosition = pos;
             }
         }
 
@@ -201,7 +210,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
             if (matIndex == 1)
                 return;
-            materials[1].SetFloat("_SelectionIndex", -1);
+            materials[1].SetFloat("_SelectedIndex", -1);
         }
 
         public void MouseDown()

@@ -161,10 +161,15 @@ public class BuildModeNew : GridTilesModeNew
             buildingBlueprint, 
             buildingPos);
 
-        buildingBlueprint.renderIndex = buildingRenderer.PlaceBlueprint(controller.isShiftPressed);
+        bool clearBlueprint = !controller.isShiftPressed;
+        buildingBlueprint.renderIndex = buildingRenderer.PlaceBlueprint(clearBlueprint);
         
-        if(!controller.isShiftPressed)
+        if(clearBlueprint)
             controller.ChangeSelMode(ControlMode.Nothing);
+        else
+        {
+            buildingBlueprint = wrapper.Building.Clone();
+        }
     }
 
     public override void ExitMod()

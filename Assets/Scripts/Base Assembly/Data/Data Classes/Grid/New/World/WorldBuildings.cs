@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 {
@@ -158,6 +159,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 }
                 world.x = originalX;
                 world.y++;
+            }
+        }
+
+        public void UpdateRenderIndexes(int startIndex, int increase)
+        {
+            for (int i = 0; i < lastIndex; i++)
+            {
+                if (buildings[i]?.renderIndex >= startIndex)
+                    buildings[i].renderIndex += increase;
             }
         }
     }
