@@ -47,13 +47,47 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             // use a lookup array indexed by different tile Types
             // Construct node paths + stability
+
             for (int i = 0; i < tileCount; i++)
             {
-                // TODO: reload objects based on save data
-                // NO need to spawn any gameobjects store all in memory
-                // Maybe create methods for creating the data, or completly change the data?
-                // Will need to change saving
-                // Change Road saving 
+
+                if (renderGrid[i].TType == TileType.Road)
+                {
+                    RevealRocks(i);
+                }
+            }
+        }
+
+        int range = 2;
+
+        public void RevealRocks(int i)
+        {
+            int checkRange = (range * 2) + 1;
+
+            int posY = i / levelDimensionsScaled;
+            int posX = i % levelDimensionsScaled;
+            posX = math.clamp(posX - range, 0, range);
+            posY = math.clamp(posY - range, 0, range);
+
+            int checkY = i / levelDimensionsScaled;
+            int checkX = i % levelDimensionsScaled;
+            checkY = math.clamp((levelDimensionsScaled+1) - checkY, 0, checkRange);
+            checkX = math.clamp((levelDimensionsScaled+1) - checkX, 0, checkRange);
+
+
+
+            //int checkIndex = i - range - range * levelDimensionsScaled;
+
+            int checkIndex = i - posX - posY * levelDimensionsScaled;
+            for (int y = 0; y < checkY; y++)
+            {
+                for (int x = 0; x < checkX; x++)
+                {
+                    LevelGridTile tile = renderGrid[checkIndex + x];
+                    tile.hiddenTypeStyleAmount = ~1 & tile.hiddenTypeStyleAmount;
+                    renderGrid[checkIndex + x] = tile;
+                }
+                checkIndex += levelDimensionsScaled;
             }
         }
 

@@ -1793,8 +1793,8 @@ Transform:
   - {fileID: 971749948}
   - {fileID: 533075847}
   - {fileID: 1903098573}
-  - {fileID: 284615617}
   - {fileID: 1186186385}
+  - {fileID: 284615617}
   - {fileID: 52733409}
   - {fileID: 258749763}
   m_Father: {fileID: 7751514193011626992}
@@ -1926,12 +1926,12 @@ GameObject:
   - component: {fileID: 1186186385}
   - component: {fileID: 1186186386}
   m_Layer: 2
-  m_Name: Dig
+  m_Name: DigAdmin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1186186385
 Transform:
   m_ObjectHideFlags: 0
@@ -2422,7 +2422,7 @@ GameObject:
   - component: {fileID: 1903098573}
   - component: {fileID: 1903098574}
   m_Layer: 2
-  m_Name: DigReal
+  m_Name: Dig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

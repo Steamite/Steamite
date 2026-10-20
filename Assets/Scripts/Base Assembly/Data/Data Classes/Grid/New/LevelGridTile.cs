@@ -26,10 +26,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public int durability;
         public static readonly LevelGridTile OutsideWall = new LevelGridTile((int)TileType.Border, int.MaxValue);
 
-        public static LevelGridTile Wall(int durability) => new LevelGridTile((int)TileType.Wall << 1, durability);
+        public static LevelGridTile Wall(int durability, bool hidden = true) => new LevelGridTile((hidden ? 1 : 0) | (int)TileType.Wall << 1, durability);
         
-        public static LevelGridTile Wall(int style, int ammount, int durability) 
-            => new LevelGridTile((((int)TileType.Wall & 0xF) << 1) | ((style & 0x7F) << 5) | ((ammount & 0xFFFFF) << 12), durability);
+        public static LevelGridTile Wall(int style, int ammount, int durability, bool hidden = true) 
+            => new LevelGridTile((hidden ? 1 : 0) | (((int)TileType.Wall & 0xF) << 1) | ((style & 0x7F) << 5) | ((ammount & 0xFFFFF) << 12), durability);
         
         public static readonly LevelGridTile Road = new LevelGridTile((int)TileType.Road << 1, 0);
 

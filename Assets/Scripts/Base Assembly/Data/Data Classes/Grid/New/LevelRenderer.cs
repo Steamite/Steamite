@@ -202,7 +202,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             customRenderers.Add(renderer);
         }
 
-        public void UpdateMesh(int levelIndex, int tileIndex, GridLevel gridLevel)
+        public void UpdateMesh(int levelIndex, int tileIndex, GridLevel gridLevel, int range = 1)
         {
             int y = tileIndex / gridLevel.levelDimensionsScaled;
             int x = tileIndex % gridLevel.levelDimensionsScaled;
@@ -213,9 +213,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             int chunkIndex = (chunkPos.y * gridLevel.levelDimensions) + chunkPos.x;
 
             // neighbours 
-            CheckNeighbours(y, chunkPos.y, chunkPos, new(0, 1), chunkIndex, gridLevel.levelDimensions, gridLevel);
-            CheckNeighbours(x, chunkPos.x, chunkPos, new(1, 0), chunkIndex, 1, gridLevel);
-
+            int2 offset;
+            offset.y = CheckNeighbours(y, chunkPos.y, chunkPos, new(0, 1), range, chunkIndex, gridLevel.levelDimensions, gridLevel);
+            offset.x = CheckNeighbours(x, chunkPos.x, chunkPos, new(1, 0), range, chunkIndex, 1, gridLevel);
+            if(range > 1 && offset.x != 0 && offset.y != 0)
+            {
+                int tempIndex = chunkIndex + offset.x + offset.y * gridLevel.levelDimensions;
+                UpdateChunk(gridLevel.levelNumber, gridLevel, chunkPos + offset, tempIndex);
+            }
             UpdateChunk(levelIndex, gridLevel, chunkPos, chunkIndex);
         }
 
@@ -225,26 +230,27 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             chunkMeshes[levelIndex][chunkIndex] = m;
         }
 
-        void CheckNeighbours(int toModulo, int axisPosition, int2 chunkPos, int2 change, int chunkIndex, int chunkIndexOffset, GridLevel level)
+        int CheckNeighbours(int toModulo, int axisPosition, int2 chunkPos, int2 change, int range, int chunkIndex, int chunkIndexOffset, GridLevel level)
         {
             toModulo %= GridLevel.chunkDimensions;
 
-            if (toModulo == 0)
+            if (toModulo < range)
             {
                 if (axisPosition > 0)
                 {
                     UpdateChunk(level.levelNumber, level, chunkPos - change, chunkIndex - chunkIndexOffset);
+                    return -1;
                 }
-
             }
-            else if (toModulo == GridLevel.chunkDimensions - 1)
+            else if (toModulo + range >= GridLevel.chunkDimensions)
             {
                 if (axisPosition < level.levelDimensions - 1)
                 {
                     UpdateChunk(level.levelNumber, level, chunkPos + change, chunkIndex + chunkIndexOffset);
+                    return 1;
                 }
             }
+            return 0;
         }
-
     }
 }

@@ -78,7 +78,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             int sVertexIndex = vertexOffsets[index];
             int sTriangleIndex = triangleOffsets[index];
 
-            CreateTile(dataIndex, sVertexIndex, sTriangleIndex, x, y, type);
+            if (tile.Hidden)
+                CreateHiddenTile(sVertexIndex, sTriangleIndex, x,y);
+            else
+                CreateTile(dataIndex, sVertexIndex, sTriangleIndex, x, y, type);
             sVertexIndex += 4;
             sTriangleIndex += 6;
 
@@ -90,16 +93,35 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 CreateWalls(index, dataIndex, sVertexIndex, sTriangleIndex, x, y);
         }
 
+        void CreateHiddenTile(int vertexIndex, int sTriangleIndex, int x, int y)
+        {
+            int yHeight = 1;
+            float2 uvPoint = UV_MAPPING[0];
 
-        void CreateTile(int dataIndex, int vertexIndex, int sTriangleIndex, int x, int y, int val)
+            vertexes[vertexIndex] = new(new(x, yHeight, y), upNormal, uvPoint);
+            vertexes[vertexIndex + 1] = new(new(x + 1, yHeight, y), upNormal, uvPoint);
+            vertexes[vertexIndex + 2] = new(new(x, yHeight, y + 1), upNormal, uvPoint);
+            vertexes[vertexIndex + 3] = new(new(x + 1, yHeight, y + 1), upNormal, uvPoint);
+
+            triangles[sTriangleIndex] = vertexIndex;
+            triangles[sTriangleIndex + 1] = vertexIndex + 2;
+            triangles[sTriangleIndex + 2] = vertexIndex + 3;
+
+            triangles[sTriangleIndex + 3] = vertexIndex;
+            triangles[sTriangleIndex + 4] = vertexIndex + 3;
+            triangles[sTriangleIndex + 5] = vertexIndex + 1;
+        }
+        void CreateTile(int dataIndex, int vertexIndex, int sTriangleIndex, int x, int y, int tileType)
         {
             // TODO
-            float yHeight = TILE_HEIGHT[val];
+            float yHeight = TILE_HEIGHT[tileType];
 
-            vertexes[vertexIndex]   = new(new(x,     yHeight, y),       upNormal, UV_MAPPING[val]);
-            vertexes[vertexIndex+1] = new(new(x + 1, yHeight, y),       upNormal, UV_MAPPING[val]);
-            vertexes[vertexIndex+2] = new(new(x,     yHeight, y + 1),   upNormal, UV_MAPPING[val]);
-            vertexes[vertexIndex+3] = new(new(x + 1, yHeight, y + 1),   upNormal, UV_MAPPING[val]);
+            float2 uvPoint = UV_MAPPING[tileType];
+
+            vertexes[vertexIndex]   = new(new(x,     yHeight, y),       upNormal, uvPoint);
+            vertexes[vertexIndex+1] = new(new(x + 1, yHeight, y),       upNormal, uvPoint);
+            vertexes[vertexIndex+2] = new(new(x,     yHeight, y + 1),   upNormal, uvPoint);
+            vertexes[vertexIndex+3] = new(new(x + 1, yHeight, y + 1),   upNormal, uvPoint);
 
             triangles[sTriangleIndex]   = vertexIndex;
             triangles[sTriangleIndex+1] = vertexIndex + 2;

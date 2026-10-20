@@ -20,6 +20,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         Deconstruct,
         /// <summary>Rock digging mode.(If started on marked Rocks, unmarks insted)</summary>
         Dig,
+        DigAdmin,
         /// <summary>Building placement mode.</summary>
         Build,
         Upgrade,

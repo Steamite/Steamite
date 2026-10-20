@@ -5,7 +5,7 @@ using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class DigNew : GridTilesModeNew
+public class DigAdmin : GridTilesModeNew
 {
     [SerializeField] Color RemoveColor;
     [SerializeField] Color toBeDugColor;

@@ -35,9 +35,20 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         [SerializeField] Material buildingMaterial;
         Action<int, int> onLevelChange;
         public List<Chunk> chunks;
-        
-        
 
+
+        private void OnDrawGizmos()
+        {
+            for (int i = 0; i < LargestLevelDimensions; i++)
+            {
+                for (int j = 0; j < LargestLevelDimensions; j++)
+                {
+                    Vector3 vec = new(i * GridLevel.chunkDimensions, 0, j * GridLevel.chunkDimensions);
+                    Vector3 secVec = vec + new Vector3(0,60,0);
+                    Gizmos.DrawLine(vec, secVec);
+                }
+            }
+        }
         public void LoadGrid(WorldSaveNew saveToLoad)
         {
             onLevelChange = null;
@@ -161,12 +172,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             {
                 tile = LevelGridTile.Road;
                 gridLevel.SetTile(pos, tile);
-                renderer.UpdateMesh(level, pos, gridLevel);
+                gridLevel.RevealRocks(pos);
+                renderer.UpdateMesh(level, pos, gridLevel, 2);
             }
             else
             {
                 gridLevel.SetTile(pos, tile);
-
+                //gridLevel.HideRocks(pos);
             }
             //SceneRefs.MouseController.UpdateTileUI(pos, level);
         }

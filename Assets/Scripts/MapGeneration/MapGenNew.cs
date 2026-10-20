@@ -182,6 +182,8 @@ public class MapGenNew : MonoBehaviour
     int center;
     int minPos;
     int maxPos;
+
+    const int SCAN_RANGE = 2;
     /// <summary>Generates veins on a level.</summary>
     async Awaitable CreateGrid(int levelDimScaled, int size)
     {
@@ -193,6 +195,9 @@ public class MapGenNew : MonoBehaviour
         center = levelDimScaled / 2;
         minPos = center - centerRadius;
         maxPos = center + centerRadius;
+
+        int revealMin = minPos - 2;
+        int revealMax = maxPos + 2;
 
         for (int i = 0; i < size; i++)
         {
@@ -206,6 +211,8 @@ public class MapGenNew : MonoBehaviour
             }
             else
             {
+
+                //bool hidden = x > revealMin && x < revealMax && y > revealMin && y < revealMax;
                 map[i] = LevelGridTile.Wall(10);
             }
 

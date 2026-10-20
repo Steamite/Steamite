@@ -51,7 +51,7 @@ namespace Assets.Scripts.UI.Refs___Shortcuts
 
         public static void Upgrade_performed(InputAction.CallbackContext obj)
         {
-            SceneRefs.MouseController.ChangeSelMode(ControlMode.Upgrade);
+            SceneRefs.MouseController.ChangeSelMode(ControlMode.DigAdmin);
         }
 
         public static void Dig_performed(InputAction.CallbackContext obj)
