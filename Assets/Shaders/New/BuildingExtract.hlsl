@@ -12,6 +12,7 @@ StructuredBuffer<PackedBuilding> _BuildingInstanceBuffer;
 StructuredBuffer<float2> _BatchGroupBuffer;
 int _Offset;
 int _GroupIndex;
+int _SelectedLevel;
 //#endif
 /*
  Bit Layout Breakdown (32-bit uint):
@@ -46,7 +47,6 @@ float3 TransformInstanceVertex2Bit(
     float3 localVertexPosition,
     uint gridX,
     uint gridZ,
-    uint GridY,
     uint rot2,
     float offset,
     float cellSize,
@@ -81,7 +81,7 @@ float3 TransformInstanceVertex2Bit(
     rotatedVertex.z = rotatedPos.y + off.y;
     
     // Translate to grid cell position
-    float3 worldPos = float3((float) (gridX * cellSize) + offset, GridY, (float) (gridZ * cellSize) + offset);
+    float3 worldPos = float3((float) (gridX * cellSize) + offset, 0, (float) (gridZ * cellSize) + offset);
     
     
     Rotation = float3(0, radians(degTable[rot2]), 0);
@@ -99,7 +99,6 @@ void UnpackBuilding2Bit_float(
     out float3 WorldPosition,
     out float3 Rotation,
     out float instanceIDFixed)
-    //out float3 Color)
 {
     uint packedUint = 0;
     uint RotationIndex = 0;
@@ -124,8 +123,14 @@ void UnpackBuilding2Bit_float(
 #endif
     
     UnpackBuildingData2Bit(packedUint, GridX, GridZ, GridY, RotationIndex);
-    WorldPosition = TransformInstanceVertex2Bit(localPosition, GridX, GridZ, GridY, RotationIndex, offset, cellSize, Rotation);
-    
+    if (_SelectedLevel == GridY)
+    {
+        WorldPosition = TransformInstanceVertex2Bit(localPosition, GridX, GridZ, RotationIndex, offset, cellSize, Rotation);
+    }
+    else
+    {
+      WorldPosition = float3(0, 0, 0);
+    }
     //Color = float3(instanceID, instanceID, instanceID);
 }
 

@@ -94,10 +94,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             y -= currentLevel.levelOffsetScaled;
             //Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
             
-            int index = gridLevels[0].levelDimensionsScaled * y + x;
-            if (index < 0 || index >= gridLevels[0].renderGrid.Length)
+            int index = currentLevel.levelDimensionsScaled * y + x;
+            if (index < 0 || index >= currentLevel.renderGrid.Length)
                 return LevelGridTile.OutsideWall;
-            return gridLevels[0].renderGrid[index];
+            return currentLevel.renderGrid[index];
         }
 
         public LevelGridTile GetActiveTile(int x, int y, out int index)
@@ -106,14 +106,18 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             y -= currentLevel.levelOffsetScaled;
             //Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
 
-            index = gridLevels[0].levelDimensionsScaled * y + x;
-            if (index < 0 || index >= gridLevels[0].renderGrid.Length)
+            index = currentLevel.levelDimensionsScaled * y + x;
+            if (index < 0 || index >= currentLevel.renderGrid.Length)
                 return LevelGridTile.OutsideWall;
-            return gridLevels[0].renderGrid[index];
+            return currentLevel.renderGrid[index];
         }
 
 
 
+        /// <summary>
+        /// Old new
+        /// </summary>
+        /// <param name="attach"></param>
         public void AttachChange(Action<int, int> attach) => onLevelChange += attach;
         public void SetLevel(int i)
         {
@@ -123,7 +127,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             int x = currentLevelIndex;
             currentLevelIndex = i;
             currentLevel = gridLevels[i];
-
+            
             onLevelChange?.Invoke(x, i);
         }
 

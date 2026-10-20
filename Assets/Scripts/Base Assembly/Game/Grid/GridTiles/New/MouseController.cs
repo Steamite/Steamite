@@ -320,9 +320,9 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         public void DamageClickedRock(TileType type, int index)
         {
             if(type == TileType.Wall)
-                world.DamageRock(index, damageAmmount);
+                world.DamageRock(index, damageAmmount, world.CurrentLevelIndex);
             else if (type == TileType.Road)
-                world.MakeRoad(index);
+                world.MakeRoad(index, world.CurrentLevelIndex);
 
             isForcedUpdate = true;
         }

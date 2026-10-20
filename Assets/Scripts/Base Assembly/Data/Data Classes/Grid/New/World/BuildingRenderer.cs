@@ -326,9 +326,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             selectedBlueprint = -1;
         }
 
-        public void OnLevelChange(int levelOffsetScaled)
+        public void OnLevelChange(GridLevel level)
         {
-            propertyBlock.SetInt("_LevelOffset", levelOffsetScaled);
+            propertyBlock.SetInt("_LevelOffset", level.levelOffsetScaled);
+            propertyBlock.SetInt("_SelectedLevel", level.levelNumber);
         }
 
         public void Render(int2 position, int2 range)

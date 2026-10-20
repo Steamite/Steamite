@@ -100,13 +100,13 @@ public static class ToolkitUtils
         {
             SceneRefs.MouseController.ObscureMouse(true);
             UIRefs.LevelCamera.CanZoom = false;
-            Debug.Log($"disable mouse: {(VisualElement)ev.target}");
+            //Debug.Log($"disable mouse: {(VisualElement)ev.target}");
         }
         static void Exit(PointerLeaveEvent ev)
         {
             SceneRefs.MouseController.ObscureMouse(false);
             UIRefs.LevelCamera.CanZoom = true;
-            Debug.Log($"enable mouse: {(VisualElement)ev.target}");
+            //Debug.Log($"enable mouse: {(VisualElement)ev.target}");
         }
 
 

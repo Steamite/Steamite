@@ -40,10 +40,11 @@ public partial class LevelButtons : ShortcutRadioButtonGroup, IInitiableUI
         for (int i = 0; i < world.LEVEL_COUNT; i++)
         {
             level = world.GetLevel(i);
+            hierarchy[i].enabledSelf = true;/*
             hierarchy[i].SetBinding(
                 nameof(GridLevel.Unlocked),
                 nameof(enabledSelf),
-                dataSource: level);
+                dataSource: level);*/
         }
     }
 }

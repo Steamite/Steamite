@@ -44,7 +44,7 @@ public class DigReal : GridTilesModeNew
             }
             else
             {
-                if (renderer.realToDigArray.GetBits(worldIndex) == 1)
+                if (renderer.markedTilesGrid.GetBits(worldIndex) == 1)
                     controller.SetMaterial(pos, 0, RemoveColor, tileType, index, 0.0001f);
                 else
                     controller.SetMaterial(pos, 0, toBeDugColor, tileType, index, 0.0001f);
@@ -87,7 +87,7 @@ public class DigReal : GridTilesModeNew
         lastDragWorldPos = startDragWorldPos;
         Debug.Log("startDrag");
         int worldIndex = SceneRefs.World.GetWorldIndex(startDragWorldPos);
-        removing = renderer.realToDigArray.GetBits(worldIndex) == 1;
+        removing = renderer.markedTilesGrid.GetBits(worldIndex) == 1;
         if(removing)
             Debug.Log("removing");
     }
@@ -113,7 +113,7 @@ public class DigReal : GridTilesModeNew
             {
                 if (SceneRefs.World.GetActiveTile(x, y).TType == TileType.Wall)
                 {
-                    renderer.realToDigArray.Set(worldIndex, !removing);
+                    renderer.markedTilesGrid.Set(worldIndex, !removing);
                     renderer.toDigRenderGrid[worldIndex] = (byte)(removing ? 0: 255);
                 }
                 else
@@ -148,7 +148,7 @@ public class DigReal : GridTilesModeNew
             bool clear = y < minPos.y || y > maxPos.y;
             for (int x = totMin.x; x <= totMax.x; x++)
             {
-                bool isUnSet = renderer.realToDigArray.GetBits(worldIndex) == 0;
+                bool isUnSet = renderer.markedTilesGrid.GetBits(worldIndex) == 0;
                 if (clear || x < minPos.x || x > maxPos.x)
                 {
                     if (isUnSet)

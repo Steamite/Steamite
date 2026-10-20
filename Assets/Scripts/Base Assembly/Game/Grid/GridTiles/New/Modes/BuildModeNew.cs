@@ -4,6 +4,7 @@ using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
@@ -25,6 +26,25 @@ public class BuildModeNew : GridTilesModeNew
     {
         base.InitMode(_mouseController);
         buildingRenderer = renderer.GetCustomRenderer(0) as BuildingRenderer;
+        SceneRefs.World.AttachChange(OnLevelChange);
+    }
+
+    void OnLevelChange(int oldLevel, int newLevel)
+    {
+        if (wrapper == null)
+            return;
+
+        uint change = 
+            (uint)(SceneRefs.World.GetLevel(oldLevel).levelOffsetScaled - SceneRefs.World.GetLevel(newLevel).levelOffsetScaled);
+
+        uint x = (0x3FF & buildingPos) + change;
+        uint z = ((0x3FF & (buildingPos >> 10)) + change) << 10;
+
+        uint pos = (x | z) | (buildingPos & (0x3 << 23));
+        uint y = (uint)(0x7 & newLevel) << 20;
+
+        buildingPos = pos | y;
+        buildingRenderer.MoveBlueprint(buildingPos);
     }
 
     public void AttachToWrapperChange(Action<BuildingWrapper> action) => onWrapperChange += action;
@@ -208,8 +228,13 @@ public class BuildModeNew : GridTilesModeNew
         wrapperIndex = buildingBlueprint.wrapperIndex;
         categoryIndex = buildingBlueprint.categoryIndex;
 
+        uint pos = (uint)(~(0x7 << 20) & buildingPos);
+        uint levelPos = (uint)((SceneRefs.World.CurrentLevelIndex & 0x7) << 20);
+        buildingPos = pos | levelPos;
 
         buildingBlueprint.renderData.position = buildingPos;
+
+
         buildingRenderer.CreateBlueprint(buildingBlueprint.renderData);
 
         onWrapperChange?.Invoke(wrapper);
@@ -226,7 +251,7 @@ public class BuildModeNew : GridTilesModeNew
         int offset = SceneRefs.World.CurrentLevel.levelOffsetScaled;
         int2 fixedPos = newWorldPosition - offset;
 
-        uint maskedPosition = (uint)(buildingPos & ~0x3FFFFF);
+        uint maskedPosition = (uint)(buildingPos & ~0xFFFFF);
         if (discardRot)
             maskedPosition = 0;
         buildingPos = (uint)((fixedPos.x & 0x3FF) | ((fixedPos.y & 0x3FF) << 10)) | maskedPosition;
@@ -254,4 +279,6 @@ public class BuildModeNew : GridTilesModeNew
         buildingPos = (uint)((buildingPos & ~(0x3 << 23)) | rot);
         buildingRenderer.MoveBlueprint(buildingPos);
     }
+
+    
 }

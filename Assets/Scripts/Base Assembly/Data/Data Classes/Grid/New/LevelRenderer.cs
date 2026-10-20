@@ -34,8 +34,18 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             enabled = false;
         }
         
+
+        /// <summary>
+        /// Values for the texture.
+        /// </summary>
+        [NonSerialized] NativeArray<byte>[] toDigRenderGrids;
         [NonSerialized] public NativeArray<byte> toDigRenderGrid;
-        [NonSerialized] public NativeBitArray realToDigArray;
+        /// <summary>
+        /// Values of marked rocks.
+        /// </summary>
+        [NonSerialized] NativeBitArray[] markedTilesGrids;
+        [NonSerialized] public NativeBitArray markedTilesGrid;
+
         public ICustomRenderer GetCustomRenderer(int index) => customRenderers[index];
 
         public void Init(int levelCount, GridLevel[] levels, int maxSize)
@@ -58,9 +68,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             worldMaterial.SetFloat(Shader.PropertyToID("_Height"), maxSize);
 
             worldMaterial.SetTexture(Shader.PropertyToID("_DigTexture"), toDigTexture);
-            toDigRenderGrid = new NativeArray<byte>(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
-            realToDigArray = new NativeBitArray(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
-            UpdateToDigTexture();
+            toDigRenderGrids = new NativeArray<byte>[levelCount];
+            markedTilesGrids = new NativeBitArray[levelCount];
+            
+            for (int i = 0; i < levelCount; i++)
+            {
+                toDigRenderGrids[i] = new NativeArray<byte>(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+                markedTilesGrids[i] = new NativeBitArray(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+            }
 
             renderParams = new(worldMaterial) 
             {
@@ -79,7 +94,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void UpdateToDigTexture()
         {
-            toDigTexture.SetPixelData(toDigRenderGrid, 0);
+            toDigTexture.SetPixelData(toDigRenderGrids[currentLevel.levelNumber], 0);
             toDigTexture.Apply(false, false);
         }
 
@@ -94,21 +109,28 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             if (toRender.IsCreated)
                 toRender.Dispose();
-            if(toDigRenderGrid.IsCreated)
-                toDigRenderGrid.Dispose();
-            if (realToDigArray.IsCreated)
-                realToDigArray.Dispose();
+            
+            for (int i = 0; i < toDigRenderGrids.Length; i++)
+            {
+                toDigRenderGrids[i].Dispose();
+                markedTilesGrids[i].Dispose();
+            }
+
             combiner?.Dispose();
         }
 
         public void ChangeLevel(GridLevel level)
         {
             currentLevel = level;
+            toDigRenderGrid = toDigRenderGrids[level.levelNumber];
+            markedTilesGrid = markedTilesGrids[level.levelNumber];
             chunkCount = currentLevel.levelDimensions * currentLevel.levelDimensions;
+            
+            UpdateToDigTexture();
 
             foreach (var item in customRenderers)
             {
-                item.OnLevelChange(currentLevel.levelOffsetScaled);
+                item.OnLevelChange(currentLevel);
             }
         }
 
