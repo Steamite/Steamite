@@ -20,6 +20,8 @@ public class SplashScreen : MonoBehaviour
     public Action afterLoad;
 #endif
 
+    public const string SEED = "DA4131C9";
+
 #if UNITY_EDITOR
     public LoadActions loadAction = LoadActions.NewGameGen;
 #endif
@@ -38,7 +40,7 @@ public class SplashScreen : MonoBehaviour
                 await screen.StartNewGame("test - TopGun");
                 break;
             case LoadActions.NewGameGen:
-                await GameObject.Find("Loading Screen New").GetComponent<LoadingScreenNew>().StartNewGame("test - TopGun", "DA4131C9");
+                await GameObject.Find("Loading Screen New").GetComponent<LoadingScreenNew>().StartNewGame("test - TopGun", SEED);
                 break;
             case LoadActions.MainMenu:
                 await screen.OpenMainMenu(true);

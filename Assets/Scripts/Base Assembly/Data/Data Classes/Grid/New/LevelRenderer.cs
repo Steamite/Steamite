@@ -110,7 +110,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             if (toRender.IsCreated)
                 toRender.Dispose();
             
-            for (int i = 0; i < toDigRenderGrids.Length; i++)
+            for (int i = 0; i < toDigRenderGrids?.Length; i++)
             {
                 toDigRenderGrids[i].Dispose();
                 markedTilesGrids[i].Dispose();

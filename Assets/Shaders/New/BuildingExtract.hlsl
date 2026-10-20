@@ -129,7 +129,7 @@ void UnpackBuilding2Bit_float(
     }
     else
     {
-      WorldPosition = float3(0, 0, 0);
+        WorldPosition = float3(0, 0, 0);
     }
     //Color = float3(instanceID, instanceID, instanceID);
 }

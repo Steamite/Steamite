@@ -1,3 +1,4 @@
+using Assets.Scripts.Saving___Loading;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -22,19 +23,18 @@ namespace Tests.Start
             await Awaitable.WaitForSecondsAsync(2);// WaitForSeconds(2);
         }
 
-        /*[Test]
+        [Test]
         public async Task GenerateMap()
         {
             await LoadMainMenu();
-            LoadingScreen loadingScreen = GameObject.FindAnyObjectByType<LoadingScreen>();
-            await loadingScreen.StartNewGame("_test_predefined", );
-
-            Debug.Log(GameObject.FindAnyObjectByType<Rock>());
-            Debug.Log("loaded");
+            /*
+            LoadingScreenNew loadingScreen = GameObject.FindAnyObjectByType<LoadingScreenNew>();
+            await loadingScreen.StartNewGame("_test_predefined", SplashScreen.SEED);
+*/
 
             ClickOnLoadingScreen();
 
             await Awaitable.WaitForSecondsAsync(2);// WaitForSeconds(2);
-        }*/
+        }
     }
 }
