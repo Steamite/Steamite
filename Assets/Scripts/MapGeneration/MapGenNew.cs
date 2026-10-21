@@ -56,7 +56,7 @@ public class MapGenNew : MonoBehaviour
     int largestDimension;
     /// <summary>Number of the generated level./summary>
     int level;
-
+    
     /// <summary>Level that's being generated at the moment./summary>
     NativeArray<LevelGridTile> map;
 
@@ -64,6 +64,7 @@ public class MapGenNew : MonoBehaviour
     [Header("Resource data")][SerializeField] public List<MinableRes> minableResources;
 
     [SerializeField] ElevatorNew elevator;
+    [SerializeField] float holeTreshold;
     #endregion
 
     public async Awaitable<WorldSaveNew> Generate(string _seed)
@@ -199,6 +200,8 @@ public class MapGenNew : MonoBehaviour
         int revealMin = minPos - 2;
         int revealMax = maxPos + 2;
 
+        float div = (float)levelDimScaled;
+        //int div =
         for (int i = 0; i < size; i++)
         {
             if (x == 0 || y == 0 || x == (levelDimScaled - 1) || y == (levelDimScaled - 1))
@@ -211,9 +214,12 @@ public class MapGenNew : MonoBehaviour
             }
             else
             {
-
+                if (Mathf.PerlinNoise(x / div, y / div) < holeTreshold)
+                    map[i] = LevelGridTile.Road;
+                else
+                    map[i] = LevelGridTile.Wall(10);
+                
                 //bool hidden = x > revealMin && x < revealMax && y > revealMin && y < revealMax;
-                map[i] = LevelGridTile.Wall(10);
             }
 
             x++;

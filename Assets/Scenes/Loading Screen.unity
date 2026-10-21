@@ -195,7 +195,7 @@ MonoBehaviour:
   maxToRemove: 25
   minToAdd: 1
   maxToAdd: 6
-  gridSizes: 150000001f00000000010000
+  gridSizes: 150000001f00000000010000i
   minableResources:
   - {fileID: 11400000, guid: a8d8035b791c05943ba13e1333106fc9, type: 2}
   - {fileID: 11400000, guid: 1c3d32d887bb74046af6627885ac30b8, type: 2}
@@ -221,7 +221,7 @@ MonoBehaviour:
   - {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
   numberOfDays: 6
   dayTime: 360
-  priority: 00000000020000000300000004000000050000000600000007000000
+  priority: 00000000020000000300000004000000050000000600000007000000i
   numberOfHumans: 300
 --- !u!114 &642414934
 MonoBehaviour:
@@ -403,7 +403,7 @@ MonoBehaviour:
   - {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
   numberOfDays: 6
   dayTime: 360
-  priority: 00000000020000000300000004000000050000000600000007000000
+  priority: 00000000020000000300000004000000050000000600000007000000i
   numberOfHumans: 0
 --- !u!114 &854178999
 MonoBehaviour:
@@ -427,22 +427,27 @@ MonoBehaviour:
   minToAdd: 1
   maxToAdd: 6
   _levelDim:
-  - sizes: 1000000010000000100000001000000010000000
-  - sizes: 080000000800000008000000080000000a000000
-  - sizes: 100000001000000010000000100000001000000010000000
+  - sizes: 1000000010000000100000001000000010000000i
+  - sizes: 080000000800000008000000080000000a000000i
+  - sizes: 100000001000000010000000100000001000000010000000i
   minableResources:
   - {fileID: 11400000, guid: a8d8035b791c05943ba13e1333106fc9, type: 2}
   - {fileID: 11400000, guid: 1c3d32d887bb74046af6627885ac30b8, type: 2}
   - {fileID: 11400000, guid: fd427511e764df5408494dc7e0e9b586, type: 2}
   elevator:
-    position: 8398858
-    meshIndex: 0
+    renderData:
+      position: 0
+      blueprintSize: 0
+      meshIndex: 0
     IsConstructing: 0
     IsDeconstructing: 0
     resources: 
     renderIndex: 0
+    categoryIndex: 0
+    wrapperIndex: 0
     canStore: 
     isMain: 0
+  holeTreshold: 0.36
 --- !u!114 &854179000
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Systems
 {
+    [DisableAutoCreation]
     public partial class HumanSpawner : SystemBase
     {
         
@@ -21,7 +22,7 @@ namespace Assets.Scripts.Systems
 
             var buffer = new EntityCommandBuffer(Allocator.TempJob);
 
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < 5000; i++)
             {
                 var ent = EntityManager.Instantiate(prefab.entity);
                 var b = EntityManager.GetBuffer<PositionNode>(ent);

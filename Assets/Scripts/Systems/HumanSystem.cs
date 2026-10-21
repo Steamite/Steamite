@@ -19,9 +19,9 @@ namespace Assets.Scripts.Systems
         public float DeltaTime;
         public void Execute(ref HumanComponent human, ref LocalTransform transform, in DynamicBuffer<PositionNode> nodes)
         {
-
             float3 pos = nodes[human.currentWaypoint].position;
-            float3 destination = math.lerp(transform.Position, pos, human.speed * DeltaTime);
+            float3 destination = transform.Position + 
+                (math.normalize(pos - transform.Position) * (human.speed * DeltaTime));
             transform.Position = destination;
 
             if (math.distancesq(destination, pos) < 0.1f)

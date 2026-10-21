@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Text;
 using Unity.Entities;
 using Unity.Mathematics;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 namespace Assets.Scripts.Systems
@@ -21,7 +20,8 @@ namespace Assets.Scripts.Systems
             public override void Bake(HumanAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                    
+                AddComponent<Prefab>(entity);
+
                 AddComponent(entity, new HumanComponent
                 {
                     position = authoring.pos,
