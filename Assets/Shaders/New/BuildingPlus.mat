@@ -47,7 +47,7 @@ Material:
     - _SelectedIndex: -1
     m_Colors:
     - _HighlightColor: {r: 0, g: 0, b: 2, a: 2}
-    - _HoverColor: {r: 0.6226415, g: 0, b: 0, a: 1}
+    - _HoverColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0.7019608}
     - _HoverPosition: {r: 80.5, g: 0, b: 80.5, a: 0}
     - _HoverRange: {r: 0, g: 0, b: 0, a: 0}
     - _MousePos: {r: 80.5, g: 0, b: 80.5, a: 0}

@@ -1,14 +1,15 @@
 ﻿<Solution>
   <Project Path="Editor.csproj" />
-  <Project Path="ToolkitUI.csproj" />
   <Project Path="BaseAssembly.csproj" />
+  <Project Path="Systems.csproj" />
+  <Project Path="ToolkitUI.csproj" />
   <Project Path="Adapters.csproj" />
   <Project Path="Quests.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="UI.csproj" />
-  <Project Path="Saving.csproj" />
   <Project Path="SimpleFolderIcon.csproj" />
   <Project Path="MapGen.csproj" />
   <Project Path="Tests.csproj" />
+  <Project Path="Saving.csproj" />
   <Project Path="APIserialization.csproj" />
 </Solution>
