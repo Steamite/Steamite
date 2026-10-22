@@ -13,7 +13,7 @@ namespace Assets.Scripts.Systems
         [SerializeField] float speed;
         [SerializeField] Vector3 pos;
         [SerializeField] List<Vector3> points;
-
+        [SerializeField] int count;
         class HumanBaker : Baker<HumanAuthoring>
         {
             
@@ -34,14 +34,15 @@ namespace Assets.Scripts.Systems
                     buffer.Add(new() { position = authoring.points[i] });
                 }
 
-                var prefab = GetEntity(TransformUsageFlags.None);
-                AddComponent(prefab, new HumanPrefab() { entity = entity });
+                var prefab = CreateAdditionalEntity(TransformUsageFlags.None);
+                AddComponent(prefab, new HumanPrefab() { entity = entity, count = authoring.count });
             }
         }
     }
 
     public struct HumanPrefab : IComponentData
     {
+        public int count;
         public Entity entity;
     }
 

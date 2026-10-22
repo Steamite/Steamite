@@ -1,45 +1,63 @@
-﻿using System;
+﻿using Assets.Scripts.Systems.Pathing;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace Assets.Scripts.Systems
 {
-    [DisableAutoCreation]
     public partial class HumanSpawner : SystemBase
     {
         
         protected override void OnCreate()
         {
             RequireForUpdate<HumanPrefab>();
+            RequireForUpdate<PathfindPrefab>();
         }
+
         protected override void OnUpdate()
         {
-            HumanPrefab prefab = SystemAPI.GetSingleton<HumanPrefab>();
+            var rand = new Unity.Mathematics.Random(1); // Provide seed
 
+            HumanPrefab prefab = SystemAPI.GetSingleton<HumanPrefab>();
             var buffer = new EntityCommandBuffer(Allocator.TempJob);
 
-            for (int i = 0; i < 5000; i++)
+            for (int i = 0; i < prefab.count; i++)
             {
-                var ent = EntityManager.Instantiate(prefab.entity);
-                var b = EntityManager.GetBuffer<PositionNode>(ent);
-                /*buffer.AddComponent(ent, new HumanComponent() { currentWaypoint = 0, speed = 0.1f});
-                buffer.AddComponent<LocalTransform>(ent);
-                var b = buffer.AddBuffer<PositionNode>(ent);*/
+                var ent = buffer.Instantiate(prefab.entity);
+                var b = buffer.SetBuffer<PositionNode>(ent);
                 for (int j = 0; j < 20; j++)
                 {
-                    b.Add(new() 
-                    { 
-                        position = new(
-                            UnityEngine.Random.Range(-50, 50), 
-                            UnityEngine.Random.Range(-50, 50), 
-                            UnityEngine.Random.Range(-50, 50))
+                    b.Add(new()
+                    {
+                        position = rand.NextFloat3(new(-50, -50, -50), new(50, 50, 50))
                     });
                 }
             }
+
+            rand = new Unity.Mathematics.Random(1); // Provide seed
+
+            PathfindPrefab pref = SystemAPI.GetSingleton<PathfindPrefab>();
+            for (int i = 0; i < pref.count; i++)
+            {
+                var ent = buffer.Instantiate(pref.entity);
+                int3 pos = rand.NextInt3(new(64, 1, 64), new(90, 1, 90));
+                buffer.SetComponent<PathfindingComponent>(ent, new()
+                {
+                    currentWaypoint = -1,
+                    speed = pref.speed,
+                    position = pos
+                });
+                buffer.SetComponent<LocalTransform>(ent, new()
+                {
+                    Position = pos + new float3(0.5f, 0, 0.5f),
+                    Scale = 1
+                });
+            }
+
 
             buffer.Playback(EntityManager);
             buffer.Dispose();

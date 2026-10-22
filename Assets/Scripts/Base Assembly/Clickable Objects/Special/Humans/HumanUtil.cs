@@ -61,6 +61,7 @@ public class HumanUtil : MonoBehaviour
 
     public void AddHuman()
     {
+        return;
         int i = UnityEngine.Random.Range(0, 2);
         Human human = SceneRefs.ObjectFactory.CreateHuman(MyGrid.GetLevelElevator(0).GetPos(), hatMaterial[i], i);
         humans.Add(human);

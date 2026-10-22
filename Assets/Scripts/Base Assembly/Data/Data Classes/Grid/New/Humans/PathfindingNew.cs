@@ -17,7 +17,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         public int gridWidth;
         public int start;
         public int destination;
-        public NativeArray<int> offsetTable;
+        /// <summary>
+        /// 1, width, -1, -width
+        /// </summary>
+        [ReadOnly] public NativeArray<int> offsetTable;
         public static readonly int2[] offsetTableVec = 
         { 
             new(1, 0),

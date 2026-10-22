@@ -1720,6 +1720,7 @@ GameObject:
   m_Component:
   - component: {fileID: 971749948}
   - component: {fileID: 971749949}
+  - component: {fileID: 971749950}
   m_Layer: 2
   m_Name: Nothing
   m_TagString: Untagged
@@ -1759,6 +1760,18 @@ MonoBehaviour:
   cursorOffset: {x: 0, y: 0}
   ToggleMod: 0
   selectionColor: {r: 1, g: 0, b: 0, a: 0.77254903}
+--- !u!114 &971749950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971749947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 264e4642ea0903440a6607c2de0fe105, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems::DestinationManager
 --- !u!1 &977506019
 GameObject:
   m_ObjectHideFlags: 0
@@ -2192,6 +2205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27610557024a3f14a9acaf087e7e8724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans.PathfindingTest
+  offset: {x: 0.5, y: 0, z: 0.5}
   start: {x: 80, y: 1, z: 64}
   end: {x: 69, y: 2, z: 51}
   world: {fileID: 4967022013944964021}

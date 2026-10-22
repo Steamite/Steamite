@@ -35,39 +35,20 @@ namespace Assets.Scripts.Systems
     }
     public partial struct HumanSystem : ISystem
     {
-     //   EntityQuery query;
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<HumanComponent>();
-       /*     query = SystemAPI.QueryBuilder()
-                .WithAll<HumanComponent, LocalTransform, PositionNode>().Build();*/
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            //NativeArray<HumanComponent> comps = query.ToComponentDataArray<HumanComponent>(Allocator.TempJob);
             MoveJob job = new()
             {
                 DeltaTime = SystemAPI.Time.DeltaTime
             };
 
             state.Dependency = job.ScheduleParallelByRef(state.Dependency);
-            //new MoveJob().ScheduleParallel(query);
-            /*foreach (var (human, transform, buffer) in )
-            {
-                float3 pos = buffer[human.ValueRO.currentWaypoint].position;
-                float3 destination = math.lerp(transform.ValueRO.Position, pos, human.ValueRO.speed);
-                transform.ValueRW.Position = destination;
-
-                if(math.distancesq(destination, pos) < 0.1f)
-                {
-                    int nextWay = human.ValueRW.currentWaypoint + 1;
-                    if (nextWay == buffer.Length)
-                        nextWay = 0;
-                    human.ValueRW.currentWaypoint = nextWay;
-                }
-            }*/
         }
     }
 }

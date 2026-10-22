@@ -49,6 +49,8 @@ public class NothingNew : GridTilesModeNew
                 controller.clickedWorldPosition = worldPos;
                 controller.clickedType = tile.Type;
                 controller.clickedIndex = index;
+
+                GetComponent<IMousePosSetter>().SetPos(worldPos);
                 break;
             case TileType.Building:
             case TileType.Elevator:
