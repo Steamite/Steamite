@@ -21,7 +21,7 @@ namespace Assets.Scripts.Systems.Pathing
         public int offset;
     }
 
-    public struct PathfindingComponent : IComponentData
+    public struct PathfindComponent : IComponentData
     {
         public float3 position;
         public int currentWaypoint;

@@ -14,15 +14,16 @@ namespace Assets.Scripts.Systems
         
         protected override void OnCreate()
         {
-            RequireForUpdate<HumanPrefab>();
+            RequireForUpdate<TestSpherePrefab>();
             RequireForUpdate<PathfindPrefab>();
         }
 
         protected override void OnUpdate()
         {
+            // Spheres
             var rand = new Unity.Mathematics.Random(1); // Provide seed
 
-            HumanPrefab prefab = SystemAPI.GetSingleton<HumanPrefab>();
+            TestSpherePrefab prefab = SystemAPI.GetSingleton<TestSpherePrefab>();
             var buffer = new EntityCommandBuffer(Allocator.TempJob);
 
             for (int i = 0; i < prefab.count; i++)
@@ -38,6 +39,8 @@ namespace Assets.Scripts.Systems
                 }
             }
 
+
+            // people
             rand = new Unity.Mathematics.Random(1); // Provide seed
 
             PathfindPrefab pref = SystemAPI.GetSingleton<PathfindPrefab>();
@@ -45,7 +48,7 @@ namespace Assets.Scripts.Systems
             {
                 var ent = buffer.Instantiate(pref.entity);
                 int3 pos = rand.NextInt3(new(64, 0, 64), new(90, 0, 90));
-                buffer.SetComponent<PathfindingComponent>(ent, new()
+                buffer.SetComponent<PathfindComponent>(ent, new()
                 {
                     currentWaypoint = -1,
                     speed = pref.speed,

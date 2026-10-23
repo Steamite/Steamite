@@ -12,7 +12,7 @@ namespace Assets.Scripts.Systems.Pathing
     {
         public float DeltaTime;
         static readonly float3 offset = new float3(0.5f, 0, 0.5f);
-        public void Execute(ref PathfindingComponent path, ref LocalTransform transform, in DynamicBuffer<PositionNode> nodes)
+        public void Execute(ref PathfindComponent path, ref LocalTransform transform, in DynamicBuffer<PositionNode> nodes)
         {
             if (path.currentWaypoint == -1)
                 return;
@@ -40,12 +40,12 @@ namespace Assets.Scripts.Systems.Pathing
             }
         }
     }
-    [UpdateAfter(typeof(PathfindingSystem))]
+    [UpdateAfter(typeof(PathfindSystem))]
     public partial struct PathfindMovingSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<PathfindingComponent>();
+            state.RequireForUpdate<PathfindComponent>();
         }
 
         public void OnUpdate(ref SystemState state)

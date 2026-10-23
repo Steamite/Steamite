@@ -13,14 +13,14 @@ namespace Assets.Scripts.Systems.Pathing
         [SerializeField] int count;
         [SerializeField] float speed;
 
-        class PathfinderPrefabBaker : Baker<PathfindPrefabAuthoring>
+        class PathfindPrefabBaker : Baker<PathfindPrefabAuthoring>
         {
             public override void Bake(PathfindPrefabAuthoring authoring)
             {
                 var ent = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent<Prefab>(ent);
 
-                AddComponent<PathfindingComponent>(ent, new() { position = 6008});
+                AddComponent<PathfindComponent>(ent, new() { position = 6008});
                 AddBuffer<PositionNode>(ent);
                 var e = CreateAdditionalEntity(TransformUsageFlags.None);
                 AddComponent<PathfindPrefab>(e, new() { entity = ent, count = authoring.count, speed = authoring.speed});

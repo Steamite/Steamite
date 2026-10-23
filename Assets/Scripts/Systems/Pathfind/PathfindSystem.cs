@@ -11,10 +11,10 @@ using Unity.Mathematics;
 namespace Assets.Scripts.Systems.Pathing
 {
 
-    partial struct PathfindingSetJob : IJobEntity
+    partial struct PathfindSetJob : IJobEntity
     {
         [ReadOnly] public DestinationComponent destination;
-        public void Execute(ref PathfindingComponent path, ref DynamicBuffer<PositionNode> nodes)
+        public void Execute(ref PathfindComponent path, ref DynamicBuffer<PositionNode> nodes)
         {
             NativeArray<int> offsets = new NativeArray<int>(4, Allocator.Temp);
             offsets[0] = 1;
@@ -54,7 +54,7 @@ namespace Assets.Scripts.Systems.Pathing
         }
     }
 
-    public partial struct PathfindingSystem : ISystem
+    public partial struct PathfindSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
         {
@@ -66,14 +66,14 @@ namespace Assets.Scripts.Systems.Pathing
         {
             var en = SystemAPI.GetSingletonEntity<DestinationComponent>();
             var comp = SystemAPI.GetComponent<DestinationComponent>(en);
-            
 
-            PathfindingSetJob pathfindingSetJob = new()
+
+            PathfindSetJob pathfindSetJob = new()
             {
                 destination = comp
             };
 
-            state.Dependency = pathfindingSetJob.ScheduleByRef(state.Dependency);
+            state.Dependency = pathfindSetJob.ScheduleByRef(state.Dependency);
 
             state.Enabled = false;
         }

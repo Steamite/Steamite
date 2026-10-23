@@ -33,7 +33,7 @@ public class DestinationManager : MonoBehaviour, IMousePosSetter
         });
 
 
-        ref var state = ref World.DefaultGameObjectInjectionWorld.Unmanaged.GetExistingSystemState<PathfindingSystem>();
+        ref var state = ref World.DefaultGameObjectInjectionWorld.Unmanaged.GetExistingSystemState<PathfindSystem>();
         state.Enabled = true;
     }
 }

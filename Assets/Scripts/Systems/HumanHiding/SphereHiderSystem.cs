@@ -20,7 +20,7 @@ namespace Assets.Scripts.Systems.HumanHiding
         {
             SphereHiderComponent component = SystemAPI.GetSingleton<SphereHiderComponent>();
 
-            foreach((var pos, var trans) in SystemAPI.Query<RefRO<PathfindingComponent>, RefRW<LocalTransform>>())
+            foreach((var pos, var trans) in SystemAPI.Query<RefRO<PathfindComponent>, RefRW<LocalTransform>>())
             {
                 int y = (int)math.floor(pos.ValueRO.position.y);
                 if (y != component.currentLevel)

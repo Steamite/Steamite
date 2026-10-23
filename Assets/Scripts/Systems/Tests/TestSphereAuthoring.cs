@@ -8,21 +8,21 @@ using UnityEngine;
 
 namespace Assets.Scripts.Systems
 {
-    public class HumanAuthoring : MonoBehaviour
+    public class TestSphereAuthoring : MonoBehaviour
     {
         [SerializeField] float speed;
         [SerializeField] Vector3 pos;
         [SerializeField] List<Vector3> points;
         [SerializeField] int count;
-        class HumanBaker : Baker<HumanAuthoring>
+        class HumanBaker : Baker<TestSphereAuthoring>
         {
             
-            public override void Bake(HumanAuthoring authoring)
+            public override void Bake(TestSphereAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent<Prefab>(entity);
 
-                AddComponent(entity, new HumanComponent
+                AddComponent(entity, new TestSphereComponent
                 {
                     position = authoring.pos,
                     currentWaypoint = 0,
@@ -35,18 +35,18 @@ namespace Assets.Scripts.Systems
                 }
 
                 var prefab = CreateAdditionalEntity(TransformUsageFlags.None);
-                AddComponent(prefab, new HumanPrefab() { entity = entity, count = authoring.count });
+                AddComponent(prefab, new TestSpherePrefab() { entity = entity, count = authoring.count });
             }
         }
     }
 
-    public struct HumanPrefab : IComponentData
+    public struct TestSpherePrefab : IComponentData
     {
         public int count;
         public Entity entity;
     }
 
-    public struct HumanComponent : IComponentData
+    public struct TestSphereComponent : IComponentData
     {
         public float3 position;
         public int currentWaypoint;
