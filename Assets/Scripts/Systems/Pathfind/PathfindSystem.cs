@@ -3,6 +3,7 @@ using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -11,9 +12,12 @@ using Unity.Mathematics;
 namespace Assets.Scripts.Systems.Pathing
 {
 
+    [BurstCompile]
     partial struct PathfindSetJob : IJobEntity
     {
         [ReadOnly] public DestinationComponent destination;
+
+        [BurstCompile]
         public void Execute(ref PathfindComponent path, ref DynamicBuffer<PositionNode> nodes)
         {
             if (path.position.y != destination.worldPos.y)
@@ -57,14 +61,18 @@ namespace Assets.Scripts.Systems.Pathing
         }
     }
 
+    [BurstCompile]
     public partial struct PathfindSystem : ISystem
     {
+
+        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<DestinationComponent>();
             state.Enabled = false;
         }
 
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var en = SystemAPI.GetSingletonEntity<DestinationComponent>();

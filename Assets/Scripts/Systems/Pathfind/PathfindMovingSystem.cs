@@ -2,16 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
 namespace Assets.Scripts.Systems.Pathing
 {
+
+    [BurstCompile]
     public partial struct PathfindMovingJob : IJobEntity
     {
         public float DeltaTime;
         static readonly float3 offset = new float3(0.5f, 0, 0.5f);
+
+        [BurstCompile]
         public void Execute(ref PathfindComponent path, ref LocalTransform transform, in DynamicBuffer<PositionNode> nodes)
         {
             if (path.currentWaypoint == -1 || path.currentWaypoint >= nodes.Length)
@@ -40,14 +45,17 @@ namespace Assets.Scripts.Systems.Pathing
             }
         }
     }
-    [UpdateAfter(typeof(PathfindSystem))]
+    [UpdateAfter(typeof(PathfindSystem))] 
+    [BurstCompile]
     public partial struct PathfindMovingSystem : ISystem
     {
+        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<PathfindComponent>();
         }
 
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             PathfindMovingJob job = new()

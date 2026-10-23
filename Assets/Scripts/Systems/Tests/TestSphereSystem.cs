@@ -17,6 +17,8 @@ namespace Assets.Scripts.Systems
     public partial struct MoveJob : IJobEntity
     {
         public float DeltaTime;
+
+        [BurstCompile]
         public void Execute(ref TestSphereComponent human, ref LocalTransform transform, in DynamicBuffer<PositionNode> nodes)
         {
             float3 pos = nodes[human.currentWaypoint].position;
@@ -33,6 +35,8 @@ namespace Assets.Scripts.Systems
             }
         }
     }
+    
+    [BurstCompile]
     public partial struct TestSphereSystem : ISystem
     {
         public void OnCreate(ref SystemState state)

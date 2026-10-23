@@ -2,20 +2,24 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
 namespace Assets.Scripts.Systems.HumanHiding
 {
+
+    [BurstCompile]
     public partial struct SphereHiderSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<SphereHiderComponent>();
-        }   
-        
+        }
 
+
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             SphereHiderComponent component = SystemAPI.GetSingleton<SphereHiderComponent>();
