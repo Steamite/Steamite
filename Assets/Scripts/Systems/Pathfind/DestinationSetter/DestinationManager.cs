@@ -26,7 +26,7 @@ public class DestinationManager : MonoBehaviour, IMousePosSetter
         manager.SetComponentData<DestinationComponent>(entity, new()
         {
             pos = offsetStart.y * width + offsetStart.x,
-            worldPos = offsetStart,
+            worldPos = new(offsetStart.x, world.CurrentLevelIndex, offsetStart.y),
             grid = world.CurrentLevel.renderGrid,
             width = width,
             offset = world.CurrentLevel.levelOffsetScaled

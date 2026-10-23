@@ -14,7 +14,7 @@ namespace Assets.Scripts.Systems.Pathing
         static readonly float3 offset = new float3(0.5f, 0, 0.5f);
         public void Execute(ref PathfindComponent path, ref LocalTransform transform, in DynamicBuffer<PositionNode> nodes)
         {
-            if (path.currentWaypoint == -1)
+            if (path.currentWaypoint == -1 || path.currentWaypoint >= nodes.Length)
                 return;
 
             float sp = path.speed * DeltaTime;

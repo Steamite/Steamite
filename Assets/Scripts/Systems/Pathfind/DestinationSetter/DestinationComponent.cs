@@ -15,7 +15,7 @@ namespace Assets.Scripts.Systems.Pathing
     public struct DestinationComponent : IComponentData
     {
         public int pos;
-        public int2 worldPos;
+        public int3 worldPos;
         [ReadOnly] public NativeArray<LevelGridTile> grid;
         public int width;
         public int offset;

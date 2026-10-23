@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Systems.Pathing;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,13 +48,15 @@ namespace Assets.Scripts.Systems
             for (int i = 0; i < pref.count; i++)
             {
                 var ent = buffer.Instantiate(pref.entity);
-                int3 pos = rand.NextInt3(new(64, 0, 64), new(90, 0, 90));
+                int yPos = rand.NextInt(0, 5);
+                int3 pos = rand.NextInt3(new(64, yPos, 64), new(90, yPos, 90));
                 buffer.SetComponent<PathfindComponent>(ent, new()
                 {
                     currentWaypoint = -1,
                     speed = pref.speed,
                     position = pos
                 });
+                pos.y = 0;
                 buffer.SetComponent<LocalTransform>(ent, new()
                 {
                     Position = pos + new float3(0.5f, 1, 0.5f),

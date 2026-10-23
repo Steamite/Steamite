@@ -89,6 +89,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             top = new(Vector3.up, new Vector3(0, topHeight, 0));
             ClearHoverMaterial();
             ClearSelectMaterial();
+
+            world.AttachChange(OnLevelChange);
         }
 
         static float2 maxDim = new(1920, 1080);
@@ -243,6 +245,14 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
         bool inChange = false;
         
+        void OnLevelChange(int old, int newLevel)
+        {
+            if (activeModeIndex == 0)
+            {
+                InfoWindowAdapter.Window.Close();
+                DeselectObjects();
+            }
+        }
 
         /// <summary>
         /// Changes the current tool mod, and manages transitions betwean them.

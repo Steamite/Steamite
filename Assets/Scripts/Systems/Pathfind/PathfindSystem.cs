@@ -16,6 +16,9 @@ namespace Assets.Scripts.Systems.Pathing
         [ReadOnly] public DestinationComponent destination;
         public void Execute(ref PathfindComponent path, ref DynamicBuffer<PositionNode> nodes)
         {
+            if (path.position.y != destination.worldPos.y)
+                return;
+
             NativeArray<int> offsets = new NativeArray<int>(4, Allocator.Temp);
             offsets[0] = 1;
             offsets[1] = destination.width;
