@@ -831,6 +831,50 @@ MonoBehaviour:
   cursor: {fileID: 2800000, guid: ae363da8347a847499c9345c5845bf1e, type: 3}
   cursorOffset: {x: 15, y: 15}
   ToggleMod: 1
+--- !u!1 &569057773
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 569057774}
+  - component: {fileID: 569057775}
+  m_Layer: 2
+  m_Name: Events
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &569057774
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569057773}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 206732441787875933}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &569057775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569057773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89c9d2e40a2fe8e41b7d46f7c4c40190, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems::Assets.Scripts.Systems.HumanHiding.SphereHiderManager
 --- !u!1 &640560561
 GameObject:
   m_ObjectHideFlags: 0
@@ -2588,7 +2632,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 569057774}
   m_Father: {fileID: 7751514193011626992}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &421873189272607880
@@ -3092,6 +3137,7 @@ MonoBehaviour:
   - {fileID: 897350252}
   - {fileID: 220867761}
   - {fileID: 709068454}
+  - {fileID: 569057775}
   _world: {fileID: 4967022013944964021}
 --- !u!114 &8150810313726245686
 MonoBehaviour:

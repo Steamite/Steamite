@@ -44,7 +44,7 @@ namespace Assets.Scripts.Systems
             for (int i = 0; i < pref.count; i++)
             {
                 var ent = buffer.Instantiate(pref.entity);
-                int3 pos = rand.NextInt3(new(64, 1, 64), new(90, 1, 90));
+                int3 pos = rand.NextInt3(new(64, 0, 64), new(90, 0, 90));
                 buffer.SetComponent<PathfindingComponent>(ent, new()
                 {
                     currentWaypoint = -1,
@@ -53,7 +53,7 @@ namespace Assets.Scripts.Systems
                 });
                 buffer.SetComponent<LocalTransform>(ent, new()
                 {
-                    Position = pos + new float3(0.5f, 0, 0.5f),
+                    Position = pos + new float3(0.5f, 1, 0.5f),
                     Scale = 1
                 });
             }
