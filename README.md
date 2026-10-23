@@ -15,3 +15,11 @@
   <li>Programing and Game Design - Richard Kopp</li>
   <li>Models - Vojta Liebich</li>
 </ul>
+
+
+<h3>Terra</h3>
+<p>
+  Cycle between selection modes
+  default - click on a tile and let humans find path to it
+  "h"     - toggle tiles
+</p>
