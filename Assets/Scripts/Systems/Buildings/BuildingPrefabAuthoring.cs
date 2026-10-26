@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Assets.Scripts.Systems.Buildings
 {
-    public class BuildingAuthoring : MonoBehaviour
+    public class BuildingPrefabAuthoring : MonoBehaviour
     {
         [SerializeField] BuildingData buildingData;
-        public class BuildingPrefabBaker : Baker<BuildingAuthoring>
+        public class BuildingPrefabBaker : Baker<BuildingPrefabAuthoring>
         {
-            public override void Bake(BuildingAuthoring authoring)
+            public override void Bake(BuildingPrefabAuthoring authoring)
             {
                 var ent = GetEntity(TransformUsageFlags.None);
                 var a = SetBuffer<BuildingPrefabsComponent>(ent);

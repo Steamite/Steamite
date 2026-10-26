@@ -7,6 +7,7 @@ using System.Text;
 using Unity.Mathematics;
 using Unity.Mathematics.Geometry;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
@@ -165,32 +166,33 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// </summary>
         /// <param name="gridPos"></param>
         /// <returns></returns>
-        public void DamageRock(int pos, int ammount, int level = 0)
+        public void DamageRock(int gridIndex, int ammount, int level = 0)
         {
             GridLevel gridLevel = gridLevels[level];
             //int pos = gridLevel.levelDimensionsScaled * gridPos.y + gridPos.x;
-            LevelGridTile tile = gridLevel.renderGrid[pos];
+            LevelGridTile tile = gridLevel.renderGrid[gridIndex];
             tile.durability -= ammount;
             
             if (tile.durability <= 0)
             {
                 tile = LevelGridTile.Road;
-                gridLevel.SetTile(pos, tile);
-                gridLevel.RevealRocks(pos);
-                renderer.UpdateMesh(level, pos, gridLevel, 2);
+                gridLevel.SetTile(gridIndex, tile);
+                gridLevel.RevealRocks(gridIndex);
+                renderer.CleanPosAndUpdate(gridIndex);
+                renderer.UpdateMesh(level, gridIndex, gridLevel, 2);
             }
             else
             {
-                gridLevel.SetTile(pos, tile);
+                gridLevel.SetTile(gridIndex, tile);
                 //gridLevel.HideRocks(pos);
             }
-            //SceneRefs.MouseController.UpdateTileUI(pos, level);
         }
 
-        public void MakeRoad(int pos, int level = 0)
+        public void CreateWall(int pos, int level = 0)
         {
             GridLevel gridLevel = gridLevels[level];
-            gridLevel.SetTile(pos, LevelGridTile.Wall(10));
+            gridLevel.SetTile(pos, LevelGridTile.Wall(10, false));
+
             renderer.UpdateMesh(level, pos, gridLevel);
         }
 

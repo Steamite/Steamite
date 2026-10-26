@@ -116,7 +116,14 @@ public class MapGenNew : MonoBehaviour
             gridSave = new LevelGridSave[levelCount]
         };
 
-        await MakeGrids(world);
+        try
+        {
+            await MakeGrids(world);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+        }
 
         int c = centerPos * _width + centerPos;
         world.gridSave[0].grid[c] = LevelGridTile.Elevator(0);

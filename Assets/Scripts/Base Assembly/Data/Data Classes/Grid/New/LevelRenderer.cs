@@ -91,16 +91,24 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             enabled = true;
         }
 
+        public void CleanPosAndUpdate(int gridIndex)
+        {
+            int pos = currentLevel.GetWorldIndex(gridIndex);
+            toDigRenderGrid[pos] = 0;
+            markedTilesGrid.Set(pos, false);
+            UpdateToDigTexture();
+        }
 
         public void UpdateToDigTexture()
         {
-            toDigTexture.SetPixelData(toDigRenderGrids[currentLevel.levelNumber], 0);
+            toDigTexture.SetPixelData(toDigRenderGrid, 0);
             toDigTexture.Apply(false, false);
         }
 
         void OnChange(int _, int newI)
         {
             ChangeLevel(SceneRefs.World.GetLevel(newI));
+            cameraMoved = true;
         }
 
 

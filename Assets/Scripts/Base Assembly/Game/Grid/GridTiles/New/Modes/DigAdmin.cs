@@ -72,17 +72,17 @@ public class DigAdmin : GridTilesModeNew
         drag = false;
     }
 
-    void HandleSelectionTypes(LevelGridTile tile, int index, int2 worldPos)
+    void HandleSelectionTypes(LevelGridTile tile, int gridIndex, int2 worldPos)
     {
         TileType type = tile.TType;
         switch (type)
         {
             case TileType.Wall:
-                controller.DamageClickedRock(type, index);
+                controller.DamageClickedRock(type, gridIndex);
                 break;
             case TileType.Road:
             case TileType.Empty:
-                controller.DamageClickedRock(type, index);
+                controller.DamageClickedRock(type, gridIndex);
                 break;
         }
     }
