@@ -29,15 +29,15 @@ public abstract class FullscreenWindow : InitilizablePanelRenderer
     /// <summary>Opening the window, disables shortcuts and hides info window.</summary>
     public virtual void OpenWindow()
     {
-        if (UIRefs.FullscreenConstraint())
-        {
-            IsOpen = true;
-            SceneRefs.GridTiles.DeselectObjects();
-            MainShortcuts.DisableInput();
-            InfoWindowAdapter.Window.Close();
-            Root.style.display = DisplayStyle.Flex;
-            SceneRefs.Tick.UIWindowToggle(false);
-        }
+        UIRefs.FullscreenConstraint();
+
+        IsOpen = true;
+        SceneRefs.MouseController.DeselectObjects();
+        MainShortcuts.DisableInput();
+        InfoWindowAdapter.Window.Close();
+        Root.style.display = DisplayStyle.Flex;
+        SceneRefs.Tick.UIWindowToggle(false);
+        
     }
 
     /// <summary>Closing the window, enables shortcuts.</summary>

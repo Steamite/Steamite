@@ -9,13 +9,37 @@
                 <ui:Button text="Close" tooltip="Close" name="Save-Close-Button" class="close-button"/>
                 <ui:Label text="Help" name="Load-Header" class="title"/>
             </ui:VisualElement>
-            <ui:VisualElement name="Body" style="flex-direction: column; justify-content: flex-start; max-height: 90%; flex-grow: 1; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px; font-size: 40px;">
-                <ui:Label text="Digging - g"/>
-                <ui:Label text="Build - b"/>
-                <ui:Label text="Demolish - delete"/>
-                <ui:Label text="Quests - y"/>
-                <ui:Label text="Trade - t"/>
-                <ui:Label text="Research - r"/>
+            <ui:VisualElement name="Body" style="flex-direction: column; justify-content: flex-start; max-height: 90%; flex-grow: 1; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px;">
+                <ui:TabView style="font-size: 40px;">
+                    <ui:Tab label="Week 1" name="Week2">
+                        <ui:ScrollView>
+                            <ui:VisualElement style="flex-grow: 1;">
+                                <ui:Label text="Tile toggle" name="Rocks"/>
+                                <ui:Label text="- use &quot;H&quot; to enter toggle mode&#10;- when you hover over and hold left mouse button, any tile while in toggle mode it changes tile to rock or road" style="font-size: 30px; -unity-font-style: normal; white-space: normal;"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement style="flex-grow: 1;">
+                                <ui:Label text="Human Pathing" name="Rocks"/>
+                                <ui:Label text="- click on any road&#10;- all humans will move to their origin &#10;- and those that found a way to the clicked position will move there&#10;- (creates a nice ripple effect but will be removed in the future)" style="font-size: 30px; -unity-font-style: normal; white-space: normal;"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement style="flex-grow: 1;">
+                                <ui:Label text="Rock hiding" name="Rocks"/>
+                                <ui:Label text="- you may notice that some rock tiles are black and some are not&#10;- black are the &quot;hidden&quot;, and can be revealed by nearby roads&#10;- after being revealed, there&apos;s no point to hide revealed rocks (in the planned gameplay)" style="font-size: 30px; -unity-font-style: normal; white-space: normal;"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement style="flex-grow: 1;">
+                                <ui:Label text="Building removing" name="Rocks"/>
+                                <ui:Label text="- use &quot;Delete&quot;  to enter deconstruction mode&#10;- when you click on a building it will get removed " style="font-size: 30px; -unity-font-style: normal; white-space: normal;"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement style="flex-grow: 1;">
+                                <ui:Label text="Map generation changes" name="Rocks"/>
+                                <ui:Label text="- I use perlin noise to remove some rocks in generation for easier pathfind tests" style="font-size: 30px; -unity-font-style: normal; white-space: normal;"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement style="flex-grow: 1;">
+                                <ui:Label text="Level switching" name="Rocks"/>
+                                <ui:Label text="- use the top buttons &#10;- or &quot;4&quot;, &quot;5&quot;, ...&#10;- change the active ground level&#10;- each level is now independent&#10;- next update, moving between floors" style="font-size: 30px; -unity-font-style: normal; white-space: normal;"/>
+                            </ui:VisualElement>
+                        </ui:ScrollView>
+                    </ui:Tab>
+                </ui:TabView>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

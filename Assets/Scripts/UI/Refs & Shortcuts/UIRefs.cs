@@ -1,3 +1,4 @@
+using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ public class UIRefs : MonoBehaviour, IBeforeLoad
 
     [SerializeField] SaveDialog _saveDialog;
     [SerializeReference] MonoBehaviour _loadMenu;
+    [SerializeReference] Help _help;
 
     public static CameraMovement LevelCamera => instance._levelCamera;
     public static Trading Trading => instance._trading;
@@ -50,25 +52,28 @@ public class UIRefs : MonoBehaviour, IBeforeLoad
     {
         if (ConfirmWindow.window.opened)
             ConfirmWindow.window.Close(false);
+
         else if (instance._saveDialog.opened)
             instance._saveDialog.CloseWindow();
         else if (((IGridMenu)instance._loadMenu).IsOpen())
             ((IGridMenu)instance._loadMenu).CloseWindow();
+        else if (instance._help.IsOpen)
+            instance._help.CloseWindow();
         else if (instance._researchWindow.IsOpen)
             instance._researchWindow.CloseWindow();
         else if (instance._tradingWindow.IsOpen)
             instance._tradingWindow.CloseWindow();
         else if (instance._quests.IsOpen)
             instance._quests.CloseWindow();
-        /*else if (SceneRefs.GridTiles.activeControl != (int)ControlMode.Nothing)
-            SceneRefs.GridTiles.BreakAction();*/
+        else if (SceneRefs.MouseController.activeModeIndex != (int)ControlMode.Nothing)
+            SceneRefs.MouseController.BreakAction();
         else
             return true;
 
         return false;
     }
 
-    public static bool FullscreenConstraint()
+    public static void FullscreenConstraint()
     {
         if (instance._researchWindow.IsOpen)
             instance._researchWindow.CloseWindow();
@@ -76,10 +81,8 @@ public class UIRefs : MonoBehaviour, IBeforeLoad
             instance._tradingWindow.CloseWindow();
         if (instance._quests.IsOpen)
             instance._quests.CloseWindow();
-        if (SceneRefs.GridTiles.activeControl != (int)ControlModeOld.Nothing)
-            SceneRefs.GridTiles.BreakAction();
-
-        return true;
+        if (SceneRefs.MouseController.activeModeIndex != (int)ControlMode.Nothing)
+            SceneRefs.MouseController.BreakAction();
     }
 
     public void BeforeInit()

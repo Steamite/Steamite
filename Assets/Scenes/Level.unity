@@ -2386,6 +2386,7 @@ MonoBehaviour:
   _topBar: {fileID: 220867761}
   _saveDialog: {fileID: 777753792}
   _loadMenu: {fileID: 405851069}
+  _help: {fileID: 220867758}
 --- !u!1 &1708745675
 GameObject:
   m_ObjectHideFlags: 0

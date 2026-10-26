@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 
-public class Help : PanelRendererRoot
+public class Help : FullscreenWindow
 {
     VisualElement controls;
     protected override void OnUIReload()
@@ -10,18 +10,28 @@ public class Help : PanelRendererRoot
         controls = Root.Q<VisualElement>("Controlls");
         
         
-        Root.Q<Button>("help-button").clicked += OpenHelp;
-        controls.Q<Button>("Save-Close-Button").clicked += CloseHelp;
+        Root.Q<Button>("help-button").clicked += OpenWindow;
+        controls.Q<Button>("Save-Close-Button").clicked += CloseWindow;
     }
 
-    void OpenHelp()
+    public override void OpenWindow()
     {
-        MainShortcuts.DisableInput(true);
+        UIRefs.FullscreenConstraint();
+        IsOpen = true;
+        MainShortcuts.DisableInput();
         controls.style.display = DisplayStyle.Flex;
+        SceneRefs.Tick.UIWindowToggle(false);
     }
-    void CloseHelp()
+
+    public override void CloseWindow()
     {
+        IsOpen = false;
         MainShortcuts.EnableInput();
         controls.style.display = DisplayStyle.None;
+        SceneRefs.Tick.UIWindowToggle(true);
+    }
+
+    protected override void OnDataLoadLogic()
+    {
     }
 }
