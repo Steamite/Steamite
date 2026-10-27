@@ -124,7 +124,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             MouseListen();
         }
 
-        void MouseListen()
+        public void MouseListen()
         {
             ray = Camera.main.ScreenPointToRay((Vector2)lastPos);
 

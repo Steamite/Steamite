@@ -171,9 +171,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             GridLevel gridLevel = gridLevels[level];
             //int pos = gridLevel.levelDimensionsScaled * gridPos.y + gridPos.x;
             LevelGridTile tile = gridLevel.renderGrid[gridIndex];
-            tile.durability -= ammount;
+            tile.otherData -= ammount;
             
-            if (tile.durability <= 0)
+            if (tile.otherData <= 0)
             {
                 tile = LevelGridTile.Road;
                 gridLevel.SetTile(gridIndex, tile);

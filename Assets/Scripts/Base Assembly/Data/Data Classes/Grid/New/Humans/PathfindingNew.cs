@@ -81,6 +81,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                     };
                     queue.Enqueue(newNode, node.position);
                 }
+
             }
             
             if(found == true)

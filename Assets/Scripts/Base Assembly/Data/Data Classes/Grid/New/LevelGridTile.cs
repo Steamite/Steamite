@@ -23,7 +23,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     public struct LevelGridTile
     {
         public int hiddenTypeStyleAmount;
-        public int durability;
+        public int otherData;
         public static readonly LevelGridTile OutsideWall = new LevelGridTile((int)TileType.Border, int.MaxValue);
 
         public static LevelGridTile Wall(int durability, bool hidden = true) => new LevelGridTile((hidden ? 1 : 0) | (int)TileType.Wall << 1, durability);
@@ -45,14 +45,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public readonly int Amount => (hiddenTypeStyleAmount >> 13) & 0x3FFFF; // (18) bits => x^18maxAmmount
 
         // maybe will be changed
-        public readonly int Durability => durability & 0xFFFF;
-        public readonly int OriginalDurability => (durability >> 16) & 0xFFFF;
+        public readonly int Durability => otherData & 0xFFFF;
+        public readonly int OriginalDurability => (otherData >> 16) & 0xFFFF;
 
 
         public LevelGridTile(int _hiddenStats, int _durability)
         {
             hiddenTypeStyleAmount = _hiddenStats;
-            durability = _durability;
+            otherData = _durability;
         }
 
         public override string ToString()

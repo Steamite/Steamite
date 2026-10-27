@@ -98,11 +98,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             if (index < firstRemovedSpace)
                 firstRemovedSpace = index;
             int count = buildingRenderer.RemoveBuilding(buildings[index].renderIndex);
-            int max = index + count;
+
+            int startIndex = buildings[index].renderIndex;
+            int max = startIndex + count;
 
             for (int i = 0; i < buildings.Length; i++)
             {
-                if (buildings[i]?.renderIndex >= index && buildings[i].renderIndex < max)
+                if (buildings[i]?.renderIndex >= startIndex && buildings[i].renderIndex < max)
                     buildings[i].renderIndex--;
             }
 

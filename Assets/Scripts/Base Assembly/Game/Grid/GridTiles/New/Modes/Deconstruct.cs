@@ -35,5 +35,6 @@ public class DeconstructNew : GridTilesModeNew
         if (controller.hoverObjectType < TileType.Building)
             return;
         SceneRefs.World.WorldBuildings.RemoveBuilding(controller.hoverObjectIndex);
+        controller.MouseListen();
     }
 }

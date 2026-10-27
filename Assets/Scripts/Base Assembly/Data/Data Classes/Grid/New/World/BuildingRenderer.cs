@@ -176,12 +176,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
         public int RemoveBuilding(int index)
         {
-            int batchIndex = -1;
-            for (int i = 0; i < renderBatches.Length; i++)
+            int batchIndex;
+            for (batchIndex = 0; batchIndex < renderBatches.Length; batchIndex++)
             {
-                if ((renderBatches[i].startIndex + renderBatches[i].numberOfItems) > index)
+                if ((renderBatches[batchIndex].startIndex + renderBatches[batchIndex].numberOfItems) > index)
                 {
-                    batchIndex = i;
                     break;
                 }    
             }
