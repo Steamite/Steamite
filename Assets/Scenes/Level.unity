@@ -2817,6 +2817,9 @@ MonoBehaviour:
   - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
   buildingMaterial: {fileID: 2100000, guid: dd3fed6aec66e76439d58f3a9573a37a, type: 2}
   chunks: []
+  inspectedChunk:
+    x: 5
+    y: 5
 --- !u!114 &4967022013944964022
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,7 +14,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     {
         public static int chunkDimensions = 16;
         public NativeArray<LevelGridTile> renderGrid;
-        public NativeArray<MovementAndStabilityData> movementAndStability;
+        public NativeArray<short> path;
+        //public NativeArray<MovementAndStabilityData> movementAndStability;
 
         public readonly int levelOffset;
         public readonly int levelOffsetScaled;
@@ -23,7 +24,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public readonly int levelNumber;
         [CreateProperty] public bool Unlocked;
-
+        public readonly int[] offsetTable;
         public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
         public GridLevel(LevelGridSave gridSave, int _levelNumber)
@@ -42,8 +43,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             int tileCount = levelDimensionsScaled * levelDimensionsScaled;
 
             renderGrid = gridSave.grid;
-
-            movementAndStability = new NativeArray<MovementAndStabilityData>(tileCount, Allocator.Persistent);
+            path = gridSave.path;
+            offsetTable = new int[] { 1, levelDimensionsScaled, -1, -levelDimensionsScaled};
+            //movementAndStability = new NativeArray<MovementAndStabilityData>(tileCount, Allocator.Persistent);
 
             // use a lookup array indexed by different tile Types
             // Construct node paths + stability
@@ -127,34 +129,43 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void Dispose()
         {
-            if(renderGrid.IsCreated)
+            if (renderGrid.IsCreated)
                 renderGrid.Dispose();
 
-            if (movementAndStability.IsCreated)
-                movementAndStability.Dispose();
-
-            if (movementAndStability.IsCreated)
-                movementAndStability.Dispose();
+            if (path.IsCreated)
+                path.Dispose();
         }
-
-        public void SetTile(int x, int y, int tile)
-            => SetTile(y * levelDimensionsScaled + x, tile);
-
-        public void SetTile(int index, int tile)
-            => movementAndStability[index] = new(tile);
-
-
-        public void SetTile(int x, int y, LevelGridTile tile)
-            => SetTile(y * levelDimensionsScaled + x, tile);
+        
         public void SetTileByWorldPos(int2 pos, LevelGridTile tile)
         {
             pos -= levelOffsetScaled;
             SetTile(pos.y * levelDimensionsScaled + pos.x, tile);
         }
-        public void SetTile(int index, LevelGridTile tile)
+
+        public void SetTile(int pos, LevelGridTile tile)
         {
-            renderGrid[index] = tile;
+            renderGrid[pos] = tile;
+
+            if (tile.TType == TileType.Road)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    int p = pos + offsetTable[i];
+                    path[p] = (short)(path[p] | (short)(0x1 << i));
+                }
+
+                //pathMap[pos] = pathNode & ~(pathNode (0x));
+            }
+            else
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    int p = pos + offsetTable[i];
+                    path[p] = (short)(path[p] & ~(short)(0x1 << i));
+                }
+            }
         }
+
 
         public void UIUpdate(string property = "")
         {

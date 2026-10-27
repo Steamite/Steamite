@@ -12,12 +12,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public int levelDimensions;
         public int levelOffset;
         public NativeArray<LevelGridTile> grid;
-
-        public LevelGridSave(int _levelDimensions, int _levelOffset, NativeArray<LevelGridTile> grid)
+        public NativeArray<short> path;
+        public LevelGridSave(int _levelDimensions, int _levelOffset, NativeArray<LevelGridTile> grid, NativeArray<short> path)
         {
             levelDimensions = _levelDimensions;
             levelOffset = _levelOffset;
             this.grid = grid;
+            this.path = path;
         }
     }
 

@@ -59,6 +59,7 @@ public class MapGenNew : MonoBehaviour
     
     /// <summary>Level that's being generated at the moment./summary>
     NativeArray<LevelGridTile> map;
+    NativeArray<short> pathMap;
 
     /// <summary>List of resources that are posible to spawn./summary>
     [Header("Resource data")][SerializeField] public List<MinableRes> minableResources;
@@ -146,12 +147,15 @@ public class MapGenNew : MonoBehaviour
             int scaledSize = levelDimScaled * levelDimScaled;
 
             NativeArray<LevelGridTile> grid = new(scaledSize, Allocator.Persistent);
+            NativeArray<short> path = new(scaledSize, Allocator.Persistent);
             LevelGridSave levelSave = new(
                 levelDim, 
                 levelDimensions.offsets[level], 
-                grid);
+                grid,
+                path);
 
             map = grid;
+            pathMap = path;
             await CreateGrid(levelDimScaled, scaledSize);
 
             world.gridSave[level] = levelSave;
@@ -192,6 +196,7 @@ public class MapGenNew : MonoBehaviour
     int maxPos;
 
     const int SCAN_RANGE = 2;
+    int[] offsetTable;
     /// <summary>Generates veins on a level.</summary>
     async Awaitable CreateGrid(int levelDimScaled, int size)
     {
@@ -206,6 +211,7 @@ public class MapGenNew : MonoBehaviour
 
         int revealMin = minPos - 2;
         int revealMax = maxPos + 2;
+        offsetTable = new int[] { 1, levelDimScaled, -1, -levelDimScaled};
 
         float div = (float)levelDimScaled;
         //int div =
@@ -217,15 +223,15 @@ public class MapGenNew : MonoBehaviour
             }
             else if (x > minPos && x < maxPos && y > minPos && y < maxPos)
             {
-                map[i] = LevelGridTile.Road;
+                MarkPath(i, LevelGridTile.Road);
             }
             else
             {
                 if (Mathf.PerlinNoise(x / div, y / div) < holeTreshold)
-                    map[i] = LevelGridTile.Road;
+                    MarkPath(i, LevelGridTile.Road);
                 else
-                    map[i] = LevelGridTile.Wall(10);
-                
+                    MarkPath(i, LevelGridTile.Wall(10));
+
                 //bool hidden = x > revealMin && x < revealMax && y > revealMin && y < revealMax;
             }
 
@@ -251,7 +257,30 @@ public class MapGenNew : MonoBehaviour
         await Awaitable.BackgroundThreadAsync();
     }
 
+    void MarkPath(int pos, LevelGridTile tile)
+    {
+        map[pos] = tile;
 
+        short pathNode = pathMap[pos];
+        if (tile.TType == TileType.Road)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                int p = pos + offsetTable[i];
+                pathMap[p] = (short)(pathMap[p] | (short)(0x1 << i));
+            }
+
+            //pathMap[pos] = pathNode & ~(pathNode (0x));
+        }
+        else
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                int p = pos + offsetTable[i];
+                pathMap[p] = (short)(pathMap[p] & ~(short)(0x1 << i));
+            }
+        }
+    }
 
 
     /// <summary>
@@ -334,15 +363,16 @@ public class MapGenNew : MonoBehaviour
                     int pos = y * levelDimScaled + x;/*
                     if (CanPlace(pos, x, y))
                     {*/
-                        map[pos] = LevelGridTile.Wall(
-                            (minable.resource.id & 0x1F) << 5,  
-                            minable.richness[level].Value(veinRichness),
-                            1);
-                        numberOfTiles--;
-                        if (numberOfTiles <= 0)
-                            return true;
-                        rockChance -= Random.Range(minToRemove, maxToRemove);
-                        continue;
+                    MarkPath(pos, LevelGridTile.Wall(
+                        (minable.resource.id & 0x1F) << 5,
+                        minable.richness[level].Value(veinRichness),
+                        1));
+                    //map[pos] = ;
+                    numberOfTiles--;
+                    if (numberOfTiles <= 0)
+                        return true;
+                    rockChance -= Random.Range(minToRemove, maxToRemove);
+                    continue;
                     //}
                 }
             }
@@ -368,7 +398,7 @@ public class MapGenNew : MonoBehaviour
     }
     bool InBounds(int x, int y)
     {
-        return (x > 1 && x < levelDimScaled && y > 1 && y < levelDimScaled);
+        return (x > 1 && x < levelDimScaled-1 && y > 1 && y < levelDimScaled-1);
     }
 
     /*

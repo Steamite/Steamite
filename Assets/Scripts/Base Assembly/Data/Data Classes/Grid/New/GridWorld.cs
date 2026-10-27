@@ -37,17 +37,55 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         Action<int, int> onLevelChange;
         public List<Chunk> chunks;
 
+        [SerializeField] int2 inspectedChunk;
+
+        Vector3[] offset = new Vector3[] { new(-0.5f,0,0), new(0,0, -0.5f), new(0.5f, 0, 0), new(0, 0, 0.5f) };
 
         private void OnDrawGizmos()
         {
+            int dim = GridLevel.chunkDimensions;
+
             for (int i = 0; i < LargestLevelDimensions; i++)
             {
                 for (int j = 0; j < LargestLevelDimensions; j++)
                 {
-                    Vector3 vec = new(i * GridLevel.chunkDimensions, 0, j * GridLevel.chunkDimensions);
-                    Vector3 secVec = vec + new Vector3(0,60,0);
+                    Vector3 vec = new(i * dim, 0, j * dim);
+                    Vector3 secVec = vec + new Vector3(0, 60, 0);
                     Gizmos.DrawLine(vec, secVec);
                 }
+            }
+
+
+            if (currentLevel == null || inspectedChunk.x == 0 || inspectedChunk.y == 0)
+                return;
+
+            Vector3 startPosition = new(currentLevel.levelOffsetScaled + 0.5f, 1, currentLevel.levelOffsetScaled + 0.5f);
+
+            int index = 0;
+            for (int y = 0; y < currentLevel.levelDimensionsScaled; y++)
+            {
+                for (int x = 0; x < currentLevel.levelDimensionsScaled; x++)
+                {
+                    int a = currentLevel.path[index];
+                    if (index == SceneRefs.MouseController.hoverObjectIndex)
+                    {
+                        Debug.Log($"{x}, {y}");
+                    }
+                    for (int i = 0; i < 4; i++)
+                    {
+
+                        if ((a & 0x1) == 1)
+                            Gizmos.color = Color.white;
+                        else
+                            Gizmos.color = Color.black;
+                        Gizmos.DrawLine(startPosition, startPosition + offset[i]);
+                        a >>= 0x1;
+                    }
+                    index++;
+                    startPosition.x++;
+                }
+                startPosition.x = currentLevel.levelOffsetScaled + 0.5f;
+                startPosition.z++;
             }
         }
         public void LoadGrid(WorldSaveNew saveToLoad)
