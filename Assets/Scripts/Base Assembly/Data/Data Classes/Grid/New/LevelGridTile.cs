@@ -26,7 +26,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public int hiddenTypeStyleAmount;
         public int otherData;
         public static readonly LevelGridTile OutsideWall = new LevelGridTile((int)TileType.Border, int.MaxValue);
-        public static readonly LevelGridTile PassableRoad = new LevelGridTile((int)TileType.PassableBuilding, 0);
 
         public static LevelGridTile Wall(int durability, bool hidden = true) => new LevelGridTile((hidden ? 1 : 0) | (int)TileType.Wall << 1, durability);
         
@@ -75,7 +74,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public static LevelGridTile Elevator(int index)
         {
             LevelGridTile tile = new(
-                0 | (((int)TileType.Building & 0xF) << 1) | ((index & 0x3FFFF) << 13), 
+                0 | (((int)TileType.Elevator & 0xF) << 1) | ((index & 0x3FFFF) << 13), 
+                0);
+            return tile;
+        }
+
+        public static LevelGridTile PassableRoad(int index)
+        {
+            LevelGridTile tile = new(
+                0 | (((int)TileType.PassableBuilding & 0xF) << 1) | ((index & 0x3FFFF) << 13),
                 0);
             return tile;
         }

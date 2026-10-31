@@ -39,7 +39,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _CellSize: 1
-    - _HoverIndex: -1
+    - _HoverIndex: 11
     - _LevelOffset: 0
     - _QueueControl: 0
     - _QueueOffset: 0

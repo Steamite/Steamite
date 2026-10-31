@@ -149,6 +149,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                     {
                         case GridItemType.Road:
                         case GridItemType.PassableRoad:
+                        case GridItemType.Elevator:
 
                             level.SetTileByWorldPos(
                                 worldTemp,
@@ -250,11 +251,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                                 worldTemp,
                                 LevelGridTile.Building(arrayIndex));
                             break;
-                        /*case GridItemType.PassableRoad:
+                        case GridItemType.PassableRoad:
                             level.SetTileByWorldPos(
                                 worldTemp,
-                                LevelGridTile.PassableRoad);
-                            break;*/
+                                LevelGridTile.PassableRoad(arrayIndex));
+                            break;
+                        case GridItemType.Elevator:
+                            level.SetTileByWorldPos(
+                                worldTemp,
+                                LevelGridTile.Elevator(arrayIndex));
+                            break;
                         case GridItemType.Entrance:
                             // mark in texture
                             level.SetEntrance(worldTemp, levelRenderer, true);

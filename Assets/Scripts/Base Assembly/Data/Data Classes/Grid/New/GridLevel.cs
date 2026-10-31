@@ -14,6 +14,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     {
         public static int chunkDimensions = 16;
         public NativeArray<LevelGridTile> renderGrid;
+        /// <summary>
+        /// 0 - Left <br/>
+        /// 1 - Backwards <br/>
+        /// 2 - Right <br/>
+        /// 3 - Forward <br/>
+        /// 4 - Down <br/>
+        /// 5 - Up <br/>
+        /// </summary>
         public NativeArray<short> path;
         //public NativeArray<MovementAndStabilityData> movementAndStability;
 
@@ -145,7 +153,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void SetTile(int pos, LevelGridTile tile)
         {
-            if (tile.TType == TileType.Road || tile.TType == TileType.PassableBuilding)
+            TileType newTileType = tile.TType;
+            TileType prevTileType = renderGrid[pos].TType;
+
+            if (newTileType == TileType.Road || newTileType == TileType.PassableBuilding || newTileType == TileType.Elevator)
             {
                 for (int i = 0; i < 4; i++)
                 {
@@ -156,23 +167,70 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 }
 
                 // was building
-                if (renderGrid[pos].TType == TileType.Building)
+                if (prevTileType == TileType.Building)
                 {
                     short newPath = 0;
                     for (int i = 0; i < 4; i++)
                     {
                         int p = pos + offsetPathTableSelf[i];
 
-                        bool canEnter = 
-                            renderGrid[p].TType == TileType.Road 
-                            || 
-                            (renderGrid[p].TType == TileType.Building && renderGrid[p].Amount == renderGrid[pos].Amount);
+                        bool canEnter =
+                            renderGrid[p].TType == TileType.Road
+                            ||
+                            (renderGrid[p].TType > TileType.Building && renderGrid[p].Amount == renderGrid[pos].Amount);
 
-                        newPath = (short)(newPath | (canEnter ? (0x1 << i) : 0 ));
+                        newPath = (short)(newPath | (canEnter ? (0x1 << i) : 0));
                     }
                     path[pos] = newPath;
                 }
-                // check buildings or save the entrance in all data
+                else if (prevTileType == TileType.Elevator)
+                {
+                    if (levelNumber > 0)
+                    {
+                        var level = SceneRefs.World.gridLevels[levelNumber - 1];
+                        int p = level.LocalIndexFromWorldPos(WorldPosFromLocalIndex(pos));
+                        if (level.renderGrid[p].TType == TileType.Elevator)
+                        {
+                            path[pos] = (short)(path[pos] & ~(1 << 4));
+                            level.path[p] = (short)(level.path[p] & ~(1 << 5));
+                        }
+                    }
+                    if (levelNumber < SceneRefs.World.LEVEL_COUNT - 1)
+                    {
+                        var level = SceneRefs.World.gridLevels[levelNumber + 1];
+                        int p = level.LocalIndexFromWorldPos(WorldPosFromLocalIndex(pos));
+                        if (level.renderGrid[p].TType == TileType.Elevator)
+                        {
+                            path[pos] = (short)(path[pos] & ~(1 << 5));
+                            level.path[p] = (short)(level.path[p] & ~(1 << 4));
+                        }
+                    }
+                }
+
+                if (newTileType == TileType.Elevator)
+                {
+                    if(levelNumber > 0)
+                    {
+                        var level = SceneRefs.World.gridLevels[levelNumber - 1];
+                        int p = level.LocalIndexFromWorldPos(WorldPosFromLocalIndex(pos));
+                        if (level.renderGrid[p].TType == TileType.Elevator)
+                        {
+                            path[pos] = (short)(path[pos] | (1 << 4));
+                            level.path[p] = (short)(level.path[p] | (1 << 5));
+                        }
+                    }
+                    if(levelNumber < SceneRefs.World.LEVEL_COUNT-1)
+                    {
+                        var level = SceneRefs.World.gridLevels[levelNumber + 1];
+                        
+                        int p = level.LocalIndexFromWorldPos(WorldPosFromLocalIndex(pos));
+                        if (level.renderGrid[p].TType == TileType.Elevator)
+                        {
+                            path[pos] = (short)(path[pos] | (1 << 5));
+                            level.path[p] = (short)(level.path[p] | (1 << 4));
+                        }
+                    }
+                }
             }
             else
             {
@@ -206,12 +264,21 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             return original;
         }
 
+        public int2 WorldPosFromLocalIndex(int localIndex)
+        {
+            int x = localIndex % levelDimensionsScaled + levelOffsetScaled;
+            int y = localIndex / levelDimensionsScaled + levelOffsetScaled;
+
+            return new(x, y);
+        }
+
         public int LocalIndexFromWorldPos(int2 world)
         {
             world -= levelOffsetScaled;
 
             return world.y * levelDimensionsScaled + world.x;
         }
+
 
         public void SetEntrance(int2 world, LevelRenderer levelRenderer, bool add)
         {

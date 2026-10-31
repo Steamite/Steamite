@@ -24,6 +24,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             0.2f, 
             0, 
             0, 
+            0,
+            0, 
+            0, 
             0 
         };
 
@@ -35,7 +38,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             new(1, 1),
 
             new(1, 1),
-            new(0, 0),            
+            new(0, 0),
+            new(0.6f, 0.1f),
+            new(0.6f, 0.1f),
+            new(0.6f, 0.1f),
+            new(0.6f, 0.1f),
+            new(0.6f, 0.1f),  
             new(0.6f, 0.1f),
             new(0.6f, 0.1f),
         };

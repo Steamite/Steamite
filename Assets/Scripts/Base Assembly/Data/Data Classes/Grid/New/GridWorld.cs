@@ -39,7 +39,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         [SerializeField] int2 inspectedChunk;
 
-        Vector3[] offset = new Vector3[] { new(-0.5f,0,0), new(0,0, -0.5f), new(0.5f, 0, 0), new(0, 0, 0.5f) };
+        readonly Vector3[] offset = new Vector3[] { new(-0.5f,0,0), new(0,0, -0.5f), new(0.5f, 0, 0), new(0, 0, 0.5f) };
+        readonly Vector3[] verticalOffset = new Vector3[] { new(0, -0.5f,0), new(0, 0.5f, 0) };
 
         private void OnDrawGizmos()
         {
@@ -67,18 +68,23 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 for (int x = 0; x < currentLevel.levelDimensionsScaled; x++)
                 {
                     int a = currentLevel.path[index];
-                    if (index == SceneRefs.MouseController.hoverObjectIndex)
-                    {
-                        Debug.Log($"{x}, {y}");
-                    }
                     for (int i = 0; i < 4; i++)
                     {
-
                         if ((a & 0x1) == 1)
                             Gizmos.color = Color.white;
                         else
                             Gizmos.color = Color.black;
                         Gizmos.DrawLine(startPosition, startPosition + offset[i]);
+                        a >>= 0x1;
+                    }
+
+                    for (int i = 0; i < 2; i++)
+                    {
+                        if ((a & 0x1) == 1)
+                        {
+                            Gizmos.color = Color.white;
+                            Gizmos.DrawLine(startPosition, startPosition + verticalOffset[i]);
+                        }
                         a >>= 0x1;
                     }
                     index++;

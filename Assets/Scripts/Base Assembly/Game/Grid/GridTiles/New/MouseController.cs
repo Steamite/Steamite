@@ -132,6 +132,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
                 return;
 
             activeMode.MouseTrack(distance, lowHeight, low, ray);
+            Debug.Log($"{hoverWorldPosition}");
         }
 
 

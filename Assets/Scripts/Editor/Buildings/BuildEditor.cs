@@ -228,6 +228,12 @@ class BuildEditor : EditorWindow
             case GridItemType.Entrance:
                 c = Color.white;
                 break;
+            case GridItemType.PassableRoad:
+                c = Color.green;
+                break;
+            case GridItemType.Elevator:
+                c = Color.red;
+                break;
             case GridItemType.Pipe:
                 c = Color.darkOrange;
                 break;

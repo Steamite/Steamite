@@ -15,6 +15,7 @@ public enum GridItemType
     Entrance,
     /// <summary>Pipe itself</summary>
     PassableRoad,
+    Elevator,
     Pipe,
     /// <summary>must be on a water tile</summary>
     WaterSource,
