@@ -24,7 +24,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public readonly int sizeScaled;
         public readonly int levelNumber;
         [CreateProperty] public bool Unlocked;
-        public readonly int[] offsetTable;
+        public readonly int[] offsetPathTableNeighbour;
+        public readonly int[] offsetPathTableSelf;
         public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
         public GridLevel(LevelGridSave gridSave, int _levelNumber)
@@ -44,7 +45,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             renderGrid = gridSave.grid;
             path = gridSave.path;
-            offsetTable = new int[] { 1, levelDimensionsScaled, -1, -levelDimensionsScaled};
+            offsetPathTableNeighbour = new int[] { 1, levelDimensionsScaled, -1, -levelDimensionsScaled};
+            offsetPathTableSelf = new int[] { -1, -levelDimensionsScaled, 1, levelDimensionsScaled};
             //movementAndStability = new NativeArray<MovementAndStabilityData>(tileCount, Allocator.Persistent);
 
             // use a lookup array indexed by different tile Types
@@ -147,7 +149,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    int p = pos + offsetTable[i];
+                    int p = pos + offsetPathTableNeighbour[i];
+                    if (renderGrid[p].TType == TileType.Building)
+                        continue;
                     path[p] = (short)(path[p] | (short)(0x1 << i));
                 }
 
@@ -157,14 +161,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     short newPath = 0;
                     for (int i = 0; i < 4; i++)
                     {
-                        int p = pos + offsetTable[i];
+                        int p = pos + offsetPathTableSelf[i];
 
                         bool canEnter = 
                             renderGrid[p].TType == TileType.Road 
                             || 
                             (renderGrid[p].TType == TileType.Building && renderGrid[p].Amount == renderGrid[pos].Amount);
 
-                        newPath = (short)((newPath << 1) | (canEnter ? 1 : 0 ));
+                        newPath = (short)(newPath | (canEnter ? (0x1 << i) : 0 ));
                     }
                     path[pos] = newPath;
                 }
@@ -179,7 +183,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
                 for (int i = 0; i < 4; i++)
                 {
-                    int p = pos + offsetTable[i];
+                    int p = pos + offsetPathTableNeighbour[i];
                     path[p] = (short)(path[p] & ~(short)(0x1 << i));
                 }
             }
