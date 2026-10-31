@@ -9,7 +9,6 @@ struct PackedBuilding
 // Declare the buffer set via MaterialPropertyBlock
 //#if defined(UNITY_SUPPORT_INSTANCING)
 StructuredBuffer<PackedBuilding> _BuildingInstanceBuffer;
-StructuredBuffer<float2> _BatchGroupBuffer;
 int _Offset;
 int _GroupIndex;
 int _SelectedLevel;
@@ -73,7 +72,7 @@ float3 TransformInstanceVertex2Bit(
     rotatedPos.x = localVertexPosition.x * c - localVertexPosition.z * s;
     rotatedPos.y = localVertexPosition.x * s + localVertexPosition.z * c;
     
-    float2 off = offsetTable[rot2] * _BatchGroupBuffer[_GroupIndex];
+    float2 off = offsetTable[rot2];
     
     float3 rotatedVertex;
     rotatedVertex.x = rotatedPos.x + off.x;

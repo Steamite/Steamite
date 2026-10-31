@@ -24,6 +24,7 @@ MonoBehaviour:
     Objects:
     - rid: 8808251703612669983
     - rid: 8808251703612669985
+    - rid: 3815251082451353677
     Icon: {fileID: 7388822144124034973, guid: 2f572a3f287d5c94c90b9dfcfd293077, type: 3}
   - id: 3
     Name: Population
@@ -131,6 +132,45 @@ MonoBehaviour:
           anchorIndex: 0
           mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
           itemArray: 
+    - rid: 3815251082451353677
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: ateatea
+        description: 
+        id: 37179
+        building:
+          renderData:
+            position: 0
+            blueprintSize: 0
+            meshIndex: 0
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 0
+          wrapperIndex: 0
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 0}
+        blueprint:
+          size:
+            x: 1
+            y: 2
+          renderSize:
+            x: 1
+            y: 1
+          anchorIndex: 1
+          mesh: {fileID: 4493585093827132993, guid: 831baef4def44414b9acbdf0ad30d414, type: 3}
+          itemArray: 0300000001000000i
     - rid: 5286523460443963457
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
@@ -396,14 +436,14 @@ MonoBehaviour:
         preview: {fileID: 21300000, guid: e2dedb0ab53d02a4a8b0e2eb23c72ddb, type: 3}
         blueprint:
           size:
-            x: 2
-            y: 3
+            x: 4
+            y: 4
           renderSize:
-            x: 1
-            y: 1
-          anchorIndex: 2
-          mesh: {fileID: 4711208715938537054, guid: 3b724b687592c5242bcb72117d8faa08, type: 3}
-          itemArray: 030000000300000001000000020000000200000002000000i
+            x: 2
+            y: 2
+          anchorIndex: 3
+          mesh: {fileID: -5495902117074765545, guid: a3898a4f608529b478397523984d6d44, type: 3}
+          itemArray: 030000000300000003000000010000000200000002000000020000000200000002000000020000000200000002000000i
     - rid: 8808251703612669985
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
@@ -462,14 +502,14 @@ MonoBehaviour:
         preview: {fileID: 21300000, guid: 6141d9965f66f6a4097dac7efb27eaa4, type: 3}
         blueprint:
           size:
-            x: 1
-            y: 2
+            x: 2
+            y: 3
           renderSize:
             x: 1
             y: 1
-          anchorIndex: 1
-          mesh: {fileID: 4493585093827132993, guid: 831baef4def44414b9acbdf0ad30d414, type: 3}
-          itemArray: 0300000001000000i
+          anchorIndex: 2
+          mesh: {fileID: 4711208715938537054, guid: 3b724b687592c5242bcb72117d8faa08, type: 3}
+          itemArray: 030000000300000001000000020000000200000002000000i
     - rid: 8808251703612669986
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:

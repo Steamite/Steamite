@@ -16,7 +16,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
     public struct BuildingGroupData
     {
         public Mesh mesh;
-        public float2 meshSizeHalved;
+        //public float2 meshSizeHalved;
         public uint count;
     }
 
@@ -55,8 +55,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         /// RenderData
         /// </summary>
         NativeArray<uint> instanceData;
-        NativeArray<float2> batchGroupData;
-        GraphicsBuffer batchGroupBuffer;
+        /*GraphicsBuffer batchGroupBuffer;*/
 
 
         public BuildingRenderer(Material buildingMaterial)
@@ -91,10 +90,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         {
             renderBatches = new RenderBatch[meshes.Length];
             
-            batchGroupData = new NativeArray<float2>(meshes.Length, Allocator.Persistent, NativeArrayOptions.ClearMemory);
-            batchGroupBuffer = new(GraphicsBuffer.Target.Structured,
+          
+            /*batchGroupBuffer = new(GraphicsBuffer.Target.Structured,
                 meshes.Length,
-                8);
+                8);*/
 
             int offset = 1;
             for (int i = 0; i < meshes.Length; i++)
@@ -103,14 +102,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 renderBatches[i].size = (int)math.max(meshes[i].count * 2, INCREASE_AMMOUNT);
                 renderBatches[i].startIndex = offset;
 
-                batchGroupData[i] = new(meshes[i].meshSizeHalved.x, meshes[i].meshSizeHalved.y);
 
 
                 offset += renderBatches[i].size;
             }
-
+/*
             batchGroupBuffer.SetData(batchGroupData);
-            propertyBlock.SetBuffer("_BatchGroupBuffer", batchGroupBuffer);
+            propertyBlock.SetBuffer("_BatchGroupBuffer", batchGroupBuffer);*/
             
             totalCapacity = offset;
         }
@@ -211,17 +209,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         {
             if (instanceBuffer != null && instanceBuffer.IsValid())
                 instanceBuffer.Dispose();
-            if (batchGroupBuffer != null && batchGroupBuffer.IsValid())
-                batchGroupBuffer.Dispose();
+            /*if (batchGroupBuffer != null && batchGroupBuffer.IsValid())
+                batchGroupBuffer.Dispose();*/
 
             if (argBuffer != null && argBuffer.IsValid())
                 argBuffer.Dispose();
 
             if (instanceData != null && instanceData.IsCreated)
                 instanceData.Dispose();
-
+/*
             if (batchGroupData != null && batchGroupData.IsCreated)
-                batchGroupData.Dispose();
+                batchGroupData.Dispose();*/
         }
 
 

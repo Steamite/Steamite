@@ -43,7 +43,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             for (int i = 0; i < buildingGroups.Length; i++)
             {
                 buildingGroups[i].mesh = wrappers[i].blueprint.mesh;
-                buildingGroups[i].meshSizeHalved = wrappers[i].blueprint.renderSize;
+                //buildingGroups[i].meshSizeHalved = wrappers[i].blueprint.renderSize;
             }
 
             BuildingRenderData[] instanceData = new BuildingRenderData[lastIndex];
@@ -181,12 +181,32 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             size.y -= 1;
             uint rot = (buildingPos >> 23) & 0x3;
 
+
+
+            /*int index = 0;
+
+            for (int i = 0; i < size.y; i++)
+            {
+                for (int j = 0; j < size.x; j++)
+                {
+                    int2 rotPos = new(
+                        j * cosTable[rot] - i * sinTable[rot],
+                        j * sinTable[rot] + i * cosTable[rot]);
+
+                    world += worldPos;
+                    index++;
+                }
+            }*/
+            int2 world = worldPos;
+
+
+
             int x = size.x * cosTable[rot] - size.y * sinTable[rot];
             int y = size.x * sinTable[rot] + size.y * cosTable[rot];
             size.x = x;
             size.y = y;
 
-            int2 world = worldPos;
+
 
 
             if (size.x < 0)
@@ -205,6 +225,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             {
                 for (int i = 0; i < size.x; i++)
                 {
+                    //wrapper.blueprint.size
                     SceneRefs.World.CurrentLevel.SetTileByWorldPos(
                         world, 
                         LevelGridTile.Building(arrayIndex));

@@ -18,8 +18,6 @@ class BuildEditor : EditorWindow
     GridItemType[] gridItemTypes;
     /// <summary>Can only be saved if there are any changes.</summary>
     bool canSave;
-    /// <summary>Each building can only have ONE anchor.</summary>
-    bool hasAnchor;
 
     int2 size;
 
@@ -55,7 +53,6 @@ class BuildEditor : EditorWindow
         {
             meshField.Unbind();
             sizeField.Unbind();
-            hasAnchor = false;
             size = new();
             return;
         }
@@ -79,12 +76,9 @@ class BuildEditor : EditorWindow
         int length = itemArray.arraySize;
         gridItemTypes = new GridItemType[length];
 
-        hasAnchor = false;
         for (int i = 0; i < length; i++)
         {
             gridItemTypes[i] = (GridItemType)itemArray.GetArrayElementAtIndex(i).enumValueIndex;
-            if (gridItemTypes[i] == GridItemType.Anchor)
-                SetAnchor(i, false);
         }
     }
 
@@ -145,8 +139,6 @@ class BuildEditor : EditorWindow
         for (int i = 0; i < newSize; i++)
         {
             gridItemTypes[i] = (GridItemType)itemArray.GetArrayElementAtIndex(i).enumValueIndex;
-            if (gridItemTypes[i] == GridItemType.Anchor)
-                SetAnchor(i);
         }
         
 
@@ -196,45 +188,11 @@ class BuildEditor : EditorWindow
         {
             if ((int)gridItemTypes[i] == maxItem)
                 gridItemTypes[i] = 0;
-            else
-            {
-                if (gridItemTypes[i] == GridItemType.Anchor)
-                {
-                    hasAnchor = false;
-                }
-
-                gridItemTypes[i] += 1;
-
-                if (gridItemTypes[i] == GridItemType.Anchor)
-                {
-                    if (hasAnchor)
-                        gridItemTypes[i] = GridItemType.Anchor + 1;
-                    else
-                        SetAnchor(i);
-                }
-            }
         }
         else if(ev.button == 1) 
         {
             if (gridItemTypes[i] == 0)
                 gridItemTypes[i] = (GridItemType)maxItem;
-            else
-            {
-                if (gridItemTypes[i] == GridItemType.Anchor)
-                {
-                    hasAnchor = false;
-                }
-
-                gridItemTypes[i] -= 1;
-
-                if (gridItemTypes[i] == GridItemType.Anchor)
-                {
-                    if (hasAnchor)
-                        gridItemTypes[i] = 0;
-                    else
-                        SetAnchor(i);
-                }
-            }
         }
 
         label.style.backgroundColor = ChangeColor(gridItemTypes[i]);
@@ -244,30 +202,6 @@ class BuildEditor : EditorWindow
         en.enumValueIndex = (int)gridItemTypes[i];
 
         blueprint.serializedObject.ApplyModifiedProperties();
-    }
-
-    void SetAnchor(int i, bool updateBlueprint = true)
-    {
-        if (updateBlueprint)
-        {
-            blueprint.FindPropertyRelative(nameof(BuildingGrid.anchorIndex)).intValue = i;
-
-            int y = size.y;
-            if (gridItemTypes[0] == GridItemType.Entrance)
-                y -= 1;
-            if (y == 1)
-                y = 2;
-
-            int x = size.x;
-            if (x == 1)
-                x = 2;
-
-
-            blueprint.FindPropertyRelative(nameof(BuildingGrid.renderSize)).boxedValue = new float2(x / 2f, y / 2f);
-
-            blueprint.serializedObject.ApplyModifiedProperties();
-        }
-        hasAnchor = true;
     }
 
     #region Buttons
@@ -282,9 +216,6 @@ class BuildEditor : EditorWindow
         {
             case GridItemType.None:
                 c = Color.black;
-                break;
-            case GridItemType.Anchor:
-                c = Color.green;
                 break;
             case GridItemType.Road:
                 c = Color.yellow;
