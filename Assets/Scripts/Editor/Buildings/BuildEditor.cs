@@ -188,11 +188,16 @@ class BuildEditor : EditorWindow
         {
             if ((int)gridItemTypes[i] == maxItem)
                 gridItemTypes[i] = 0;
+            else
+                gridItemTypes[i]++;
+
         }
         else if(ev.button == 1) 
         {
             if (gridItemTypes[i] == 0)
                 gridItemTypes[i] = (GridItemType)maxItem;
+            else
+                gridItemTypes[i]--;
         }
 
         label.style.backgroundColor = ChangeColor(gridItemTypes[i]);

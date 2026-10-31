@@ -9,8 +9,6 @@ public enum GridItemType
 {
     /// <summary>doesn't matter</summary>
     None,
-    /// <summary>only one for each blueprint, where the cursor is when moving</summary>
-    Anchor,
     /// <summary>must be on a road tile</summary>
     Road,
     /// <summary>atleast one of them must be on a road tile</summary>
