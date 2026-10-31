@@ -115,7 +115,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
 
             renderer = GetComponent<LevelRenderer>();
-            renderer.AddRenderer(WorldBuildings.SetupRenderer(buildingMaterial));
+            renderer.AddRenderer(WorldBuildings.SetupRenderer(buildingMaterial, renderer));
             renderer.Init(LEVEL_COUNT, gridLevels, LargestLevelDimensions * saveToLoad.chunkDimensions);
 
             SetLevel(0);
@@ -126,14 +126,18 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             return gridLevels[level].renderGrid[gridLevels[level].levelDimensionsScaled * y + x];
         }
 
-
-        public LevelGridTile GetActiveTile(int x, int y)
+        public LevelGridTile GetActiveTile(int2 worldPosition)
         {
-            x -= currentLevel.levelOffsetScaled;
-            y -= currentLevel.levelOffsetScaled;
+            return GetActiveTile(worldPosition.x, worldPosition.y);
+        }
+
+        public LevelGridTile GetActiveTile(int worldX, int worldY)
+        {
+            worldX -= currentLevel.levelOffsetScaled;
+            worldY -= currentLevel.levelOffsetScaled;
             //Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
             
-            int index = currentLevel.levelDimensionsScaled * y + x;
+            int index = currentLevel.levelDimensionsScaled * worldY + worldX;
             if (index < 0 || index >= currentLevel.renderGrid.Length)
                 return LevelGridTile.OutsideWall;
             return currentLevel.renderGrid[index];

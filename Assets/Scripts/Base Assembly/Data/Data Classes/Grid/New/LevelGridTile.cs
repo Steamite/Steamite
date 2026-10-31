@@ -14,6 +14,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         Vein,
         Water,
         Building,
+        PassableBuilding,
         Elevator
     }
 
@@ -25,6 +26,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public int hiddenTypeStyleAmount;
         public int otherData;
         public static readonly LevelGridTile OutsideWall = new LevelGridTile((int)TileType.Border, int.MaxValue);
+        public static readonly LevelGridTile PassableRoad = new LevelGridTile((int)TileType.PassableBuilding, 0);
 
         public static LevelGridTile Wall(int durability, bool hidden = true) => new LevelGridTile((hidden ? 1 : 0) | (int)TileType.Wall << 1, durability);
         
@@ -78,9 +80,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             return tile;
         }
 
-        public static LevelGridTile Building(int v)
+        public static LevelGridTile Building(int index)
         {
-            LevelGridTile tile = new((((int)TileType.Building & 0xF) << 1) | (v & 0x3FFFF) << 13, 0);
+            LevelGridTile tile = new((((int)TileType.Building & 0xF) << 1) | (index & 0x3FFFF) << 13, 0);
             return tile;
         }
     }

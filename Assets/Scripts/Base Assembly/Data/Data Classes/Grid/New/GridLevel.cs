@@ -21,7 +21,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public readonly int levelOffsetScaled;
         public readonly int levelDimensions;
         public readonly int levelDimensionsScaled;
-
+        public readonly int sizeScaled;
         public readonly int levelNumber;
         [CreateProperty] public bool Unlocked;
         public readonly int[] offsetTable;
@@ -40,7 +40,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             levelOffset = gridSave.levelOffset;
             levelOffsetScaled = levelOffset * chunkDimensions;
 
-            int tileCount = levelDimensionsScaled * levelDimensionsScaled;
+            sizeScaled = levelDimensionsScaled * levelDimensionsScaled;
 
             renderGrid = gridSave.grid;
             path = gridSave.path;
@@ -50,7 +50,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             // use a lookup array indexed by different tile Types
             // Construct node paths + stability
 
-            for (int i = 0; i < tileCount; i++)
+            for (int i = 0; i < sizeScaled; i++)
             {
 
                 if (renderGrid[i].TType == TileType.Road)
@@ -136,17 +136,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 path.Dispose();
         }
         
-        public void SetTileByWorldPos(int2 pos, LevelGridTile tile)
-        {
-            pos -= levelOffsetScaled;
-            SetTile(pos.y * levelDimensionsScaled + pos.x, tile);
-        }
+        public void SetTileByWorldPos(int2 worldPosition, LevelGridTile tile) 
+            => SetTile(LocalIndexFromWorldPos(worldPosition), tile);
+
+        public LevelGridTile GetTile(int pos) => renderGrid[pos];
 
         public void SetTile(int pos, LevelGridTile tile)
         {
-            renderGrid[pos] = tile;
-
-            if (tile.TType == TileType.Road)
+            if (tile.TType == TileType.Road || tile.TType == TileType.PassableBuilding)
             {
                 for (int i = 0; i < 4; i++)
                 {
@@ -154,16 +151,39 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     path[p] = (short)(path[p] | (short)(0x1 << i));
                 }
 
-                //pathMap[pos] = pathNode & ~(pathNode (0x));
+                // was building
+                if (renderGrid[pos].TType == TileType.Building)
+                {
+                    short newPath = 0;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        int p = pos + offsetTable[i];
+
+                        bool canEnter = 
+                            renderGrid[p].TType == TileType.Road 
+                            || 
+                            (renderGrid[p].TType == TileType.Building && renderGrid[p].Amount == renderGrid[pos].Amount);
+
+                        newPath = (short)((newPath << 1) | (canEnter ? 1 : 0 ));
+                    }
+                    path[pos] = newPath;
+                }
+                // check buildings or save the entrance in all data
             }
             else
             {
+                if(tile.TType == TileType.Building)
+                {
+                    path[pos] = 0;
+                }
+
                 for (int i = 0; i < 4; i++)
                 {
                     int p = pos + offsetTable[i];
                     path[p] = (short)(path[p] & ~(short)(0x1 << i));
                 }
             }
+            renderGrid[pos] = tile;
         }
 
 
@@ -172,15 +192,52 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             propertyChanged?.Invoke(this, new(property));
         }
 
-        public int GetWorldIndex(int gridIndex)
+        public int WorldIndexFromLocalIndex(int gridIndex)
         {
             int x = gridIndex % levelDimensionsScaled + levelOffsetScaled;
             int y = gridIndex / levelDimensionsScaled + levelOffsetScaled;
 
 
-            //int test =  gridIndex + (levelOffsetScaled * (levelDimensionsScaled + (2 * levelOffsetScaled)));
             int original = x + y * (levelDimensionsScaled + (2 * levelOffsetScaled));
             return original;
+        }
+
+        public int LocalIndexFromWorldPos(int2 world)
+        {
+            world -= levelOffsetScaled;
+
+            return world.y * levelDimensionsScaled + world.x;
+        }
+
+        public void SetEntrance(int2 world, LevelRenderer levelRenderer, bool add)
+        {
+            int localIndex = LocalIndexFromWorldPos(world);
+            var gridTile = renderGrid[localIndex];
+
+            int entranceCount = gridTile.otherData & 0x3;
+            if (!add)
+            {
+                entranceCount--;
+                gridTile.otherData--;
+                renderGrid[localIndex] = gridTile;
+            }
+
+            if (gridTile.TType == TileType.Road)
+            {
+                if (entranceCount == 0) 
+                { 
+                    int worldIndex = SceneRefs.World.GetWorldIndex(world);
+                    levelRenderer.levelOverlayGrid[worldIndex] = 
+                        levelRenderer.levelOverlayGrid[worldIndex].G((byte)(add ? 255 : 0));
+                    Debug.Log($"Place Entrance on {world}");
+                }
+            }
+
+            if (add)
+            {
+                gridTile.otherData++;
+                renderGrid[localIndex] = gridTile;
+            }
         }
     }
 }

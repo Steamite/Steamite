@@ -14,6 +14,7 @@ public enum GridItemType
     /// <summary>atleast one of them must be on a road tile</summary>
     Entrance,
     /// <summary>Pipe itself</summary>
+    PassableRoad,
     Pipe,
     /// <summary>must be on a water tile</summary>
     WaterSource,

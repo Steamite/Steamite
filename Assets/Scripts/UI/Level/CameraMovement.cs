@@ -367,10 +367,11 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
                 switch (currentMovement)
                 {
                     case < 0:
-                        currentMovement += remove * f;
+                        currentMovement = Mathf.Clamp(currentMovement + remove * f, currentMovement, 0);
+                        
                         break;
                     case > 0:
-                        currentMovement -= remove * f;
+                        currentMovement = Mathf.Clamp(currentMovement - remove * f, 0, currentMovement);
                         break;
                     default:
                         return 0;

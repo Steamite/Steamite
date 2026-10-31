@@ -250,7 +250,7 @@ MonoBehaviour:
   - {x: 70, y: 1, z: 70}
   - {x: 70, y: 1, z: 75}
   - {x: 75, y: 1, z: 70}
-  count: 15
+  count: 0
 --- !u!1 &2124947127
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,7 +378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b6708043054bc34e814558ce4102e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Systems::Assets.Scripts.Systems.Pathing.PathfindPrefabAuthoring
-  count: 5000
+  count: 0
   speed: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

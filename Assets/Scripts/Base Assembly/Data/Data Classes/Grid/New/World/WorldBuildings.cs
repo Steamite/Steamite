@@ -16,9 +16,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         int firstRemovedSpace = int.MaxValue;
 
         BuildingRenderer buildingRenderer;
+        LevelRenderer levelRenderer;
 
         public void LoadState(BuildingNew[] newSave)
         {
+
+            List<BuildingWrapper> wrappers = SceneRefs.ObjectFactory.buildPrefabs.GetAllObjects();
+
             buildings = new BuildingNew[math.max(50, newSave.Length * 2)];
 
             foreach (var item in newSave)
@@ -30,12 +34,20 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                     lastIndex++;
                 }
                 else
+                {
+                    /*int2 pos = new((int)item.renderData.position & 0x9, (int)(item.renderData.position >> 10) & 0x9);
+                    PlaceBuilding(pos, wrappers[item.wrapperIndex], item);*/
                     AddBuilding(item);
+                }
             }
         }
 
-        public BuildingRenderer SetupRenderer(Material buildingMaterial)
+        public BuildingRenderer SetupRenderer(Material buildingMaterial, LevelRenderer levelRenderer)
         {
+            this.levelRenderer = levelRenderer;
+
+
+
             List<BuildingWrapper> wrappers = SceneRefs.ObjectFactory.buildPrefabs.GetAllObjects();
 
             BuildingGroupData[] buildingGroups = new BuildingGroupData[wrappers.Count];
@@ -114,15 +126,51 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             size.y -= 1;
             uint rot = (buildings[index].renderData.position >> 23) & 0x3;
 
+            int2 worldPos = new int2(
+                (int)buildings[index].renderData.position & 0x3FF, 
+                (int)(buildings[index].renderData.position >> 10) & 0x3FF);
+            worldPos += SceneRefs.World.CurrentLevel.levelOffsetScaled;
+
+            int2 worldTemp;
+            int tileIndex = 0;
+            GridLevel level = SceneRefs.World.CurrentLevel;
+
+            for (int i = -1; i < size.y; i++)
+            {
+                for (int j = 0; j < size.x; j++)
+                {
+                    int2 rotPos = new(
+                        j * cosTable[rot] - i * sinTable[rot],
+                        j * sinTable[rot] + i * cosTable[rot]);
+
+                    worldTemp = worldPos + rotPos;
+
+                    switch (wrapper.blueprint.itemArray[tileIndex])
+                    {
+                        case GridItemType.Road:
+                        case GridItemType.PassableRoad:
+
+                            level.SetTileByWorldPos(
+                                worldTemp,
+                                LevelGridTile.Road);
+                            break;
+                        case GridItemType.Entrance:
+                            // mark in texture
+                            level.SetEntrance(worldTemp, levelRenderer, false);
+                            break;
+                    }
+                    tileIndex++;
+                }
+            }
+            levelRenderer.UpdateOverlayTexture();
+
+/*
+
             int x = size.x * cosTable[rot] - size.y * sinTable[rot];
             int y = size.x * sinTable[rot] + size.y * cosTable[rot];
             size.x = x;
             size.y = y;
 
-            int2 world = new int2(
-                (int)buildings[index].renderData.position & 0x3FF, 
-                (int)(buildings[index].renderData.position >> 10) & 0x3FF);
-            world += SceneRefs.World.CurrentLevel.levelOffsetScaled;
 
 
             if (size.x < 0)
@@ -149,7 +197,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 world.x = originalX;
                 world.y++;
             }
-            buildings[index] = null;
+            buildings[index] = null;*/
         }
 
         void FindNextRemoved(int startIndex)
@@ -172,20 +220,19 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
         readonly static int[] cosTable = { 1, 0, -1, 0 };
         readonly static int[] sinTable = { 0, 1, 0, -1 };
-        public void PlaceBuilding(int2 worldPos, BuildingWrapper wrapper, BuildingNew buildingData, uint buildingPos)
+        public void PlaceBuilding(int2 worldPos, BuildingWrapper wrapper, BuildingNew buildingData)
         {
-            buildingData.renderData.position = buildingPos;
-
             int arrayIndex = AddBuilding(buildingData);
             int2 size = wrapper.blueprint.size;
             size.y -= 1;
-            uint rot = (buildingPos >> 23) & 0x3;
+            uint rot = (buildingData.renderData.position >> 23) & 0x3;
 
 
+            int2 worldTemp;
+            int index = 0;
+            GridLevel level = SceneRefs.World.CurrentLevel;
 
-            /*int index = 0;
-
-            for (int i = 0; i < size.y; i++)
+            for (int i = -1; i < size.y; i++)
             {
                 for (int j = 0; j < size.x; j++)
                 {
@@ -193,47 +240,30 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                         j * cosTable[rot] - i * sinTable[rot],
                         j * sinTable[rot] + i * cosTable[rot]);
 
-                    world += worldPos;
+                    worldTemp = worldPos + rotPos;
+
+                    switch (wrapper.blueprint.itemArray[index])
+                    {
+                        case GridItemType.Road:
+
+                            level.SetTileByWorldPos(
+                                worldTemp,
+                                LevelGridTile.Building(arrayIndex));
+                            break;
+                        /*case GridItemType.PassableRoad:
+                            level.SetTileByWorldPos(
+                                worldTemp,
+                                LevelGridTile.PassableRoad);
+                            break;*/
+                        case GridItemType.Entrance:
+                            // mark in texture
+                            level.SetEntrance(worldTemp, levelRenderer, true);
+                            break;
+                    }
                     index++;
                 }
-            }*/
-            int2 world = worldPos;
-
-
-
-            int x = size.x * cosTable[rot] - size.y * sinTable[rot];
-            int y = size.x * sinTable[rot] + size.y * cosTable[rot];
-            size.x = x;
-            size.y = y;
-
-
-
-
-            if (size.x < 0)
-            {
-                world.x += size.x + 1;
-                size.x = -size.x;
             }
-            if (size.y < 0)
-            {
-                world.y += size.y + 1;
-                size.y = -size.y;
-            }
-            int originalX = world.x;
-
-            for (int j = 0; j < size.y; j++)
-            {
-                for (int i = 0; i < size.x; i++)
-                {
-                    //wrapper.blueprint.size
-                    SceneRefs.World.CurrentLevel.SetTileByWorldPos(
-                        world, 
-                        LevelGridTile.Building(arrayIndex));
-                    world.x++;
-                }
-                world.x = originalX;
-                world.y++;
-            }
+            levelRenderer.UpdateOverlayTexture();
         }
 
         public void UpdateRenderIndexes(int startIndex, int increase)

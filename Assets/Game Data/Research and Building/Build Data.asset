@@ -387,8 +387,8 @@ MonoBehaviour:
             x: 0
             y: 0
           anchorIndex: 1
-          mesh: {fileID: -5495902117074765545, guid: 8f5253ba88aeb2845a76034f8276b888, type: 3}
-          itemArray: 0300000001000000i
+          mesh: {fileID: 3735029673142812049, guid: a5fc4d65593ece84aa598ba7c6b5d4d0, type: 3}
+          itemArray: 0200000001000000i
     - rid: 8808251703612669980
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
@@ -426,8 +426,8 @@ MonoBehaviour:
             x: 1
             y: 1
           anchorIndex: 1
-          mesh: {fileID: 4493585093827132993, guid: 831baef4def44414b9acbdf0ad30d414, type: 3}
-          itemArray: 0300000001000000i
+          mesh: {fileID: 3735029673142812049, guid: a5fc4d65593ece84aa598ba7c6b5d4d0, type: 3}
+          itemArray: 0200000001000000i
     - rid: 8808251703612669983
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:

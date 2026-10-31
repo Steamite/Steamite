@@ -8,6 +8,28 @@ using UnityEngine;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
+
+    public struct OverlayData
+    {
+        public byte r;
+        public byte g;
+
+        public OverlayData(byte r, byte g)
+        {
+            this.r = r;
+            this.g = g;
+        }
+
+        public OverlayData R(byte R)
+        {
+            return new OverlayData(R, g);
+        }
+        public OverlayData G(byte G)
+        {
+            return new OverlayData(r, G);
+        }
+    }
+
     public class LevelRenderer : MonoBehaviour
     {
         NativeArray<int> toRender;
@@ -25,7 +47,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         [SerializeField] int2 cameraChunkSize;
         [SerializeField] Material worldMaterial;
 
-        [SerializeField] Texture2D toDigTexture;
+        [SerializeField] Texture2D gridTexture;
 
         MeshCombinerPlus combiner;
 
@@ -38,8 +60,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// <summary>
         /// Values for the texture.
         /// </summary>
-        [NonSerialized] NativeArray<byte>[] toDigRenderGrids;
-        [NonSerialized] public NativeArray<byte> toDigRenderGrid;
+        [NonSerialized] NativeArray<OverlayData>[] WorldOverlayGrids;
+
+        [NonSerialized] public NativeArray<OverlayData> levelOverlayGrid;
+
         /// <summary>
         /// Values of marked rocks.
         /// </summary>
@@ -60,20 +84,20 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 chunkMeshes[i] = combiner.GetLevelMeshes(levels[i].levelDimensions, levels[i].renderGrid);
             }
 
-            toDigTexture = new(maxSize, maxSize, TextureFormat.R8, false)
+            gridTexture = new(maxSize, maxSize, TextureFormat.RG16, false)
             {
                 filterMode = FilterMode.Point
             };
             worldMaterial.SetFloat(Shader.PropertyToID("_Width"), maxSize);
             worldMaterial.SetFloat(Shader.PropertyToID("_Height"), maxSize);
 
-            worldMaterial.SetTexture(Shader.PropertyToID("_DigTexture"), toDigTexture);
-            toDigRenderGrids = new NativeArray<byte>[levelCount];
+            worldMaterial.SetTexture(Shader.PropertyToID("_DigTexture"), gridTexture);
+            WorldOverlayGrids = new NativeArray<OverlayData>[levelCount];
             markedTilesGrids = new NativeBitArray[levelCount];
             
             for (int i = 0; i < levelCount; i++)
             {
-                toDigRenderGrids[i] = new NativeArray<byte>(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+                WorldOverlayGrids[i] = new NativeArray<OverlayData>(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
                 markedTilesGrids[i] = new NativeBitArray(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
             }
 
@@ -93,16 +117,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void CleanPosAndUpdate(int gridIndex)
         {
-            int pos = currentLevel.GetWorldIndex(gridIndex);
-            toDigRenderGrid[pos] = 0;
+            int pos = currentLevel.WorldIndexFromLocalIndex(gridIndex);
+            levelOverlayGrid[pos] = levelOverlayGrid[pos].R(0);
             markedTilesGrid.Set(pos, false);
-            UpdateToDigTexture();
+            UpdateOverlayTexture();
         }
 
-        public void UpdateToDigTexture()
+        public void UpdateOverlayTexture()
         {
-            toDigTexture.SetPixelData(toDigRenderGrid, 0);
-            toDigTexture.Apply(false, false);
+            gridTexture.SetPixelData(levelOverlayGrid, 0);
+            gridTexture.Apply(false, false);
         }
 
         void OnChange(int _, int newI)
@@ -118,9 +142,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             if (toRender.IsCreated)
                 toRender.Dispose();
             
-            for (int i = 0; i < toDigRenderGrids?.Length; i++)
+            for (int i = 0; i < WorldOverlayGrids?.Length; i++)
             {
-                toDigRenderGrids[i].Dispose();
+                WorldOverlayGrids[i].Dispose();
                 markedTilesGrids[i].Dispose();
             }
 
@@ -130,11 +154,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public void ChangeLevel(GridLevel level)
         {
             currentLevel = level;
-            toDigRenderGrid = toDigRenderGrids[level.levelNumber];
+            levelOverlayGrid = WorldOverlayGrids[level.levelNumber];
             markedTilesGrid = markedTilesGrids[level.levelNumber];
+
             chunkCount = currentLevel.levelDimensions * currentLevel.levelDimensions;
             
-            UpdateToDigTexture();
+            UpdateOverlayTexture();
 
             foreach (var item in customRenderers)
             {

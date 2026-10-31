@@ -114,16 +114,17 @@ public class DigReal : GridTilesModeNew
                 if (SceneRefs.World.GetActiveTile(x, y).TType == TileType.Wall)
                 {
                     renderer.markedTilesGrid.Set(worldIndex, !removing);
-                    renderer.toDigRenderGrid[worldIndex] = (byte)(removing ? 0: 255);
+                    renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R((byte)(removing ? 0: 255));
                 }
                 else
                 {
-                    renderer.toDigRenderGrid[worldIndex] = 0;
+                    renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R(0);
                 }
                 worldIndex++;
             }
         }
-        renderer.UpdateToDigTexture();
+        renderer.UpdateOverlayTexture();
+        controller.MouseListen();
     }
 
     void CalculateTiles()
@@ -153,27 +154,27 @@ public class DigReal : GridTilesModeNew
                 {
                     if (isUnSet)
                     {
-                        renderer.toDigRenderGrid[worldIndex] = 0;
+                        renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R(0);// = 0;
                     }
                     else if (removing)
                     {
-                        renderer.toDigRenderGrid[worldIndex] = 255;
+                        renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R(255);
                     }
                 }
                 else
                 {
                     if (isUnSet)
-                        renderer.toDigRenderGrid[worldIndex] = (byte)(removing ? 90 : 200);
+                        renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R((byte)(removing ? 90 : 200));
                     else if(removing)
                     {
-                        renderer.toDigRenderGrid[worldIndex] = 115;
+                        renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R(115);
                     }
                 }
                 worldIndex++;
             }
         }
 
-        renderer.UpdateToDigTexture();
+        renderer.UpdateOverlayTexture();
         lastDragWorldPos = newPosition;
     }
 }
