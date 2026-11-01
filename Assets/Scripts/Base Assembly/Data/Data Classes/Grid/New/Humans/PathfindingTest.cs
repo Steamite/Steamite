@@ -40,10 +40,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             NativeList<int> tempPos = new(Allocator.TempJob);
 
             NativeArray<int> offsets = new NativeArray<int>(4, Allocator.TempJob);
-            offsets[0] = 1;
-            offsets[1] = width;
-            offsets[2] = -1;
-            offsets[3] = -width;
+            offsets[0] = -1;
+            offsets[1] = -width;
+            offsets[2] = 1;
+            offsets[3] = width;
 
             int2 offsetStart = new(
                     start.x - world.CurrentLevel.levelOffsetScaled, 
@@ -57,7 +57,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             {
                 start = offsetStart.y * width + offsetStart.x,
                 destination = offsetEnd.y * width + offsetEnd.x,
-                grids = world.CurrentLevel.renderGrid,
+                pathNodes = world.CurrentLevel.path,
                 gridWidth = world.CurrentLevel.levelDimensionsScaled,
                 offsetTable = offsets,
                 positions = tempPos

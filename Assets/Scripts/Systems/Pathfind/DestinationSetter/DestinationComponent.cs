@@ -16,9 +16,14 @@ namespace Assets.Scripts.Systems.Pathing
     {
         public int pos;
         public int3 worldPos;
-        [ReadOnly] public NativeArray<LevelGridTile> grid;
+        [ReadOnly] public NativeArray<short> grid;
         public int width;
         public int offset;
+    }
+
+    public struct PathingGameData : IComponentData
+    {
+        public NativeArray<short> pathingArrays;
     }
 
     public struct PathfindComponent : IComponentData

@@ -24,10 +24,10 @@ namespace Assets.Scripts.Systems.Pathing
                 return;
 
             NativeArray<int> offsets = new NativeArray<int>(4, Allocator.Temp);
-            offsets[0] = 1;
-            offsets[1] = destination.width;
-            offsets[2] = -1;
-            offsets[3] = -destination.width;
+            offsets[0] = -1;
+            offsets[1] = -destination.width;
+            offsets[2] = 1;
+            offsets[3] = destination.width;
 
 
             NativeList<int> positions = new NativeList<int>(10, Allocator.Temp);
@@ -37,7 +37,7 @@ namespace Assets.Scripts.Systems.Pathing
                 start =
                     ((int)math.floor(path.position.z) - destination.offset) * destination.width +
                     ((int)math.floor(path.position.x) - destination.offset),
-                grids = destination.grid,
+                pathNodes = destination.grid,
                 gridWidth = destination.width,
                 offsetTable = offsets,
                 positions = positions

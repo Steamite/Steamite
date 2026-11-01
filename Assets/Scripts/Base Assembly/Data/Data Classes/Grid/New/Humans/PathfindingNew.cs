@@ -13,7 +13,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
     [BurstCompile]
     public struct PathfindingNew : IJob
     {
-        public NativeArray<LevelGridTile> grids;
+        public NativeArray<short> pathNodes;
         public int gridWidth;
         public int start;
         public int destination;
@@ -23,10 +23,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         [ReadOnly] public NativeArray<int> offsetTable;
         public static readonly int2[] offsetTableVec = 
         { 
-            new(1, 0),
-            new(0, 1),
             new(-1, 0),
-            new(0, -1)
+            new(0, -1),
+            new(1, 0),
+            new(0, 1)
         };
 
         public NativeList<int> positions;
@@ -47,7 +47,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             while ((node = queue.Dequeue()).position != -1)
             {
                 int pos = node.position;
-                int2 posWorld = node.worldPosition;
 
 
                 if (pos == destination)
@@ -61,15 +60,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                     break;
                 }
 
+                short mapNode = pathNodes[pos];
                 for (int i = 0; i < offsetTable.Length; i++)
                 {
                     pos = node.position + offsetTable[i];
 
-                    posWorld = node.worldPosition + offsetTableVec[i];
+                    int2 posWorld = node.worldPosition + offsetTableVec[i];
                     int costToReach = math.select(
                         2_000_000, 
-                        node.costToReach + 1, 
-                        grids[pos].TType == TileType.Road || grids[pos].TType == TileType.Empty);
+                        node.costToReach + 1,
+                        (mapNode & 0x1) == 1);
                     int2 dist = math.abs(posWorld - dPos);
 
                     PathNode newNode = new()
@@ -80,6 +80,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                         totalCost = costToReach + dist.x + dist.y,
                     };
                     queue.Enqueue(newNode, node.position);
+                    mapNode >>= 0x1;
                 }
 
             }

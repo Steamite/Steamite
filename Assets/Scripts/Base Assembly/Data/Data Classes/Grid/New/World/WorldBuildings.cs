@@ -164,41 +164,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 }
             }
             levelRenderer.UpdateOverlayTexture();
-
-/*
-
-            int x = size.x * cosTable[rot] - size.y * sinTable[rot];
-            int y = size.x * sinTable[rot] + size.y * cosTable[rot];
-            size.x = x;
-            size.y = y;
-
-
-
-            if (size.x < 0)
-            {
-                world.x += size.x + 1;
-                size.x = -size.x;
-            }
-            if (size.y < 0)
-            {
-                world.y += size.y + 1;
-                size.y = -size.y;
-            }
-            int originalX = world.x;
-
-            for (int j = 0; j < size.y; j++)
-            {
-                for (int i = 0; i < size.x; i++)
-                {
-                    SceneRefs.World.CurrentLevel.SetTileByWorldPos(
-                        world,
-                        LevelGridTile.Road);
-                    world.x++;
-                }
-                world.x = originalX;
-                world.y++;
-            }
-            buildings[index] = null;*/
         }
 
         void FindNextRemoved(int startIndex)
