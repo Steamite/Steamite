@@ -59,7 +59,7 @@ public class OverlayController : MonoBehaviour, IAfterLoad
     public void AfterLoad()
     {
         GridWorld world = SceneRefs.World;
-        gridSize = world.LargestLevelDimensions;
+        gridSize = world.LargestLevelDimension;
 
         mainValueMap = new(gridSize * gridSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
         selectedValueMap = new(gridSize * gridSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);

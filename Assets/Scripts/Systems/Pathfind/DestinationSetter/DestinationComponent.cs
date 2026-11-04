@@ -15,16 +15,18 @@ namespace Assets.Scripts.Systems.Pathing
     public struct DestinationComponent : IComponentData
     {
         public int pos;
-        public int3 worldPos;
-        [ReadOnly] public NativeArray<short> grid;
-        public int width;
-        public int offset;
+        public int level;
     }
 
-    public struct PathingGameData : IComponentData
+    public struct WorldComponent : IComponentData
     {
-        public NativeArray<short> pathingArrays;
+        [ReadOnly] public NativeArray<short> path;
+        [ReadOnly] public NativeArray<int> offsets;
+        [ReadOnly] public int LargestLevelDimensionScaled;
+        [ReadOnly] public int largestGridSize;
     }
+
+
 
     public struct PathfindComponent : IComponentData
     {

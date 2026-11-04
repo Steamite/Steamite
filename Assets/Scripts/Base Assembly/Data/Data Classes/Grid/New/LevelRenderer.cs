@@ -184,7 +184,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         private void Update()
         {
-            if (true || cameraMoved)
+            if (cameraMoved)
             {
                 NativeReference<int> nativeRenderCount = new(0, Allocator.TempJob);
                 CullJob job = new()

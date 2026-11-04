@@ -196,7 +196,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     if (levelNumber > 0)
                     {
                         var level = SceneRefs.World.gridLevels[levelNumber - 1];
-                        int _levelLocal = level.LocalIndexFromWorldPos(worldIndex);
+                        int _levelLocal = level.LocalIndexFromWorldIndex(worldIndex);
                         if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
                         {
                             path[worldIndex] = (short)(path[worldIndex] & ~(1 << 4));
@@ -206,7 +206,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     if (levelNumber < SceneRefs.World.LEVEL_COUNT - 1)
                     {
                         var level = SceneRefs.World.gridLevels[levelNumber + 1];
-                        int _levelLocal = level.LocalIndexFromWorldPos(worldIndex);
+                        int _levelLocal = level.LocalIndexFromWorldIndex(worldIndex);
 
                         if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
                         {
@@ -221,7 +221,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     if (levelNumber > 0)
                     {
                         var level = SceneRefs.World.gridLevels[levelNumber - 1];
-                        int _levelLocal = level.LocalIndexFromWorldPos(worldIndex);
+                        int _levelLocal = level.LocalIndexFromWorldIndex(worldIndex);
 
                         if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
                         {
@@ -232,7 +232,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     if (levelNumber < SceneRefs.World.LEVEL_COUNT - 1)
                     {
                         var level = SceneRefs.World.gridLevels[levelNumber + 1];
-                        int _levelLocal = level.LocalIndexFromWorldPos(worldIndex);
+                        int _levelLocal = level.LocalIndexFromWorldIndex(worldIndex);
 
                         if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
                         {

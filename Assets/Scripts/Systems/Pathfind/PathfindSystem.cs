@@ -16,46 +16,44 @@ namespace Assets.Scripts.Systems.Pathing
     partial struct PathfindSetJob : IJobEntity
     {
         [ReadOnly] public DestinationComponent destination;
+        [ReadOnly] public WorldComponent worldData;
+
 
         [BurstCompile]
-        public void Execute(ref PathfindComponent path, ref DynamicBuffer<PositionNode> nodes)
+        public void Execute(ref PathfindComponent humanPosition, ref DynamicBuffer<PositionNode> nodes)
         {
-            if (path.position.y != destination.worldPos.y)
+            if (humanPosition.position.y != destination.level)
                 return;
 
-            NativeArray<int> offsets = new NativeArray<int>(4, Allocator.Temp);
-            offsets[0] = -1;
-            offsets[1] = -destination.width;
-            offsets[2] = 1;
-            offsets[3] = destination.width;
+            
 
 
-            NativeList<int> positions = new NativeList<int>(10, Allocator.Temp);
+            NativeList<int> positions = new NativeList<int>(20, Allocator.Temp);
             PathfindingNew pathfindingNew = new()
             {
                 destination = destination.pos,
                 start =
-                    ((int)math.floor(path.position.z) - destination.offset) * destination.width +
-                    ((int)math.floor(path.position.x) - destination.offset),
-                pathNodes = destination.grid,
-                gridWidth = destination.width,
-                offsetTable = offsets,
+                    ((int)math.floor(humanPosition.position.z)) * worldData.LargestLevelDimensionScaled +
+                    ((int)math.floor(humanPosition.position.x)),
+                level = destination.level,
+                path = worldData.path,
+                gridWidth = worldData.LargestLevelDimensionScaled,
+                offsetTable = worldData.offsets,
                 positions = positions
             };
 
             pathfindingNew.Execute();
             nodes.Clear();
-            if(positions.Length == 0)
+            if (positions.Length == 0)
             {
-                path.currentWaypoint = -1;
+                humanPosition.currentWaypoint = -1;
                 return;
             }
-
-            path.currentWaypoint = 0;
+            nodes.Capacity = positions.Length - 1;
+            humanPosition.currentWaypoint = 0;
             for (int i = positions.Length-2; i >= 0; i--)
             {
-                int2 pos = new int2(positions[i] % destination.width, positions[i] / destination.width) + destination.offset;
-                //int posFixed = pos.y * destination.width + pos.x * destination.width;
+                int2 pos = new int2(positions[i] % worldData.LargestLevelDimensionScaled, positions[i] / worldData.LargestLevelDimensionScaled);
                 nodes.Add(new() { position = new(pos.x, 1, pos.y)});
             }
         }
@@ -69,19 +67,21 @@ namespace Assets.Scripts.Systems.Pathing
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<DestinationComponent>();
+            state.RequireForUpdate<WorldComponent>();
             state.Enabled = false;
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var en = SystemAPI.GetSingletonEntity<DestinationComponent>();
-            var comp = SystemAPI.GetComponent<DestinationComponent>(en);
+            var comp = SystemAPI.GetSingleton<DestinationComponent>();
+            var world = SystemAPI.GetSingleton<WorldComponent>();
 
 
             PathfindSetJob pathfindSetJob = new()
             {
-                destination = comp
+                destination = comp,
+                worldData = world
             };
 
             state.Dependency = pathfindSetJob.ScheduleByRef(state.Dependency);

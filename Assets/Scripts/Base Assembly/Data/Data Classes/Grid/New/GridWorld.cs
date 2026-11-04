@@ -30,8 +30,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public int[] offsetPathTableNeighbour;
 
         public int CenterScaled;
-        [NonSerialized] public int LargestLevelDimensions;
-        [NonSerialized] public int LargestLevelDimensionsScaled;
+        [NonSerialized] public int LargestLevelDimension;
+        [NonSerialized] public int LargestLevelDimensionScaled;
 
         [SerializeField] Mesh[] buildingMeshes;
         [SerializeField] Material buildingMaterial;
@@ -40,7 +40,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         [SerializeField] int2 inspectedChunk;
 
-        NativeArray<short> path;
+        [NonSerialized] public NativeArray<short> path;
         readonly Vector3[] offset = new Vector3[] { new(-0.5f,0,0), new(0,0, -0.5f), new(0.5f, 0, 0), new(0, 0, 0.5f) };
         readonly Vector3[] verticalOffset = new Vector3[] { new(0, -0.5f,0), new(0, 0.5f, 0) };
 
@@ -48,9 +48,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             int dim = GridLevel.chunkDimensions;
 
-            for (int i = 0; i < LargestLevelDimensions; i++)
+            for (int i = 0; i < LargestLevelDimension; i++)
             {
-                for (int j = 0; j < LargestLevelDimensions; j++)
+                for (int j = 0; j < LargestLevelDimension; j++)
                 {
                     Vector3 vec = new(i * dim, 0, j * dim);
                     Vector3 secVec = vec + new Vector3(0, 60, 0);
@@ -65,9 +65,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             Vector3 startPosition = new(0.5f, 1, 0.5f);
 
             int index = 0;// currentLevelIndex * (LargestLevelDimensionsScaled * LargestLevelDimensionsScaled);
-            for (int y = 0; y < LargestLevelDimensionsScaled; y++)
+            for (int y = 0; y < LargestLevelDimensionScaled; y++)
             {
-                for (int x = 0; x < LargestLevelDimensionsScaled; x++)
+                for (int x = 0; x < LargestLevelDimensionScaled; x++)
                 {
                     int a = currentLevel.path[index];
                     for (int i = 0; i < 4; i++)
@@ -106,18 +106,18 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             gridLevels = new GridLevel[LEVEL_COUNT];
 
             GridLevel.chunkDimensions = saveToLoad.chunkDimensions;
-            LargestLevelDimensions = saveToLoad.largestDimension;
-            LargestLevelDimensionsScaled = LargestLevelDimensions * GridLevel.chunkDimensions;
+            LargestLevelDimension = saveToLoad.largestDimension;
+            LargestLevelDimensionScaled = LargestLevelDimension * GridLevel.chunkDimensions;
 
-            offsetPathTableNeighbour = new int[] { 1, LargestLevelDimensionsScaled, -1, -LargestLevelDimensionsScaled };
+            offsetPathTableNeighbour = new int[] { 1, LargestLevelDimensionScaled, -1, -LargestLevelDimensionScaled };
             path = saveToLoad.pathSave;
 
             for (int i = 0; i < LEVEL_COUNT; i++)
             {
-                gridLevels[i] = new GridLevel(saveToLoad.gridSave[i], i, LargestLevelDimensionsScaled * LargestLevelDimensionsScaled, path);
+                gridLevels[i] = new GridLevel(saveToLoad.gridSave[i], i, LargestLevelDimensionScaled * LargestLevelDimensionScaled, path);
             }
 
-            CenterScaled = (LargestLevelDimensions / 2) * GridLevel.chunkDimensions;
+            CenterScaled = (LargestLevelDimension / 2) * GridLevel.chunkDimensions;
 
             WorldBuildings = new WorldBuildings();// )GetComponent<>();
             WorldBuildings.LoadState(saveToLoad.objectsSave.buildings);
@@ -125,7 +125,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             renderer = GetComponent<LevelRenderer>();
             renderer.AddRenderer(WorldBuildings.SetupRenderer(buildingMaterial, renderer));
-            renderer.Init(LEVEL_COUNT, gridLevels, LargestLevelDimensions * saveToLoad.chunkDimensions);
+            renderer.Init(LEVEL_COUNT, gridLevels, LargestLevelDimension * saveToLoad.chunkDimensions);
 
             SetLevel(0);
         }
@@ -247,6 +247,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             renderer.UpdateMesh(level, pos, gridLevel);
         }
 
-        public int GetWorldIndex(int2 worldPosition) => worldPosition.y * LargestLevelDimensionsScaled + worldPosition.x;
+        public int GetWorldIndex(int2 worldPosition) => worldPosition.y * LargestLevelDimensionScaled + worldPosition.x;
     }
 }

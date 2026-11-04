@@ -19,17 +19,13 @@ public class DestinationManager : MonoBehaviour, IMousePosSetter
         var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
         var world = SceneRefs.World;
-        int width = world.CurrentLevel.levelDimensionsScaled;
 
-        int2 offsetStart = worldPos - world.CurrentLevel.levelOffsetScaled;
+        int2 offsetStart = worldPos;
 
         manager.SetComponentData<DestinationComponent>(entity, new()
         {
-            pos = offsetStart.y * width + offsetStart.x,
-            worldPos = new(offsetStart.x, world.CurrentLevelIndex, offsetStart.y),
-            //grid = world.CurrentLevel.path,
-            width = width,
-            offset = world.CurrentLevel.levelOffsetScaled
+            pos = offsetStart.y * world.LargestLevelDimensionScaled + offsetStart.x,
+            level = world.CurrentLevelIndex
         });
 
 

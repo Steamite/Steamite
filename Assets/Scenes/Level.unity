@@ -1765,6 +1765,7 @@ GameObject:
   - component: {fileID: 971749948}
   - component: {fileID: 971749949}
   - component: {fileID: 971749950}
+  - component: {fileID: 971749951}
   m_Layer: 2
   m_Name: Nothing
   m_TagString: Untagged
@@ -1816,6 +1817,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 264e4642ea0903440a6607c2de0fe105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Systems::DestinationManager
+--- !u!114 &971749951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971749947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dea7d03f5fb840c4bbb88a584262c877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems::Assets.Scripts.Systems.Pathfind.DestinationSetter.WorldLinker
 --- !u!1 &977506019
 GameObject:
   m_ObjectHideFlags: 0
@@ -2811,6 +2824,7 @@ MonoBehaviour:
   LEVEL_COUNT: 0
   WorldBuildings:
     buildings: []
+  offsetPathTableNeighbour: 
   CenterScaled: 0
   buildingMeshes:
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
@@ -3163,6 +3177,7 @@ MonoBehaviour:
   - {fileID: 220867761}
   - {fileID: 709068454}
   - {fileID: 569057775}
+  - {fileID: 971749951}
   _world: {fileID: 4967022013944964021}
 --- !u!114 &8150810313726245686
 MonoBehaviour:

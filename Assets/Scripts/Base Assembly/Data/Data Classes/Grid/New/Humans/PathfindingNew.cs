@@ -13,7 +13,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
     [BurstCompile]
     public struct PathfindingNew : IJob
     {
-        public NativeArray<short> pathNodes;
+        public NativeArray<short> path;
         public int gridWidth;
         public int start;
         public int destination;
@@ -30,6 +30,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         };
 
         public NativeList<int> positions;
+        public int level;
 
         public void Execute()
         {
@@ -60,7 +61,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                     break;
                 }
 
-                short mapNode = pathNodes[pos];
+                short mapNode = path[pos];
                 for (int i = 0; i < offsetTable.Length; i++)
                 {
                     pos = node.position + offsetTable[i];
