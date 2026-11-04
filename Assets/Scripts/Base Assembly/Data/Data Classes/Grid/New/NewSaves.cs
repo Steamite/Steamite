@@ -12,13 +12,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public int levelDimensions;
         public int levelOffset;
         public NativeArray<LevelGridTile> grid;
-        public NativeArray<short> path;
-        public LevelGridSave(int _levelDimensions, int _levelOffset, NativeArray<LevelGridTile> grid, NativeArray<short> path)
+        public LevelGridSave(int _levelDimensions, int _levelOffset, NativeArray<LevelGridTile> grid)
         {
             levelDimensions = _levelDimensions;
             levelOffset = _levelOffset;
             this.grid = grid;
-            this.path = path;
         }
     }
 
@@ -31,6 +29,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public int largestDimension;
         public int chunkDimensions;
         public int levelCount;
+        public NativeArray<short> pathSave;
+        public int pathGridSize;
     }
 
     public class BuildsAndChunksSaveNew

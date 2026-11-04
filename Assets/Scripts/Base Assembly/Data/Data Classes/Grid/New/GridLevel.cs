@@ -15,6 +15,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public static int chunkDimensions = 16;
         public NativeArray<LevelGridTile> renderGrid;
         /// <summary>
+        /// Indexed by world position, not local!
         /// 0 - Left <br/>
         /// 1 - Backwards <br/>
         /// 2 - Right <br/>
@@ -22,7 +23,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// 4 - Down <br/>
         /// 5 - Up <br/>
         /// </summary>
-        public NativeArray<short> path;
+        public NativeSlice<short> path;
         //public NativeArray<MovementAndStabilityData> movementAndStability;
 
         public readonly int levelOffset;
@@ -32,11 +33,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public readonly int sizeScaled;
         public readonly int levelNumber;
         [CreateProperty] public bool Unlocked;
-        public readonly int[] offsetPathTableNeighbour;
-        public readonly int[] offsetPathTableSelf;
+        public readonly int[] pathNeighbourTable;
         public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
-        public GridLevel(LevelGridSave gridSave, int _levelNumber)
+        public GridLevel(LevelGridSave gridSave, int _levelNumber, int levelSize, NativeArray<short> gridPath)
         {
             // TODO
             if (_levelNumber == 0)
@@ -52,9 +52,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             sizeScaled = levelDimensionsScaled * levelDimensionsScaled;
 
             renderGrid = gridSave.grid;
-            path = gridSave.path;
-            offsetPathTableNeighbour = new int[] { 1, levelDimensionsScaled, -1, -levelDimensionsScaled};
-            offsetPathTableSelf = new int[] { -1, -levelDimensionsScaled, 1, levelDimensionsScaled};
+            path = new(gridPath, _levelNumber * levelSize, levelSize);
+
+            pathNeighbourTable = new int[] { 1, levelDimensionsScaled, -1, -levelDimensionsScaled};
             //movementAndStability = new NativeArray<MovementAndStabilityData>(tileCount, Allocator.Persistent);
 
             // use a lookup array indexed by different tile Types
@@ -141,9 +141,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             if (renderGrid.IsCreated)
                 renderGrid.Dispose();
-
-            if (path.IsCreated)
-                path.Dispose();
         }
         
         public void SetTileByWorldPos(int2 worldPosition, LevelGridTile tile) 
@@ -151,19 +148,31 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public LevelGridTile GetTile(int pos) => renderGrid[pos];
 
-        public void SetTile(int pos, LevelGridTile tile)
+        public void SetTile(int localIndex, LevelGridTile tile)
+        {
+            UpdatePath(localIndex, tile);
+
+            renderGrid[localIndex] = tile;
+        }
+
+        private void UpdatePath(int localIndex, LevelGridTile tile)
         {
             TileType newTileType = tile.TType;
-            TileType prevTileType = renderGrid[pos].TType;
+            TileType prevTileType = renderGrid[localIndex].TType;
+
+            int worldIndex = WorldIndexFromLocalIndex(localIndex);
+            var neighbours = SceneRefs.World.offsetPathTableNeighbour;
 
             if (newTileType == TileType.Road || newTileType == TileType.PassableBuilding || newTileType == TileType.Elevator)
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    int p = pos + offsetPathTableNeighbour[i];
-                    if (renderGrid[p].TType == TileType.Building)
+                    int pathIndex = worldIndex + neighbours[i];
+                    int gridIndex = localIndex + pathNeighbourTable[i];
+
+                    if (renderGrid[gridIndex].TType == TileType.Building)
                         continue;
-                    path[p] = (short)(path[p] | (short)(0x1 << i));
+                    path[pathIndex] = (short)(path[pathIndex] | (short)(0x1 << i));
                 }
 
                 // was building
@@ -172,82 +181,81 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     short newPath = 0;
                     for (int i = 0; i < 4; i++)
                     {
-                        int p = pos + offsetPathTableSelf[i];
-
+                        int gridIndex = localIndex + pathNeighbourTable[i];
                         bool canEnter =
-                            renderGrid[p].TType == TileType.Road
+                            renderGrid[gridIndex].TType == TileType.Road
                             ||
-                            (renderGrid[p].TType > TileType.Building && renderGrid[p].Amount == renderGrid[pos].Amount);
+                            (renderGrid[gridIndex].TType > TileType.Building && renderGrid[gridIndex].Amount == renderGrid[localIndex].Amount);
 
                         newPath = (short)(newPath | (canEnter ? (0x1 << i) : 0));
                     }
-                    path[pos] = newPath;
+                    path[worldIndex] = newPath;
                 }
                 else if (prevTileType == TileType.Elevator)
                 {
                     if (levelNumber > 0)
                     {
                         var level = SceneRefs.World.gridLevels[levelNumber - 1];
-                        int p = level.LocalIndexFromWorldPos(WorldPosFromLocalIndex(pos));
-                        if (level.renderGrid[p].TType == TileType.Elevator)
+                        int _levelLocal = level.LocalIndexFromWorldPos(worldIndex);
+                        if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
                         {
-                            path[pos] = (short)(path[pos] & ~(1 << 4));
-                            level.path[p] = (short)(level.path[p] & ~(1 << 5));
+                            path[worldIndex] = (short)(path[worldIndex] & ~(1 << 4));
+                            level.path[worldIndex] = (short)(level.path[worldIndex] & ~(1 << 5));
                         }
                     }
                     if (levelNumber < SceneRefs.World.LEVEL_COUNT - 1)
                     {
                         var level = SceneRefs.World.gridLevels[levelNumber + 1];
-                        int p = level.LocalIndexFromWorldPos(WorldPosFromLocalIndex(pos));
-                        if (level.renderGrid[p].TType == TileType.Elevator)
+                        int _levelLocal = level.LocalIndexFromWorldPos(worldIndex);
+
+                        if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
                         {
-                            path[pos] = (short)(path[pos] & ~(1 << 5));
-                            level.path[p] = (short)(level.path[p] & ~(1 << 4));
+                            path[worldIndex] = (short)(path[worldIndex] & ~(1 << 5));
+                            level.path[worldIndex] = (short)(level.path[worldIndex] & ~(1 << 4));
                         }
                     }
                 }
 
                 if (newTileType == TileType.Elevator)
                 {
-                    if(levelNumber > 0)
+                    if (levelNumber > 0)
                     {
                         var level = SceneRefs.World.gridLevels[levelNumber - 1];
-                        int p = level.LocalIndexFromWorldPos(WorldPosFromLocalIndex(pos));
-                        if (level.renderGrid[p].TType == TileType.Elevator)
+                        int _levelLocal = level.LocalIndexFromWorldPos(worldIndex);
+
+                        if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
                         {
-                            path[pos] = (short)(path[pos] | (1 << 4));
-                            level.path[p] = (short)(level.path[p] | (1 << 5));
+                            path[worldIndex] = (short)(path[worldIndex] | (1 << 4));
+                            level.path[worldIndex] = (short)(level.path[worldIndex] | (1 << 5));
                         }
                     }
-                    if(levelNumber < SceneRefs.World.LEVEL_COUNT-1)
+                    if (levelNumber < SceneRefs.World.LEVEL_COUNT - 1)
                     {
                         var level = SceneRefs.World.gridLevels[levelNumber + 1];
-                        
-                        int p = level.LocalIndexFromWorldPos(WorldPosFromLocalIndex(pos));
-                        if (level.renderGrid[p].TType == TileType.Elevator)
+                        int _levelLocal = level.LocalIndexFromWorldPos(worldIndex);
+
+                        if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
                         {
-                            path[pos] = (short)(path[pos] | (1 << 5));
-                            level.path[p] = (short)(level.path[p] | (1 << 4));
+                            path[worldIndex] = (short)(path[worldIndex] | (1 << 5));
+                            level.path[worldIndex] = (short)(level.path[worldIndex] | (1 << 4));
                         }
                     }
                 }
             }
             else
             {
-                if(tile.TType == TileType.Building)
+                if (tile.TType == TileType.Building)
                 {
-                    path[pos] = 0;
+                    path[worldIndex] = 0;
                 }
 
                 for (int i = 0; i < 4; i++)
                 {
-                    int p = pos + offsetPathTableNeighbour[i];
-                    path[p] = (short)(path[p] & ~(short)(0x1 << i));
+                    int _world = worldIndex + neighbours[i];
+                    path[_world] = (short)(path[_world] & ~(short)(0x1 << i));
                 }
             }
-            renderGrid[pos] = tile;
         }
-
 
         public void UIUpdate(string property = "")
         {
@@ -270,6 +278,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             int y = localIndex / levelDimensionsScaled + levelOffsetScaled;
 
             return new(x, y);
+        }
+
+        public int LocalIndexFromWorldIndex(int world)
+        {
+            int x = (world % (levelDimensionsScaled + (2 * levelOffsetScaled))) - levelOffsetScaled;
+            int y = (world / (levelDimensionsScaled + (2 * levelOffsetScaled))) - levelOffsetScaled;
+            
+            return y * levelDimensionsScaled + x;
         }
 
         public int LocalIndexFromWorldPos(int2 world)

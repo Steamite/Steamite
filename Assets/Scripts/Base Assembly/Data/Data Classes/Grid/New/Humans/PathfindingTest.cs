@@ -57,7 +57,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             {
                 start = offsetStart.y * width + offsetStart.x,
                 destination = offsetEnd.y * width + offsetEnd.x,
-                pathNodes = world.CurrentLevel.path,
+                //pathNodes = world.CurrentLevel.path,
                 gridWidth = world.CurrentLevel.levelDimensionsScaled,
                 offsetTable = offsets,
                 positions = tempPos

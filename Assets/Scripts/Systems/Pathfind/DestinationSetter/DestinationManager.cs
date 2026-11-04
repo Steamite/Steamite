@@ -27,7 +27,7 @@ public class DestinationManager : MonoBehaviour, IMousePosSetter
         {
             pos = offsetStart.y * width + offsetStart.x,
             worldPos = new(offsetStart.x, world.CurrentLevelIndex, offsetStart.y),
-            grid = world.CurrentLevel.path,
+            //grid = world.CurrentLevel.path,
             width = width,
             offset = world.CurrentLevel.levelOffsetScaled
         });

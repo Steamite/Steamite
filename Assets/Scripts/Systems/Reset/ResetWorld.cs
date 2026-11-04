@@ -21,8 +21,10 @@ namespace Assets.Scripts.Systems.Reset
                 }
             }
 
-            if (!World.DefaultGameObjectInjectionWorld.IsCreated)
+            if(World.DefaultGameObjectInjectionWorld != null && 
+                World.DefaultGameObjectInjectionWorld.IsCreated)
                 return;
+
             ref var spawner = ref World.DefaultGameObjectInjectionWorld.Unmanaged
                 .GetExistingSystemState<HumanSpawner>();
             spawner.Enabled = true;

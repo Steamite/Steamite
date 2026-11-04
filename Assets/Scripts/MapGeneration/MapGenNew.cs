@@ -51,15 +51,17 @@ public class MapGenNew : MonoBehaviour
     /// <summary>
     /// Scaled size of the current grid level.
     /// </summary>
-    int levelDimScaled;
+    int currentLevelDimScaled;
+    int currentOffsetScaled;
 
     int largestDimension;
+    int largestDimensionScaled;
     /// <summary>Number of the generated level./summary>
     int level;
     
     /// <summary>Level that's being generated at the moment./summary>
     NativeArray<LevelGridTile> map;
-    NativeArray<short> pathMap;
+    NativeSlice<short> pathMap;
 
     /// <summary>List of resources that are posible to spawn./summary>
     [Header("Resource data")][SerializeField] public List<MinableRes> minableResources;
@@ -105,8 +107,14 @@ public class MapGenNew : MonoBehaviour
         buildingSaves[3] = save;
 
 
+        largestDimensionScaled = largestDimension * chunkSize;
+        int gridSize = largestDimensionScaled * largestDimensionScaled;
+        NativeArray<short> path = new(gridSize*levelCount, Allocator.Persistent);
+        neighbourOffsetTable = new int[] { 1, largestDimensionScaled, -1, -largestDimensionScaled };
+
         WorldSaveNew world = new()
         {
+            pathGridSize = gridSize,
             largestDimension = largestDimension,
             levelCount = levelCount,
             chunkDimensions = chunkSize,
@@ -114,7 +122,8 @@ public class MapGenNew : MonoBehaviour
                     buildingSaves,
                     new ChunkSave[0]
                 ),
-            gridSave = new LevelGridSave[levelCount]
+            gridSave = new LevelGridSave[levelCount],
+            pathSave = path
         };
 
         try
@@ -142,21 +151,21 @@ public class MapGenNew : MonoBehaviour
         for (level = 0; level < world.levelCount; level++)
         {
             int levelDim = levelDimensions.sizes[level];
-            levelDimScaled = levelDim * world.chunkDimensions;
-
-            int scaledSize = levelDimScaled * levelDimScaled;
-
+            currentLevelDimScaled = levelDim * world.chunkDimensions;
+            currentOffsetScaled = levelDimensions.offsets[level] * world.chunkDimensions;
+            
+            int scaledSize = currentLevelDimScaled * currentLevelDimScaled;
+            
             NativeArray<LevelGridTile> grid = new(scaledSize, Allocator.Persistent);
-            NativeArray<short> path = new(scaledSize, Allocator.Persistent);
+            NativeSlice<short> path = new(world.pathSave, level*world.pathGridSize, world.pathGridSize);
             LevelGridSave levelSave = new(
                 levelDim, 
                 levelDimensions.offsets[level], 
-                grid,
-                path);
+                grid);
 
             map = grid;
             pathMap = path;
-            await CreateGrid(levelDimScaled, scaledSize);
+            await CreateGrid(currentLevelDimScaled, scaledSize);
 
             world.gridSave[level] = levelSave;
         }
@@ -196,7 +205,7 @@ public class MapGenNew : MonoBehaviour
     int maxPos;
 
     const int SCAN_RANGE = 2;
-    int[] offsetTable;
+    int[] neighbourOffsetTable;
     /// <summary>Generates veins on a level.</summary>
     async Awaitable CreateGrid(int levelDimScaled, int size)
     {
@@ -209,15 +218,10 @@ public class MapGenNew : MonoBehaviour
         minPos = center - centerRadius;
         maxPos = center + centerRadius;
 
-        int revealMin = minPos - 2;
-        int revealMax = maxPos + 2;
-        offsetTable = new int[] { 1, levelDimScaled, -1, -levelDimScaled};
-
         float div = (float)levelDimScaled;
-        //int div =
         for (int i = 0; i < size; i++)
         {
-            if (x == 0 || y == 0 || x == (levelDimScaled - 1) || y == (levelDimScaled - 1))
+            if (x == 0 || y == 0 || x > (levelDimScaled - 2) || y > (levelDimScaled - 2))
             {
                 // keep outside wall
             }
@@ -261,22 +265,23 @@ public class MapGenNew : MonoBehaviour
     {
         map[pos] = tile;
 
-        short pathNode = pathMap[pos];
+        int x = (pos % currentLevelDimScaled) + currentOffsetScaled;
+        int y = (pos / currentLevelDimScaled) + currentOffsetScaled;
+        int worldPos = y * largestDimensionScaled + x;
+
         if (tile.TType == TileType.Road)
         {
             for (int i = 0; i < 4; i++)
             {
-                int p = pos + offsetTable[i];
+                int p = worldPos + neighbourOffsetTable[i];
                 pathMap[p] = (short)(pathMap[p] | (short)(0x1 << i));
             }
-
-            //pathMap[pos] = pathNode & ~(pathNode (0x));
         }
         else
         {
             for (int i = 0; i < 4; i++)
             {
-                int p = pos + offsetTable[i];
+                int p = worldPos + neighbourOffsetTable[i];
                 pathMap[p] = (short)(pathMap[p] & ~(short)(0x1 << i));
             }
         }
@@ -292,9 +297,9 @@ public class MapGenNew : MonoBehaviour
         int pos, x, z;
         /*do
         {*/
-            x = Random.Range(1, levelDimScaled);
-            z = Random.Range(1, levelDimScaled);
-            pos = z * levelDimScaled + x;/*
+            x = Random.Range(1, currentLevelDimScaled);
+            z = Random.Range(1, currentLevelDimScaled);
+            pos = z * currentLevelDimScaled + x;/*
         }
         while (!CanPlace(pos, x, z));*/
         int _veinSize = minable.size[level].Value(veinSize);
@@ -360,7 +365,7 @@ public class MapGenNew : MonoBehaviour
 
                 if (InBounds(x, y))
                 {
-                    int pos = y * levelDimScaled + x;/*
+                    int pos = y * currentLevelDimScaled + x;/*
                     if (CanPlace(pos, x, y))
                     {*/
                     MarkPath(pos, LevelGridTile.Wall(
@@ -398,7 +403,7 @@ public class MapGenNew : MonoBehaviour
     }
     bool InBounds(int x, int y)
     {
-        return (x > 1 && x < levelDimScaled-1 && y > 1 && y < levelDimScaled-1);
+        return (x > 1 && x < currentLevelDimScaled-1 && y > 1 && y < currentLevelDimScaled-1);
     }
 
     /*
