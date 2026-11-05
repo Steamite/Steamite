@@ -32,6 +32,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public int CenterScaled;
         [NonSerialized] public int LargestLevelDimension;
         [NonSerialized] public int LargestLevelDimensionScaled;
+        [NonSerialized] public int GridSizeScaled;
 
         [SerializeField] Mesh[] buildingMeshes;
         [SerializeField] Material buildingMaterial;
@@ -108,13 +109,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             GridLevel.chunkDimensions = saveToLoad.chunkDimensions;
             LargestLevelDimension = saveToLoad.largestDimension;
             LargestLevelDimensionScaled = LargestLevelDimension * GridLevel.chunkDimensions;
+            GridSizeScaled = LargestLevelDimensionScaled * LargestLevelDimensionScaled;
+
 
             offsetPathTableNeighbour = new int[] { 1, LargestLevelDimensionScaled, -1, -LargestLevelDimensionScaled };
             path = saveToLoad.pathSave;
 
             for (int i = 0; i < LEVEL_COUNT; i++)
             {
-                gridLevels[i] = new GridLevel(saveToLoad.gridSave[i], i, LargestLevelDimensionScaled * LargestLevelDimensionScaled, path);
+                gridLevels[i] = new GridLevel(saveToLoad.gridSave[i], i, GridSizeScaled, path);
             }
 
             CenterScaled = (LargestLevelDimension / 2) * GridLevel.chunkDimensions;

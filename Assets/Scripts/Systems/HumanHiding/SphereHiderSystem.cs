@@ -26,14 +26,14 @@ namespace Assets.Scripts.Systems.HumanHiding
 
             foreach((var pos, var trans) in SystemAPI.Query<RefRO<PathfindComponent>, RefRW<LocalTransform>>())
             {
-                int y = (int)math.floor(pos.ValueRO.position.y);
+                int y = (int)pos.ValueRO.position.y;
                 if (y != component.currentLevel)
                     trans.ValueRW.Scale = 0;
                 else
                     trans.ValueRW.Scale = 1;
             }
 
-            state.Enabled = false;
+            //state.Enabled = false;
         }
     }
 }

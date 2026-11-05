@@ -23,17 +23,19 @@ namespace Assets.Scripts.Systems.Pathing
                 return;
 
             float sp = path.speed * DeltaTime;
+            float maxDistance = sp * sp;// math.pow(path.speed * DeltaTime, 2);
 
             float3 pos = transform.Position - offset;
             float3 waypoint = nodes[path.currentWaypoint].position;
-            float3 dir = waypoint - pos;// math.normalizesafe();
-            
+            float2 dir = new(waypoint.x - pos.x, waypoint.z - pos.z);// waypoint - pos;// math.normalizesafe();
 
-            float dist = math.sqrt(dir.x* dir.x + dir.z* dir.z);
 
-            if(dist < sp)
+            float dist = /*math.sqrt(*/(dir.x * dir.x) + (dir.y * dir.y);//);
+
+            if(dist < maxDistance)
             {
-                transform.Position = waypoint + offset;
+                path.position = waypoint;
+                transform.Position = new float3(waypoint.x, 1, waypoint.z) + offset;
                 path.currentWaypoint++;
                 if (path.currentWaypoint == nodes.Length)
                     path.currentWaypoint = -1;
@@ -41,7 +43,7 @@ namespace Assets.Scripts.Systems.Pathing
             else
             {
                 dir = math.normalizesafe(dir) * sp;
-                transform.Position += dir;
+                transform.Position += new float3(dir.x, 0, dir.y);
             }
         }
     }

@@ -32,7 +32,7 @@ namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
                 path = world.path,
                 offsets = offsets,
                 LargestLevelDimensionScaled = world.LargestLevelDimensionScaled,
-                largestGridSize = world.LargestLevelDimensionScaled * world.LargestLevelDimensionScaled,
+                largestGridSize = world.GridSizeScaled
             });
         }
 

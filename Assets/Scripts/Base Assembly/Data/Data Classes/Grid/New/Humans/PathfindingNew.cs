@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Unity.AI.Navigation.LowLevel;
@@ -15,6 +16,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
     {
         public NativeArray<short> path;
         public int gridWidth;
+        public int gridSize;
         public int start;
         public int destination;
         /// <summary>
@@ -42,7 +44,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             int expectedTileCount = expectedSize.x * expectedSize.y;
 
             
-            QueueNew queue = new(start, sPos, expectedTileCount, 0, gridWidth * gridWidth);
+            QueueNew queue = new(start, sPos, expectedTileCount, level, path.Length);
             PathNode node = default;
             bool found = false;
             while ((node = queue.Dequeue()).position != -1)
@@ -64,7 +66,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                 short mapNode = path[pos];
                 for (int i = 0; i < offsetTable.Length; i++)
                 {
-                    pos = node.position + offsetTable[i];
+                    int checkPos = node.position + offsetTable[i];
 
                     int2 posWorld = node.worldPosition + offsetTableVec[i];
                     int costToReach = math.select(
@@ -75,12 +77,29 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 
                     PathNode newNode = new()
                     {
-                        position = pos,
+                        position = checkPos,
                         worldPosition = posWorld,
                         costToReach = costToReach,
                         totalCost = costToReach + dist.x + dist.y,
+                        levelIndex = node.levelIndex,
                     };
                     queue.Enqueue(newNode, node.position);
+                    mapNode >>= 0x1;
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    if((mapNode & 0x1) == 1) 
+                    {
+                        PathNode newNode = new()
+                        {
+                            position = pos + math.select(gridSize, -gridSize, i == 0),
+                            worldPosition = node.worldPosition,
+                            costToReach = node.costToReach + 1,
+                            totalCost = node.totalCost + 1,
+                            levelIndex = node.levelIndex + math.select(1, -1, i == 0)
+                        };
+                        queue.Enqueue(newNode, node.position);
+                    }
                     mapNode >>= 0x1;
                 }
 

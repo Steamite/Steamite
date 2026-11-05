@@ -22,22 +22,19 @@ namespace Assets.Scripts.Systems.Pathing
         [BurstCompile]
         public void Execute(ref PathfindComponent humanPosition, ref DynamicBuffer<PositionNode> nodes)
         {
-            if (humanPosition.position.y != destination.level)
-                return;
-
-            
-
-
             NativeList<int> positions = new NativeList<int>(20, Allocator.Temp);
+            int yPos = ((int)math.floor(humanPosition.position.y));
             PathfindingNew pathfindingNew = new()
             {
                 destination = destination.pos,
                 start =
+                    yPos * worldData.largestGridSize + 
                     ((int)math.floor(humanPosition.position.z)) * worldData.LargestLevelDimensionScaled +
                     ((int)math.floor(humanPosition.position.x)),
-                level = destination.level,
+                level = yPos,
                 path = worldData.path,
                 gridWidth = worldData.LargestLevelDimensionScaled,
+                gridSize = worldData.largestGridSize,
                 offsetTable = worldData.offsets,
                 positions = positions
             };
@@ -53,8 +50,15 @@ namespace Assets.Scripts.Systems.Pathing
             humanPosition.currentWaypoint = 0;
             for (int i = positions.Length-2; i >= 0; i--)
             {
-                int2 pos = new int2(positions[i] % worldData.LargestLevelDimensionScaled, positions[i] / worldData.LargestLevelDimensionScaled);
-                nodes.Add(new() { position = new(pos.x, 1, pos.y)});
+                int p = positions[i] % worldData.largestGridSize;
+                int2 pos = new int2(
+                    positions[i] % worldData.LargestLevelDimensionScaled, 
+                    p / worldData.LargestLevelDimensionScaled);
+
+                nodes.Add(new() { position = new(
+                    pos.x, 
+                    positions[i] / worldData.largestGridSize, 
+                    pos.y)});
             }
         }
     }

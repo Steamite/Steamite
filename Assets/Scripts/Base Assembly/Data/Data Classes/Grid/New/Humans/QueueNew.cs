@@ -14,6 +14,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         
         public int totalCost;
         public int costToReach;
+        public int levelIndex;
     }
 
 
@@ -28,17 +29,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 
         public NativeArray<Visited> tiles;
 
-        public QueueNew(int startIndex, int2 worldPosition, int expectedSize, int heurestic, int worldSize)
+        public QueueNew(int startIndex, int2 worldPosition, int expectedSize, int level, int worldSize)
         {
             queue = new(expectedSize, Allocator.Temp);
             tiles = new(worldSize, Allocator.Temp);
-
 
             Enqueue(new PathNode()
             {
                 position = startIndex,
                 worldPosition = worldPosition,
-                totalCost = -1
+                totalCost = -1,
+                levelIndex = level,
             },
                 -1);
         }

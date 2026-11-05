@@ -19,9 +19,9 @@ namespace Assets.Scripts.Systems.HumanHiding
                 prevLevel = oldLevel,
                 currentLevel = newLevel
             });
-
+/*
             ref var state = ref World.DefaultGameObjectInjectionWorld.Unmanaged.GetExistingSystemState<SphereHiderSystem>();
-            state.Enabled = true;
+            state.Enabled = true;*/
         }
 
         public void AfterLoad()
