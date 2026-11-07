@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
-using Assets.Scripts.Systems.Pathing;
+using Pathing;
 using System;
 using System.Collections.Generic;
 using System.Text;

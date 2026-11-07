@@ -1,7 +1,4 @@
-﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Humans;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Humans;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

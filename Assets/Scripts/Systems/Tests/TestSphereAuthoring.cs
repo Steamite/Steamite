@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Humans;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -53,9 +54,4 @@ namespace Assets.Scripts.Systems
         public float speed;
     }
 
-    [InternalBufferCapacity(20)]
-    public struct PositionNode : IBufferElementData
-    {
-        public float3 position;
-    }
 }

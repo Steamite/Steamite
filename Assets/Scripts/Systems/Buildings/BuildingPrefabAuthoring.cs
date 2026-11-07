@@ -28,10 +28,4 @@ namespace Assets.Scripts.Systems.Buildings
     {
         public Entity prefab;
     }
-
-    public struct BuildingComponent : IComponentData
-    {
-        public int typeIndex;
-
-    }
 }

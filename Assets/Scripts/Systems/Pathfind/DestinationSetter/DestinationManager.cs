@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Systems.Pathing;
+﻿using Pathing;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;

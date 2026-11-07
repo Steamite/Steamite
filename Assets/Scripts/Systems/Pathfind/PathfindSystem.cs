@@ -1,5 +1,5 @@
-﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
-using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans;
+using Humans;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +9,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-namespace Assets.Scripts.Systems.Pathing
+namespace Pathing
 {
 
     [BurstCompile]

@@ -10,7 +10,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.LightTransport;
 
-namespace Assets.Scripts.Systems.Pathing
+namespace Pathing
 {
     public struct DestinationComponent : IComponentData
     {
@@ -24,14 +24,5 @@ namespace Assets.Scripts.Systems.Pathing
         [ReadOnly] public NativeArray<int> offsets;
         [ReadOnly] public int LargestLevelDimensionScaled;
         [ReadOnly] public int largestGridSize;
-    }
-
-
-
-    public struct PathfindComponent : IComponentData
-    {
-        public float3 position;
-        public int currentWaypoint;
-        public float speed;
     }
 }

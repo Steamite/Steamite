@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Systems.Pathing;
+﻿using Humans;
 using System;
 using System.Collections.Generic;
 using System.Text;

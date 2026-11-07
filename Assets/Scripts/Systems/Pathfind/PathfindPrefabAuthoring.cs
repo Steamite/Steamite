@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans;
+﻿using Humans;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +6,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Assets.Scripts.Systems.Pathing
+namespace Pathing
 {
     public class PathfindPrefabAuthoring : MonoBehaviour
     {
