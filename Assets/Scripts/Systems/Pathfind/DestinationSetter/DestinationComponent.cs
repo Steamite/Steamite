@@ -14,7 +14,7 @@ namespace Pathing
 {
     public struct DestinationComponent : IComponentData
     {
-        public int pos;
+        public NativeArray<int> positions;
         public int level;
     }
 

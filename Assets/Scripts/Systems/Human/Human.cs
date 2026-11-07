@@ -39,6 +39,19 @@ namespace Humans
         public float3 position;
     }
 
+    public struct HumanJobData : IComponentData
+    {
+        public int targetPosition;
+        public Entity buildingInterest;
+
+        public JobType jobType;
+    }
+    public enum JobType
+    {
+        Free,
+        Dig,
+        Construct
+    }
     /*
         [InternalBufferCapacity(3)]
         public struct OrderedResources : IBufferElementData

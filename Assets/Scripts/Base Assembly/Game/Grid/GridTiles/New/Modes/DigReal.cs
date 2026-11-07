@@ -1,8 +1,10 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
+using JobFind;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,7 +16,9 @@ public class DigReal : GridTilesModeNew
     [SerializeField] Color toBeDugColorRoad;
 
     [SerializeField] LevelRenderer renderer;
-    
+
+    [SerializeField] MonoBehaviour jobLinker;
+
     bool drag = false;
 
 
@@ -102,6 +106,8 @@ public class DigReal : GridTilesModeNew
 
         int2 position;
         int worldIndex;
+        IDigManager manager = jobLinker as IDigManager;
+
 
         for (int y = minPos.y; y <= maxPos.y; y++)
         {
@@ -109,10 +115,13 @@ public class DigReal : GridTilesModeNew
             position.x = minPos.x;
 
             worldIndex = SceneRefs.World.GetWorldIndex(position);
+            /*int localIndex = SceneRefs.World.CurrentLevelIndex * SceneRefs.World.GridSizeScaled 
+                + SceneRefs.World.CurrentLevel.LocalIndexFromWorldPos(position);*/
             for (int x = minPos.x; x <= maxPos.x; x++)
             {
                 if (SceneRefs.World.GetActiveTile(x, y).TType == TileType.Wall)
                 {
+                    manager.MarkTile(worldIndex);
                     renderer.markedTilesGrid.Set(worldIndex, !removing);
                     renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R((byte)(removing ? 0: 255));
                 }
@@ -120,9 +129,12 @@ public class DigReal : GridTilesModeNew
                 {
                     renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R(0);
                 }
+                //localIndex++;
                 worldIndex++;
             }
         }
+        manager.ApplyMark(!removing);
+
         renderer.UpdateOverlayTexture();
         controller.MouseListen();
     }

@@ -15,6 +15,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         public int totalCost;
         public int costToReach;
         public int levelIndex;
+
+        public int destinationIndex;
     }
 
 
@@ -29,19 +31,30 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 
         public NativeArray<Visited> tiles;
 
-        public QueueNew(int startIndex, int2 worldPosition, int expectedSize, int level, int worldSize)
+        public QueueNew(NativeArray<int> startPositions, int2 destinationPosition, int level, int worldSize, int width, int expectedSize = 50)
         {
             queue = new(expectedSize, Allocator.Temp);
             tiles = new(worldSize, Allocator.Temp);
 
-            Enqueue(new PathNode()
+            for (int i = 0; i < startPositions.Length; i++)
             {
-                position = startIndex,
-                worldPosition = worldPosition,
-                totalCost = -1,
-                levelIndex = level,
-            },
+                int startPos = startPositions[i];
+
+                int2 worldPos = new(startPos % width, startPos / width);
+                int distance = math.abs(worldPos.x - destinationPosition.x) + math.abs(worldPos.y - destinationPosition.y);
+                Enqueue(new PathNode()
+                {
+                    position = startPos,
+                    worldPosition = worldPos,
+                    costToReach = 0,
+                    totalCost = distance,
+                    levelIndex = level,
+                    destinationIndex = i
+                },
                 -1);
+            }
+
+            
         }
 
         public void Dispose()

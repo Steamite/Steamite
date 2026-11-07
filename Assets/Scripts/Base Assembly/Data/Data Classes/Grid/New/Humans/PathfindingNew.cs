@@ -11,14 +11,16 @@ using UnityEngine;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 {
-    [BurstCompile]
+    //[BurstCompile]
     public struct PathfindingNew : IJob
     {
         public NativeArray<short> path;
         public int gridWidth;
         public int gridSize;
-        public int start;
+        public NativeArray<int> positionsToStartFrom;
         public int destination;
+
+        public NativeReference<int> closestDestination;
         /// <summary>
         /// 1, width, -1, -width
         /// </summary>
@@ -36,16 +38,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 
         public void Execute()
         {
-            int2 sPos = new(start % gridWidth, start / gridWidth);
-            int2 dPos = new(destination % gridWidth, destination / gridWidth);
+            int2 destinationPosition = new(destination % gridWidth, destination / gridWidth);
 
-
-            int2 expectedSize = math.abs(dPos - sPos) + 2;
-            int expectedTileCount = expectedSize.x * expectedSize.y;
 
             
-            QueueNew queue = new(start, sPos, expectedTileCount, level, path.Length);
-            PathNode node = default;
+            QueueNew queue = new(positionsToStartFrom, destinationPosition, level, path.Length, gridWidth);
+            PathNode node;
+
             bool found = false;
             while ((node = queue.Dequeue()).position != -1)
             {
@@ -73,7 +72,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                         2_000_000, 
                         node.costToReach + 1,
                         (mapNode & 0x1) == 1);
-                    int2 dist = math.abs(posWorld - dPos);
+                    int2 dist = math.abs(posWorld - destinationPosition);
 
                     PathNode newNode = new()
                     {
@@ -82,6 +81,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                         costToReach = costToReach,
                         totalCost = costToReach + dist.x + dist.y,
                         levelIndex = node.levelIndex,
+                        destinationIndex = node.destinationIndex
                     };
                     queue.Enqueue(newNode, node.position);
                     mapNode >>= 0x1;
@@ -96,7 +96,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                             worldPosition = node.worldPosition,
                             costToReach = node.costToReach + 1,
                             totalCost = node.totalCost + 1,
-                            levelIndex = node.levelIndex + math.select(1, -1, i == 0)
+                            levelIndex = node.levelIndex + math.select(1, -1, i == 0),
+                            destinationIndex = node.destinationIndex
                         };
                         queue.Enqueue(newNode, node.position);
                     }
@@ -107,6 +108,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             
             if(found == true)
             {
+                closestDestination.Value = node.destinationIndex;
+
                 int toVisit = node.position;
                 while (toVisit != -1)
                 {
@@ -114,6 +117,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                     toVisit = queue.tiles[toVisit].prevVisited;
                 }
             }
+            else
+                closestDestination.Value = -1;
+
             queue.Dispose();
         }
     }

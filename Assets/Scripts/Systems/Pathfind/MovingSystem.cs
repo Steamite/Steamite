@@ -49,7 +49,7 @@ namespace Pathing
     }
     [UpdateAfter(typeof(PathfindSystem))] 
     [BurstCompile]
-    public partial struct PathfindMovingSystem : ISystem
+    public partial struct MovingSystem : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)

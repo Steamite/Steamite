@@ -53,9 +53,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                     end.x - world.CurrentLevel.levelOffsetScaled,
                     end.z - world.CurrentLevel.levelOffsetScaled);
 
+            NativeArray<int> starts = new(new int[] { offsetStart.y * width + offsetStart.x }, Allocator.TempJob);
             PathfindingNew pathfindingNew = new()
             {
-                start = offsetStart.y * width + offsetStart.x,
+                positionsToStartFrom = starts,
                 destination = offsetEnd.y * width + offsetEnd.x,
                 //pathNodes = world.CurrentLevel.path,
                 gridWidth = world.CurrentLevel.levelDimensionsScaled,
@@ -66,6 +67,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             pathfindingNew.Run();
             if (positions.IsCreated)
                 positions.Dispose();
+            if (starts.IsCreated)
+                starts.Dispose();
+
             positions = new(tempPos.Count, Allocator.Persistent);
 
 

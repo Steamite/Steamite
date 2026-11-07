@@ -22,46 +22,79 @@ namespace Pathing
         [BurstCompile]
         public void Execute(ref PathfindComponent humanPosition, ref DynamicBuffer<PositionNode> nodes)
         {
+            Pathfind.FindPath(ref humanPosition, nodes, destination.positions, worldData);
+        }
+
+        
+    }
+
+    public static class Pathfind
+    {
+        public static int FindPath(
+            ref PathfindComponent humanPosition, 
+            DynamicBuffer<PositionNode> nodes, 
+            NativeArray<int> destinations, 
+            WorldComponent worldData)
+        {
             NativeList<int> positions = new NativeList<int>(20, Allocator.Temp);
             int yPos = ((int)math.floor(humanPosition.position.y));
+
+            NativeReference<int> foundDestination = new NativeReference<int>(Allocator.TempJob);
+
             PathfindingNew pathfindingNew = new()
             {
-                destination = destination.pos,
-                start =
-                    yPos * worldData.largestGridSize + 
+                destination = yPos * worldData.largestGridSize +
                     ((int)math.floor(humanPosition.position.z)) * worldData.LargestLevelDimensionScaled +
                     ((int)math.floor(humanPosition.position.x)),
+
+                positionsToStartFrom = destinations,
+
                 level = yPos,
                 path = worldData.path,
                 gridWidth = worldData.LargestLevelDimensionScaled,
                 gridSize = worldData.largestGridSize,
                 offsetTable = worldData.offsets,
-                positions = positions
+                positions = positions,
+                closestDestination = foundDestination
             };
 
             pathfindingNew.Execute();
             nodes.Clear();
-            if (positions.Length == 0)
-            {
+
+            if(foundDestination.Value == -1)
+            { 
                 humanPosition.currentWaypoint = -1;
-                return;
+                foundDestination.Dispose();
+                return -1;
             }
+
             nodes.Capacity = positions.Length - 1;
             humanPosition.currentWaypoint = 0;
-            for (int i = positions.Length-2; i >= 0; i--)
+            for (int i = 1; i < positions.Length; i++)
             {
-                int p = positions[i] % worldData.largestGridSize;
-                int2 pos = new int2(
-                    positions[i] % worldData.LargestLevelDimensionScaled, 
-                    p / worldData.LargestLevelDimensionScaled);
+                int levelPosition = positions[i] % worldData.largestGridSize;
+                int yPosition = positions[i] / worldData.largestGridSize;
 
-                nodes.Add(new() { position = new(
-                    pos.x, 
-                    positions[i] / worldData.largestGridSize, 
-                    pos.y)});
+                int2 pos = new int2(
+                    positions[i] % worldData.LargestLevelDimensionScaled,
+                    levelPosition / worldData.LargestLevelDimensionScaled);
+
+                nodes.Add(new()
+                {
+                    position = new(
+                    pos.x,
+                    yPosition,
+                    pos.y)
+                });
             }
+
+            int val = foundDestination.Value;
+            foundDestination.Dispose();
+            return val;
         }
     }
+
+
 
     [BurstCompile]
     public partial struct PathfindSystem : ISystem

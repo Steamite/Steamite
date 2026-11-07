@@ -21,6 +21,7 @@ namespace Pathing
                 AddComponent<Prefab>(ent);
 
                 AddComponent<PathfindComponent>(ent, new() { position = 6008});
+                AddComponent<HumanJobData>(ent, new() { jobType = JobType.Free, buildingInterest = default, targetPosition = -1 });
                 AddBuffer<PositionNode>(ent);
                 var e = CreateAdditionalEntity(TransformUsageFlags.None);
                 AddComponent<PathfindPrefab>(e, new() { entity = ent, count = authoring.count, speed = authoring.speed});
