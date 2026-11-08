@@ -319,7 +319,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
         public void OnLevelChange(GridLevel level)
         {
-            propertyBlock.SetInt("_LevelOffset", level.levelOffsetScaled);
+            propertyBlock.SetInt("_LevelOffset", level.offsetScaled);
             propertyBlock.SetInt("_SelectedLevel", level.levelNumber);
         }
 

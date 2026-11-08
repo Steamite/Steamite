@@ -47,7 +47,7 @@ namespace Rendering
                 toRenderCount = nativeRenderCount,
                 width = levelDimensions
             };
-            job.Run(level.chunkCounts);
+            job.Run(level.chunkCount);
 
             chunks.ValueRW.toRenderCount = nativeRenderCount.Value;
             nativeRenderCount.Dispose();

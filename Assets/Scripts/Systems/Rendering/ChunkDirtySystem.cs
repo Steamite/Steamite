@@ -30,8 +30,6 @@ namespace Rendering
             var render = SystemAPI.GetSingleton<RenderingComponent>();
             var level = SystemAPI.GetSingletonBuffer<GridLevelComponent>()[levelIndex];
 
-            //rerenderedThisFrame.Clear();
-
             Mesh[] meshes = chunkMeshes[levelIndex];
             for (int i = 0; i < render.toRenderCount; i++)
             {

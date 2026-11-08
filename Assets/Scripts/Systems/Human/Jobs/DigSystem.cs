@@ -19,11 +19,13 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
         public void OnUpdate(ref SystemState state)
         {
-            var ent = SystemAPI.GetSingletonEntity<WorldComponent>();
-            //var world = SystemAPI.GetComponent<WorldComponent>(ent);
-            var levels = SystemAPI.GetBuffer<GridLevelComponent>(ent);
+            //var worldComponent = SystemAPI.GetSingleton<WorldComponent>();
+            var levels = SystemAPI.GetSingletonBuffer<GridLevelComponent>();
+            var overlayBuffers = SystemAPI.GetSingletonBuffer<OverlayDataComponent>();
 
-            foreach((var jobData, var pathing) in SystemAPI.Query<RefRW<HumanJobData>, RefRO<PathfindComponent>>())
+            var change = SystemAPI.GetSingletonRW<OverlayChangeComponent>();
+
+            foreach ((var jobData, var pathing) in SystemAPI.Query<RefRW<HumanJobData>, RefRO<PathfindComponent>>())
             {
                 if (jobData.ValueRO.jobType == JobType.Free)
                     continue;
@@ -32,7 +34,8 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
                 if (jobData.ValueRO.jobType == JobType.Dig)
                 {
-                    var level = levels[jobData.ValueRO.targetLevel];
+                    int levelIndex = jobData.ValueRO.targetLevel;
+                    var level = levels[levelIndex];
                     var grid = level.renderGrid;
                     
                     int localIndex = jobData.ValueRO.targetPosition;
@@ -48,8 +51,18 @@ namespace Assets.Scripts.Systems.Human.Jobs
                             localIndex);
                         jobData.ValueRW.jobType = JobType.Free;
                         jobData.ValueRW.targetPosition = -1;
-                        // update roads
-                        //world.path
+
+                        // clear overlay
+                        int world = Recalculation.WorldIndexFromLocal(localIndex, level.levelOffsetScaled, level.levelDimensionsScaled);
+                        var overlay = overlayBuffers[levelIndex];
+                        
+                        overlay.overlayGrid[world] = overlay.overlayGrid[world].R(0);
+                        overlay.markedTilesGrid.Set(world, false);
+
+                        change.ValueRW.hasChange = true;
+
+                        // path update
+                        //worldComponent.path[]
                     }
                     grid[localIndex] = tile;
                 }

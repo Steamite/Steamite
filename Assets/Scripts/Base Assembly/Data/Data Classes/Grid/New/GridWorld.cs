@@ -117,7 +117,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             for (int i = 0; i < LEVEL_COUNT; i++)
             {
-                gridLevels[i] = new GridLevel(saveToLoad.gridSave[i], i, GridSizeScaled, path);
+                gridLevels[i] = new GridLevel(saveToLoad.gridSave[i], i, GridSizeScaled, path, LargestLevelDimensionScaled);
             }
 
             CenterScaled = (LargestLevelDimension / 2) * GridLevel.chunkDimensions;
@@ -137,7 +137,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public LevelGridTile GetTile(int x, int level, int y)
         {
-            return gridLevels[level].renderGrid[gridLevels[level].levelDimensionsScaled * y + x];
+            return gridLevels[level].renderGrid[gridLevels[level].dimensionsScaled * y + x];
         }
 
         public LevelGridTile GetActiveTile(int2 worldPosition)
@@ -147,11 +147,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public LevelGridTile GetActiveTile(int worldX, int worldY)
         {
-            worldX -= currentLevel.levelOffsetScaled;
-            worldY -= currentLevel.levelOffsetScaled;
+            worldX -= currentLevel.offsetScaled;
+            worldY -= currentLevel.offsetScaled;
             //Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
             
-            int index = currentLevel.levelDimensionsScaled * worldY + worldX;
+            int index = currentLevel.dimensionsScaled * worldY + worldX;
             if (index < 0 || index >= currentLevel.renderGrid.Length)
                 return LevelGridTile.OutsideWall;
             return currentLevel.renderGrid[index];
@@ -159,11 +159,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public LevelGridTile GetActiveTile(int x, int y, out int index)
         {
-            x -= currentLevel.levelOffsetScaled;
-            y -= currentLevel.levelOffsetScaled;
+            x -= currentLevel.offsetScaled;
+            y -= currentLevel.offsetScaled;
             //Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
 
-            index = currentLevel.levelDimensionsScaled * y + x;
+            index = currentLevel.dimensionsScaled * y + x;
             if (index < 0 || index >= currentLevel.renderGrid.Length)
                 return LevelGridTile.OutsideWall;
             return currentLevel.renderGrid[index];
@@ -222,7 +222,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// </summary>
         /// <param name="gridPos"></param>
         /// <returns></returns>
-        public void DamageRock(int gridIndex, uint ammount, int level = 0)
+        public void DamageRock(int gridIndex, uint ammount, int level)
         {
             GridLevel gridLevel = gridLevels[level];
             //int pos = gridLevel.levelDimensionsScaled * gridPos.y + gridPos.x;
@@ -234,8 +234,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 tile = LevelGridTile.Road;
                 gridLevel.SetTile(gridIndex, tile);
                 gridLevel.RevealRocks(gridIndex);
-                renderer.CleanPosAndUpdate(gridIndex);
-                renderer.UpdateMesh(level, gridIndex, gridLevel, 2);
+
+                currentLevel.CleanPosAndUpdate(gridIndex);
+                renderer.UpdateOverlayTexture();
             }
             else
             {
@@ -248,8 +249,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             GridLevel gridLevel = CurrentLevel;
             gridLevel.SetTile(pos, LevelGridTile.Wall(10, false));
-
-            renderer.UpdateMesh(level, pos, gridLevel);
         }
 
         public int GetWorldIndex(int2 worldPosition) => worldPosition.y * LargestLevelDimensionScaled + worldPosition.x;

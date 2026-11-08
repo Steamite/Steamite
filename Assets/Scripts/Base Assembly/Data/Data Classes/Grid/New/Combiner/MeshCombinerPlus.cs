@@ -117,7 +117,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public Mesh GetNewMesh(int2 chunkPosition, GridLevel levelData)
         {
-            worldSize = new(levelData.levelDimensionsScaled, levelData.levelDimensionsScaled);
+            worldSize = new(levelData.dimensionsScaled, levelData.dimensionsScaled);
 
             return ComposeChunk(chunkPosition * chunkDimensions, levelData.renderGrid);
         }

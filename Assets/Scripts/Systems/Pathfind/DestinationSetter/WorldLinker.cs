@@ -41,10 +41,10 @@ namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
                 buffer.Add(new()
                 {
                     renderGrid = level.renderGrid,
-                    levelDimensionsScaled = level.levelDimensionsScaled,
+                    levelDimensionsScaled = level.dimensionsScaled,
                     levelDimensions = level.levelDimensions,
-                    chunkCounts = level.levelDimensions * level.levelDimensions,
-                    levelOffsetScaled = level.levelOffsetScaled,
+                    chunkCount = level.levelDimensions * level.levelDimensions,
+                    levelOffsetScaled = level.offsetScaled,
                     levelOffset = level.levelOffset,
                     dirtyChunks = level.dirtyChunks
                 });

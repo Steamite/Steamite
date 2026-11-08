@@ -35,7 +35,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         [ContextMenu("TestPath")]
         void TestPath()
         {
-            int width = world.CurrentLevel.levelDimensionsScaled;
+            int width = world.CurrentLevel.dimensionsScaled;
 
             NativeList<int> tempPos = new(Allocator.TempJob);
 
@@ -46,12 +46,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             offsets[3] = width;
 
             int2 offsetStart = new(
-                    start.x - world.CurrentLevel.levelOffsetScaled, 
-                    start.z - world.CurrentLevel.levelOffsetScaled);
+                    start.x - world.CurrentLevel.offsetScaled, 
+                    start.z - world.CurrentLevel.offsetScaled);
 
             int2 offsetEnd = new(
-                    end.x - world.CurrentLevel.levelOffsetScaled,
-                    end.z - world.CurrentLevel.levelOffsetScaled);
+                    end.x - world.CurrentLevel.offsetScaled,
+                    end.z - world.CurrentLevel.offsetScaled);
 
             NativeArray<int> starts = new(new int[] { offsetStart.y * width + offsetStart.x }, Allocator.TempJob);
             PathfindingNew pathfindingNew = new()
@@ -59,7 +59,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                 positionsToStartFrom = starts,
                 destination = offsetEnd.y * width + offsetEnd.x,
                 //pathNodes = world.CurrentLevel.path,
-                gridWidth = world.CurrentLevel.levelDimensionsScaled,
+                gridWidth = world.CurrentLevel.dimensionsScaled,
                 offsetTable = offsets,
                 positions = tempPos
             };
@@ -76,9 +76,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             for (int i = 0; i < positions.Length; i++)
             {
                 positions[i] = new Vector3(
-                    tempPos[i] % width + world.CurrentLevel.levelOffsetScaled, 
+                    tempPos[i] % width + world.CurrentLevel.offsetScaled, 
                     1, 
-                    tempPos[i] / width + world.CurrentLevel.levelOffsetScaled) + offset;
+                    tempPos[i] / width + world.CurrentLevel.offsetScaled) + offset;
             }
 
             tempPos.Dispose();

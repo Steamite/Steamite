@@ -1,8 +1,7 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Systems.Rendering;
 using Pathing;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -10,26 +9,24 @@ using UnityEngine;
 
 namespace Rendering
 {
-    public class ChunkRenderingLinker : MonoBehaviour, IRenderInit
+    public class ChunkRenderingLinker : MonoBehaviour, IRenderInit, IOverlayUpdate
     {
         [NonSerialized] public Entity cameraEntity;
         [SerializeField] Material worldMaterial;
         [SerializeField] int2 cameraSize;
+        [SerializeField] Texture2D gridTexture;
 
         MeshCombinerPlus combiner;
 
-        NativeArray<int> renderArray;
-        NativeArray<OverlayData>[] WorldOverlayGrids;
-        NativeBitArray[] markedTilesGrids;
 
+        public static ChunkRenderingLinker instance;
         public void Init(GridWorld world)
         {
+            instance = this;
             combiner = new MeshCombinerPlus(GridLevel.chunkDimensions);
 
             int levelCount = world.LEVEL_COUNT;
-
             var chunkMeshes = new Mesh[levelCount][];
-
             NativeArray<int> renderArray = new(50, Allocator.Persistent);
 
             var entityWorld = World.DefaultGameObjectInjectionWorld;
@@ -41,7 +38,7 @@ namespace Rendering
             }
 
             int maxSize = world.LargestLevelDimension * GridLevel.chunkDimensions;
-            CreateTextures(maxSize, levelCount);
+            CreateTextures(maxSize, levelCount, entityWorld, world);
             
             var renderParams = new RenderParams(worldMaterial)
             {
@@ -53,10 +50,9 @@ namespace Rendering
             AttachSystems(world, combiner, chunkMeshes, renderArray, entityWorld, renderParams);
         }
 
-        private void AttachSystems(GridWorld world, MeshCombinerPlus combiner, Mesh[][] chunkMeshes, NativeArray<int> renderArray, World entityWorld, RenderParams renderParams)
+        void AttachSystems(GridWorld world, MeshCombinerPlus combiner, Mesh[][] chunkMeshes, NativeArray<int> renderArray, World entityWorld, RenderParams renderParams)
         {
             var manager = entityWorld.EntityManager;
-            cameraEntity = manager.CreateEntity();
 
             manager.AddComponentData<RenderingComponent>(cameraEntity, new()
             {
@@ -90,11 +86,14 @@ namespace Rendering
             var render = entityWorld.GetExistingSystemManaged<ChunkRenderSystem>();
             render.chunkMeshes = chunkMeshes;
             render.renderParams = renderParams;
+
+            var overlay = entityWorld.GetExistingSystemManaged<OverlayRenderSystem>();
+            overlay.gridTexture = gridTexture;
         }
 
-        void CreateTextures(int maxSize, int levelCount)
+        void CreateTextures(int maxSize, int levelCount, World entityWorld, GridWorld world)
         {
-            var gridTexture = new Texture2D(maxSize, maxSize, TextureFormat.RG16, false)
+            gridTexture = new Texture2D(maxSize, maxSize, TextureFormat.RG16, false)
             {
                 filterMode = FilterMode.Point
             };
@@ -104,29 +103,35 @@ namespace Rendering
 
             worldMaterial.SetTexture(Shader.PropertyToID("_DigTexture"), gridTexture);
 
-            WorldOverlayGrids = new NativeArray<OverlayData>[levelCount];
-            markedTilesGrids = new NativeBitArray[levelCount];
+
+            var manager = entityWorld.EntityManager;
+
+            cameraEntity = manager.CreateEntity();
+            manager.AddComponentData<OverlayChangeComponent>(cameraEntity, new() { hasChange = true});
+            DynamicBuffer<OverlayDataComponent> buffer = manager.AddBuffer<OverlayDataComponent>(cameraEntity);
 
             for (int i = 0; i < levelCount; i++)
             {
-                WorldOverlayGrids[i] = new NativeArray<OverlayData>(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
-                markedTilesGrids[i] = new NativeBitArray(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+                buffer.Add(new()
+                {
+                    overlayGrid = world.gridLevels[i].overlayTiles,
+                    markedTilesGrid = world.gridLevels[i].marked
+                });
             }
         }
 
-        private void OnDestroy()
+        void OnDestroy()
         {
-            if(renderArray.IsCreated)
-                renderArray.Dispose();
-
-            for (int i = 0; i < WorldOverlayGrids?.Length; i++)
-            {
-                WorldOverlayGrids[i].Dispose();
-                markedTilesGrids[i].Dispose();
-            }
-
             combiner?.Dispose();
         }
 
+        public void MarkDirty()
+        {
+            var changes = World.DefaultGameObjectInjectionWorld.EntityManager
+                .GetComponentDataRW<OverlayChangeComponent>(cameraEntity);
+
+            changes.ValueRW.hasChange = true;
+        }
     }
+
 }

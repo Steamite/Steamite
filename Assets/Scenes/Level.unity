@@ -2855,8 +2855,7 @@ MonoBehaviour:
   cameraChunkSize:
     x: 4
     y: 4
-  worldMaterial: {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
-  gridTexture: {fileID: 0}
+  linker: {fileID: 4967022013944964026}
 --- !u!114 &4967022013944964024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2902,6 +2901,7 @@ MonoBehaviour:
   cameraSize:
     x: 4
     y: 4
+  gridTexture: {fileID: 0}
 --- !u!4 &5026351469592114601
 Transform:
   m_ObjectHideFlags: 0

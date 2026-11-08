@@ -129,7 +129,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             int2 worldPos = new int2(
                 (int)buildings[index].renderData.position & 0x3FF, 
                 (int)(buildings[index].renderData.position >> 10) & 0x3FF);
-            worldPos += SceneRefs.World.CurrentLevel.levelOffsetScaled;
+            worldPos += SceneRefs.World.CurrentLevel.offsetScaled;
 
             int2 worldTemp;
             int tileIndex = 0;

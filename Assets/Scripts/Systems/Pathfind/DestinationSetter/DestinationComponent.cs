@@ -29,8 +29,13 @@ namespace Pathing
         [ReadOnly] public int levelOffset;
         [ReadOnly] public int levelDimensionsScaled;
         [ReadOnly] public int levelDimensions;
-        [ReadOnly] public int chunkCounts;
+        [ReadOnly] public int chunkCount;
         [ReadOnly] public NativeBitArray dirtyChunks;
+    }
+
+    public struct OverlayChangeComponent : IComponentData
+    {
+        public bool hasChange;
     }
 
     public struct RenderingComponent : IComponentData
@@ -48,5 +53,12 @@ namespace Pathing
     public struct CameraLevelComponent : IComponentData
     {
         public int level;
+    }
+
+    [InternalBufferCapacity(5)]
+    public struct OverlayDataComponent : IBufferElementData
+    {
+        public NativeBitArray markedTilesGrid;
+        public NativeArray<OverlayData> overlayGrid;
     }
 }

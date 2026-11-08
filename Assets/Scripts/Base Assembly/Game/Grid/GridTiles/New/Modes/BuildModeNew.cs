@@ -35,7 +35,7 @@ public class BuildModeNew : GridTilesModeNew
             return;
 
         uint change = 
-            (uint)(SceneRefs.World.GetLevel(oldLevel).levelOffsetScaled - SceneRefs.World.GetLevel(newLevel).levelOffsetScaled);
+            (uint)(SceneRefs.World.GetLevel(oldLevel).offsetScaled - SceneRefs.World.GetLevel(newLevel).offsetScaled);
 
         uint x = (0x3FF & buildingPos) + change;
         uint z = ((0x3FF & (buildingPos >> 10)) + change) << 10;
@@ -189,7 +189,7 @@ public class BuildModeNew : GridTilesModeNew
     /// <returns>Packed position, should keep rotation.</returns>
     void BuildPositionUpdate(int2 newWorldPosition, bool discardRot = false)
     {
-        int offset = SceneRefs.World.CurrentLevel.levelOffsetScaled;
+        int offset = SceneRefs.World.CurrentLevel.offsetScaled;
         int2 fixedPos = newWorldPosition - offset;
 
         uint maskedPosition = (uint)(buildingPos & ~0xFFFFF);

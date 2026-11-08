@@ -40,7 +40,8 @@ public class DigReal : GridTilesModeNew
 
         if (tileType == TileType.Wall)
         {
-            int worldIndex = SceneRefs.World.GetWorldIndex(pos);
+            var world = SceneRefs.World;
+            int worldIndex = world.GetWorldIndex(pos);
 
             if (drag)
             {
@@ -48,7 +49,7 @@ public class DigReal : GridTilesModeNew
             }
             else
             {
-                if (renderer.markedTilesGrid.GetBits(worldIndex) == 1)
+                if (SceneRefs.World.CurrentLevel.marked.GetBits(worldIndex) == 1)
                     controller.SetMaterial(pos, 0, RemoveColor, tileType, index, 0.0001f);
                 else
                     controller.SetMaterial(pos, 0, toBeDugColor, tileType, index, 0.0001f);
@@ -90,8 +91,9 @@ public class DigReal : GridTilesModeNew
         startDragWorldPos = controller.hoverWorldPosition;
         lastDragWorldPos = startDragWorldPos;
         Debug.Log("startDrag");
-        int worldIndex = SceneRefs.World.GetWorldIndex(startDragWorldPos);
-        removing = renderer.markedTilesGrid.GetBits(worldIndex) == 1;
+        var world = SceneRefs.World;
+        int worldIndex = world.GetWorldIndex(startDragWorldPos);
+        removing = world.CurrentLevel.marked.GetBits(worldIndex) == 1;
         if(removing)
             Debug.Log("removing");
     }
@@ -108,25 +110,26 @@ public class DigReal : GridTilesModeNew
         int worldIndex;
         IDigManager manager = jobLinker as IDigManager;
 
-
+        GridWorld world = SceneRefs.World;
+        var level = world.CurrentLevel;
         for (int y = minPos.y; y <= maxPos.y; y++)
         {
             position.y = y;
             position.x = minPos.x;
 
-            worldIndex = SceneRefs.World.GetWorldIndex(position);
-            int globalIndex = worldIndex + (SceneRefs.World.CurrentLevelIndex * SceneRefs.World.GridSizeScaled);
+            worldIndex = world.GetWorldIndex(position);
+            int globalIndex = worldIndex + (level.levelNumber * world.GridSizeScaled);
             for (int x = minPos.x; x <= maxPos.x; x++)
             {
-                if (SceneRefs.World.GetActiveTile(x, y).TType == TileType.Wall)
+                if (world.GetActiveTile(x, y).TType == TileType.Wall)
                 {
                     manager.MarkTile(globalIndex);
-                    renderer.markedTilesGrid.Set(worldIndex, !removing);
-                    renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R((byte)(removing ? 0: 255));
+                    level.marked.Set(worldIndex, !removing);
+                    level.overlayTiles[worldIndex] = level.overlayTiles[worldIndex].R((byte)(removing ? 0: 255));
                 }
                 else
                 {
-                    renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R(0);
+                    level.overlayTiles[worldIndex] = level.overlayTiles[worldIndex].R(0);
                 }
                 globalIndex++;
                 worldIndex++;
@@ -156,29 +159,31 @@ public class DigReal : GridTilesModeNew
             position.y = y;
             position.x = totMin.x;
             worldIndex = SceneRefs.World.GetWorldIndex(position);
+            var level = SceneRefs.World.CurrentLevel;
+            NativeArray<OverlayData> overlays = level.overlayTiles;
 
             bool clear = y < minPos.y || y > maxPos.y;
             for (int x = totMin.x; x <= totMax.x; x++)
             {
-                bool isUnSet = renderer.markedTilesGrid.GetBits(worldIndex) == 0;
+                bool isUnSet = level.marked.GetBits(worldIndex) == 0;
                 if (clear || x < minPos.x || x > maxPos.x)
                 {
                     if (isUnSet)
                     {
-                        renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R(0);// = 0;
+                        overlays[worldIndex] = overlays[worldIndex].R(0);// = 0;
                     }
                     else if (removing)
                     {
-                        renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R(255);
+                        overlays[worldIndex] = overlays[worldIndex].R(255);
                     }
                 }
                 else
                 {
                     if (isUnSet)
-                        renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R((byte)(removing ? 90 : 200));
+                        overlays[worldIndex] = overlays[worldIndex].R((byte)(removing ? 90 : 200));
                     else if(removing)
                     {
-                        renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R(115);
+                        overlays[worldIndex] = overlays[worldIndex].R(115);
                     }
                 }
                 worldIndex++;

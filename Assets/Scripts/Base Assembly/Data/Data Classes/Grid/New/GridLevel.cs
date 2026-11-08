@@ -28,9 +28,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         //public NativeArray<MovementAndStabilityData> movementAndStability;
 
         public readonly int levelOffset;
-        public readonly int levelOffsetScaled;
+        public readonly int offsetScaled;
         public readonly int levelDimensions;
-        public readonly int levelDimensionsScaled;
+        public readonly int dimensionsScaled;
         public readonly int sizeScaled;
         public readonly int levelNumber;
         [CreateProperty] public bool Unlocked;
@@ -38,7 +38,18 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
         public NativeBitArray dirtyChunks;
 
-        public GridLevel(LevelGridSave gridSave, int _levelNumber, int levelSize, NativeArray<short> gridPath)
+
+        /// <summary>
+        /// Marked rocks.
+        /// </summary>
+        public NativeBitArray marked;
+        
+        /// <summary>
+        /// Color values, overlay like roads and digging.
+        /// </summary>
+        public NativeArray<OverlayData> overlayTiles;
+
+        public GridLevel(LevelGridSave gridSave, int _levelNumber, int levelSize, NativeArray<short> gridPath, int largestDimScaled)
         {
             // TODO
             if (_levelNumber == 0)
@@ -46,23 +57,23 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             levelNumber = _levelNumber;
             levelDimensions = gridSave.levelDimensions;
-            levelDimensionsScaled = levelDimensions * chunkDimensions;
+            dimensionsScaled = levelDimensions * chunkDimensions;
 
             levelOffset = gridSave.levelOffset;
-            levelOffsetScaled = levelOffset * chunkDimensions;
+            offsetScaled = levelOffset * chunkDimensions;
 
-            sizeScaled = levelDimensionsScaled * levelDimensionsScaled;
+            sizeScaled = dimensionsScaled * dimensionsScaled;
 
             renderGrid = gridSave.grid;
             path = new(gridPath, _levelNumber * levelSize, levelSize);
             
+
+            pathNeighbourTable = new int[] { 1, dimensionsScaled, -1, -dimensionsScaled};
+
+            marked = new NativeBitArray(largestDimScaled * largestDimScaled, Allocator.Persistent);
+            overlayTiles = new NativeArray<OverlayData>(largestDimScaled * largestDimScaled, Allocator.Persistent);
+
             dirtyChunks = new NativeBitArray(levelDimensions * levelDimensions, Allocator.Persistent);
-
-            pathNeighbourTable = new int[] { 1, levelDimensionsScaled, -1, -levelDimensionsScaled};
-            //movementAndStability = new NativeArray<MovementAndStabilityData>(tileCount, Allocator.Persistent);
-
-            // use a lookup array indexed by different tile Types
-            // Construct node paths + stability
 
             for (int i = 0; i < sizeScaled; i++)
             {
@@ -80,21 +91,21 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             int checkRange = (range * 2) + 1;
 
-            int posY = i / levelDimensionsScaled;
-            int posX = i % levelDimensionsScaled;
+            int posY = i / dimensionsScaled;
+            int posX = i % dimensionsScaled;
             posX = math.clamp(posX - range, 0, range);
             posY = math.clamp(posY - range, 0, range);
 
-            int checkY = i / levelDimensionsScaled;
-            int checkX = i % levelDimensionsScaled;
-            checkY = math.clamp((levelDimensionsScaled+1) - checkY, 0, checkRange);
-            checkX = math.clamp((levelDimensionsScaled+1) - checkX, 0, checkRange);
+            int checkY = i / dimensionsScaled;
+            int checkX = i % dimensionsScaled;
+            checkY = math.clamp((dimensionsScaled+1) - checkY, 0, checkRange);
+            checkX = math.clamp((dimensionsScaled+1) - checkX, 0, checkRange);
 
 
 
             //int checkIndex = i - range - range * levelDimensionsScaled;
 
-            int checkIndex = i - posX - posY * levelDimensionsScaled;
+            int checkIndex = i - posX - posY * dimensionsScaled;
             for (int y = 0; y < checkY; y++)
             {
                 for (int x = 0; x < checkX; x++)
@@ -103,7 +114,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     tile.hiddenTypeStyleAmount = ~1 & tile.hiddenTypeStyleAmount;
                     renderGrid[checkIndex + x] = tile;
                 }
-                checkIndex += levelDimensionsScaled;
+                checkIndex += dimensionsScaled;
             }
         }
 
@@ -111,19 +122,19 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             int checkRange = (range * 2) + 1;
 
-            int posY = i / levelDimensionsScaled;
-            int posX = i % levelDimensionsScaled;
+            int posY = i / dimensionsScaled;
+            int posX = i % dimensionsScaled;
             posX = math.clamp(posX - range, 0, range);
             posY = math.clamp(posY - range, 0, range);
 
-            int checkY = i / levelDimensionsScaled;
-            int checkX = i % levelDimensionsScaled;
-            checkY = math.clamp((levelDimensionsScaled + 1) - checkY, 0, checkRange);
-            checkX = math.clamp((levelDimensionsScaled + 1) - checkX, 0, checkRange);
+            int checkY = i / dimensionsScaled;
+            int checkX = i % dimensionsScaled;
+            checkY = math.clamp((dimensionsScaled + 1) - checkY, 0, checkRange);
+            checkX = math.clamp((dimensionsScaled + 1) - checkX, 0, checkRange);
 
 
 
-            int checkIndex = i - posX - posY * levelDimensionsScaled;
+            int checkIndex = i - posX - posY * dimensionsScaled;
             for (int y = 0; y < checkY; y++)
             {
                 for (int x = 0; x < checkX; x++)
@@ -135,7 +146,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     if (tile.TType == TileType.Road)
                         return true;
                 }
-                checkIndex += levelDimensionsScaled;
+                checkIndex += dimensionsScaled;
             }
             return false;
         }
@@ -148,6 +159,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             if(dirtyChunks.IsCreated)
                 dirtyChunks.Dispose();
+
+            if (marked.IsCreated)
+                marked.Dispose();
+
+            if (overlayTiles.IsCreated)
+                overlayTiles.Dispose();
         }
         
         public void SetTileByWorldPos(int2 worldPosition, LevelGridTile tile) 
@@ -162,7 +179,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             if (tile.Type != renderGrid[localIndex].Type)
                 DirtyGridUtils.SetDirty(
                     dirtyChunks, 
-                    levelDimensionsScaled, 
+                    dimensionsScaled, 
                     levelDimensions, 
                     localIndex, 
                     tile.TType == TileType.Wall ? 2 : 1);
@@ -280,35 +297,27 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public int WorldIndexFromLocalIndex(int gridIndex)
         {
-            int x = gridIndex % levelDimensionsScaled + levelOffsetScaled;
-            int y = gridIndex / levelDimensionsScaled + levelOffsetScaled;
-
-
-            int original = x + y * (levelDimensionsScaled + (2 * levelOffsetScaled));
-            return original;
+            return Recalculation.WorldIndexFromLocal(gridIndex, offsetScaled, dimensionsScaled);
         }
 
         public int2 WorldPosFromLocalIndex(int localIndex)
         {
-            int x = localIndex % levelDimensionsScaled + levelOffsetScaled;
-            int y = localIndex / levelDimensionsScaled + levelOffsetScaled;
+            int x = localIndex % dimensionsScaled + offsetScaled;
+            int y = localIndex / dimensionsScaled + offsetScaled;
 
             return new(x, y);
         }
 
         public int LocalIndexFromWorldIndex(int world)
         {
-            int x = (world % (levelDimensionsScaled + (2 * levelOffsetScaled))) - levelOffsetScaled;
-            int y = (world / (levelDimensionsScaled + (2 * levelOffsetScaled))) - levelOffsetScaled;
-            
-            return y * levelDimensionsScaled + x;
+            return Recalculation.LocalIndexFromWorldIndex(world, offsetScaled, dimensionsScaled);
         }
 
         public int LocalIndexFromWorldPos(int2 world)
         {
-            world -= levelOffsetScaled;
+            world -= offsetScaled;
 
-            return world.y * levelDimensionsScaled + world.x;
+            return world.y * dimensionsScaled + world.x;
         }
 
 
@@ -330,8 +339,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 if (entranceCount == 0) 
                 { 
                     int worldIndex = SceneRefs.World.GetWorldIndex(world);
-                    levelRenderer.levelOverlayGrid[worldIndex] = 
-                        levelRenderer.levelOverlayGrid[worldIndex].G((byte)(add ? 255 : 0));
+                    overlayTiles[worldIndex] = overlayTiles[worldIndex].G((byte)(add ? 255 : 0));
                     Debug.Log($"Place Entrance on {world}");
                 }
             }
@@ -342,5 +350,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 renderGrid[localIndex] = gridTile;
             }
         }
+
+        public void CleanPosAndUpdate(int gridIndex)
+        {
+            int pos = WorldIndexFromLocalIndex(gridIndex);
+            overlayTiles[pos] = overlayTiles[pos].R(0);
+            marked.Set(pos, false);
+        }
+    
     }
 }
