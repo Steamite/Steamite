@@ -12,7 +12,6 @@ namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
     public class WorldLinker : MonoBehaviour, IWorldInit
     {
         NativeArray<int> offsets;
-        List<NativeBitArray> dirtyChunks;
         public void Init(GridWorld gridWorld)
         {
             var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
@@ -34,14 +33,11 @@ namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
             });
 
             var buffer = manager.AddBuffer<GridLevelComponent>(ent);
-            dirtyChunks = new();
             for (int i = 0; i < gridWorld.LEVEL_COUNT; i++)
             {
                 var level = gridWorld.gridLevels[i];
 
-                var dirt = new NativeBitArray(level.levelDimensions * level.levelDimensions, Allocator.Persistent);
-
-                dirtyChunks.Add(dirt);
+                
                 buffer.Add(new()
                 {
                     renderGrid = level.renderGrid,
@@ -50,7 +46,7 @@ namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
                     chunkCounts = level.levelDimensions * level.levelDimensions,
                     levelOffsetScaled = level.levelOffsetScaled,
                     levelOffset = level.levelOffset,
-                    dirtyChunks = dirt
+                    dirtyChunks = level.dirtyChunks
                 });
             }
         }
@@ -58,11 +54,6 @@ namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
         private void OnDestroy()
         {
             offsets.Dispose();
-
-            foreach (var dirt in dirtyChunks)
-            {
-                dirt.Dispose();
-            }
         }
     }
 }

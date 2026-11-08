@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rendering;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -35,6 +36,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         [CreateProperty] public bool Unlocked;
         public readonly int[] pathNeighbourTable;
         public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
+        public NativeBitArray dirtyChunks;
 
         public GridLevel(LevelGridSave gridSave, int _levelNumber, int levelSize, NativeArray<short> gridPath)
         {
@@ -53,6 +55,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             renderGrid = gridSave.grid;
             path = new(gridPath, _levelNumber * levelSize, levelSize);
+            
+            dirtyChunks = new NativeBitArray(levelDimensions * levelDimensions, Allocator.Persistent);
 
             pathNeighbourTable = new int[] { 1, levelDimensionsScaled, -1, -levelDimensionsScaled};
             //movementAndStability = new NativeArray<MovementAndStabilityData>(tileCount, Allocator.Persistent);
@@ -141,6 +145,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             if (renderGrid.IsCreated)
                 renderGrid.Dispose();
+
+            if(dirtyChunks.IsCreated)
+                dirtyChunks.Dispose();
         }
         
         public void SetTileByWorldPos(int2 worldPosition, LevelGridTile tile) 
@@ -152,7 +159,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             UpdatePath(localIndex, tile);
 
+            if (tile.Type != renderGrid[localIndex].Type)
+                DirtyGridUtils.SetDirty(
+                    dirtyChunks, 
+                    levelDimensionsScaled, 
+                    levelDimensions, 
+                    localIndex, 
+                    tile.TType == TileType.Wall ? 2 : 1);
+
             renderGrid[localIndex] = tile;
+
         }
 
         private void UpdatePath(int localIndex, LevelGridTile tile)

@@ -20,12 +20,12 @@ namespace Pathing
 
 
         [BurstCompile]
-        public void Execute(ref PathfindComponent humanPosition, ref DynamicBuffer<PositionNode> nodes)
+        public void Execute(ref PathfindComponent humanPosition, ref DynamicBuffer<PositionNode> nodes, ref HumanJobData job)
         {
+            if (job.jobType != JobType.Free)
+                return;
             Pathfind.FindPath(ref humanPosition, nodes, destination.positions, worldData);
         }
-
-        
     }
 
     public static class Pathfind

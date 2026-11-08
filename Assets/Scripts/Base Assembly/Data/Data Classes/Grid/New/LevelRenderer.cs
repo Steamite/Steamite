@@ -81,6 +81,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void Init(int levelCount, GridLevel[] levels, int maxSize)
         {
+
             combiner = new(GridLevel.chunkDimensions);
             chunkMeshes = new Mesh[levelCount][];
             dirtyMeshes = new bool[levelCount][];

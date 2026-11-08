@@ -16,12 +16,15 @@ namespace Rendering
         [SerializeField] Material worldMaterial;
         [SerializeField] int2 cameraSize;
 
-        NativeArray<int> renderArray;
+        MeshCombinerPlus combiner;
 
+        NativeArray<int> renderArray;
+        NativeArray<OverlayData>[] WorldOverlayGrids;
+        NativeBitArray[] markedTilesGrids;
 
         public void Init(GridWorld world)
         {
-            var combiner = new MeshCombinerPlus(GridLevel.chunkDimensions);
+            combiner = new MeshCombinerPlus(GridLevel.chunkDimensions);
 
             int levelCount = world.LEVEL_COUNT;
 
@@ -38,22 +41,8 @@ namespace Rendering
             }
 
             int maxSize = world.LargestLevelDimension * GridLevel.chunkDimensions;
-            CreateTextures(maxSize);
-
-            var WorldOverlayGrids = new NativeArray<OverlayData>[levelCount];
-            var markedTilesGrids = new NativeBitArray[levelCount];
-
-            for (int i = 0; i < levelCount; i++)
-            {
-                WorldOverlayGrids[i] = new NativeArray<OverlayData>(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
-                markedTilesGrids[i] = new NativeBitArray(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
-            }
-
-            /*
-                        SceneRefs.World.AttachChange(OnChange);
-                        ChangeLevel(levels[0]);
-                        enabled = true;*/
-
+            CreateTextures(maxSize, levelCount);
+            
             var renderParams = new RenderParams(worldMaterial)
             {
                 shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
@@ -61,10 +50,10 @@ namespace Rendering
                 worldBounds = new Bounds(Vector3.zero, new Vector3(1000, 1000, 1000))
             };
 
-            CreateSystems(world, combiner, chunkMeshes, renderArray, entityWorld, renderParams);
+            AttachSystems(world, combiner, chunkMeshes, renderArray, entityWorld, renderParams);
         }
 
-        private void CreateSystems(GridWorld world, MeshCombinerPlus combiner, Mesh[][] chunkMeshes, NativeArray<int> renderArray, World entityWorld, RenderParams renderParams)
+        private void AttachSystems(GridWorld world, MeshCombinerPlus combiner, Mesh[][] chunkMeshes, NativeArray<int> renderArray, World entityWorld, RenderParams renderParams)
         {
             var manager = entityWorld.EntityManager;
             cameraEntity = manager.CreateEntity();
@@ -103,7 +92,7 @@ namespace Rendering
             render.renderParams = renderParams;
         }
 
-        void CreateTextures(int maxSize)
+        void CreateTextures(int maxSize, int levelCount)
         {
             var gridTexture = new Texture2D(maxSize, maxSize, TextureFormat.RG16, false)
             {
@@ -114,13 +103,29 @@ namespace Rendering
             worldMaterial.SetFloat(Shader.PropertyToID("_Height"), maxSize);
 
             worldMaterial.SetTexture(Shader.PropertyToID("_DigTexture"), gridTexture);
-        }
 
+            WorldOverlayGrids = new NativeArray<OverlayData>[levelCount];
+            markedTilesGrids = new NativeBitArray[levelCount];
+
+            for (int i = 0; i < levelCount; i++)
+            {
+                WorldOverlayGrids[i] = new NativeArray<OverlayData>(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+                markedTilesGrids[i] = new NativeBitArray(maxSize * maxSize, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+            }
+        }
 
         private void OnDestroy()
         {
             if(renderArray.IsCreated)
                 renderArray.Dispose();
+
+            for (int i = 0; i < WorldOverlayGrids?.Length; i++)
+            {
+                WorldOverlayGrids[i].Dispose();
+                markedTilesGrids[i].Dispose();
+            }
+
+            combiner?.Dispose();
         }
 
     }
