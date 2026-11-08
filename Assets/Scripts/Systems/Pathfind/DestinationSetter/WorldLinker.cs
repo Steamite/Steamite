@@ -9,36 +9,60 @@ using UnityEngine;
 
 namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
 {
-    public class WorldLinker : MonoBehaviour, IAfterLoad
+    public class WorldLinker : MonoBehaviour, IWorldInit
     {
         NativeArray<int> offsets;
-        public void AfterLoad()
+        List<NativeBitArray> dirtyChunks;
+        public void Init(GridWorld gridWorld)
         {
             var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             var ent = manager.CreateEntity();
 
-            GridWorld world = SceneRefs.World;
-
-
             offsets = new NativeArray<int>(4, Allocator.Persistent);
             offsets[0] = -1;
-            offsets[1] = -world.LargestLevelDimensionScaled;
+            offsets[1] = -gridWorld.LargestLevelDimensionScaled;
             offsets[2] = 1;
-            offsets[3] = world.LargestLevelDimensionScaled;
+            offsets[3] = gridWorld.LargestLevelDimensionScaled;
 
 
             manager.AddComponentData<WorldComponent>(ent, new()
             {
-                path = world.path,
+                path = gridWorld.path,
                 offsets = offsets,
-                LargestLevelDimensionScaled = world.LargestLevelDimensionScaled,
-                largestGridSize = world.GridSizeScaled
+                LargestLevelDimensionScaled = gridWorld.LargestLevelDimensionScaled,
+                largestGridSize = gridWorld.GridSizeScaled
             });
+
+            var buffer = manager.AddBuffer<GridLevelComponent>(ent);
+            dirtyChunks = new();
+            for (int i = 0; i < gridWorld.LEVEL_COUNT; i++)
+            {
+                var level = gridWorld.gridLevels[i];
+
+                var dirt = new NativeBitArray(level.levelDimensions * level.levelDimensions, Allocator.Persistent);
+
+                dirtyChunks.Add(dirt);
+                buffer.Add(new()
+                {
+                    renderGrid = level.renderGrid,
+                    levelDimensionsScaled = level.levelDimensionsScaled,
+                    levelDimensions = level.levelDimensions,
+                    chunkCounts = level.levelDimensions * level.levelDimensions,
+                    levelOffsetScaled = level.levelOffsetScaled,
+                    levelOffset = level.levelOffset,
+                    dirtyChunks = dirt
+                });
+            }
         }
 
         private void OnDestroy()
         {
             offsets.Dispose();
+
+            foreach (var dirt in dirtyChunks)
+            {
+                dirt.Dispose();
+            }
         }
     }
 }

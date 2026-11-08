@@ -115,13 +115,12 @@ public class DigReal : GridTilesModeNew
             position.x = minPos.x;
 
             worldIndex = SceneRefs.World.GetWorldIndex(position);
-            /*int localIndex = SceneRefs.World.CurrentLevelIndex * SceneRefs.World.GridSizeScaled 
-                + SceneRefs.World.CurrentLevel.LocalIndexFromWorldPos(position);*/
+            int globalIndex = worldIndex + (SceneRefs.World.CurrentLevelIndex * SceneRefs.World.GridSizeScaled);
             for (int x = minPos.x; x <= maxPos.x; x++)
             {
                 if (SceneRefs.World.GetActiveTile(x, y).TType == TileType.Wall)
                 {
-                    manager.MarkTile(worldIndex);
+                    manager.MarkTile(globalIndex);
                     renderer.markedTilesGrid.Set(worldIndex, !removing);
                     renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R((byte)(removing ? 0: 255));
                 }
@@ -129,7 +128,7 @@ public class DigReal : GridTilesModeNew
                 {
                     renderer.levelOverlayGrid[worldIndex] = renderer.levelOverlayGrid[worldIndex].R(0);
                 }
-                //localIndex++;
+                globalIndex++;
                 worldIndex++;
             }
         }

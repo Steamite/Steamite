@@ -1,6 +1,9 @@
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
+using Pathing;
+using Rendering;
 using System;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -97,6 +100,7 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
         cameraMap.Disable();
     }
 
+    [SerializeField] ChunkRenderingLinker linker;
     //bool hasChanged = false;
     void Update()
     {
@@ -112,7 +116,15 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
         if (hasMoved && levelRender)
         {
             mouseListener.isForcedUpdate = true;
-            levelRender.SetCameraPosition(new(transform.position.x, transform.position.z));
+            var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            manager.SetComponentData(
+                linker.cameraEntity,
+                new CameraPosition()
+            {
+                CameraMoved = true,
+                cameraPosition = new(transform.position.x, transform.position.z),
+                cameraSize = new(4,4),
+                });
         }
         
         hasMoved = false;

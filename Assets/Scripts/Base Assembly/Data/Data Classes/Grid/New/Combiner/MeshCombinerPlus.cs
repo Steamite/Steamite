@@ -121,6 +121,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             return ComposeChunk(chunkPosition * chunkDimensions, levelData.renderGrid);
         }
+        public Mesh GetNewMesh(int2 chunkPosition, int dimensions, NativeArray<LevelGridTile> grid)
+        {
+            worldSize = new(dimensions, dimensions);
+
+            return ComposeChunk(chunkPosition * chunkDimensions, grid);
+        }
 
         Mesh ComposeChunk(int2 startPosition, NativeArray<LevelGridTile> levelData)
         {

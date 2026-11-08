@@ -30,6 +30,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         }
     }
 
+
+
+    public interface IRenderInit
+    {
+        public void Init(GridWorld world);
+    }
+
     public class LevelRenderer : MonoBehaviour
     {
         NativeArray<int> toRender;
@@ -167,23 +174,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             }
         }
 
-        public void SetCameraPosition(float2 newPos)
-        {
-            cameraPosition = new(
-                Mathf.FloorToInt((newPos.x) / GridLevel.chunkDimensions) - currentLevel.levelOffset, 
-                Mathf.FloorToInt((newPos.y) / GridLevel.chunkDimensions) - currentLevel.levelOffset
-                );
-          
-            cameraMoved = true;
-        }
-
-        public void MarkDirty(int level, int index)
-        {
-            dirtyMeshes[level][index] = true;
-        }
-
         private void Update()
         {
+            return;
+
             if (cameraMoved)
             {
                 NativeReference<int> nativeRenderCount = new(0, Allocator.TempJob);
@@ -191,7 +185,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 {
                     cameraPosition = cameraPosition,
                     cameraSize = cameraChunkSize,
-                    lastPosition = new(0, 0), //TODO maybe try to calculte a better place to start from?
+                    //lastPosition = new(0, 0), //TODO maybe try to calculte a better place to start from?
                     maxSize = 50,
                     toRender = toRender,
                     toRenderCount = nativeRenderCount,

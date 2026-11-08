@@ -323,7 +323,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
 
         [SerializeField]
-        int damageAmmount = 4;
+        uint damageAmmount = 4;
         public int2 clickedWorldPosition;
 
 

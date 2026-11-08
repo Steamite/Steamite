@@ -17,9 +17,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public NativeReference<int> toRenderCount;
         public int maxSize;
         public int width;
-        public int2 lastPosition;
-        public int2 cameraPosition;
-        public int2 cameraSize;
+        //public float2 lastPosition;
+        public float2 cameraPosition;
+        public float2 cameraSize;
 
         public void Execute(int index)
         {

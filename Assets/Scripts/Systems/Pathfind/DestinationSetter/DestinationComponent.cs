@@ -1,14 +1,8 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
-using BuildingStats;
-using NUnit;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.LightTransport;
 
 namespace Pathing
 {
@@ -24,5 +18,35 @@ namespace Pathing
         [ReadOnly] public NativeArray<int> offsets;
         [ReadOnly] public int LargestLevelDimensionScaled;
         [ReadOnly] public int largestGridSize;
+        [ReadOnly] public int chunkSize;
+    }
+
+    [InternalBufferCapacity(5)]
+    public struct GridLevelComponent : IBufferElementData
+    {
+        [ReadOnly] public NativeArray<LevelGridTile> renderGrid;
+        [ReadOnly] public int levelOffsetScaled;
+        [ReadOnly] public int levelOffset;
+        [ReadOnly] public int levelDimensionsScaled;
+        [ReadOnly] public int levelDimensions;
+        [ReadOnly] public int chunkCounts;
+        [ReadOnly] public NativeBitArray dirtyChunks;
+    }
+
+    public struct RenderingComponent : IComponentData
+    {
+        [ReadOnly] public NativeArray<int> toRenderIndexArray;
+        [ReadOnly] public int chunkSize;
+        public int toRenderCount;
+    }
+    public struct CameraPosition : IComponentData
+    {
+        public bool CameraMoved;
+        public float2 cameraPosition;
+        public float2 cameraSize;
+    }
+    public struct CameraLevelComponent : IComponentData
+    {
+        public int level;
     }
 }

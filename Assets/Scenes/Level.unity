@@ -1765,7 +1765,6 @@ GameObject:
   - component: {fileID: 971749948}
   - component: {fileID: 971749949}
   - component: {fileID: 971749950}
-  - component: {fileID: 971749951}
   m_Layer: 2
   m_Name: Nothing
   m_TagString: Untagged
@@ -1817,18 +1816,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 264e4642ea0903440a6607c2de0fe105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Systems::DestinationManager
---- !u!114 &971749951
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 971749947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dea7d03f5fb840c4bbb88a584262c877, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Systems::Assets.Scripts.Systems.Pathfind.DestinationSetter.WorldLinker
 --- !u!1 &977506019
 GameObject:
   m_ObjectHideFlags: 0
@@ -2802,6 +2789,8 @@ GameObject:
   - component: {fileID: 4967022013944964022}
   - component: {fileID: 4967022013944964021}
   - component: {fileID: 4967022013944964024}
+  - component: {fileID: 4967022013944964026}
+  - component: {fileID: 4967022013944964025}
   m_Layer: 2
   m_Name: Renderer
   m_TagString: Grid
@@ -2843,7 +2832,7 @@ MonoBehaviour:
   buildingMeshes:
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
-  buildingMaterial: {fileID: 2100000, guid: dd3fed6aec66e76439d58f3a9573a37a, type: 2}
+  buildingMaterial: {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
   chunks: []
   inspectedChunk:
     x: 5
@@ -2885,6 +2874,34 @@ MonoBehaviour:
   specialPrefabs: {fileID: 11400000, guid: 5e85ccb93c567d64cb0f47d2049664b8, type: 2}
   PipeConnectionPrefab: {fileID: 0}
   recipeData: {fileID: 11400000, guid: db1598235bbab6947a5097d2decd0e69, type: 2}
+--- !u!114 &4967022013944964025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4967022013944964015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dea7d03f5fb840c4bbb88a584262c877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems::Assets.Scripts.Systems.Pathfind.DestinationSetter.WorldLinker
+--- !u!114 &4967022013944964026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4967022013944964015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62040af06a54d844bad25fe46e65498a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems::Assets.Scripts.Systems.Rendering.ChunkRenderingLinker
+  worldMaterial: {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
+  cameraSize:
+    x: 4
+    y: 4
 --- !u!4 &5026351469592114601
 Transform:
   m_ObjectHideFlags: 0
@@ -2967,6 +2984,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Camera brain
       objectReference: {fileID: 0}
+    - target: {fileID: 4186981223861399555, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
+      propertyPath: linker
+      value: 
+      objectReference: {fileID: 4967022013944964026}
     - target: {fileID: 4186981223861399555, guid: f2f6c298de98ee341bc6155977d42d24, type: 3}
       propertyPath: mainShortcuts
       value: 
@@ -3191,7 +3212,6 @@ MonoBehaviour:
   - {fileID: 220867761}
   - {fileID: 709068454}
   - {fileID: 569057775}
-  - {fileID: 971749951}
   - {fileID: 1587689418}
   _world: {fileID: 4967022013944964021}
 --- !u!114 &8150810313726245686

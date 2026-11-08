@@ -41,6 +41,7 @@ namespace Humans
 
     public struct HumanJobData : IComponentData
     {
+        public int targetLevel;
         public int targetPosition;
         public Entity buildingInterest;
 

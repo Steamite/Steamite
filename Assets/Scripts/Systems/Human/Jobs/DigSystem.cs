@@ -1,4 +1,5 @@
-﻿using Humans;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Humans;
 using Pathing;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,10 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
         public void OnUpdate(ref SystemState state)
         {
-            var world = SystemAPI.GetSingleton<WorldComponent>();
+            var ent = SystemAPI.GetSingletonEntity<WorldComponent>();
+            var world = SystemAPI.GetComponent<WorldComponent>(ent);
+            var levels = SystemAPI.GetBuffer<GridLevelComponent>(ent);
+
             foreach(var jobData in SystemAPI.Query<RefRW<HumanJobData>>())
             {
                 if (jobData.ValueRO.jobType == JobType.Free)
@@ -25,7 +29,16 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
                 if (jobData.ValueRO.jobType == JobType.Dig)
                 {
-                    // Remove rock
+                    var grid = levels[jobData.ValueRO.targetLevel].renderGrid;
+                    var tile = grid[jobData.ValueRO.targetPosition];
+                    
+                    tile.RemoveDurability(1);
+                    if(tile.TType == TileType.Road)
+                    {
+                        // update roads
+                        //world.path
+                    }
+                    grid[jobData.ValueRO.targetPosition] = tile;
                 }
             }
         }

@@ -301,7 +301,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             int localIndex = LocalIndexFromWorldPos(world);
             var gridTile = renderGrid[localIndex];
 
-            int entranceCount = gridTile.otherData & 0x3;
+            uint entranceCount = gridTile.otherData & 0x3;
             if (!add)
             {
                 entranceCount--;

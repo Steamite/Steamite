@@ -125,6 +125,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             WorldBuildings = new WorldBuildings();// )GetComponent<>();
             WorldBuildings.LoadState(saveToLoad.objectsSave.buildings);
 
+            GetComponent<IWorldInit>().Init(this);
+            GetComponent<IRenderInit>().Init(this);
 
             renderer = GetComponent<LevelRenderer>();
             renderer.AddRenderer(WorldBuildings.SetupRenderer(buildingMaterial, renderer));
@@ -220,7 +222,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// </summary>
         /// <param name="gridPos"></param>
         /// <returns></returns>
-        public void DamageRock(int gridIndex, int ammount, int level = 0)
+        public void DamageRock(int gridIndex, uint ammount, int level = 0)
         {
             GridLevel gridLevel = gridLevels[level];
             //int pos = gridLevel.levelDimensionsScaled * gridPos.y + gridPos.x;
@@ -244,7 +246,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void CreateWall(int pos, int level = 0)
         {
-            GridLevel gridLevel = gridLevels[level];
+            GridLevel gridLevel = CurrentLevel;
             gridLevel.SetTile(pos, LevelGridTile.Wall(10, false));
 
             renderer.UpdateMesh(level, pos, gridLevel);

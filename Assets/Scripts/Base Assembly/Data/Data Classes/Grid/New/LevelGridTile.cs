@@ -1,7 +1,10 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Burst;
+using Unity.Mathematics;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
@@ -24,12 +27,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     public struct LevelGridTile
     {
         public int hiddenTypeStyleAmount;
-        public int otherData;
+        public uint otherData;
         public static readonly LevelGridTile OutsideWall = new LevelGridTile((int)TileType.Border, int.MaxValue);
 
-        public static LevelGridTile Wall(int durability, bool hidden = true) => new LevelGridTile((hidden ? 1 : 0) | (int)TileType.Wall << 1, durability);
+        public static LevelGridTile Wall(uint durability, bool hidden = true) => new LevelGridTile((hidden ? 1 : 0) | (int)TileType.Wall << 1, durability);
         
-        public static LevelGridTile Wall(int style, int ammount, int durability, bool hidden = true) 
+        public static LevelGridTile Wall(int style, int ammount, uint durability, bool hidden = true) 
             => new LevelGridTile((hidden ? 1 : 0) | (((int)TileType.Wall & 0xF) << 1) | ((style & 0x7F) << 5) | ((ammount & 0xFFFFF) << 12), durability);
         
         public static readonly LevelGridTile Road = new LevelGridTile((int)TileType.Road << 1, 0);
@@ -46,16 +49,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public readonly int Amount => (hiddenTypeStyleAmount >> 13) & 0x3FFFF; // (18) bits => x^18maxAmmount
 
         // maybe will be changed
-        public readonly int Durability => otherData & 0xFFFF;
-        public readonly int OriginalDurability => (otherData >> 16) & 0xFFFF;
+        public readonly float Durability => new half() { value = (ushort)(otherData & 0xFFFFu)};
+        public readonly float OriginalDurability => new half() { value = (ushort)((otherData >> 16) & 0xFFFFu) };
 
 
-        public LevelGridTile(int _hiddenStats, int _durability)
+        public LevelGridTile(int _hiddenStats, uint _durability)
         {
             hiddenTypeStyleAmount = _hiddenStats;
             otherData = _durability;
         }
 
+        #region Overrides
         public override string ToString()
         {
             return hiddenTypeStyleAmount.ToString();
@@ -70,7 +74,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             return obj.GetHashCode() == GetHashCode();
         }
-
+        #endregion
+        #region Constructors
         public static LevelGridTile Elevator(int index)
         {
             LevelGridTile tile = new(
@@ -91,6 +96,20 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             LevelGridTile tile = new((((int)TileType.Building & 0xF) << 1) | (index & 0x3FFFF) << 13, 0);
             return tile;
+        }
+        #endregion
+
+
+        [BurstCompile]
+        public float RemoveDurability(float change)
+        {
+            float dur = Durability - change;
+            otherData = (otherData & ~0xFFFFu) | ((half)dur).value;
+            if(dur < 0)
+            {
+                hiddenTypeStyleAmount = (hiddenTypeStyleAmount & ~(0xF << 0x1)) | (((int)TileType.Road & 0xF) << 0x1);
+            }
+            return dur;
         }
     }
 }

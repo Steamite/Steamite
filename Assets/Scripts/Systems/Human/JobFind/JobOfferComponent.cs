@@ -9,8 +9,7 @@ namespace Assets.Scripts.Systems.Human.JobFind
         /// Positions of the rocks.
         /// </summary>
         public NativeList<int> digJobs;
-        public NativeList<int> toAdd;
-        public NativeList<int> toRemove;
+        public NativeList<int> impossibleToDig;
         /// <summary>
         /// Building to work on
         /// </summary>
