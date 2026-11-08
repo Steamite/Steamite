@@ -19,7 +19,7 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
         public void OnUpdate(ref SystemState state)
         {
-            //var worldComponent = SystemAPI.GetSingleton<WorldComponent>();
+            var worldComponent = SystemAPI.GetSingleton<WorldComponent>();
             var levels = SystemAPI.GetSingletonBuffer<GridLevelComponent>();
             var overlayBuffers = SystemAPI.GetSingletonBuffer<OverlayDataComponent>();
 
@@ -61,8 +61,16 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
                         change.ValueRW.hasChange = true;
 
-                        // path update
-                        //worldComponent.path[]
+                        PathChanges.UpdatePath(
+                            localIndex, 
+                            levelIndex, 
+                            tile, 
+                            level.levelDimensionsScaled,
+                            level.levelOffsetScaled, 
+                            worldComponent.offsets,
+                            level.neighbourOffsets, 
+                            level.renderGrid,
+                            worldComponent.path);
                     }
                     grid[localIndex] = tile;
                 }

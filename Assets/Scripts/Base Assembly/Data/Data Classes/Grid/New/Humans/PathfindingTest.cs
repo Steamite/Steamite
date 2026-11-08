@@ -32,7 +32,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         [SerializeField] GridWorld world;
 
         NativeArray<Vector3> positions;
-        [ContextMenu("TestPath")]
+        /*[ContextMenu("TestPath")]
         void TestPath()
         {
             int width = world.CurrentLevel.dimensionsScaled;
@@ -83,7 +83,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 
             tempPos.Dispose();
             offsets.Dispose();
-        }
+        }*/
 
         private void OnDestroy()
         {

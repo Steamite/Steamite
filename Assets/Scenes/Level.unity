@@ -2832,7 +2832,7 @@ MonoBehaviour:
   buildingMeshes:
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
-  buildingMaterial: {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
+  buildingMaterial: {fileID: 2100000, guid: dd3fed6aec66e76439d58f3a9573a37a, type: 2}
   chunks: []
   inspectedChunk:
     x: 5

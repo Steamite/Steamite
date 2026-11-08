@@ -41,6 +41,7 @@ namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
                 buffer.Add(new()
                 {
                     renderGrid = level.renderGrid,
+                    neighbourOffsets = level.neighbourOffsets,
                     levelDimensionsScaled = level.dimensionsScaled,
                     levelDimensions = level.levelDimensions,
                     chunkCount = level.levelDimensions * level.levelDimensions,

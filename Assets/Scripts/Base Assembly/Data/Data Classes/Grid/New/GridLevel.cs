@@ -34,7 +34,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public readonly int sizeScaled;
         public readonly int levelNumber;
         [CreateProperty] public bool Unlocked;
-        public readonly int[] pathNeighbourTable;
+        public readonly NativeArray<int> neighbourOffsets;
         public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
         public NativeBitArray dirtyChunks;
 
@@ -66,9 +66,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             renderGrid = gridSave.grid;
             path = new(gridPath, _levelNumber * levelSize, levelSize);
-            
 
-            pathNeighbourTable = new int[] { 1, dimensionsScaled, -1, -dimensionsScaled};
+
+            neighbourOffsets = new NativeArray<int>(4, Allocator.Persistent);
+            neighbourOffsets[0] = 1;
+            neighbourOffsets[1] = dimensionsScaled;
+            neighbourOffsets[2] = -1;
+            neighbourOffsets[3] = -dimensionsScaled;
 
             marked = new NativeBitArray(largestDimScaled * largestDimScaled, Allocator.Persistent);
             overlayTiles = new NativeArray<OverlayData>(largestDimScaled * largestDimScaled, Allocator.Persistent);
@@ -165,6 +169,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             if (overlayTiles.IsCreated)
                 overlayTiles.Dispose();
+
+            if (neighbourOffsets.IsCreated)
+                neighbourOffsets.Dispose();
         }
         
         public void SetTileByWorldPos(int2 worldPosition, LevelGridTile tile) 
@@ -198,95 +205,110 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             if (newTileType == TileType.Road || newTileType == TileType.PassableBuilding || newTileType == TileType.Elevator)
             {
-                for (int i = 0; i < 4; i++)
-                {
-                    int pathIndex = worldIndex + neighbours[i];
-                    int gridIndex = localIndex + pathNeighbourTable[i];
-
-                    if (renderGrid[gridIndex].TType == TileType.Building)
-                        continue;
-                    path[pathIndex] = (short)(path[pathIndex] | (short)(0x1 << i));
-                }
-
-                // was building
-                if (prevTileType == TileType.Building)
-                {
-                    short newPath = 0;
-                    for (int i = 0; i < 4; i++)
-                    {
-                        int gridIndex = localIndex + pathNeighbourTable[i];
-                        bool canEnter =
-                            renderGrid[gridIndex].TType == TileType.Road
-                            ||
-                            (renderGrid[gridIndex].TType > TileType.Building && renderGrid[gridIndex].Amount == renderGrid[localIndex].Amount);
-
-                        newPath = (short)(newPath | (canEnter ? (0x1 << i) : 0));
-                    }
-                    path[worldIndex] = newPath;
-                }
-                else if (prevTileType == TileType.Elevator)
-                {
-                    if (levelNumber > 0)
-                    {
-                        var level = SceneRefs.World.gridLevels[levelNumber - 1];
-                        int _levelLocal = level.LocalIndexFromWorldIndex(worldIndex);
-                        if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
-                        {
-                            path[worldIndex] = (short)(path[worldIndex] & ~(1 << 4));
-                            level.path[worldIndex] = (short)(level.path[worldIndex] & ~(1 << 5));
-                        }
-                    }
-                    if (levelNumber < SceneRefs.World.LEVEL_COUNT - 1)
-                    {
-                        var level = SceneRefs.World.gridLevels[levelNumber + 1];
-                        int _levelLocal = level.LocalIndexFromWorldIndex(worldIndex);
-
-                        if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
-                        {
-                            path[worldIndex] = (short)(path[worldIndex] & ~(1 << 5));
-                            level.path[worldIndex] = (short)(level.path[worldIndex] & ~(1 << 4));
-                        }
-                    }
-                }
-
-                if (newTileType == TileType.Elevator)
-                {
-                    if (levelNumber > 0)
-                    {
-                        var level = SceneRefs.World.gridLevels[levelNumber - 1];
-                        int _levelLocal = level.LocalIndexFromWorldIndex(worldIndex);
-
-                        if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
-                        {
-                            path[worldIndex] = (short)(path[worldIndex] | (1 << 4));
-                            level.path[worldIndex] = (short)(level.path[worldIndex] | (1 << 5));
-                        }
-                    }
-                    if (levelNumber < SceneRefs.World.LEVEL_COUNT - 1)
-                    {
-                        var level = SceneRefs.World.gridLevels[levelNumber + 1];
-                        int _levelLocal = level.LocalIndexFromWorldIndex(worldIndex);
-
-                        if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
-                        {
-                            path[worldIndex] = (short)(path[worldIndex] | (1 << 5));
-                            level.path[worldIndex] = (short)(level.path[worldIndex] | (1 << 4));
-                        }
-                    }
-                }
+                SetPath(localIndex, newTileType, prevTileType, worldIndex, neighbours);
             }
             else
             {
-                if (tile.TType == TileType.Building)
-                {
-                    path[worldIndex] = 0;
-                }
+                ClearPath(tile, worldIndex, neighbours);
+            }
+        }
 
+        private void SetPath(int localIndex, TileType newTileType, TileType prevTileType, int worldIndex, int[] neighbours)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                int pathIndex = worldIndex + neighbours[i];
+                int gridIndex = localIndex + neighbourOffsets[i];
+
+                if (renderGrid[gridIndex].TType == TileType.Building)
+                    continue;
+                path[pathIndex] = (short)(path[pathIndex] | (short)(0x1 << i));
+            }
+
+            // was building
+            HandleBuildingPath(localIndex, newTileType, prevTileType, worldIndex);
+        }
+
+        private void HandleBuildingPath(int localIndex, TileType newTileType, TileType prevTileType, int worldIndex)
+        {
+            if (prevTileType == TileType.Building)
+            {
+                short newPath = 0;
                 for (int i = 0; i < 4; i++)
                 {
-                    int _world = worldIndex + neighbours[i];
-                    path[_world] = (short)(path[_world] & ~(short)(0x1 << i));
+                    int gridIndex = localIndex + neighbourOffsets[i];
+                    bool canEnter =
+                        renderGrid[gridIndex].TType == TileType.Road
+                        ||
+                        (renderGrid[gridIndex].TType > TileType.Building && renderGrid[gridIndex].Amount == renderGrid[localIndex].Amount);
+
+                    newPath = (short)(newPath | (canEnter ? (0x1 << i) : 0));
                 }
+                path[worldIndex] = newPath;
+            }
+            else if (prevTileType == TileType.Elevator)
+            {
+                if (levelNumber > 0)
+                {
+                    var level = SceneRefs.World.gridLevels[levelNumber - 1];
+                    int _levelLocal = level.LocalIndexFromWorldIndex(worldIndex);
+                    if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
+                    {
+                        path[worldIndex] = (short)(path[worldIndex] & ~(1 << 4));
+                        level.path[worldIndex] = (short)(level.path[worldIndex] & ~(1 << 5));
+                    }
+                }
+                if (levelNumber < SceneRefs.World.LEVEL_COUNT - 1)
+                {
+                    var level = SceneRefs.World.gridLevels[levelNumber + 1];
+                    int _levelLocal = level.LocalIndexFromWorldIndex(worldIndex);
+
+                    if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
+                    {
+                        path[worldIndex] = (short)(path[worldIndex] & ~(1 << 5));
+                        level.path[worldIndex] = (short)(level.path[worldIndex] & ~(1 << 4));
+                    }
+                }
+            }
+
+            if (newTileType == TileType.Elevator)
+            {
+                if (levelNumber > 0)
+                {
+                    var level = SceneRefs.World.gridLevels[levelNumber - 1];
+                    int _levelLocal = level.LocalIndexFromWorldIndex(worldIndex);
+
+                    if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
+                    {
+                        path[worldIndex] = (short)(path[worldIndex] | (1 << 4));
+                        level.path[worldIndex] = (short)(level.path[worldIndex] | (1 << 5));
+                    }
+                }
+                if (levelNumber < SceneRefs.World.LEVEL_COUNT - 1)
+                {
+                    var level = SceneRefs.World.gridLevels[levelNumber + 1];
+                    int _levelLocal = level.LocalIndexFromWorldIndex(worldIndex);
+
+                    if (level.renderGrid[_levelLocal].TType == TileType.Elevator)
+                    {
+                        path[worldIndex] = (short)(path[worldIndex] | (1 << 5));
+                        level.path[worldIndex] = (short)(level.path[worldIndex] | (1 << 4));
+                    }
+                }
+            }
+        }
+
+        private void ClearPath(LevelGridTile tile, int worldIndex, int[] neighbours)
+        {
+            if (tile.TType == TileType.Building)
+            {
+                path[worldIndex] = 0;
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                int _world = worldIndex + neighbours[i];
+                path[_world] = (short)(path[_world] & ~(short)(0x1 << i));
             }
         }
 

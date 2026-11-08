@@ -25,6 +25,7 @@ namespace Pathing
     public struct GridLevelComponent : IBufferElementData
     {
         [ReadOnly] public NativeArray<LevelGridTile> renderGrid;
+        [ReadOnly] public NativeArray<int> neighbourOffsets;
         [ReadOnly] public int levelOffsetScaled;
         [ReadOnly] public int levelOffset;
         [ReadOnly] public int levelDimensionsScaled;
