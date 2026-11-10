@@ -10,7 +10,7 @@ namespace Rendering
     [BurstCompile]
     public static class DirtyGridUtils
     {
-
+        // TODO: create a list of all changes to then iterate though and update things like paths and jobs!!!
         public static void SetDirty(NativeBitArray array, int dimScaled, int dim, int tileIndex, int range = 1)
         {
             int y = tileIndex / dimScaled;

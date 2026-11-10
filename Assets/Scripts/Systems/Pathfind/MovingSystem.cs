@@ -47,7 +47,8 @@ namespace Pathing
             }
         }
     }
-    [UpdateAfter(typeof(PathfindSystem))] 
+
+    [UpdateInGroup(typeof(HumanUpdateGroup)), UpdateAfter(typeof(PathfindSystem))] 
     [BurstCompile]
     public partial struct MovingSystem : ISystem
     {
@@ -64,7 +65,7 @@ namespace Pathing
             {
                 DeltaTime = SystemAPI.Time.DeltaTime
             };
-            state.Dependency = job.ScheduleByRef(state.Dependency);
+            state.Dependency = job.ScheduleParallelByRef(state.Dependency);
         }
     }
 }

@@ -17,11 +17,7 @@ namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
             var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             var ent = manager.CreateEntity();
 
-            offsets = new NativeArray<int>(4, Allocator.Persistent);
-            offsets[0] = -1;
-            offsets[1] = -gridWorld.LargestLevelDimensionScaled;
-            offsets[2] = 1;
-            offsets[3] = gridWorld.LargestLevelDimensionScaled;
+            offsets = gridWorld.offsetPathTableNeighbour;
 
 
             manager.AddComponentData<WorldComponent>(ent, new()
@@ -50,11 +46,6 @@ namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
                     dirtyChunks = level.dirtyChunks
                 });
             }
-        }
-
-        private void OnDestroy()
-        {
-            offsets.Dispose();
         }
     }
 }

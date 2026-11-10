@@ -7,7 +7,7 @@
         <ui:VisualElement name="Background" class="menu-view" style="width: 100%; position: relative;">
             <ui:VisualElement name="Header-Bar" class="bar">
                 <ui:Button text="Close" tooltip="Close" name="Save-Close-Button" class="close-button"/>
-                <ui:Label text="Help" name="Load-Header" class="title"/>
+                <ui:Label text="Help" name="Load-Header" class="title" style="opacity: 1;"/>
             </ui:VisualElement>
             <ui:VisualElement name="Body" style="flex-direction: column; justify-content: flex-start; max-height: 90%; flex-grow: 1; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px;">
                 <ui:TabView style="font-size: 40px;">
@@ -38,6 +38,12 @@
                                 <ui:Label text="- use the top buttons &#10;- or &quot;4&quot;, &quot;5&quot;, ...&#10;- change the active ground level&#10;- each level is now independent&#10;- next update, moving between floors" style="font-size: 30px; -unity-font-style: normal; white-space: normal;"/>
                             </ui:VisualElement>
                         </ui:ScrollView>
+                    </ui:Tab>
+                    <ui:Tab label="Week 2">
+                        <ui:Label text="Minimal visible Changes.&#10;Bug fixes with buildings.&#10;Human movement source data rewrite.&#10;"/>
+                    </ui:Tab>
+                    <ui:Tab label="Week 3">
+                        <ui:Label text="&lt;b&gt;Dig&lt;/b&gt;&#10;Use the &quot;G&quot; to mark tiles for humans to remove. &#10;!Mark only reacheble ones!&#10;&#10;&lt;b&gt;Vertical Movement&lt;/b&gt;&#10;Build the first building in the first category (elevator) to allow  travel&#10;between levels. &#10;Must match the center tile(use shift and level shortcuts)"/>
                     </ui:Tab>
                 </ui:TabView>
             </ui:VisualElement>

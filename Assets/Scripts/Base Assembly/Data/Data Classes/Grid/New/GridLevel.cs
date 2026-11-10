@@ -175,13 +175,21 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         }
         
         public void SetTileByWorldPos(int2 worldPosition, LevelGridTile tile) 
-            => SetTile(LocalIndexFromWorldPos(worldPosition), tile);
-
-        public LevelGridTile GetTile(int pos) => renderGrid[pos];
+            => SetTile(Recalculation.LocalIndexFromWorldPos(worldPosition, offsetScaled, dimensionsScaled), tile);
 
         public void SetTile(int localIndex, LevelGridTile tile)
         {
-            UpdatePath(localIndex, tile);
+            //UpdatePath(localIndex, tile);
+            PathChanges.UpdatePath(
+                localIndex, 
+                levelNumber, 
+                tile, 
+                dimensionsScaled, 
+                offsetScaled, 
+                SceneRefs.World.offsetPathTableNeighbour, 
+                neighbourOffsets,
+                renderGrid, 
+                SceneRefs.World.path);
 
             if (tile.Type != renderGrid[localIndex].Type)
                 DirtyGridUtils.SetDirty(
@@ -194,13 +202,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             renderGrid[localIndex] = tile;
 
         }
-
+/*
         private void UpdatePath(int localIndex, LevelGridTile tile)
         {
             TileType newTileType = tile.TType;
             TileType prevTileType = renderGrid[localIndex].TType;
 
-            int worldIndex = WorldIndexFromLocalIndex(localIndex);
+            int worldIndex = Recalculation.WorldIndexFromLocalIndex(localIndex, offsetScaled, dimensionsScaled);
             var neighbours = SceneRefs.World.offsetPathTableNeighbour;
 
             if (newTileType == TileType.Road || newTileType == TileType.PassableBuilding || newTileType == TileType.Elevator)
@@ -311,23 +319,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 path[_world] = (short)(path[_world] & ~(short)(0x1 << i));
             }
         }
-
+*/
         public void UIUpdate(string property = "")
         {
             propertyChanged?.Invoke(this, new(property));
-        }
-
-        public int WorldIndexFromLocalIndex(int gridIndex)
-        {
-            return Recalculation.WorldIndexFromLocal(gridIndex, offsetScaled, dimensionsScaled);
-        }
-
-        public int2 WorldPosFromLocalIndex(int localIndex)
-        {
-            int x = localIndex % dimensionsScaled + offsetScaled;
-            int y = localIndex / dimensionsScaled + offsetScaled;
-
-            return new(x, y);
         }
 
         public int LocalIndexFromWorldIndex(int world)
@@ -375,9 +370,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void CleanPosAndUpdate(int gridIndex)
         {
-            int pos = WorldIndexFromLocalIndex(gridIndex);
-            overlayTiles[pos] = overlayTiles[pos].R(0);
-            marked.Set(pos, false);
+            int worldPosition = Recalculation.WorldIndexFromLocalIndex(gridIndex, offsetScaled, dimensionsScaled);// WorldIndexFromLocalIndex(gridIndex);
+            overlayTiles[worldPosition] = overlayTiles[worldPosition].R(0);
+            marked.Set(worldPosition, false);
         }
     
     }

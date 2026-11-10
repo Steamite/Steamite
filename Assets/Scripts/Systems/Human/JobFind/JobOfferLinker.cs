@@ -95,7 +95,7 @@ namespace JobFind
             digJob = new NativeList<int>(50, Allocator.Persistent);
             buildJob = new NativeList<Entity>(20, Allocator.Persistent);
             toDigMarks = new NativeList<int>(10, Allocator.Persistent);
-            manager.AddComponentData(ent, new JobOfferComponent()
+            manager.AddComponentData(ent, new JobOffersComponent()
             {
                 digJobs = digJob,
                 buildingJobs = buildJob

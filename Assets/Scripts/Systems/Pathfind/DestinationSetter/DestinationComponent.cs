@@ -14,6 +14,10 @@ namespace Pathing
 
     public struct WorldComponent : IComponentData
     {
+        /*[ReadOnly] public NativeArray<byte> pathRegions;
+        [ReadOnly] public NativeBitArray regions;*/
+
+
         [ReadOnly] public NativeArray<short> path;
         [ReadOnly] public NativeArray<int> offsets;
         [ReadOnly] public int LargestLevelDimensionScaled;

@@ -1,27 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Burst;
 using Unity.Collections;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
+    
     public static class PathChanges
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="localIndex"></param>
+        /// <param name="levelIndex"></param>
+        /// <param name="tile"></param>
+        /// <param name="dimensionScaled"></param>
+        /// <param name="offsetScaled"></param>
+        /// <param name="worldOffset">Offset using largest dim scaled</param>
+        /// <param name="levelOffset">Offset using level dim scaled.</param>
+        /// <param name="renderGrid"></param>
+        /// <param name="path"></param>
+        
         public static void UpdatePath(
             int localIndex, 
             int levelIndex,
             LevelGridTile tile,
             int dimensionScaled,
             int offsetScaled,
+            NativeArray<int> worldOffset,
             NativeArray<int> levelOffset,
-            NativeArray<int> neighbourOffset,
             NativeArray<LevelGridTile> renderGrid,
             NativeArray<short> path)
         {
             TileType newTileType = tile.TType;
             TileType prevTileType = renderGrid[localIndex].TType;
 
-            int worldIndex = Recalculation.WorldIndexFromLocal(localIndex, offsetScaled, dimensionScaled);
+            int worldIndex = Recalculation.WorldIndexFromLocalIndex(localIndex, offsetScaled, dimensionScaled);
             
             if (newTileType == TileType.Road || newTileType == TileType.PassableBuilding || newTileType == TileType.Elevator)
             {
@@ -31,8 +46,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     prevTileType, 
                     worldIndex, 
                     levelIndex, 
+                    worldOffset, 
                     levelOffset, 
-                    neighbourOffset, 
                     renderGrid, 
                     path);
             }
@@ -41,7 +56,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 ClearPath(
                     tile,
                     worldIndex,
-                    levelOffset,
+                    worldOffset,
                     path);
             }
         }
@@ -52,16 +67,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             TileType prevTileType, 
             int worldIndex, 
             int levelIndex,
+            NativeArray<int> worldOffset,
             NativeArray<int> levelOffset,
-            NativeArray<int> neighbourOffset,
             NativeArray<LevelGridTile> renderGrid,
             NativeArray<short> path)
         {
             for (int i = 0; i < 4; i++)
             {
-                // TODO: fix properly tomorrow
-                int pathIndex = worldIndex - levelOffset[i];
-                int gridIndex = localIndex + neighbourOffset[i];
+                int pathIndex = worldIndex - worldOffset[i];
+                int gridIndex = localIndex + levelOffset[i];
 
                 if (renderGrid[gridIndex].TType == TileType.Building)
                     continue;
@@ -69,7 +83,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             }
 
             // was building
-            HandleBuildingPath(localIndex, newTileType, prevTileType, worldIndex, levelIndex, levelOffset, neighbourOffset, renderGrid, path);
+            HandleBuildingPath(localIndex, newTileType, prevTileType, worldIndex, levelIndex, worldOffset, levelOffset, renderGrid, path);
         }
 
         static void HandleBuildingPath(
@@ -78,7 +92,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             TileType prevTileType, 
             int worldIndex,
             int levelIndex,
-            NativeArray<int> levelOffset,
+            NativeArray<int> worldOffset,
             NativeArray<int> neighbourOffset,
             NativeArray<LevelGridTile> renderGrid,
             NativeArray<short> path)
@@ -88,7 +102,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 short newPath = 0;
                 for (int i = 0; i < 4; i++)
                 {
-                    int gridIndex = localIndex + levelOffset[i];
+                    int gridIndex = localIndex - worldOffset[i];
                     bool canEnter =
                         renderGrid[gridIndex].TType == TileType.Road
                         ||
@@ -154,7 +168,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             LevelGridTile tile, 
             int worldIndex,
             //NativeArray<int> levelOffset,
-            NativeArray<int> neighbourOffset,
+            NativeArray<int> worldOffset,
             //NativeArray<LevelGridTile> renderGrid,
             NativeArray<short> path)
         {
@@ -165,7 +179,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             for (int i = 0; i < 4; i++)
             {
-                int _world = worldIndex + neighbourOffset[i];
+                int _world = worldIndex - worldOffset[i];
                 path[_world] = (short)(path[_world] & ~(short)(0x1 << i));
             }
         }

@@ -47,6 +47,12 @@ namespace Humans
 
         public JobType jobType;
     }
+
+    public struct HumanIsFree : IEnableableComponent, IComponentData
+    {
+
+    }
+
     public enum JobType
     {
         Free,

@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 {
-    //[BurstCompile]
+    [BurstCompile]
     public struct PathfindingNew : IJob
     {
         public NativeArray<short> path;
@@ -22,7 +22,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 
         public NativeReference<int> closestDestination;
         /// <summary>
-        /// 1, width, -1, -width
+        /// -1, -width, 1, width
         /// </summary>
         [ReadOnly] public NativeArray<int> offsetTable;
         public static readonly int2[] offsetTableVec = 
@@ -36,6 +36,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         public NativeList<int> positions;
         public int level;
 
+        [BurstCompile]
         public void Execute()
         {
             int2 destinationPosition = new(destination % gridWidth, destination / gridWidth);
@@ -86,7 +87,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                     queue.Enqueue(newNode, node.position);
                     mapNode >>= 0x1;
                 }
-                for (int i = 0; i < 2; i++)
+                
+                int iters = math.select(0, 2, (mapNode & 0x3) > 0);
+                for (int i = 0; i < iters; i++)
                 {
                     if((mapNode & 0x1) == 1) 
                     {

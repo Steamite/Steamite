@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Mathematics;
 
 public static class Recalculation
 {
-    public static int WorldIndexFromLocal(int localIndex, int offsetScaled, int dimensionsScaled)
+    public static int WorldIndexFromLocalIndex(int localIndex, int offsetScaled, int dimensionsScaled)
     {
         int x = localIndex % dimensionsScaled + offsetScaled;
         int y = localIndex / dimensionsScaled + offsetScaled;
@@ -20,6 +21,21 @@ public static class Recalculation
         int y = (world / (dimensionsScaled + (2 * offsetScaled))) - offsetScaled;
 
         return y * dimensionsScaled + x;
+    }
+
+    public static int LocalIndexFromWorldPos(int2 world, int offsetScaled, int dimensionsScaled)
+    {
+        world -= offsetScaled;
+
+        return world.y * dimensionsScaled + world.x;
+    }
+
+    public static int2 WorldPosFromLocalIndex(int localIndex, int offsetScaled, int dimensionsScaled)
+    {
+        int x = localIndex % dimensionsScaled + offsetScaled;
+        int y = localIndex / dimensionsScaled + offsetScaled;
+
+        return new(x, y);
     }
 }
 

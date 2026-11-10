@@ -1,14 +1,10 @@
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
-using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Unity.Collections;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.LightTransport;
 using Random = UnityEngine.Random;
 
 
@@ -87,6 +83,8 @@ public class MapGenNew : MonoBehaviour
 
         int chunkSize = 16;
 
+        #region Buildings
+        /*
         ElevatorNew save = elevator;
         int _width = levelDimensions.sizes[0] * chunkSize;
         int centerPos = _width / 2;
@@ -96,20 +94,20 @@ public class MapGenNew : MonoBehaviour
         buildingSaves[0] = save;
         uint pos = save.renderData.position;
 
-        save = new() { renderData = new() { meshIndex = 0, position = pos + 1 } };
-        buildingSaves[1] = save;
-
-
-        save = new() { renderData = new() { meshIndex = 1, position = pos + 2 }, wrapperIndex = 1 };
-        buildingSaves[2] = save;
-
-        save = new() { renderData = new() { meshIndex = 1, position = pos + 3 }, wrapperIndex = 1 };
-        buildingSaves[3] = save;
-
+        _width = levelDimensions.sizes[1] * chunkSize;
+        centerPos = ;
+        save = new() { renderData = new() { meshIndex = 0, position =  } };
+        buildingSaves[1] = save;*/
+#endregion
 
         largestDimensionScaled = largestDimension * chunkSize;
         int gridSize = largestDimensionScaled * largestDimensionScaled;
+        
+        // path data for the whole world
         NativeArray<short> path = new(gridSize*levelCount, Allocator.Persistent);
+        NativeArray<byte> pathRegions = new(gridSize*levelCount, Allocator.Persistent);
+        NativeBitArray regionList = new(255, Allocator.Persistent);
+
         neighbourOffsetTable = new int[] { 1, largestDimensionScaled, -1, -largestDimensionScaled };
 
         WorldSaveNew world = new()
@@ -119,11 +117,13 @@ public class MapGenNew : MonoBehaviour
             levelCount = levelCount,
             chunkDimensions = chunkSize,
             objectsSave = new BuildsAndChunksSaveNew(
-                    buildingSaves,
+                    new BuildingNew[0],//buildingSaves,
                     new ChunkSave[0]
                 ),
             gridSave = new LevelGridSave[levelCount],
-            pathSave = path
+            pathSave = path,
+            pathRegions = pathRegions,
+            regionList = regionList,
         };
 
         try
@@ -135,11 +135,14 @@ public class MapGenNew : MonoBehaviour
             Debug.LogError(e);
         }
 
+
+        // TODO: place the buildings correctly
+/*
         int c = centerPos * _width + centerPos;
         world.gridSave[0].grid[c] = LevelGridTile.Elevator(0);
-        world.gridSave[0].grid[c + 1] = LevelGridTile.Elevator(1);
-        world.gridSave[0].grid[c + 2] = LevelGridTile.Elevator(2);
-        world.gridSave[0].grid[c + 3] = LevelGridTile.Elevator(3);
+        world.gridSave[1].grid[c] = LevelGridTile.Elevator(1);*/
+
+
 
         return world;
     }
@@ -171,6 +174,8 @@ public class MapGenNew : MonoBehaviour
         }
         await Awaitable.MainThreadAsync();
     }
+
+
 
     /// <summary>Extracts parameters from the <see cref="seed"/>.</summary>
     void ParseInput()

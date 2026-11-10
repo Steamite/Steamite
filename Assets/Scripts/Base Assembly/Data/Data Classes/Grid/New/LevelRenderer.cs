@@ -41,7 +41,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     {
         [SerializeField] int2 cameraPosition = new(0, 0);
         [SerializeField] int2 cameraChunkSize;
-        GridLevel currentLevel;
 
         [SerializeField] MonoBehaviour linker;
         
@@ -72,13 +71,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void ChangeLevel(GridLevel level)
         {
-            currentLevel = level;
 
             UpdateOverlayTexture();
 
             foreach (var item in customRenderers)
             {
-                item.OnLevelChange(currentLevel);
+                item.OnLevelChange(level);
             }
         }
 

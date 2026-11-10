@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans;
+using Assets.Scripts.Systems.Human.JobFind;
 using Humans;
 using System;
 using System.Collections.Generic;
@@ -25,11 +26,13 @@ namespace Pathing
             if (job.jobType != JobType.Free)
                 return;
             Pathfind.FindPath(ref humanPosition, nodes, destination.positions, worldData);
+            
         }
     }
 
     public static class Pathfind
     {
+        [BurstCompile]
         public static int FindPath(
             ref PathfindComponent humanPosition, 
             DynamicBuffer<PositionNode> nodes, 
@@ -96,6 +99,7 @@ namespace Pathing
 
 
 
+    [UpdateInGroup(typeof(HumanUpdateGroup)), UpdateAfter(typeof(JobFindingSystem))]
     [BurstCompile]
     public partial struct PathfindSystem : ISystem
     {
@@ -118,10 +122,10 @@ namespace Pathing
             PathfindSetJob pathfindSetJob = new()
             {
                 destination = comp,
-                worldData = world
+                worldData = world,
             };
 
-            state.Dependency = pathfindSetJob.ScheduleByRef(state.Dependency);
+            state.Dependency = pathfindSetJob.ScheduleParallelByRef(state.Dependency);
 
             state.Enabled = false;
         }

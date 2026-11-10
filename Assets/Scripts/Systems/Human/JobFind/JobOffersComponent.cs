@@ -3,10 +3,10 @@ using Unity.Entities;
 
 namespace Assets.Scripts.Systems.Human.JobFind
 {
-    public struct JobOfferComponent : IComponentData
+    public struct JobOffersComponent : IComponentData
     {
         /// <summary>
-        /// Positions of the rocks.
+        /// Absolute world positions of the rocks.
         /// </summary>
         public NativeList<int> digJobs;
         public NativeList<int> impossibleToDig;

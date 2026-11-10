@@ -27,7 +27,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public WorldBuildings WorldBuildings;
 
-        public int[] offsetPathTableNeighbour;
+        public NativeArray<int> offsetPathTableNeighbour;
 
         public int CenterScaled;
         [NonSerialized] public int LargestLevelDimension;
@@ -42,6 +42,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         [SerializeField] int2 inspectedChunk;
 
         [NonSerialized] public NativeArray<short> path;
+        [NonSerialized] public NativeArray<byte> pathRegions;
+        [NonSerialized] public NativeBitArray regionList;
+
         readonly Vector3[] offset = new Vector3[] { new(-0.5f,0,0), new(0,0, -0.5f), new(0.5f, 0, 0), new(0, 0, 0.5f) };
         readonly Vector3[] verticalOffset = new Vector3[] { new(0, -0.5f,0), new(0, 0.5f, 0) };
 
@@ -112,8 +115,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             GridSizeScaled = LargestLevelDimensionScaled * LargestLevelDimensionScaled;
 
 
-            offsetPathTableNeighbour = new int[] { 1, LargestLevelDimensionScaled, -1, -LargestLevelDimensionScaled };
+            offsetPathTableNeighbour = new NativeArray<int>(4, Allocator.Persistent);
+            offsetPathTableNeighbour[0] = -1;
+            offsetPathTableNeighbour[1] = -LargestLevelDimensionScaled;
+            offsetPathTableNeighbour[2] = 1;
+            offsetPathTableNeighbour[3] = LargestLevelDimensionScaled;
+
             path = saveToLoad.pathSave;
+            regionList = saveToLoad.regionList;
+            pathRegions = saveToLoad.pathRegions;
 
             for (int i = 0; i < LEVEL_COUNT; i++)
             {
@@ -191,6 +201,18 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         private void OnDestroy()
         {
             WorldBuildings.Dispose();
+
+
+            if(path.IsCreated)
+                path.Dispose();
+            if(pathRegions.IsCreated)
+                pathRegions.Dispose();
+            if (regionList.IsCreated)
+                regionList.Dispose();
+
+            if(offsetPathTableNeighbour.IsCreated)
+                offsetPathTableNeighbour.Dispose();
+
             foreach (var level in gridLevels)
             {
                 level.Dispose();

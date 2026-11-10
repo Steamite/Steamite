@@ -76,6 +76,8 @@ namespace Rendering
             world.AttachChange((oldI, newI) =>
             {
                 manager.SetComponentData(cameraEntity, new CameraLevelComponent() { level = newI});
+                var camPos = manager.GetComponentDataRW<CameraPosition>(cameraEntity);// cameraEntity, new () { level = newI});
+                camPos.ValueRW.CameraMoved = true;
             });
 
             var dirty = entityWorld.GetExistingSystemManaged<ChunkDirtySystem>();

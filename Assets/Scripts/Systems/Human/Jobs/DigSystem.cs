@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Systems.Human.JobFind;
 using Humans;
 using Pathing;
 using Rendering;
@@ -9,6 +10,7 @@ using Unity.Entities;
 
 namespace Assets.Scripts.Systems.Human.Jobs
 {
+    [UpdateInGroup(typeof(HumanUpdateGroup)), UpdateAfter(typeof(MovingSystem))]
     public partial struct DigSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
@@ -24,7 +26,7 @@ namespace Assets.Scripts.Systems.Human.Jobs
             var overlayBuffers = SystemAPI.GetSingletonBuffer<OverlayDataComponent>();
 
             var change = SystemAPI.GetSingletonRW<OverlayChangeComponent>();
-
+/*
             foreach ((var jobData, var pathing) in SystemAPI.Query<RefRW<HumanJobData>, RefRO<PathfindComponent>>())
             {
                 if (jobData.ValueRO.jobType == JobType.Free)
@@ -74,7 +76,7 @@ namespace Assets.Scripts.Systems.Human.Jobs
                     }
                     grid[localIndex] = tile;
                 }
-            }
+            }*/
         }
     }
 }

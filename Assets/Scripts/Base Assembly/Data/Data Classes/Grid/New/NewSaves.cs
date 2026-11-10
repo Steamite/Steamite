@@ -20,7 +20,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         }
     }
 
-    public class WorldSaveNew
+    public struct WorldSaveNew
     {
         public BuildsAndChunksSaveNew objectsSave;
         public LevelGridSave[] gridSave;
@@ -31,9 +31,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public int levelCount;
         public NativeArray<short> pathSave;
         public int pathGridSize;
+        public NativeArray<byte> pathRegions;
+        public NativeBitArray regionList;
     }
 
-    public class BuildsAndChunksSaveNew
+    public struct BuildsAndChunksSaveNew
     {
         public BuildingNew[] buildings;
         public ChunkSave[] chunks;
