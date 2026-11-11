@@ -11,6 +11,30 @@ using UnityEngine.UIElements;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WorldData
+    {
+        [ReadOnly] public int largestDimScaled;
+        [ReadOnly] public int largestLevelSize;
+        [ReadOnly] public NativeArray<LevelData> levels;
+        [ReadOnly] public NativeArray<short> path;
+        [ReadOnly] public NativeArray<int> neighbourOffset;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct LevelData
+    {
+        [ReadOnly] public int offsetScaled;
+        [ReadOnly] public int dimScaled;
+        [ReadOnly] public int startIndex;
+        [ReadOnly] public NativeArray<int> neighbourOffsetTable;
+                   
+        [ReadOnly] public NativeArray<LevelGridTile> renderGrid;
+        [ReadOnly] public NativeBitArray dirtyChunks;
+        [ReadOnly] public NativeBitArray marked;
+    }
+
+
     public class GridLevel : IDisposable, IUpdatable
     {
         public static int chunkDimensions = 16;
@@ -330,17 +354,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             return Recalculation.LocalIndexFromWorldIndex(world, offsetScaled, dimensionsScaled);
         }
 
-        public int LocalIndexFromWorldPos(int2 world)
-        {
-            world -= offsetScaled;
-
-            return world.y * dimensionsScaled + world.x;
-        }
-
 
         public void SetEntrance(int2 world, LevelRenderer levelRenderer, bool add)
         {
-            int localIndex = LocalIndexFromWorldPos(world);
+            int localIndex = Recalculation.LocalIndexFromWorldPos(world, offsetScaled, dimensionsScaled);
             var gridTile = renderGrid[localIndex];
 
             uint entranceCount = gridTile.otherData & 0x3;
