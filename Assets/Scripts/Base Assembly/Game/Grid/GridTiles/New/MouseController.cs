@@ -328,12 +328,12 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
 
         [ContextMenu("DamageRock")]
-        public void DamageClickedRock(TileType type, int gridIndex)
+        public void DamageClickedRock(TileType type, int localIndex)
         {
             if(type == TileType.Wall)
-                world.DamageRock(gridIndex, damageAmmount, world.CurrentLevelIndex);
+                world.DamageRock(localIndex, damageAmmount, world.CurrentLevelIndex);
             else if (type == TileType.Road)
-                world.CreateWall(gridIndex, world.CurrentLevelIndex);
+                world.CreateWall(localIndex, world.CurrentLevelIndex);
 
             isForcedUpdate = true;
         }

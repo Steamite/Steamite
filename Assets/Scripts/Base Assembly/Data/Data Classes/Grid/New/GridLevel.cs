@@ -26,6 +26,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     {
         [ReadOnly] public int offsetScaled;
         [ReadOnly] public int dimScaled;
+        [ReadOnly] public int dim;
         [ReadOnly] public int startIndex;
         [ReadOnly] public NativeArray<int> neighbourOffsetTable;
                    
@@ -204,7 +205,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         public void SetTile(int localIndex, LevelGridTile tile)
         {
             //UpdatePath(localIndex, tile);
-            PathChanges.UpdatePath(
+            /*PathChanges.UpdatePath(
                 localIndex, 
                 levelNumber, 
                 tile, 
@@ -224,7 +225,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     tile.TType == TileType.Wall ? 2 : 1);
 
             renderGrid[localIndex] = tile;
-
+*/
         }
 /*
         private void UpdatePath(int localIndex, LevelGridTile tile)

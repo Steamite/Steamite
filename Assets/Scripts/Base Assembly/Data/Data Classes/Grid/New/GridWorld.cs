@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths;
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using System;
 using System.Collections.Generic;
@@ -269,8 +270,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void CreateWall(int pos, int level = 0)
         {
-            GridLevel gridLevel = CurrentLevel;
-            gridLevel.SetTile(pos, LevelGridTile.Wall(10, false));
+            // TODO: create and store world Data
+            //WorldChanges.SetTile(pos, level, LevelGridTile.Wall(10, false), );
         }
 
         public int GetWorldIndex(int2 worldPosition) => worldPosition.y * LargestLevelDimensionScaled + worldPosition.x;
