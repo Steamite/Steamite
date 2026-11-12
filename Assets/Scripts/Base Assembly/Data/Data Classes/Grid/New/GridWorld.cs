@@ -106,13 +106,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             onLevelChange = null;
             currentLevelIndex = -1;
 
-            LEVEL_COUNT = saveToLoad.gridSave.Length;
+            LEVEL_COUNT = saveToLoad.levels.Length;
             
             gridLevels = new GridLevel[LEVEL_COUNT];
 
-            GridLevel.chunkDimensions = saveToLoad.chunkDimensions;
-            LargestLevelDimension = saveToLoad.largestDimension;
-            LargestLevelDimensionScaled = LargestLevelDimension * GridLevel.chunkDimensions;
+            LargestLevelDimensionScaled = saveToLoad.world.LargestLevelDimensionScaled;
+            LargestLevelDimension = saveToLoad.world.LargestLevelDimensionScaled / GridLevel.chunkDimensions;
             GridSizeScaled = LargestLevelDimensionScaled * LargestLevelDimensionScaled;
 
 
@@ -122,13 +121,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             offsetPathTableNeighbour[2] = 1;
             offsetPathTableNeighbour[3] = LargestLevelDimensionScaled;
 
-            path = saveToLoad.pathSave;
-            regionList = saveToLoad.regionList;
-            pathRegions = saveToLoad.pathRegions;
+            path = saveToLoad.world.path;/*
+            regionList = saveToLoad.world.regionList;
+            pathRegions = saveToLoad.pathRegions;*/
 
             for (int i = 0; i < LEVEL_COUNT; i++)
             {
-                gridLevels[i] = new GridLevel(saveToLoad.gridSave[i], i, GridSizeScaled, path, LargestLevelDimensionScaled);
+                gridLevels[i] = new GridLevel(saveToLoad.levels[i], i, GridSizeScaled, path, LargestLevelDimensionScaled);
             }
 
             CenterScaled = (LargestLevelDimension / 2) * GridLevel.chunkDimensions;
@@ -141,7 +140,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             renderer = GetComponent<LevelRenderer>();
             renderer.AddRenderer(WorldBuildings.SetupRenderer(buildingMaterial, renderer));
-            renderer.Init(LEVEL_COUNT, gridLevels, LargestLevelDimension * saveToLoad.chunkDimensions);
+            renderer.Init(LEVEL_COUNT, gridLevels, LargestLevelDimension * GridLevel.chunkDimensions);
 
             SetLevel(0);
         }

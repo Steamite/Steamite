@@ -15,7 +15,7 @@ namespace Rendering
         {
             state.RequireForUpdate<CameraPosition>();
             state.RequireForUpdate<RenderingComponent>();
-            state.RequireForUpdate<GridLevelComponent>();
+            state.RequireForUpdate<LevelComponent>();
         }
 
         public readonly void OnUpdate(ref SystemState state)
@@ -29,13 +29,13 @@ namespace Rendering
             int levelIndex = SystemAPI.GetSingleton<CameraLevelComponent>().level;
 
             RefRW<RenderingComponent> chunks = SystemAPI.GetSingletonRW<RenderingComponent>();
-            GridLevelComponent level = SystemAPI.GetSingletonBuffer<GridLevelComponent>()[levelIndex];
+            LevelComponent level = SystemAPI.GetSingletonBuffer<LevelComponent>()[levelIndex];
 
-            int levelDimensions = level.levelDimensions;
+            int levelDimensions = level.dimensions;
 
             NativeReference<int> nativeRenderCount = new(0, Allocator.TempJob);
 
-            float2 camPos = math.floor(position.ValueRO.cameraPosition / GridLevel.chunkDimensions) - level.levelOffset;
+            float2 camPos = math.floor(position.ValueRO.cameraPosition / GridLevel.chunkDimensions) - level.offsets;
 
             CullJob job = new()
             {

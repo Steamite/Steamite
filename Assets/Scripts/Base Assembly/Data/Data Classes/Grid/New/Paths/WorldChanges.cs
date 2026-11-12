@@ -12,19 +12,19 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths
     public static class WorldChanges
     {
         [BurstCompile]
-        public static void SetTile(int localIndex, int levelIndex, in LevelGridTile tile, ref WorldData worldData)
+        public static void SetTile(int localIndex, int levelIndex, in LevelGridTile tile, ref WorldComponent worldData, in NativeArray<LevelComponent> levels)
         {
             // Update path
-            PathChanges.UpdatePath(localIndex, levelIndex, tile, ref worldData);
+            PathChanges.UpdatePath(localIndex, levelIndex, tile, ref worldData, in levels);
 
             // affected level
-            var level = worldData.levels[levelIndex];
+            var level = levels[levelIndex];
 
             if (tile.Type != level.renderGrid[localIndex].Type)
                 DirtyGridUtils.SetDirty(
                     level.dirtyChunks,
-                    level.dimScaled,
-                    level.dim,
+                    level.dimensionsScaled,
+                    level.dimensions,
                     localIndex,
                     tile.TType == TileType.Wall ? 2 : 1);
 

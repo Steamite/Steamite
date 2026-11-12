@@ -18,29 +18,29 @@ namespace Rendering
         {
             RequireForUpdate<CameraLevelComponent>();
             RequireForUpdate<RenderingComponent>();
-            RequireForUpdate<GridLevelComponent>();
+            RequireForUpdate<LevelComponent>();
         }
 
         protected override void OnUpdate()
         {
             int levelNumber = SystemAPI.GetSingleton<CameraLevelComponent>().level;
             RenderingComponent rendering = SystemAPI.GetSingleton<RenderingComponent>();
-            GridLevelComponent level = SystemAPI.GetSingletonBuffer<GridLevelComponent>()[levelNumber];
+            LevelComponent level = SystemAPI.GetSingletonBuffer<LevelComponent>()[levelNumber];
 
             int toRenderCount = rendering.toRenderCount;
             for (int i = 0; i < toRenderCount; i++)
             {
                 int j = rendering.toRenderIndexArray[i];
-                int y = j / level.levelDimensions;
-                int x = j - y * level.levelDimensions;
+                int y = j / level.dimensions;
+                int x = j - y * level.dimensions;
 
                 Graphics.RenderMesh(
                     renderParams,
                     chunkMeshes[levelNumber][j], 0, Matrix4x4.TRS(
                         new Vector3(
-                            (x + level.levelOffset) * GridLevel.chunkDimensions,
+                            (x + level.offsets) * GridLevel.chunkDimensions,
                             0,
-                            (y + level.levelOffset) * GridLevel.chunkDimensions
+                            (y + level.offsets) * GridLevel.chunkDimensions
                         ),
                         Quaternion.identity,
                         Vector3.one));

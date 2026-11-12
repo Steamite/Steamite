@@ -19,9 +19,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             int localIndex,
             int levelIndex,
             in LevelGridTile newTile,
-            ref WorldData worldData)
+            ref WorldComponent worldData,
+            in NativeArray<LevelComponent> levels)
         {
-            LevelData levelData = worldData.levels[levelIndex];
+            LevelComponent levelData = levels[levelIndex];
 
             TileType newTileType = newTile.TType;
             TileType prevTileType = levelData.renderGrid[localIndex].TType;
@@ -29,21 +30,21 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             int globalIndex = Recalculation.GlobalIndexFromLocalIndex(
                 localIndex,
-                levelData.offsetScaled,
-                levelData.dimScaled,
-                levelData.startIndex);
+                levelData.offsetsScaled,
+                levelData.dimensionsScaled,
+                levelIndex);
 
             if (newTileType == TileType.Road || newTileType == TileType.PassableBuilding || newTileType == TileType.Elevator)
             {
                 OpenPath(
                     localIndex,
                     globalIndex,
-                    worldData.neighbourOffset,
-                    levelData.neighbourOffsetTable,
+                    worldData.offsets,
+                    levelData.neighbours,
                     levelData.renderGrid,
                     ref worldData.path);
 
-                HandleBuildingChanges(localIndex, newTileType, prevTileType, globalIndex, levelIndex, ref worldData);
+                HandleBuildingChanges(localIndex, newTileType, prevTileType, globalIndex, levelIndex, ref worldData, in levels);
             }
             else
             {
@@ -52,7 +53,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
                 BlockPath(
                     globalIndex,
-                    worldData.neighbourOffset,
+                    worldData.offsets,
                     ref worldData.path);
             }
         }
@@ -97,15 +98,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             TileType prevTileType,
             int globalPosition,
             int levelIndex,
-            ref WorldData worldData)
+            ref WorldComponent worldData,
+            in NativeArray<LevelComponent> levels)
         {
-            var level = worldData.levels[levelIndex];
+            var level = levels[levelIndex];
             if (prevTileType == TileType.Building)
             {
                 short newPath = 0;
                 for (int i = 0; i < 4; i++)
                 {
-                    int gridIndex = localIndex - worldData.neighbourOffset[i];
+                    int gridIndex = localIndex - worldData.offsets[i];
                     bool canEnter =
                         level.renderGrid[gridIndex].TType == TileType.Road
                         ||
@@ -119,11 +121,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             {
                 if (levelIndex > 0)
                 {
-                    RemoveElevator(globalPosition, levelIndex, ref worldData, false);
+                    RemoveElevator(globalPosition, levelIndex, ref worldData, in levels, false);
                 }
-                if (levelIndex < worldData.levels.Length - 1)
+                if (levelIndex < levels.Length - 1)
                 {
-                    RemoveElevator(globalPosition, levelIndex, ref worldData, true);
+                    RemoveElevator(globalPosition, levelIndex, ref worldData, in levels, true);
                 }
             }
 
@@ -131,26 +133,26 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             {
                 if (levelIndex > 0)
                 {
-                    AddElevator(globalPosition, levelIndex, ref worldData, false);
+                    AddElevator(globalPosition, levelIndex, ref worldData, in levels, false);
                 }
-                if (levelIndex < worldData.levels.Length - 1)
+                if (levelIndex < levels.Length - 1)
                 {
-                    AddElevator(globalPosition, levelIndex, ref worldData, true);
+                    AddElevator(globalPosition, levelIndex, ref worldData, in levels, true);
                 }
             }
         }
 
         [BurstCompile]
-        private static void RemoveElevator(int globalPosition, int levelIndex, ref WorldData worldData, bool up)
+        private static void RemoveElevator(int globalPosition, int levelIndex, ref WorldComponent worldData, in NativeArray<LevelComponent> levels, bool up)
         {
-            var _level = worldData.levels[levelIndex + (up ? 1 : -1)];
-            int worldPosition = globalPosition % worldData.largestLevelSize;
+            var _level = levels[levelIndex + (up ? 1 : -1)];
+            int worldPosition = globalPosition % worldData.largestGridSize;
             /*int nextIndex = Recalculation.LocalIndexFromWorldIndex(
                 worldPosition,
                 _level.offsetScaled,
                 _level.dimScaled);*/
 
-            int nextGlobalPosition = globalPosition + (up ? 1 : -1) * worldData.largestLevelSize;
+            int nextGlobalPosition = globalPosition + (up ? 1 : -1) * worldData.largestGridSize;
             /*
                         if (_level.renderGrid[nextIndex].TType == TileType.Elevator)
                         {*/
@@ -160,16 +162,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         }
 
         [BurstCompile]
-        private static void AddElevator(int globalPosition, int levelIndex, ref WorldData worldData, bool up)
+        private static void AddElevator(int globalPosition, int levelIndex, ref WorldComponent worldData, in NativeArray<LevelComponent> levels, bool up)
         {
-            var _level = worldData.levels[levelIndex + (up ? 1 : -1)];
-            int worldPosition = globalPosition % worldData.largestLevelSize;
+            var _level = levels[levelIndex + (up ? 1 : -1)];
+            int worldPosition = globalPosition % worldData.largestGridSize;
             int nextIndex = Recalculation.LocalIndexFromWorldIndex(
                 worldPosition,
-                _level.offsetScaled,
-                _level.dimScaled);
+                _level.offsetsScaled,
+                _level.dimensionsScaled);
 
-            int nextGlobalPosition = globalPosition + (up ? 1 : -1) * worldData.largestLevelSize;
+            int nextGlobalPosition = globalPosition + (up ? 1 : -1) * worldData.largestGridSize;
 
             if (_level.renderGrid[nextIndex].TType == TileType.Elevator)
             {

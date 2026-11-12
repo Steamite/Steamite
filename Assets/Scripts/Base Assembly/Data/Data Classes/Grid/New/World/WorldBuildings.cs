@@ -73,6 +73,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             for (int i = 0; i < lastIndex; i++)
             {
                 buildings[i].renderIndex = indexes[i];
+                //MarkTiles(buildings[i].renderData.position)
             }
 
             return buildingRenderer;
@@ -189,6 +190,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         public void PlaceBuilding(int2 worldPos, BuildingWrapper wrapper, BuildingNew buildingData)
         {
             int arrayIndex = AddBuilding(buildingData);
+            MarkTiles(worldPos, wrapper, buildingData, arrayIndex);
+            levelRenderer.UpdateOverlayTexture();
+        }
+
+        private void MarkTiles(int2 worldPos, BuildingWrapper wrapper, BuildingNew buildingData, int arrayIndex)
+        {
             int2 size = wrapper.blueprint.size;
             size.y -= 1;
             uint rot = (buildingData.renderData.position >> 23) & 0x3;
@@ -234,7 +241,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                     index++;
                 }
             }
-            levelRenderer.UpdateOverlayTexture();
         }
 
         public void UpdateRenderIndexes(int startIndex, int increase)

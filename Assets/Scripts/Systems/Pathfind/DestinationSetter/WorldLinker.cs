@@ -28,7 +28,7 @@ namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
                 largestGridSize = gridWorld.GridSizeScaled
             });
 
-            var buffer = manager.AddBuffer<GridLevelComponent>(ent);
+            var buffer = manager.AddBuffer<LevelComponent>(ent);
             for (int i = 0; i < gridWorld.LEVEL_COUNT; i++)
             {
                 var level = gridWorld.gridLevels[i];
@@ -37,12 +37,12 @@ namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
                 buffer.Add(new()
                 {
                     renderGrid = level.renderGrid,
-                    neighbourOffsets = level.neighbourOffsets,
-                    levelDimensionsScaled = level.dimensionsScaled,
-                    levelDimensions = level.levelDimensions,
+                    neighbours = level.neighbourOffsets,
+                    dimensionsScaled = level.dimensionsScaled,
+                    dimensions = level.levelDimensions,
                     chunkCount = level.levelDimensions * level.levelDimensions,
-                    levelOffsetScaled = level.offsetScaled,
-                    levelOffset = level.levelOffset,
+                    offsetsScaled = level.offsetScaled,
+                    offsets = level.levelOffset,
                     dirtyChunks = level.dirtyChunks
                 });
             }

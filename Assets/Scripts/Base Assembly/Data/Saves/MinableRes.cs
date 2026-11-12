@@ -19,6 +19,7 @@ public class VeinParameter
     /// <param name="genParam"></param>
     /// <returns></returns>
     public int Value(int genParam) => UnityEngine.Random.Range(min[genParam], max[genParam]);
+    public int Value(int genParam, ref Unity.Mathematics.Random random) => random.NextInt(min[genParam], max[genParam]);
 
     public VeinParameter()
     {

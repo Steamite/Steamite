@@ -438,12 +438,12 @@ MonoBehaviour:
     renderData:
       position: 0
       blueprintSize: 0
-      meshIndex: 0
+      meshIndex: 2
     IsConstructing: 0
     IsDeconstructing: 0
     resources: 
     renderIndex: 0
-    categoryIndex: 0
+    categoryIndex: 1
     wrapperIndex: 0
     canStore: 
     isMain: 0

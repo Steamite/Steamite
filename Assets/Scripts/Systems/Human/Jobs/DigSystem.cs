@@ -22,7 +22,7 @@ namespace Assets.Scripts.Systems.Human.Jobs
         public void OnUpdate(ref SystemState state)
         {
             var worldComponent = SystemAPI.GetSingleton<WorldComponent>();
-            var levels = SystemAPI.GetSingletonBuffer<GridLevelComponent>();
+            var levels = SystemAPI.GetSingletonBuffer<LevelComponent>();
             var overlayBuffers = SystemAPI.GetSingletonBuffer<OverlayDataComponent>();
 
             var change = SystemAPI.GetSingletonRW<OverlayChangeComponent>();

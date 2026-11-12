@@ -68,7 +68,7 @@ namespace Assets.Scripts.Systems.Human.JobFind
         {
             var offers = SystemAPI.GetSingleton<JobOffersComponent>();
             var world = SystemAPI.GetSingleton<WorldComponent>();
-            var levels = SystemAPI.GetSingletonBuffer<GridLevelComponent>();
+            var levels = SystemAPI.GetSingletonBuffer<LevelComponent>();
 
             if (offers.digJobs.Count == 0 && offers.buildingJobs.Count == 0)
                 return;
@@ -100,10 +100,10 @@ namespace Assets.Scripts.Systems.Human.JobFind
 
                 int2 levelPosition = new int2(
                     onLevel % world.LargestLevelDimensionScaled,
-                    onLevel / world.LargestLevelDimensionScaled) - levels[levelNumber].levelOffsetScaled;
+                    onLevel / world.LargestLevelDimensionScaled) - levels[levelNumber].offsetsScaled;
 
                 job.ValueRW.targetLevel = levelNumber;
-                job.ValueRW.targetPosition = levelPosition.x + (levelPosition.y * levels[levelNumber].levelDimensionsScaled);
+                job.ValueRW.targetPosition = levelPosition.x + (levelPosition.y * levels[levelNumber].dimensionsScaled);
                 job.ValueRW.jobType = JobType.Dig;
                 offers.digJobs.RemoveAt(i);
             }

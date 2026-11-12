@@ -77,14 +77,24 @@ namespace Assets.Scripts.Saving___Loading
             NewGameInit newGameInit = gameObject.GetComponent<NewGameInit>();
             WorldSaveNew worldSave;
             bool randomMap = seed != "";
-            if (randomMap)
+            try
             {
-                worldSave = await gameObject.GetComponent<MapGenNew>().Generate(seed);
+                if (randomMap)
+                {
+                    worldSave = await gameObject.GetComponent<MapGenNew>().Generate(seed);
+                }
+                else
+                {
+                    return;
+                }
             }
-            else
+            catch(Exception e)
             {
+                Debug.LogError(e);
+                Debug.DebugBreak();
                 return;
             }
+            
             /*else
             {
                 size = testLevels[0].height;
@@ -97,7 +107,7 @@ namespace Assets.Scripts.Saving___Loading
                 trade = await newGameInit.InitTrade(0),
                 research = await newGameInit.InitResearch(),
                 //TODO right position (get scaled center with offset)
-                humans = newGameInit.InitHumans(worldSave.chunkDimensions * (worldSave.largestDimension/2)),
+                humans = newGameInit.InitHumans(GridLevel.chunkDimensions * (worldSave.world.LargestLevelDimensionScaled/ (2 * GridLevel.chunkDimensions))),
                 quests = await newGameInit.InitQuests(randomMap),
                 world = worldSave
             };
@@ -178,7 +188,7 @@ namespace Assets.Scripts.Saving___Loading
             // for gridSave
             save.world = new();
             JsonTextReader jsonReader = new(new StreamReader($"{_folderName}/Grid.json"));
-            save.world.objectsSave = jsonSerializer.Deserialize<BuildsAndChunksSaveNew>(jsonReader);
+            /*save.world.objectsSave = jsonSerializer.Deserialize<BuildsAndChunksSaveNew>(jsonReader);
             jsonReader.Close();
             // for all levels
             save.world.gridSave = new LevelGridSave[MyGrid.NUMBER_OF_LEVELS];
@@ -187,7 +197,7 @@ namespace Assets.Scripts.Saving___Loading
                 jsonReader = new(new StreamReader($"{_folderName}/Level{i}.json"));
                 save.world.gridSave[i] = jsonSerializer.Deserialize<LevelGridSave>(jsonReader);
                 jsonReader.Close();
-            }
+            }*/
             // for playerSettings
             jsonReader = new(new StreamReader($"{_folderName}/Game State.json"));
             save.gameState = jsonSerializer.Deserialize<GameStateSave>(jsonReader);

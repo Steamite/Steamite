@@ -33,5 +33,21 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
                 }
             }
         }
+
+        public ElevatorNew Clone()
+        {
+            return new()
+            {
+                canStore = canStore,
+                categoryIndex = categoryIndex,
+                IsConstructing = IsConstructing,
+                IsDeconstructing = IsDeconstructing,
+                isMain = false,
+                renderData = renderData,
+                renderIndex = renderIndex,
+                resources = resources,
+                wrapperIndex = wrapperIndex
+            };
+        }
     }
 }

@@ -21,14 +21,14 @@ namespace Rendering
             base.OnCreate();
             RequireForUpdate<CameraPosition>();
             RequireForUpdate<RenderingComponent>();
-            RequireForUpdate<GridLevelComponent>();
+            RequireForUpdate<LevelComponent>();
         }
 
         protected override void OnUpdate()
         {
             var levelIndex = SystemAPI.GetSingleton<CameraLevelComponent>().level;
             var render = SystemAPI.GetSingleton<RenderingComponent>();
-            var level = SystemAPI.GetSingletonBuffer<GridLevelComponent>()[levelIndex];
+            var level = SystemAPI.GetSingletonBuffer<LevelComponent>()[levelIndex];
 
             Mesh[] meshes = chunkMeshes[levelIndex];
             for (int i = 0; i < render.toRenderCount; i++)
@@ -40,9 +40,9 @@ namespace Rendering
                     // re-render
                     meshes[index] = combiner.GetNewMesh(
                         new(
-                            index % level.levelDimensions,
-                            index / level.levelDimensions),
-                        level.levelDimensionsScaled, 
+                            index % level.dimensions,
+                            index / level.dimensions),
+                        level.dimensionsScaled, 
                         level.renderGrid);
                 }
             }

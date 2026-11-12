@@ -15,11 +15,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
         /// 25 - 31 - construction progress<br/>
         /// </summary>
         public uint position;
-        /// <summary>
-        /// 00 - 03 - x
-        /// 04 - 07 - y
-        /// </summary>
-        public byte blueprintSize;
         public uint meshIndex;
     }
 

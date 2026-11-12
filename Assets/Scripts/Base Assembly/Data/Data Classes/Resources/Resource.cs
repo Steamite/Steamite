@@ -8,7 +8,7 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>Game resources.</summary>
-[Serializable, JsonObject]
+[Serializable, JsonObject, Obsolete]
 public class Resource
 {
     #region Variables

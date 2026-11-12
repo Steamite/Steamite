@@ -22,17 +22,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
     public struct WorldSaveNew
     {
+        public WorldComponent world;
+        public NativeArray<LevelComponent> levels;
         public BuildsAndChunksSaveNew objectsSave;
-        public LevelGridSave[] gridSave;
-
-
-        public int largestDimension;
-        public int chunkDimensions;
-        public int levelCount;
-        public NativeArray<short> pathSave;
-        public int pathGridSize;
-        public NativeArray<byte> pathRegions;
-        public NativeBitArray regionList;
     }
 
     public struct BuildsAndChunksSaveNew

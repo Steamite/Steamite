@@ -11,34 +11,11 @@ using UnityEngine.UIElements;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
-    [StructLayout(LayoutKind.Sequential)]
-    public struct WorldData
-    {
-        [ReadOnly] public int largestDimScaled;
-        [ReadOnly] public int largestLevelSize;
-        [ReadOnly] public NativeArray<LevelData> levels;
-        [ReadOnly] public NativeArray<short> path;
-        [ReadOnly] public NativeArray<int> neighbourOffset;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct LevelData
-    {
-        [ReadOnly] public int offsetScaled;
-        [ReadOnly] public int dimScaled;
-        [ReadOnly] public int dim;
-        [ReadOnly] public int startIndex;
-        [ReadOnly] public NativeArray<int> neighbourOffsetTable;
-                   
-        [ReadOnly] public NativeArray<LevelGridTile> renderGrid;
-        [ReadOnly] public NativeBitArray dirtyChunks;
-        [ReadOnly] public NativeBitArray marked;
-    }
 
 
     public class GridLevel : IDisposable, IUpdatable
     {
-        public static int chunkDimensions = 16;
+        public readonly static int chunkDimensions = 16;
         public NativeArray<LevelGridTile> renderGrid;
         /// <summary>
         /// Indexed by world position, not local!
@@ -74,22 +51,22 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// </summary>
         public NativeArray<OverlayData> overlayTiles;
 
-        public GridLevel(LevelGridSave gridSave, int _levelNumber, int levelSize, NativeArray<short> gridPath, int largestDimScaled)
+        public GridLevel(LevelComponent gridSave, int _levelNumber, int levelSize, NativeArray<short> gridPath, int largestDimScaled)
         {
             // TODO
             if (_levelNumber == 0)
                 Unlocked = true;
 
             levelNumber = _levelNumber;
-            levelDimensions = gridSave.levelDimensions;
-            dimensionsScaled = levelDimensions * chunkDimensions;
+            levelDimensions = gridSave.dimensions;
+            dimensionsScaled = gridSave.dimensionsScaled;
 
-            levelOffset = gridSave.levelOffset;
-            offsetScaled = levelOffset * chunkDimensions;
+            levelOffset = gridSave.offsets;
+            offsetScaled = gridSave.offsetsScaled;
 
             sizeScaled = dimensionsScaled * dimensionsScaled;
 
-            renderGrid = gridSave.grid;
+            renderGrid = gridSave.renderGrid;
             path = new(gridPath, _levelNumber * levelSize, levelSize);
 
 
@@ -204,6 +181,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void SetTile(int localIndex, LevelGridTile tile)
         {
+
             //UpdatePath(localIndex, tile);
             /*PathChanges.UpdatePath(
                 localIndex, 
@@ -355,7 +333,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             return Recalculation.LocalIndexFromWorldIndex(world, offsetScaled, dimensionsScaled);
         }
 
-
+        /// <summary>
+        /// Entrance overlay Tile
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="levelRenderer"></param>
+        /// <param name="add"></param>
         public void SetEntrance(int2 world, LevelRenderer levelRenderer, bool add)
         {
             int localIndex = Recalculation.LocalIndexFromWorldPos(world, offsetScaled, dimensionsScaled);
