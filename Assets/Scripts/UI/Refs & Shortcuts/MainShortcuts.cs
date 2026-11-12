@@ -6,7 +6,7 @@ using Unity.XR.Oculus.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
+public class MainShortcuts : MonoBehaviour, IBeforeLoad
 {
     InputActionMap bindingMap => inputAsset.actionMaps[1];
 
@@ -38,11 +38,13 @@ public class MainShortcuts : MonoBehaviour, IAfterLoad, IBeforeLoad
         quests = bindingMap.FindAction("Quests");
 
         instance = this;
+        enabled = false;
     }
 
-    public void AfterLoad()
+
+    public static void FirstStart()
     {
-        enabled = true;
+        instance.enabled = true;
         EnableInput();
     }
 

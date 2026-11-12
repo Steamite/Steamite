@@ -433,13 +433,13 @@ namespace Assets.Scripts.Saving___Loading
         /// </summary>
         /// <param name="newGame"></param>
         /// <returns></returns>
-        IEnumerator CancelInput()
+        async Awaitable CancelInput()
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 1; i++)
             {
-                yield return null;
+                await Awaitable.NextFrameAsync();
             }
-            EnableLevelContollers();
+            await EnableLevelContollers();
         }
 
 
@@ -452,20 +452,21 @@ namespace Assets.Scripts.Saving___Loading
         /// And enables user input.
         /// </summary>
         /// <param name="newGame">Information for ticks</param>
-        async void EnableLevelContollers()
+        async Awaitable EnableLevelContollers()
         {
-            StopCoroutine(CancelInput());
+            SceneRefs.FinishLoad();
+
+            humanActivation?.Invoke();
+            humanActivation = null;
+            SceneRefs.Tick.InitTicks();
+
             for (int i = SceneManager.sceneCount - 1; i > -1; i--)
             {
                 if (SceneManager.GetSceneAt(i).name == "Loading Screen" && SceneManager.GetSceneAt(i).isLoaded)
                     await SceneManager.UnloadSceneAsync("Loading Screen");
             }
 
-            SceneRefs.FinishLoad();
-
-            humanActivation?.Invoke();
-            humanActivation = null;
-            SceneRefs.Tick.InitTicks();
+            MainShortcuts.FirstStart();
             UIRefs.TopBar.RegisterReload(TopBarStart);
 
 #if UNITY_INCLUDE_TESTS

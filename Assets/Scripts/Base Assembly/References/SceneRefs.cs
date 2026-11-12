@@ -96,7 +96,7 @@ public class SceneRefs : MonoBehaviour
         foreach (IAfterLoad afterLoad in instance.afterLoads.Cast<IAfterLoad>())
             afterLoad.AfterLoad();
         instance.afterLoads = null;
-        World.SetupAttachments();//.Init();
+        World.SetupAttachments();
     }
 
     private void OnValidate()
