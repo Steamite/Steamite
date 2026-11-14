@@ -110,7 +110,7 @@ namespace Rendering
 
             cameraEntity = manager.CreateEntity();
             manager.AddComponentData<OverlayChangeComponent>(cameraEntity, new() { hasChange = true});
-            DynamicBuffer<OverlayDataComponent> buffer = manager.AddBuffer<OverlayDataComponent>(cameraEntity);
+            DynamicBuffer<OverlayComponent> buffer = manager.AddBuffer<OverlayComponent>(cameraEntity);
 
             for (int i = 0; i < levelCount; i++)
             {

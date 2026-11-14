@@ -15,7 +15,7 @@ namespace Assets.Scripts.Systems.Rendering
         {
             RequireForUpdate<CameraLevelComponent>();
             RequireForUpdate<OverlayChangeComponent>();
-            RequireForUpdate<OverlayDataComponent>();
+            RequireForUpdate<OverlayComponent>();
         }
 
         protected override void OnUpdate()
@@ -26,7 +26,7 @@ namespace Assets.Scripts.Systems.Rendering
                 return;
             
             change.ValueRW.hasChange = false;
-            var level = SystemAPI.GetSingletonBuffer<OverlayDataComponent>()[levelNumber];
+            var level = SystemAPI.GetSingletonBuffer<OverlayComponent>()[levelNumber];
 
             gridTexture.SetPixelData(level.overlayGrid, 0);
             gridTexture.Apply(false, false);

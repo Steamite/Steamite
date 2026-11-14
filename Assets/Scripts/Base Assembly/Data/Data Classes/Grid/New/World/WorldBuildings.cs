@@ -45,12 +45,19 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
         WorldComponent worldComponent;
         NativeArray<LevelComponent> levelArray;
+        NativeArray<OverlayComponent> overlays;
 
-        public BuildingRenderer SetupRenderer(Material buildingMaterial, LevelRenderer levelRenderer, ref WorldComponent worldComponent, in NativeArray<LevelComponent> levelArray)
+        public BuildingRenderer SetupRenderer(
+            Material buildingMaterial, 
+            LevelRenderer levelRenderer, 
+            ref WorldComponent worldComponent, 
+            in NativeArray<LevelComponent> levelArray,
+            ref NativeArray<OverlayComponent> overlays)
         {
             this.levelRenderer = levelRenderer;
             this.worldComponent = worldComponent;
             this.levelArray = levelArray;
+            this.overlays = overlays;
 
 
             List<BuildingWrapper> wrappers = SceneRefs.ObjectFactory.buildPrefabs.GetAllObjects();
@@ -84,9 +91,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                     wrappers[(int)buildings[i].renderData.meshIndex].blueprint,
                     build.renderData,
                     i,
-                    worldComponent,
-                    levelArray);
+                    ref worldComponent,
+                    in levelArray,
+                    ref overlays);
             }
+            levelRenderer.UpdateOverlayTexture();
 
             return buildingRenderer;
         }
@@ -143,8 +152,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         {
             BuildingNew building = buildings[index];
             RemoveBuildingFromArray(index);
-            BuildingWrapper wrapper = SceneRefs.ObjectFactory.buildPrefabs.GetBuilding(buildings[index].categoryIndex, buildings[index].wrapperIndex);
-            BuildingChanges.UnMarkTiles(wrapper.blueprint, building.renderData, ref worldComponent, in levelArray);
+            BuildingWrapper wrapper = SceneRefs.ObjectFactory.buildPrefabs.GetBuilding(building.categoryIndex, building.wrapperIndex);
+            BuildingChanges.UnMarkTiles(
+                wrapper.blueprint, 
+                building.renderData, 
+                ref worldComponent, 
+                in levelArray,
+                ref overlays);
             
             levelRenderer.UpdateOverlayTexture();
         }
@@ -175,8 +189,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 blueprint.blueprint, 
                 buildingData.renderData, 
                 arrayIndex, 
-                worldComponent, 
-                levelArray);
+                ref worldComponent, 
+                in levelArray,
+                ref overlays);
 
             levelRenderer.UpdateOverlayTexture();
         }

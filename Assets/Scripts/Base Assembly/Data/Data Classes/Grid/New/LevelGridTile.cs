@@ -27,6 +27,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     public struct LevelGridTile
     {
         public int hiddenTypeStyleAmount;
+        /// <summary>
+        /// 0-1 entryPoint Counts
+        /// </summary>
         public uint otherData;
         public static readonly LevelGridTile OutsideWall = new LevelGridTile((int)TileType.Border, int.MaxValue);
 

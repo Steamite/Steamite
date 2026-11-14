@@ -54,6 +54,7 @@ public class NothingNew : GridTilesModeNew
                 break;
             case TileType.Building:
             case TileType.Elevator:
+            case TileType.PassableBuilding:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.Rock);
                 controller.SetBuildingHighligh(worldPos, false, tile.Amount, selectionColor);
                 break;

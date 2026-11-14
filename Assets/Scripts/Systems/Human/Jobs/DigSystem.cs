@@ -23,7 +23,7 @@ namespace Assets.Scripts.Systems.Human.Jobs
         {
             var worldComponent = SystemAPI.GetSingleton<WorldComponent>();
             var levels = SystemAPI.GetSingletonBuffer<LevelComponent>();
-            var overlayBuffers = SystemAPI.GetSingletonBuffer<OverlayDataComponent>();
+            var overlayBuffers = SystemAPI.GetSingletonBuffer<OverlayComponent>();
 
             var change = SystemAPI.GetSingletonRW<OverlayChangeComponent>();
 /*

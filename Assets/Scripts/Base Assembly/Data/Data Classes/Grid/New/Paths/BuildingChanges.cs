@@ -16,8 +16,9 @@ public static class BuildingChanges
         BuildingGrid blueprint, 
         BuildingRenderData renderData,
         int arrayIndex,
-        WorldComponent worldComponent,
-        NativeArray<LevelComponent> levelArray)
+        ref WorldComponent worldComponent,
+        in NativeArray<LevelComponent> levelArray,
+        ref NativeArray<OverlayComponent> overlays)
     {
         uint encodedPosition = renderData.encodedLocalPosition;
         int levelIndex = (int)(encodedPosition >> 20) & 0x3;
@@ -38,6 +39,7 @@ public static class BuildingChanges
         int index = 0;
 
         LevelComponent level = levelArray[levelIndex];
+        OverlayComponent overlay = overlays[levelIndex];
 
         for (int i = -1; i < size.y; i++)
         {
@@ -64,10 +66,8 @@ public static class BuildingChanges
                         break;
                     case GridItemType.Entrance:
                         index++;
+                        OverlayChanges.SetEntrance(worldTemp, true, ref level, ref overlay);
                         continue;
-                        // mark in texture
-                        //level.SetEntrance(worldTemp, levelRenderer, true);
-                        break;
                 }
 
                 WorldChanges.SetTile(
@@ -82,7 +82,12 @@ public static class BuildingChanges
         }
     }
 
-    public static void UnMarkTiles(BuildingGrid blueprint, in BuildingRenderData buildingRenderData, ref WorldComponent worldComponent, in NativeArray<LevelComponent> levelArray)
+    public static void UnMarkTiles(
+        BuildingGrid blueprint, 
+        in BuildingRenderData buildingRenderData, 
+        ref WorldComponent worldComponent, 
+        in NativeArray<LevelComponent> levelArray,
+        ref NativeArray<OverlayComponent> overlays)
     {
         int2 size = blueprint.size;
         size.y -= 1;
@@ -97,6 +102,7 @@ public static class BuildingChanges
         int2 worldTemp;
         int tileIndex = 0;
         LevelComponent level = levelArray[levelIndex];
+        OverlayComponent overlay = overlays[levelIndex];
 
         worldPos += level.offsetsScaled;
 
@@ -120,9 +126,7 @@ public static class BuildingChanges
                         WorldChanges.SetTile(local, levelIndex, LevelGridTile.Road, ref worldComponent, in levelArray);
                         break;
                     case GridItemType.Entrance:
-                        // mark in texture
-                        // TODO:
-                        //level.SetEntrance(worldTemp, levelRenderer, false);
+                        OverlayChanges.SetEntrance(worldTemp, false, ref level, ref overlay);
                         break;
                 }
                 tileIndex++;

@@ -29,7 +29,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public WorldBuildings WorldBuildings;
 
-        public NativeArray<int> offsetPathTableNeighbour;
+        NativeArray<int> offsetPathTableNeighbour;
 
         public int CenterScaled;
         [NonSerialized] public int LargestLevelDimension;
@@ -43,6 +43,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         [SerializeField] int2 inspectedChunk;
 
+        /// <summary>
+        /// 0 - Left <br/>
+        /// 1 - Backwards <br/>
+        /// 2 - Right <br/>
+        /// 3 - Forward <br/>
+        /// 4 - Down <br/>
+        /// 5 - Up <br/>
+        /// </summary>
         [NonSerialized] public NativeArray<short> path;
         [NonSerialized] public NativeArray<byte> pathRegions;
         [NonSerialized] public NativeBitArray regionList;
@@ -70,12 +78,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             Vector3 startPosition = new(0.5f, 1, 0.5f);
 
-            int index = 0;// currentLevelIndex * (LargestLevelDimensionsScaled * LargestLevelDimensionsScaled);
+            int index = currentLevelIndex * GridSizeScaled;
             for (int y = 0; y < LargestLevelDimensionScaled; y++)
             {
                 for (int x = 0; x < LargestLevelDimensionScaled; x++)
                 {
-                    int a = currentLevel.path[index];
+                    int a = path[index];
                     for (int i = 0; i < 4; i++)
                     {
                         if ((a & 0x1) == 1)
@@ -105,11 +113,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         WorldComponent world;
         NativeArray<LevelComponent> levelArray;
+        NativeArray<OverlayComponent> overlayArray;
 
         public void LoadGrid(WorldSaveNew saveToLoad)
         {
             world = saveToLoad.world;
             levelArray = saveToLoad.levels;
+            overlayArray = saveToLoad.overlays;
 
             onLevelChange = null;
             currentLevelIndex = -1;
@@ -130,7 +140,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             for (int i = 0; i < LEVEL_COUNT; i++)
             {
-                gridLevels[i] = new GridLevel(saveToLoad.levels[i], i, GridSizeScaled, path, LargestLevelDimensionScaled);
+                gridLevels[i] = new GridLevel(saveToLoad.levels[i], saveToLoad.overlays[i], i, LargestLevelDimensionScaled);
             }
 
             CenterScaled = (LargestLevelDimension / 2) * GridLevel.chunkDimensions;
@@ -146,7 +156,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 buildingMaterial, 
                 renderer, 
                 ref saveToLoad.world, 
-                in saveToLoad.levels));
+                in saveToLoad.levels,
+                ref saveToLoad.overlays));
 
             renderer.Init(LEVEL_COUNT, gridLevels, LargestLevelDimension * GridLevel.chunkDimensions);
 
@@ -252,24 +263,25 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// </summary>
         /// <param name="gridPos"></param>
         /// <returns></returns>
-        public void DamageRock(int localIndex, uint ammount, int level)
+        public void DamageRock(int localIndex, uint ammount, int levelIndex)
         {
-            GridLevel gridLevel = gridLevels[level];
+            //GridLevel gridLevel = gridLevels[level];
             //int pos = gridLevel.levelDimensionsScaled * gridPos.y + gridPos.x;
-            LevelGridTile tile = gridLevel.renderGrid[localIndex];
+            LevelComponent level = levelArray[levelIndex];
+            LevelGridTile tile = level.renderGrid[localIndex];
             tile.otherData -= ammount;
             
             if (tile.otherData <= 0)
             {
-                WorldChanges.SetTile(localIndex, level, LevelGridTile.Road, ref world, in levelArray);
-                gridLevel.RevealRocks(localIndex);
+                WorldChanges.SetTile(localIndex, levelIndex, LevelGridTile.Road, ref world, in levelArray);
+                RevealChanges.RevealRocks(localIndex, level);
 
-                currentLevel.CleanPosAndUpdate(localIndex);
+                OverlayChanges.CleanPosAndUpdate(localIndex, levelArray[levelIndex], overlayArray[levelIndex]);
                 renderer.UpdateOverlayTexture();
             }
             else
             {
-                WorldChanges.SetTile(localIndex, level, tile, ref world, in levelArray);
+                WorldChanges.SetTile(localIndex, levelIndex, tile, ref world, in levelArray);
                 //gridLevel.HideRocks(pos);
             }
         }

@@ -11,15 +11,28 @@ namespace Assets.Scripts.Systems.Pathfind.DestinationSetter
 {
     public class WorldLinker : MonoBehaviour, IWorldInit
     {
+        NativeArray<LevelComponent> levelArray;
         public void Init(ref WorldComponent worldComponent, ref NativeArray<LevelComponent> levelArray)
         {
+            this.levelArray = levelArray;
+
             var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            var ent = manager.CreateEntity();
+            var entity = manager.CreateEntity();
 
-            manager.AddComponentData(ent, worldComponent);
+            manager.AddComponentData(entity, worldComponent);
 
-            var buffer = manager.AddBuffer<LevelComponent>(ent);
+            var buffer = manager.AddBuffer<LevelComponent>(entity);
             buffer.AddRange(levelArray);
         }
+        private void OnDestroy()
+        {
+            if (levelArray.IsCreated)
+            {
+                foreach (var level in levelArray)
+                    level.Dispose();
+                levelArray.Dispose();
+            }
+        }
     }
+    
 }

@@ -48,7 +48,7 @@ public struct LevelComponent : IBufferElementData, IDisposable
 }
 
 [InternalBufferCapacity(5)]
-public struct OverlayDataComponent : IBufferElementData
+public struct OverlayComponent : IBufferElementData
 {
     public NativeBitArray markedTilesGrid;
     public NativeArray<OverlayData> overlayGrid;

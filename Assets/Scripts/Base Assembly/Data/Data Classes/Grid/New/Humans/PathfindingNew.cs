@@ -51,17 +51,20 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             {
                 int pos = node.position;
 
-
-                if (pos == destination)
+                if (node.costToReach >= 2_000_000)
+                {
+                    node = new() { position = -1 };
+                    break;
+                } else if (pos == destination)
                 {
                     found = true;
                     break;
-                }
+                }/*
                 else if (node.costToReach >= 2_000_000)
                 {
                     node = new() { position = -1 };
                     break;
-                }
+                }*/
 
                 short mapNode = path[pos];
                 for (int i = 0; i < offsetTable.Length; i++)

@@ -24,6 +24,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     {
         public WorldComponent world;
         public NativeArray<LevelComponent> levels;
+        public NativeArray<OverlayComponent> overlays;
         public BuildsAndChunksSaveNew objectsSave;
     }
 

@@ -127,10 +127,11 @@ public class MapGenNew : MonoBehaviour
         };
 
         NativeArray<LevelComponent> levels = new NativeArray<LevelComponent>(levelCount, Allocator.Persistent);
+        NativeArray<OverlayComponent> overlays = new NativeArray<OverlayComponent>(levelCount, Allocator.Persistent);
 
         try
         {
-            await CreateLevels(worldComponent, levels);
+            await CreateLevels(worldComponent, levels, overlays);
         }
         catch (Exception e)
         {
@@ -142,20 +143,19 @@ public class MapGenNew : MonoBehaviour
             }
             Debug.LogError(e);
         }
+        
 
 
-        // TODO: place the buildings correctly
-/*
-        int c = centerPos * _width + centerPos;
-        world.gridSave[0].grid[c] = LevelGridTile.Elevator(0);
-        world.gridSave[1].grid[c] = LevelGridTile.Elevator(1);*/
-
-
-
-        return new() { world = worldComponent, levels = levels, objectsSave = buildsAndChunksSaveNew };
+        return new() 
+        { 
+            world = worldComponent, 
+            levels = levels, 
+            overlays = overlays, 
+            objectsSave = buildsAndChunksSaveNew 
+        };
     }
 
-    async Awaitable CreateLevels(WorldComponent worldComponent, NativeArray<LevelComponent> levelArray)
+    async Awaitable CreateLevels(WorldComponent worldComponent, NativeArray<LevelComponent> levelArray, NativeArray<OverlayComponent> componentArray)
     {
         await Awaitable.BackgroundThreadAsync();
 
@@ -191,6 +191,13 @@ public class MapGenNew : MonoBehaviour
             };
 
             levelArray[i] = level;
+
+            OverlayComponent overlay = new()
+            {
+                markedTilesGrid = new NativeBitArray(worldComponent.largestGridSize, Allocator.Persistent),
+                overlayGrid = new NativeArray<OverlayData>(worldComponent.largestGridSize, Allocator.Persistent)
+            };
+            componentArray[i] = overlay;
         }
         for (int levelIndex = 0; levelIndex < levelArray.Length; levelIndex++)
         {
