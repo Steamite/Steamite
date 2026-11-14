@@ -17,7 +17,7 @@ namespace Rendering
             int x = tileIndex % dimScaled;
 
             int2 chunkPos = new
-                int2(x, y) / GridLevel.chunkDimensions;
+                int2(x, y) / LevelComponent.CHUNK_DIMENSIONS;
 
             int chunkIndex = (chunkPos.y * dim) + chunkPos.x;
 
@@ -35,7 +35,7 @@ namespace Rendering
 
         static int CheckNeighbours(int toModulo, int axisPosition, int range, int chunkIndex, int chunkIndexOffset, int dim, NativeBitArray array)
         {
-            toModulo %= GridLevel.chunkDimensions;
+            toModulo %= LevelComponent.CHUNK_DIMENSIONS;
 
             if (toModulo < range)
             {
@@ -45,7 +45,7 @@ namespace Rendering
                     return -1;
                 }
             }
-            else if (toModulo + range >= GridLevel.chunkDimensions)
+            else if (toModulo + range >= LevelComponent.CHUNK_DIMENSIONS)
             {
                 if (axisPosition < dim - 1)
                 {

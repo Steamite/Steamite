@@ -38,9 +38,9 @@ namespace Rendering
                     renderParams,
                     chunkMeshes[levelNumber][j], 0, Matrix4x4.TRS(
                         new Vector3(
-                            (x + level.offsets) * GridLevel.chunkDimensions,
+                            (x + level.offsets) * LevelComponent.CHUNK_DIMENSIONS,
                             0,
-                            (y + level.offsets) * GridLevel.chunkDimensions
+                            (y + level.offsets) * LevelComponent.CHUNK_DIMENSIONS
                         ),
                         Quaternion.identity,
                         Vector3.one));

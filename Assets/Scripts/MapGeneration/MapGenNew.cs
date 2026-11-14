@@ -81,7 +81,7 @@ public class MapGenNew : MonoBehaviour
             levelDimensions.offsets[i] = (largestDimension - levelDimensions.sizes[i])/2;
         }
 
-        int chunkSize = GridLevel.chunkDimensions;
+        int chunkSize = LevelComponent.CHUNK_DIMENSIONS;
 
         #region Buildings
 
@@ -162,10 +162,10 @@ public class MapGenNew : MonoBehaviour
         for (int i = 0; i < levelArray.Length; i++)
         {
             int levelDim = levelDimensions.sizes[i];
-            int currentLevelDimScaled = levelDim * GridLevel.chunkDimensions;
+            int currentLevelDimScaled = levelDim * LevelComponent.CHUNK_DIMENSIONS;
 
             int levelOffset = levelDimensions.offsets[i];
-            int currentOffsetScaled = levelOffset * GridLevel.chunkDimensions;
+            int currentOffsetScaled = levelOffset * LevelComponent.CHUNK_DIMENSIONS;
 
             int scaledSize = currentLevelDimScaled * currentLevelDimScaled;
             int chunkCount = levelDim * levelDim;

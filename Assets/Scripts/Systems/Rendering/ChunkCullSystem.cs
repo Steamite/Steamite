@@ -35,7 +35,7 @@ namespace Rendering
 
             NativeReference<int> nativeRenderCount = new(0, Allocator.TempJob);
 
-            float2 camPos = math.floor(position.ValueRO.cameraPosition / GridLevel.chunkDimensions) - level.offsets;
+            float2 camPos = math.floor(position.ValueRO.cameraPosition / LevelComponent.CHUNK_DIMENSIONS) - level.offsets;
 
             CullJob job = new()
             {

@@ -23,7 +23,7 @@ namespace Rendering
         public void Init(GridWorld world)
         {
             instance = this;
-            combiner = new MeshCombinerPlus(GridLevel.chunkDimensions);
+            combiner = new MeshCombinerPlus(LevelComponent.CHUNK_DIMENSIONS);
 
             int levelCount = world.LEVEL_COUNT;
             var chunkMeshes = new Mesh[levelCount][];
@@ -33,11 +33,11 @@ namespace Rendering
 
             for (int i = 0; i < levelCount; i++)
             {
-                var level = world.gridLevels[i];
-                chunkMeshes[i] = combiner.GetLevelMeshes(level.levelDimensions, level.renderGrid);
+                var level = world.levelArray[i];
+                chunkMeshes[i] = combiner.GetLevelMeshes(level.dimensions, level.renderGrid);
             }
 
-            int maxSize = world.LargestLevelDimension * GridLevel.chunkDimensions;
+            int maxSize = world.LargestLevelDimension * LevelComponent.CHUNK_DIMENSIONS;
             CreateTextures(maxSize, levelCount, entityWorld, world);
             
             var renderParams = new RenderParams(worldMaterial)
@@ -56,7 +56,7 @@ namespace Rendering
 
             manager.AddComponentData<RenderingComponent>(cameraEntity, new()
             {
-                chunkSize = GridLevel.chunkDimensions,
+                chunkSize = LevelComponent.CHUNK_DIMENSIONS,
                 toRenderCount = 0,
                 toRenderIndexArray = renderArray
             });
@@ -114,10 +114,11 @@ namespace Rendering
 
             for (int i = 0; i < levelCount; i++)
             {
+                var overlay = world.overlayArray[i];
                 buffer.Add(new()
                 {
-                    overlayGrid = world.gridLevels[i].overlayTiles,
-                    markedTilesGrid = world.gridLevels[i].marked
+                    overlayGrid = overlay.overlayGrid,
+                    markedTilesGrid = overlay.markedTilesGrid
                 });
             }
         }

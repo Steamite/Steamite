@@ -18,13 +18,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
     public class GridWorld : MonoBehaviour
     {
         public int LEVEL_COUNT;
-        [NonSerialized] public GridLevel[] gridLevels = null;
-        public GridLevel GetLevel(int i) => gridLevels[i];
-
         int currentLevelIndex;
         public int CurrentLevelIndex => currentLevelIndex;
-        GridLevel currentLevel;
-        public GridLevel CurrentLevel => currentLevel;
         LevelRenderer renderer;
 
         public WorldBuildings WorldBuildings;
@@ -39,6 +34,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         [SerializeField] Mesh[] buildingMeshes;
         [SerializeField] Material buildingMaterial;
         Action<int, int> onLevelChange;
+        Action<LevelComponent, int, int> onLevelComponentChange;
+        Action<LevelComponent, LevelComponent, int> LevelChange;
         public List<Chunk> chunks;
 
         [SerializeField] int2 inspectedChunk;
@@ -60,8 +57,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         private void OnDrawGizmos()
         {
-            int dim = GridLevel.chunkDimensions;
+            #region Dim chunks corners
+            int dim = LevelComponent.CHUNK_DIMENSIONS;
 
+            // Draw chunk lines
             for (int i = 0; i < LargestLevelDimension; i++)
             {
                 for (int j = 0; j < LargestLevelDimension; j++)
@@ -71,9 +70,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     Gizmos.DrawLine(vec, secVec);
                 }
             }
+            #endregion
 
-
-            if (currentLevel == null || inspectedChunk.x == 0 || inspectedChunk.y == 0)
+            if (currentLevelIndex == -1 || inspectedChunk.x == 0 || inspectedChunk.y == 0)
                 return;
 
             Vector3 startPosition = new(0.5f, 1, 0.5f);
@@ -112,8 +111,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         }
 
         WorldComponent world;
-        NativeArray<LevelComponent> levelArray;
-        NativeArray<OverlayComponent> overlayArray;
+        [NonSerialized] public NativeArray<LevelComponent> levelArray;
+        [NonSerialized] public NativeArray<OverlayComponent> overlayArray;
+
+        [NonSerialized] public LevelComponent currentLevel;
+        [NonSerialized] public OverlayComponent currentOverlay;
 
         public void LoadGrid(WorldSaveNew saveToLoad)
         {
@@ -125,11 +127,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             currentLevelIndex = -1;
 
             LEVEL_COUNT = levelArray.Length;
-            gridLevels = new GridLevel[LEVEL_COUNT];
 
             // remove this:
             LargestLevelDimensionScaled = saveToLoad.world.LargestLevelDimensionScaled;
-            LargestLevelDimension = saveToLoad.world.LargestLevelDimensionScaled / GridLevel.chunkDimensions;
+            LargestLevelDimension = saveToLoad.world.LargestLevelDimensionScaled / LevelComponent.CHUNK_DIMENSIONS;
             GridSizeScaled = LargestLevelDimensionScaled * LargestLevelDimensionScaled;
 
             offsetPathTableNeighbour = saveToLoad.world.offsets;
@@ -140,10 +141,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             for (int i = 0; i < LEVEL_COUNT; i++)
             {
-                gridLevels[i] = new GridLevel(saveToLoad.levels[i], saveToLoad.overlays[i], i, LargestLevelDimensionScaled);
+                //gridLevels[i] = new GridLevel(saveToLoad.levels[i], saveToLoad.overlays[i], i, LargestLevelDimensionScaled);
+                var level = levelArray[i];
+                var render = levelArray[i].renderGrid;
+                for (int j = 0; j < render.Length; j++)
+                {
+                    if (render[j].TType == TileType.Road)
+                        RevealChanges.RevealRocks(j, ref level);
+                }
             }
 
-            CenterScaled = (LargestLevelDimension / 2) * GridLevel.chunkDimensions;
+            CenterScaled = (LargestLevelDimension / 2) * LevelComponent.CHUNK_DIMENSIONS;
 
             WorldBuildings = new WorldBuildings();
             WorldBuildings.LoadState(saveToLoad.objectsSave.buildings);
@@ -159,14 +167,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 in saveToLoad.levels,
                 ref saveToLoad.overlays));
 
-            renderer.Init(LEVEL_COUNT, gridLevels, LargestLevelDimension * GridLevel.chunkDimensions);
+            renderer.Init(this);
 
             SetLevel(0);
-        }
-
-        public LevelGridTile GetTile(int x, int level, int y)
-        {
-            return gridLevels[level].renderGrid[gridLevels[level].dimensionsScaled * y + x];
         }
 
         public LevelGridTile GetActiveTile(int2 worldPosition)
@@ -176,8 +179,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public LevelGridTile GetActiveTile(int worldX, int worldY)
         {
-            worldX -= currentLevel.offsetScaled;
-            worldY -= currentLevel.offsetScaled;
+            worldX -= currentLevel.offsetsScaled;
+            worldY -= currentLevel.offsetsScaled;
             //Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
             
             int index = currentLevel.dimensionsScaled * worldY + worldX;
@@ -188,8 +191,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public LevelGridTile GetActiveTile(int x, int y, out int index)
         {
-            x -= currentLevel.offsetScaled;
-            y -= currentLevel.offsetScaled;
+            x -= currentLevel.offsetsScaled;
+            y -= currentLevel.offsetsScaled;
             //Debug.Log($"{x}, {y}, {currentLevel.levelOffsetScaled}");
 
             index = currentLevel.dimensionsScaled * y + x;
@@ -205,6 +208,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// </summary>
         /// <param name="attach"></param>
         public void AttachChange(Action<int, int> attach) => onLevelChange += attach;
+        public void AttachChange(Action<LevelComponent, int, int> attach) => onLevelComponentChange += attach;
+        public void AttachChange(Action<LevelComponent, LevelComponent, int> attach) => LevelChange += attach;
+
         public void SetLevel(int i)
         {
             if (i == currentLevelIndex)
@@ -212,9 +218,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             int x = currentLevelIndex;
             currentLevelIndex = i;
-            currentLevel = gridLevels[i];
-            
+            currentLevel = levelArray[i];
+            currentOverlay = overlayArray[i];
+
             onLevelChange?.Invoke(x, i);
+            onLevelComponentChange?.Invoke(currentLevel, x, i);
+            LevelChange?.Invoke(levelArray[x], currentLevel, i);
         }
 
         private void OnDestroy()
@@ -232,20 +241,26 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             if(offsetPathTableNeighbour.IsCreated)
                 offsetPathTableNeighbour.Dispose();
 
-            foreach (var level in gridLevels)
+            if (levelArray.IsCreated)
             {
-                level.Dispose();
+                foreach (var level in levelArray)
+                {
+                    level.Dispose();
+                }
+                levelArray.Dispose();
             }
+
         }
 
         public bool IsUnlocked(int i)
         {
-            return gridLevels[i].Unlocked;
+            return levelArray[i].Unlocked;
         }
 
         public void UnlockLevel(Elevator selectedElevator, int selectedLevel)
         {
-            gridLevels[selectedLevel].Unlocked = true;
+            // TODO: need to use a pointer to change it
+            //levelArray[selectedLevel] ; .Unlocked = true;
         }
 
         public void SetupAttachments()
@@ -265,8 +280,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// <returns></returns>
         public void DamageRock(int localIndex, uint ammount, int levelIndex)
         {
-            //GridLevel gridLevel = gridLevels[level];
-            //int pos = gridLevel.levelDimensionsScaled * gridPos.y + gridPos.x;
             LevelComponent level = levelArray[levelIndex];
             LevelGridTile tile = level.renderGrid[localIndex];
             tile.otherData -= ammount;
@@ -274,7 +287,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             if (tile.otherData <= 0)
             {
                 WorldChanges.SetTile(localIndex, levelIndex, LevelGridTile.Road, ref world, in levelArray);
-                RevealChanges.RevealRocks(localIndex, level);
+                RevealChanges.RevealRocks(localIndex, ref level);
 
                 OverlayChanges.CleanPosAndUpdate(localIndex, levelArray[levelIndex], overlayArray[levelIndex]);
                 renderer.UpdateOverlayTexture();
@@ -282,7 +295,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             else
             {
                 WorldChanges.SetTile(localIndex, levelIndex, tile, ref world, in levelArray);
-                //gridLevel.HideRocks(pos);
             }
         }
 

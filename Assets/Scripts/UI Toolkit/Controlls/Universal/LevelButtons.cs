@@ -36,11 +36,11 @@ public partial class LevelButtons : ShortcutRadioButtonGroup, IInitiableUI
         world.AttachChange((_, newLevel) => OutsideTrigger(newLevel));
 
 
-        object level;
+        //object level;
         for (int i = 0; i < world.LEVEL_COUNT; i++)
         {
-            level = world.GetLevel(i);
             hierarchy[i].enabledSelf = true;/*
+            //level = world.GetLevel(i);
             hierarchy[i].SetBinding(
                 nameof(GridLevel.Unlocked),
                 nameof(enabledSelf),

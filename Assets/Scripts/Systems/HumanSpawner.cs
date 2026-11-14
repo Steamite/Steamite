@@ -46,6 +46,9 @@ namespace Assets.Scripts.Systems
             rand = new Unity.Mathematics.Random(1); // Provide seed
 
             PathfindPrefab pref = SystemAPI.GetSingleton<PathfindPrefab>();
+
+            //DynamicBuffer<LevelComponent> levels = SystemAPI.GetSingletonBuffer<LevelComponent>();
+
             for (int i = 0; i < pref.count; i++)
             {
                 var ent = buffer.Instantiate(pref.entity);

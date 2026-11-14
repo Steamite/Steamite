@@ -107,7 +107,7 @@ namespace Assets.Scripts.Saving___Loading
                 trade = await newGameInit.InitTrade(0),
                 research = await newGameInit.InitResearch(),
                 //TODO right position (get scaled center with offset)
-                humans = newGameInit.InitHumans(GridLevel.chunkDimensions * (worldSave.world.LargestLevelDimensionScaled/ (2 * GridLevel.chunkDimensions))),
+                humans = newGameInit.InitHumans(LevelComponent.CHUNK_DIMENSIONS * (worldSave.world.LargestLevelDimensionScaled/ (2 * LevelComponent.CHUNK_DIMENSIONS))),
                 quests = await newGameInit.InitQuests(randomMap),
                 world = worldSave
             };

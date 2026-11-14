@@ -18,6 +18,7 @@ public struct WorldComponent : IComponentData
 [InternalBufferCapacity(5)]
 public struct LevelComponent : IBufferElementData, IDisposable
 {
+    public readonly static int CHUNK_DIMENSIONS = 16;
     [ReadOnly] public NativeBitArray dirtyChunks;
     [ReadOnly] public NativeArray<LevelGridTile> renderGrid;
     /// <summary>
@@ -35,6 +36,8 @@ public struct LevelComponent : IBufferElementData, IDisposable
     /// Numbers of chunks (used for render Cull)
     /// </summary>
     [ReadOnly] public int chunkCount;
+
+    public bool Unlocked;
 
     public void Dispose()
     {

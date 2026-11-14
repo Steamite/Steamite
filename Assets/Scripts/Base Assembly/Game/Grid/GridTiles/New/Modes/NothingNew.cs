@@ -22,7 +22,7 @@ public class NothingNew : GridTilesModeNew
 
     public void RefreshDownedTile()
     {
-        var tile = controller.world.gridLevels[0].renderGrid[controller.clickedIndex];
+        var tile = controller.world.currentLevel.renderGrid[controller.clickedIndex];
         HandleSelectionTypes(tile, controller.clickedIndex, controller.clickedWorldPosition);
     }
 

@@ -9,7 +9,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths
     {
         static readonly int range = 2;
 
-        public static void RevealRocks(int i, LevelComponent level)
+        public static void RevealRocks(int i, ref LevelComponent level)
         {
             int dimensionsScaled = level.dimensionsScaled;
 
@@ -24,10 +24,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths
             int checkX = i % dimensionsScaled;
             checkY = math.clamp((dimensionsScaled + 1) - checkY, 0, checkRange);
             checkX = math.clamp((dimensionsScaled + 1) - checkX, 0, checkRange);
-
-
-
-            //int checkIndex = i - range - range * levelDimensionsScaled;
 
             int checkIndex = i - posX - posY * dimensionsScaled;
             for (int y = 0; y < checkY; y++)

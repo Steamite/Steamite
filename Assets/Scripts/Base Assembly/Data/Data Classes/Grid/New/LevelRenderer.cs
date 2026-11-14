@@ -52,10 +52,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         
         public ICustomRenderer GetCustomRenderer(int index) => customRenderers[index];
 
-        public void Init(int levelCount, GridLevel[] levels, int maxSize)
+        public void Init(GridWorld world)
         {
-            SceneRefs.World.AttachChange(OnChange);
-            ChangeLevel(levels[0]);
+            world.AttachChange(ChangeLevel);
             enabled = true;
         }
 
@@ -64,19 +63,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             (linker as IOverlayUpdate).MarkDirty();
         }
 
-        void OnChange(int _, int newI)
-        {
-            ChangeLevel(SceneRefs.World.GetLevel(newI));
-        }
-
-        public void ChangeLevel(GridLevel level)
+        public void ChangeLevel(LevelComponent level, int oldLevel, int newLevel)
         {
 
             UpdateOverlayTexture();
 
             foreach (var item in customRenderers)
             {
-                item.OnLevelChange(level);
+                item.OnLevelChange(level, oldLevel, newLevel);
             }
         }
 
