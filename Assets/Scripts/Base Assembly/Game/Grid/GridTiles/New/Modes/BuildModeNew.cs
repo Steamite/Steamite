@@ -116,9 +116,8 @@ public class BuildModeNew : GridTilesModeNew
             world.y++;
         }
 
-        buildingBlueprint.renderData.position = buildingPos;
+        buildingBlueprint.renderData.encodedLocalPosition = buildingPos;
         SceneRefs.World.WorldBuildings.PlaceBuilding(
-            controller.hoverWorldPosition, 
             wrapper,
             buildingBlueprint);
 
@@ -173,7 +172,7 @@ public class BuildModeNew : GridTilesModeNew
         uint levelPos = (uint)((SceneRefs.World.CurrentLevelIndex & 0x7) << 20);
         buildingPos = pos | levelPos;
 
-        buildingBlueprint.renderData.position = buildingPos;
+        buildingBlueprint.renderData.encodedLocalPosition = buildingPos;
 
 
         buildingRenderer.CreateBlueprint(buildingBlueprint.renderData);

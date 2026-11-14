@@ -48,8 +48,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             }
             else
             {
-                if (newTile.TType == TileType.Building)
-                    worldData.path[globalIndex] = 0;
+                /*if (newTile.TType == TileType.Building)
+                    worldData.path[globalIndex] = 0;*/
 
                 BlockPath(
                     globalIndex,
@@ -71,9 +71,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             {
                 int gridIndex = localIndex + levelOffset[i];
                 int pathIndex = globalPosition - worldOffset[i];
-
+/*
                 if (renderGrid[gridIndex].TType == TileType.Building)
-                    continue;
+                    continue;*/
                 path[pathIndex] = (short)(path[pathIndex] | (short)(0x1 << i));
             }
         }
@@ -108,10 +108,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 for (int i = 0; i < 4; i++)
                 {
                     int gridIndex = localIndex - worldData.offsets[i];
-                    bool canEnter =
-                        level.renderGrid[gridIndex].TType == TileType.Road
+                    bool canEnter = true;
+                        /*level.renderGrid[gridIndex].TType == TileType.Road
                         ||
-                        (level.renderGrid[gridIndex].TType > TileType.Building && level.renderGrid[gridIndex].Amount == level.renderGrid[localIndex].Amount);
+                        (level.renderGrid[gridIndex].TType > TileType.Building && level.renderGrid[gridIndex].Amount == level.renderGrid[localIndex].Amount);*/
 
                     newPath = (short)(newPath | (short)(canEnter ? (0x1 << i) : 0));
                 }

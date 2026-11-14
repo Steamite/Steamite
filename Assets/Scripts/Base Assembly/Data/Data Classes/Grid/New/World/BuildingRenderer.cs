@@ -154,7 +154,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             {
                 int batchIndex = (int)buildings[i].meshIndex;
                 int index = (int)(renderBatches[batchIndex].startIndex + renderBatches[batchIndex].numberOfItems);
-                instanceData[index] = buildings[i].position;
+                instanceData[index] = buildings[i].encodedLocalPosition;
 
                 indexes[i] = index;
                 renderBatches[batchIndex].numberOfItems++;
@@ -225,7 +225,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             args[0] = args[selectedBlueprint + 1];
             args[0].instanceCount = 1;
 
-            instanceData[0] = renderData.position;
+            instanceData[0] = renderData.encodedLocalPosition;
 
             argBuffer.SetData(args, 0, 0, 1);
             instanceBuffer.SetData(instanceData, 0, 0, 1);

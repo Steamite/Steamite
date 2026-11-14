@@ -93,7 +93,7 @@ public class MapGenNew : MonoBehaviour
         BuildingNew[] buildingSaves = new BuildingNew[2];
         buildingSaves[0] = save;
         buildingSaves[1] = save.Clone();
-        buildingSaves[1].renderData.position = (uint)((buildingSaves[1].renderData.position & ~(0x7 << 20)) | (1 << 20));
+        buildingSaves[1].renderData.encodedLocalPosition = (uint)((buildingSaves[1].renderData.encodedLocalPosition & ~(0x7 << 20)) | (1 << 20));
 
         BuildsAndChunksSaveNew buildsAndChunksSaveNew = new()
         {
@@ -134,6 +134,12 @@ public class MapGenNew : MonoBehaviour
         }
         catch (Exception e)
         {
+            if (levels.IsCreated)
+            {
+                foreach (var level in levels)
+                    level.Dispose();
+                levels.Dispose();
+            }
             Debug.LogError(e);
         }
 

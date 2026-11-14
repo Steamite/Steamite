@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using System;
 using System.Runtime.InteropServices;
 using Unity.Collections;
 using Unity.Entities;
@@ -15,7 +16,7 @@ public struct WorldComponent : IComponentData
 }
 
 [InternalBufferCapacity(5)]
-public struct LevelComponent : IBufferElementData
+public struct LevelComponent : IBufferElementData, IDisposable
 {
     [ReadOnly] public NativeBitArray dirtyChunks;
     [ReadOnly] public NativeArray<LevelGridTile> renderGrid;
@@ -34,6 +35,16 @@ public struct LevelComponent : IBufferElementData
     /// Numbers of chunks (used for render Cull)
     /// </summary>
     [ReadOnly] public int chunkCount;
+
+    public void Dispose()
+    {
+        if (neighbours.IsCreated)
+            neighbours.Dispose();
+        if (renderGrid.IsCreated)
+            renderGrid.Dispose();
+        if (dirtyChunks.IsCreated)
+            dirtyChunks.Dispose();
+    }
 }
 
 [InternalBufferCapacity(5)]

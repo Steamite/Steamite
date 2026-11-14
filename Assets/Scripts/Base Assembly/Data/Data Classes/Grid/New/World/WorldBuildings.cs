@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths;
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
@@ -37,15 +38,19 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 {
                     /*int2 pos = new((int)item.renderData.position & 0x9, (int)(item.renderData.position >> 10) & 0x9);
                     PlaceBuilding(pos, wrappers[item.wrapperIndex], item);*/
-                    AddBuilding(item);
+                    AddBuildingToArray(item);
                 }
             }
         }
 
-        public BuildingRenderer SetupRenderer(Material buildingMaterial, LevelRenderer levelRenderer)
+        WorldComponent worldComponent;
+        NativeArray<LevelComponent> levelArray;
+
+        public BuildingRenderer SetupRenderer(Material buildingMaterial, LevelRenderer levelRenderer, ref WorldComponent worldComponent, in NativeArray<LevelComponent> levelArray)
         {
             this.levelRenderer = levelRenderer;
-
+            this.worldComponent = worldComponent;
+            this.levelArray = levelArray;
 
 
             List<BuildingWrapper> wrappers = SceneRefs.ObjectFactory.buildPrefabs.GetAllObjects();
@@ -73,13 +78,27 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             for (int i = 0; i < lastIndex; i++)
             {
                 buildings[i].renderIndex = indexes[i];
-                //MarkTiles(buildings[i].renderData.position)
+                BuildingNew build = buildings[i];
+
+                BuildingChanges.MarkTiles(
+                    wrappers[(int)buildings[i].renderData.meshIndex].blueprint,
+                    build.renderData,
+                    i,
+                    worldComponent,
+                    levelArray);
             }
 
             return buildingRenderer;
         }
 
-        int AddBuilding(BuildingNew data)
+        #region Array management
+        /// <summary>
+        /// Doesn't do any registers, only adds the data to the right index in the <see cref="buildings"/>.
+        /// Nothing else is afffected.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        int AddBuildingToArray(BuildingNew data)
         {
             int index;
             if(firstRemovedSpace <= lastIndex)
@@ -100,13 +119,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 buildings[lastIndex] = data;
                 lastIndex++;
             }
-
-            //render?.CreateBuilding(data.renderData);
-
             return index;
         }
-
-        public void RemoveBuilding(int index)
+        void RemoveBuildingFromArray(int index)
         {
             if (index < firstRemovedSpace)
                 firstRemovedSpace = index;
@@ -120,50 +135,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 if (buildings[i]?.renderIndex >= startIndex && buildings[i].renderIndex < max)
                     buildings[i].renderIndex--;
             }
+            buildings[index] = null;
+        }
+        #endregion
 
+        public void RemoveBuilding(int index)
+        {
+            BuildingNew building = buildings[index];
+            RemoveBuildingFromArray(index);
             BuildingWrapper wrapper = SceneRefs.ObjectFactory.buildPrefabs.GetBuilding(buildings[index].categoryIndex, buildings[index].wrapperIndex);
+            BuildingChanges.UnMarkTiles(wrapper.blueprint, building.renderData, ref worldComponent, in levelArray);
             
-            int2 size = wrapper.blueprint.size;
-            size.y -= 1;
-            uint rot = (buildings[index].renderData.position >> 23) & 0x3;
-
-            int2 worldPos = new int2(
-                (int)buildings[index].renderData.position & 0x3FF, 
-                (int)(buildings[index].renderData.position >> 10) & 0x3FF);
-            worldPos += SceneRefs.World.CurrentLevel.offsetScaled;
-
-            int2 worldTemp;
-            int tileIndex = 0;
-            GridLevel level = SceneRefs.World.CurrentLevel;
-
-            for (int i = -1; i < size.y; i++)
-            {
-                for (int j = 0; j < size.x; j++)
-                {
-                    int2 rotPos = new(
-                        j * cosTable[rot] - i * sinTable[rot],
-                        j * sinTable[rot] + i * cosTable[rot]);
-
-                    worldTemp = worldPos + rotPos;
-
-                    switch (wrapper.blueprint.itemArray[tileIndex])
-                    {
-                        case GridItemType.Road:
-                        case GridItemType.PassableRoad:
-                        case GridItemType.Elevator:
-
-                            level.SetTileByWorldPos(
-                                worldTemp,
-                                LevelGridTile.Road);
-                            break;
-                        case GridItemType.Entrance:
-                            // mark in texture
-                            level.SetEntrance(worldTemp, levelRenderer, false);
-                            break;
-                    }
-                    tileIndex++;
-                }
-            }
             levelRenderer.UpdateOverlayTexture();
         }
 
@@ -185,62 +167,18 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             buildingRenderer?.Dispose();
         }
 
-        readonly static int[] cosTable = { 1, 0, -1, 0 };
-        readonly static int[] sinTable = { 0, 1, 0, -1 };
-        public void PlaceBuilding(int2 worldPos, BuildingWrapper wrapper, BuildingNew buildingData)
+        public void PlaceBuilding(BuildingWrapper blueprint, BuildingNew buildingData)
         {
-            int arrayIndex = AddBuilding(buildingData);
-            MarkTiles(worldPos, wrapper, buildingData, arrayIndex);
+            int arrayIndex = AddBuildingToArray(buildingData);
+
+            BuildingChanges.MarkTiles(
+                blueprint.blueprint, 
+                buildingData.renderData, 
+                arrayIndex, 
+                worldComponent, 
+                levelArray);
+
             levelRenderer.UpdateOverlayTexture();
-        }
-
-        private void MarkTiles(int2 worldPos, BuildingWrapper wrapper, BuildingNew buildingData, int arrayIndex)
-        {
-            int2 size = wrapper.blueprint.size;
-            size.y -= 1;
-            uint rot = (buildingData.renderData.position >> 23) & 0x3;
-
-
-            int2 worldTemp;
-            int index = 0;
-            GridLevel level = SceneRefs.World.CurrentLevel;
-
-            for (int i = -1; i < size.y; i++)
-            {
-                for (int j = 0; j < size.x; j++)
-                {
-                    int2 rotPos = new(
-                        j * cosTable[rot] - i * sinTable[rot],
-                        j * sinTable[rot] + i * cosTable[rot]);
-
-                    worldTemp = worldPos + rotPos;
-
-                    switch (wrapper.blueprint.itemArray[index])
-                    {
-                        case GridItemType.Road:
-
-                            level.SetTileByWorldPos(
-                                worldTemp,
-                                LevelGridTile.Building(arrayIndex));
-                            break;
-                        case GridItemType.PassableRoad:
-                            level.SetTileByWorldPos(
-                                worldTemp,
-                                LevelGridTile.PassableRoad(arrayIndex));
-                            break;
-                        case GridItemType.Elevator:
-                            level.SetTileByWorldPos(
-                                worldTemp,
-                                LevelGridTile.Elevator(arrayIndex));
-                            break;
-                        case GridItemType.Entrance:
-                            // mark in texture
-                            level.SetEntrance(worldTemp, levelRenderer, true);
-                            break;
-                    }
-                    index++;
-                }
-            }
         }
 
         public void UpdateRenderIndexes(int startIndex, int increase)

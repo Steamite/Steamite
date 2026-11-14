@@ -15,7 +15,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
 
         public void CreateMainElevator(int centerPos)
         {
-            renderData.position = (uint)(centerPos & 0x3FF | ((centerPos & 0x3FF) << 10)); 
+            renderData.encodedLocalPosition = (uint)(centerPos & 0x3FF | ((centerPos & 0x3FF) << 10)); 
             IsConstructing = false;
             IsDeconstructing = false;
             isMain = true;

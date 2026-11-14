@@ -14,7 +14,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
         /// 23 - 24 - y (rotation)  0x3  <br/>
         /// 25 - 31 - construction progress<br/>
         /// </summary>
-        public uint position;
+        public uint encodedLocalPosition;
         public uint meshIndex;
     }
 
