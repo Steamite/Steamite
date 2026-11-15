@@ -8,6 +8,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine.Rendering.VirtualTexturing;
 
 namespace Assets.Scripts.Systems
 {
@@ -18,6 +19,7 @@ namespace Assets.Scripts.Systems
         {
             RequireForUpdate<TestSpherePrefab>();
             RequireForUpdate<PathfindPrefab>();
+            RequireForUpdate<WorldComponent>();
         }
 
         protected override void OnUpdate()
@@ -47,13 +49,14 @@ namespace Assets.Scripts.Systems
 
             PathfindPrefab pref = SystemAPI.GetSingleton<PathfindPrefab>();
 
-            //DynamicBuffer<LevelComponent> levels = SystemAPI.GetSingletonBuffer<LevelComponent>();
-
+            WorldComponent worldComponent = SystemAPI.GetSingleton<WorldComponent>();
+            int center = worldComponent.LargestLevelDimensionScaled / 2;
+            int2 spawnRange = new(center - LevelComponent.CHUNK_DIMENSIONS, center + LevelComponent.CHUNK_DIMENSIONS);
             for (int i = 0; i < pref.count; i++)
             {
                 var ent = buffer.Instantiate(pref.entity);
                 int yPos = rand.NextInt(0, 5);
-                int3 pos = rand.NextInt3(new(64, yPos, 64), new(90, yPos, 90));
+                int3 pos = rand.NextInt3(new(spawnRange.x, yPos, spawnRange.x), new(spawnRange.y, yPos, spawnRange.y));
                 buffer.SetComponent<PathfindComponent>(ent, new()
                 {
                     currentWaypoint = -1,

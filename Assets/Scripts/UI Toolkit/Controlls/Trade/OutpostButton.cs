@@ -5,6 +5,7 @@ public partial class OutpostButton : CustomRadioButton
 {
     public OutpostButton()
     {
+        RemoveFromClassList("unity-button");
         AddToClassList("location-button");
         rotator = new();
         style.width = 100;

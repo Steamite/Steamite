@@ -92,8 +92,14 @@ public class MapGenNew : MonoBehaviour
 
         BuildingNew[] buildingSaves = new BuildingNew[2];
         buildingSaves[0] = save;
+
+
+        _width = levelDimensions.sizes[1] * chunkSize;
+        centerPos = (_width / 2) - 1;
+
         buildingSaves[1] = save.Clone();
-        buildingSaves[1].renderData.encodedLocalPosition = (uint)((buildingSaves[1].renderData.encodedLocalPosition & ~(0x7 << 20)) | (1 << 20));
+        buildingSaves[1].renderData.encodedLocalPosition = (uint)((centerPos & 0x3FF) | ((centerPos & 0x3FF) << 10) | (1 & 0x7) << 20);
+        // (uint)((buildingSaves[1].renderData.encodedLocalPosition & ~(0x7 << 20)) | (1 << 20));
 
         BuildsAndChunksSaveNew buildsAndChunksSaveNew = new()
         {

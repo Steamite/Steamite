@@ -263,16 +263,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             //levelArray[selectedLevel] ; .Unlocked = true;
         }
 
-        public void SetupAttachments()
-        {
-            // TODO no need to do this I think, I'll replace all of it
-            /*
-            AddToGridChange((_, _) => SceneRefs.GridTiles.ChangeSelMode(ControlMode.Nothing));
-            AddToGridChange((_, _) => SceneRefs.GridTiles.Exit());
-            AddToGridChange(SceneRefs.Humans.SwitchLevel);
-            ChangeGridLevel(0);*/
-        }
-
         /// <summary>
         /// 
         /// </summary>

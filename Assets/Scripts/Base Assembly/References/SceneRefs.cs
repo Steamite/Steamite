@@ -80,9 +80,9 @@ public class SceneRefs : MonoBehaviour
         //MyGrid.ReloadDomain();
         instance = this;
 
-        foreach (IBeforeLoadAwaitable beforeLoad in instance.beforeLoadsAwaitable)
+        foreach (IBeforeLoadAwaitable beforeLoad in instance.beforeLoadsAwaitable.Cast<IBeforeLoadAwaitable>())
             await beforeLoad.BeforeInit();
-        foreach (IBeforeLoad beforeLoad in instance.beforeLoads)
+        foreach (IBeforeLoad beforeLoad in instance.beforeLoads.Cast<IBeforeLoad>())
             beforeLoad.BeforeInit();
 
         beforeLoads = null;
@@ -96,7 +96,6 @@ public class SceneRefs : MonoBehaviour
         foreach (IAfterLoad afterLoad in instance.afterLoads.Cast<IAfterLoad>())
             afterLoad.AfterLoad();
         instance.afterLoads = null;
-        World.SetupAttachments();
     }
 
     private void OnValidate()

@@ -75,8 +75,10 @@ namespace AbstractControls
         #region Constructors
         public Map() : base()
         {
-            mapElem = new();
-            mapElem.name = "MapImage";
+            mapElem = new()
+            {
+                name = "MapImage"
+            };
             mapElem.style.backgroundImage = mapImg;
             mapElem.style.minHeight = baseHeight;
             mapElem.style.minWidth = baseWidth;

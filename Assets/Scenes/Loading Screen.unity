@@ -428,16 +428,15 @@ MonoBehaviour:
   maxToAdd: 6
   _levelDim:
   - sizes: 0600000006000000060000000600000008000000i
-  - sizes: 080000000800000008000000080000000a000000i
-  - sizes: 0c0000000c0000000c0000000c00000010000000i
+  - sizes: 080000000a0000000c0000000e00000010000000i
+  - sizes: 2000000020000000200000002000000020000000i
   minableResources:
   - {fileID: 11400000, guid: a8d8035b791c05943ba13e1333106fc9, type: 2}
   - {fileID: 11400000, guid: 1c3d32d887bb74046af6627885ac30b8, type: 2}
   - {fileID: 11400000, guid: fd427511e764df5408494dc7e0e9b586, type: 2}
   elevator:
     renderData:
-      position: 0
-      blueprintSize: 0
+      encodedLocalPosition: 0
       meshIndex: 2
     IsConstructing: 0
     IsDeconstructing: 0
