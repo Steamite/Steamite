@@ -86,7 +86,21 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     for (int i = 0; i < 4; i++)
                     {
                         if ((a & 0x1) == 1)
-                            Gizmos.color = Color.white;
+                        {
+                            int mod = pathRegions[index] % 3;
+                            switch (mod)
+                            {
+                                case 0:
+                                    Gizmos.color = Color.white;
+                                    break;
+                                case 1:
+                                    Gizmos.color = Color.blue;
+                                    break;
+                                case 2:
+                                    Gizmos.color = Color.orange;
+                                    break;
+                            }
+                        }
                         else
                             Gizmos.color = Color.black;
                         Gizmos.DrawLine(startPosition, startPosition + offset[i]);
@@ -135,9 +149,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             offsetPathTableNeighbour = saveToLoad.world.offsets;
 
-            path = saveToLoad.world.path;/*
-            regionList = saveToLoad.world.regionList;
-            pathRegions = saveToLoad.pathRegions;*/
+            path = saveToLoad.world.path;
+            pathRegions = saveToLoad.world.pathRegions;
+            regionList = saveToLoad.world.regions;
 
             for (int i = 0; i < LEVEL_COUNT; i++)
             {
@@ -231,14 +245,14 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             WorldBuildings.Dispose();
 
 
-            if(path.IsCreated)
+            if (path.IsCreated)
                 path.Dispose();
-            if(pathRegions.IsCreated)
+            if (pathRegions.IsCreated)
                 pathRegions.Dispose();
             if (regionList.IsCreated)
                 regionList.Dispose();
 
-            if(offsetPathTableNeighbour.IsCreated)
+            if (offsetPathTableNeighbour.IsCreated)
                 offsetPathTableNeighbour.Dispose();
 
             if (levelArray.IsCreated)
@@ -248,6 +262,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     level.Dispose();
                 }
                 levelArray.Dispose();
+            }
+
+            if (overlayArray.IsCreated)
+            {
+                foreach (var item in overlayArray)
+                {
+                    item.Dispose();
+                }
+                overlayArray.Dispose();
             }
 
         }

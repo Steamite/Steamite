@@ -18,7 +18,7 @@ namespace Rendering
 
         MeshCombinerPlus combiner;
 
-
+        NativeArray<int> renderArray;
         public static ChunkRenderingLinker instance;
         public void Init(GridWorld world)
         {
@@ -27,7 +27,7 @@ namespace Rendering
 
             int levelCount = world.LEVEL_COUNT;
             var chunkMeshes = new Mesh[levelCount][];
-            NativeArray<int> renderArray = new(50, Allocator.Persistent);
+            renderArray = new(50, Allocator.Persistent);
 
             var entityWorld = World.DefaultGameObjectInjectionWorld;
 
@@ -126,6 +126,8 @@ namespace Rendering
         void OnDestroy()
         {
             combiner?.Dispose();
+            if (renderArray.IsCreated)
+                renderArray.Dispose();
         }
 
         public void MarkDirty()

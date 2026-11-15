@@ -99,7 +99,6 @@ public class MapGenNew : MonoBehaviour
 
         buildingSaves[1] = save.Clone();
         buildingSaves[1].renderData.encodedLocalPosition = (uint)((centerPos & 0x3FF) | ((centerPos & 0x3FF) << 10) | (1 & 0x7) << 20);
-        // (uint)((buildingSaves[1].renderData.encodedLocalPosition & ~(0x7 << 20)) | (1 << 20));
 
         BuildsAndChunksSaveNew buildsAndChunksSaveNew = new()
         {
@@ -112,10 +111,16 @@ public class MapGenNew : MonoBehaviour
         int gridSize = largestDimensionScaled * largestDimensionScaled;
         
         // path data for the whole world
-        NativeArray<short> path = new(gridSize*levelCount, Allocator.Persistent);
-        /*NativeArray<byte> pathRegions = new(gridSize*levelCount, Allocator.Persistent);
-        NativeBitArray regionList = new(255, Allocator.Persistent);*/
+        NativeArray<byte> pathRegions = new(gridSize*levelCount, Allocator.Persistent);
+        NativeBitArray regions = new(byte.MaxValue, Allocator.Persistent);
+        for (int i = 0; i < regions.Length; i++)
+        {
+            regions.SetBits(0, false, byte.MaxValue);
+        }
 
+
+        NativeArray<short> path = new(gridSize*levelCount, Allocator.Persistent);
+        
         NativeArray<int> offsets = new NativeArray<int>(4, Allocator.Persistent);
 
         offsets[0] = -1;
@@ -125,11 +130,12 @@ public class MapGenNew : MonoBehaviour
 
         WorldComponent worldComponent = new()
         {
+            pathRegions = pathRegions,
+            regions = regions,
             path = path,
             largestGridSize = gridSize,
             LargestLevelDimensionScaled = largestDimensionScaled,
             offsets = offsets,
-            
         };
 
         NativeArray<LevelComponent> levels = new NativeArray<LevelComponent>(levelCount, Allocator.Persistent);
@@ -208,6 +214,10 @@ public class MapGenNew : MonoBehaviour
         for (int levelIndex = 0; levelIndex < levelArray.Length; levelIndex++)
         {
             CreateGrid(ref worldComponent, in levelArray, levelIndex);
+        }
+        for (int i = 0; i < levelArray.Length; i++)
+        {
+            RegionChanges.InitFill(i, ref worldComponent, levelArray);
         }
         await Awaitable.MainThreadAsync();
     }

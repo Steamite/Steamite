@@ -9,6 +9,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
+using Unity.Profiling;
 
 namespace Pathing
 {
@@ -29,16 +30,21 @@ namespace Pathing
             
         }
     }
+    [BurstCompile]
 
     public static class Pathfind
     {
+        private static readonly ProfilerMarker k_InitMarker = new ProfilerMarker("Pathfind.0_Init");
+        private static readonly ProfilerMarker k_FinishMarker = new ProfilerMarker("Pathfind.9_OpenSetPop");
+
         [BurstCompile]
         public static int FindPath(
             ref PathfindComponent humanPosition, 
-            DynamicBuffer<PositionNode> nodes, 
-            NativeArray<int> destinations, 
-            WorldComponent worldData)
+            in DynamicBuffer<PositionNode> nodes, 
+            in NativeArray<int> destinations, 
+            in WorldComponent worldData)
         {
+            k_InitMarker.Begin();
             NativeList<int> positions = new NativeList<int>(20, Allocator.Temp);
             int yPos = ((int)math.floor(humanPosition.position.y));
 
@@ -60,18 +66,21 @@ namespace Pathing
                 positions = positions,
                 closestDestination = foundDestination
             };
+            k_InitMarker.End();
 
             pathfindingNew.Execute();
+            k_FinishMarker.Begin();
             nodes.Clear();
 
             if(foundDestination.Value == -1)
             { 
                 humanPosition.currentWaypoint = -1;
                 foundDestination.Dispose();
+                k_FinishMarker.End();
+
                 return -1;
             }
 
-            nodes.Capacity = positions.Length - 1;
             humanPosition.currentWaypoint = 0;
             for (int i = 1; i < positions.Length; i++)
             {
@@ -93,6 +102,7 @@ namespace Pathing
 
             int val = foundDestination.Value;
             foundDestination.Dispose();
+            k_FinishMarker.End();
             return val;
         }
     }

@@ -9,90 +9,100 @@ public static class RegionChanges
     /// <summary>
     /// Uses the computed path nodes to flood mark regions
     /// </summary>
-    /// <param name="position"></param>
     /// <param name="path"></param>
     /// <param name="regions"></param>
     /// <param name="availableRegions"></param>
     [BurstCompile]
     public static void InitFill(
         int levelIndex,
-        int scaledDim,
-        NativeArray<short> path, 
-        NativeArray<byte> regions, 
-        NativeBitArray availableRegions)
+        ref WorldComponent worldComponent,
+        NativeArray<LevelComponent> levels)
     {
+        var level = levels[levelIndex];
+        int scaledDim = level.dimensionsScaled;
+
         int gridSizeScaled = scaledDim * scaledDim;
-        int maxLen = (gridSizeScaled * levelIndex) - (scaledDim);
 
-
+        // Vertical offsets
         NativeArray<int> connectOffsets;
         if (levelIndex > 0)
         {
-            connectOffsets = new NativeArray<int>(3, Allocator.TempJob);
+            connectOffsets = new NativeArray<int>(3, Allocator.Persistent);
             connectOffsets[2] = -gridSizeScaled;
         }
         else
-            connectOffsets = new NativeArray<int>(2, Allocator.TempJob);
+            connectOffsets = new NativeArray<int>(2, Allocator.Persistent);
         connectOffsets[0] = -1;
         connectOffsets[1] = -scaledDim;
 
-        NativeArray<int> neighbourOffsets = new NativeArray<int>(4, Allocator.TempJob);
-        neighbourOffsets[0] = -1;
-        neighbourOffsets[1] = -scaledDim;
-        neighbourOffsets[2] = 1;
-        neighbourOffsets[3] = scaledDim;
 
 
-        for (int i = (gridSizeScaled*levelIndex) + scaledDim; i < maxLen; i++)
+        var pathRegions = worldComponent.pathRegions;
+        var regions = worldComponent.regions;
+
+        var path = worldComponent.path;
+
+        int len = scaledDim * scaledDim;
+        int x = 0;
+
+        int off = level.offsetsScaled;
+        int iJump = level.offsetsScaled * 2;
+        int worldIndex = (off * level.dimensionsScaled) + (off * off) * 2 + off; 
+        //(level.offsetsScaled*level.offsetsScaled) + (level.offsetsScaled * level.offsetsScaled) + level.offsetsScaled;
+
+        for (int i = 0; i < len; i++)
         {
-            if (regions[i] > 0)
-                continue;
-
-            bool accessible = false;
-            for (int j = 0; j < neighbourOffsets.Length; j++)
+            if (pathRegions[worldIndex] == 0)
             {
-                int neighbour = path[i + neighbourOffsets[j]];
-                if (((neighbour >> j) & 0x1) == 1)
+                var t = levels[levelIndex].renderGrid[i].TType;
+                bool accessible = t == TileType.Road || t == TileType.PassableBuilding || t == TileType.Elevator;
+
+                if (accessible) 
                 {
-                    accessible = true;
-                    break;
+                    Join(worldIndex, path, pathRegions, worldComponent.offsets, GetNewRegionId(regions));
                 }
             }
 
-            if (!accessible)
-                continue;
 
-            //Join(i, path, regions, GetNewRegionId(availableRegions));
-            // JOIN
+            worldIndex++;
+
+            x++;
+            if (x == scaledDim)
+            {
+                x = 0;
+                worldIndex += iJump;
+            }
         }
-
-        connectOffsets.Dispose();
-        neighbourOffsets.Dispose();
+        if(connectOffsets.IsCreated)
+            connectOffsets.Dispose();
     }
 
     static byte GetNewRegionId(NativeBitArray array)
     {
-        for (byte i = 0; i < array.Length; i++)
+        for (byte i = 1; i < array.Length; i++)
         {
             if (array.GetBits(i) == 0)
+            {
+                array.Set(i, true);
                 return i;
+            }
         }
-        return 0;
+        return byte.MaxValue;
     }
 
     static void Join(
         int startPosition, 
         NativeArray<short> path, 
         NativeArray<byte> regions, 
-        NativeBitArray takenArrays, 
         NativeArray<int> offsets,
-        int regionId)
+        byte regionId)
     {
         NativeList<int> queue = new NativeList<int>(5, Allocator.TempJob)
         {
             startPosition
         };
 
+        regions[startPosition] = regionId;
         while(queue.Length > 0)
         {
             int worldIndex = queue[0];
@@ -100,11 +110,15 @@ public static class RegionChanges
             queue.RemoveAt(0);
             for (int i = 0; i < offsets.Length; i++)
             {
-                int index = worldIndex + offsets[i];
+                int index = worldIndex - offsets[i];
 
                 if (((path[index] >> i) & 0x1) == 1)
                 {
-                   // regions[index] = regionId;
+                    if(regions[index] != regionId)
+                    {
+                        regions[index] = regionId;
+                        queue.Add(index);
+                    }
                 }
             }
         }

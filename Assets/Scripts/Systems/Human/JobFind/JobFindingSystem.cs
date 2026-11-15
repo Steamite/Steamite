@@ -73,16 +73,11 @@ namespace Assets.Scripts.Systems.Human.JobFind
             if (offers.digJobs.Count == 0 && offers.buildingJobs.Count == 0)
                 return;
 
-            /*FindJob findJob = new()
-            {
-
-            };*/
-
-            foreach ((var pathfind, var nodes, var job, var _) in SystemAPI.Query<
+            foreach ((var pathfind, var nodes, var job, var isFree) in SystemAPI.Query<
                 RefRW<PathfindComponent>,
                 DynamicBuffer<PositionNode>,
                 RefRW<HumanJobData>,
-                HumanIsFree>())
+                EnabledRefRW<HumanIsFree>>())
             {
                 if (job.ValueRO.jobType != JobType.Free)
                     continue;
@@ -92,9 +87,14 @@ namespace Assets.Scripts.Systems.Human.JobFind
 
                 int i = Pathing.Pathfind.FindPath(ref pathfind.ValueRW, nodes, offers.digJobs.AsArray(), world);
                 if (i == -1)
-                    return;
+                    continue;
 
-                nodes.RemoveAt(nodes.Length - 1);
+                if(nodes.Length > 0)
+                    nodes.RemoveAt(nodes.Length - 1);
+                
+                if (nodes.Length == 0)
+                    pathfind.ValueRW.currentWaypoint = -1;
+
                 int levelNumber = offers.digJobs[i] / world.largestGridSize;
                 int onLevel = offers.digJobs[i] % world.largestGridSize;
 
@@ -105,6 +105,9 @@ namespace Assets.Scripts.Systems.Human.JobFind
                 job.ValueRW.targetLevel = levelNumber;
                 job.ValueRW.targetPosition = levelPosition.x + (levelPosition.y * levels[levelNumber].dimensionsScaled);
                 job.ValueRW.jobType = JobType.Dig;
+
+                isFree.ValueRW = false;
+
                 offers.digJobs.RemoveAt(i);
             }
         }

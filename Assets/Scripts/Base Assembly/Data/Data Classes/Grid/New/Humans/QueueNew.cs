@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Collections;
 using Unity.Mathematics;
+using Unity.Profiling;
 using UnityEngine.VFX;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
@@ -27,6 +28,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
     }
     public struct QueueNew : IDisposable
     {
+        private static readonly ProfilerMarker k_Enque = new ProfilerMarker("Pathfind.3_Enque");
+        private static readonly ProfilerMarker k_Pop = new ProfilerMarker("Pathfind.4_Pop");
+
         NativeList<PathNode> queue;
 
         public NativeArray<Visited> tiles;
@@ -107,25 +111,34 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 
         public void Enqueue(PathNode pN, int prevPos)
         {
-            if (tiles[pN.position].cost != 0) 
+            k_Enque.Begin();
+            if (tiles[pN.position].cost != 0)
+            {
+                k_Enque.End();
                 return;
+            }
 
             tiles[pN.position] = new() { cost = pN.totalCost, prevVisited = prevPos};
             queue.Add(pN);
             
             BubbleUp(queue.Count - 1);
+            k_Enque.End();
         }
 
         public PathNode Dequeue()
         {
+            k_Pop.Begin();
             if (queue.Count > 0)
             {
+                int len = queue.Count - 1;
                 PathNode p = queue[0];
-                queue[0] = queue[^1];
-                queue.RemoveAt(queue.Count - 1);
+                queue[0] = queue[len];
+                queue.RemoveAt(len);
                 BubbleDown(0);
+                k_Pop.End();
                 return p;
             }
+            k_Pop.End();
             return new PathNode() { position = -1};
         }
         

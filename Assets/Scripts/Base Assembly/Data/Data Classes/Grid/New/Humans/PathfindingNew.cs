@@ -7,6 +7,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
+using Unity.Profiling;
 using UnityEngine;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
@@ -25,27 +26,34 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         /// -1, -width, 1, width
         /// </summary>
         [ReadOnly] public NativeArray<int> offsetTable;
-        public static readonly int2[] offsetTableVec = 
+        public static readonly FixedList64Bytes<int2> offsetTableVec = new FixedList64Bytes<int2>()
         { 
-            new(-1, 0),
-            new(0, -1),
-            new(1, 0),
-            new(0, 1)
+            new int2(-1, 0),
+            new int2(0, -1),
+            new int2(1, 0),
+            new int2(0, 1)
         };
 
         public NativeList<int> positions;
         public int level;
+
+        private static readonly ProfilerMarker k_Init = new ProfilerMarker("Pathfind.1_Reallocate");
+        private static readonly ProfilerMarker k_Search = new ProfilerMarker("Pathfind.2_Search");
+
 
         [BurstCompile]
         public void Execute()
         {
             int2 destinationPosition = new(destination % gridWidth, destination / gridWidth);
 
+            k_Init.Begin();
 
-            
             QueueNew queue = new(positionsToStartFrom, destinationPosition, level, path.Length, gridWidth);
             PathNode node;
 
+            k_Init.End();
+
+            k_Search.Begin();
             bool found = false;
             while ((node = queue.Dequeue()).position != -1)
             {
@@ -59,12 +67,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                 {
                     found = true;
                     break;
-                }/*
-                else if (node.costToReach >= 2_000_000)
-                {
-                    node = new() { position = -1 };
-                    break;
-                }*/
+                }
 
                 short mapNode = path[pos];
                 for (int i = 0; i < offsetTable.Length; i++)
@@ -72,22 +75,22 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                     int checkPos = node.position + offsetTable[i];
 
                     int2 posWorld = node.worldPosition + offsetTableVec[i];
-                    int costToReach = math.select(
-                        2_000_000, 
-                        node.costToReach + 1,
-                        (mapNode & 0x1) == 1);
-                    int2 dist = math.abs(posWorld - destinationPosition);
-
-                    PathNode newNode = new()
+                    if ((mapNode & 0x1) == 1)
                     {
-                        position = checkPos,
-                        worldPosition = posWorld,
-                        costToReach = costToReach,
-                        totalCost = costToReach + dist.x + dist.y,
-                        levelIndex = node.levelIndex,
-                        destinationIndex = node.destinationIndex
-                    };
-                    queue.Enqueue(newNode, node.position);
+                        int costToReach = node.costToReach + 1;
+                        int2 dist = math.abs(posWorld - destinationPosition);
+
+                        PathNode newNode = new()
+                        {
+                            position = checkPos,
+                            worldPosition = posWorld,
+                            costToReach = costToReach,
+                            totalCost = costToReach + dist.x + dist.y,
+                            levelIndex = node.levelIndex,
+                            destinationIndex = node.destinationIndex
+                        };
+                        queue.Enqueue(newNode, node.position);
+                    }
                     mapNode >>= 0x1;
                 }
                 
@@ -111,7 +114,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                 }
 
             }
-            
+            k_Search.End();
+
             if(found == true)
             {
                 closestDestination.Value = node.destinationIndex;

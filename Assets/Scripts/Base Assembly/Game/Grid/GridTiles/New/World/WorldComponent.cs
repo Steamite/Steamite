@@ -7,9 +7,16 @@ using Unity.Mathematics;
 
 public struct WorldComponent : IComponentData
 {
-    /*[ReadOnly] public NativeArray<byte> pathRegions;
-    [ReadOnly] public NativeBitArray regions;*/
+    // Region
+    [ReadOnly] public NativeArray<byte> pathRegions;
+    [ReadOnly] public NativeBitArray regions;
+
+
     [ReadOnly] public NativeArray<short> path;
+    /// <summary>
+    /// Reverse of World offsets
+    /// -1, -dim, 1, dim
+    /// </summary>
     [ReadOnly] public NativeArray<int> offsets;
     [ReadOnly] public int LargestLevelDimensionScaled;
     [ReadOnly] public int largestGridSize;
@@ -55,6 +62,15 @@ public struct OverlayComponent : IBufferElementData
 {
     public NativeBitArray markedTilesGrid;
     public NativeArray<OverlayData> overlayGrid;
+
+    public void Dispose()
+    {
+        if (markedTilesGrid.IsCreated)
+            markedTilesGrid.Dispose();
+
+        if (overlayGrid.IsCreated)
+            overlayGrid.Dispose();
+    }
 }
 
 public struct OverlayChangeComponent : IComponentData

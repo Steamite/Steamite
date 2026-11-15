@@ -18,7 +18,7 @@ namespace Assets.Scripts.Systems
         protected override void OnCreate()
         {
             RequireForUpdate<TestSpherePrefab>();
-            RequireForUpdate<PathfindPrefab>();
+            RequireForUpdate<HumanPrefab>();
             RequireForUpdate<WorldComponent>();
         }
 
@@ -47,35 +47,48 @@ namespace Assets.Scripts.Systems
             // people
             rand = new Unity.Mathematics.Random(1); // Provide seed
 
-            PathfindPrefab pref = SystemAPI.GetSingleton<PathfindPrefab>();
-
-            WorldComponent worldComponent = SystemAPI.GetSingleton<WorldComponent>();
-            int center = worldComponent.LargestLevelDimensionScaled / 2;
-            int2 spawnRange = new(center - LevelComponent.CHUNK_DIMENSIONS, center + LevelComponent.CHUNK_DIMENSIONS);
-            for (int i = 0; i < pref.count; i++)
+            HumanPrefab pref = SystemAPI.GetSingleton<HumanPrefab>();
+            if(pref.count == 1)
             {
-                var ent = buffer.Instantiate(pref.entity);
-                int yPos = rand.NextInt(0, 5);
-                int3 pos = rand.NextInt3(new(spawnRange.x, yPos, spawnRange.x), new(spawnRange.y, yPos, spawnRange.y));
-                buffer.SetComponent<PathfindComponent>(ent, new()
-                {
-                    currentWaypoint = -1,
-                    speed = pref.speed,
-                    position = pos
-                });
-                pos.y = 0;
-                buffer.SetComponent<LocalTransform>(ent, new()
-                {
-                    Position = pos + new float3(0.5f, 1, 0.5f),
-                    Scale = 1
-                });
+                CreateHuman(ref buffer, ref pref, pref.pos);
             }
+            else
+            {
+                WorldComponent worldComponent = SystemAPI.GetSingleton<WorldComponent>();
+                int center = worldComponent.LargestLevelDimensionScaled / 2;
+                int2 spawnRange = new(center - LevelComponent.CHUNK_DIMENSIONS, center + LevelComponent.CHUNK_DIMENSIONS);
+                for (int i = 0; i < pref.count; i++)
+                {
+                    int yPos = rand.NextInt(0, 5);
+                    int3 pos = rand.NextInt3(
+                        new(spawnRange.x, yPos, spawnRange.x), 
+                        new(spawnRange.y, yPos, spawnRange.y));
 
+                    CreateHuman(ref buffer, ref pref, pos);
+                }
+            }
 
             buffer.Playback(EntityManager);
             buffer.Dispose();
 
             Enabled = false;
+        }
+
+        private static void CreateHuman(ref EntityCommandBuffer buffer, ref HumanPrefab pref, int3 pos)
+        {
+            var ent = buffer.Instantiate(pref.entity);
+            buffer.SetComponent<PathfindComponent>(ent, new()
+            {
+                currentWaypoint = -1,
+                speed = pref.speed,
+                position = pos
+            });
+            pos.y = 0;
+            buffer.SetComponent<LocalTransform>(ent, new()
+            {
+                Position = pos + new float3(0.5f, 1, 0.5f),
+                Scale = 1
+            });
         }
     }
 }
