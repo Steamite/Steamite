@@ -50,7 +50,11 @@ public class MapGenNew : MonoBehaviour
 
     int largestDimension;
     int largestDimensionScaled;
-    
+
+
+    [Header("Buildings")]
+    [SerializeField] BuildingData buildingData;
+
     /// <summary>List of resources that are posible to spawn./summary>
     [Header("Resource data")]
     [SerializeField] public List<MinableRes> minableResources;
@@ -58,12 +62,14 @@ public class MapGenNew : MonoBehaviour
     [SerializeField] ElevatorNew elevator;
     [SerializeField] float holeTreshold;
 
+
     Random random;
     #endregion
 
 
     public async Awaitable<WorldSaveNew> Generate(string _seed)
     {
+        await Awaitable.BackgroundThreadAsync();
         seed = _seed;
         ParseInput();
 
@@ -74,40 +80,16 @@ public class MapGenNew : MonoBehaviour
 
         for (int i = 0; i < levelDimensions.offsets.Length; i++)
         {
-            levelDimensions.offsets[i] = (largestDimension - levelDimensions.sizes[i])/2;
+            levelDimensions.offsets[i] = (largestDimension - levelDimensions.sizes[i]) / 2;
         }
 
         int chunkSize = LevelComponent.CHUNK_DIMENSIONS;
 
-        #region Buildings
-
-        ElevatorNew save = elevator;
-        int _width = levelDimensions.sizes[0] * chunkSize;
-        int centerPos = (_width / 2) - 1;
-        save.CreateMainElevator(centerPos);
-
-        BuildingNew[] buildingSaves = new BuildingNew[2];
-        buildingSaves[0] = save;
-
-
-        _width = levelDimensions.sizes[1] * chunkSize;
-        centerPos = (_width / 2) - 1;
-
-        buildingSaves[1] = save.Clone();
-        buildingSaves[1].renderData.encodedLocalPosition = (uint)((centerPos & 0x3FF) | ((centerPos & 0x3FF) << 10) | (1 & 0x7) << 20);
-
-        BuildsAndChunksSaveNew buildsAndChunksSaveNew = new()
-        {
-            buildings = buildingSaves,
-            chunks = new ChunkSave[0]
-        };
-        #endregion
-
         largestDimensionScaled = largestDimension * chunkSize;
         int gridSize = largestDimensionScaled * largestDimensionScaled;
-        
+
         // path data for the whole world
-        NativeArray<byte> pathRegions = new(gridSize*levelCount, Allocator.Persistent);
+        NativeArray<byte> pathRegions = new(gridSize * levelCount, Allocator.Persistent);
         NativeBitArray regions = new(byte.MaxValue, Allocator.Persistent);
         for (int i = 0; i < regions.Length; i++)
         {
@@ -115,8 +97,8 @@ public class MapGenNew : MonoBehaviour
         }
 
 
-        NativeArray<short> path = new(gridSize*levelCount, Allocator.Persistent);
-        
+        NativeArray<short> path = new(gridSize * levelCount, Allocator.Persistent);
+
         NativeArray<int> offsets = new NativeArray<int>(4, Allocator.Persistent);
 
         offsets[0] = -1;
@@ -134,39 +116,90 @@ public class MapGenNew : MonoBehaviour
             offsets = offsets,
         };
 
-        NativeArray<LevelComponent> levels = new NativeArray<LevelComponent>(levelCount, Allocator.Persistent);
+        NativeArray<LevelComponent> levelArray = new NativeArray<LevelComponent>(levelCount, Allocator.Persistent);
         NativeArray<OverlayComponent> overlays = new NativeArray<OverlayComponent>(levelCount, Allocator.Persistent);
 
+        BuildsAndChunksSaveNew buildsAndChunksSaveNew;
         try
         {
-            await CreateLevels(worldComponent, levels, overlays);
+            await CreateLevels(worldComponent, levelArray, overlays);
+
+            buildsAndChunksSaveNew = CreateBuildings(chunkSize, ref worldComponent, levelArray, ref overlays);
+            CreateRegions(ref worldComponent, ref levelArray);
         }
         catch (Exception e)
         {
-            if (levels.IsCreated)
+            if (levelArray.IsCreated)
             {
-                foreach (var level in levels)
+                foreach (var level in levelArray)
                     level.Dispose();
-                levels.Dispose();
+                levelArray.Dispose();
             }
             Debug.LogError(e);
+            return default;
         }
-        
 
 
-        return new() 
-        { 
-            world = worldComponent, 
-            levels = levels, 
-            overlays = overlays, 
-            objectsSave = buildsAndChunksSaveNew 
+        await Awaitable.MainThreadAsync();
+
+        return new()
+        {
+            world = worldComponent,
+            levels = levelArray,
+            overlays = overlays,
+            objectsSave = buildsAndChunksSaveNew
         };
+    }
+
+    private static void CreateRegions(ref WorldComponent worldComponent, ref NativeArray<LevelComponent> levelArray)
+    {
+        for (int i = 0; i < levelArray.Length; i++)
+        {
+            RegionChanges.InitFill(i, ref worldComponent, levelArray);
+        }
+    }
+
+    BuildsAndChunksSaveNew CreateBuildings(int chunkSize, ref WorldComponent worldComponent, NativeArray<LevelComponent> levelArray, ref NativeArray<OverlayComponent> overlays)
+    {
+        List<BuildingWrapper> wrappers = buildingData.GetAllObjects();
+
+        ElevatorNew save = elevator;
+        int _width = levelDimensions.sizes[0] * chunkSize;
+        int centerPos = (_width / 2) - 1;
+        save.CreateMainElevator(centerPos);
+
+        BuildingNew[] buildings = new BuildingNew[2];
+        buildings[0] = save;
+
+
+        _width = levelDimensions.sizes[1] * chunkSize;
+        centerPos = (_width / 2) - 1;
+
+        buildings[1] = save.Clone();
+        buildings[1].renderData.encodedLocalPosition = (uint)((centerPos & 0x3FF) | ((centerPos & 0x3FF) << 10) | (1 & 0x7) << 20);
+
+        BuildsAndChunksSaveNew buildsAndChunksSaveNew = new()
+        {
+            buildings = buildings,
+            chunks = new ChunkSave[0]
+        };
+
+        for (int i = 0; i < buildings.Length; i++)
+        {
+            BuildingChanges.MarkTiles(
+                wrappers[(int)buildings[i].renderData.meshIndex].blueprint,
+                buildings[i].renderData,
+                i,
+                ref worldComponent,
+                in levelArray,
+                ref overlays);
+        }
+
+        return buildsAndChunksSaveNew;
     }
 
     async Awaitable CreateLevels(WorldComponent worldComponent, NativeArray<LevelComponent> levelArray, NativeArray<OverlayComponent> componentArray)
     {
-        await Awaitable.BackgroundThreadAsync();
-
         for (int i = 0; i < levelArray.Length; i++)
         {
             int levelDim = levelDimensions.sizes[i];
@@ -211,11 +244,6 @@ public class MapGenNew : MonoBehaviour
         {
             CreateGrid(ref worldComponent, in levelArray, levelIndex);
         }
-        for (int i = 0; i < levelArray.Length; i++)
-        {
-            RegionChanges.InitFill(i, ref worldComponent, levelArray);
-        }
-        await Awaitable.MainThreadAsync();
     }
 
 

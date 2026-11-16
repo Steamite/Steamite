@@ -56,5 +56,10 @@ public static class Recalculation
 
         return new(x, y);
     }
+
+    public static int GlobalIndexFromWorldPos(int2 world, int largestLevel)
+    {
+        return world.y * largestLevel + world.x;
+    }
 }
 

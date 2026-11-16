@@ -77,6 +77,7 @@ namespace Assets.Scripts.Saving___Loading
             NewGameInit newGameInit = gameObject.GetComponent<NewGameInit>();
             WorldSaveNew worldSave;
             bool randomMap = seed != "";
+
             try
             {
                 if (randomMap)

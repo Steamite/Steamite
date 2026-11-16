@@ -37,6 +37,14 @@ namespace Pathing
         private static readonly ProfilerMarker k_InitMarker = new ProfilerMarker("Pathfind.0_Init");
         private static readonly ProfilerMarker k_FinishMarker = new ProfilerMarker("Pathfind.9_OpenSetPop");
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="humanPosition"></param>
+        /// <param name="nodes"></param>
+        /// <param name="destinations">Global world positions.</param>
+        /// <param name="worldData"></param>
+        /// <returns></returns>
         [BurstCompile]
         public static int FindPath(
             ref PathfindComponent humanPosition, 
@@ -58,8 +66,8 @@ namespace Pathing
 
                 positionsToStartFrom = destinations,
 
-                level = yPos,
                 path = worldData.path,
+                regions = worldData.pathRegions,
                 gridWidth = worldData.LargestLevelDimensionScaled,
                 gridSize = worldData.largestGridSize,
                 offsetTable = worldData.offsets,

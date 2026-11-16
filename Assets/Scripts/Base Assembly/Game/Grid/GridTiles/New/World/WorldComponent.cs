@@ -12,6 +12,14 @@ public struct WorldComponent : IComponentData
     [ReadOnly] public NativeBitArray regions;
 
 
+    /// <summary>
+    /// 0 - Left <br/>
+    /// 1 - Backwards <br/>
+    /// 2 - Right <br/>
+    /// 3 - Forward <br/>
+    /// 4 - Down <br/>
+    /// 5 - Up <br/>
+    /// </summary>
     [ReadOnly] public NativeArray<short> path;
     /// <summary>
     /// Reverse of World offsets

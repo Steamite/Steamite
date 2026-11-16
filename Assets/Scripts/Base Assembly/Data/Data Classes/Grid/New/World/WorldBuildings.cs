@@ -21,9 +21,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
         public void LoadState(BuildingNew[] newSave)
         {
-
-            List<BuildingWrapper> wrappers = SceneRefs.ObjectFactory.buildPrefabs.GetAllObjects();
-
             buildings = new BuildingNew[math.max(50, newSave.Length * 2)];
 
             foreach (var item in newSave)
@@ -85,15 +82,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             for (int i = 0; i < lastIndex; i++)
             {
                 buildings[i].renderIndex = indexes[i];
-                BuildingNew build = buildings[i];
-
-                BuildingChanges.MarkTiles(
-                    wrappers[(int)buildings[i].renderData.meshIndex].blueprint,
-                    build.renderData,
-                    i,
-                    ref worldComponent,
-                    in levelArray,
-                    ref overlays);
             }
             levelRenderer.UpdateOverlayTexture();
 

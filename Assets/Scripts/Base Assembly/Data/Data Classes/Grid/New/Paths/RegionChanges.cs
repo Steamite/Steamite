@@ -25,18 +25,18 @@ public static class RegionChanges
 
         // Vertical offsets
         NativeArray<int> conectedOffsets = new (6, Allocator.Persistent);
-        conectedOffsets[0] = worldComponent.offsets[0];
-        conectedOffsets[1] = worldComponent.offsets[1];
-        conectedOffsets[2] = worldComponent.offsets[2];
-        conectedOffsets[3] = worldComponent.offsets[3];
+        conectedOffsets[0] = -worldComponent.offsets[0];
+        conectedOffsets[1] = -worldComponent.offsets[1];
+        conectedOffsets[2] = -worldComponent.offsets[2];
+        conectedOffsets[3] = -worldComponent.offsets[3];
         
         if(levelIndex > 0)
         {
-            conectedOffsets[4] = size;
+            conectedOffsets[5] = -size;
         }
         if (levelIndex < levels.Length -1)
         {
-            conectedOffsets[5] = -size;
+            conectedOffsets[4] = size;
         }
 
 
@@ -119,10 +119,15 @@ public static class RegionChanges
                 if (offsets[i] == 0)
                     continue;
 
-                int index = worldIndex - offsets[i];
+                int index = worldIndex + offsets[i];
 
                 if (((path[index] >> i) & 0x1) == 1)
                 {
+                    if(i == 4)
+                    {
+
+                    }
+                        
                     if(regions[index] != regionId)
                     {
                         regions[index] = regionId;

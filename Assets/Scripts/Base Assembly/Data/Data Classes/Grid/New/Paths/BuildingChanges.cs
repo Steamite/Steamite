@@ -66,7 +66,7 @@ public static class BuildingChanges
                         break;
                     case GridItemType.Entrance:
                         index++;
-                        OverlayChanges.SetEntrance(worldTemp, true, ref level, ref overlay);
+                        OverlayChanges.SetEntrance(worldTemp, true, ref level, ref overlay, worldComponent.LargestLevelDimensionScaled);
                         continue;
                 }
 
@@ -126,7 +126,7 @@ public static class BuildingChanges
                         WorldChanges.SetTile(local, levelIndex, LevelGridTile.Road, ref worldComponent, in levelArray);
                         break;
                     case GridItemType.Entrance:
-                        OverlayChanges.SetEntrance(worldTemp, false, ref level, ref overlay);
+                        OverlayChanges.SetEntrance(worldTemp, false, ref level, ref overlay, worldComponent.LargestLevelDimensionScaled);
                         break;
                 }
                 tileIndex++;

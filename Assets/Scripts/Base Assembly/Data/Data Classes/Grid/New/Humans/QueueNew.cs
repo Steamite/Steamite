@@ -35,30 +35,49 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 
         public NativeArray<Visited> tiles;
 
-        public QueueNew(NativeArray<int> startPositions, int2 destinationPosition, int level, int worldSize, int width, int expectedSize = 50)
+        public int Len => queue.Length;
+
+        public QueueNew(NativeArray<int> startPositions, int2 destinationPosition, int level, int worldSize, int width, NativeArray<byte> pathRegions, byte destinationRegion, int expectedSize = 50)
         {
             queue = new(expectedSize, Allocator.Temp);
-            tiles = new(worldSize, Allocator.Temp);
+
+            NativeList<PathNode> nodes = new NativeList<PathNode>(startPositions.Length, Allocator.Temp);
 
             for (int i = 0; i < startPositions.Length; i++)
             {
                 int startPos = startPositions[i];
-
-                int2 worldPos = new(startPos % width, startPos / width);
-                int distance = math.abs(worldPos.x - destinationPosition.x) + math.abs(worldPos.y - destinationPosition.y);
-                Enqueue(new PathNode()
+                if (pathRegions[startPos] == destinationRegion)
                 {
-                    position = startPos,
-                    worldPosition = worldPos,
-                    costToReach = 0,
-                    totalCost = distance,
-                    levelIndex = level,
-                    destinationIndex = i
-                },
-                -1);
+                    int2 worldPos = new(startPos % width, startPos / width);
+                    
+                    int distance = math.abs(worldPos.x - destinationPosition.x) + math.abs(worldPos.y - destinationPosition.y);
+                    nodes.Add(new PathNode()
+                        {
+                            position = startPos,
+                            worldPosition = worldPos,
+                            costToReach = 0,
+                            totalCost = distance,
+                            levelIndex = level,
+                            destinationIndex = i
+                        });
+                }
             }
 
-            
+            if (nodes.Count == 0)
+            {
+                tiles = default;
+            }
+            else
+            {
+                tiles = new(worldSize, Allocator.Temp);
+                for (int i = 0; i < nodes.Count; i++)
+                {
+                    Enqueue(nodes[i], -1);
+                }
+            }
+
+
+            nodes.Dispose();
         }
 
         public void Dispose()

@@ -16,6 +16,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
     public struct PathfindingNew : IJob
     {
         public NativeArray<short> path;
+        public NativeArray<byte> regions;
+
         public int gridWidth;
         public int gridSize;
         public NativeArray<int> positionsToStartFrom;
@@ -35,7 +37,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         };
 
         public NativeList<int> positions;
-        public int level;
 
         private static readonly ProfilerMarker k_Init = new ProfilerMarker("Pathfind.1_Reallocate");
         private static readonly ProfilerMarker k_Search = new ProfilerMarker("Pathfind.2_Search");
@@ -44,11 +45,19 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         [BurstCompile]
         public void Execute()
         {
-            int2 destinationPosition = new(destination % gridWidth, destination / gridWidth);
+            int size = (gridWidth * gridWidth);
+            int level = destination / size;
+            int2 destinationPosition = new(destination % gridWidth, (destination / gridWidth) - (256 * level));
 
             k_Init.Begin();
 
-            QueueNew queue = new(positionsToStartFrom, destinationPosition, level, path.Length, gridWidth);
+            QueueNew queue = new(positionsToStartFrom, destinationPosition, level, path.Length, gridWidth, regions, regions[destination]);
+            if (queue.Len == 0)
+            {
+                closestDestination.Value = -1;
+                queue.Dispose();
+                return;
+            }
             PathNode node;
 
             k_Init.End();

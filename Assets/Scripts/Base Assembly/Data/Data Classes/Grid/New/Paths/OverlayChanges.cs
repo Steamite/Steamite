@@ -12,9 +12,8 @@ public static class OverlayChanges
     /// Entrance overlay Tile
     /// </summary>
     /// <param name="world"></param>
-    /// <param name="levelRenderer"></param>
     /// <param name="add"></param>
-    public static void SetEntrance(int2 world, bool add, ref LevelComponent level, ref OverlayComponent overlay)
+    public static void SetEntrance(int2 world, bool add, ref LevelComponent level, ref OverlayComponent overlay, int largestLevel)
     {
         int localIndex = Recalculation.LocalIndexFromWorldPos(world, level.offsetsScaled, level.dimensionsScaled);
         var gridTile = level.renderGrid[localIndex];
@@ -31,7 +30,7 @@ public static class OverlayChanges
         {
             if (entranceCount == 0)
             {
-                int worldIndex = SceneRefs.World.GetWorldIndex(world);
+                int worldIndex = Recalculation.GlobalIndexFromWorldPos(world, largestLevel);
                 overlay.overlayGrid[worldIndex] = overlay.overlayGrid[worldIndex].G((byte)(add ? 255 : 0));
                 
                 
