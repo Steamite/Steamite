@@ -21,19 +21,23 @@ public static class RegionChanges
         var level = levels[levelIndex];
         int scaledDim = level.dimensionsScaled;
 
-        int gridSizeScaled = scaledDim * scaledDim;
+        int size = worldComponent.LargestLevelDimensionScaled * worldComponent.LargestLevelDimensionScaled;
 
         // Vertical offsets
-        NativeArray<int> connectOffsets;
-        if (levelIndex > 0)
+        NativeArray<int> conectedOffsets = new (6, Allocator.Persistent);
+        conectedOffsets[0] = worldComponent.offsets[0];
+        conectedOffsets[1] = worldComponent.offsets[1];
+        conectedOffsets[2] = worldComponent.offsets[2];
+        conectedOffsets[3] = worldComponent.offsets[3];
+        
+        if(levelIndex > 0)
         {
-            connectOffsets = new NativeArray<int>(3, Allocator.Persistent);
-            connectOffsets[2] = -gridSizeScaled;
+            conectedOffsets[4] = size;
         }
-        else
-            connectOffsets = new NativeArray<int>(2, Allocator.Persistent);
-        connectOffsets[0] = -1;
-        connectOffsets[1] = -scaledDim;
+        if (levelIndex < levels.Length -1)
+        {
+            conectedOffsets[5] = -size;
+        }
 
 
 
@@ -47,7 +51,9 @@ public static class RegionChanges
 
         int off = level.offsetsScaled;
         int iJump = level.offsetsScaled * 2;
-        int worldIndex = (off * level.dimensionsScaled) + (off * off) * 2 + off; 
+        int worldIndex = 
+            (levelIndex * size) + 
+            (off * level.dimensionsScaled) + (off * off) * 2 + off; 
         //(level.offsetsScaled*level.offsetsScaled) + (level.offsetsScaled * level.offsetsScaled) + level.offsetsScaled;
 
         for (int i = 0; i < len; i++)
@@ -59,7 +65,7 @@ public static class RegionChanges
 
                 if (accessible) 
                 {
-                    Join(worldIndex, path, pathRegions, worldComponent.offsets, GetNewRegionId(regions));
+                    Join(worldIndex, path, pathRegions, conectedOffsets, GetNewRegionId(regions));
                 }
             }
 
@@ -73,8 +79,8 @@ public static class RegionChanges
                 worldIndex += iJump;
             }
         }
-        if(connectOffsets.IsCreated)
-            connectOffsets.Dispose();
+        if(conectedOffsets.IsCreated)
+            conectedOffsets.Dispose();
     }
 
     static byte GetNewRegionId(NativeBitArray array)
@@ -93,7 +99,7 @@ public static class RegionChanges
     static void Join(
         int startPosition, 
         NativeArray<short> path, 
-        NativeArray<byte> regions, 
+        NativeArray<byte> regions,
         NativeArray<int> offsets,
         byte regionId)
     {
@@ -110,6 +116,9 @@ public static class RegionChanges
             queue.RemoveAt(0);
             for (int i = 0; i < offsets.Length; i++)
             {
+                if (offsets[i] == 0)
+                    continue;
+
                 int index = worldIndex - offsets[i];
 
                 if (((path[index] >> i) & 0x1) == 1)

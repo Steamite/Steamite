@@ -111,7 +111,20 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                     {
                         if ((a & 0x1) == 1)
                         {
-                            Gizmos.color = Color.white;
+                            int mod = pathRegions[index] % 3;
+                            switch (mod)
+                            {
+                                case 0:
+                                    Gizmos.color = Color.white;
+                                    break;
+                                case 1:
+                                    Gizmos.color = Color.blue;
+                                    break;
+                                case 2:
+                                    Gizmos.color = Color.orange;
+                                    break;
+                            }
+
                             Gizmos.DrawLine(startPosition, startPosition + verticalOffset[i]);
                         }
                         a >>= 0x1;

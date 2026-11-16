@@ -51,13 +51,9 @@ public class MapGenNew : MonoBehaviour
     int largestDimension;
     int largestDimensionScaled;
     
-    /// <summary>Level that's being generated at the moment./summary>
-    //NativeArray<LevelGridTile> map;
-    //NativeSlice<short> pathMap;
-    //NativeArray<int> neighbours;
-
     /// <summary>List of resources that are posible to spawn./summary>
-    [Header("Resource data")][SerializeField] public List<MinableRes> minableResources;
+    [Header("Resource data")]
+    [SerializeField] public List<MinableRes> minableResources;
 
     [SerializeField] ElevatorNew elevator;
     [SerializeField] float holeTreshold;
