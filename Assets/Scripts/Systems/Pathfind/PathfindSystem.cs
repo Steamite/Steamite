@@ -50,7 +50,8 @@ namespace Pathing
             ref PathfindComponent humanPosition, 
             in DynamicBuffer<PositionNode> nodes, 
             in NativeArray<int> destinations, 
-            in WorldComponent worldData)
+            in WorldComponent worldData,
+            NativeList<uint> digRegions = default)
         {
             k_InitMarker.Begin();
             NativeList<int> positions = new NativeList<int>(20, Allocator.Temp);
@@ -65,7 +66,7 @@ namespace Pathing
                     ((int)math.floor(humanPosition.position.x)),
 
                 startingPositions = destinations,
-
+                startingPositionsRegions = digRegions,
                 path = worldData.path,
                 regions = worldData.regions,
                 gridWidth = worldData.LargestLevelDimensionScaled,
@@ -118,7 +119,7 @@ namespace Pathing
             k_FinishMarker.End();
             return val;
         }
-
+/*
         public static int FindPath(
             ref PathfindComponent humanPosition,
             in DynamicBuffer<PositionNode> nodes,
@@ -153,7 +154,7 @@ namespace Pathing
             pathfindingNew.Execute();
 
             return EndSearch(ref humanPosition, nodes, worldData, positions, foundDestination);
-        }
+        }*/
 
     }
 

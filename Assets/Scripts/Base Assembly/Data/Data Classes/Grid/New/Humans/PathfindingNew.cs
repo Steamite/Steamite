@@ -22,7 +22,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         public int gridWidth;
         public int gridSize;
         public NativeArray<int> startingPositions;
-        public NativeArray<uint> startingPositionsRegions;
+        public NativeList<uint> startingPositionsRegions;
 
         public int destination;
 
