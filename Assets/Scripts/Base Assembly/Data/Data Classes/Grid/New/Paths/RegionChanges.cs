@@ -1,5 +1,5 @@
-using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans;
+using Grid.New;
 using System.Drawing;
 using Unity.Burst;
 using Unity.Collections;

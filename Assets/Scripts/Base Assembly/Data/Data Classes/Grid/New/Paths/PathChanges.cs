@@ -1,4 +1,5 @@
-﻿using Unity.Burst;
+﻿using Grid.New;
+using Unity.Burst;
 using Unity.Collections;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New

@@ -11,11 +11,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
     public struct PathNode
     {
         public int position;
-        public int2 worldPosition;
         
         public int totalCost;
         public int costToReach;
-        public int levelIndex;
 
         public int destinationIndex;
     }
@@ -30,18 +28,24 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
     {
         private static readonly ProfilerMarker k_Enque = new ProfilerMarker("Pathfind.3_Enque");
         private static readonly ProfilerMarker k_Pop = new ProfilerMarker("Pathfind.4_Pop");
+        private static readonly ProfilerMarker k_Allocate = new ProfilerMarker("Pathfind.6_Allocate");
 
         NativeList<PathNode> queue;
 
         public NativeArray<Visited> tiles;
+        public NativeBitArray visitedGrid;
 
         public int Len => queue.Length;
 
-        public QueueNew(NativeList<PathNode> nodes, int2 destinationPosition, int level, int worldSize, int width, NativeArray<byte> pathRegions, byte destinationRegion, int expectedSize = 50)
+        public QueueNew(NativeList<PathNode> nodes, int worldSize, int expectedSize = 50)
         {
+            k_Allocate.Begin();
             queue = new(expectedSize, Allocator.Temp);
 
+            visitedGrid = new NativeBitArray(worldSize, Allocator.TempJob);
             tiles = new(worldSize, Allocator.Temp);
+            k_Allocate.End();
+
             for (int i = 0; i < nodes.Count; i++)
             {
                 Enqueue(nodes[i], -1);
@@ -53,6 +57,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 
         public void Dispose()
         {
+            visitedGrid.Dispose();
             queue.Dispose();
             tiles.Dispose();
         }
@@ -102,13 +107,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         public void Enqueue(PathNode pN, int prevPos)
         {
             k_Enque.Begin();
-            if (tiles[pN.position].cost != 0)
+            
+            if (visitedGrid.GetBits(pN.position) == 1)
             {
                 k_Enque.End();
                 return;
             }
 
+            visitedGrid.Set(pN.position, true);
+
             tiles[pN.position] = new() { cost = pN.totalCost, prevVisited = prevPos};
+            
             queue.Add(pN);
             
             BubbleUp(queue.Count - 1);

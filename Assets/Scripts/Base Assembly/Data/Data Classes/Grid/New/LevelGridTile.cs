@@ -6,7 +6,7 @@ using System.Text;
 using Unity.Burst;
 using Unity.Mathematics;
 
-namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
+namespace Grid.New
 {
     public enum TileType
     {

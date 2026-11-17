@@ -1,4 +1,5 @@
-﻿using Humans;
+﻿using Grid.New;
+using Humans;
 using JetBrains.Annotations;
 using Pathing;
 using System;
@@ -55,16 +56,26 @@ namespace Assets.Scripts.Systems
             else
             {
                 WorldComponent worldComponent = SystemAPI.GetSingleton<WorldComponent>();
+                DynamicBuffer<LevelComponent> levels = SystemAPI.GetSingletonBuffer<LevelComponent>();
                 int center = worldComponent.LargestLevelDimensionScaled / 2;
                 int2 spawnRange = new(center - LevelComponent.CHUNK_DIMENSIONS, center + LevelComponent.CHUNK_DIMENSIONS);
                 for (int i = 0; i < pref.count; i++)
                 {
                     int yPos = rand.NextInt(0, 5);
-                    int3 pos = rand.NextInt3(
-                        new(spawnRange.x, yPos, spawnRange.x), 
-                        new(spawnRange.y, yPos, spawnRange.y));
+                    int2 pos = default;
+                    do
+                    {
+                        pos = rand.NextInt2(
+                            new(spawnRange.x, spawnRange.x),
+                            new(spawnRange.y, spawnRange.y));
+                    } while (levels[yPos]
+                        .renderGrid[Recalculation.LocalIndexFromWorldPos(
+                            pos, 
+                            levels[yPos].offsetsScaled, 
+                            levels[yPos].dimensionsScaled)]
+                        .TType != TileType.Road);
 
-                    CreateHuman(ref buffer, ref pref, pos);
+                    CreateHuman(ref buffer, ref pref, new(pos.x, yPos, pos.y));
                 }
             }
 

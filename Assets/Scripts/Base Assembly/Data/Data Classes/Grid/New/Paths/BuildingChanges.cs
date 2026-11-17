@@ -1,6 +1,6 @@
-﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
-using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using Grid.New;
 using System;
 using System.Collections.Generic;
 using System.Text;

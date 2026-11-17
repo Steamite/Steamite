@@ -1,8 +1,4 @@
-﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 
 
 /// <summary>
@@ -13,6 +9,18 @@ using Unity.Mathematics;
 /// </summary>
 public static class Recalculation
 {
+    public static int Distance(int2 currentPosition, int2 destPosition)
+    {
+        int2 dist = math.abs(currentPosition - destPosition);
+        return dist.x + dist.y;
+    }
+
+    public static int Distance(int3 currentPosition, int3 destPosition)
+    {
+        int3 dist = math.abs(currentPosition - destPosition);
+        return dist.x + (dist.y*2) + dist.z;
+    }
+
     public static int GlobalIndexFromLocalIndex(int localIndex, int offsetScaled, int dimensionsScaled, int levelIndex)
     {
         int x = localIndex % dimensionsScaled + offsetScaled;

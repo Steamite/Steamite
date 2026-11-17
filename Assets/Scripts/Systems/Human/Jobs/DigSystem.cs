@@ -1,6 +1,6 @@
-﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
-using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths;
 using Assets.Scripts.Systems.Human.JobFind;
+using Grid.New;
 using Humans;
 using Pathing;
 using Rendering;

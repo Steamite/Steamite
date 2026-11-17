@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+﻿using Grid.New;
 using System;
 using System.Collections.Generic;
 using System.Text;

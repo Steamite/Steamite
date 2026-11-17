@@ -28,41 +28,38 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         /// -1, -width, 1, width
         /// </summary>
         [ReadOnly] public NativeArray<int> offsetTable;
-        public static readonly FixedList64Bytes<int2> offsetTableVec = new FixedList64Bytes<int2>()
-        { 
-            new int2(-1, 0),
-            new int2(0, -1),
-            new int2(1, 0),
-            new int2(0, 1)
+        public static readonly FixedList64Bytes<int3> offsetTableVec = new FixedList64Bytes<int3>()
+        {
+            new int3(-1,    0,     0),
+            new int3(0,     0,     -1),
+            new int3(1,     0,     0),
+            new int3(0,     0,     1)
         };
 
         public NativeList<int> positions;
 
-        private static readonly ProfilerMarker k_Init = new ProfilerMarker("Pathfind.1_Reallocate");
-        private static readonly ProfilerMarker k_Search = new ProfilerMarker("Pathfind.2_Search");
+        private static readonly ProfilerMarker k_Region = new ProfilerMarker("Pathfind.1_RegionSearch");
+        private static readonly ProfilerMarker k_QueueStart = new ProfilerMarker("Pathfind.2_QueueInit");
+        private static readonly ProfilerMarker k_Search = new ProfilerMarker("Pathfind.5_Search");
 
 
-        public NativeList<PathNode> TestRegions(NativeArray<int> startPositions, NativeArray<byte> regions, byte destinationRegion, int width, int2 destinationPosition)
+        public NativeList<PathNode> TestRegions(NativeArray<int> startPositions, NativeArray<byte> regions, int3 destinationPosition)
         {
             NativeList<PathNode> nodes = new NativeList<PathNode>(startPositions.Length, Allocator.Temp);
 
             for (int i = 0; i < startPositions.Length; i++)
             {
                 int startPos = startPositions[i];
-                if (regions[startPos] == destinationRegion)
+                if (regions[startPos] == regions[destination])
                 {
-                    int2 worldPos = new(startPos % width, startPos / width);
+                    int3 worldPos = new(startPos % gridWidth, startPos / gridSize, startPos / gridWidth);
 
-                    int level = startPos / (width ^ 2);
-
-                    int distance = math.abs(worldPos.x - destinationPosition.x) + math.abs(worldPos.y - destinationPosition.y);
+                    // + math.abs(worldPos.y - destinationPosition.y);
                     nodes.Add(new PathNode()
                     {
                         position = startPos,
-                        worldPosition = worldPos,
                         costToReach = 0,
-                        totalCost = distance,
-                        levelIndex = level,
+                        totalCost = Recalculation.Distance(worldPos, destinationPosition),
                         destinationIndex = i
                     });
                 }
@@ -73,58 +70,54 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         [BurstCompile]
         public void Execute()
         {
-            int size = (gridWidth * gridWidth);
-            int level = destination / size;
-            int2 destinationPosition = new(destination % gridWidth, (destination / gridWidth) - (256 * level));
+            int level = destination / gridSize;
+            int3 destinationPosition = new(destination % gridWidth, level, (destination / gridWidth) - (256 * level));
 
-            k_Init.Begin();
-            var nodes = TestRegions(positionsToStartFrom, regions, regions[destination], gridWidth, destinationPosition);
-            if(nodes.Length == 0)
+            k_Region.Begin();
+            var nodes = TestRegions(positionsToStartFrom, regions, destinationPosition);
+            k_Region.End();
+            if (nodes.Length == 0)
             {
                 nodes.Dispose();
                 closestDestination.Value = -1;
-                k_Init.End();
                 return;
             }
-            QueueNew queue = new(nodes, destinationPosition, level, path.Length, gridWidth, regions, regions[destination]);
+
+            k_QueueStart.Begin();
+            QueueNew queue = new(nodes, path.Length);
+            k_QueueStart.End();
+
             PathNode node;
 
-            k_Init.End();
 
             k_Search.Begin();
             bool found = false;
             while ((node = queue.Dequeue()).position != -1)
             {
                 int pos = node.position;
-
-                if (node.costToReach >= 2_000_000)
-                {
-                    node = new() { position = -1 };
-                    break;
-                } else if (pos == destination)
+                
+                if (pos == destination)
                 {
                     found = true;
                     break;
                 }
-
                 short mapNode = path[pos];
+                int3 worldPos = new(pos % gridWidth, pos / gridSize, (pos / gridWidth) % gridWidth);
+
                 for (int i = 0; i < offsetTable.Length; i++)
                 {
                     int checkPos = node.position + offsetTable[i];
 
-                    int2 posWorld = node.worldPosition + offsetTableVec[i];
+                    int3 tmpPos = worldPos + offsetTableVec[i];
                     if ((mapNode & 0x1) == 1)
                     {
                         int costToReach = node.costToReach + 1;
-                        int2 dist = math.abs(posWorld - destinationPosition);
 
                         PathNode newNode = new()
                         {
                             position = checkPos,
-                            worldPosition = posWorld,
                             costToReach = costToReach,
-                            totalCost = costToReach + dist.x + dist.y,
-                            levelIndex = node.levelIndex,
+                            totalCost = costToReach + Recalculation.Distance(tmpPos, destinationPosition),
                             destinationIndex = node.destinationIndex
                         };
                         queue.Enqueue(newNode, node.position);
@@ -140,10 +133,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                         PathNode newNode = new()
                         {
                             position = pos + math.select(gridSize, -gridSize, i == 0),
-                            worldPosition = node.worldPosition,
                             costToReach = node.costToReach + 1,
                             totalCost = node.totalCost + 1,
-                            levelIndex = node.levelIndex + math.select(1, -1, i == 0),
                             destinationIndex = node.destinationIndex
                         };
                         queue.Enqueue(newNode, node.position);
