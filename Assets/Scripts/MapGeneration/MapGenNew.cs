@@ -312,7 +312,7 @@ public class MapGenNew : MonoBehaviour
                 if (Mathf.PerlinNoise(x / div, y / div) < holeTreshold)
                     WorldChanges.SetTileCreate(i, levelIndex, LevelGridTile.Road, ref worldComponent, in levelArray);
                 else
-                    WorldChanges.SetTileCreate(i, levelIndex, LevelGridTile.Wall(10), ref worldComponent, in levelArray);
+                    WorldChanges.SetTileCreate(i, levelIndex, LevelGridTile.Wall((half)10f), ref worldComponent, in levelArray);
             }
 
             x++;
@@ -428,7 +428,7 @@ public class MapGenNew : MonoBehaviour
                         LevelGridTile.Wall(
                             (minable.resource.id & 0x1F) << 5,
                             minable.richness[levelIndex].Value(veinRichness, ref random),
-                            1),
+                            (half)10),
                         ref worldComponent,
                         in levelArray);
                     //map[pos] = ;

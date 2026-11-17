@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -26,19 +27,19 @@ public class Tick : MonoBehaviour
     }
 
     #region Variables
-    /// <summary>
-    /// How long an ingame hour lasts.
-    /// </summary>
-    /// <seealso href="../../../Documentation/Time scale.xlsx">
-    /// Time scale table.
-    /// </seealso>
-    //[Header("Tick speed")][SerializeField] int ticksPerHour = 4;
-    /// <summary>Progresses time by this(60/<see cref="ticksPerHour"/>).</summary>
-    private int minutesPerTick;
-    public static int MinutesPerTick = 15;
 
-    /// <summary>Current time of the day(counts as hours when starting a new game).</summary>
+    [Header("Tick speed")]
+    /// <summary>Progresses time</summary>
+    [SerializeField] private int minutesPerTick = 5;
+    static int MinutesPerTick;
+    
+    /// <summary>Current time of the dat in real world seconds.</summary>
+    public float timeElapsed = 4;
+
+    /// <summary>Current time of the day in minutes.</summary>
     public int timeInMinutes = 4;
+    
+    
     /// <summary>Current number of days, increased each new day.<summary>
     public int numberOfDays = 5;
 
@@ -61,20 +62,22 @@ public class Tick : MonoBehaviour
     event Action yearStart;
     #endregion
 
-    [SerializeField] public int dayTime = 6;
-    [SerializeField] public int nightTime = 21;
+    [SerializeField] int _dayTime = 6;
+    [NonSerialized] public int dayTime;
+
+    [SerializeField] int _nightTime = 21;
+    [NonSerialized] public int nightTime;
+    
+    
     /// <summary>The tick counter, resets if it reaches uint capacity.</summary>
     [HideInInspector] public uint lastTick = 0;
-
-    [SerializeField] float ticksPerSecond = 4f;
-    [SerializeField] float tickTimer = 0f;
 
     [SerializeField] List<int> speeds;
     [SerializeField] int speedIndex;
     [SerializeField] int prevSpeedIndex;
 
 
-    float timeToTick;
+    //float timeToTick;
     float timerSpeed;
 
     bool uiOpen = false;
@@ -169,21 +172,48 @@ public class Tick : MonoBehaviour
     #endregion
 
     #region Init
+
+    bool wasDayStart = false;
+    bool wasNightStart = false;
+
     public void InitTicks()
     {
-        minutesPerTick = 5;
-        TicksInDay = 1440 / minutesPerTick;
-        if (timeInMinutes < dayTime * 60 || timeInMinutes > nightTime * 60)
-            nightStart?.Invoke();
+        MinutesPerTick = minutesPerTick;
 
-        timeToTick = 1f / ticksPerSecond;
+        
+        TicksInDay = 1440 / minutesPerTick;
+        timeInMinutes = Mathf.FloorToInt(timeElapsed * minutesPerTick);
+
+        dayTime = _dayTime * 60;
+        nightTime = _nightTime * 60;
+
+        if (timeInMinutes < dayTime) 
+        {
+            wasNightStart = false;
+            wasDayStart = false;
+            nightStart?.Invoke();
+        }
+        else if (timeInMinutes > nightTime)
+        {
+            wasNightStart = true;
+            wasDayStart = true;
+            nightStart?.Invoke();
+        }
+        else
+        {
+            wasNightStart = false;
+            wasDayStart = true;
+        }
+
         timerSpeed = 0;
+        GameTime.SetTimeScale(0);
 
         speedIndex = 0;
         prevSpeedIndex = 1;
 
-        tickTimer = 0;
         enabled = false;
+
+        UpdateTime();
     }
     #endregion
 
@@ -204,6 +234,7 @@ public class Tick : MonoBehaviour
         }
 
         timerSpeed = speeds[speedIndex];
+        GameTime.SetTimeScale(timerSpeed);
         enabled = !uiOpen && speedIndex > 0;
     }
 
@@ -226,10 +257,12 @@ public class Tick : MonoBehaviour
         uiOpen = !_enable;
         if (_enable)
         {
+            GameTime.SetTimeScale(timerSpeed);
             enabled = true;
         }
         else
         {
+            GameTime.SetTimeScale(0);
             enabled = false;
         }
     }
@@ -238,20 +271,11 @@ public class Tick : MonoBehaviour
     #region Tick
     private void Update()
     {
-        tickTimer += Time.unscaledDeltaTime * timerSpeed;
-        if(tickTimer > timeToTick)
-        {
-            tickTimer -= timeToTick;
-            if (tickTimer > timeToTick)
-                tickTimer = 0;
-            UpdateTime();
-            tickAction?.Invoke();
-            if (lastTick == uint.MaxValue)
-                lastTick = 0;
-            else
-                lastTick++;
-        }
+        timeElapsed += GameTime.DeltaTime;
+        UpdateTime();
+        tickAction?.Invoke();
     }
+
     private void OnApplicationFocus(bool focus)
     {
         if (Application.runInBackground)
@@ -266,36 +290,45 @@ public class Tick : MonoBehaviour
             enabled = false;
         }
     }
-
     void UpdateTime()
     {
-        timeInMinutes += minutesPerTick;
-        switch (timeInMinutes)
+        timeInMinutes = Mathf.FloorToInt(timeElapsed * minutesPerTick);
+        if(!wasDayStart && timeInMinutes > 360)
         {
-            case 1440:
-                numberOfDays++;
-                day?.Invoke();
-                timeInMinutes = 0;
-                if (numberOfDays % 7 == 0)
+            wasDayStart = true;
+            dayStart?.Invoke();
+        }
+        else if(!wasNightStart && timeInMinutes > 1320)
+        {
+            wasNightStart = true;
+        }
+        else if(timeInMinutes > 1440)
+        {
+            numberOfDays++;
+            day?.Invoke();
+            
+            wasDayStart = false;
+            wasNightStart = false;
+
+
+            timeElapsed -= 1440 / minutesPerTick;
+            timeInMinutes = Mathf.FloorToInt(timeElapsed * minutesPerTick);
+
+
+            if (numberOfDays % 7 == 0)
+            {
+                weekStart?.Invoke();
+                if (numberOfDays % 30 == 0)
                 {
-                    weekStart?.Invoke();
-                    if (numberOfDays % 30 == 0)
+                    monthStart?.Invoke();
+                    if (numberOfDays % 360 == 0)
                     {
-                        monthStart?.Invoke();
-                        if (numberOfDays % 360 == 0)
-                        {
-                            yearStart?.Invoke();
-                        }
+                        yearStart?.Invoke();
                     }
                 }
-                break;
-            case 1320:
-                nightStart?.Invoke();
-                break;
-            case 360:
-                dayStart?.Invoke();
-                break;
+            }
         }
+
     }
 
     public static string RemainingTime(int time)
@@ -319,7 +352,7 @@ public class Tick : MonoBehaviour
     /// <param name="gameState">Where to save.</param>
     public void Save(GameStateSave gameState)
     {
-        gameState.dayTime = timeInMinutes;
+        gameState.dayTime = timeElapsed;
         gameState.numberOfDays = numberOfDays;
     }
 
@@ -329,9 +362,8 @@ public class Tick : MonoBehaviour
     /// <param name="gameState">Where to load from.</param>
     public void Load(GameStateSave gameState)
     {
-        timeInMinutes = gameState.dayTime;
+        timeElapsed = gameState.dayTime;
         numberOfDays = gameState.numberOfDays;
-        UpdateTime();
     }
 
 

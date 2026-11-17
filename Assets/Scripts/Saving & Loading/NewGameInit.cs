@@ -12,7 +12,7 @@ public class NewGameInit : MonoBehaviour
     [SerializeField] List<Color> hatMaterial = new List<Color> { Color.azure, Color.forestGreen, Color.crimson };
 
     [SerializeField] int numberOfDays = 6;
-    [SerializeField] int dayTime = 6 * 60;
+    [SerializeField] int dayTime = 6 * 12;
     [SerializeField] List<JobState> priority;
 
     [SerializeField] int numberOfHumans = 3;

@@ -661,6 +661,10 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1464009460878408193, guid: 750f96801c6f2904dbeec6cf384f82e9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -63
+      objectReference: {fileID: 0}
     - target: {fileID: 2417685550590803658, guid: 750f96801c6f2904dbeec6cf384f82e9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2827,7 +2831,6 @@ MonoBehaviour:
   LEVEL_COUNT: 0
   WorldBuildings:
     buildings: []
-  offsetPathTableNeighbour: 
   CenterScaled: 0
   buildingMeshes:
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
@@ -3160,13 +3163,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c820b0d8f88bdb4d835008f00417405, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minutesPerTick: 10
+  timeElapsed: 4
   timeInMinutes: 4
   numberOfDays: 5
-  dayTime: 6
-  nightTime: 21
+  _dayTime: 6
+  _nightTime: 21
   lastTick: 0
-  ticksPerSecond: 4
-  tickTimer: 0
   speeds: 00000000010000000300000005000000i
   speedIndex: 0
   prevSpeedIndex: 0
@@ -3205,7 +3208,6 @@ MonoBehaviour:
   - {fileID: 8150810313726245683}
   - {fileID: 977506021}
   - {fileID: 7072378217534680772}
-  - {fileID: 6086404398923934763}
   - {fileID: 274122778}
   - {fileID: 8277524054700303564}
   - {fileID: 897350252}

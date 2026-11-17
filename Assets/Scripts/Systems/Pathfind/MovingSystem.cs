@@ -63,7 +63,7 @@ namespace Pathing
         {
             PathfindMovingJob job = new()
             {
-                DeltaTime = SystemAPI.Time.DeltaTime
+                DeltaTime = GameTime.DeltaTime
             };
             state.Dependency = job.ScheduleParallelByRef(state.Dependency);
         }

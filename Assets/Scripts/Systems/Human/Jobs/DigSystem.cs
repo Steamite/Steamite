@@ -46,7 +46,7 @@ namespace Assets.Scripts.Systems.Human.Jobs
                     int localIndex = jobData.ValueRO.targetPosition;
                     var tile = grid[localIndex];
 
-                    tile.RemoveDurability(1);
+                    tile.RemoveDurability(GameTime.DeltaTime);
                     if (tile.TType == TileType.Road)
                     {
                         // Clear human data

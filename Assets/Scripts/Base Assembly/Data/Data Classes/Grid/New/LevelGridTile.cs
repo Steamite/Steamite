@@ -33,10 +33,15 @@ namespace Grid.New
         public uint otherData;
         public static readonly LevelGridTile OutsideWall = new LevelGridTile((int)TileType.Border, int.MaxValue);
 
-        public static LevelGridTile Wall(uint durability, bool hidden = true) => new LevelGridTile((hidden ? 1 : 0) | (int)TileType.Wall << 1, durability);
+        public static LevelGridTile Wall(half durability, bool hidden = true) => 
+            new LevelGridTile(
+                (hidden ? 1 : 0) | (int)TileType.Wall << 1, 
+                (uint)((durability.value << 16) | durability.value));
         
-        public static LevelGridTile Wall(int style, int ammount, uint durability, bool hidden = true) 
-            => new LevelGridTile((hidden ? 1 : 0) | (((int)TileType.Wall & 0xF) << 1) | ((style & 0x7F) << 5) | ((ammount & 0xFFFFF) << 12), durability);
+        public static LevelGridTile Wall(int style, int ammount, half durability, bool hidden = true) 
+            => new LevelGridTile(
+                (hidden ? 1 : 0) | (((int)TileType.Wall & 0xF) << 1) | ((style & 0x7F) << 5) | ((ammount & 0xFFFFF) << 12),
+                (uint)((durability.value << 16) | durability.value));
         
         public static readonly LevelGridTile Road = new LevelGridTile((int)TileType.Road << 1, 0);
 
@@ -51,14 +56,14 @@ namespace Grid.New
         /// </summary>
         public readonly int Amount => (hiddenTypeStyleAmount >> 13) & 0x3FFFF; // (18) bits => x^18maxAmmount
 
-        // maybe will be changed
-        public readonly float Durability => new half() { value = (ushort)(otherData & 0xFFFFu)};
-        public readonly float OriginalDurability => new half() { value = (ushort)((otherData >> 16) & 0xFFFFu) };
+        public readonly float Durability => math.f16tof32(otherData & 0xFFFFu);
+        public readonly float OriginalDurability => math.f16tof32((otherData >> 16) & 0xFFFFu);
 
 
         public LevelGridTile(int _hiddenStats, uint _durability)
         {
             hiddenTypeStyleAmount = _hiddenStats;
+
             otherData = _durability;
         }
 
@@ -107,8 +112,8 @@ namespace Grid.New
         public float RemoveDurability(float change)
         {
             float dur = Durability - change;
-            otherData = (otherData & ~0xFFFFu) | ((half)dur).value;
-            if(dur < 0)
+            otherData = (otherData & 0xFFFF0000u) | ((half)dur).value;
+            if (dur < 0)
             {
                 hiddenTypeStyleAmount = (hiddenTypeStyleAmount & ~(0xF << 0x1)) | (((int)TileType.Road & 0xF) << 0x1);
             }

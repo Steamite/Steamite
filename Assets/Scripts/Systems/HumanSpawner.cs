@@ -18,7 +18,6 @@ namespace Assets.Scripts.Systems
         
         protected override void OnCreate()
         {
-            RequireForUpdate<TestSpherePrefab>();
             RequireForUpdate<HumanPrefab>();
             RequireForUpdate<WorldComponent>();
         }
@@ -28,22 +27,7 @@ namespace Assets.Scripts.Systems
             // Spheres
             var rand = new Unity.Mathematics.Random(1); // Provide seed
 
-            TestSpherePrefab prefab = SystemAPI.GetSingleton<TestSpherePrefab>();
             var buffer = new EntityCommandBuffer(Allocator.TempJob);
-
-            for (int i = 0; i < prefab.count; i++)
-            {
-                var ent = buffer.Instantiate(prefab.entity);
-                var b = buffer.SetBuffer<PositionNode>(ent);
-                for (int j = 0; j < 20; j++)
-                {
-                    b.Add(new()
-                    {
-                        position = rand.NextFloat3(new(-50, -50, -50), new(50, 50, 50))
-                    });
-                }
-            }
-
 
             // people
             rand = new Unity.Mathematics.Random(1); // Provide seed

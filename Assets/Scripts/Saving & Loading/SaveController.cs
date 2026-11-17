@@ -81,7 +81,8 @@ public class SaveController : MonoBehaviour, IAfterLoad
     #region Init
     public void AfterLoad()
     {
-        SceneRefs.Tick.SubscribeToEvent(() => SaveGame("", true), Tick.TimeEventType.Day);
+        // TODO: return saving
+        //SceneRefs.Tick.SubscribeToEvent(() => SaveGame("", true), Tick.TimeEventType.Day);
         UIRefs.PauseMenu.AddSaveAction((s) => SaveGame(s, false));
 
         saveUIAction += ((IGridMenu)UIRefs.LoadMenu).UpdateButtonState;

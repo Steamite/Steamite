@@ -313,7 +313,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public void CreateWall(int pos, int level = 0)
         {
-            WorldChanges.SetTileRuntime(pos, level, LevelGridTile.Wall(10, false), ref world, in levelArray);
+            WorldChanges.SetTileRuntime(pos, level, LevelGridTile.Wall((half)10, false), ref world, in levelArray);
         }
 
         public int GetWorldIndex(int2 worldPosition) => worldPosition.y * LargestLevelDimensionScaled + worldPosition.x;

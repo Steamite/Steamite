@@ -320,7 +320,7 @@ public class StorageResSave : ResourceSave
 public class GameStateSave
 {
     public List<JobState> priorities;
-    public int dayTime;
+    public float dayTime;
     public int numberOfDays;
     public bool autoSave;
 
