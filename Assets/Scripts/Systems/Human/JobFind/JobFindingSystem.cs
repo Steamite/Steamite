@@ -2,6 +2,7 @@
 using Pathing;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Permissions;
 using System.Text;
 using Unity.Burst;
@@ -85,7 +86,7 @@ namespace Assets.Scripts.Systems.Human.JobFind
                 if (offers.digJobs.Count == 0)
                     break;
 
-                int i = Pathing.Pathfind.FindPath(ref pathfind.ValueRW, nodes, offers.digJobs.AsArray(), world);
+                int i = Pathing.Pathfind.FindPath(ref pathfind.ValueRW, nodes, offers.digJobs.AsArray(), world, offers.digRegions);
                 if (i == -1)
                     continue;
 
@@ -109,6 +110,7 @@ namespace Assets.Scripts.Systems.Human.JobFind
                 isFree.ValueRW = false;
 
                 offers.digJobs.RemoveAt(i);
+                offers.digRegions.RemoveAt(i);
             }
         }
 

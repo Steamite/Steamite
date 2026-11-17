@@ -9,16 +9,12 @@ namespace Assets.Scripts.Systems.Human.JobFind
         /// Absolute world positions of the rocks.
         /// </summary>
         public NativeList<int> digJobs;
+        public NativeList<uint> digRegions;
+
         public NativeList<int> impossibleToDig;
         /// <summary>
         /// Building to work on
         /// </summary>
         public NativeList<Entity> buildingJobs;
     }
-
-
-    /*public struct DigJob
-    {
-        int rockPosition;
-    }*/
 }

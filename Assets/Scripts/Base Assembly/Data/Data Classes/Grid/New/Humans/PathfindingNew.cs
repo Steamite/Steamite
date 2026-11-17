@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using Unity.AI.Navigation.LowLevel;
 using Unity.Burst;
@@ -20,7 +21,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 
         public int gridWidth;
         public int gridSize;
-        public NativeArray<int> positionsToStartFrom;
+        public NativeArray<int> startingPositions;
+        public NativeArray<uint> startingPositionsRegions;
+
         public int destination;
 
         public NativeReference<int> closestDestination;
@@ -41,15 +44,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         private static readonly ProfilerMarker k_Region = new ProfilerMarker("Pathfind.1_RegionSearch");
         private static readonly ProfilerMarker k_QueueStart = new ProfilerMarker("Pathfind.2_QueueInit");
         private static readonly ProfilerMarker k_Search = new ProfilerMarker("Pathfind.5_Search");
+        
 
-
-        public NativeList<PathNode> TestRegions(NativeArray<int> startPositions, NativeArray<byte> regions, int3 destinationPosition)
+        public NativeList<PathNode> TestRegions(int3 destinationPosition)
         {
-            NativeList<PathNode> nodes = new NativeList<PathNode>(startPositions.Length, Allocator.Temp);
+            NativeList<PathNode> nodes = new NativeList<PathNode>(startingPositions.Length, Allocator.Temp);
 
-            for (int i = 0; i < startPositions.Length; i++)
+            for (int i = 0; i < startingPositions.Length; i++)
             {
-                int startPos = startPositions[i];
+                int startPos = startingPositions[i];
                 if (regions[startPos] == regions[destination])
                 {
                     int3 worldPos = new(startPos % gridWidth, startPos / gridSize, startPos / gridWidth);
@@ -67,6 +70,53 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             return nodes;
         }
 
+        NativeList<PathNode> TestRockRegions(int3 destinationPosition)
+        {
+            NativeList<PathNode> nodes = new NativeList<PathNode>(startingPositions.Length, Allocator.Temp);
+
+            int reg = regions[destination];
+
+            for (int i = 0; i < startingPositions.Length; i++)
+            {
+                uint region = startingPositionsRegions[i];
+                for (int j = 0; j < 4; j++)
+                {
+                    if((region & 0xF3) == reg)
+                    {
+                        int startPos = startingPositions[i];
+                        int3 worldPos = new(startPos % gridWidth, startPos / gridSize, startPos / gridWidth);
+
+                        nodes.Add(new PathNode()
+                        {
+                            position = startPos,
+                            costToReach = 0,
+                            totalCost = Recalculation.Distance(worldPos, destinationPosition),
+                            destinationIndex = i
+                        });
+
+                        break;
+                    }
+                    region >>= 8;
+                }
+                /*
+                int startPos = startingPositions[i];
+                if (startingPositionsRegions[i] == regions[destination])
+                {
+                    int3 worldPos = new(startPos % gridWidth, startPos / gridSize, startPos / gridWidth);
+
+                    // + math.abs(worldPos.y - destinationPosition.y);
+                    nodes.Add(new PathNode()
+                    {
+                        position = startPos,
+                        costToReach = 0,
+                        totalCost = Recalculation.Distance(worldPos, destinationPosition),
+                        destinationIndex = i
+                    });
+                }*/
+            }
+            return nodes;
+        }
+
         [BurstCompile]
         public void Execute()
         {
@@ -74,7 +124,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             int3 destinationPosition = new(destination % gridWidth, level, (destination / gridWidth) - (256 * level));
 
             k_Region.Begin();
-            var nodes = TestRegions(positionsToStartFrom, regions, destinationPosition);
+            NativeList<PathNode> nodes;
+            if (startingPositionsRegions.IsCreated == false)
+                nodes = TestRegions(destinationPosition);
+            else
+                nodes = TestRockRegions(destinationPosition);
+
             k_Region.End();
             if (nodes.Length == 0)
             {
@@ -104,7 +159,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                 short mapNode = path[pos];
                 int3 worldPos = new(pos % gridWidth, pos / gridSize, (pos / gridWidth) % gridWidth);
 
-                for (int i = 0; i < offsetTable.Length; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     int checkPos = node.position + offsetTable[i];
 

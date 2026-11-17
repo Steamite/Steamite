@@ -11,6 +11,7 @@ namespace JobFind
     class JobOfferLinker : MonoBehaviour, IAfterLoad, IDigManager
     {
         NativeList<int> digJob;
+        NativeList<uint> digRegions;
         NativeList<int> impossibleToDig;
         NativeList<Entity> buildJob;
 
@@ -35,6 +36,8 @@ namespace JobFind
         {
             if (digJob.IsCreated)
                 digJob.Dispose();
+            if (digRegions.IsCreated)
+                digRegions.Dispose();
             if (impossibleToDig.IsCreated)
                 impossibleToDig.Dispose();
 
@@ -96,12 +99,14 @@ namespace JobFind
             var ent = manager.CreateEntity();
 
             digJob = new NativeList<int>(50, Allocator.Persistent);
+            digRegions = new NativeList<uint>(50, Allocator.Persistent);
             impossibleToDig = new NativeList<int>(50, Allocator.Persistent);
             buildJob = new NativeList<Entity>(20, Allocator.Persistent);
             toDigMarks = new NativeList<int>(10, Allocator.Persistent);
             manager.AddComponentData(ent, new JobOffersComponent()
             {
                 digJobs = digJob,
+                digRegions = digRegions,
                 impossibleToDig = impossibleToDig,
                 buildingJobs = buildJob
             });

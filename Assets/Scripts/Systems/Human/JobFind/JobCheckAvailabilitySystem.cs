@@ -21,7 +21,7 @@ namespace Assets.Scripts.Systems.Human.JobFind
 
             offers.impossibleToDig.AddRange(offers.digJobs);
             offers.digJobs.Clear();
-
+            offers.digRegions.Clear();
             // rocks have world position 30329
             //var offsets = world.offsets;
 
@@ -32,6 +32,7 @@ namespace Assets.Scripts.Systems.Human.JobFind
                 {
                     offers.impossibleToDig.RemoveAt(i);
                     offers.digJobs.Add(pos);
+                    offers.digRegions.Add(RegionChanges.GetAdjacentRegions(pos, world.offsets, world.regions));
                 }
             }
         }

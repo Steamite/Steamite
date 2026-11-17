@@ -100,12 +100,14 @@ public class MapGenNew : MonoBehaviour
 
         NativeArray<short> path = new(gridSize * levelCount, Allocator.Persistent);
 
-        NativeArray<int> offsets = new NativeArray<int>(4, Allocator.Persistent);
+        NativeArray<int> offsets = new NativeArray<int>(6, Allocator.Persistent);
 
         offsets[0] = -1;
         offsets[1] = -largestDimensionScaled;
         offsets[2] = 1;
         offsets[3] = largestDimensionScaled;
+        offsets[4] = -gridSize;
+        offsets[5] = gridSize;
 
         WorldComponent worldComponent = new()
         {

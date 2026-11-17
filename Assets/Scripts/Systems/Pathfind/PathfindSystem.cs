@@ -64,7 +64,7 @@ namespace Pathing
                     ((int)math.floor(humanPosition.position.z)) * worldData.LargestLevelDimensionScaled +
                     ((int)math.floor(humanPosition.position.x)),
 
-                positionsToStartFrom = destinations,
+                startingPositions = destinations,
 
                 path = worldData.path,
                 regions = worldData.regions,
@@ -77,11 +77,16 @@ namespace Pathing
             k_InitMarker.End();
 
             pathfindingNew.Execute();
+            return EndSearch(ref humanPosition, nodes, worldData, positions, foundDestination);
+        }
+
+        static int EndSearch(ref PathfindComponent humanPosition, in DynamicBuffer<PositionNode> nodes, WorldComponent worldData, NativeList<int> positions, NativeReference<int> foundDestination)
+        {
             k_FinishMarker.Begin();
             nodes.Clear();
 
-            if(foundDestination.Value == -1)
-            { 
+            if (foundDestination.Value == -1)
+            {
                 humanPosition.currentWaypoint = -1;
                 foundDestination.Dispose();
                 k_FinishMarker.End();
@@ -113,6 +118,43 @@ namespace Pathing
             k_FinishMarker.End();
             return val;
         }
+
+        public static int FindPath(
+            ref PathfindComponent humanPosition,
+            in DynamicBuffer<PositionNode> nodes,
+            in NativeArray<int> destinations,
+            in WorldComponent worldData, 
+            NativeList<uint> digRegions)
+        {
+            k_InitMarker.Begin();
+            NativeList<int> positions = new NativeList<int>(20, Allocator.Temp);
+            int yPos = ((int)math.floor(humanPosition.position.y));
+
+            NativeReference<int> foundDestination = new NativeReference<int>(Allocator.TempJob);
+
+            PathfindingNew pathfindingNew = new()
+            {
+                destination = yPos * worldData.largestGridSize +
+                    ((int)math.floor(humanPosition.position.z)) * worldData.LargestLevelDimensionScaled +
+                    ((int)math.floor(humanPosition.position.x)),
+
+                startingPositions = destinations,
+                startingPositionsRegions = digRegions,
+                path = worldData.path,
+                regions = worldData.regions,
+                gridWidth = worldData.LargestLevelDimensionScaled,
+                gridSize = worldData.largestGridSize,
+                offsetTable = worldData.offsets,
+                positions = positions,
+                closestDestination = foundDestination
+            };
+            k_InitMarker.End();
+
+            pathfindingNew.Execute();
+
+            return EndSearch(ref humanPosition, nodes, worldData, positions, foundDestination);
+        }
+
     }
 
 

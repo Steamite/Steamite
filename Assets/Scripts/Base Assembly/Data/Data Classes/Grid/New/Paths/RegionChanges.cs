@@ -3,6 +3,7 @@ using Grid.New;
 using System.Drawing;
 using Unity.Burst;
 using Unity.Collections;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -25,10 +26,6 @@ public static class RegionChanges
         int scaledDim = level.dimensionsScaled;
 
         int size = worldComponent.largestGridSize;// .LargestLevelDimensionScaled * worldComponent.LargestLevelDimensionScaled;
-
-
-        var conectedOffsets = CreateOffsetArray(worldComponent.offsets, size, levelIndex);
-
 
         var pathRegions = worldComponent.regions;
         var regions = worldComponent.availableRegions;
@@ -54,7 +51,7 @@ public static class RegionChanges
 
                 if (accessible) 
                 {
-                    Join(worldIndex, path, ref pathRegions, conectedOffsets, GetNewRegionId(regions));
+                    Join(worldIndex, path, ref pathRegions, worldComponent.offsets, GetNewRegionId(regions));
                 }
             }
 
@@ -68,8 +65,6 @@ public static class RegionChanges
                 worldIndex += iJump;
             }
         }
-        if(conectedOffsets.IsCreated)
-            conectedOffsets.Dispose();
     }
 
     static byte GetNewRegionId(in NativeBitArray array)
@@ -85,50 +80,26 @@ public static class RegionChanges
         return byte.MaxValue;
     }
 
-    static NativeArray<int> CreateOffsetArray(in NativeArray<int> offsets, int gridSize, int levelIndex)
-    {
-        // Vertical offsets
-        NativeArray<int> conectedOffsets = new(6, Allocator.Persistent);
-        conectedOffsets[0] = -offsets[0];
-        conectedOffsets[1] = -offsets[1];
-        conectedOffsets[2] = -offsets[2];
-        conectedOffsets[3] = -offsets[3];
-
-        if (levelIndex > 0)
-        {
-            conectedOffsets[5] = -gridSize;
-        }
-        if (levelIndex < 4)
-        {
-            conectedOffsets[4] = gridSize;
-        }
-        return conectedOffsets;
-    }
-
     public static void SetPath(int openPosition, in WorldComponent world, int levelIndex)
     {
-        var offsets = CreateOffsetArray(world.offsets, world.largestGridSize, levelIndex);
         var path = world.path;
 
         var regions = world.regions;
         var availableRegions = world.availableRegions;
-        byte regionId = JoinRegionArray(openPosition, ref offsets, ref path, ref regions, availableRegions);
+        byte regionId = JoinRegionArray(openPosition, world.offsets, path, ref regions, availableRegions);
 
 
-        Join(openPosition, path, ref regions, offsets, regionId);
+        Join(openPosition, path, ref regions, world.offsets, regionId);
     }
-    static byte JoinRegionArray(int openPosition, ref NativeArray<int> offsets, ref NativeArray<short> path, ref NativeArray<byte> regions, NativeBitArray availableRegions)
+    static byte JoinRegionArray(int openPosition, in NativeArray<int> offsets, in NativeArray<short> path, ref NativeArray<byte> regions, NativeBitArray availableRegions)
     {
         byte regionId = byte.MaxValue;
 
-        for (int i = 0; i < offsets.Length; i++)
+        for (int i = 0; i < 4; i++)
         {
-            if (offsets[i] == 0)
-                continue;
-
-            int pos = openPosition + offsets[i];
-            if (((path[pos] >> i) & 0x1) == 1)
+            if (((path[openPosition] >> i) & 0x1) == 1)
             {
+                int pos = openPosition + offsets[i];
                 if (regions[pos] < regionId && regions[pos] > 0)
                 {
                     if (regionId != byte.MaxValue)
@@ -141,6 +112,17 @@ public static class RegionChanges
         }
 
         return regionId;
+    }
+
+    public static uint GetAdjacentRegions(int position, in NativeArray<int> offsets, in NativeArray<byte> regions)
+    {
+        uint regionResult = 0;
+        for (int i = 0; i < 4; i++)
+        {
+            int pos = position + offsets[i];
+            regionResult = (regionResult << 8) | regions[pos];
+        }
+        return regionResult;
     }
 
     static void Join(
@@ -161,28 +143,22 @@ public static class RegionChanges
             int worldIndex = queue[0];
             
             queue.RemoveAt(0);
+            int p = path[worldIndex];
             for (int i = 0; i < offsets.Length; i++)
             {
-                if (offsets[i] == 0)
-                    continue;
-
-                int index = worldIndex + offsets[i];
-
-                if (((path[index] >> i) & 0x1) == 1)
-                {                        
-                    if(regions[index] != regionId)
+                if((p & 0x1) == 1)
+                {
+                    int index = worldIndex + offsets[i];
+                    if (regions[index] != regionId)
                     {
                         regions[index] = regionId;
                         queue.Add(index);
                     }
                 }
+                p >>= 0x1;
             }
         }
 
         queue.Dispose();
     }
-
-
-
-
 }
