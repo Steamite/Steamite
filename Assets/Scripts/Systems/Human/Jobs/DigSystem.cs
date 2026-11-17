@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths;
 using Assets.Scripts.Systems.Human.JobFind;
 using Humans;
 using Pathing;
@@ -46,14 +47,9 @@ namespace Assets.Scripts.Systems.Human.Jobs
                     var tile = grid[localIndex];
 
                     tile.RemoveDurability(1);
-
                     if (tile.TType == TileType.Road)
                     {
-                        DirtyGridUtils.SetDirty(
-                            level.dirtyChunks,
-                            level.dimensionsScaled,
-                            level.dimensions,
-                            localIndex);
+                        // Clear human data
                         jobData.ValueRW.jobType = JobType.Free;
                         jobData.ValueRW.targetPosition = -1;
                         free.ValueRW = true;
@@ -66,15 +62,8 @@ namespace Assets.Scripts.Systems.Human.Jobs
                         overlay.markedTilesGrid.Set(world, false);
 
                         change.ValueRW.hasChange = true;
-
-                        PathChanges.UpdatePath(
-                            localIndex,
-                            levelIndex,
-                            tile,
-                            ref worldComponent,
-                            levels.AsNativeArray());
                     }
-                    grid[localIndex] = tile;
+                    WorldChanges.SetTileRuntime(localIndex, levelIndex, tile, ref worldComponent, levels.AsNativeArray());
                 }
             }
         }

@@ -24,8 +24,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         public WorldBuildings WorldBuildings;
 
-        NativeArray<int> offsetPathTableNeighbour;
-
         public int CenterScaled;
         [NonSerialized] public int LargestLevelDimension;
         [NonSerialized] public int LargestLevelDimensionScaled;
@@ -50,7 +48,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         /// </summary>
         [NonSerialized] public NativeArray<short> path;
         [NonSerialized] public NativeArray<byte> pathRegions;
-        [NonSerialized] public NativeBitArray regionList;
 
         readonly Vector3[] offset = new Vector3[] { new(-0.5f,0,0), new(0,0, -0.5f), new(0.5f, 0, 0), new(0, 0, 0.5f) };
         readonly Vector3[] verticalOffset = new Vector3[] { new(0, -0.5f,0), new(0, 0.5f, 0) };
@@ -160,11 +157,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             LargestLevelDimension = saveToLoad.world.LargestLevelDimensionScaled / LevelComponent.CHUNK_DIMENSIONS;
             GridSizeScaled = LargestLevelDimensionScaled * LargestLevelDimensionScaled;
 
-            offsetPathTableNeighbour = saveToLoad.world.offsets;
-
             path = saveToLoad.world.path;
-            pathRegions = saveToLoad.world.pathRegions;
-            regionList = saveToLoad.world.regions;
+            pathRegions = saveToLoad.world.regions;
 
             for (int i = 0; i < LEVEL_COUNT; i++)
             {
@@ -257,16 +251,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         {
             WorldBuildings.Dispose();
 
-
-            if (path.IsCreated)
-                path.Dispose();
-            if (pathRegions.IsCreated)
-                pathRegions.Dispose();
-            if (regionList.IsCreated)
-                regionList.Dispose();
-
-            if (offsetPathTableNeighbour.IsCreated)
-                offsetPathTableNeighbour.Dispose();
+            world.Dispose();
 
             if (levelArray.IsCreated)
             {
@@ -312,7 +297,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             
             if (tile.otherData <= 0)
             {
-                WorldChanges.SetTile(localIndex, levelIndex, LevelGridTile.Road, ref world, in levelArray);
+                WorldChanges.SetTileRuntime(localIndex, levelIndex, LevelGridTile.Road, ref world, in levelArray);
                 RevealChanges.RevealRocks(localIndex, ref level);
 
                 OverlayChanges.CleanPosAndUpdate(localIndex, levelArray[levelIndex], overlayArray[levelIndex]);
@@ -320,13 +305,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             }
             else
             {
-                WorldChanges.SetTile(localIndex, levelIndex, tile, ref world, in levelArray);
+                WorldChanges.SetTileRuntime(localIndex, levelIndex, tile, ref world, in levelArray);
             }
         }
 
         public void CreateWall(int pos, int level = 0)
         {
-            WorldChanges.SetTile(pos, level, LevelGridTile.Wall(10, false), ref world, in levelArray);
+            WorldChanges.SetTileRuntime(pos, level, LevelGridTile.Wall(10, false), ref world, in levelArray);
         }
 
         public int GetWorldIndex(int2 worldPosition) => worldPosition.y * LargestLevelDimensionScaled + worldPosition.x;

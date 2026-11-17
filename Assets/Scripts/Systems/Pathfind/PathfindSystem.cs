@@ -67,7 +67,7 @@ namespace Pathing
                 positionsToStartFrom = destinations,
 
                 path = worldData.path,
-                regions = worldData.pathRegions,
+                regions = worldData.regions,
                 gridWidth = worldData.LargestLevelDimensionScaled,
                 gridSize = worldData.largestGridSize,
                 offsetTable = worldData.offsets,

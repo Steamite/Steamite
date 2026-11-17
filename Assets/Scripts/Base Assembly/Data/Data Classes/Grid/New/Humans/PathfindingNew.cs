@@ -42,6 +42,34 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
         private static readonly ProfilerMarker k_Search = new ProfilerMarker("Pathfind.2_Search");
 
 
+        public NativeList<PathNode> TestRegions(NativeArray<int> startPositions, NativeArray<byte> regions, byte destinationRegion, int width, int2 destinationPosition)
+        {
+            NativeList<PathNode> nodes = new NativeList<PathNode>(startPositions.Length, Allocator.Temp);
+
+            for (int i = 0; i < startPositions.Length; i++)
+            {
+                int startPos = startPositions[i];
+                if (regions[startPos] == destinationRegion)
+                {
+                    int2 worldPos = new(startPos % width, startPos / width);
+
+                    int level = startPos / (width ^ 2);
+
+                    int distance = math.abs(worldPos.x - destinationPosition.x) + math.abs(worldPos.y - destinationPosition.y);
+                    nodes.Add(new PathNode()
+                    {
+                        position = startPos,
+                        worldPosition = worldPos,
+                        costToReach = 0,
+                        totalCost = distance,
+                        levelIndex = level,
+                        destinationIndex = i
+                    });
+                }
+            }
+            return nodes;
+        }
+
         [BurstCompile]
         public void Execute()
         {
@@ -50,14 +78,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
             int2 destinationPosition = new(destination % gridWidth, (destination / gridWidth) - (256 * level));
 
             k_Init.Begin();
-
-            QueueNew queue = new(positionsToStartFrom, destinationPosition, level, path.Length, gridWidth, regions, regions[destination]);
-            if (queue.Len == 0)
+            var nodes = TestRegions(positionsToStartFrom, regions, regions[destination], gridWidth, destinationPosition);
+            if(nodes.Length == 0)
             {
+                nodes.Dispose();
                 closestDestination.Value = -1;
-                queue.Dispose();
+                k_Init.End();
                 return;
             }
+            QueueNew queue = new(nodes, destinationPosition, level, path.Length, gridWidth, regions, regions[destination]);
             PathNode node;
 
             k_Init.End();

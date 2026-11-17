@@ -18,7 +18,8 @@ public static class BuildingChanges
         int arrayIndex,
         ref WorldComponent worldComponent,
         in NativeArray<LevelComponent> levelArray,
-        ref NativeArray<OverlayComponent> overlays)
+        ref NativeArray<OverlayComponent> overlays,
+        bool runtime = true)
     {
         uint encodedPosition = renderData.encodedLocalPosition;
         int levelIndex = (int)(encodedPosition >> 20) & 0x3;
@@ -70,12 +71,22 @@ public static class BuildingChanges
                         continue;
                 }
 
-                WorldChanges.SetTile(
-                    locaIndex,
-                    levelIndex,
-                    in tile,
-                    ref worldComponent,
-                    in levelArray);
+                if(runtime)
+                    WorldChanges.SetTileRuntime(
+                        locaIndex,
+                        levelIndex,
+                        in tile,
+                        ref worldComponent,
+                        in levelArray);
+                else
+                    WorldChanges.SetTileCreate(
+                        locaIndex,
+                        levelIndex,
+                        in tile,
+                        ref worldComponent,
+                        in levelArray);
+
+
 
                 index++;
             }
@@ -123,7 +134,7 @@ public static class BuildingChanges
                     case GridItemType.Road:
                     case GridItemType.PassableRoad:
                     case GridItemType.Elevator:
-                        WorldChanges.SetTile(local, levelIndex, LevelGridTile.Road, ref worldComponent, in levelArray);
+                        WorldChanges.SetTileRuntime(local, levelIndex, LevelGridTile.Road, ref worldComponent, in levelArray);
                         break;
                     case GridItemType.Entrance:
                         OverlayChanges.SetEntrance(worldTemp, false, ref level, ref overlay, worldComponent.LargestLevelDimensionScaled);

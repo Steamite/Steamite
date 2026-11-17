@@ -33,8 +33,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 }
                 else
                 {
-                    /*int2 pos = new((int)item.renderData.position & 0x9, (int)(item.renderData.position >> 10) & 0x9);
-                    PlaceBuilding(pos, wrappers[item.wrapperIndex], item);*/
                     AddBuildingToArray(item);
                 }
             }

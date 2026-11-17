@@ -108,8 +108,8 @@ public class MapGenNew : MonoBehaviour
 
         WorldComponent worldComponent = new()
         {
-            pathRegions = pathRegions,
-            regions = regions,
+            regions = pathRegions,
+            availableRegions = regions,
             path = path,
             largestGridSize = gridSize,
             LargestLevelDimensionScaled = largestDimensionScaled,
@@ -192,7 +192,8 @@ public class MapGenNew : MonoBehaviour
                 i,
                 ref worldComponent,
                 in levelArray,
-                ref overlays);
+                ref overlays,
+                false);
         }
 
         return buildsAndChunksSaveNew;
@@ -211,13 +212,6 @@ public class MapGenNew : MonoBehaviour
             int scaledSize = currentLevelDimScaled * currentLevelDimScaled;
             int chunkCount = levelDim * levelDim;
 
-
-            NativeArray<int> offsets = new NativeArray<int>(4, Allocator.Persistent);
-            offsets[0] = 1;
-            offsets[0] = currentLevelDimScaled;
-            offsets[0] = -1;
-            offsets[0] = -currentLevelDimScaled;
-
             NativeArray<LevelGridTile> grid = new(scaledSize, Allocator.Persistent);
             LevelComponent level = new()
             {
@@ -228,7 +222,6 @@ public class MapGenNew : MonoBehaviour
                 offsetsScaled = currentOffsetScaled,
                 dirtyChunks = new NativeBitArray(chunkCount, Allocator.Persistent),
                 renderGrid = grid,
-                neighbours = offsets
             };
 
             levelArray[i] = level;
@@ -309,14 +302,14 @@ public class MapGenNew : MonoBehaviour
             }
             else if (x > minPos && x < maxPos && y > minPos && y < maxPos)
             {
-                WorldChanges.SetTile(i, levelIndex, LevelGridTile.Road, ref worldComponent, in levelArray);
+                WorldChanges.SetTileCreate(i, levelIndex, LevelGridTile.Road, ref worldComponent, in levelArray);
             }
             else
             {
                 if (Mathf.PerlinNoise(x / div, y / div) < holeTreshold)
-                    WorldChanges.SetTile(i, levelIndex, LevelGridTile.Road, ref worldComponent, in levelArray);
+                    WorldChanges.SetTileCreate(i, levelIndex, LevelGridTile.Road, ref worldComponent, in levelArray);
                 else
-                    WorldChanges.SetTile(i, levelIndex, LevelGridTile.Wall(10), ref worldComponent, in levelArray);
+                    WorldChanges.SetTileCreate(i, levelIndex, LevelGridTile.Wall(10), ref worldComponent, in levelArray);
             }
 
             x++;
@@ -428,7 +421,7 @@ public class MapGenNew : MonoBehaviour
                 if (InBounds(x, y, dimScaled))
                 {
                     int pos = y * dimScaled + x;
-                    WorldChanges.SetTile(pos, levelIndex, 
+                    WorldChanges.SetTileCreate(pos, levelIndex, 
                         LevelGridTile.Wall(
                             (minable.resource.id & 0x1F) << 5,
                             minable.richness[levelIndex].Value(veinRichness, ref random),

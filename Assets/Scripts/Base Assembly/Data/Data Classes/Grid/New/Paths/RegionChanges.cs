@@ -1,9 +1,12 @@
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans;
+using System.Drawing;
 using Unity.Burst;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
+[BurstCompile]
 public static class RegionChanges
 {
     /// <summary>
@@ -16,33 +19,19 @@ public static class RegionChanges
     public static void InitFill(
         int levelIndex,
         ref WorldComponent worldComponent,
-        NativeArray<LevelComponent> levels)
+        in NativeArray<LevelComponent> levels)
     {
         var level = levels[levelIndex];
         int scaledDim = level.dimensionsScaled;
 
-        int size = worldComponent.LargestLevelDimensionScaled * worldComponent.LargestLevelDimensionScaled;
-
-        // Vertical offsets
-        NativeArray<int> conectedOffsets = new (6, Allocator.Persistent);
-        conectedOffsets[0] = -worldComponent.offsets[0];
-        conectedOffsets[1] = -worldComponent.offsets[1];
-        conectedOffsets[2] = -worldComponent.offsets[2];
-        conectedOffsets[3] = -worldComponent.offsets[3];
-        
-        if(levelIndex > 0)
-        {
-            conectedOffsets[5] = -size;
-        }
-        if (levelIndex < levels.Length -1)
-        {
-            conectedOffsets[4] = size;
-        }
+        int size = worldComponent.largestGridSize;// .LargestLevelDimensionScaled * worldComponent.LargestLevelDimensionScaled;
 
 
+        var conectedOffsets = CreateOffsetArray(worldComponent.offsets, size, levelIndex);
 
-        var pathRegions = worldComponent.pathRegions;
-        var regions = worldComponent.regions;
+
+        var pathRegions = worldComponent.regions;
+        var regions = worldComponent.availableRegions;
 
         var path = worldComponent.path;
 
@@ -65,7 +54,7 @@ public static class RegionChanges
 
                 if (accessible) 
                 {
-                    Join(worldIndex, path, pathRegions, conectedOffsets, GetNewRegionId(regions));
+                    Join(worldIndex, path, ref pathRegions, conectedOffsets, GetNewRegionId(regions));
                 }
             }
 
@@ -83,7 +72,7 @@ public static class RegionChanges
             conectedOffsets.Dispose();
     }
 
-    static byte GetNewRegionId(NativeBitArray array)
+    static byte GetNewRegionId(in NativeBitArray array)
     {
         for (byte i = 1; i < array.Length; i++)
         {
@@ -96,11 +85,69 @@ public static class RegionChanges
         return byte.MaxValue;
     }
 
+    static NativeArray<int> CreateOffsetArray(in NativeArray<int> offsets, int gridSize, int levelIndex)
+    {
+        // Vertical offsets
+        NativeArray<int> conectedOffsets = new(6, Allocator.Persistent);
+        conectedOffsets[0] = -offsets[0];
+        conectedOffsets[1] = -offsets[1];
+        conectedOffsets[2] = -offsets[2];
+        conectedOffsets[3] = -offsets[3];
+
+        if (levelIndex > 0)
+        {
+            conectedOffsets[5] = -gridSize;
+        }
+        if (levelIndex < 4)
+        {
+            conectedOffsets[4] = gridSize;
+        }
+        return conectedOffsets;
+    }
+
+    public static void SetPath(int openPosition, in WorldComponent world, int levelIndex)
+    {
+        var offsets = CreateOffsetArray(world.offsets, world.largestGridSize, levelIndex);
+        var path = world.path;
+
+        var regions = world.regions;
+        var availableRegions = world.availableRegions;
+        byte regionId = JoinRegionArray(openPosition, ref offsets, ref path, ref regions, availableRegions);
+
+
+        Join(openPosition, path, ref regions, offsets, regionId);
+    }
+    static byte JoinRegionArray(int openPosition, ref NativeArray<int> offsets, ref NativeArray<short> path, ref NativeArray<byte> regions, NativeBitArray availableRegions)
+    {
+        byte regionId = byte.MaxValue;
+
+        for (int i = 0; i < offsets.Length; i++)
+        {
+            if (offsets[i] == 0)
+                continue;
+
+            int pos = openPosition + offsets[i];
+            if (((path[pos] >> i) & 0x1) == 1)
+            {
+                if (regions[pos] < regionId)
+                {
+                    if (regionId != byte.MaxValue)
+                    {
+                        availableRegions.Set(regionId, false);
+                    }
+                    regionId = regions[pos];
+                }
+            }
+        }
+
+        return regionId;
+    }
+
     static void Join(
         int startPosition, 
-        NativeArray<short> path, 
-        NativeArray<byte> regions,
-        NativeArray<int> offsets,
+        in NativeArray<short> path, 
+        ref NativeArray<byte> regions,
+        in NativeArray<int> offsets,
         byte regionId)
     {
         NativeList<int> queue = new NativeList<int>(5, Allocator.TempJob)
@@ -122,12 +169,7 @@ public static class RegionChanges
                 int index = worldIndex + offsets[i];
 
                 if (((path[index] >> i) & 0x1) == 1)
-                {
-                    if(i == 4)
-                    {
-
-                    }
-                        
+                {                        
                     if(regions[index] != regionId)
                     {
                         regions[index] = regionId;
@@ -139,4 +181,8 @@ public static class RegionChanges
 
         queue.Dispose();
     }
+
+
+
+
 }

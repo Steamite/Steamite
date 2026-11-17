@@ -5,11 +5,11 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 
-public struct WorldComponent : IComponentData
+public struct WorldComponent : IComponentData, IDisposable
 {
     // Region
-    [ReadOnly] public NativeArray<byte> pathRegions;
-    [ReadOnly] public NativeBitArray regions;
+    [ReadOnly] public NativeArray<byte> regions;
+    [ReadOnly] public NativeBitArray availableRegions;
 
 
     /// <summary>
@@ -21,13 +21,30 @@ public struct WorldComponent : IComponentData
     /// 5 - Up <br/>
     /// </summary>
     [ReadOnly] public NativeArray<short> path;
+
     /// <summary>
-    /// Reverse of World offsets
+    /// Offsets is the opposite of the path order, to check if an adjacent tile connects to this one.
+    /// For going in the real direction use the negative version of this.
     /// -1, -dim, 1, dim
     /// </summary>
     [ReadOnly] public NativeArray<int> offsets;
+
+
     [ReadOnly] public int LargestLevelDimensionScaled;
     [ReadOnly] public int largestGridSize;
+
+    public void Dispose()
+    {
+        if (offsets.IsCreated)
+            offsets.Dispose();
+        if (path.IsCreated)
+            path.Dispose();
+
+        if (availableRegions.IsCreated)
+            availableRegions.Dispose();
+        if (regions.IsCreated)
+            regions.Dispose();
+    }
 }
 
 [InternalBufferCapacity(5)]
@@ -36,11 +53,6 @@ public struct LevelComponent : IBufferElementData, IDisposable
     public readonly static int CHUNK_DIMENSIONS = 16;
     [ReadOnly] public NativeBitArray dirtyChunks;
     [ReadOnly] public NativeArray<LevelGridTile> renderGrid;
-    /// <summary>
-    /// Reverse of World offsets
-    /// 1, dim, -1, -dim
-    /// </summary>
-    [ReadOnly] public NativeArray<int> neighbours;
 
     [ReadOnly] public int offsetsScaled;
     [ReadOnly] public int offsets;
@@ -56,8 +68,6 @@ public struct LevelComponent : IBufferElementData, IDisposable
 
     public void Dispose()
     {
-        if (neighbours.IsCreated)
-            neighbours.Dispose();
         if (renderGrid.IsCreated)
             renderGrid.Dispose();
         if (dirtyChunks.IsCreated)
