@@ -161,15 +161,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             path = saveToLoad.world.path;
             pathRegions = saveToLoad.world.regions;
 
-            for (int i = 0; i < LEVEL_COUNT; i++)
+            for (int levelIndex = 0; levelIndex < LEVEL_COUNT; levelIndex++)
             {
                 //gridLevels[i] = new GridLevel(saveToLoad.levels[i], saveToLoad.overlays[i], i, LargestLevelDimensionScaled);
-                var level = levelArray[i];
-                var render = levelArray[i].renderGrid;
-                for (int j = 0; j < render.Length; j++)
+                var level = levelArray[levelIndex];
+                var render = levelArray[levelIndex].renderGrid;
+
+                for (int localIndex = 0; localIndex < render.Length; localIndex++)
                 {
-                    if (render[j].TType == TileType.Road)
-                        RevealChanges.RevealRocks(j, ref level);
+                    if (render[localIndex].TType == TileType.Road)
+                        RevealChanges.RevealRocks(localIndex, ref level);
                 }
             }
 

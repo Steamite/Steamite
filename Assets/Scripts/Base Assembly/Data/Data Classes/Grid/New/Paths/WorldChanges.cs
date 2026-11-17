@@ -64,6 +64,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths
                     worldData,
                     levelIndex);
 
+                RevealChanges.RevealRocks(localIndex, ref level);
+
                 DirtyGridUtils.SetDirty(
                     level.dirtyChunks,
                     level.dimensionsScaled,

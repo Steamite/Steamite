@@ -129,7 +129,7 @@ public static class RegionChanges
             int pos = openPosition + offsets[i];
             if (((path[pos] >> i) & 0x1) == 1)
             {
-                if (regions[pos] < regionId)
+                if (regions[pos] < regionId && regions[pos] > 0)
                 {
                     if (regionId != byte.MaxValue)
                     {
