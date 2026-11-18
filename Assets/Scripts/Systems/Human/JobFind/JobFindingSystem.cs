@@ -80,9 +80,9 @@ namespace Assets.Scripts.Systems.Human.JobFind
                 RefRW<HumanJobData>,
                 EnabledRefRW<HumanJobData>>().WithDisabled<HumanJobData>().WithEntityAccess())
             {
-                if (job.ValueRO.jobType != JobType.Free)
+                /*if (job.ValueRO.jobType != JobType.Free)
                     continue;
-
+*/
                 if (offers.digJobs.Count == 0)
                     break;
 

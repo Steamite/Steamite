@@ -52,7 +52,9 @@ namespace Assets.Scripts.Systems.Human.JobFind
                         var ent = offers.assignedJobs[i].assignHuman;
                         
                         humans.SetComponentEnabled(ent, false);
-                        
+                        //var jobData = humans.GetRefRW(ent);
+
+
                         var rw = pathfind.GetRefRW(ent);
                         var nodes = positionNodes[ent];
 
@@ -66,6 +68,10 @@ namespace Assets.Scripts.Systems.Human.JobFind
                         }
                         else
                             nodes.Clear();
+
+                        offers.assignedJobs.RemoveAt(i);
+
+                        break;
                     }
                 }
 

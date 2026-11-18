@@ -18,6 +18,8 @@ namespace Assets.Scripts.Systems.Human.Jobs
         {
             state.RequireForUpdate<HumanJobData>();
             state.RequireForUpdate<WorldComponent>();
+
+            state.RequireForUpdate<JobCancelComponent>();
         }
 
         public void OnUpdate(ref SystemState state)
@@ -27,6 +29,8 @@ namespace Assets.Scripts.Systems.Human.Jobs
             var overlayBuffers = SystemAPI.GetSingletonBuffer<OverlayComponent>();
 
             var change = SystemAPI.GetSingletonRW<OverlayChangeComponent>();
+
+            var jobCancel = SystemAPI.GetSingleton<JobCancelComponent>();
 
             foreach ((var jobData, var pathing, var isFree) in SystemAPI.Query<
                 RefRW<HumanJobData>, RefRO<PathfindComponent>, EnabledRefRW<HumanJobData>>())
@@ -48,11 +52,6 @@ namespace Assets.Scripts.Systems.Human.Jobs
                     tile.RemoveDurability(GameTime.DeltaTime);
                     if (tile.TType == TileType.Road)
                     {
-                        // Clear human data
-                        jobData.ValueRW.jobType = JobType.Free;
-                        jobData.ValueRW.targetPosition = -1;
-                        isFree.ValueRW = false;
-
                         // clear overlay
                         int world = Recalculation.WorldIndexFromLocalIndex(localIndex, level.offsetsScaled, level.dimensionsScaled);
                         var overlay = overlayBuffers[levelIndex];
@@ -61,6 +60,9 @@ namespace Assets.Scripts.Systems.Human.Jobs
                         overlay.markedTilesGrid.Set(world, false);
 
                         change.ValueRW.hasChange = true;
+
+                        /// cancel the position and get freed in the <see cref="JobCancelSystem.OnUpdate(ref SystemState)"/>
+                        jobCancel.positionsToCancel.Add(world);
                     }
                     WorldChanges.SetTileRuntime(localIndex, levelIndex, tile, ref worldComponent, levels.AsNativeArray());
                 }
