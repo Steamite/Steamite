@@ -15,6 +15,7 @@ namespace Pathing
 {
 
     [BurstCompile]
+    [WithDisabled(typeof(HumanJobData))]
     partial struct PathfindSetJob : IJobEntity
     {
         [ReadOnly] public DestinationComponent destination;

@@ -132,7 +132,7 @@ public static class RegionChanges
         in NativeArray<int> offsets,
         byte regionId)
     {
-        NativeList<int> queue = new NativeList<int>(5, Allocator.TempJob)
+        NativeList<int> queue = new NativeList<int>(5, Allocator.Persistent)
         {
             startPosition
         };

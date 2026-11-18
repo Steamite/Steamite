@@ -28,9 +28,8 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
             var change = SystemAPI.GetSingletonRW<OverlayChangeComponent>();
 
-            foreach ((var jobData, var pathing, var free) in SystemAPI.Query<
-                RefRW<HumanJobData>, RefRO<PathfindComponent>, EnabledRefRW<HumanIsFree>
-                >().WithDisabled<HumanIsFree>())
+            foreach ((var jobData, var pathing, var isFree) in SystemAPI.Query<
+                RefRW<HumanJobData>, RefRO<PathfindComponent>, EnabledRefRW<HumanJobData>>())
             {
                 if (jobData.ValueRO.jobType == JobType.Free)
                     continue;
@@ -52,7 +51,7 @@ namespace Assets.Scripts.Systems.Human.Jobs
                         // Clear human data
                         jobData.ValueRW.jobType = JobType.Free;
                         jobData.ValueRW.targetPosition = -1;
-                        free.ValueRW = true;
+                        isFree.ValueRW = false;
 
                         // clear overlay
                         int world = Recalculation.WorldIndexFromLocalIndex(localIndex, level.offsetsScaled, level.dimensionsScaled);

@@ -13,7 +13,7 @@ using UnityEngine.LightTransport;
 
 namespace Assets.Scripts.Systems.Human.JobFind
 {
-
+/*
     [BurstCompile]
     public partial struct FindJob : IJob
     {
@@ -25,7 +25,7 @@ namespace Assets.Scripts.Systems.Human.JobFind
         }
         public void Execute(ref PathfindComponent path, ref DynamicBuffer<PositionNode> nodes, ref HumanJobData job, HumanIsFree _)
         {
-            /*if (job.jobType != JobType.Free)
+            if (job.jobType != JobType.Free)
                 return;
 
             if (offers.digJobs.Count == 0)
@@ -47,10 +47,10 @@ namespace Assets.Scripts.Systems.Human.JobFind
             job.ValueRW.targetLevel = levelNumber;
             job.ValueRW.targetPosition = levelPosition.x + (levelPosition.y * levels[levelNumber].levelDimensionsScaled);
             job.ValueRW.jobType = JobType.Dig;
-            offers.digJobs.RemoveAt(i);*/
+            offers.digJobs.RemoveAt(i);
         }
     }
-
+*/
 
     [UpdateInGroup(typeof(HumanUpdateGroup)), UpdateAfter(typeof(JobCheckAvailabilitySystem))]
     [BurstCompile]
@@ -74,11 +74,11 @@ namespace Assets.Scripts.Systems.Human.JobFind
             if (offers.digJobs.Count == 0 && offers.buildingJobs.Count == 0)
                 return;
 
-            foreach ((var pathfind, var nodes, var job, var isFree) in SystemAPI.Query<
+            foreach ((var pathfind, var nodes, var job, var hasJob, var humanEntity) in SystemAPI.Query<
                 RefRW<PathfindComponent>,
                 DynamicBuffer<PositionNode>,
                 RefRW<HumanJobData>,
-                EnabledRefRW<HumanIsFree>>())
+                EnabledRefRW<HumanJobData>>().WithDisabled<HumanJobData>().WithEntityAccess())
             {
                 if (job.ValueRO.jobType != JobType.Free)
                     continue;
@@ -107,8 +107,9 @@ namespace Assets.Scripts.Systems.Human.JobFind
                 job.ValueRW.targetPosition = levelPosition.x + (levelPosition.y * levels[levelNumber].dimensionsScaled);
                 job.ValueRW.jobType = JobType.Dig;
 
-                isFree.ValueRW = false;
+                hasJob.ValueRW = true;
 
+                offers.assignedJobs.Add(new() { assignHuman = humanEntity, position = offers.digJobs[i] });
                 offers.digJobs.RemoveAt(i);
                 offers.digRegions.RemoveAt(i);
             }

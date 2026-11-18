@@ -39,7 +39,10 @@ namespace Humans
         public float3 position;
     }
 
-    public struct HumanJobData : IComponentData
+    /// <summary>
+    /// Enabled only the worker has an active job
+    /// </summary>
+    public struct HumanJobData : IComponentData, IEnableableComponent
     {
         public int targetLevel;
         public int targetPosition;
@@ -48,6 +51,7 @@ namespace Humans
         public JobType jobType;
     }
 
+    [Obsolete]
     public struct HumanIsFree : IEnableableComponent, IComponentData
     {
 

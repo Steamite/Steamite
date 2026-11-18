@@ -16,6 +16,8 @@ namespace JobFind
         NativeList<Entity> buildJob;
 
         NativeList<int> toDigMarks;
+        NativeList<DigAssign> assignedJobs;
+        NativeList<int> positionsToCancel;
 
         /*public void BeforeInit()
         {
@@ -46,6 +48,12 @@ namespace JobFind
 
             if(toDigMarks.IsCreated)
                 toDigMarks.Dispose();
+
+            if (assignedJobs.IsCreated)
+                assignedJobs.Dispose();
+
+            if (positionsToCancel.IsCreated)
+                positionsToCancel.Dispose();
         }
 
 
@@ -83,12 +91,7 @@ namespace JobFind
                 digJob.AddRange(toDigMarks);
             else
             {
-                foreach (int mark in toDigMarks)
-                {
-                    int index = digJob.IndexOf(mark);
-                    if (index > -1)
-                        digJob.RemoveAt(index);
-                }
+                positionsToCancel.AddRange(toDigMarks);
             }
             toDigMarks.Clear();
         }
@@ -103,12 +106,22 @@ namespace JobFind
             impossibleToDig = new NativeList<int>(50, Allocator.Persistent);
             buildJob = new NativeList<Entity>(20, Allocator.Persistent);
             toDigMarks = new NativeList<int>(10, Allocator.Persistent);
+
+            assignedJobs = new NativeList<DigAssign>(10, Allocator.Persistent);
+            positionsToCancel = new NativeList<int>(10, Allocator.Persistent);
+
+
             manager.AddComponentData(ent, new JobOffersComponent()
             {
                 digJobs = digJob,
                 digRegions = digRegions,
                 impossibleToDig = impossibleToDig,
+                assignedJobs = assignedJobs,
                 buildingJobs = buildJob
+            });
+            manager.AddComponentData(ent, new JobCancelComponent()
+            {
+                positionsToCancel = positionsToCancel
             });
         }
     }

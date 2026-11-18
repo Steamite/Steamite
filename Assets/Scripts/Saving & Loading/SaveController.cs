@@ -237,7 +237,7 @@ public class SaveController : MonoBehaviour, IAfterLoad
         catch (Exception e)
         {
             NotificationController.ShowMessage("An error ocured when saving.");
-            Debug.LogWarning("Saving error: " + e);
+            Debug.LogError("Saving error: " + e);
             foreach (string file in Directory.GetFiles(tmpPath))
             {
                 File.Delete(file);
