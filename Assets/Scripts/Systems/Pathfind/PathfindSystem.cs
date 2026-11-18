@@ -51,7 +51,7 @@ namespace Pathing
             in DynamicBuffer<PositionNode> nodes, 
             in NativeArray<int> destinations, 
             in WorldComponent worldData,
-            NativeList<uint> digRegions = default)
+            in NativeList<uint> digRegions = default)
         {
             k_InitMarker.Begin();
             NativeList<int> positions = new NativeList<int>(20, Allocator.Temp);
