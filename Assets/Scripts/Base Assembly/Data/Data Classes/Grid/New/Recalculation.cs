@@ -19,7 +19,8 @@ public static class Recalculation
     public static int Distance(int3 currentPosition, int3 destPosition)
     {
         int3 dist = math.abs(currentPosition - destPosition);
-        return dist.x + (dist.y*2) + dist.z;
+
+        return math.select(dist.x + dist.z, 0, dist.y > 0);//math.select(dist.x + dist.z, 0, dist.y > 0) dist.x + /*(dist.y) +*/ dist.z;
     }
 
     public static int GlobalIndexFromLocalIndex(int localIndex, int offsetScaled, int dimensionsScaled, int largestDim, int levelIndex)

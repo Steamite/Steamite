@@ -156,14 +156,15 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                     found = true;
                     break;
                 }
+
                 short mapNode = path[pos];
-                int3 worldPos = new(pos % gridWidth, pos / gridSize, (pos / gridWidth) % gridWidth);
+                int3 worldPos = new(pos % gridWidth, pos / gridSize, (pos % gridSize) / gridWidth);
 
                 for (int i = 0; i < 4; i++)
                 {
                     if ((mapNode & 0x1) == 1)
                     {
-                        int checkPos = node.position + offsetTable[i];
+                        int checkPos = pos + offsetTable[i];
 
                         int3 tmpPos = worldPos + offsetTableVec[i];
 
@@ -176,7 +177,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                             totalCost = costToReach + Recalculation.Distance(tmpPos, destinationPosition),
                             destinationIndex = node.destinationIndex
                         };
-                        queue.Enqueue(newNode, node.position);
+                        queue.Enqueue(newNode, pos);
                     }
                     mapNode >>= 0x1;
                 }
@@ -193,7 +194,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
                             totalCost = node.totalCost + 1,
                             destinationIndex = node.destinationIndex
                         };
-                        queue.Enqueue(newNode, node.position);
+                        queue.Enqueue(newNode, pos);
                     }
                     mapNode >>= 0x1;
                 }
