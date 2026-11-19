@@ -24,6 +24,7 @@ namespace Grid.New
     /// <summary>
     /// Rocks, veins and water can store only one resource per tile.
     /// </summary>
+    [BurstCompile]
     public struct LevelGridTile
     {
         public int hiddenTypeStyleAmount;

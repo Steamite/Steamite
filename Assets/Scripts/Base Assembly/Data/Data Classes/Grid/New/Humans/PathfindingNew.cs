@@ -161,11 +161,12 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Humans
 
                 for (int i = 0; i < 4; i++)
                 {
-                    int checkPos = node.position + offsetTable[i];
-
-                    int3 tmpPos = worldPos + offsetTableVec[i];
                     if ((mapNode & 0x1) == 1)
                     {
+                        int checkPos = node.position + offsetTable[i];
+
+                        int3 tmpPos = worldPos + offsetTableVec[i];
+
                         int costToReach = node.costToReach + 1;
 
                         PathNode newNode = new()
