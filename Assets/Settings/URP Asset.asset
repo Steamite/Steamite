@@ -139,7 +139,7 @@ MonoBehaviour:
   m_PrefilterReflectionProbeBoxProjection: 1
   m_PrefilterReflectionProbeAtlas: 0
   m_PrefilterPointSamplingUpsampling: 1
-  m_Light2DPrefilteringMode: 0
+  m_Light2DPrefilteringMode: 1
   m_Light2DKeptVariantCombos: []
   m_ShaderVariantLogLevel: 0
   m_ShadowCascades: 0

@@ -34,11 +34,10 @@ GraphicsSettings:
   - {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 10770, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 10783, guid: 0000000000000000f000000000000000, type: 0}
-  m_PreloadedShaders:
-  - {fileID: 20000000, guid: 9560f3bf77bea734aae81b913ca9f670, type: 2}
+  m_PreloadedShaders: []
   m_PreloadShadersBatchTimeLimit: -1
-  m_GraphicsStateCollection: {fileID: 0}
-  m_CollectionStartupAction: 0
+  m_GraphicsStateCollection: {fileID: -6766982352335285333, guid: 47a81b88a92bc284a8216376209134c8, type: 3}
+  m_CollectionStartupAction: 2
   m_TraceSavePath: TracedCollection
   m_TraceSendToEditor: 1
   m_AdditionalWarmupCollections: []
