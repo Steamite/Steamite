@@ -64,5 +64,10 @@ public class InfoWindowAdapter : MonoBehaviour
     {
         realInfoWindow.Open(dataSource, active);
     }
+
+    public void Open()
+    {
+        //realInfoWindow.Open
+    }
     #endregion
 }

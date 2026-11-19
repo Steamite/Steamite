@@ -26,18 +26,18 @@ public class NothingNew : GridTilesModeNew
         HandleSelectionTypes(tile, controller.clickedIndex, controller.clickedWorldPosition);
     }
 
-    void HandleSelectionTypes(LevelGridTile tile, int index, int2 worldPos)
+    void HandleSelectionTypes(LevelGridTile tile, int localIndex, int2 worldPos)
     {
         switch ((TileType)tile.Type)
         {
             case TileType.Wall:
-                InfoWindowAdapter.Window.Open(tile, InfoMode.Rock);
+                InfoWindowAdapter.Window.Open(localIndex, InfoMode.Rock);
 
                 controller.SetSelectionMaterial(worldPos, 0, selectionColor, 0.0001f);
 
                 controller.clickedWorldPosition = worldPos;
                 controller.clickedType = tile.Type;
-                controller.clickedIndex = index;
+                controller.clickedIndex = localIndex;
                 Debug.Log(tile);
                 break;
             case TileType.Road:
@@ -48,7 +48,7 @@ public class NothingNew : GridTilesModeNew
 
                 controller.clickedWorldPosition = worldPos;
                 controller.clickedType = tile.Type;
-                controller.clickedIndex = index;
+                controller.clickedIndex = localIndex;
 
                 GetComponent<IMousePosSetter>().SetPos(worldPos);
                 break;

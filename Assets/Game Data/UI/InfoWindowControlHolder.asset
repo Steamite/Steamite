@@ -12,20 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 168ff3b10306d584389d7050a7f51965, type: 3}
   m_Name: InfoWindowControlHolder
   m_EditorClassIdentifier: 
-  visualTreeAssets:
-  - {fileID: 9197481963319205126, guid: 5fef3b58edc99634c9f7f4397a227378, type: 3}
-  - {fileID: 9197481963319205126, guid: 871750dd022b19e4e9f07f3de75b53c4, type: 3}
-  - {fileID: 9197481963319205126, guid: a2aaf691f56d3264a9ea60f9cd159001, type: 3}
-  - {fileID: 9197481963319205126, guid: 09dac0cf86d0c1440bf64a9253c771c7, type: 3}
-  - {fileID: 9197481963319205126, guid: 2f666a0318115c844b5824ee05cf6760, type: 3}
-  - {fileID: 9197481963319205126, guid: 3888b8fcf39071e44b74b70d5e26e7bf, type: 3}
-  - {fileID: 9197481963319205126, guid: 73eba4102aca7094bb199b533f94d558, type: 3}
-  - {fileID: 9197481963319205126, guid: d9a379c24b17de945b04279aeeb4813a, type: 3}
-  - {fileID: 9197481963319205126, guid: dbc7e3127f773e54cb31d4f02a95a90e, type: 3}
-  - {fileID: 9197481963319205126, guid: d0dedc438b0b08b48a678da9e4c6b862, type: 3}
-  - {fileID: 9197481963319205126, guid: da4d6dcf3fd686e4d8af719c421b38ba, type: 3}
-  - {fileID: 9197481963319205126, guid: da3cd59b26cb681409e45e39eab4fc24, type: 3}
-  - {fileID: 9197481963319205126, guid: 739a9f5483cc4cc4ebf6a35194e89feb, type: 3}
-  - {fileID: 9197481963319205126, guid: e3e1b2694d63741419c20920094bc816, type: 3}
-  - {fileID: 9197481963319205126, guid: aead48d8cadaee2469905b405d373c54, type: 3}
-  - {fileID: 9197481963319205126, guid: f6b3f51fe0ab2534883b920ee1539e83, type: 3}
+  visualTreeAssets: []

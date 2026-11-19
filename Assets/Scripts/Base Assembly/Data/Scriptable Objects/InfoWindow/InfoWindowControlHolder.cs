@@ -1,5 +1,6 @@
 
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,11 +8,17 @@ using UnityEngine.UIElements;
 [CreateAssetMenu(fileName = "InfoWindowControlHolder", menuName = "InfoWindowControlHolder", order = 99)]
 public class InfoWindowControlHolder : ScriptableObject
 {
-    [SerializeField] List<VisualTreeAsset> visualTreeAssets;
+    [SerializeField] Dictionary<InfoMode, VisualTreeAsset> visualTreeAssets;
 
+    public void InitElements()
+    {
+
+    }
+
+    [Obsolete("Creating elements during runtime is slow, create them beforehand!")]
     public void CreateElementByName(string name, VisualElement parent, object data, float maxWidth = 100)
     {
-        VisualTreeAsset asset = visualTreeAssets.Find(q => q.name == name);
+        /*VisualTreeAsset asset = visualTreeAssets.Find(q => q.name == name);
         if (asset)
         {
             asset.CloneTree(parent);
@@ -24,7 +31,7 @@ public class InfoWindowControlHolder : ScriptableObject
         else
         {
             Debug.LogError($"'{name}' is not present in the catalog.");
-        }
+        }*/
 
     }
 }

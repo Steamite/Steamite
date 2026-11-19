@@ -1,4 +1,5 @@
-﻿using Unity.Mathematics;
+﻿using Unity.Collections;
+using Unity.Mathematics;
 
 
 /// <summary>
@@ -21,13 +22,11 @@ public static class Recalculation
         return dist.x + (dist.y*2) + dist.z;
     }
 
-    public static int GlobalIndexFromLocalIndex(int localIndex, int offsetScaled, int dimensionsScaled, int levelIndex)
+    public static int GlobalIndexFromLocalIndex(int localIndex, int offsetScaled, int dimensionsScaled, int largestDim, int levelIndex)
     {
         int x = localIndex % dimensionsScaled + offsetScaled;
         int y = localIndex / dimensionsScaled + offsetScaled;
 
-
-        int largestDim = dimensionsScaled + (2 * offsetScaled);
         int original = x + (y * largestDim) + (levelIndex * (largestDim * largestDim));
         return original;
     }
@@ -68,6 +67,16 @@ public static class Recalculation
     public static int GlobalIndexFromWorldPos(int2 world, int largestLevel)
     {
         return world.y * largestLevel + world.x;
+    }
+
+    public static int LocalIndexFromGlobalIndex(int global, in NativeArray<LevelComponent> levelArray, int levelGrid, out int levelIndex)
+    {
+        levelIndex = global / levelGrid;
+
+        return LocalIndexFromWorldIndex(
+            global % levelGrid, 
+            levelArray[levelIndex].offsetsScaled,
+            levelArray[levelIndex].dimensionsScaled);
     }
 }
 

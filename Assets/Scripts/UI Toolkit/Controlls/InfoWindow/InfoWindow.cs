@@ -55,9 +55,6 @@ public class InfoWindow : PanelRendererRoot, IUIInfoWindow
     /// <summary>List containing all temp bindings, are destroyed with object.</summary>
     List<BindingContext> activeBindings = new();
 
-    /// <summary>Stores last opened mode. To hide it and remove datasource.</summary>
-    public InfoMode LastInfo { get; private set; }
-
     public Action<Building> buildingCostChange;
 
     [SerializeField] InfoWindowControlHolder controls;
@@ -89,7 +86,6 @@ public class InfoWindow : PanelRendererRoot, IUIInfoWindow
 
     protected override void OnUIReload()
     {
-        LastInfo = InfoMode.None;
         window = Root.Q<VisualElement>("Info-Window");
         windowBody = window[1];
 
@@ -127,14 +123,17 @@ public class InfoWindow : PanelRendererRoot, IUIInfoWindow
             SceneRefs.MouseController.DeselectObjects();
             window.style.display = DisplayStyle.None;
         }
-        windowBody.Clear();
+        //windowBody.Clear();
 
         secondWindow.style.display = DisplayStyle.None;
-        secondBody.Clear();
+        //secondBody.Clear();
 
         // TODO create function
         //SceneRefs.Overlays.overlay.ClearTileOverlay();
         activeBindings.Clear();
+
+        activeControl = null;
+        deltaTime = updateInterval;
     }
     #endregion
 
@@ -148,7 +147,6 @@ public class InfoWindow : PanelRendererRoot, IUIInfoWindow
     public void Open(object dataSource, InfoMode active)
     {
         Close(false);
-        LastInfo = active;
         window.style.display = DisplayStyle.Flex;
         TabView = null;
         //window.style.width = new Length(25, LengthUnit.Percent);
@@ -186,7 +184,8 @@ public class InfoWindow : PanelRendererRoot, IUIInfoWindow
                 break;
 
             case InfoMode.Rock:
-                controls.CreateElementByName("Rock Info", windowBody, dataSource);
+                activeControl = windowBody.Q<RockInfo>();
+                activeControl.Select(new() { localPosition = (int)dataSource});
                 break;
 
             case InfoMode.Chunk:
@@ -196,6 +195,24 @@ public class InfoWindow : PanelRendererRoot, IUIInfoWindow
             default:
                 Close();
                 break;
+        }
+    }
+
+    InfoWindowControl activeControl;
+    [SerializeField] float updateInterval;
+    [SerializeField] float deltaTime;
+
+    void Update()
+    {
+        if (activeControl != null)
+        {
+            deltaTime += Time.deltaTime;
+            if(deltaTime >= updateInterval)
+            {
+                deltaTime = 0;
+                if (!activeControl.Update())
+                    Close();
+            }
         }
     }
 

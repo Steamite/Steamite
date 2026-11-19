@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace JobFind
 {
-    class JobOfferLinker : MonoBehaviour, IAfterLoad, IDigManager
+    public class JobOfferLinker : MonoBehaviour, IAfterLoad, IDigManager
     {
         NativeList<int> digJob;
         NativeList<uint> digRegions;
@@ -98,8 +98,10 @@ namespace JobFind
 
         public void AfterLoad()
         {
-            var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            var ent = manager.CreateEntity();
+            instance = this;
+
+            EntityManager  manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            Entity entity = manager.CreateEntity();
 
             digJob = new NativeList<int>(50, Allocator.Persistent);
             digRegions = new NativeList<uint>(50, Allocator.Persistent);
@@ -111,7 +113,7 @@ namespace JobFind
             positionsToCancel = new NativeList<int>(10, Allocator.Persistent);
 
 
-            manager.AddComponentData(ent, new JobOffersComponent()
+            manager.AddComponentData(entity, new JobOffersComponent()
             {
                 digJobs = digJob,
                 digRegions = digRegions,
@@ -119,10 +121,27 @@ namespace JobFind
                 assignedJobs = assignedJobs,
                 buildingJobs = buildJob
             });
-            manager.AddComponentData(ent, new JobCancelComponent()
+            manager.AddComponentData(entity, new JobCancelComponent()
             {
                 positionsToCancel = positionsToCancel
             });
+        }
+
+        public static JobOfferLinker instance;
+
+        public bool GetAssignedHuman(int globalPosition, out Entity assigned) 
+        {
+            foreach (var item in assignedJobs)
+            {
+                if(item.position == globalPosition)
+                {
+                    assigned = item.assignHuman;
+                    return true;
+                }
+            }
+
+            assigned = default;
+            return false;
         }
     }
 }

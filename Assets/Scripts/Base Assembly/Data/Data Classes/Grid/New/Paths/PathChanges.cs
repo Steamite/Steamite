@@ -33,6 +33,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
                 localIndex,
                 levelData.offsetsScaled,
                 levelData.dimensionsScaled,
+                worldData.LargestLevelDimensionScaled,
                 levelIndex);
 
             TryRemoveElevator(levelIndex, ref worldData, in levels, prevTileType, globalIndex);
