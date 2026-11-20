@@ -2,6 +2,7 @@
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using System;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 using static UnityEngine.Analytics.IAnalytic;
@@ -16,10 +17,17 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
 
         public void Init(GridWorld world)
         {
-            UploadBuildingData(world.WorldBuildings.GetInitialRenderData());
+            UploadBuildingData(world.WorldBuildings.GetInitialRenderData(), world.levelArray);
+
+
+            world.AttachChange((LevelComponent level, int i, int newIndex) =>
+            {
+                Shader.SetGlobalInt("_LevelOffset", 0);//level.offsetsScaled);
+                Shader.SetGlobalInt("_SelectedLevel", newIndex);
+            });
         }
 
-        public void UploadBuildingData(InitialRenderData data)
+        public void UploadBuildingData(InitialRenderData data, NativeArray<LevelComponent> levels)
         {
             InitBatches(data.buildingGroups, out RenderBatch[] renderBatches);
             
@@ -27,7 +35,7 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
             SetupArgBuffer(renderBatches.Length, out IndirectDrawIndexedArgs[] args, out GraphicsBuffer argsBuffer);
 
 
-            FillInstaceBuffers(data.instanceData, renderBatches, out int[] renderIndexes);
+            FillInstaceBuffers(data.instanceData, renderBatches, levels, out int[] renderIndexes);
 
             FillRenderIndex(data.buildings, renderIndexes);
 
@@ -99,7 +107,7 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
             argBuffer.SetData(args);
         }
 
-        void FillInstaceBuffers(BuildingRenderData[] buildings, RenderBatch[] renderBatches, out int[] renderIndexes)
+        void FillInstaceBuffers(BuildingRenderData[] buildings, RenderBatch[] renderBatches, NativeArray<LevelComponent> levels, out int[] renderIndexes)
         {
             renderIndexes = new int[buildings.Length];
 
@@ -109,7 +117,17 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
                 int batchIndex = (int)buildings[i].meshIndex + 1;
                 RenderBatch batch = renderBatches[batchIndex];
 
-                batch.instanceData[batch.numberOfItems] = buildings[i].encodedLocalPosition;
+                uint position = buildings[i].encodedLocalPosition;
+
+                int y = (int)((position >> 20) & 0x7);
+
+                uint offset = (uint)levels[y].offsetsScaled;
+                uint x = (position & 0x3FF) + offset;
+                uint z = ((position >> 10) & 0x3FF) + offset;
+
+                position = (uint)((position & ~0xFFFFF) | (x & 0x3FF) | ((z & 0x3FF) << 10));
+
+                batch.instanceData[batch.numberOfItems] = position;
 
                 renderIndexes[i] = batch.startIndex + batch.numberOfItems;
                 batch.numberOfItems++;

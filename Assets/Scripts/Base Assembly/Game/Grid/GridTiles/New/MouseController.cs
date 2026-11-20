@@ -159,8 +159,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             if (hover)
             {
                 ClearHoverMaterial(1);
-                materials[1].SetFloat("_HoverIndex", renderIndex);
-                materials[1].SetColor("_HoverColor", color);
+                Shader.SetGlobalInteger("_HoverIndex", renderIndex);
+                Shader.SetGlobalColor("_HoverColor", color);
 
 
                 hoverWorldPosition = pos;
@@ -170,8 +170,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             else
             {
                 ClearSelectMaterial(1);
-                materials[1].SetFloat("_SelectedIndex", renderIndex);
-                materials[1].SetColor("_SelectedColor", color);
+                Shader.SetGlobalInteger("_SelectedIndex", renderIndex);
+                Shader.SetGlobalColor("_SelectedColor", color);
                 
                 hoverWorldPosition = pos;
             }

@@ -5,7 +5,8 @@ using Unity.Entities;
 
 namespace Assets.Scripts.Systems.Rendering
 {
-    [UpdateInGroup(typeof(PresentationSystemGroup), OrderFirst = true)]
+    [UpdateInGroup(typeof(PresentationSystemGroup))]
+
     public partial class RenderUpdateGroup : ComponentSystemGroup
     {
 

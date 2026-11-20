@@ -6,12 +6,11 @@ struct PackedBuilding
     uint data;
 };
 
-// Declare the buffer set via MaterialPropertyBlock
-//#if defined(UNITY_SUPPORT_INSTANCING)
 StructuredBuffer<PackedBuilding> _BuildingInstanceBuffer;
-int _Offset;
-int _GroupIndex;
-int _SelectedLevel;
+float _Offset;
+float _LevelOffset;
+float _GroupIndex;
+float _SelectedLevel;
 //#endif
 /*
  Bit Layout Breakdown (32-bit uint):
@@ -47,7 +46,6 @@ float3 TransformInstanceVertex2Bit(
     uint gridX,
     uint gridZ,
     uint rot2,
-    float offset,
     float cellSize,
     out float3 Rotation)
 {
@@ -80,7 +78,7 @@ float3 TransformInstanceVertex2Bit(
     rotatedVertex.z = rotatedPos.y + off.y;
     
     // Translate to grid cell position
-    float3 worldPos = float3((float) (gridX * cellSize) + offset, 0, (float) (gridZ * cellSize) + offset);
+    float3 worldPos = float3((float) (gridX * cellSize) + _LevelOffset, 0, (float) (gridZ * cellSize) + _LevelOffset);
     
     
     Rotation = float3(0, radians(degTable[rot2]), 0);
@@ -93,11 +91,11 @@ void UnpackBuilding2Bit_float(
     float instanceID,
     float3 localPosition,
     float cellSize,
-    float offset,
 
     out float3 WorldPosition,
     out float3 Rotation,
-    out float instanceIDFixed)
+    out float instanceIDFixed,
+    out float3 debugColor)
 {
     uint packedUint = 0;
     uint RotationIndex = 0;
@@ -124,13 +122,14 @@ void UnpackBuilding2Bit_float(
     UnpackBuildingData2Bit(packedUint, GridX, GridZ, GridY, RotationIndex);
     if (_SelectedLevel == GridY)
     {
-        WorldPosition = TransformInstanceVertex2Bit(localPosition, GridX, GridZ, RotationIndex, offset, cellSize, Rotation);
+        WorldPosition = TransformInstanceVertex2Bit(localPosition, GridX, GridZ, RotationIndex, cellSize, Rotation);
     }
     else
     {
         WorldPosition = float3(0, 0, 0);
     }
-    //Color = float3(instanceID, instanceID, instanceID);
+    
+    debugColor = float3(instanceID, packedUint, GridY);
 }
 
 #endif // BUILDING_UNPACK_2BIT_INCLUDED
