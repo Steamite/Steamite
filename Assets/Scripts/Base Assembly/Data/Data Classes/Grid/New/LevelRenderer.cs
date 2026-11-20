@@ -74,19 +74,19 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             }
         }
 
-        private void Update()
+/*        private void Update()
         {
             foreach (var item in customRenderers)
             {
                 item.Render(cameraPosition, cameraChunkSize);
             }
-        }
+        }*/
 
         readonly List<ICustomRenderer> customRenderers = new();
-        public void AddRenderer(ICustomRenderer renderer)
+        /*public void AddRenderer(ICustomRenderer renderer)
         {
             customRenderers.Add(renderer);
-        }
+        }*/
 
     }
 

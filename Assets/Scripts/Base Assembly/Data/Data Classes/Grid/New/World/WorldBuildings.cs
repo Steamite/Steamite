@@ -8,6 +8,14 @@ using UnityEngine;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 {
+    public struct InitialRenderData
+    {
+        public BuildingGroupData[] buildingGroups;
+        public BuildingRenderData[] instanceData;
+
+        public BuildingNew[] buildings;
+    }
+
     [Serializable]
     public class WorldBuildings : IDisposable
     {
@@ -41,6 +49,39 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         WorldComponent worldComponent;
         NativeArray<LevelComponent> levelArray;
         NativeArray<OverlayComponent> overlays;
+        
+
+        public InitialRenderData GetInitialRenderData()
+        {
+            List<BuildingWrapper> wrappers = SceneRefs.ObjectFactory.buildPrefabs.GetAllObjects();
+            BuildingGroupData[] buildingGroups = new BuildingGroupData[wrappers.Count];
+
+            for (int i = 0; i < buildingGroups.Length; i++)
+            {
+                buildingGroups[i].mesh = wrappers[i].blueprint.mesh;
+                buildingGroups[i].count = 0;
+
+
+                // TODO
+                //buildingGroups[i].material = wrappers[i].blueprint.material;
+            }
+
+            BuildingRenderData[] instanceData = new BuildingRenderData[lastIndex];
+            for (int i = 0; i < lastIndex; i++)
+            {
+                if (buildings[i] == null)
+                    continue;
+                buildingGroups[buildings[i].renderData.meshIndex].count++;
+                instanceData[i] = buildings[i].renderData;
+            }
+
+            return new InitialRenderData()
+            {
+                buildingGroups = buildingGroups,
+                instanceData = instanceData,
+                buildings = buildings
+            };
+        }
 
         public BuildingRenderer SetupRenderer(
             Material buildingMaterial, 

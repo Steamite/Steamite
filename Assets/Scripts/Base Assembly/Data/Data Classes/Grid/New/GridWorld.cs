@@ -180,15 +180,17 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             WorldBuildings.LoadState(saveToLoad.objectsSave.buildings);
 
             GetComponent<IWorldInit>().Init(ref world, ref levelArray);
-            GetComponent<IRenderInit>().Init(this);
+
+            foreach(IRenderInit tempRender in GetComponents<IRenderInit>())
+                tempRender.Init(this);
 
             renderer = GetComponent<LevelRenderer>();
-            renderer.AddRenderer(WorldBuildings.SetupRenderer(
+            /*renderer.AddRenderer(WorldBuildings.SetupRenderer(
                 buildingMaterial, 
                 renderer, 
                 ref saveToLoad.world, 
                 in saveToLoad.levels,
-                ref saveToLoad.overlays));
+                ref saveToLoad.overlays));*/
 
             renderer.Init(this);
 

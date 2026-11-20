@@ -118,7 +118,7 @@ void UnpackBuilding2Bit_float(
 #else
     
     
-    packedUint = _BuildingInstanceBuffer[(uint) instanceIDFixed].data;
+    packedUint = _BuildingInstanceBuffer[(uint) instanceID].data;
 #endif
     
     UnpackBuildingData2Bit(packedUint, GridX, GridZ, GridY, RotationIndex);

@@ -26,7 +26,7 @@ public class BuildModeNew : GridTilesModeNew
     public override void InitMode(MouseController _mouseController)
     {
         base.InitMode(_mouseController);
-        buildingRenderer = renderer.GetCustomRenderer(0) as BuildingRenderer;
+        //buildingRenderer = renderer.GetCustomRenderer(0) as BuildingRenderer;
         SceneRefs.World.AttachChange(OnLevelChange);
     }
 

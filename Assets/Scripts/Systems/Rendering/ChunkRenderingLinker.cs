@@ -83,7 +83,6 @@ namespace Rendering
             var dirty = entityWorld.GetExistingSystemManaged<ChunkDirtySystem>();
             dirty.chunkMeshes = chunkMeshes;
             dirty.combiner = combiner;
-            
 
             var render = entityWorld.GetExistingSystemManaged<ChunkRenderSystem>();
             render.chunkMeshes = chunkMeshes;

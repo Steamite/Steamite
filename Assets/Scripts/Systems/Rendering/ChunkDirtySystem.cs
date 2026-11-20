@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Systems.Rendering;
 using Pathing;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,11 @@ using UnityEngine;
 
 namespace Rendering
 {
-    [UpdateInGroup(typeof(PresentationSystemGroup)), UpdateAfter(typeof(ChunkCullSystem))]
+    [UpdateInGroup(typeof(RenderUpdateGroup)), UpdateAfter(typeof(ChunkCullSystem))]
     public partial class ChunkDirtySystem : SystemBase
     {
         public Mesh[][] chunkMeshes;
         public MeshCombinerPlus combiner;
-        //NativeList<int> rerenderedThisFrame;
         protected override void OnCreate()
         {
             base.OnCreate();

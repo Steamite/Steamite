@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Systems.Rendering;
 using Pathing;
 using Unity.Collections;
 using Unity.Entities;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace Rendering
 {
-    [UpdateInGroup(typeof(PresentationSystemGroup))]
+    [UpdateInGroup(typeof(RenderUpdateGroup), OrderFirst = true)]
     public partial struct ChunkCullSystem : ISystem
     {
         public readonly void OnCreate(ref SystemState state)

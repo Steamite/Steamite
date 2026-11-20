@@ -10,11 +10,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
     public struct BuildingGroupData
     {
         public Mesh mesh;
-        //public float2 meshSizeHalved;
-        public uint count;
+        public Material material;
+        public int count;
     }
 
-    struct RenderBatch
+    struct RenderBatcha
     {
         public Mesh mesh;
         public int size;
@@ -34,7 +34,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         /// </summary>
         GraphicsBuffer argBuffer;
 
-        RenderBatch[] renderBatches;
+        RenderBatcha[] renderBatches;
 
         private RenderParams renderParams;
         private MaterialPropertyBlock propertyBlock;
@@ -82,7 +82,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
         void InitBatches(BuildingGroupData[] meshes)
         {
-            renderBatches = new RenderBatch[meshes.Length];
+            renderBatches = new RenderBatcha[meshes.Length];
             
           
             /*batchGroupBuffer = new(GraphicsBuffer.Target.Structured,
@@ -127,7 +127,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         {
             for (int i = startElement; i < renderBatches.Length; i++)
             {
-                RenderBatch batch = renderBatches[i];
+                RenderBatcha batch = renderBatches[i];
 
                 args[i+1].indexCountPerInstance = batch.mesh.GetIndexCount(0);
                 args[i+1].instanceCount = batch.numberOfItems;

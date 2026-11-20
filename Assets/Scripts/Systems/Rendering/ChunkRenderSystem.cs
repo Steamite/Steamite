@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Systems.Rendering;
 using Pathing;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,12 @@ using UnityEngine.UIElements;
 
 namespace Rendering
 {
-    [UpdateInGroup(typeof(PresentationSystemGroup)), UpdateAfter(typeof(ChunkDirtySystem))]
+    [UpdateInGroup(typeof(RenderUpdateGroup)), UpdateAfter(typeof(ChunkDirtySystem))]
     public partial class ChunkRenderSystem : SystemBase
     {
         public RenderParams renderParams;
         public Mesh[][] chunkMeshes;
+
         protected override void OnCreate()
         {
             RequireForUpdate<CameraLevelComponent>();

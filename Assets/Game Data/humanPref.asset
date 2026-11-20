@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ab63640d27cada418010ef0ae56a16b, type: 3}
   m_Name: humanPref
   m_EditorClassIdentifier: Systems::Pathing.HumanPrefabData
-  count: 1000
+  count: 0
   speed: 5
   position:
     x: 133

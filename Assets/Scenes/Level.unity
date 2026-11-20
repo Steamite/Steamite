@@ -2797,6 +2797,7 @@ GameObject:
   - component: {fileID: 4967022013944964024}
   - component: {fileID: 4967022013944964026}
   - component: {fileID: 4967022013944964025}
+  - component: {fileID: 4967022013944964027}
   m_Layer: 2
   m_Name: Renderer
   m_TagString: Grid
@@ -2907,6 +2908,19 @@ MonoBehaviour:
     x: 4
     y: 4
   gridTexture: {fileID: 0}
+--- !u!114 &4967022013944964027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4967022013944964015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3e63f773b67a04eb62bb54883888a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems::Assets.Scripts.Systems.Rendering.Buildings.BuildingRenderLinker
+  buildingMaterial: {fileID: -876546973899608171, guid: d2f21eeb38b339c41b08d5b9a7c84916, type: 3}
 --- !u!4 &5026351469592114601
 Transform:
   m_ObjectHideFlags: 0

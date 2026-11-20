@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Systems.Rendering
 {
-    [UpdateInGroup(typeof(PresentationSystemGroup)), UpdateBefore(typeof(ChunkRenderSystem))]
+    [UpdateInGroup(typeof(RenderUpdateGroup)), UpdateBefore(typeof(ChunkRenderSystem))]
     public partial class OverlayRenderSystem : SystemBase
     {
         public Texture2D gridTexture;
