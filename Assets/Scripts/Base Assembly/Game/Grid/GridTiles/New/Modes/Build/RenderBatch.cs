@@ -32,9 +32,9 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
             instanceData.Dispose();
         }
 
-        public void UpdateInstanceData()
+        public void UpdateInstanceData(int start = 0)
         {
-            instaceBuffer.SetData(instanceData);
+            instaceBuffer.SetData(instanceData, start, start, size - start);
         }
 
         public RenderBatch(Mesh mesh, Material material, int itemCount, int startIndex, int groupIndex)

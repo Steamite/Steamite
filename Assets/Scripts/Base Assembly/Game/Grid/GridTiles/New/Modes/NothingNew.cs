@@ -33,7 +33,7 @@ public class NothingNew : GridTilesModeNew
             case TileType.Wall:
                 InfoWindowAdapter.Window.Open(localIndex, InfoMode.Rock);
 
-                controller.SetSelectionMaterial(worldPos, 0, selectionColor, 0.0001f);
+                controller.SetGridSelectColor(worldPos, selectionColor, 0.0001f);
 
                 controller.clickedWorldPosition = worldPos;
                 controller.clickedType = tile.Type;
@@ -44,7 +44,7 @@ public class NothingNew : GridTilesModeNew
             case TileType.Empty:
                 InfoWindowAdapter.Window.Open(tile, InfoMode.None);
 
-                controller.SetSelectionMaterial(worldPos, 0, selectionColor, -0.0001f);
+                controller.SetGridSelectColor(worldPos, selectionColor, -0.0001f);
 
                 controller.clickedWorldPosition = worldPos;
                 controller.clickedType = tile.Type;

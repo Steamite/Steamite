@@ -604,7 +604,6 @@ MonoBehaviour:
   cursor: {fileID: 0}
   cursorOffset: {x: 0, y: 0}
   ToggleMod: 1
-  renderer: {fileID: 4967022013944964022}
   categoryIndex: 0
   wrapperIndex: 0
 --- !u!1 &405851067
@@ -1893,6 +1892,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
   - {fileID: 2100000, guid: dd3fed6aec66e76439d58f3a9573a37a, type: 2}
   - {fileID: 2100000, guid: 166e19725f4ea4c46af762dc0e251d0b, type: 2}
+  gridMaterial: {fileID: 2100000, guid: d734ed55235db8044b2f15779ca6e0b6, type: 2}
   clickedType: 0
   clickedIndex: 0
   obscured: 0
@@ -2920,7 +2920,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3e63f773b67a04eb62bb54883888a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Systems::Assets.Scripts.Systems.Rendering.Buildings.BuildingRenderLinker
-  buildingMaterial: {fileID: -876546973899608171, guid: d2f21eeb38b339c41b08d5b9a7c84916, type: 3}
+  buildingMaterial: {fileID: 2100000, guid: dd3fed6aec66e76439d58f3a9573a37a, type: 2}
+  blueprintMaterial: {fileID: 2100000, guid: dd3fed6aec66e76439d58f3a9573a37a, type: 2}
 --- !u!4 &5026351469592114601
 Transform:
   m_ObjectHideFlags: 0

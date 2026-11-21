@@ -1,9 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings
 {
+    public struct BuildingGroupData
+    {
+        public Mesh mesh;
+        public Material material;
+        public int count;
+    }
+
     [Serializable]
     public struct BuildingRenderData
     {

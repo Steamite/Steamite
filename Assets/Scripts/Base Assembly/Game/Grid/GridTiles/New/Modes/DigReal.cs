@@ -46,14 +46,14 @@ public class DigReal : GridTilesModeNew
 
             if (drag)
             {
-                controller.SetMaterial(pos, 0, removing ? RemoveColor : toBeDugColor, tileType, index, 0.0001f);
+                controller.SetGridHoverColor(pos, removing ? RemoveColor : toBeDugColor, tileType, index, 0.0001f);
             }
             else
             {
                 if (SceneRefs.World.currentOverlay.markedTilesGrid.GetBits(worldIndex) == 1)
-                    controller.SetMaterial(pos, 0, RemoveColor, tileType, index, 0.0001f);
+                    controller.SetGridHoverColor(pos, RemoveColor, tileType, index, 0.0001f);
                 else
-                    controller.SetMaterial(pos, 0, toBeDugColor, tileType, index, 0.0001f);
+                    controller.SetGridHoverColor(pos, toBeDugColor, tileType, index, 0.0001f);
             }
 
         }

@@ -106,7 +106,7 @@ public abstract partial class GridTilesModeNew : MonoBehaviour
 
     protected virtual void FallbackColor(LevelGridTile tile, int index, int2 prevPos)
     {
-        controller.SetMaterial(prevPos, 0, hoverColor, (TileType)tile.Type, index, -0.001f);
+        controller.SetGridHoverColor(prevPos, hoverColor, (TileType)tile.Type, index, -0.001f);
     }
 
     protected virtual bool CheckTopObstruction(int2 pos, int index, LevelGridTile tile)
@@ -114,7 +114,7 @@ public abstract partial class GridTilesModeNew : MonoBehaviour
         TileType tileType = (TileType)tile.Type;
         if (tileType < TileType.Road)
         {
-            controller.SetMaterial(pos, 0, hoverColor, tileType, index, 0.0001f);
+            controller.SetGridHoverColor(pos, hoverColor, tileType, index, 0.0001f);
             return true;
         }
         else if (tileType >= TileType.Building)

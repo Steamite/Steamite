@@ -14,20 +14,20 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
     {
         const int INCREASE_AMMOUNT = 5;
         [SerializeField] Material buildingMaterial;
+        [SerializeField] Material blueprintMaterial;
 
         public void Init(GridWorld world)
         {
-            UploadBuildingData(world.WorldBuildings.GetInitialRenderData(), world.levelArray);
-
+            BuildingRenderSystem system = UploadBuildingData(world.WorldBuildings.GetInitialRenderData(), world.levelArray);
+            world.WorldBuildings.buildingRenderer = new(system.batches, system.args, system.argBuffer, blueprintMaterial);
 
             world.AttachChange((LevelComponent level, int i, int newIndex) =>
             {
-                Shader.SetGlobalInt("_LevelOffset", 0);//level.offsetsScaled);
                 Shader.SetGlobalInt("_SelectedLevel", newIndex);
             });
         }
 
-        public void UploadBuildingData(InitialRenderData data, NativeArray<LevelComponent> levels)
+        public BuildingRenderSystem UploadBuildingData(InitialRenderData data, NativeArray<LevelComponent> levels)
         {
             InitBatches(data.buildingGroups, out RenderBatch[] renderBatches);
             
@@ -48,6 +48,8 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
             
             
             buildingRenderSystem.Enabled = true;
+            return buildingRenderSystem;
+
         }
 
         private void FillRenderIndex(BuildingNew[] buildings, int[] renderIndexes)
@@ -121,11 +123,7 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
 
                 int y = (int)((position >> 20) & 0x7);
 
-                uint offset = (uint)levels[y].offsetsScaled;
-                uint x = (position & 0x3FF) + offset;
-                uint z = ((position >> 10) & 0x3FF) + offset;
-
-                position = (uint)((position & ~0xFFFFF) | (x & 0x3FF) | ((z & 0x3FF) << 10));
+                position = Recalculation.BuildingPosToFixedBuildingPos(position, levels[y].offsetsScaled);
 
                 batch.instanceData[batch.numberOfItems] = position;
 

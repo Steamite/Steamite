@@ -28,6 +28,13 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
         Overlay
     }
+
+    public enum MaterialType 
+    {
+        All,
+        Grid,
+        Buildings
+    }
     public class MouseController : MonoBehaviour, IAfterLoad
     {
         GridTilesModeNew[] modes;
@@ -59,6 +66,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         /// Grid, Building, Human, ....
         /// </summary>
         [SerializeField] Material[] materials;
+        [SerializeField] Material gridMaterial;
         [Header("Clicked Data")]
         public int clickedType;
         public int clickedIndex;
@@ -137,13 +145,14 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         }
 
 
-        public void SetMaterial(int2 pos, int matIndex, Color c, TileType hoverType, int hoverIndex, float mod = 0)
+        public void SetGridHoverColor(int2 pos, Color c, TileType hoverType, int hoverIndex, float mod = 0)
         {
-            ClearHoverMaterial(matIndex);
+            ClearHoverMaterial(MaterialType.Buildings);
 
-            materials[matIndex].SetVector("_HoverRange", new(0.5f + mod, 0.5f + mod));
-            materials[matIndex].SetVector("_HoverPosition", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
-            materials[matIndex].SetColor("_HoverColor", c);
+            gridMaterial.SetVector("_HoverRange", new(0.5f + mod, 0.5f + mod));
+            gridMaterial.SetVector("_HoverPosition", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
+            gridMaterial.SetColor("_HoverColor", c);
+            
             
             hoverWorldPosition = pos;
             hoverObjectType = hoverType;
@@ -158,8 +167,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
 
             if (hover)
             {
-                ClearHoverMaterial(1);
-                Shader.SetGlobalInteger("_HoverIndex", renderIndex);
+                ClearHoverMaterial(MaterialType.Grid);
+                Shader.SetGlobalFloat("_HoverIndex", renderIndex);
                 Shader.SetGlobalColor("_HoverColor", color);
 
 
@@ -169,8 +178,8 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
             }
             else
             {
-                ClearSelectMaterial(1);
-                Shader.SetGlobalInteger("_SelectedIndex", renderIndex);
+                ClearSelectMaterial(MaterialType.Grid);
+                Shader.SetGlobalFloat("_SelectedIndex", renderIndex);
                 Shader.SetGlobalColor("_SelectedColor", color);
                 
                 hoverWorldPosition = pos;
@@ -178,44 +187,38 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
         }
 
 
-        public void SetSelectionMaterial(int2 pos, int matIndex, Color color, float mod = 0)
+        /// <summary>
+        /// Grid
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="color"></param>
+        /// <param name="mod"></param>
+        public void SetGridSelectColor(int2 pos, Color color, float mod = 0)
         {
-            ClearSelectMaterial(matIndex);
-            materials[matIndex].SetVector("_SelectionRange", new(0.5f + mod, 0.5f + mod));
-            materials[matIndex].SetVector("_SelectionPosition", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
-            materials[matIndex].SetColor("_SelectionColor", color);
+            ClearSelectMaterial(MaterialType.Buildings);
+            gridMaterial.SetVector("_SelectionRange", new(0.5f + mod, 0.5f + mod));
+            gridMaterial.SetVector("_SelectionPosition", new Vector3(pos.x + 0.5f, 0, pos.y + 0.5f));
+            gridMaterial.SetColor("_SelectionColor", color);
 
             hoverWorldPosition = pos;
         }
 
-        public void ClearHoverMaterial(int matIndex = -1)
+        public void ClearHoverMaterial(MaterialType typeToClear = MaterialType.All)
         {
-            for (int i = 0; i < materials.Length; i++)
-            {
-                if (i == matIndex || i == 1)
-                    continue;
-                materials[i].SetVector("_HoverRange", default);
-            }
+            if(typeToClear == MaterialType.All || typeToClear == MaterialType.Grid)
+                materials[0].SetVector("_HoverRange", default);
 
-
-            if (matIndex == 1)
-                return;
-            materials[1].SetFloat("_HoverIndex", -1);
+            if(typeToClear == MaterialType.All || typeToClear == MaterialType.Buildings)
+                Shader.SetGlobalFloat("_HoverIndex", -1);
         }
-        void ClearSelectMaterial(int matIndex = -1)
+
+        void ClearSelectMaterial(MaterialType typeToClear = MaterialType.All)
         {
-            for (int i = 0; i < materials.Length; i++)
-            {
-                if (i == matIndex || i == 1)
-                    continue;
-                materials[i].SetVector("_SelectionRange", default);
+            if (typeToClear == MaterialType.All || typeToClear == MaterialType.Grid)
+                materials[0].SetVector("_SelectionRange", default);
 
-            }
-
-
-            if (matIndex == 1)
-                return;
-            materials[1].SetFloat("_SelectedIndex", -1);
+            if (typeToClear == MaterialType.All || typeToClear == MaterialType.Buildings)
+                Shader.SetGlobalFloat("_SelectionIndex", -1);
         }
 
         public void MouseDown()

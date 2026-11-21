@@ -176,21 +176,16 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
             CenterScaled = (LargestLevelDimension / 2) * LevelComponent.CHUNK_DIMENSIONS;
 
+            renderer = GetComponent<LevelRenderer>();
+
+
             WorldBuildings = new WorldBuildings();
-            WorldBuildings.LoadState(saveToLoad.objectsSave.buildings);
+            WorldBuildings.LoadState(saveToLoad.objectsSave.buildings, world, levelArray, overlayArray, renderer);
 
             GetComponent<IWorldInit>().Init(ref world, ref levelArray);
 
             foreach(IRenderInit tempRender in GetComponents<IRenderInit>())
                 tempRender.Init(this);
-
-            renderer = GetComponent<LevelRenderer>();
-            /*renderer.AddRenderer(WorldBuildings.SetupRenderer(
-                buildingMaterial, 
-                renderer, 
-                ref saveToLoad.world, 
-                in saveToLoad.levels,
-                ref saveToLoad.overlays));*/
 
             renderer.Init(this);
 
@@ -253,8 +248,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
         private void OnDestroy()
         {
-            WorldBuildings.Dispose();
-
             world.Dispose();
 
             if (levelArray.IsCreated)

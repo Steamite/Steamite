@@ -1,5 +1,7 @@
-﻿using Unity.Collections;
+﻿using System;
+using Unity.Collections;
 using Unity.Mathematics;
+using UnityEngine.UIElements;
 
 
 /// <summary>
@@ -78,6 +80,16 @@ public static class Recalculation
             global % levelGrid, 
             levelArray[levelIndex].offsetsScaled,
             levelArray[levelIndex].dimensionsScaled);
+    }
+
+    public static uint BuildingPosToFixedBuildingPos(uint pos, int offsetsScaled)
+    {
+
+        uint offset = (uint)offsetsScaled;
+        uint x = (pos & 0x3FF) + offset;
+        uint z = ((pos >> 10) & 0x3FF) + offset;
+
+        return (uint)((pos & ~0xFFFFF) | (x & 0x3FF) | ((z & 0x3FF) << 10));
     }
 }
 

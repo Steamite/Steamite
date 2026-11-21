@@ -8,7 +8,6 @@ struct PackedBuilding
 
 StructuredBuffer<PackedBuilding> _BuildingInstanceBuffer;
 float _Offset;
-float _LevelOffset;
 float _GroupIndex;
 float _SelectedLevel;
 //#endif
@@ -78,7 +77,7 @@ float3 TransformInstanceVertex2Bit(
     rotatedVertex.z = rotatedPos.y + off.y;
     
     // Translate to grid cell position
-    float3 worldPos = float3((float) (gridX * cellSize) + _LevelOffset, 0, (float) (gridZ * cellSize) + _LevelOffset);
+    float3 worldPos = float3((float) (gridX * cellSize), 0, (float) (gridZ * cellSize));
     
     
     Rotation = float3(0, radians(degTable[rot2]), 0);

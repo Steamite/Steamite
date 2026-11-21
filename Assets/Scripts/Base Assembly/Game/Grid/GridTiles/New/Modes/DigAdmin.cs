@@ -31,7 +31,7 @@ public class DigAdmin : GridTilesModeNew
         TileType tileType = tile.TType;
 
         if (tileType == TileType.Wall)
-            controller.SetMaterial(pos, 0, toBeDugColor, tileType, index, 0.0001f);
+            controller.SetGridHoverColor(pos, toBeDugColor, tileType, index, 0.0001f);
         else
             return false;
 
@@ -48,7 +48,7 @@ public class DigAdmin : GridTilesModeNew
     {
         TileType type = tile.TType;
         if (type == TileType.Road || type == TileType.Empty)
-            controller.SetMaterial(pos, 0, toBeDugColor, type, index, -0.0001f);
+            controller.SetGridHoverColor(pos, toBeDugColor, type, index, -0.0001f);
 
         else
             controller.ClearHoverMaterial();

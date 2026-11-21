@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BuildingPlus
+  m_Name: BuildingNew
   m_Shader: {fileID: -6465566751694194690, guid: d2f21eeb38b339c41b08d5b9a7c84916, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

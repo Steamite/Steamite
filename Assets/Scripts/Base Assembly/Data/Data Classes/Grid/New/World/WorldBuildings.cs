@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Modes;
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
@@ -8,6 +9,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 {
+
     public struct InitialRenderData
     {
         public BuildingGroupData[] buildingGroups;
@@ -17,18 +19,28 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
     }
 
     [Serializable]
-    public class WorldBuildings : IDisposable
+    public class WorldBuildings
     {
         public BuildingNew[] buildings;
 
         int lastIndex = 0;
         int firstRemovedSpace = int.MaxValue;
 
-        BuildingRenderer buildingRenderer;
+        [NonSerialized] public BuildingRenderManager buildingRenderer;
         LevelRenderer levelRenderer;
 
-        public void LoadState(BuildingNew[] newSave)
+        public void LoadState(
+            BuildingNew[] newSave, 
+            WorldComponent worldComponent, 
+            NativeArray<LevelComponent> levelArray, 
+            NativeArray<OverlayComponent> overlays,
+            LevelRenderer levelRenderer)
         {
+            this.worldComponent = worldComponent;
+            this.levelArray = levelArray;
+            this.overlays = overlays;
+            this.levelRenderer = levelRenderer;
+
             buildings = new BuildingNew[math.max(50, newSave.Length * 2)];
 
             foreach (var item in newSave)
@@ -81,50 +93,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 instanceData = instanceData,
                 buildings = buildings
             };
-        }
-
-        public BuildingRenderer SetupRenderer(
-            Material buildingMaterial, 
-            LevelRenderer levelRenderer, 
-            ref WorldComponent worldComponent, 
-            in NativeArray<LevelComponent> levelArray,
-            ref NativeArray<OverlayComponent> overlays)
-        {
-            this.levelRenderer = levelRenderer;
-            this.worldComponent = worldComponent;
-            this.levelArray = levelArray;
-            this.overlays = overlays;
-
-
-            List<BuildingWrapper> wrappers = SceneRefs.ObjectFactory.buildPrefabs.GetAllObjects();
-
-            BuildingGroupData[] buildingGroups = new BuildingGroupData[wrappers.Count];
-
-            for (int i = 0; i < buildingGroups.Length; i++)
-            {
-                buildingGroups[i].mesh = wrappers[i].blueprint.mesh;
-                //buildingGroups[i].meshSizeHalved = wrappers[i].blueprint.renderSize;
-            }
-
-            BuildingRenderData[] instanceData = new BuildingRenderData[lastIndex];
-            for (int i = 0; i < lastIndex; i++)
-            {
-                if (buildings[i] == null)
-                    continue;
-                buildingGroups[buildings[i].renderData.meshIndex].count++;
-                instanceData[i] = buildings[i].renderData; 
-            }
-
-            buildingRenderer = new(buildingMaterial);
-            int[] indexes = buildingRenderer.UploadBuildingData(buildingGroups, instanceData);
-
-            for (int i = 0; i < lastIndex; i++)
-            {
-                buildings[i].renderIndex = indexes[i];
-            }
-            levelRenderer.UpdateOverlayTexture();
-
-            return buildingRenderer;
         }
 
         #region Array management
@@ -201,11 +169,6 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 }
             }
             firstRemovedSpace = int.MaxValue;
-        }
-
-        public void Dispose()
-        {
-            buildingRenderer?.Dispose();
         }
 
         public void PlaceBuilding(BuildingWrapper blueprint, BuildingNew buildingData)

@@ -2,6 +2,7 @@
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
+using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Modes;
 using Grid.New;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,7 @@ public class BuildModeNew : GridTilesModeNew
 {
     BuildingWrapper wrapper;
 
-    [SerializeField] LevelRenderer renderer;
-    BuildingRenderer buildingRenderer;
+    BuildingRenderManager buildingRenderer;
 
     event Action<BuildingWrapper> onWrapperChange;
 
@@ -26,7 +26,7 @@ public class BuildModeNew : GridTilesModeNew
     public override void InitMode(MouseController _mouseController)
     {
         base.InitMode(_mouseController);
-        //buildingRenderer = renderer.GetCustomRenderer(0) as BuildingRenderer;
+        buildingRenderer = SceneRefs.World.WorldBuildings.buildingRenderer;
         SceneRefs.World.AttachChange(OnLevelChange);
     }
 
@@ -55,7 +55,7 @@ public class BuildModeNew : GridTilesModeNew
         TileType tileType = (TileType)tile.Type;
         if (tileType < TileType.Road)
         {
-            controller.SetMaterial(pos, 0, hoverColor, tileType, index, 0.0001f);
+            controller.SetGridHoverColor(pos, hoverColor, tileType, index, 0.0001f);
             return true;
         }
         return false;
