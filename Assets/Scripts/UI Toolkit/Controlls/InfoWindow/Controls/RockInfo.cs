@@ -65,6 +65,7 @@ public partial class RockInfo : InfoWindowControl
     EntityManager manager;
     public override void Select(SelectionData data)
     {
+        base.Select(data);
         var world = SceneRefs.World;
         localIndex = data.localPosition;
         levelIndex = world.CurrentLevelIndex;

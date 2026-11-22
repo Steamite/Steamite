@@ -96,6 +96,7 @@ namespace ModesNew
 
             low = new(Vector3.up, new Vector3(0, lowHeight, 0));
             top = new(Vector3.up, new Vector3(0, topHeight, 0));
+
             ClearHoverMaterial();
             ClearSelectMaterial();
 
@@ -218,7 +219,7 @@ namespace ModesNew
                 materials[0].SetVector("_SelectionRange", default);
 
             if (typeToClear == MaterialType.All || typeToClear == MaterialType.Buildings)
-                Shader.SetGlobalFloat("_SelectionIndex", -1);
+                Shader.SetGlobalFloat("_SelectedIndex", -1);
         }
 
         public void MouseDown()

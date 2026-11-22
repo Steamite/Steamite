@@ -42,7 +42,7 @@ public class NothingNew : GridTilesModeNew
                 break;
             case TileType.Road:
             case TileType.Empty:
-                InfoWindowAdapter.Window.Open(tile, InfoMode.None);
+                //InfoWindowAdapter.Window.Open(tile, InfoMode.None);
 
                 controller.SetGridSelectColor(worldPos, selectionColor, -0.0001f);
 
@@ -55,7 +55,7 @@ public class NothingNew : GridTilesModeNew
             case TileType.Building:
             case TileType.Elevator:
             case TileType.PassableBuilding:
-                InfoWindowAdapter.Window.Open(tile, InfoMode.Rock);
+                InfoWindowAdapter.Window.Open(localIndex, InfoMode.Building);
                 controller.SetBuildingHighligh(worldPos, false, tile.Amount, selectionColor);
                 break;
         }

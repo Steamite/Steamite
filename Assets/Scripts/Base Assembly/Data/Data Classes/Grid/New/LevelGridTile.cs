@@ -27,6 +27,12 @@ namespace Grid.New
     [BurstCompile]
     public struct LevelGridTile
     {
+        /// <summary>
+        /// 0       - hidden    (0x1)
+        /// 1 - 4   - type      (0xF)
+        /// 5 - 12  - style     (0x7F)     
+        /// 13 - 32 - ammount   (0xFFFFF)
+        /// </summary>
         public int hiddenTypeStyleAmount;
         /// <summary>
         /// 0-1 entryPoint Counts
@@ -55,7 +61,7 @@ namespace Grid.New
         /// <summary>
         /// points to a building index in the <see cref="WorldBuildings"/>
         /// </summary>
-        public readonly int Amount => (hiddenTypeStyleAmount >> 13) & 0x3FFFF; // (18) bits => x^18maxAmmount
+        public readonly int Amount => (hiddenTypeStyleAmount >> 13) & 0xFFFFF; // (20) bits => x^20
 
         public readonly float Durability => math.f16tof32(otherData & 0xFFFFu);
         public readonly float OriginalDurability => math.f16tof32((otherData >> 16) & 0xFFFFu);
@@ -88,7 +94,7 @@ namespace Grid.New
         public static LevelGridTile Elevator(int index)
         {
             LevelGridTile tile = new(
-                0 | (((int)TileType.Elevator & 0xF) << 1) | ((index & 0x3FFFF) << 13), 
+                0 | (((int)TileType.Elevator & 0xF) << 1) | ((index & 0xFFFFF) << 13), 
                 0);
             return tile;
         }

@@ -1,5 +1,6 @@
 ﻿
 
+using InfoWindowViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -132,6 +133,8 @@ public class InfoWindow : PanelRendererRoot, IUIInfoWindow
         //SceneRefs.Overlays.overlay.ClearTileOverlay();
         activeBindings.Clear();
 
+        if (activeControl != null)
+            activeControl.style.display = DisplayStyle.None;// Visibility.Hidden;
         activeControl = null;
         deltaTime = updateInterval;
     }
@@ -152,45 +155,15 @@ public class InfoWindow : PanelRendererRoot, IUIInfoWindow
         //window.style.width = new Length(25, LengthUnit.Percent);
         switch (active)
         {
-            case InfoMode.None:
-                controls.CreateElementByName("General Info", windowBody, null);
-                break;
-            case InfoMode.Water:
-                controls.CreateElementByName("Water Info", windowBody, dataSource);
-                break;
-            case InfoMode.Vein:
-                controls.CreateElementByName("Vein Info", windowBody, dataSource);
-                break;
-
             case InfoMode.Building:
-                Building building = (Building)dataSource;
-                if (!building.IsWorking)
-                {
-                    controls.CreateElementByName("Construction Info", windowBody, dataSource);
-                }
-                else
-                {
-                    //CreateTabbedView();
-                }
+                activeControl = windowBody.Q<GeneralInfo>();
+                activeControl.Select(new() { localPosition = (int)dataSource });
                 break;
-
-            case InfoMode.Human:
-                Dictionary<string, List<string>> toEnable = new()
-                {
-                    { "General", new List<string> { "Human Info" } },
-                    { "Job", new List<string> { "Job Info" } }
-                };
-                CreateTabbedView(toEnable, dataSource);
-                break;
-
             case InfoMode.Rock:
                 activeControl = windowBody.Q<RockInfo>();
                 activeControl.Select(new() { localPosition = (int)dataSource});
                 break;
 
-            case InfoMode.Chunk:
-                controls.CreateElementByName("Chunk Info", windowBody, dataSource);
-                break;
 
             default:
                 Close();

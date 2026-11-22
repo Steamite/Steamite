@@ -1,5 +1,6 @@
 using InfoWindowElements;
 using System;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,6 +32,16 @@ public partial class ConstructionInfo : InfoWindowControl
                         UpdateConstructionText(building);
                     }));
         }
+    }
+
+    int selectedIndex;
+    public override void Select(SelectionData data)
+    {
+        selectedIndex = data.localPosition;
+        int buildingIndex = SceneRefs.World.currentLevel.renderGrid[selectedIndex].Amount;
+        var buildings = SceneRefs.World.WorldBuildings;
+        
+
     }
 
     public ConstructionInfo()

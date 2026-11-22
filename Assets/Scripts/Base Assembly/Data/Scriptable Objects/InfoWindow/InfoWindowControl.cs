@@ -15,7 +15,7 @@ public abstract class InfoWindowControl : VisualElement, IUIElement
 {
     public virtual void Select(SelectionData data)
     {
-        throw new NotImplementedException();
+        style.display = DisplayStyle.Flex;
     }
 
     /// <summary>
