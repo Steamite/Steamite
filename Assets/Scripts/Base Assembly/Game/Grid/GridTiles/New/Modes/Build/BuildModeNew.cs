@@ -117,39 +117,51 @@ public class BuildModeNew : GridTilesModeNew
             world.y++;
         }
 
-        buildingBlueprint.renderData.encodedLocalPosition = buildingPos;
+        buildingBlueprint.encodedLocalPosition = buildingPos;
+
+        bool clearBlueprint = !controller.isShiftPressed;
+        buildingBlueprint.renderIndex = buildingRenderer.PlaceBlueprint(clearBlueprint);
+
         SceneRefs.World.WorldBuildings.PlaceBuilding(
             wrapper,
             buildingBlueprint);
 
-        bool clearBlueprint = !controller.isShiftPressed;
-        buildingBlueprint.renderIndex = buildingRenderer.PlaceBlueprint(clearBlueprint);
+
         
         if(clearBlueprint)
             controller.ChangeSelMode(ControlMode.Nothing);
         else
         {
-            buildingBlueprint = wrapper.Building.Clone();
+            // keep the struct
         }
     }
 
     public override void ExitMod()
     {
         wrapper = null;
-        categoryIndex = -1;
         wrapperIndex = -1;
+        categoryIndex = -1;
+        categoryIndex = -1;
 
         buildingRenderer.DestroyBlueprint();
         onWrapperChange?.Invoke(wrapper);
     }
 
-    BuildingNew buildingBlueprint;
-    public int categoryIndex;
+    BuildingRenderData buildingBlueprint;
     public int wrapperIndex;
 
-    public void SetBlueprint(BuildingWrapper _wrapper)
+    // FOR UI CONTROLLS
+    public int categoryIndex;
+    public int objectIndex;
+
+    public void ClearBlueprint()
     {
-        if (_wrapper == null || _wrapper == wrapper)
+        controller.ChangeSelMode(ControlMode.Nothing);
+    }
+
+    public void SetBlueprint(short wrapperIndex, int catIndex, int objIndex, BuildingWrapper wrapper)
+    {
+        if(wrapperIndex == -1 || wrapperIndex == this.wrapperIndex)
         {
             controller.ChangeSelMode(ControlMode.Nothing);
             return;
@@ -159,24 +171,30 @@ public class BuildModeNew : GridTilesModeNew
             controller.ChangeSelMode(ControlMode.Build);
         }
 
-        // new wrapper set
-        wrapper = _wrapper;
+        categoryIndex = catIndex;
+        objectIndex = objIndex;
 
-        buildingBlueprint = wrapper.Building.Clone();
+        // new wrapper set
+        this.wrapperIndex = wrapperIndex;
+        this.wrapper = wrapper;
+
         BuildPositionUpdate(controller.hoverWorldPosition, true);
 
-
-        wrapperIndex = buildingBlueprint.wrapperIndex;
-        categoryIndex = buildingBlueprint.categoryIndex;
+        buildingBlueprint = new()
+        {
+            encodedLocalPosition = buildingPos,
+            meshIndex = wrapperIndex,
+            renderIndex = -1
+        };
 
         uint pos = (uint)(~(0x7 << 20) & buildingPos);
         uint levelPos = (uint)((SceneRefs.World.CurrentLevelIndex & 0x7) << 20);
         buildingPos = pos | levelPos;
 
-        buildingBlueprint.renderData.encodedLocalPosition = buildingPos;
+        buildingBlueprint.encodedLocalPosition = buildingPos;
 
 
-        buildingRenderer.CreateBlueprint(buildingBlueprint.renderData);
+        buildingRenderer.CreateBlueprint(buildingBlueprint);
 
         onWrapperChange?.Invoke(wrapper);
     }
@@ -185,16 +203,19 @@ public class BuildModeNew : GridTilesModeNew
     /// 
     /// </summary>
     /// <param name="newWorldPosition"></param>
-    /// <param name="restOfPosition"></param>
-    /// <returns>Packed position, should keep rotation.</returns>
+    /// <param name="discardRot"></param>
+    /// <returns>Packed position</returns>
     void BuildPositionUpdate(int2 newWorldPosition, bool discardRot = false)
     {
         int offset = SceneRefs.World.currentLevel.offsetsScaled;
         int2 fixedPos = newWorldPosition - offset;
 
-        uint maskedPosition = (uint)(buildingPos & ~0xFFFFF);
+        uint maskedPosition;
         if (discardRot)
             maskedPosition = 0;
+        else
+            maskedPosition = (uint)(buildingPos & ~0xFFFFF);
+
         buildingPos = (uint)((fixedPos.x & 0x3FF) | ((fixedPos.y & 0x3FF) << 10)) | maskedPosition;
     }
 
@@ -221,5 +242,4 @@ public class BuildModeNew : GridTilesModeNew
         buildingRenderer.MoveBlueprint(buildingPos);
     }
 
-    
 }

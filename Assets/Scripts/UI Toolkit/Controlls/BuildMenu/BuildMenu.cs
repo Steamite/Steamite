@@ -1,3 +1,4 @@
+using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
 using ResearchUI;
 using UnityEngine.UIElements;
 
@@ -84,12 +85,14 @@ namespace BottomBar.Building
         {
             if (i > -1)
             {
-                BuildingWrapper wrapper = buildingData.Categories[categGroup.SelectedChoice].Objects[i];
+                short id = buildingData.GetFlatId(categGroup.SelectedChoice, i);
+                BuildingWrapper wrapper = buildingData.FlatWrappers[id];
+
                 if (wrapper.unlocked && MyRes.CanAfford(wrapper.Cost))
-                    SceneRefs.MouseController.buildMode.SetBlueprint(wrapper);
+                    SceneRefs.MouseController.buildMode.SetBlueprint(id, categGroup.SelectedChoice, i, wrapper);
             }
             else
-                SceneRefs.MouseController.buildMode.SetBlueprint(null);
+                SceneRefs.MouseController.ChangeSelMode(ControlMode.Nothing);// .ClearBlueprint();
         }
 
         public void Open()

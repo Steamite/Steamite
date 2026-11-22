@@ -45,6 +45,7 @@ class BuildEditor : EditorWindow
 
 
     PropertyField meshField;
+    PropertyField materialField;
     PropertyField sizeField;
 
     void Load()
@@ -52,13 +53,15 @@ class BuildEditor : EditorWindow
         if (blueprint == null)
         {
             meshField.Unbind();
+            materialField.Unbind();
             sizeField.Unbind();
             size = new();
             return;
         }
 
         meshField.BindProperty(blueprint.FindPropertyRelative(nameof(BuildingGrid.mesh)));
-        
+        materialField.BindProperty(blueprint.FindPropertyRelative(nameof(BuildingGrid.material)));
+
         var sizeProp = blueprint.FindPropertyRelative(nameof(BuildingGrid.size));
         sizeField.BindProperty(sizeProp);
         sizeField.TrackPropertyValue(sizeProp, SizeChange);
@@ -87,6 +90,7 @@ class BuildEditor : EditorWindow
     void CreateGUI()
     {
         rootVisualElement.Add(meshField = new());
+        rootVisualElement.Add(materialField = new());
         rootVisualElement.Add(sizeField = new());
 
         VisualElement fields = new()

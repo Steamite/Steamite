@@ -31,10 +31,10 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 
     public struct BuildsAndChunksSaveNew
     {
-        public BuildingNew[] buildings;
+        public NativeArray<BuildingRenderData> buildings;
         public ChunkSave[] chunks;
 
-        public BuildsAndChunksSaveNew(BuildingNew[] _buildings, ChunkSave[] _chunks)
+        public BuildsAndChunksSaveNew(NativeArray<BuildingRenderData> _buildings, ChunkSave[] _chunks)
         {
             buildings = _buildings;
             chunks = _chunks;

@@ -74,6 +74,16 @@ public class BuildCategWrapper : DataCategory<BuildingWrapper>
 [CreateAssetMenu(fileName = "BuildButtonCategory", menuName = "UI Data/BuildButton Holder", order = 1)]
 public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapper>
 {
+    List<BuildingWrapper> flatWrappers;
+    public List<BuildingWrapper> FlatWrappers 
+    { 
+        get 
+        {
+            if (flatWrappers == null)
+                Init();
+            return flatWrappers;
+        }
+    }
     public Mesh defaultMesh;
     public new const string PATH = "Build Data";
     #region Editor
@@ -81,53 +91,46 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
     public new const string EDITOR_PATH = "Assets/Game Data/Research and Building/Build Data.asset";
 #endif
 #endregion
-
-    /*public BuildingNew GetBuilding(int categ, int id)
-    {
-        //return Categories.FirstOrDefault(q => q.id == categ).Objects.Find(q => q.id == id).Building;
-    }*/
-
-    public BuildingNew GetBuilding(string name)
-    {
-        return Categories[0].Objects.Find(q => q.Name == name).Building;
-    }
-/*
-    public Pipe GetPipe()
-    {
-        return Categories[3].Objects.Find(q => q.Building is Pipe).Building as Pipe;
-    }*/
-
+    
     public override void Init()
     {
-        int meshIndex = 0;
         for (int i = 0; i < Categories.Count; i++)
         {
             for (int j = 0; j < Categories[i].Objects.Count; j++)
             {
                 if(Categories[i].Objects[j].blueprint.mesh == null)
                     Categories[i].Objects[j].blueprint.mesh = defaultMesh;
-
-                Categories[i].Objects[j].Building.SetBindingIndex(i, j, (uint)meshIndex);
-                meshIndex++;
             }
         }
-    }
 
-    public List<BuildingWrapper> GetAllObjects()
-    {
-        List<BuildingWrapper> wrappers = new();
+
+        flatWrappers = new();
         foreach (var categ in Categories)
         {
             foreach (var wrapper in categ.Objects)
             {
-                wrappers.Add(wrapper);
+                FlatWrappers.Add(wrapper);
             }
         }
-        return wrappers;
     }
 
     public BuildingWrapper GetBuilding(byte categoryIndex, byte wrapperIndex)
     {
         return Categories[categoryIndex].Objects[wrapperIndex];
+    }
+
+    public BuildingWrapper GetBuilding(short buildingIndex)
+    {
+        return FlatWrappers[buildingIndex];// .Objects[wrapperIndex];
+    }
+
+    public short GetFlatId(int selectedChoice, int objectIndex)
+    {
+        int offset = 0;
+        for (int i = 0; i < selectedChoice; i++)
+        {
+            offset += Categories[i].Objects.Count;
+        }
+        return (short)(offset + objectIndex);
     }
 }

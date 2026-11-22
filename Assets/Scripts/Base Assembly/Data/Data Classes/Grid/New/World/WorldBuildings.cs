@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 {
@@ -13,24 +14,27 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
     public struct InitialRenderData
     {
         public BuildingGroupData[] buildingGroups;
-        public BuildingRenderData[] instanceData;
-
-        public BuildingNew[] buildings;
+        public NativeArray<BuildingRenderData> buildings;
     }
 
     [Serializable]
-    public class WorldBuildings
+    public class WorldBuildings : MonoBehaviour
     {
-        public BuildingNew[] buildings;
+        /// <summary>
+        /// Used for bridging selection (tiles point to this array), rendering, and storing position.
+        /// </summary>
+        [NonSerialized] public NativeArray<BuildingRenderData> buildings;
 
+        [SerializeField] BuildingData buildingPrefabs;
         int lastIndex = 0;
         int firstRemovedSpace = int.MaxValue;
 
         [NonSerialized] public BuildingRenderManager buildingRenderer;
         LevelRenderer levelRenderer;
 
+
         public void LoadState(
-            BuildingNew[] newSave, 
+            NativeArray<BuildingRenderData> buildingsToLoad, 
             WorldComponent worldComponent, 
             NativeArray<LevelComponent> levelArray, 
             NativeArray<OverlayComponent> overlays,
@@ -41,21 +45,22 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             this.overlays = overlays;
             this.levelRenderer = levelRenderer;
 
-            buildings = new BuildingNew[math.max(50, newSave.Length * 2)];
+            buildings = new NativeArray<BuildingRenderData>(math.max(50, buildingsToLoad.Length * 2), Allocator.Persistent);
 
-            foreach (var item in newSave)
+            for (int i = 0; i < buildings.Length; i++)
             {
-                if (item == null)
+                if(i >= buildingsToLoad.Length)
                 {
                     if (firstRemovedSpace == int.MaxValue)
                         firstRemovedSpace = lastIndex;
+                    buildings[lastIndex] = BuildingRenderData.Null;
                     lastIndex++;
                 }
                 else
-                {
-                    AddBuildingToArray(item);
-                }
+                    AddBuildingToArray(buildingsToLoad[i]);
             }
+
+            buildingsToLoad.Dispose();
         }
 
         WorldComponent worldComponent;
@@ -65,32 +70,27 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
 
         public InitialRenderData GetInitialRenderData()
         {
-            List<BuildingWrapper> wrappers = SceneRefs.ObjectFactory.buildPrefabs.GetAllObjects();
+            List<BuildingWrapper> wrappers = buildingPrefabs.FlatWrappers;
             BuildingGroupData[] buildingGroups = new BuildingGroupData[wrappers.Count];
 
             for (int i = 0; i < buildingGroups.Length; i++)
             {
                 buildingGroups[i].mesh = wrappers[i].blueprint.mesh;
                 buildingGroups[i].count = 0;
-
-
-                // TODO
-                //buildingGroups[i].material = wrappers[i].blueprint.material;
+                buildingGroups[i].material = wrappers[i].blueprint.material;
             }
 
-            BuildingRenderData[] instanceData = new BuildingRenderData[lastIndex];
             for (int i = 0; i < lastIndex; i++)
             {
-                if (buildings[i] == null)
+                if (!buildings[i].IsValid)
                     continue;
-                buildingGroups[buildings[i].renderData.meshIndex].count++;
-                instanceData[i] = buildings[i].renderData;
+
+                buildingGroups[buildings[i].meshIndex].count++;
             }
 
             return new InitialRenderData()
             {
                 buildingGroups = buildingGroups,
-                instanceData = instanceData,
                 buildings = buildings
             };
         }
@@ -102,7 +102,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        int AddBuildingToArray(BuildingNew data)
+        int AddBuildingToArray(BuildingRenderData data)
         {
             int index;
             if(firstRemovedSpace <= lastIndex)
@@ -116,15 +116,22 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                 index = lastIndex;
                 if(lastIndex == buildings.Length)
                 {
-                    BuildingNew[] buildingDataNew = new BuildingNew[buildings.Length * 2];
-                    buildings.CopyTo(buildingDataNew, 0);
-                    buildings = buildingDataNew;
+                    NativeArray<BuildingRenderData> posTemp = new NativeArray<BuildingRenderData>(buildings.Length * 2, Allocator.Persistent);
+                    posTemp.CopyFrom(buildings);
+                    buildings.Dispose();
+                    buildings = posTemp;
                 }
+
                 buildings[lastIndex] = data;
                 lastIndex++;
             }
             return index;
         }
+
+        /// <summary>
+        /// Removes the data from render array, and updates renderIndexes.
+        /// </summary>
+        /// <param name="index"></param>
         void RemoveBuildingFromArray(int index)
         {
             if (index < firstRemovedSpace)
@@ -134,23 +141,25 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             int startIndex = buildings[index].renderIndex;
             int max = startIndex + count;
 
+            var span = buildings.AsSpan();
             for (int i = 0; i < buildings.Length; i++)
             {
-                if (buildings[i]?.renderIndex >= startIndex && buildings[i].renderIndex < max)
-                    buildings[i].renderIndex--;
+                if (span[i].renderIndex >= startIndex && span[i].renderIndex < max)
+                    span[i].renderIndex--;
             }
-            buildings[index] = null;
+            buildings[index] = BuildingRenderData.Null;
         }
         #endregion
 
         public void RemoveBuilding(int index)
         {
-            BuildingNew building = buildings[index];
+            // GET FROM COMPONENT
+            BuildingRenderData building = buildings[index];
             RemoveBuildingFromArray(index);
-            BuildingWrapper wrapper = SceneRefs.ObjectFactory.buildPrefabs.GetBuilding(building.categoryIndex, building.wrapperIndex);
+            BuildingWrapper wrapper = buildingPrefabs.GetBuilding(building.meshIndex);
             BuildingChanges.UnMarkTiles(
                 wrapper.blueprint, 
-                building.renderData, 
+                building, 
                 ref worldComponent, 
                 in levelArray,
                 ref overlays);
@@ -162,7 +171,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         {
             for (int i = startIndex; i < lastIndex; i++)
             {
-                if (buildings[i] == null)
+                if (!buildings[i].IsValid)
                 {
                     firstRemovedSpace = i;
                     return;
@@ -171,13 +180,13 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             firstRemovedSpace = int.MaxValue;
         }
 
-        public void PlaceBuilding(BuildingWrapper blueprint, BuildingNew buildingData)
+        public void PlaceBuilding(BuildingWrapper blueprint, BuildingRenderData buildingData)
         {
             int arrayIndex = AddBuildingToArray(buildingData);
 
             BuildingChanges.MarkTiles(
                 blueprint.blueprint, 
-                buildingData.renderData, 
+                buildingData, 
                 arrayIndex, 
                 ref worldComponent, 
                 in levelArray,
@@ -186,13 +195,25 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             levelRenderer.UpdateOverlayTexture();
         }
 
-        public void UpdateRenderIndexes(int startIndex, int increase)
+        public void UpdateRenderIndexes(int startIndex, short increase)
         {
             for (int i = 0; i < lastIndex; i++)
             {
-                if (buildings[i]?.renderIndex >= startIndex)
-                    buildings[i].renderIndex += increase;
+                if (buildings[i].renderIndex >= startIndex)
+                {
+                    var b = buildings[i];
+                    b.renderIndex += increase;
+                    buildings[i] = b;
+                }
             }
+        }
+
+        private void OnDestroy()
+        {
+            buildingRenderer.Dispose();
+            
+            if(buildings.IsCreated) 
+                buildings.Dispose();
         }
     }
 }

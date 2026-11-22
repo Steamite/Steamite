@@ -15,7 +15,8 @@ using UnityEngine.UIElements;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
 {
-    [RequireComponent(typeof(LevelRenderer))]
+[RequireComponent(typeof(LevelRenderer))]
+    [RequireComponent(typeof(WorldBuildings))]
     public class GridWorld : MonoBehaviour
     {
         public int LEVEL_COUNT;
@@ -179,7 +180,7 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
             renderer = GetComponent<LevelRenderer>();
 
 
-            WorldBuildings = new WorldBuildings();
+            WorldBuildings = GetComponent<WorldBuildings>();
             WorldBuildings.LoadState(saveToLoad.objectsSave.buildings, world, levelArray, overlayArray, renderer);
 
             GetComponent<IWorldInit>().Init(ref world, ref levelArray);

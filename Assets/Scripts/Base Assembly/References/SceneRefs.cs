@@ -51,6 +51,7 @@ public class SceneRefs : MonoBehaviour
     #region Getters
     public static MouseController MouseController => instance._mouseController;
     public static UIOverlay Overlays => instance._overlays;
+    [Obsolete]
     public static ClickableObjectFactory ObjectFactory => instance._objectFactory;
     public static HumanUtil Humans => instance._humans;
     public static JobQueue JobQueue => instance._jobQueue;

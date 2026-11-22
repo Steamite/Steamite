@@ -4,6 +4,7 @@ using Assets.Scripts.Systems.Rendering.Buildings;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using Unity.Collections;
 using UnityEngine;
@@ -11,7 +12,7 @@ using static UnityEngine.GraphicsBuffer;
 
 namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Modes
 {
-    public class BuildingRenderManager
+    public class BuildingRenderManager : IDisposable
     {
 
         GraphicsBuffer argsBuffer;
@@ -90,7 +91,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Modes
         }
 
         const int INCREASE_AMMOUNT = 5;
-        public int PlaceBlueprint(bool clearBlueprint)
+        public short PlaceBlueprint(bool clearBlueprint)
         {
             int dataIndex = renderBatches[prefabIndex].numberOfItems;
             renderBatches[prefabIndex].numberOfItems++;
@@ -110,7 +111,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Modes
             renderBatches[prefabIndex].UpdateInstanceData(dataIndex);
 
 
-            return dataIndex + renderBatches[prefabIndex].startIndex;
+            return (short)(dataIndex + renderBatches[prefabIndex].startIndex);
         }
 
         void HandleInstanceRealoc(int index)
@@ -160,6 +161,15 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Modes
             argsBuffer.SetData(args, 0, 0, 1);
 
             renderBatches[0].numberOfItems = 0;
+        }
+
+        public void Dispose()
+        {
+            argsBuffer.Dispose();
+            foreach (var item in renderBatches)
+            {
+                item.Dispose();
+            }
         }
     }
 }

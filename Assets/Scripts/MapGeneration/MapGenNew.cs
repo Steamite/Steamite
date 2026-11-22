@@ -164,22 +164,21 @@ public class MapGenNew : MonoBehaviour
 
     BuildsAndChunksSaveNew CreateBuildings(int chunkSize, ref WorldComponent worldComponent, NativeArray<LevelComponent> levelArray, ref NativeArray<OverlayComponent> overlays)
     {
-        List<BuildingWrapper> wrappers = buildingData.GetAllObjects();
+        List<BuildingWrapper> wrappers = buildingData.FlatWrappers;
 
-        ElevatorNew save = elevator;
+        //ElevatorNew save = elevator;
+        //save.CreateMainElevator(centerPos);
+        
         int _width = levelDimensions.sizes[0] * chunkSize;
         int centerPos = (_width / 2) - 1;
-        save.CreateMainElevator(centerPos);
 
-        BuildingNew[] buildings = new BuildingNew[2];
-        buildings[0] = save;
+        NativeArray<BuildingRenderData> buildings = new NativeArray<BuildingRenderData>(2, Allocator.Persistent);
 
-
+        buildings[0] = new() { encodedLocalPosition = Recalculation.BuildingPosFromPos(centerPos, 0, 0), meshIndex = 2};
+        
         _width = levelDimensions.sizes[1] * chunkSize;
         centerPos = (_width / 2) - 1;
-
-        buildings[1] = save.Clone();
-        buildings[1].renderData.encodedLocalPosition = (uint)((centerPos & 0x3FF) | ((centerPos & 0x3FF) << 10) | (1 & 0x7) << 20);
+        buildings[1] = new() { encodedLocalPosition = Recalculation.BuildingPosFromPos(centerPos, 1, 0), meshIndex = 2};
 
         BuildsAndChunksSaveNew buildsAndChunksSaveNew = new()
         {
@@ -190,8 +189,8 @@ public class MapGenNew : MonoBehaviour
         for (int i = 0; i < buildings.Length; i++)
         {
             BuildingChanges.MarkTiles(
-                wrappers[(int)buildings[i].renderData.meshIndex].blueprint,
-                buildings[i].renderData,
+                wrappers[buildings[i].meshIndex].blueprint,
+                buildings[i],
                 i,
                 ref worldComponent,
                 in levelArray,

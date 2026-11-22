@@ -12,7 +12,6 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
 {
     public class BuildingRenderLinker : MonoBehaviour, IRenderInit
     {
-        const int INCREASE_AMMOUNT = 5;
         [SerializeField] Material buildingMaterial;
         [SerializeField] Material blueprintMaterial;
 
@@ -35,9 +34,7 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
             SetupArgBuffer(renderBatches.Length, out IndirectDrawIndexedArgs[] args, out GraphicsBuffer argsBuffer);
 
 
-            FillInstaceBuffers(data.instanceData, renderBatches, levels, out int[] renderIndexes);
-
-            FillRenderIndex(data.buildings, renderIndexes);
+            FillInstaceBuffers(data.buildings, renderBatches, levels, out int[] renderIndexes);
 
             InitArgs(renderBatches, args, argsBuffer);
 
@@ -50,20 +47,6 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
             buildingRenderSystem.Enabled = true;
             return buildingRenderSystem;
 
-        }
-
-        private void FillRenderIndex(BuildingNew[] buildings, int[] renderIndexes)
-        {
-            int j = 0;
-
-            for (int i = 0; i < buildings.Length; i++)
-            {
-                if (buildings[i] == null)
-                    continue;
-
-                buildings[i].renderIndex = renderIndexes[j];
-                j++;
-            }
         }
 
         void InitBatches(BuildingGroupData[] buildingGroups, out RenderBatch[] renderBatches)
@@ -109,25 +92,30 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
             argBuffer.SetData(args);
         }
 
-        void FillInstaceBuffers(BuildingRenderData[] buildings, RenderBatch[] renderBatches, NativeArray<LevelComponent> levels, out int[] renderIndexes)
+        void FillInstaceBuffers(NativeArray<BuildingRenderData> buildings, RenderBatch[] renderBatches, NativeArray<LevelComponent> levels, out int[] renderIndexes)
         {
             renderIndexes = new int[buildings.Length];
 
 
             for (int i = 0; i < buildings.Length; i++)
             {
-                int batchIndex = (int)buildings[i].meshIndex + 1;
-                RenderBatch batch = renderBatches[batchIndex];
+                var build = buildings[i];
+                if (!build.IsValid)
+                    continue;
 
-                uint position = buildings[i].encodedLocalPosition;
-
+                int batchIndex =    build.meshIndex + 1;
+                uint position =     build.encodedLocalPosition;
                 int y = (int)((position >> 20) & 0x7);
 
-                position = Recalculation.BuildingPosToFixedBuildingPos(position, levels[y].offsetsScaled);
 
+                RenderBatch batch = renderBatches[batchIndex];
+
+                position = Recalculation.BuildingPosToFixedBuildingPos(position, levels[y].offsetsScaled);
                 batch.instanceData[batch.numberOfItems] = position;
 
-                renderIndexes[i] = batch.startIndex + batch.numberOfItems;
+                build.renderIndex = (short)(batch.startIndex + batch.numberOfItems);
+                buildings[i] = build;
+
                 batch.numberOfItems++;
             }
 

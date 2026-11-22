@@ -23,7 +23,26 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
         /// 25 - 31 - construction progress<br/>
         /// </summary>
         public uint encodedLocalPosition;
-        public uint meshIndex;
+
+        /// <summary>
+        /// Index shared with the 3d model, used for hover and selection colors.
+        /// </summary>
+        public short renderIndex;
+
+        /// <summary>
+        /// Index of the buildingType (index of the wrapper), used for creating and destroying.
+        /// </summary>
+        public short meshIndex;
+
+        /// <summary>
+        /// Instance with meshIndex set to -1.
+        /// </summary>
+        public static BuildingRenderData Null => new() { encodedLocalPosition = 0, renderIndex = 0, meshIndex = -1 };
+
+        /// <summary>
+        /// Is this a builiding of a valid type (meshIndex != -1);
+        /// </summary>
+        public readonly bool IsValid => meshIndex != -1;
     }
 
     [Serializable]
@@ -59,11 +78,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
             return building;
         }
 
-        public void SetBindingIndex(int catIndex, int wrapIndex, uint meshIndex)
+        /*public void SetBindingIndex(int catIndex, int wrapIndex, uint meshIndex)
         {
             categoryIndex = (byte)catIndex;
             wrapperIndex = (byte)wrapIndex;
             renderData.meshIndex = meshIndex;
-        }
+        }*/
     }
 }

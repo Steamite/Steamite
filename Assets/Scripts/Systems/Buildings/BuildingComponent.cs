@@ -5,11 +5,19 @@ using Unity.Entities;
 
 namespace Assets.Scripts.Systems.Buildings
 {
+    [Flags]
+    public enum BuildingState : byte
+    {
+        None = 0,
+        Constructing = 1,
+        Deconstructing = 2,
+    }
     public struct BuildingComponent : IComponentData
     {
-        public int typeIndex;
-
+        public int listIndex;
+        public BuildingState state;
     }
+
 
     [InternalBufferCapacity(3)]
     public struct BuildingInventory : IBufferElementData

@@ -18,6 +18,8 @@ public struct BuildingGrid
     [SerializeField] public int anchorIndex;
 
     [SerializeField] public Mesh mesh;
+    [SerializeField] public Material material;
+
     /// <summary>List of tiles.</summary>
     [FormerlySerializedAs("itemList")]
     [SerializeField] public GridItemType[] itemArray;

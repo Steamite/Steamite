@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using System;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine.UIElements;
@@ -91,5 +92,18 @@ public static class Recalculation
 
         return (uint)((pos & ~0xFFFFF) | (x & 0x3FF) | ((z & 0x3FF) << 10));
     }
+
+    /// <summary>
+    /// See: <see cref="BuildingRenderData.encodedLocalPosition"/>
+    /// </summary>
+    /// <param name="posToPlace"></param>
+    /// <param name="level"></param>
+    /// <param name="rot"></param>
+    /// <returns></returns>
+    public static uint BuildingPosFromPos(int posToPlace, int level, int rot) => (uint)(
+        (posToPlace & 0x3FF) | 
+        ((posToPlace & 0x3FF) << 10) | 
+        ((level & 0x7) << 20) |
+        ((rot & 0x3) << 22));
 }
 
