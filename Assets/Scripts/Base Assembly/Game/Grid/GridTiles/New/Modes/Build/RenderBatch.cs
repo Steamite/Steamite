@@ -47,7 +47,9 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
             renderParams = new(new(material))
             {
                 matProps = propBlock,
-                worldBounds = new Bounds(Vector3.zero, Vector3.one * 10000)
+                worldBounds = new Bounds(Vector3.zero, Vector3.one * 10000),
+                receiveShadows = true,
+                shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On
             };
 
             numberOfItems = 0;
@@ -60,21 +62,12 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
 
             propBlock.SetInt("_GroupIndex", groupIndex);
             propBlock.SetInt("_Offset", startIndex);
-
-            /*argBuffer = new (GraphicsBuffer.Target.IndirectArguments, 1, 20);
-
-            args.indexCountPerInstance = mesh.GetIndexCount(0);
-            args.instanceCount = numberOfItems;
-            args.startIndex = mesh.GetIndexStart(0);
-            args.baseVertexIndex = mesh.GetBaseVertex(0);
-
-            argBuffer.SetData(args);*/
         }
 
         /// <summary>
         /// Blueprint init
         /// </summary>
-        public RenderBatch()
+        public RenderBatch(Material blueprintMaterial)
         {
             size = 1;
             startIndex = 0;
@@ -82,6 +75,12 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
             propBlock = new();
 
             instanceData = new NativeArray<uint>(1, Allocator.Persistent);
+
+            renderParams = new(blueprintMaterial)
+            {
+                matProps = propBlock,
+                worldBounds = new(Vector3.zero, Vector3.one * 10000)
+            };
 
             instaceBuffer = new GraphicsBuffer(Target.Structured, size, sizeof(uint));
             instaceBuffer.SetData(instanceData);
@@ -92,15 +91,9 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
             propBlock.SetInt("_Offset", startIndex);
         }
 
-        public void SetBlueprint(Mesh mesh, Material blueprintMaterial)
+        public void SetBlueprint(Mesh mesh)
         {
             this.mesh = mesh;
-
-            renderParams = new(blueprintMaterial)
-            {
-                matProps = propBlock,
-                worldBounds = new(Vector3.zero, Vector3.one * 10000)
-            };
             numberOfItems = 1;
         }
 

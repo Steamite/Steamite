@@ -61,9 +61,13 @@ namespace Pathing
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            float time = GameTime.DeltaTime;
+            if (time <= 0)
+                return;
+
             PathfindMovingJob job = new()
             {
-                DeltaTime = GameTime.DeltaTime
+                DeltaTime = time
             };
             state.Dependency = job.ScheduleParallelByRef(state.Dependency);
         }

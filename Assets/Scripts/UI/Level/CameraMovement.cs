@@ -1,5 +1,5 @@
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
-using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
+using ModesNew;
 using Pathing;
 using Rendering;
 using System;
@@ -156,6 +156,7 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
     void Move()
     {
         Vector2 vec = move.ReadValue<Vector2>();
+        //Debug.Log(vec);
         Vector2 mouse = Mouse.current.position.value;
         if (UIRefs.TradingWindow.IsOpen)
         {
@@ -163,28 +164,6 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
         }
         else
         {
-            /*transform.Translate(
-                GetSpeed(
-                    ref currentMovementX,
-                    addMovement,
-                    removeMovement,
-                    maxMovement,
-                    MergeMove(
-                        Edge(
-                            mouse.x,
-                            Screen.width),
-                        vec.x)),
-                0,
-                GetSpeed(
-                    ref currentMovementY,
-                    addMovement,
-                    removeMovement,
-                    maxMovement,
-                    MergeMove(
-                        Edge(
-                            mouse.y,
-                            Screen.height),
-                        vec.y)));*/
 
             Vector3 toMove = new(
                 GetSpeed(

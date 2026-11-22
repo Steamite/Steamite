@@ -74,12 +74,12 @@ public class BuildCategWrapper : DataCategory<BuildingWrapper>
 [CreateAssetMenu(fileName = "BuildButtonCategory", menuName = "UI Data/BuildButton Holder", order = 1)]
 public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapper>
 {
-    List<BuildingWrapper> flatWrappers;
+    [NonSerialized] List<BuildingWrapper> flatWrappers;
     public List<BuildingWrapper> FlatWrappers 
     { 
         get 
         {
-            if (flatWrappers == null)
+            if (flatWrappers == null || flatWrappers.Count == 0)
                 Init();
             return flatWrappers;
         }
@@ -109,7 +109,7 @@ public class BuildingData : InitializableHolder<BuildCategWrapper, BuildingWrapp
         {
             foreach (var wrapper in categ.Objects)
             {
-                FlatWrappers.Add(wrapper);
+                flatWrappers.Add(wrapper);
             }
         }
     }

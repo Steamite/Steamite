@@ -24,6 +24,10 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
         public void OnUpdate(ref SystemState state)
         {
+            float time = GameTime.DeltaTime;
+            if (time <= 0)
+                return;
+
             var worldComponent = SystemAPI.GetSingleton<WorldComponent>();
             var levels = SystemAPI.GetSingletonBuffer<LevelComponent>();
             var overlayBuffers = SystemAPI.GetSingletonBuffer<OverlayComponent>();

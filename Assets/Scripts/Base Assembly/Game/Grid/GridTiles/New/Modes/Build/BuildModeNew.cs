@@ -1,13 +1,10 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
-using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
 using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Modes;
 using Grid.New;
+using ModesNew;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,7 +17,9 @@ public class BuildModeNew : GridTilesModeNew
 
     event Action<BuildingWrapper> onWrapperChange;
 
-
+    [SerializeField] Material blueprintMaterial;
+    [SerializeField] Color availableColor;
+    [SerializeField] Color unavailableColor;
 
 
     public override void InitMode(MouseController _mouseController)
@@ -45,6 +44,7 @@ public class BuildModeNew : GridTilesModeNew
         uint y = (uint)(0x7 & newLevel) << 20;
 
         buildingPos = pos | y;
+        
         buildingRenderer.MoveBlueprint(buildingPos);
     }
 
@@ -55,10 +55,15 @@ public class BuildModeNew : GridTilesModeNew
         TileType tileType = (TileType)tile.Type;
         if (tileType < TileType.Road)
         {
-            controller.SetGridHoverColor(pos, hoverColor, tileType, index, 0.0001f);
+            controller.hoverWorldPosition = pos;
+            
             return true;
         }
         return false;
+    }
+    protected override void FallbackColor(LevelGridTile tile, int index, int2 prevPos)
+    {
+        controller.hoverWorldPosition = prevPos;
     }
 
 
@@ -72,6 +77,12 @@ public class BuildModeNew : GridTilesModeNew
             BuildPositionUpdate(controller.hoverWorldPosition);
 
             buildingRenderer.MoveBlueprint(buildingPos);
+
+
+            blueprintMaterial.SetColor("_EmmissionColor",
+                TestPlacement(wrapper.blueprint.size, controller.hoverWorldPosition)
+                ? availableColor
+                : unavailableColor);
         }
     }
 
@@ -101,21 +112,8 @@ public class BuildModeNew : GridTilesModeNew
             world.y += size.y + 1;
             size.y = -size.y;
         }
-        int originalX = world.x;
-
-        for (int j = 0; j < size.y; j++)
-        {
-            for (int i = 0; i < size.x; i++)
-            {
-                var a = SceneRefs.World.GetActiveTile(world).TType;
-                if (a != TileType.Empty && a != TileType.Road)
-                    return;
-
-                world.x++;
-            }
-            world.x = originalX;
-            world.y++;
-        }
+        if (!TestPlacement(size, world))
+            return;
 
         buildingBlueprint.encodedLocalPosition = buildingPos;
 
@@ -134,6 +132,25 @@ public class BuildModeNew : GridTilesModeNew
         {
             // keep the struct
         }
+    }
+
+    public bool TestPlacement(int2 size, int2 world)
+    {
+        int originalX = world.x;
+        for (int j = 0; j < size.y; j++)
+        {
+            for (int i = 0; i < size.x; i++)
+            {
+                var a = SceneRefs.World.GetActiveTile(world).TType;
+                if (a != TileType.Empty && a != TileType.Road)
+                    return false;
+
+                world.x++;
+            }
+            world.x = originalX;
+            world.y++;
+        }
+        return true;
     }
 
     public override void ExitMod()

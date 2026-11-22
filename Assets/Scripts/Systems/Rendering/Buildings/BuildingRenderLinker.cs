@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
-using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using Buildings;
 using System;
 using Unity.Collections;
 using Unity.Entities;
@@ -18,7 +18,7 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
         public void Init(GridWorld world)
         {
             BuildingRenderSystem system = UploadBuildingData(world.WorldBuildings.GetInitialRenderData(), world.levelArray);
-            world.WorldBuildings.buildingRenderer = new(system.batches, system.args, system.argBuffer, blueprintMaterial);
+            world.WorldBuildings.buildingRenderer = new(system.batches, system.args, system.argBuffer);
 
             world.AttachChange((LevelComponent level, int i, int newIndex) =>
             {
@@ -52,7 +52,7 @@ namespace Assets.Scripts.Systems.Rendering.Buildings
         void InitBatches(BuildingGroupData[] buildingGroups, out RenderBatch[] renderBatches)
         {
             renderBatches = new RenderBatch[buildingGroups.Length + 1];
-            renderBatches[0] = new();
+            renderBatches[0] = new(blueprintMaterial);
 
             int offset = 1;
             int j = 1;

@@ -10,7 +10,7 @@ using UnityEngine.Analytics;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
-namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New
+namespace ModesNew
 {
     /// <summary>Handles different control states for <see cref="GridTiles"/>.</summary>
     public enum ControlMode

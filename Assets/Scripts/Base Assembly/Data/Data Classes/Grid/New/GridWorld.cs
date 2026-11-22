@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths;
-using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using Buildings;
 using Grid.New;
 using System;
 using System.Collections.Generic;
@@ -31,12 +31,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New
         [NonSerialized] public int LargestLevelDimensionScaled;
         [NonSerialized] public int GridSizeScaled;
 
-        [SerializeField] Mesh[] buildingMeshes;
-        [SerializeField] Material buildingMaterial;
         Action<int, int> onLevelChange;
         Action<LevelComponent, int, int> onLevelComponentChange;
         Action<LevelComponent, LevelComponent, int> LevelChange;
-        public List<Chunk> chunks;
 
         [SerializeField] int2 inspectedChunk;
 

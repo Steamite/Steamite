@@ -1,14 +1,16 @@
-﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths;
+﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
+using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Modes;
+using Assets.Scripts.Systems.Buildings;
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
-using static UnityEditor.Progress;
 
-namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
+namespace Buildings
 {
 
     public struct InitialRenderData
@@ -24,7 +26,8 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
         /// Used for bridging selection (tiles point to this array), rendering, and storing position.
         /// </summary>
         [NonSerialized] public NativeArray<BuildingRenderData> buildings;
-
+        [NonSerialized] public NativeArray<Entity> buildingEntities;
+        
         [SerializeField] BuildingData buildingPrefabs;
         int lastIndex = 0;
         int firstRemovedSpace = int.MaxValue;
@@ -45,7 +48,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             this.overlays = overlays;
             this.levelRenderer = levelRenderer;
 
-            buildings = new NativeArray<BuildingRenderData>(math.max(50, buildingsToLoad.Length * 2), Allocator.Persistent);
+            int size = math.max(50, buildingsToLoad.Length * 2);
+            buildings = new NativeArray<BuildingRenderData>(size, Allocator.Persistent);
+            buildingEntities = new NativeArray<Entity>(size, Allocator.Persistent);
 
             for (int i = 0; i < buildings.Length; i++)
             {
@@ -108,8 +113,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             if(firstRemovedSpace <= lastIndex)
             {
                 index = firstRemovedSpace;
-                buildings[firstRemovedSpace] = data;
-                FindNextRemoved(firstRemovedSpace);
+
+                buildings[index] = data;
+                FindNextRemoved(index);
             }
             else
             {
@@ -120,11 +126,31 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                     posTemp.CopyFrom(buildings);
                     buildings.Dispose();
                     buildings = posTemp;
+
+
+                    NativeArray<Entity> entitiesTemp = new NativeArray<Entity>(buildingEntities.Length * 2, Allocator.Persistent);
+
+                    entitiesTemp.CopyFrom(buildingEntities);
+                    buildingEntities.Dispose();
+                    buildingEntities = entitiesTemp;
                 }
 
-                buildings[lastIndex] = data;
+                buildings[index] = data;
                 lastIndex++;
             }
+
+            // Create entity
+            var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
+            var ent = manager.CreateEntity();
+            buildingEntities[index] = ent;
+
+            manager.AddComponentData<BuildingComponent>(ent, new()
+            {
+                listIndex = index,
+                state = BuildingState.Constructing
+            });
+            
             return index;
         }
 
@@ -148,6 +174,11 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
                     span[i].renderIndex--;
             }
             buildings[index] = BuildingRenderData.Null;
+
+            // destroy Entity
+            var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            manager.DestroyEntity(buildingEntities[index]);
+            buildingEntities[index] = Entity.Null;
         }
         #endregion
 
@@ -214,6 +245,9 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World
             
             if(buildings.IsCreated) 
                 buildings.Dispose();
+
+            if (buildingEntities.IsCreated)
+                buildingEntities.Dispose();
         }
     }
 }

@@ -10,8 +10,12 @@ namespace Assets.Scripts.Systems.Buildings
     {
         None = 0,
         Constructing = 1,
-        Deconstructing = 2,
+        Deconstructing = 1 << 1,
+        WaitingForResources = 1 << 2,
+        OutputFull = 1 << 3,
+        NoSource = 1 << 4
     }
+
     public struct BuildingComponent : IComponentData
     {
         public int listIndex;

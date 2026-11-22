@@ -19,15 +19,12 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Modes
         RenderBatch[] renderBatches;
         IndirectDrawIndexedArgs[] args;
 
-        Material blueprintMaterial;
 
-        public BuildingRenderManager(RenderBatch[] batches, IndirectDrawIndexedArgs[] args, GraphicsBuffer argsBuffer, Material blueprintMaterial)
+        public BuildingRenderManager(RenderBatch[] batches, IndirectDrawIndexedArgs[] args, GraphicsBuffer argsBuffer)
         {
             this.renderBatches = batches;
             this.args = args;
             this.argsBuffer = argsBuffer;
-
-            this.blueprintMaterial = blueprintMaterial;
         }
 
         public int RemoveBuilding(int index)
@@ -71,7 +68,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Modes
             prefabIndex = (int)renderData.meshIndex + 1;
             var prefab = renderBatches[prefabIndex];
 
-            renderBatches[0].SetBlueprint(prefab.mesh, blueprintMaterial);
+            renderBatches[0].SetBlueprint(prefab.mesh);
 
             renderBatches[0].instanceData[0] = renderData.encodedLocalPosition;
             renderBatches[0].UpdateInstanceData();

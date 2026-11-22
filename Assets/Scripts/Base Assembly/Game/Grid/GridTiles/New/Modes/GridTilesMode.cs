@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
-using Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New;
+using ModesNew;
 using UnityEngine;
 
 public abstract partial class GridTilesModeNew : MonoBehaviour
