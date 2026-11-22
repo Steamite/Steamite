@@ -66,7 +66,7 @@ namespace Assets.Scripts.Systems.Human.Jobs
                         change.ValueRW.hasChange = true;
 
                         /// cancel the position and get freed in the <see cref="JobCancelSystem.OnUpdate(ref SystemState)"/>
-                        jobCancel.positionsToCancel.Add(world);
+                        jobCancel.positionsToCancel.Add(world + levelIndex * worldComponent.largestGridSize);
                     }
                     WorldChanges.SetTileRuntime(localIndex, levelIndex, tile, ref worldComponent, levels.AsNativeArray());
                 }

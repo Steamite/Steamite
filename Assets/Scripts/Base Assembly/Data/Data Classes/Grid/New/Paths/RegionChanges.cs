@@ -86,6 +86,7 @@ public static class RegionChanges
 
         var regions = world.regions;
         var availableRegions = world.availableRegions;
+        openPosition += levelIndex * world.largestGridSize;
         byte regionId = JoinRegionArray(openPosition, world.offsets, path, ref regions, availableRegions);
 
 
