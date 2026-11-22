@@ -1,0 +1,761 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c28966b8feb9714cb5a597fbcd884bd, type: 3}
+  m_Name: _bck
+  m_EditorClassIdentifier: 
+  Categories:
+  - id: 1
+    Name: Unbuildable
+    Objects:
+    - rid: 8808251701909258314
+    - rid: 8808251703612669980
+    Icon: {fileID: 7388822144124034973, guid: b3a59500ed796b04d9bc3ed01fc07904, type: 3}
+  - id: 2
+    Name: Production
+    Objects:
+    - rid: 8808251703612669983
+    - rid: 8808251703612669985
+    Icon: {fileID: 7388822144124034973, guid: 2f572a3f287d5c94c90b9dfcfd293077, type: 3}
+  - id: 3
+    Name: Population
+    Objects:
+    - rid: 8808251703612669986
+    - rid: 8808251703612669987
+    - rid: 1153726817925070940
+    - rid: 5286523460443963457
+    Icon: {fileID: 7388822144124034973, guid: e9c32ea6e6dc1d34a9d07bba3f1acdbc, type: 3}
+  - id: 4
+    Name: Fluids
+    Objects:
+    - rid: 8808251703612669988
+    - rid: 8808251703612669989
+    - rid: 8808251703612669990
+    - rid: 8808251703612669991
+    - rid: 8808251703612669992
+    Icon: {fileID: 7388822144124034973, guid: 2e6d11d762930904c837fc26e0709d66, type: 3}
+  - id: 5
+    Name: Mining
+    Objects:
+    - rid: 5286523460443963458
+    - rid: 5286523460443963459
+    - rid: 1073264522842341447
+    Icon: {fileID: 7388822144124034973, guid: f303754b353b04e4ba464dfb84699356, type: 3}
+  defaultMesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1073264522842341447
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 274342640
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 17
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 4
+          wrapperIndex: 2
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: c770445d57d1c8041b75bef58b05f5d3, type: 3}
+        blueprint:
+          size:
+            x: 0
+            y: 0
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+          material: {fileID: 0}
+          itemArray: 
+    - rid: 1153726817925070940
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 512409920
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 8
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 2
+          wrapperIndex: 2
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: 17f94f26da813984e91e7ac514c22efa, type: 3}
+        blueprint:
+          size:
+            x: 0
+            y: 0
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+          material: {fileID: 0}
+          itemArray: 
+    - rid: 5286523460443963457
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 1599500820
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 9
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 2
+          wrapperIndex: 3
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: 61ddc400ef1828b44aea71e08150614e, type: 3}
+        blueprint:
+          size:
+            x: 0
+            y: 0
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+          material: {fileID: 0}
+          itemArray: 
+    - rid: 5286523460443963458
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 343481641
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 15
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 4
+          wrapperIndex: 0
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: 844559dcf93745c499f6f30a2b1dd430, type: 3}
+        blueprint:
+          size:
+            x: 0
+            y: 0
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+          material: {fileID: 0}
+          itemArray: 
+    - rid: 5286523460443963459
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 1169593243
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 16
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 4
+          wrapperIndex: 1
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: 0255a6fef51cb4442a4c4011e20d89b8, type: 3}
+        blueprint:
+          size:
+            x: 0
+            y: 0
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+          material: {fileID: 0}
+          itemArray: 
+    - rid: 8808251701909258314
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: asdsadasdsa
+        description: 'aa
+
+          dsadsa
+
+
+
+          dsadas'
+        id: 1458562700
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 0
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 0
+          wrapperIndex: 0
+        modifications:
+        - name: 13
+          size: 0
+          resource:
+            types:
+            - {fileID: 11400000, guid: 1347ef2c9f2b3c44cb6f5e843e1d55bb, type: 2}
+            - {fileID: 11400000, guid: 980911e3c0dcaac498249b372f434607, type: 2}
+            ammounts: 0f0000000a000000i
+            baseResource:
+              types: []
+              ammounts: 
+            money:
+              baseValue: 0
+              currentValue: 0
+          statValues: []
+        Cost:
+          types:
+          - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+          ammounts: 32000000i
+          baseResource:
+            types:
+            - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+            ammounts: 32000000i
+          money:
+            baseValue: 15
+            currentValue: 15
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: 28711bc89a9f8b244a01e3d359df53d2, type: 3}
+        blueprint:
+          size:
+            x: 1
+            y: 2
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 1
+          mesh: {fileID: 3735029673142812049, guid: a5fc4d65593ece84aa598ba7c6b5d4d0, type: 3}
+          material: {fileID: 0}
+          itemArray: 0200000001000000i
+    - rid: 8808251703612669980
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: dsadsadsadsa
+        description: 
+        id: 242703327
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 1
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 0
+          wrapperIndex: 1
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: 0ef82ac86a3e2e94298e673ef0925f4d, type: 3}
+        blueprint:
+          size:
+            x: 1
+            y: 2
+          renderSize:
+            x: 1
+            y: 1
+          anchorIndex: 1
+          mesh: {fileID: 3735029673142812049, guid: a5fc4d65593ece84aa598ba7c6b5d4d0, type: 3}
+          material: {fileID: 0}
+          itemArray: 0200000001000000i
+    - rid: 8808251703612669983
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: abcd
+        description: "\t"
+        id: 1235511660
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 2
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 1
+          wrapperIndex: 0
+        modifications:
+        - name: 15
+          size: 0
+          resource:
+            types:
+            - {fileID: 11400000, guid: 476987d8701b79b42acf9d04564a5ac0, type: 2}
+            - {fileID: 11400000, guid: 3c7dfac828d8f2444a5b534a5eb44dc7, type: 2}
+            ammounts: 1e0000000a000000i
+            baseResource:
+              types: []
+              ammounts: 
+            money:
+              baseValue: 30
+              currentValue: 0
+          statValues:
+          - mod: 3
+            modAmmount: 50
+            percent: 1
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: e2dedb0ab53d02a4a8b0e2eb23c72ddb, type: 3}
+        blueprint:
+          size:
+            x: 3
+            y: 4
+          renderSize:
+            x: 2
+            y: 2
+          anchorIndex: 3
+          mesh: {fileID: -7614807428085643112, guid: a5fc4d65593ece84aa598ba7c6b5d4d0, type: 3}
+          material: {fileID: 0}
+          itemArray: 020000000200000002000000010000000300000001000000010000000400000001000000010000000100000001000000i
+    - rid: 8808251703612669985
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 2
+        description: 
+        id: 1915475883
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 3
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 1
+          wrapperIndex: 1
+        modifications:
+        - name: 5
+          size: 0
+          resource:
+            types:
+            - {fileID: 11400000, guid: 6f13f7cede6861645a353535afb233de, type: 2}
+            - {fileID: 11400000, guid: 8fc4cf8feaad5a648bd0c87ee4ff2ca6, type: 2}
+            ammounts: 0a0000000a000000i
+            baseResource:
+              types: []
+              ammounts: 
+            money:
+              baseValue: 0
+              currentValue: 0
+          statValues: []
+        - name: 1
+          size: 45
+          resource:
+            types:
+            - {fileID: 11400000, guid: 6f13f7cede6861645a353535afb233de, type: 2}
+            ammounts: 0a000000i
+            baseResource:
+              types: []
+              ammounts: 
+            money:
+              baseValue: 0
+              currentValue: 0
+          statValues: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: 6141d9965f66f6a4097dac7efb27eaa4, type: 3}
+        blueprint:
+          size:
+            x: 2
+            y: 3
+          renderSize:
+            x: 1
+            y: 1
+          anchorIndex: 2
+          mesh: {fileID: 3074696894467530729, guid: a5fc4d65593ece84aa598ba7c6b5d4d0, type: 3}
+          material: {fileID: 0}
+          itemArray: 020000000200000001000000010000000100000001000000i
+    - rid: 8808251703612669986
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 268937765
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 6
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 2
+          wrapperIndex: 0
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: 99c47f49e7b31bb458a9f7b76d1fe662, type: 3}
+        blueprint:
+          size:
+            x: 0
+            y: 0
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+          material: {fileID: 0}
+          itemArray: 
+    - rid: 8808251703612669987
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 640485558
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 7
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 2
+          wrapperIndex: 1
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: 729a493191982dd44beeec1170baec64, type: 3}
+        blueprint:
+          size:
+            x: 0
+            y: 0
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+          material: {fileID: 0}
+          itemArray: 
+    - rid: 8808251703612669988
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 1277743679
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 10
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 3
+          wrapperIndex: 0
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: af12f7dbf4371724b9331c594fb1b6d4, type: 3}
+        blueprint:
+          size:
+            x: 0
+            y: 0
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+          material: {fileID: 0}
+          itemArray: 
+    - rid: 8808251703612669989
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 63962023
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 11
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 3
+          wrapperIndex: 1
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: 8d56f6d5e177f0343bf4465b57cb3d33, type: 3}
+        blueprint:
+          size:
+            x: 0
+            y: 0
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+          material: {fileID: 0}
+          itemArray: 
+    - rid: 8808251703612669990
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 1611848327
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 12
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 3
+          wrapperIndex: 2
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: c63621c53a7984e41a870e4e0778ed5e, type: 3}
+        blueprint:
+          size:
+            x: 0
+            y: 0
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+          material: {fileID: 0}
+          itemArray: 
+    - rid: 8808251703612669991
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 1298733611
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 13
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 3
+          wrapperIndex: 3
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: 8831f13d226e4154897c29c1f62d2eed, type: 3}
+        blueprint:
+          size:
+            x: 0
+            y: 0
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+          material: {fileID: 0}
+          itemArray: 
+    - rid: 8808251703612669992
+      type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
+      data:
+        Name: 
+        description: 
+        id: 159146180
+        building:
+          renderData:
+            encodedLocalPosition: 0
+            renderIndex: 0
+            meshIndex: 14
+          IsConstructing: 0
+          IsDeconstructing: 0
+          resources: 
+          renderIndex: 0
+          categoryIndex: 3
+          wrapperIndex: 4
+        modifications: []
+        Cost:
+          types: []
+          ammounts: 
+          baseResource:
+            types: []
+            ammounts: 
+          money:
+            baseValue: 0
+            currentValue: 0
+        selectedLevel: 0
+        preview: {fileID: 21300000, guid: 3c805fc3897ae954594f05dc27600b4d, type: 3}
+        blueprint:
+          size:
+            x: 0
+            y: 0
+          renderSize:
+            x: 0
+            y: 0
+          anchorIndex: 0
+          mesh: {fileID: -5495902117074765545, guid: 81a09ed25fb411c468555499f95c104c, type: 3}
+          material: {fileID: 0}
+          itemArray: 

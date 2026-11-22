@@ -77,13 +77,17 @@ public class BuildModeNew : GridTilesModeNew
             BuildPositionUpdate(controller.hoverWorldPosition);
 
             buildingRenderer.MoveBlueprint(buildingPos);
+            
+            UpdateEmmissionColor();
+        }
+    }
 
-
-            blueprintMaterial.SetColor("_EmmissionColor",
+    public void UpdateEmmissionColor()
+    {
+        blueprintMaterial.SetColor("_EmmissionColor",
                 TestPlacement(wrapper.blueprint.size, controller.hoverWorldPosition)
                 ? availableColor
                 : unavailableColor);
-        }
     }
 
     readonly static int[] cosTable = { 1, 0, -1, 0 };
@@ -130,7 +134,7 @@ public class BuildModeNew : GridTilesModeNew
             controller.ChangeSelMode(ControlMode.Nothing);
         else
         {
-            // keep the struct
+            UpdateEmmissionColor();
         }
     }
 
@@ -183,10 +187,6 @@ public class BuildModeNew : GridTilesModeNew
             controller.ChangeSelMode(ControlMode.Nothing);
             return;
         }
-        else if(controller.activeModeIndex != (int)ControlMode.Build)
-        {
-            controller.ChangeSelMode(ControlMode.Build);
-        }
 
         categoryIndex = catIndex;
         objectIndex = objIndex;
@@ -210,8 +210,13 @@ public class BuildModeNew : GridTilesModeNew
 
         buildingBlueprint.encodedLocalPosition = buildingPos;
 
-
         buildingRenderer.CreateBlueprint(buildingBlueprint);
+
+
+        if (controller.activeModeIndex != (int)ControlMode.Build)
+        {
+            controller.ChangeSelMode(ControlMode.Build);
+        }
 
         onWrapperChange?.Invoke(wrapper);
     }

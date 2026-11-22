@@ -74,7 +74,7 @@ Material:
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _EmmissionColor: {r: 1, g: 0, b: 0, a: 0.6}
+    - _EmmissionColor: {r: 0, g: 0.15156436, b: 1, a: 0.6}
     - _HoverColor: {r: 0.5764706, g: 0.5764706, b: 0.5764706, a: 0.7019608}
     - _SelectedColor: {r: 1, g: 0, b: 0, a: 0.77254903}
   m_BuildTextureStacks: []

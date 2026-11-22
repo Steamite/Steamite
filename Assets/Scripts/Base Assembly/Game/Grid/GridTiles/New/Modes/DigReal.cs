@@ -142,7 +142,7 @@ public class DigReal : GridTilesModeNew
         manager.ApplyMark(!removing);
 
         renderer.UpdateOverlayTexture();
-        controller.MouseListen();
+        controller.RefreshHover();
     }
 
     void CalculateTiles()

@@ -115,9 +115,13 @@ namespace ModesNew
             maxDim.x = Screen.width;
             maxDim.y = Screen.height;
 
+            TestMouse();
+        }
 
+        void TestMouse()
+        {
             Vector2 mousePos = math.clamp(
-                Mouse.current.position.value, 
+                Mouse.current.position.value,
                 0,
                 maxDim);
             if (!isForcedUpdate && Mathf.Approximately(mousePos.x, lastPos.x) && Mathf.Approximately(mousePos.y, lastPos.y))
@@ -131,10 +135,10 @@ namespace ModesNew
             if (!top.Raycast(ray, out distance))
                 return;
 
-            MouseListen();
+            RefreshHover();
         }
 
-        public void MouseListen()
+        public void RefreshHover()
         {
             ray = Camera.main.ScreenPointToRay((Vector2)lastPos);
 
@@ -253,10 +257,15 @@ namespace ModesNew
         
         void OnLevelChange(int old, int newLevel)
         {
-            if (activeModeIndex == 0)
+            switch (activeModeIndex)
             {
-                InfoWindowAdapter.Window.Close();
-                DeselectObjects();
+                case 0:
+                    InfoWindowAdapter.Window.Close();
+                    DeselectObjects();
+                    break;
+                case (int)ControlMode.Build:
+                    ((BuildModeNew)activeMode).UpdateEmmissionColor();
+                    break;
             }
         }
 
@@ -294,7 +303,7 @@ namespace ModesNew
 
                 activeMode.EnterMod();
                 
-                MouseListen();
+                RefreshHover();
             }
             inChange = false;
         }

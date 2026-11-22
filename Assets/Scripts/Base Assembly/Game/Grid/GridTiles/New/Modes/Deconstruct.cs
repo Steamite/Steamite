@@ -30,11 +30,17 @@ public class DeconstructNew : GridTilesModeNew
         }
     }
 
+    protected override void FallbackColor(LevelGridTile tile, int index, int2 prevPos)
+    {
+        controller.hoverWorldPosition = prevPos;
+        controller.ClearHoverMaterial(ModesNew.MaterialType.Buildings);
+    }
+
     public override void DownObject()
     {
         if (controller.hoverObjectType < TileType.Building)
             return;
         SceneRefs.World.WorldBuildings.RemoveBuilding(controller.hoverObjectIndex);
-        controller.MouseListen();
+        controller.RefreshHover();
     }
 }

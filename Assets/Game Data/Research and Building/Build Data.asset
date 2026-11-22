@@ -440,7 +440,7 @@ MonoBehaviour:
     - rid: 8808251703612669983
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
-        Name: abcd
+        Name: Elevator
         description: "\t"
         id: 1235511660
         building:
@@ -497,7 +497,7 @@ MonoBehaviour:
     - rid: 8808251703612669985
       type: {class: BuildingWrapper, ns: , asm: BaseAssembly}
       data:
-        Name: 2
+        Name: Test sphere
         description: 
         id: 1915475883
         building:
