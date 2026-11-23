@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: humanPref
   m_EditorClassIdentifier: Systems::Pathing.HumanPrefabData
   count: 1000
-  speed: 5
+  speed: 1
   position:
     x: 133
     y: 1

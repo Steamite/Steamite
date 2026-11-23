@@ -11,12 +11,19 @@ namespace Pathing
 {
 
     [BurstCompile]
+    [WithPresent(typeof(HumanJobData))]
     public partial struct PathfindMovingJob : IJobEntity
     {
         static readonly float3 offset = new float3(0.5f, 0, 0.5f);
 
         [BurstCompile]
-        public void Execute(ref PathfindComponent path, ref LocalTransform transform, ref RemainingTime time, in DynamicBuffer<PositionNode> nodes, EnabledRefRW<RemainingTime> timeEnabled)
+        public void Execute(
+            ref PathfindComponent path, 
+            ref LocalTransform transform, 
+            ref RemainingTime time, 
+            in DynamicBuffer<PositionNode> nodes, 
+            EnabledRefRW<RemainingTime> timeEnabled,
+            EnabledRefRO<HumanJobData> jobData)
         {
             if (path.currentWaypoint == -1 || path.currentWaypoint >= nodes.Length)
                 return;
@@ -34,7 +41,7 @@ namespace Pathing
             if(dist < maxDistance)
             {
                 // keep rest for the next movement
-                time.remainingTime -= (maxDistance / sp);
+                time.remainingTime -= (dist / path.speed);
 
                 path.position = waypoint;
                 transform.Position = new float3(waypoint.x, 1, waypoint.z) + offset;
@@ -42,11 +49,13 @@ namespace Pathing
                 if (path.currentWaypoint == nodes.Length)
                 {
                     path.currentWaypoint = -1;
-                    timeEnabled.ValueRW = false;
+                    if(!jobData.ValueRO)
+                        timeEnabled.ValueRW = false;
                 }
             }
             else
             {
+                time.remainingTime = 0;
                 dir = math.normalizesafe(dir) * sp;
                 transform.Position += new float3(dir.x, 0, dir.y);
             }
@@ -66,8 +75,7 @@ namespace Pathing
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            float time = GameTime.DeltaTime;
-            if (time <= 0)
+            if (GameTime.DeltaTime == 0)
                 return;
 
             PathfindMovingJob job = new()

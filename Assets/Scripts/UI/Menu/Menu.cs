@@ -70,8 +70,6 @@ public class Menu : InitilizablePanelRenderer
                 SceneRefs.Tick.UIWindowToggle(false);
             }
             UIRefs.LevelCamera.enabled = _isOpen;
-            UIRefs.LevelCamera.mainCamera.GetComponent<PhysicsRaycaster>().enabled = _isOpen;
-            UIRefs.LevelCamera.mainCamera.GetComponent<Physics2DRaycaster>().enabled = _isOpen;
             MenuContainer.style.display = _isOpen ? DisplayStyle.None : DisplayStyle.Flex;
             
             IsOpen = !_isOpen;

@@ -24,8 +24,7 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
         public void OnUpdate(ref SystemState state)
         {
-            float t= GameTime.DeltaTime;
-            if (t <= 0)
+            if (GameTime.DeltaTime == 0)
                 return;
 
             var worldComponent = SystemAPI.GetSingleton<WorldComponent>();
@@ -36,8 +35,11 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
             var jobCancel = SystemAPI.GetSingleton<JobCancelComponent>();
 
-            foreach ((var jobData, var pathing, var isFree, var time, var timeEnabled) in SystemAPI.Query<
-                RefRW<HumanJobData>, RefRO<PathfindComponent>, EnabledRefRW<HumanJobData>, RefRW<RemainingTime>, EnabledRefRW<RemainingTime>>())
+            foreach ((var jobData, var pathing, var isFree, var time) in SystemAPI.Query<
+                RefRW<HumanJobData>, 
+                RefRO<PathfindComponent>, 
+                EnabledRefRW<HumanJobData>, 
+                RefRW<RemainingTime>>())
             {
                 if (jobData.ValueRO.jobType == JobType.Free)
                     continue;
@@ -57,7 +59,7 @@ namespace Assets.Scripts.Systems.Human.Jobs
                     if (durability <= 0)
                     {
                         time.ValueRW.remainingTime = -durability;
-                        timeEnabled.ValueRW = false;
+
                         // clear overlay
                         int world = Recalculation.WorldIndexFromLocalIndex(localIndex, level.offsetsScaled, level.dimensionsScaled);
                         var overlay = overlayBuffers[levelIndex];
@@ -69,6 +71,10 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
                         /// cancel the position and get freed in the <see cref="JobCancelSystem.OnUpdate(ref SystemState)"/>
                         jobCancel.positionsToCancel.Add(world + levelIndex * worldComponent.largestGridSize);
+                    }
+                    else
+                    {
+                        time.ValueRW.remainingTime = 0;
                     }
                     WorldChanges.SetTileRuntime(localIndex, levelIndex, tile, ref worldComponent, levels.AsNativeArray());
                 }

@@ -23,6 +23,7 @@ namespace Assets.Scripts.Systems.Human.JobFind
             
 
             var humans = SystemAPI.GetComponentLookup<HumanJobData>();
+            var times = SystemAPI.GetComponentLookup<RemainingTime>();
             var pathfind = SystemAPI.GetComponentLookup<PathfindComponent>();
             var positionNodes = SystemAPI.GetBufferLookup<PositionNode>();
 
@@ -53,6 +54,8 @@ namespace Assets.Scripts.Systems.Human.JobFind
                         
                         humans.SetComponentEnabled(ent, false);
                         humans.GetRefRW(ent).ValueRW.Clear();
+                        times.GetEnabledRefRW<RemainingTime>(ent).ValueRW = false;
+
 
 
                         var rw = pathfind.GetRefRW(ent);

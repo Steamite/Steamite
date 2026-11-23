@@ -84,7 +84,7 @@ namespace Pathing
 
 
             // found a path
-            if (foundIndex != 1)
+            if (foundIndex != -1)
             {
                 remainingTime.ValueRW = true;
             }

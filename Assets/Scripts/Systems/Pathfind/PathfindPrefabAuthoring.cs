@@ -26,6 +26,7 @@ namespace Pathing
                 AddComponent<PathfindComponent>(ent, new() { position = 6008});
                 AddComponent<HumanJobData>(ent, new() { jobType = JobType.Free, buildingInterest = default, targetPosition = -1});
                 AddComponent<RemainingTime>(ent, new() { remainingTime = 0 });
+                SetComponentEnabled<RemainingTime>(ent, false);
                 SetComponentEnabled<HumanJobData>(ent, false);
                 //AddComponent<HumanIsFree>(ent, new());
                 AddBuffer<PositionNode>(ent);

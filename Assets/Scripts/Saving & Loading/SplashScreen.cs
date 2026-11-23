@@ -27,7 +27,6 @@ public class SplashScreen : MonoBehaviour
 #endif
     private async Awaitable Start()
     {
-        Time.timeScale = 1;
         await SceneManager.LoadSceneAsync("Loading Screen");
 
         await ResFluidTypes.Init();

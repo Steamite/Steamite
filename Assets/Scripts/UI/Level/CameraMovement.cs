@@ -88,12 +88,12 @@ public class CameraMovement : MonoBehaviour, IAfterLoad
         levelRender = GameObject.FindAnyObjectByType<LevelRenderer>();
         mouseListener = GameObject.FindAnyObjectByType<MouseController>();
         enabled = true;
+        Reset();
     }
 
     private void OnEnable()
     {
         cameraMap.Enable();
-        Reset();
     }
     private void OnDisable()
     {
