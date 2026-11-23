@@ -81,7 +81,7 @@ namespace Assets.Scripts.Systems.Human.JobFind
                 EnabledRefRW<HumanJobData>,
                 EnabledRefRW<RemainingTime>>()
                 .WithDisabled<HumanJobData>()
-                .WithDisabled<RemainingTime>()
+                .WithPresent<RemainingTime>()
                 .WithEntityAccess())
             {
                 /*if (job.ValueRO.jobType != JobType.Free)

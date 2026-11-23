@@ -53,8 +53,8 @@ namespace Assets.Scripts.Systems.Human.JobFind
                         var ent = offers.assignedJobs[i].assignHuman;
                         
                         humans.SetComponentEnabled(ent, false);
+                        times.SetComponentEnabled(ent, false);
                         humans.GetRefRW(ent).ValueRW.Clear();
-                        times.GetEnabledRefRW<RemainingTime>(ent).ValueRW = false;
 
 
 
