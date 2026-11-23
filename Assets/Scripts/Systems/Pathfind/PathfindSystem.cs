@@ -10,12 +10,14 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Profiling;
+using UnityEngine;
 
 namespace Pathing
 {
 
     [BurstCompile]
     [WithDisabled(typeof(HumanJobData))]
+    [WithPresent(typeof(RemainingTime))]
     partial struct PathfindSetJob : IJobEntity
     {
         [ReadOnly] public DestinationComponent destination;
@@ -23,11 +25,9 @@ namespace Pathing
 
 
         [BurstCompile]
-        public void Execute(ref PathfindComponent humanPosition, ref DynamicBuffer<PositionNode> nodes, ref HumanJobData job)
+        public void Execute(ref PathfindComponent humanPosition, ref DynamicBuffer<PositionNode> nodes, EnabledRefRW<RemainingTime> time)
         {
-            if (job.jobType != JobType.Free)
-                return;
-            Pathfind.FindPath(ref humanPosition, nodes, destination.positions, worldData);
+            Pathfind.FindPath(ref humanPosition, time, nodes, destination.positions, worldData);
             
         }
     }
@@ -49,6 +49,7 @@ namespace Pathing
         [BurstCompile]
         public static int FindPath(
             ref PathfindComponent humanPosition, 
+            in EnabledRefRW<RemainingTime> remainingTime,
             in DynamicBuffer<PositionNode> nodes, 
             in NativeArray<int> destinations, 
             in WorldComponent worldData,
@@ -79,7 +80,20 @@ namespace Pathing
             k_InitMarker.End();
 
             pathfindingNew.Execute();
-            return EndSearch(ref humanPosition, nodes, worldData, positions, foundDestination);
+            int foundIndex = EndSearch(ref humanPosition, nodes, worldData, positions, foundDestination);
+
+
+            // found a path
+            if (foundIndex != 1)
+            {
+                remainingTime.ValueRW = true;
+            }
+            else
+            {
+                remainingTime.ValueRW = false;
+            }
+
+            return foundIndex;
         }
 
         static int EndSearch(ref PathfindComponent humanPosition, in DynamicBuffer<PositionNode> nodes, WorldComponent worldData, NativeList<int> positions, NativeReference<int> foundDestination)

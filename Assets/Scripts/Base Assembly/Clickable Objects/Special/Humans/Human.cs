@@ -38,6 +38,7 @@ public enum Specializations
     Miner
 }
 
+[Obsolete]
 /// <summary>Humans walk around the map and complete tasks ordered by the player.</summary>
 public class Human : ClickableObject
 {

@@ -13,16 +13,15 @@ namespace Pathing
     [BurstCompile]
     public partial struct PathfindMovingJob : IJobEntity
     {
-        public float DeltaTime;
         static readonly float3 offset = new float3(0.5f, 0, 0.5f);
 
         [BurstCompile]
-        public void Execute(ref PathfindComponent path, ref LocalTransform transform, in DynamicBuffer<PositionNode> nodes)
+        public void Execute(ref PathfindComponent path, ref LocalTransform transform, ref RemainingTime time, in DynamicBuffer<PositionNode> nodes, EnabledRefRW<RemainingTime> timeEnabled)
         {
             if (path.currentWaypoint == -1 || path.currentWaypoint >= nodes.Length)
                 return;
 
-            float sp = path.speed * DeltaTime;
+            float sp = path.speed * time.remainingTime;
             float maxDistance = sp * sp;// math.pow(path.speed * DeltaTime, 2);
 
             float3 pos = transform.Position - offset;
@@ -34,11 +33,17 @@ namespace Pathing
 
             if(dist < maxDistance)
             {
+                // keep rest for the next movement
+                time.remainingTime -= (maxDistance / sp);
+
                 path.position = waypoint;
                 transform.Position = new float3(waypoint.x, 1, waypoint.z) + offset;
                 path.currentWaypoint++;
                 if (path.currentWaypoint == nodes.Length)
+                {
                     path.currentWaypoint = -1;
+                    timeEnabled.ValueRW = false;
+                }
             }
             else
             {
@@ -50,7 +55,7 @@ namespace Pathing
 
     [UpdateInGroup(typeof(HumanUpdateGroup)), UpdateAfter(typeof(PathfindSystem))] 
     [BurstCompile]
-    public partial struct MovingSystem : ISystem
+    public partial struct MovementSystem : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
@@ -67,7 +72,6 @@ namespace Pathing
 
             PathfindMovingJob job = new()
             {
-                DeltaTime = time
             };
             state.Dependency = job.ScheduleParallelByRef(state.Dependency);
         }

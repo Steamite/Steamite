@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>Job for humans.</summary>
-[Serializable]
+[Serializable, Obsolete]
 public struct JobData
 {
     #region Variables

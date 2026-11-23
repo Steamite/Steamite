@@ -52,7 +52,7 @@ namespace Assets.Scripts.Systems.Human.JobFind
                         var ent = offers.assignedJobs[i].assignHuman;
                         
                         humans.SetComponentEnabled(ent, false);
-                        //var jobData = humans.GetRefRW(ent);
+                        humans.GetRefRW(ent).ValueRW.Clear();
 
 
                         var rw = pathfind.GetRefRW(ent);

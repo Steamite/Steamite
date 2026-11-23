@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Humans;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Unity.Entities;
@@ -8,17 +9,27 @@ namespace Assets.Scripts.Base_Assembly.Game.Time
 {
     [UpdateInGroup(typeof(SimulationSystemGroup), OrderFirst = true), ]
     public partial struct TimeSystem : ISystem
-    {/*
-        public void OnCreate(ref SystemState state)
-        {
-            state.RequireForUpdate<TimeComponent>();
-            GameTime.SetDeltaTime(0);
-        }*/
+    {
         
         public void OnUpdate(ref SystemState state)
         {
             float delta = SystemAPI.Time.DeltaTime * GameTime.ScaleTime;
             GameTime.SetDeltaTime(delta);
+
+
+            foreach((var time, var enable) in 
+                SystemAPI.Query<RefRW<RemainingTime>, EnabledRefRO<RemainingTime>>().WithPresent<RemainingTime>())
+            {
+                if(enable.ValueRO == false)
+                {
+                    time.ValueRW.remainingTime = delta;
+                }
+                else
+                {
+                    time.ValueRW.remainingTime += delta;
+                }
+            }
+            
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<Solution>
   <Project Path="Editor.csproj" />
-  <Project Path="Systems.csproj" />
   <Project Path="BaseAssembly.csproj" />
+  <Project Path="Systems.csproj" />
   <Project Path="ToolkitUI.csproj" />
   <Project Path="Adapters.csproj" />
   <Project Path="Quests.csproj" />

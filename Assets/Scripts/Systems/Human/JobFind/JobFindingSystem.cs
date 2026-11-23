@@ -74,11 +74,14 @@ namespace Assets.Scripts.Systems.Human.JobFind
             if (offers.digJobs.Count == 0 && offers.buildingJobs.Count == 0)
                 return;
 
-            foreach ((var pathfind, var nodes, var job, var hasJob, var humanEntity) in SystemAPI.Query<
+            foreach ((var pathfind, var nodes, var job, var hasJob, var remainingTime, var humanEntity) in SystemAPI.Query<
                 RefRW<PathfindComponent>,
                 DynamicBuffer<PositionNode>,
                 RefRW<HumanJobData>,
-                EnabledRefRW<HumanJobData>>().WithDisabled<HumanJobData>().WithEntityAccess())
+                EnabledRefRW<HumanJobData>,
+                EnabledRefRW<RemainingTime>>()
+                .WithDisabled<HumanJobData>()
+                .WithEntityAccess())
             {
                 /*if (job.ValueRO.jobType != JobType.Free)
                     continue;
@@ -86,7 +89,7 @@ namespace Assets.Scripts.Systems.Human.JobFind
                 if (offers.digJobs.Count == 0)
                     break;
 
-                int i = Pathing.Pathfind.FindPath(ref pathfind.ValueRW, nodes, offers.digJobs.AsArray(), world, offers.digRegions);
+                int i = Pathing.Pathfind.FindPath(ref pathfind.ValueRW, remainingTime, nodes, offers.digJobs.AsArray(), world, offers.digRegions);
                 if (i == -1)
                     continue;
 

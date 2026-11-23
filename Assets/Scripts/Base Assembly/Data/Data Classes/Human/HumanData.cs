@@ -49,11 +49,19 @@ namespace Humans
         public Entity buildingInterest;
 
         public JobType jobType;
+
+        public void Clear()
+        {
+            targetLevel = -1;
+            targetPosition = -1;
+            buildingInterest = Entity.Null;
+            jobType = JobType.Free;
+        }
     }
 
-    [Obsolete]
-    public struct HumanIsFree : IEnableableComponent, IComponentData
+    public struct RemainingTime : IComponentData, IEnableableComponent
     {
+        public float remainingTime;
 
     }
 

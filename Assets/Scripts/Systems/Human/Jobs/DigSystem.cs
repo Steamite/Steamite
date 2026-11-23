@@ -11,7 +11,7 @@ using Unity.Entities;
 
 namespace Assets.Scripts.Systems.Human.Jobs
 {
-    [UpdateInGroup(typeof(HumanUpdateGroup)), UpdateAfter(typeof(MovingSystem))]
+    [UpdateInGroup(typeof(HumanUpdateGroup)), UpdateAfter(typeof(MovementSystem))]
     public partial struct DigSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
@@ -24,8 +24,8 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
         public void OnUpdate(ref SystemState state)
         {
-            float time = GameTime.DeltaTime;
-            if (time <= 0)
+            float t= GameTime.DeltaTime;
+            if (t <= 0)
                 return;
 
             var worldComponent = SystemAPI.GetSingleton<WorldComponent>();
@@ -36,8 +36,8 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
             var jobCancel = SystemAPI.GetSingleton<JobCancelComponent>();
 
-            foreach ((var jobData, var pathing, var isFree) in SystemAPI.Query<
-                RefRW<HumanJobData>, RefRO<PathfindComponent>, EnabledRefRW<HumanJobData>>())
+            foreach ((var jobData, var pathing, var isFree, var time, var timeEnabled) in SystemAPI.Query<
+                RefRW<HumanJobData>, RefRO<PathfindComponent>, EnabledRefRW<HumanJobData>, RefRW<RemainingTime>, EnabledRefRW<RemainingTime>>())
             {
                 if (jobData.ValueRO.jobType == JobType.Free)
                     continue;
@@ -52,10 +52,12 @@ namespace Assets.Scripts.Systems.Human.Jobs
 
                     int localIndex = jobData.ValueRO.targetPosition;
                     var tile = grid[localIndex];
-
-                    tile.RemoveDurability(GameTime.DeltaTime);
-                    if (tile.TType == TileType.Road)
+                    
+                    float durability = tile.RemoveDurability(time.ValueRO.remainingTime);
+                    if (durability <= 0)
                     {
+                        time.ValueRW.remainingTime = -durability;
+                        timeEnabled.ValueRW = false;
                         // clear overlay
                         int world = Recalculation.WorldIndexFromLocalIndex(localIndex, level.offsetsScaled, level.dimensionsScaled);
                         var overlay = overlayBuffers[levelIndex];
