@@ -33,6 +33,11 @@ namespace Assets.Scripts.Systems.Buildings
         public byte type;
         public byte stored;
         public byte cost;
+
+        public readonly override string ToString()
+        {
+            return $"type: {type} stored: {stored} / {cost}";
+        }
     }
 
     [InternalBufferCapacity(3)]

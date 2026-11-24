@@ -48,8 +48,18 @@ namespace InfoWindowViews
             title.text = $"Building ID: {selectedIndex}";
 
             buildingEntity = buildings.buildingEntities[selectedIndex];
-            var buildComponent = World.DefaultGameObjectInjectionWorld.EntityManager.GetComponentData<BuildingComponent>(buildingEntity);
-            secText.text = $"{buildComponent.state}";
+            var entManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            var buildComponent = entManager.GetComponentData<BuildingComponent>(buildingEntity);
+            var resourceComponent = entManager.GetBuffer<BuildingInventory>(buildingEntity);
+
+            StringBuilder textBuilder = new();
+
+            textBuilder.AppendLine(buildComponent.state.ToString());
+            for (int i = 0; i < resourceComponent.Length; i++)
+            {
+                textBuilder.AppendLine(resourceComponent[i].ToString());
+            }
+            secText.text = textBuilder.ToString();
 
             buildingRenderDatas = buildings.buildings;
         }
