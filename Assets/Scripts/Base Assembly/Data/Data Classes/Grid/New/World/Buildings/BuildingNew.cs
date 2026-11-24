@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Assets.Scripts.Systems.Buildings;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings
@@ -10,6 +12,20 @@ namespace Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Building
         public Mesh mesh;
         public Material material;
         public int count;
+    }
+
+    public struct BuildingSaveData
+    {
+        public BuildingRenderData data;
+        public List<BuildingInventory> inventory;
+        public BuildingState state;
+
+        public BuildingSaveData(BuildingRenderData data, List<BuildingInventory> inventory)
+        {
+            this.data = data;
+            this.inventory = inventory;
+            state = BuildingState.None;
+        }
     }
 
     [Serializable]

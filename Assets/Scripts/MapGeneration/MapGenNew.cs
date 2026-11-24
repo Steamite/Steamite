@@ -1,6 +1,7 @@
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.Paths;
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using Assets.Scripts.Systems.Buildings;
 using Grid.New;
 using System;
 using System.Collections.Generic;
@@ -172,13 +173,18 @@ public class MapGenNew : MonoBehaviour
         int _width = levelDimensions.sizes[0] * chunkSize;
         int centerPos = (_width / 2) - 1;
 
-        NativeArray<BuildingRenderData> buildings = new NativeArray<BuildingRenderData>(2, Allocator.Persistent);
+        List<BuildingInventory> inventory = new()
+        {
+            new() { type = 10, cost = 0, stored = 50 }
+        };
 
-        buildings[0] = new() { encodedLocalPosition = Recalculation.BuildingPosFromPos(centerPos, 0, 0), meshIndex = 2};
-        
+        List<BuildingSaveData> buildings = new List<BuildingSaveData>();
+        buildings.Add(TestBuilding(centerPos, 0, inventory));
+
+
         _width = levelDimensions.sizes[1] * chunkSize;
         centerPos = (_width / 2) - 1;
-        buildings[1] = new() { encodedLocalPosition = Recalculation.BuildingPosFromPos(centerPos, 1, 0), meshIndex = 2};
+        buildings.Add(TestBuilding(centerPos, 1, inventory));
 
         BuildsAndChunksSaveNew buildsAndChunksSaveNew = new()
         {
@@ -186,11 +192,11 @@ public class MapGenNew : MonoBehaviour
             chunks = new ChunkSave[0]
         };
 
-        for (int i = 0; i < buildings.Length; i++)
+        for (int i = 0; i < buildings.Count; i++)
         {
             BuildingChanges.MarkTiles(
-                wrappers[buildings[i].meshIndex].blueprint,
-                buildings[i],
+                wrappers[buildings[i].data.meshIndex].blueprint,
+                buildings[i].data,
                 i,
                 ref worldComponent,
                 in levelArray,
@@ -199,6 +205,17 @@ public class MapGenNew : MonoBehaviour
         }
 
         return buildsAndChunksSaveNew;
+    }
+
+    BuildingSaveData TestBuilding(int _centerPos, int level, List<BuildingInventory> inventory)
+    {
+        return new BuildingSaveData(
+            new()
+            {
+                encodedLocalPosition = Recalculation.BuildingPosFromPos(_centerPos, level, 0),
+                meshIndex = 2
+            },
+            inventory);
     }
 
     async Awaitable CreateLevels(WorldComponent worldComponent, NativeArray<LevelComponent> levelArray, NativeArray<OverlayComponent> componentArray)

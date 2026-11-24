@@ -144,7 +144,7 @@ namespace BottomBar.Building
                 if (wrappers[index].unlocked == false)
                     return DisplayStyle.None;
 
-                if (MyRes.CanAfford(wrappers[index].Cost))
+                if (false)//MyRes.CanAfford(wrappers[index]))
                 {
                     return DisplayStyle.None;
                 }
@@ -192,11 +192,11 @@ namespace BottomBar.Building
                 UIRefs.ResearchWindow.OpenWithFocus(wrappers[index]);
                 return false;
             }
-            else if (!MyRes.CanAfford(wrappers[index].Cost))
+            /*else if (!MyRes.CanAfford(wrappers[index].Cost))
             {
                 SelectedChoice = -1;
                 return false;
-            }
+            }*/
             else
             {
                 SelectedChoice = index;

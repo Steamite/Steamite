@@ -27,7 +27,7 @@ namespace BottomBar.Building
             {
                 foreach (var wrapper in item.Objects)
                 {
-                    wrapper.Cost.Init();
+                    //wrapper.Cost.Init();
                     wrapper.unlocked = true;
                 }
             }
@@ -88,7 +88,7 @@ namespace BottomBar.Building
                 short id = buildingData.GetFlatId(categGroup.SelectedChoice, i);
                 BuildingWrapper wrapper = buildingData.FlatWrappers[id];
 
-                if (wrapper.unlocked && MyRes.CanAfford(wrapper.Cost))
+                if (wrapper.unlocked)// && MyRes.CanAfford(wrapper.Cost))
                     SceneRefs.MouseController.buildMode.SetBlueprint(id, categGroup.SelectedChoice, i, wrapper);
             }
             else

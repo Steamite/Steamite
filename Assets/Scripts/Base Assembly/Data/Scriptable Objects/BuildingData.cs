@@ -1,13 +1,22 @@
 using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
+using Assets.Scripts.Systems.Buildings;
 using Levels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 
+[Serializable]
+public struct TempResource
+{
+    public byte type;
+    public byte amount;
+}
 
 [Serializable]
 public class BuildingWrapper : DataObject
@@ -16,7 +25,10 @@ public class BuildingWrapper : DataObject
     [SerializeField] BuildingNew building;
 
     public List<BuildingModifications> modifications;
-    public MoneyResource Cost;
+
+    public List<TempResource> cost;
+    public int moneyCost;
+
 #if UNITY_EDITOR
     [SerializeField] public int selectedLevel;
 #endif
@@ -51,6 +63,25 @@ public class BuildingWrapper : DataObject
     public void SetBuilding(BuildingNew building)
     {
         throw new NotImplementedException();
+    }
+
+    public ICollection<BuildingInventory> FillCost()
+    {
+        BuildingInventory[] buildingInventories = new BuildingInventory[cost.Count];
+
+        for (int i = 0; i < cost.Count; i++)
+        {
+            TempResource item = cost[i];
+
+            buildingInventories[i] = new()
+            {
+                type = item.type,
+                cost = item.amount,
+                stored = 0
+            };
+        }
+
+        return buildingInventories;
     }
 }
 

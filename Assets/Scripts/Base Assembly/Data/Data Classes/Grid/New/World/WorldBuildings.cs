@@ -37,7 +37,7 @@ namespace Buildings
 
 
         public void LoadState(
-            NativeArray<BuildingRenderData> buildingsToLoad, 
+            List<BuildingSaveData> buildingsToLoad, 
             WorldComponent worldComponent, 
             NativeArray<LevelComponent> levelArray, 
             NativeArray<OverlayComponent> overlays,
@@ -48,13 +48,13 @@ namespace Buildings
             this.overlays = overlays;
             this.levelRenderer = levelRenderer;
 
-            int size = math.max(50, buildingsToLoad.Length * 2);
+            int size = math.max(50, buildingsToLoad.Count * 2);
             buildings = new NativeArray<BuildingRenderData>(size, Allocator.Persistent);
             buildingEntities = new NativeArray<Entity>(size, Allocator.Persistent);
 
             for (int i = 0; i < buildings.Length; i++)
             {
-                if(i >= buildingsToLoad.Length)
+                if(i >= buildingsToLoad.Count)
                 {
                     if (firstRemovedSpace == int.MaxValue)
                         firstRemovedSpace = lastIndex;
@@ -62,10 +62,12 @@ namespace Buildings
                     lastIndex++;
                 }
                 else
-                    AddBuildingToArray(buildingsToLoad[i]);
-            }
+                {
+                    AddBuildingToArray(buildingsToLoad[i].data, buildingsToLoad[i].inventory);
+                    
+                }
 
-            buildingsToLoad.Dispose();
+            }
         }
 
         WorldComponent worldComponent;
@@ -107,7 +109,7 @@ namespace Buildings
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        int AddBuildingToArray(BuildingRenderData data)
+        int AddBuildingToArray(BuildingRenderData data, ICollection<BuildingInventory> resource)
         {
             int index;
             if(firstRemovedSpace <= lastIndex)
@@ -127,7 +129,6 @@ namespace Buildings
                     buildings.Dispose();
                     buildings = posTemp;
 
-
                     NativeArray<Entity> entitiesTemp = new NativeArray<Entity>(buildingEntities.Length * 2, Allocator.Persistent);
 
                     entitiesTemp.CopyFrom(buildingEntities);
@@ -139,7 +140,15 @@ namespace Buildings
                 lastIndex++;
             }
 
-            // Create entity
+            CreateEntity(index, resource);
+
+
+            return index;
+        }
+
+        void CreateEntity(int index, ICollection<BuildingInventory> resource)
+        {
+            // !!! Create new buildings, need to get resource data here !!!
             var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
             var ent = manager.CreateEntity();
@@ -151,7 +160,11 @@ namespace Buildings
                 state = BuildingState.Constructing
             });
             
-            return index;
+            var inventory = manager.AddBuffer<BuildingInventory>(ent);
+            foreach (var item in resource)
+            {
+                inventory.Add(item);
+            }
         }
 
         /// <summary>
@@ -213,7 +226,7 @@ namespace Buildings
 
         public void PlaceBuilding(BuildingWrapper blueprint, BuildingRenderData buildingData)
         {
-            int arrayIndex = AddBuildingToArray(buildingData);
+            int arrayIndex = AddBuildingToArray(buildingData, blueprint.FillCost());
 
             BuildingChanges.MarkTiles(
                 blueprint.blueprint, 

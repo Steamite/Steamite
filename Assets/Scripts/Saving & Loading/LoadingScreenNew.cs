@@ -242,7 +242,7 @@ namespace Assets.Scripts.Saving___Loading
             int maxprogress = 0;
             /*for (int i = 0; i < MyGrid.NUMBER_OF_LEVELS; i++)
                 maxprogress += worldSave.gridSave[i].width * worldSave.gridSave[i].height * TILE_WEIGHT; // Tiles and pipes*/
-            maxprogress += worldSave.objectsSave.buildings.Length * BUILD_WEIGHT; //scale number
+            maxprogress += worldSave.objectsSave.buildings.Count * BUILD_WEIGHT; //scale number
             maxprogress += worldSave.objectsSave.chunks.Length * CHUNK_WEIGHT;
             maxprogress += humanSaves.Length * HUMAN_WEIGHT;
             maxprogress += researchSave.count * RES_WEIGHT;

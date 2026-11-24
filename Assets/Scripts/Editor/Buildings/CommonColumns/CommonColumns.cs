@@ -96,7 +96,9 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                     el.parent.focusable = true;
 
                     EditorResourceCell cell = el.Q<EditorResourceCell>();
-                    cell.Open(register.GetBuildingWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.Cost)));
+                    cell.style.display = DisplayStyle.None;
+
+                    //cell.Open(register.GetBuildingWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.Cost)));
                 };
             #endregion
 
