@@ -340,7 +340,19 @@ MonoBehaviour:
               currentValue: 0
           statValues: []
         cost:
-          resource: []
+          resource:
+          - assign:
+              categoryId: 12925
+              objectId: 0
+            amount: 0
+          - assign:
+              categoryId: 0
+              objectId: 0
+            amount: 0
+          - assign:
+              categoryId: 0
+              objectId: 0
+            amount: 0
           moneyCost: 30
         selectedLevel: 0
         preview: {fileID: 21300000, guid: 28711bc89a9f8b244a01e3d359df53d2, type: 3}
@@ -437,15 +449,15 @@ MonoBehaviour:
           - assign:
               categoryId: 33938
               objectId: 47085
-            amount: 0
+            amount: 10
           - assign:
               categoryId: 12925
               objectId: 5000
-            amount: 0
+            amount: 20
           - assign:
               categoryId: 78954
-              objectId: 0
-            amount: 0
+              objectId: 55019
+            amount: 5
           moneyCost: 50
         selectedLevel: 0
         preview: {fileID: 21300000, guid: e2dedb0ab53d02a4a8b0e2eb23c72ddb, type: 3}

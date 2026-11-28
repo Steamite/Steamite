@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: BaseAssembly::Assets.Scripts.Base_Assembly.Data.Scriptable_Objects.ResourceData
   Categories:
   - id: 12925
-    Name: Zero
+    Name: Hidden
     Objects:
     - rid: 8842880000011010598
     - rid: 8842880000011010614
-    Icon: {fileID: 0}
+    Icon: {fileID: 7388822144124034973, guid: c81df9893225b064d87b54762b2bdfb3, type: 3}
     color: {r: 0, g: 0, b: 0, a: 0}
   - id: 33938
     Name: Metals
@@ -33,9 +33,15 @@ MonoBehaviour:
     Name: Food
     Objects:
     - rid: 8842880083528515725
+    - rid: 8842880083528515727
     - rid: 8842880083528515726
     Icon: {fileID: 0}
     color: {r: 0, g: 1, b: 0.015195131, a: 1}
+  - id: 60872
+    Name: 4
+    Objects: []
+    Icon: {fileID: 0}
+    color: {r: 1, g: 0.9622973, b: 0, a: 1}
   references:
     version: 2
     RefIds:
@@ -43,7 +49,11 @@ MonoBehaviour:
       type: {class: ResourceType, ns: , asm: BaseAssembly}
       data:
         Name: Nothing
-        description: 
+        description: 'dsa
+
+          dsadas
+
+          gq'
         id: 56684
         color: {r: 1, g: 0, b: 0.5207076, a: 1}
         image: {fileID: 0}
@@ -102,4 +112,12 @@ MonoBehaviour:
         description: 
         id: 55019
         color: {r: 0.77152747, g: 0.8113208, b: 0.24110004, a: 1}
+        image: {fileID: 0}
+    - rid: 8842880083528515727
+      type: {class: ResourceType, ns: , asm: BaseAssembly}
+      data:
+        Name: Berries
+        description: 
+        id: 62941
+        color: {r: 0, g: 0.06409195, b: 0.6226415, a: 1}
         image: {fileID: 0}

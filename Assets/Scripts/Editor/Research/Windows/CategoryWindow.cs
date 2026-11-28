@@ -78,14 +78,9 @@ namespace Assets.Scripts.Editor.Research.Windows
                 SelectedCategory = Holder.Categories[index];
 
                 categoryRemover.SetEnabled(true);
-                createCategory.text = "Rename";
-                createCategory.clicked -= CreateCateg;
-                createCategory.clicked -= RenameCateg;
-                createCategory.clicked += RenameCateg;
+                createCategory.style.display = DisplayStyle.None;
 
                 iconElement.style.backgroundImage = Background.FromVectorImage(SelectedCategory.Icon);
-                iconSelector.value = SelectedCategory.Icon;
-                categoryNameField.value = SelectedCategory.Name;
 
                 serializedCategory = serializedHolder
                     .FindProperty(nameof(Holder.Categories))
@@ -93,6 +88,10 @@ namespace Assets.Scripts.Editor.Research.Windows
 
                 serializedEntries = serializedCategory
                     .FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.Objects));
+
+                iconSelector.BindProperty(serializedCategory.FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.Icon)));
+
+                categoryNameField.BindProperty(serializedCategory.FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.Name)));//.value = SelectedCategory.Name;
             }
             else
             {
@@ -103,13 +102,15 @@ namespace Assets.Scripts.Editor.Research.Windows
                 serializedEntries = null;
 
                 categoryRemover.SetEnabled(false);
-                createCategory.text = "Create new category";
-                createCategory.clicked -= RenameCateg;
+                createCategory.style.display = DisplayStyle.Flex;
                 createCategory.clicked -= CreateCateg;
                 createCategory.clicked += CreateCateg;
 
                 iconElement.style.backgroundImage = null;
+                iconSelector.Unbind();
                 iconSelector.value = null;
+
+                categoryNameField.Unbind();
                 categoryNameField.value = "";
             }
 
@@ -119,27 +120,16 @@ namespace Assets.Scripts.Editor.Research.Windows
         protected virtual void TopBar(out ObjectField iconSelector)
         {
             createCategory = rootVisualElement.Q<Button>("Category-Create");
+            createCategory.text = "Create new category";
             createCategory.SetEnabled(false);
 
             iconElement = rootVisualElement.Q<VisualElement>("Icon-Image");
             iconSelector = rootVisualElement.Q<ObjectField>("Icon-Changer");
             iconSelector.objectType = typeof(VectorImage);
-            iconSelector.UnregisterValueChangedCallback<Object>(IconChange);
-            iconSelector.RegisterValueChangedCallback<Object>(IconChange);
 
             categoryNameField = rootVisualElement.Q<TextField>("Category-Name");
             categoryNameField.UnregisterValueChangedCallback<string>(NameChange);
             categoryNameField.RegisterValueChangedCallback<string>(NameChange);
-        }
-
-        void IconChange(ChangeEvent<Object> ev)
-        {
-            if (SelectedCategory != null && SelectedCategory.Icon != (VectorImage)ev.newValue)
-            {
-                SelectedCategory.Icon = (VectorImage)ev.newValue;
-                iconElement.style.backgroundImage = Background.FromVectorImage(SelectedCategory.Icon);
-                EditorUtility.SetDirty(Holder);
-            }
         }
 
         void NameChange(ChangeEvent<string> ev)
@@ -152,14 +142,6 @@ namespace Assets.Scripts.Editor.Research.Windows
         }
 
         #region Categ Buttons
-        protected virtual void RenameCateg()
-        {
-            createCategory.SetEnabled(false);
-            SelectedCategory.Name = categoryNameField.value;
-            categorySelector.choices[categorySelector.index] = categoryNameField.value;
-            categorySelector.SetValueWithoutNotify(categoryNameField.value);
-            EditorUtility.SetDirty(Holder);
-        }
 
         protected virtual void CreateCateg()
         {
@@ -174,12 +156,14 @@ namespace Assets.Scripts.Editor.Research.Windows
 
             cat.FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.id)).intValue = holder.UniqueCategID();
             cat.FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.Name)).stringValue = name;
-            cat.FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.Objects)).arraySize = 0;// = new List<DATA_TYPE>();
+            cat.FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.Objects)).arraySize = 0;
 
             cat.serializedObject.ApplyModifiedProperties();
 
             categorySelector.choices.Insert(size, name);
-            categorySelector.value = name;
+            categorySelector.SetValueWithoutNotify(name);
+            
+            LoadCategData(size);
         }
 
         protected virtual bool RemoveCateg()
@@ -189,10 +173,16 @@ namespace Assets.Scripts.Editor.Research.Windows
                 "Are you sure you want to delete this category? All data will be lost.",
                 "Confirm", "Cancel"))
             {
-                Holder.Categories.RemoveAt(categorySelector.index);
-                categorySelector.choices.RemoveAt(categorySelector.index);
-                categorySelector.index = categorySelector.index - 1 > -1 ? categorySelector.index - 1 : 0;
-                EditorUtility.SetDirty(Holder);
+                int index = categorySelector.index;
+                var categoriesProp = serializedHolder.FindProperty(nameof(DataHolder<CATEG_TYPE, DATA_TYPE>.Categories));
+                categoriesProp.DeleteArrayElementAtIndex(index);
+                
+                serializedHolder.ApplyModifiedProperties();
+
+                categorySelector.choices.RemoveAt(index);
+                categorySelector.SetValueWithoutNotify(categorySelector.choices[index]);
+                LoadCategData(index);
+
                 return true;
             }
             return false;

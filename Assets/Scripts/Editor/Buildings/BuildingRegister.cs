@@ -159,7 +159,7 @@ namespace EditorWindows.Windows
         #region Columns
         protected override void CreateColumns()
         {
-            //base.CreateColumns();
+            base.CreateColumns();
 
             commonColumns = new(dataGrid, this);
             commonColumns.CreateColumns();

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -30,7 +31,8 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceTyp
         bool b = base.LoadCategData(index);
         if (b)
         {
-            colorField.value = SelectedCategory.color;
+            colorField.style.display = DisplayStyle.Flex;
+            colorField.BindProperty(serializedCategory.FindPropertyRelative(nameof(ResourceTypeCategory.color)));
             bool a = false;
             for (int i = 0; i < SelectedCategory.Objects.Count; i++)
             {
@@ -45,7 +47,8 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceTyp
         }
         else
         {
-            colorField.value = new();
+            colorField.Unbind();
+            colorField.style.display = DisplayStyle.None;
         }
 
         return b;
@@ -54,59 +57,11 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceTyp
     protected override void TopBar(out ObjectField iconSelector)
     {
         base.TopBar(out iconSelector);
-        colorField.UnregisterValueChangedCallback(CategoryColorChange);
-        colorField.RegisterValueChangedCallback(CategoryColorChange);
-    }
-
-    void CategoryColorChange(ChangeEvent<Color> ev)
-    {
-        if (SelectedCategory != null && ev.newValue != new Color())
-        {
-            SelectedCategory.color = ev.newValue;
-            EditorUtility.SetDirty(Holder);
-        }
     }
 
     protected override void CreateColumns()
     {
-        //base.CreateColumns();
-        /*dataGrid.columns["asset"].makeCell =
-                () => new ObjectField();
-        dataGrid.columns["asset"].bindCell =
-            (el, i) =>
-            {
-                ObjectField field = (ObjectField)el;
-                field.allowSceneObjects = false;
-                field.objectType = typeof(ResourceTypeNew);
-                field.value = ((ResourceWrapperNew)dataGrid.itemsSource[i]).data;
-                field.RegisterValueChangedCallback(AssetChange);
-            };
-        dataGrid.columns["asset"].unbindCell =
-            (el, i) =>
-            {
-                ObjectField field = (ObjectField)el;
-                field.UnregisterValueChangedCallback(AssetChange);
-            };*/
-
-        dataGrid.columns.Add(new()
-        {
-            title = "Name",
-            resizable = true,
-            minWidth = 200,
-            makeCell = () => new TextField(),
-            bindCell = (el, i) =>
-            {
-                TextField field = (TextField)el;
-                field.BindProperty(GetWrapperAt(i).FindPropertyRelative(nameof(ResourceType.Name)));
-            },
-            unbindCell = (el, i) =>
-            {
-                TextField field = (TextField)el;
-                field.Unbind();
-            }
-
-        });
-
+        base.CreateColumns();
         dataGrid.columns.Add(new()
         {
             title = "Color",
@@ -145,30 +100,6 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceTyp
             }
 
         });
-    }
-
-    protected override void NameChange(FocusOutEvent ev)
-    {
-        string value;
-        if (ev.target is TextElement)
-        {
-            TextElement field = (TextElement)ev.target;
-            value = field.text.Trim(' ');
-            field.text = value;
-        }
-        else
-        {
-            TextField field = (TextField)ev.target;
-            value = field.value.Trim(' ');
-            field.value = value;
-        }
-
-        int i = ((VisualElement)ev.target).GetRowIndex();
-        if (((ResourceType)dataGrid.itemsSource[i]).Name != value)
-        {
-            ((ResourceType)dataGrid.itemsSource[i]).Name = value;
-            EditorUtility.SetDirty(Holder);
-        }
     }
 }
 

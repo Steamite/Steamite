@@ -26,37 +26,6 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
 
         public override void CreateColumns()
         {
-            view.columns["name"].makeCell = () =>
-            {
-                return new TextField();
-            };
-            view.columns["name"].bindCell = (el, i) =>
-            {
-                TextField field = (TextField)el;
-                field.BindProperty(register.GetWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.Name)));
-            };
-            view.columns["name"].unbindCell = (el, i) =>
-            {
-                TextField field = (TextField)el;
-                field.Unbind();
-            };
-
-            view.columns["description"].makeCell = () =>
-            {
-                return new TextField() { multiline = true, };
-            };
-            view.columns["description"].bindCell = (el, i) =>
-            {
-                TextField field = (TextField)el;
-                field.BindProperty(register.GetWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.description)));
-            };
-            view.columns["description"].unbindCell = (el, i) =>
-            {
-                TextField field = (TextField)el;
-                field.Unbind();
-            };
-
-
             #region Type
             view.columns["type"].makeCell =
                 () => new DropdownField();

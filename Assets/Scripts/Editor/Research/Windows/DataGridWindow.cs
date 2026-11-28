@@ -33,6 +33,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
         }
         else
         {
+            dataGrid.Unbind();
             dataGrid.style.display = DisplayStyle.None;
         }
         return boo;
@@ -68,110 +69,62 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
     {
         #region Base
         #region ID
-        dataGrid.columns["id"].makeCell =
+        dataGrid.columns.Insert(0, new()
+        {
+            title = "ID",
+            width = 100,
+            makeCell =
             () =>
             {
                 Label l = new Label();
                 l.AddToClassList("cell");
                 return l;
-            };
-        dataGrid.columns["id"].bindCell =
-            (el, i) => ((Label)el).text = SelectedCategory.Objects[i]?.id.ToString();
+            },
+            bindCell =
+            (el, i) => ((Label)el).text = SelectedCategory.Objects[i]?.id.ToString()
+        });
         #endregion
 
         #region Name
-        dataGrid.columns["name"].makeCell =
-            () => new TextField();
-        dataGrid.columns["name"].bindCell =
-            (el, i) =>
-            {
-                TextField field = (TextField)el;
-                if (((DATA_TYPE)dataGrid.itemsSource[i])?.Name != null)
-                {
-                    field.value = ((DATA_TYPE)dataGrid.itemsSource[i]).Name;
-                    field.RegisterCallback<FocusOutEvent>(NameChange);
-                }
-                else
-                    field.value = "";
-            };
-        dataGrid.columns["name"].unbindCell =
-            (el, i) =>
-            {
-                TextField field = (TextField)el;
-                field.UnregisterCallback<FocusOutEvent>(NameChange);
-            };
-        #endregion
-        #region Description
-        dataGrid.columns.Add(new()
+        dataGrid.columns.Insert(1, new()
         {
-            name = "description",
-            title = "Descr",
+            title = "Name",
+            resizable = true,
+            width = 200,
             makeCell = () => new TextField(),
             bindCell = (el, i) =>
             {
                 TextField field = (TextField)el;
-                field.value = ((DATA_TYPE)dataGrid.itemsSource[i]).description;
-                field.RegisterCallback<FocusOutEvent>(DescrChange);
+                field.BindProperty(GetWrapperAt(i).FindPropertyRelative(nameof(DataObject.Name)));
+            },
+            unbindCell = (el, i) =>
+            {
+                TextField field = (TextField)el;
+                field.Unbind();
+            }
+        });
+        #endregion
+        #region Description
+        dataGrid.columns.Insert(2, new()
+        {
+            name = "description",
+            title = "Descr",
+            width = 200,
+            makeCell = () => new TextField() { multiline = true},
+            bindCell = (el, i) =>
+            {
+                TextField field = (TextField)el;
+                field.BindProperty(GetWrapperAt(i).FindPropertyRelative(nameof(DataObject.description)));
             },
             unbindCell =
             (el, i) =>
             {
                 TextField field = (TextField)el;
                 field.Unbind();
-                field.UnregisterCallback<FocusOutEvent>(DescrChange);
             }
-
         });
         #endregion
         #endregion
-    }
-
-    /// <summary>Event for changing entry names.</summary>
-    protected virtual void NameChange(FocusOutEvent ev)
-    {
-        string value;
-        if (ev.target is TextElement)
-        {
-            TextElement field = (TextElement)ev.target;
-            value = field.text.Trim(' ');
-            field.text = value;
-        }
-        else
-        {
-            TextField field = (TextField)ev.target;
-            value = field.value.Trim(' ');
-            field.value = value;
-        }
-
-        int i = ((VisualElement)ev.target).GetRowIndex();
-        if (((DATA_TYPE)dataGrid.itemsSource[i]).Name != value)
-        {
-            ((DATA_TYPE)dataGrid.itemsSource[i]).Name = value;
-            EditorUtility.SetDirty(Holder);
-        }
-    }
-    protected virtual void DescrChange(FocusOutEvent ev)
-    {
-        string value;
-        if (ev.target is TextElement)
-        {
-            TextElement field = (TextElement)ev.target;
-            value = field.text.Trim(' ');
-            field.text = value;
-        }
-        else
-        {
-            TextField field = (TextField)ev.target;
-            value = field.value.Trim(' ');
-            field.value = value;
-        }
-
-        int i = ((VisualElement)ev.target).GetRowIndex();
-        if (((DATA_TYPE)dataGrid.itemsSource[i]).description != value)
-        {
-            ((DATA_TYPE)dataGrid.itemsSource[i]).description = value;
-            EditorUtility.SetDirty(Holder);
-        }
     }
     #endregion
 }
