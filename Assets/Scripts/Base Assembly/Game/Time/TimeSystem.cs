@@ -18,7 +18,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Time
             float delta = SystemAPI.Time.DeltaTime * GameTime.ScaleTime;
             GameTime.SetDeltaTime(delta);
 
-            Debug.Log(delta);
+            //Debug.Log(delta);
             if (GameTime.ScaleTime == 0)
                 return;
 

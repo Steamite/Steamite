@@ -71,6 +71,7 @@ public class MapGenNew : MonoBehaviour
 
     public async Awaitable<WorldSaveNew> Generate(string _seed)
     {
+        buildingData.Init();
         await Awaitable.BackgroundThreadAsync();
         seed = _seed;
         ParseInput();

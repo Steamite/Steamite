@@ -59,7 +59,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
         public void TypeChange(ChangeEvent<string> ev)
         {
             int i = ev.target.GetRowIndex();
-            var wrapperProperty = register.GetBuildingWrapperAt(i);
+            var wrapperProperty = register.GetWrapperAt(i);
             
             // Is there a building?
             if(((BuildingWrapper)wrapperProperty.boxedValue).Building == null)
@@ -90,7 +90,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
             int i = ev.target.GetRowIndex();
 
             // TODO pass a serializedProperty
-            BuildEditor.ShowWindow(register.GetBuildingWrapperAt(i));
+            BuildEditor.ShowWindow(register.GetWrapperAt(i));
         }
 
         public void PreviewClick(ClickEvent ev)

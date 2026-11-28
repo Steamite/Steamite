@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Base_Assembly.Data.Data_Classes.Grid.New.World.Buildings;
 using Assets.Scripts.Editor.Buildings.LevelList;
 using Assets.Scripts.Editor.Columns;
+using Assets.Scripts.Editor.New.Resources;
 using EditorWindows.Windows;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
             view.columns["name"].bindCell = (el, i) =>
             {
                 TextField field = (TextField)el;
-                field.BindProperty(register.GetBuildingWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.Name)));
+                field.BindProperty(register.GetWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.Name)));
             };
             view.columns["name"].unbindCell = (el, i) =>
             {
@@ -46,7 +47,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
             view.columns["description"].bindCell = (el, i) =>
             {
                 TextField field = (TextField)el;
-                field.BindProperty(register.GetBuildingWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.description)));
+                field.BindProperty(register.GetWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.description)));
             };
             view.columns["description"].unbindCell = (el, i) =>
             {
@@ -65,7 +66,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                     field.choices = register.BuildingTypes.Select(q => q.Name).ToList();//.Select(q => q.Name).Where(q => !q.Contains("Pipe")).ToList();
 
                     // register.GetBuildingWrapperAt(i).FindPropertyRelative("building").type
-                    field.value = register.GetBuildingWrapperAt(i).FindPropertyRelative("building").type;//((BuildingWrapper)view.itemsSource[i]).Building.GetType().ToString();
+                    field.value = register.GetWrapperAt(i).FindPropertyRelative("building").type;//((BuildingWrapper)view.itemsSource[i]).Building.GetType().ToString();
                     field.RegisterValueChangedCallback(actions.TypeChange);
                 };
             view.columns["type"].unbindCell =
@@ -89,14 +90,14 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
 
             #region Cost
             view.columns["cost"].makeCell =
-                () => new EditorResourceCell();//FieldLevelList<MoneyResource, ResourceCell>("costs");//new ResourceCell();
+                () => new ResourceCellNew();//FieldLevelList<MoneyResource, ResourceCell>("costs");//new ResourceCell();
             view.columns["cost"].bindCell =
                 (el, i) =>
                 {
                     el.parent.focusable = true;
 
-                    EditorResourceCell cell = el.Q<EditorResourceCell>();
-                    cell.style.display = DisplayStyle.None;
+                    ResourceCellNew cell = el.Q<ResourceCellNew>();
+                    cell.BindProperty(register.GetWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.cost)));
 
                     //cell.Open(register.GetBuildingWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.Cost)));
                 };
@@ -187,7 +188,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                     {
                         ModificationCell cell = el as ModificationCell;
 
-                        SerializedProperty wrapper = register.categoryObjects.GetArrayElementAtIndex(i);
+                        SerializedProperty wrapper = register.serializedEntries.GetArrayElementAtIndex(i);
                         cell.Open(wrapper);
                     },
                 stretchable = true,

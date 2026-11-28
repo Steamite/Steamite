@@ -36,7 +36,7 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 {
                     IntegerField field = el.Q<IntegerField>();
 
-                    var building = register.GetBuildingWrapperAt(i).FindPropertyRelative("building");
+                    var building = register.GetWrapperAt(i).FindPropertyRelative("building");
 
                     if (building.GetPropertyType() is IAssign)
                     {
@@ -98,7 +98,7 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 makeCell = () => new Mask64Field(),
                 bindCell = (el, i) =>
                 {
-                    var building = register.GetBuildingWrapperAt(i).FindPropertyRelative("building");
+                    var building = register.GetWrapperAt(i).FindPropertyRelative("building");
 
 
                     Mask64Field field = (Mask64Field)el;
@@ -109,7 +109,7 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                         field.choices = choices;
 
                         field.BindProperty(
-                            register.GetBuildingWrapperAt(i)
+                            register.GetWrapperAt(i)
                             .FindPropertyRelative("building")
                             .FindPropertyRelative("canStoreInt"));
                     }
@@ -230,7 +230,7 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 bindCell = (el, i) =>
                 {
                     IntegerField field = el as IntegerField;
-                    var building = register.GetBuildingWrapperAt(i).FindPropertyRelative("building");
+                    var building = register.GetWrapperAt(i).FindPropertyRelative("building");
 
                     if (building.GetPropertyType() is not IEffectObject effect)
                     {
@@ -261,7 +261,7 @@ namespace Assets.Scripts.Editor.Buildings.SpecialColumns
                 {
                     IntegerField intField = (IntegerField)el;
 
-                    var building = register.GetBuildingWrapperAt(i).FindPropertyRelative("building");
+                    var building = register.GetWrapperAt(i).FindPropertyRelative("building");
 
                     if (building.GetPropertyType() is not IStabilitySupport)
                     {

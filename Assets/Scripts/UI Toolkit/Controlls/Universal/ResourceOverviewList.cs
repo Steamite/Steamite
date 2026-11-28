@@ -48,7 +48,7 @@ namespace Assets.Scripts.UI_Toolkit.Controlls.Universal
 
         public void ChangeCategory(int i, ResourceDisplay display, IResolvedStyle resStyle)
         {
-            types = categories[i].Objects.Select(q => q.data).ToList();
+            types = categories[i].Objects.ToList();
             int activeElems;
             InitToUI(display.GlobalResources, out activeElems);
 

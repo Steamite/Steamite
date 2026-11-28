@@ -89,7 +89,7 @@ public class StatRegister : DataGridWindow<BuildingStatCateg, Stat>
                 listView.bindItem =
                     (el, j) =>
                     {
-                        SerializedProperty statPair = categoryObjects
+                        SerializedProperty statPair = serializedEntries
                             .GetArrayElementAtIndex(i)
                             .FindPropertyRelative(nameof(Stat.pairs))
                             .GetArrayElementAtIndex(j);

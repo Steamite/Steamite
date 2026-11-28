@@ -4,18 +4,24 @@ using Levels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Collections;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 
+
 [Serializable]
-public struct TempResource
+public class ResourceNew
 {
-    public byte type;
+    public int assignIds;
+
     public byte amount;
+}
+
+[Serializable]
+public class MoneyNew
+{
+    public List<ResourceNew> resource;
+    public short moneyCost;
 }
 
 [Serializable]
@@ -26,33 +32,16 @@ public class BuildingWrapper : DataObject
 
     public List<BuildingModifications> modifications;
 
-    public List<TempResource> cost;
-    public int moneyCost;
+    public MoneyNew cost;
 
 #if UNITY_EDITOR
-    [SerializeField] public int selectedLevel;
+    public int selectedLevel;
 #endif
-    [SerializeField] public Sprite preview;
+    public Sprite preview;
     
     public BuildingGrid blueprint;
 
     [NonSerialized] public bool unlocked = true;
-
-
-
-#if UNITY_EDITOR
-    /*public void SetBuilding( _b, int categoryID, string name = null)
-    {
-        building = _b;
-        if (building)
-        {
-            if (name != null)
-                building.Name = name;
-            building.PrefabConnection = new(categoryID, id);
-            EditorUtility.SetDirty(building);
-        }
-    }*/
-#endif
 
     public BuildingWrapper(int _id) : base(_id)
     {
@@ -67,15 +56,16 @@ public class BuildingWrapper : DataObject
 
     public ICollection<BuildingInventory> FillCost()
     {
-        BuildingInventory[] buildingInventories = new BuildingInventory[cost.Count];
+        var resource = cost.resource;
+        BuildingInventory[] buildingInventories = new BuildingInventory[resource.Count];
 
-        for (int i = 0; i < cost.Count; i++)
+        for (int i = 0; i < resource.Count; i++)
         {
-            TempResource item = cost[i];
+            ResourceNew item = resource[i];
 
             buildingInventories[i] = new()
             {
-                type = item.type,
+                type = ResFluidTypes.GetRuntimeIndex(item.assignIds),
                 cost = item.amount,
                 stored = 0
             };

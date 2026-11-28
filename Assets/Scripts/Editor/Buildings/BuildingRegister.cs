@@ -35,11 +35,6 @@ namespace EditorWindows.Windows
         SpecialColumns specialColumns;
         CommonColumns commonColumns;
 
-        SerializedObject holderObject;
-        SerializedProperty selectedCategoryProperty;
-        SerializedProperty selectedCategoryBuildingsProperty;
-        public SerializedProperty GetBuildingWrapperAt(int i) =>
-            selectedCategoryBuildingsProperty.GetArrayElementAtIndex(i);
 
         public List<Type> BuildingTypes { get => buildingTypes; set => buildingTypes = value; }
         public bool ChangedType { get => changedType; set => changedType = value; }
@@ -60,7 +55,7 @@ namespace EditorWindows.Windows
             buildingTypes = TypeCache.GetTypesDerivedFrom<BuildingNew>().ToList();
             buildingTypes.Prepend(typeof(BuildingNew));
             Holder = AssetDatabase.LoadAssetAtPath<BuildingData>(BuildingData.EDITOR_PATH);
-            holderObject = new(Holder);
+            serializedHolder = new(Holder);
 
             #region Grid
             base.CreateGUI();
@@ -119,10 +114,7 @@ namespace EditorWindows.Windows
             bool boo = base.LoadCategData(index);
             if (boo)
             {
-                selectedCategoryProperty = holderObject.FindProperty(nameof(BuildingData.Categories)).GetArrayElementAtIndex(index);
-                selectedCategoryBuildingsProperty = selectedCategoryProperty.FindPropertyRelative(nameof(BuildCategWrapper.Objects));
-                /*dataGrid.itemsSource = null;*/
-                dataGrid.BindProperty(selectedCategoryBuildingsProperty);
+                dataGrid.BindProperty(serializedEntries);
 
                 for (int i = 0; i < SelectedCategory.columnStates?.Count; i++)
                     dataGrid.columns[i].visible = SelectedCategory.columnStates[i];

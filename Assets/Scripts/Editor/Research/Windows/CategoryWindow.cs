@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -6,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
-namespace EditorWindows
+namespace Assets.Scripts.Editor.Research.Windows
 {
     public class CategoryWindow<CATEG_TYPE, DATA_TYPE> : EditorWindow
         where CATEG_TYPE : DataCategory<DATA_TYPE>
@@ -22,11 +23,12 @@ namespace EditorWindows
         public DataHolder<CATEG_TYPE, DATA_TYPE> Holder { get => holder; set => holder = value; }
         public CATEG_TYPE SelectedCategory { get => selectedCategory; set => selectedCategory = value; }
 
+        [NonSerialized] public SerializedObject serializedHolder;
+        [NonSerialized] public SerializedProperty serializedCategory;
+        [NonSerialized] public SerializedProperty serializedEntries;
 
-        public SerializedProperty ObjectAt(int i) => categoryObjects.GetArrayElementAtIndex(i);
-        [NonSerialized] public SerializedObject holderObject;
-        [NonSerialized] public SerializedProperty selectedCategoryObject;
-        [NonSerialized] public SerializedProperty categoryObjects;
+        public SerializedProperty GetWrapperAt(int i) =>
+            serializedEntries.GetArrayElementAtIndex(i);
 
         protected TextField categoryNameField;
         Button createCategory;
@@ -36,7 +38,7 @@ namespace EditorWindows
         public void SaveValues() => EditorUtility.SetDirty(Holder);
         protected virtual void CreateGUI()
         {
-            holderObject = new(Holder);
+            serializedHolder = new(Holder);
 
             VisualElement doc = windowAsset.CloneTree();
             rootVisualElement.Add(doc);
@@ -85,11 +87,11 @@ namespace EditorWindows
                 iconSelector.value = SelectedCategory.Icon;
                 categoryNameField.value = SelectedCategory.Name;
 
-                selectedCategoryObject = holderObject
+                serializedCategory = serializedHolder
                     .FindProperty(nameof(Holder.Categories))
                     .GetArrayElementAtIndex(index);
 
-                categoryObjects = selectedCategoryObject
+                serializedEntries = serializedCategory
                     .FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.Objects));
             }
             else
@@ -97,8 +99,8 @@ namespace EditorWindows
                 categoryExists = false;
                 SelectedCategory = Activator.CreateInstance<CATEG_TYPE>();
 
-                selectedCategoryObject = null;
-                categoryObjects = null;
+                serializedCategory = null;
+                serializedEntries = null;
 
                 categoryRemover.SetEnabled(false);
                 createCategory.text = "Create new category";
@@ -162,14 +164,20 @@ namespace EditorWindows
         protected virtual void CreateCateg()
         {
             createCategory.SetEnabled(false);
-            SelectedCategory.Name = categoryNameField.value;
-            SelectedCategory.Objects = new();
-            SelectedCategory.id = Holder.UniqueCategID();
-            Holder.Categories.Add(SelectedCategory);
-            categorySelector.choices.Insert(Holder.Categories.Count - 1, SelectedCategory.Name);
-            categorySelector.value = SelectedCategory.Name;
-            categorySelector.MarkDirtyRepaint();
-            EditorUtility.SetDirty(Holder);
+
+            var categs = serializedHolder.FindProperty(nameof(DataHolder<CATEG_TYPE, DATA_TYPE>.Categories));
+            int size = categs.arraySize;
+            categs.InsertArrayElementAtIndex(size);
+            
+            var cat = categs.GetArrayElementAtIndex(size);
+            string name = categoryNameField.value;
+            cat.FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.Name)).stringValue = name;
+            cat.FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.Objects)).arraySize = 0;// = new List<DATA_TYPE>();
+
+            cat.serializedObject.ApplyModifiedProperties();
+
+            categorySelector.choices.Insert(size, name);
+            categorySelector.value = name;
         }
 
         protected virtual bool RemoveCateg()

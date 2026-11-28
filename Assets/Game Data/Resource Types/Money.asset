@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82e536a827d83af46a96e1c1816a9246, type: 3}
   m_Name: Money
   m_EditorClassIdentifier: BaseAssembly::ResourceType
+  name: 
   Name: Money
-  color: {r: 0.6927292, g: 0.735849, b: 0.12842648, a: 1}
+  color:
+    r: 0.6927292
+    g: 0.735849
+    b: 0.12842648
+    a: 1
   image: {fileID: 0}
-  enumLink: 0

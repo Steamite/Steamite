@@ -25,9 +25,9 @@ namespace TradeData.Locations
         public TradeLocation(TradeLocationSave save)
         {
             pos = save.position;
-            Name = save.name;
+            Name = save.name;/*
             Buy = save.tradeDealsBuy.Select(q => new TradeDeal(q)).ToList();
-            Sell = save.tradeDealsSell.Select(q => new TradeDeal(q)).ToList();
+            Sell = save.tradeDealsSell.Select(q => new TradeDeal(q)).ToList();*/
             distance = save.distance;
         }
     }

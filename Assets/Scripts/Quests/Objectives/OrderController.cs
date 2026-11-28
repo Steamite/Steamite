@@ -98,54 +98,57 @@ public class OrderController
         ResourceObjective objective = new();
         List<ResourceGen> gen = orderGenConfig.resourceGens.ToList();
 
-
-        for (int i = 0; i < resTypeCount; i++)
-        {
-            int max = gen.Sum(q => q.typeChance) + 1;
-            int random = Random.Range(0, max);
-            ResourceGen selType = null;
-            foreach (var item in gen)
-            {
-                if (random > item.typeChance)
-                    random -= item.typeChance;
-                else
+        /*
+                for (int i = 0; i < resTypeCount; i++)
                 {
-                    selType = item;
-                    break;
+                    if (gen.Count == 0)
+                        break;
+                    int max = gen.Sum(q => q.typeChance) + 1;
+                    int random = Random.Range(0, max);
+                    ResourceGen selType = null;
+                    foreach (var item in gen)
+                    {
+                        if (random > item.typeChance)
+                            random -= item.typeChance;
+                        else
+                        {
+                            selType = item;
+                            break;
+                        }
+                    }
+                    gen.Remove(selType);
+                    int resAmmount = selType.ammountRange.Random();
+                    objective.resource
+                        .ManageSimple(
+                            selType.type,
+                            resAmmount,
+                            true,
+                            mod);
+                    orderDifficulty += resAmmount / (float)selType.typeChance;
                 }
-            }
-            gen.Remove(selType);
-            int resAmmount = selType.ammountRange.Random();
-            objective.resource
-                .ManageSimple(
-                    selType.type,
-                    resAmmount,
-                    true,
-                    mod);
-            orderDifficulty += resAmmount / (float)selType.typeChance;
-        }
 
-        Order order = new()
-        {
-            orderDifficulty = (OrderDifficulty)Mathf.FloorToInt(orderDifficulty),
-            TimeToFail = Mathf.RoundToInt(orderGenConfig.timeToFail.Random() * mod * orderDifficulty),
-            objectives =
-            {
-                objective
-            },
-            rewards =
-            {
-                new TrustReward(
-                    Mathf.RoundToInt(
-                        orderGenConfig.trustGain.Random() * mod * orderDifficulty / 2))
-            },
-            penalties =
-            {
-                new TrustPenalty(
-                    Mathf.RoundToInt(
-                        orderGenConfig.trustLoss.Random() * mod * orderDifficulty / 2))
-            }
-        };
+                Order order = new()
+                {
+                    orderDifficulty = (OrderDifficulty)Mathf.FloorToInt(orderDifficulty),
+                    TimeToFail = Mathf.RoundToInt(orderGenConfig.timeToFail.Random() * mod * orderDifficulty),
+                    objectives =
+                    {
+                        objective
+                    },
+                    rewards =
+                    {
+                        new TrustReward(
+                            Mathf.RoundToInt(
+                                orderGenConfig.trustGain.Random() * mod * orderDifficulty / 2))
+                    },
+                    penalties =
+                    {
+                        new TrustPenalty(
+                            Mathf.RoundToInt(
+                                orderGenConfig.trustLoss.Random() * mod * orderDifficulty / 2))
+                    }
+                };*/
+        Order order = new();
         /*
         order.objectives.Add(objective);
         order.rewards.Add(;

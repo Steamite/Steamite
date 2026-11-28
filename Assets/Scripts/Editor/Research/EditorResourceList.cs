@@ -32,7 +32,7 @@ namespace Assets.Scripts.Editor.Research
         {
             SerializedProperty types = property.FindPropertyRelative(nameof(Resource.types));
             types.InsertArrayElementAtIndex(types.arraySize);
-            types.GetArrayElementAtIndex(types.arraySize-1).objectReferenceValue = ResFluidTypes.None;
+            types.GetArrayElementAtIndex(types.arraySize-1).managedReferenceValue = ResFluidTypes.None;
 
             SerializedProperty ammounts = property.FindPropertyRelative(nameof(Resource.ammounts));
             ammounts.InsertArrayElementAtIndex(ammounts.arraySize);
@@ -180,7 +180,7 @@ namespace Assets.Scripts.Editor.Research
             }
             else
             {
-                resourceType.objectReferenceValue = ResFluidTypes.GetTypeByName(evt.newValue);
+                resourceType.managedReferenceValue = ResFluidTypes.GetTypeByName(evt.newValue);
                 property.serializedObject.ApplyModifiedProperties();
             }
         }

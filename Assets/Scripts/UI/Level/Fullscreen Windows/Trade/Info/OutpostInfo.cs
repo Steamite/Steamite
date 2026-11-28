@@ -140,7 +140,7 @@ public class OutpostInfo : MonoBehaviour
             trade.outposts.Add(
                 new(
                     "Outpost " + activeOutpost, 
-                    (ResourceType)unconstructed.GetChild(0).GetComponent<TMP_Dropdown>().value-1));
+                    (ResourceTypeNew)unconstructed.GetChild(0).GetComponent<TMP_Dropdown>().value-1));
         }
         else
         {

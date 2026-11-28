@@ -1,7 +1,8 @@
-using EditorWindows;
+using Assets.Scripts.Editor.Research.Windows;
 using System;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, DATA_TYPE>
@@ -9,7 +10,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
     where DATA_TYPE : DataObject
 {
     protected MultiColumnListView dataGrid;
-    
+
 
     protected override void CreateGUI()
     {
@@ -40,21 +41,23 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
 
 
     #region Entry managment
-    protected virtual void AddEntry(BaseListView _, bool add = true)
+    protected virtual void AddEntry(BaseListView _)
     {
-        if (add)
-            SelectedCategory.Objects.Add((DATA_TYPE)Activator.CreateInstance(typeof(DATA_TYPE), Holder.UniqueID()));
+        int index = serializedEntries.arraySize;
+        serializedEntries.InsertArrayElementAtIndex(index);
+        var param = serializedEntries.GetArrayElementAtIndex(index);
+        param.managedReferenceValue = Activator.CreateInstance<DATA_TYPE>();
+        param.FindPropertyRelative(nameof(DataObject.id)).intValue = Holder.UniqueID();
+
+        serializedHolder.ApplyModifiedProperties();
         dataGrid.RefreshItems();
-        EditorUtility.SetDirty(Holder);
     }
-    protected void RemoveEntry(BaseListView _) => RemoveEntry(_.selectedItem as DATA_TYPE, true);
-    protected virtual void RemoveEntry(DATA_TYPE wrapper, bool removeFromGrid)
+    protected void RemoveEntry(BaseListView _) => RemoveEntry(_.selectedIndex);
+    protected virtual void RemoveEntry(int i)
     {
-        if (removeFromGrid)
-        {
-            SelectedCategory.Objects.Remove(wrapper);
-            dataGrid.RefreshItems();
-        }
+        serializedEntries.DeleteArrayElementAtIndex(i);
+        serializedEntries.serializedObject.ApplyModifiedProperties();
+        LoadCategData(categorySelector.index);
     }
     #endregion
 
@@ -83,7 +86,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
             (el, i) =>
             {
                 TextField field = (TextField)el;
-                if (((DATA_TYPE)dataGrid.itemsSource[i]).GetName() != null)
+                if (((DATA_TYPE)dataGrid.itemsSource[i])?.GetName() != null)
                 {
                     field.value = ((DATA_TYPE)dataGrid.itemsSource[i]).GetName();
                     field.RegisterCallback<FocusOutEvent>(NameChange);

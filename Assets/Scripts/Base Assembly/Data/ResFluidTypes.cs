@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Permissions;
 using System.Threading.Tasks;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -21,9 +22,11 @@ public static class ResFluidTypes
     static List<ResourceType> resources;
 
     static List<ResourceType> fluids;
-
     static List<ResourceTypeCategory> fullRes;
     public static List<ResourceTypeCategory> FullRes => fullRes;
+
+    static Dictionary<int2, byte> EditAssignsToRuntimeIndexes;
+    static List<ResourceType> RuntimeAllignedIndexes;
 
     public static async Awaitable Init()
     {
@@ -53,13 +56,31 @@ public static class ResFluidTypes
     {
         data = _data;
         fullRes = _data.Categories;
-        resources = fullRes.Skip(1).SkipLast(1).SelectMany(q => q.Objects).Select(q => q.data).ToList();
+        resources = fullRes.Skip(1).SkipLast(1).SelectMany(q => q.Objects).ToList();
 
-        fluids = fullRes[^1].Objects.Select(q => q.data).ToList();
-        none = fullRes[0].Objects.First(q => q.Name == "None").data;
-        Money = fullRes[0].Objects.First(q => q.Name == "Money").data;
+        fluids = fullRes[^1].Objects.ToList();
+        none = fullRes[0].Objects[0];//.FirstOrDefault(q => q?.Name == "None");
+        Money = fullRes[0].Objects[1];//.FirstOrDefault(q => q?.Name == "Money");
+        
+        EditAssignsToRuntimeIndexes = new();
+        RuntimeAllignedIndexes = new();
+        byte i = 0;
+        foreach (var categ in _data.Categories)
+        {
+            foreach (var item in categ.Objects)
+            {
+                EditAssignsToRuntimeIndexes.Add(new(categ.id, item.id), i);
+                RuntimeAllignedIndexes.Add(item);
+                i++;
+            }
+        }
+
+
         Debug.Log("Resources loaded");
     }
+
+    public static byte GetRuntimeIndex(int2 editorAssign) => EditAssignsToRuntimeIndexes[editorAssign];
+    public static ResourceType GetResourceTypeByRuntimeIndex(byte index) => RuntimeAllignedIndexes[index];
 
     public static ResourceType GetTypeByName(string name)
     {
@@ -96,6 +117,7 @@ public static class ResFluidTypes
 
     public static ResourceType GetResByIndex(int i)
     {
+        return None;
         return resources[i];
     }
     
@@ -112,23 +134,23 @@ public static class ResFluidTypes
         };
 
     public static List<string> GetResNamesList()
-        => resources.Select(q => q.Name).ToList();
+        => resources.Select(q => q?.Name).ToList();
     public static List<string> GetResNamesList(List<int> allowedCategories)
     {
         List<string> names = new();
         //#if UNITY_EDITOR
-        names.Add(none.Name);
+        names.Add(none?.Name);
         //#endif
         if (allowedCategories == null || allowedCategories.Count == 0)
             foreach (var category in fullRes)
             {
-                names.AddRange(category.Objects.Select(q => q.Name));
+                names.AddRange(category.Objects.Select(q => q?.Name));
                 names.Add("");
             }
         else
             foreach (int i in allowedCategories)
             {
-                names.AddRange(FullRes[i].Objects.Select(q => q.Name));
+                names.AddRange(FullRes[i].Objects.Select(q => q?.Name));
                 names.Add("");
             }
         return names;
@@ -140,7 +162,7 @@ public static class ResFluidTypes
         => resources.IndexOf(resourceType);
 
     public static List<string> GetFluidNames()
-        => fluids.Select(q => q.Name).ToList();
+        => fluids.Select(q => q?.Name).ToList();
 
     public static List<ResourceType> LoadTypeList(List<DataAssign> types)
     {
@@ -156,7 +178,7 @@ public static class ResFluidTypes
         return fullRes
             .FirstOrDefault(q => q.id == type.categoryId)
             .Objects
-            .FirstOrDefault(q => q.id == type.objectId)?.data;
+            .FirstOrDefault(q => q.id == type.objectId);
     }
 
 

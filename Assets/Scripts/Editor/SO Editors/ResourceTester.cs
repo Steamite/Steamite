@@ -33,7 +33,7 @@ class ResourceTester : IPreprocessBuildWithReport
         foreach (var res in minableRes)
         {
             Resource resource = new();
-            resource.types.Add(res.resource.data);
+            resource.types.Add(res.resource);
             if (CheckResource(resource, res.name, "Minable Res", "Minable Resouce yield"))
                 succes = false;
         }

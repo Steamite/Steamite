@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWrapper>
+public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceType>
 {
     ColorField colorField;
     [MenuItem("Custom Editors/Resource register %n", priority = 14)]
@@ -27,10 +27,22 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
 
     protected override bool LoadCategData(int index)
     {
+        Debug.Log("Start load");
         bool b = base.LoadCategData(index);
         if (b)
         {
             colorField.value = SelectedCategory.color;
+            bool a = false;
+            for (int i = 0; i < SelectedCategory.Objects.Count; i++)
+            {
+                if (SelectedCategory.Objects[i] == null)
+                {
+                    SelectedCategory.Objects[i] = new ResourceType();
+                    a = true;
+                }
+            }
+            if(a)
+                EditorUtility.SetDirty(holder);
         }
         else
         {
@@ -58,16 +70,16 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
 
     protected override void CreateColumns()
     {
-        base.CreateColumns();
-        dataGrid.columns["asset"].makeCell =
+        //base.CreateColumns();
+        /*dataGrid.columns["asset"].makeCell =
                 () => new ObjectField();
         dataGrid.columns["asset"].bindCell =
             (el, i) =>
             {
                 ObjectField field = (ObjectField)el;
                 field.allowSceneObjects = false;
-                field.objectType = typeof(ResourceType);
-                field.value = ((ResourceWrapper)dataGrid.itemsSource[i]).data;
+                field.objectType = typeof(ResourceTypeNew);
+                field.value = ((ResourceWrapperNew)dataGrid.itemsSource[i]).data;
                 field.RegisterValueChangedCallback(AssetChange);
             };
         dataGrid.columns["asset"].unbindCell =
@@ -75,7 +87,26 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
             {
                 ObjectField field = (ObjectField)el;
                 field.UnregisterValueChangedCallback(AssetChange);
-            };
+            };*/
+
+        dataGrid.columns.Add(new()
+        {
+            title = "Name",
+            resizable = true,
+            minWidth = 200,
+            makeCell = () => new TextField(),
+            bindCell = (el, i) =>
+            {
+                TextField field = (TextField)el;
+                field.BindProperty(GetWrapperAt(i).FindPropertyRelative(nameof(ResourceType.Name)));
+            },
+            unbindCell = (el, i) =>
+            {
+                TextField field = (TextField)el;
+                field.Unbind();
+            }
+
+        });
 
         dataGrid.columns.Add(new()
         {
@@ -86,23 +117,16 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
             bindCell = (el, i) =>
             {
                 ColorField field = (ColorField)el;
-                if (((ResourceWrapper)dataGrid.itemsSource[i]).data == null)
-                {
-                    field.style.display = DisplayStyle.None;
-                    return;
-                }
-                field.style.display = DisplayStyle.Flex;
-
-                field.value = ((ResourceWrapper)dataGrid.itemsSource[i]).data.color;
-                field.RegisterValueChangedCallback(ColorChange);
+                field.BindProperty(GetWrapperAt(i).FindPropertyRelative(nameof(ResourceType.color)));
             },
             unbindCell = (el, i) =>
             {
                 ColorField field = (ColorField)el;
-                field.UnregisterValueChangedCallback(ColorChange);
+                field.Unbind();
             }
 
         });
+
 
         dataGrid.columns.Add(new()
         {
@@ -113,63 +137,15 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
             bindCell = (el, i) =>
             {
                 ObjectField field = (ObjectField)el;
-                field.objectType = typeof(Texture2D);
-                if (((ResourceWrapper)dataGrid.itemsSource[i]).data == null)
-                {
-                    field.style.display = DisplayStyle.None;
-                    return;
-                }
-                field.style.display = DisplayStyle.Flex;
-                field.value = ((ResourceWrapper)dataGrid.itemsSource[i]).data.image;
-                field.RegisterValueChangedCallback(ImageChange);
+                field.BindProperty(GetWrapperAt(i).FindPropertyRelative(nameof(ResourceType.image)));
             },
             unbindCell = (el, i) =>
             {
                 ObjectField field = (ObjectField)el;
-                field.UnregisterValueChangedCallback(ImageChange);
+                field.Unbind();
             }
 
         });
-    }
-
-    private void ImageChange(ChangeEvent<UnityEngine.Object> evt)
-    {
-        int i = evt.target.GetRowIndex();
-        if (i != -1)
-        {
-            ResourceType resType = ((ResourceWrapper)dataGrid.itemsSource[i]).data;
-            resType.image = evt.newValue as Texture2D;
-            EditorUtility.SetDirty(resType);
-            dataGrid.RefreshItem(i);
-        }
-    }
-
-    private void ColorChange(ChangeEvent<Color> evt)
-    {
-        int i = evt.target.GetRowIndex();
-        if (i != -1)
-        {
-            ResourceType resType = ((ResourceWrapper)dataGrid.itemsSource[i]).data;
-            resType.color = evt.newValue;
-            Debug.Log(evt.newValue);
-            EditorUtility.SetDirty(resType);
-            dataGrid.RefreshItem(i);
-        }
-    }
-
-
-
-    private void AssetChange(ChangeEvent<UnityEngine.Object> ev)
-    {
-        int i = ev.target.GetRowIndex();
-        if (Holder.Categories.SelectMany(q => q.Objects).Select(q => q.data).Contains(ev.newValue) == false)
-        {
-            ((ResourceWrapper)dataGrid.itemsSource[i]).data = ev.newValue as ResourceType;
-            ((ResourceWrapper)dataGrid.itemsSource[i]).Name = (ev.newValue as ResourceType)?.Name;
-            EditorUtility.SetDirty(Holder);
-
-            dataGrid.RefreshItem(i);
-        }
     }
 
     protected override void NameChange(FocusOutEvent ev)
@@ -189,13 +165,10 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceWra
         }
 
         int i = ((VisualElement)ev.target).GetRowIndex();
-        if (((ResourceWrapper)dataGrid.itemsSource[i]).Name != value)
+        if (((ResourceType)dataGrid.itemsSource[i]).Name != value)
         {
-            ((ResourceWrapper)dataGrid.itemsSource[i]).Name = value;
+            ((ResourceType)dataGrid.itemsSource[i]).Name = value;
             EditorUtility.SetDirty(Holder);
-
-            ((ResourceWrapper)dataGrid.itemsSource[i]).data.Name = value;
-            EditorUtility.SetDirty(((ResourceWrapper)dataGrid.itemsSource[i]).data);
         }
     }
 }

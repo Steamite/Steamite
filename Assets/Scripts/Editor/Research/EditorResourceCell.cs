@@ -138,7 +138,7 @@ public partial class EditorResourceCell : VisualElement
     protected virtual void ChangeType(ChangeEvent<string> evt)
     {
         int i = evt.target.GetRowIndex(false);
-        ResourceType t = ResFluidTypes.GetTypeByName(evt.newValue);
+        ResourceTypeNew t = ResFluidTypes.GetTypeByName(evt.newValue);
         int j = resource.types.IndexOf(t);
         if (j > -1 && i != j)
         {

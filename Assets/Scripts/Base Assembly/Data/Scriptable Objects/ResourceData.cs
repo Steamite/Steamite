@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ResourceData", menuName = "Resources/ResourceData")]
-public class ResourceData : DataHolder<ResourceTypeCategory, ResourceWrapper>
+public class ResourceData : DataHolder<ResourceTypeCategory, ResourceType>
 {
     public new const string PATH = "ResourceData";
 #if UNITY_EDITOR

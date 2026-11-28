@@ -277,13 +277,13 @@ public class Resource
 
     public int Sum() => ammounts.Sum();
 
-    public Resource FilterByType(List<ResourceWrapper> objects, out int activeElem)
+    public Resource FilterByType(List<ResourceType> objects, out int activeElem)
     {
         Resource resource = new();
         activeElem = 0;
         for (int i = 0; i < objects.Count; i++)
         {
-            ResourceType type = objects[i].data;
+            ResourceType type = objects[i];
             int j = types.FindIndex(q => q == type);
 
             resource.Add(type, j > -1 ? ammounts[j] : 0);

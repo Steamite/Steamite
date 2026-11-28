@@ -49,7 +49,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Resources
 
         /*
 
-        protected virtual int Remove(ResourceType type, int change)
+        protected virtual int Remove(ResourceTypeNew type, int change)
         {
             int i = types.IndexOf(type);
             if (i == -1)
@@ -68,7 +68,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Resources
                 ManageSimple(resAmmount.types[i], resAmmount.ammounts[i], add, mod, removeEmpty);
         }
 
-        public void ManageSimple(ResourceType type, float ammount, bool add, float mod = 1, bool removeEmpty = false)
+        public void ManageSimple(ResourceTypeNew type, float ammount, bool add, float mod = 1, bool removeEmpty = false)
         {
             if (add)
                 Add(type, Mathf.RoundToInt(ammount * mod));
@@ -178,7 +178,7 @@ namespace Assets.Scripts.Base_Assembly.Game.Grid.GridTiles.New.Resources
             activeElem = 0;
             for (int i = 0; i < objects.Count; i++)
             {
-                ResourceType type = objects[i].data;
+                ResourceTypeNew type = objects[i].data;
                 int j = types.FindIndex(q => q == type);
 
                 resource.Add(type, j > -1 ? ammounts[j] : 0);
