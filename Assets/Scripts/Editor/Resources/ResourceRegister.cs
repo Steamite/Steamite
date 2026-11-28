@@ -27,7 +27,6 @@ public class ResourceRegister : DataGridWindow<ResourceTypeCategory, ResourceTyp
 
     protected override bool LoadCategData(int index)
     {
-        Debug.Log("Start load");
         bool b = base.LoadCategData(index);
         if (b)
         {

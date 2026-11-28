@@ -29,7 +29,7 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
         if (boo)
         {
             dataGrid.style.display = DisplayStyle.Flex;
-            dataGrid.itemsSource = SelectedCategory.Objects;
+            dataGrid.BindProperty(serializedEntries);//.itemsSource = SelectedCategory.Objects;
         }
         else
         {
