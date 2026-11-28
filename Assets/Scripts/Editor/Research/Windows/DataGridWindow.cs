@@ -86,9 +86,9 @@ public class DataGridWindow<CATEG_TYPE, DATA_TYPE> : CategoryWindow<CATEG_TYPE, 
             (el, i) =>
             {
                 TextField field = (TextField)el;
-                if (((DATA_TYPE)dataGrid.itemsSource[i])?.GetName() != null)
+                if (((DATA_TYPE)dataGrid.itemsSource[i])?.Name != null)
                 {
-                    field.value = ((DATA_TYPE)dataGrid.itemsSource[i]).GetName();
+                    field.value = ((DATA_TYPE)dataGrid.itemsSource[i]).Name;
                     field.RegisterCallback<FocusOutEvent>(NameChange);
                 }
                 else

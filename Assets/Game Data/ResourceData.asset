@@ -21,16 +21,21 @@ MonoBehaviour:
     Icon: {fileID: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
   - id: 33938
-    Name: ew
+    Name: Metals
     Objects:
     - rid: 8842880003129999360
+    - rid: 8842880083528515722
+    - rid: 8842880083528515723
+    - rid: 8842880083528515724
     Icon: {fileID: 0}
-    color: {r: 0.0866977, g: 1, b: 0, a: 1}
-  - id: 33938
-    Name: test
-    Objects: []
+    color: {r: 0.21698111, g: 0.21698111, b: 0.21698111, a: 1}
+  - id: 78954
+    Name: Food
+    Objects:
+    - rid: 8842880083528515725
+    - rid: 8842880083528515726
     Icon: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0, g: 1, b: 0.015195131, a: 1}
   references:
     version: 2
     RefIds:
@@ -53,8 +58,48 @@ MonoBehaviour:
     - rid: 8842880003129999360
       type: {class: ResourceType, ns: , asm: BaseAssembly}
       data:
-        Name: Metal
+        Name: Iron
         description: 
         id: 47085
         color: {r: 1, g: 0, b: 0, a: 1}
+        image: {fileID: 0}
+    - rid: 8842880083528515722
+      type: {class: ResourceType, ns: , asm: BaseAssembly}
+      data:
+        Name: Copper
+        description: 
+        id: 5208
+        color: {r: 1, g: 0.48381877, b: 0, a: 1}
+        image: {fileID: 0}
+    - rid: 8842880083528515723
+      type: {class: ResourceType, ns: , asm: BaseAssembly}
+      data:
+        Name: Gold
+        description: 
+        id: 35799
+        color: {r: 1, g: 0.81607765, b: 0, a: 1}
+        image: {fileID: 0}
+    - rid: 8842880083528515724
+      type: {class: ResourceType, ns: , asm: BaseAssembly}
+      data:
+        Name: Tin
+        description: 
+        id: 28792
+        color: {r: 0.75881094, g: 0.7924528, b: 0.7924528, a: 1}
+        image: {fileID: 0}
+    - rid: 8842880083528515725
+      type: {class: ResourceType, ns: , asm: BaseAssembly}
+      data:
+        Name: Meat
+        description: 
+        id: 47920
+        color: {r: 1, g: 0, b: 0, a: 1}
+        image: {fileID: 0}
+    - rid: 8842880083528515726
+      type: {class: ResourceType, ns: , asm: BaseAssembly}
+      data:
+        Name: Grains
+        description: 
+        id: 55019
+        color: {r: 0.77152747, g: 0.8113208, b: 0.24110004, a: 1}
         image: {fileID: 0}

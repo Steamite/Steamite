@@ -10,8 +10,6 @@ public class DataObject
     [SerializeField] public string description;
     [SerializeField] public int id;
 
-    public virtual string GetName() => Name;
-
     public DataObject(DataObject dataObject)
     {
         Name = dataObject.Name;
@@ -30,44 +28,9 @@ public class DataObject
 public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CATEG_T : DataCategory<WRAPPER_T> where WRAPPER_T : DataObject
 {
     public const string PATH = "";
-
-    #region Editor
-
-#if UNITY_EDITOR
-    public const string EDITOR_PATH = "Assets/Game Data/UI/QuestData.asset";
-
-    public List<string> CategoryChoices()
-        => Categories.Select(q => q.Name).ToList();
-    public List<string> ObjectChoices(bool addNone = false)
-    {
-        List<string> objectNames = new();
-        if (addNone)
-            objectNames.Add("None");
-        objectNames.AddRange(Categories.SelectMany(q => q.Objects).Select(q => q.Name).ToList());
-        return objectNames;
-    }
-    public int UniqueID()
-    {
-        int i;
-        do
-        {
-            i = UnityEngine.Random.Range(1, 0xFFFF);
-        } while (Categories.SelectMany(q => q.Objects).Count(q => q.id == i) > 0);
-        return i;
-    }
-    public int UniqueCategID()
-    {
-        int i;
-        do
-        {
-            i = UnityEngine.Random.Range(1, 0xFFFF);
-        } while (Categories.Select(q => q.id).Count(q => q == i) > 0);
-        return i;
-    }
-#endif
-    #endregion
-
     [SerializeField] public List<CATEG_T> Categories = new();
+
+
 
     public WRAPPER_T GetObjectBySaveIndex(DataAssign dataAssign)
     {
@@ -100,9 +63,82 @@ public abstract class DataHolder<CATEG_T, WRAPPER_T> : ScriptableObject where CA
     }
 
 
+
+
+    #region Editor
+
+#if UNITY_EDITOR
+    IEnumerable<WRAPPER_T> AllObjects => Categories.SelectMany(q => q.Objects);
+
+
+    public const string EDITOR_PATH = "Assets/Game Data/UI/QuestData.asset";
+
+    public List<string> CategoryChoices(bool addNone = false)
+    {
+        List<string> objectNames = new();
+        if (addNone)
+            objectNames.Add("None");
+        objectNames.AddRange(Categories.Select(q => q.Name).ToList());
+        return objectNames;
+    }
+
+    public string GetCategoryChoiceByID(int categoryId)
+    {
+        if (categoryId == -1)
+            return "None";
+
+        CATEG_T categ = Categories.FirstOrDefault(q => q.id == categoryId);
+        if (categ == null)
+            return "Missing!";
+
+        return categ.Name;
+    }
+
+
+    /*
+        public Dictionary<int, string> GetCategoryCatalog()
+        {
+            Dictionary<int, string> valuePairs = new();
+            foreach (var item in Categories)
+            {
+                valuePairs.Add(item.id, item.Name);
+            }
+            return valuePairs;
+        }
+
+        public Dictionary<int, string> GetObjectCatalog(int categoryId, bool onlyAvailable = false)
+            => Categories.FirstOrDefault(q => q.id == categoryId).GetObjectCatalog(onlyAvailable);*/
+
+
+
+    public int UniqueID()
+    {
+        int i;
+        do
+        {
+            i = UnityEngine.Random.Range(1, 0xFFFF);
+        } while (AllObjects.Count(q => q.id == i) > 0);
+        return i;
+    }
+
+    public int UniqueCategID()
+    {
+        int i;
+        do
+        {
+            i = UnityEngine.Random.Range(1, 0xFFFF);
+        } while (Categories.Select(q => q.id).Count(q => q == i) > 0);
+        return i;
+    }
+
     public int GetCategIdFromName(string newValue)
     {
         CATEG_T cat = Categories.FirstOrDefault(q => q.Name == newValue);
-        return cat != null ? cat.id : -1;
+        return cat != null ? cat.id : 0;
     }
+
+#endif
+    #endregion
+
+
 }

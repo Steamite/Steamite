@@ -171,6 +171,8 @@ namespace Assets.Scripts.Editor.Research.Windows
             
             var cat = categs.GetArrayElementAtIndex(size);
             string name = categoryNameField.value;
+
+            cat.FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.id)).intValue = holder.UniqueCategID();
             cat.FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.Name)).stringValue = name;
             cat.FindPropertyRelative(nameof(DataCategory<DATA_TYPE>.Objects)).arraySize = 0;// = new List<DATA_TYPE>();
 

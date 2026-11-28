@@ -10,18 +10,13 @@ namespace Assets.Scripts.Editor.New.Resources
 {
     public class ResourceRow : BindableElement
     {
-        DropdownField categoryField;
-        DropdownField objectField;
+        DataAssignRow<ResourceData, ResourceTypeCategory, ResourceType> assignField;
         IntegerField integerField;
         
         public ResourceRow()
         {
             style.flexDirection = FlexDirection.Row;
-
-            Add(categoryField = new()
-            {
-            });
-            Add(objectField = new()
+            Add(assignField = new()
             {
             });
             Add(integerField = new()
@@ -31,9 +26,10 @@ namespace Assets.Scripts.Editor.New.Resources
             });
         }
 
-        public void Bind()
+        public void Bind(SerializedProperty resource)
         {
-
+            assignField.Bind(ResFluidTypes.Data, resource.FindPropertyRelative(nameof(ResourceNew.assign)));
+            integerField.BindProperty(resource.FindPropertyRelative(nameof(ResourceNew.amount)));
         }
     }
 }

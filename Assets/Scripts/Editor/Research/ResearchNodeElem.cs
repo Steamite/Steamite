@@ -289,11 +289,11 @@ namespace EditorWindows.Research
                 case NodeType.Building:
                     _nodeData.objectConnection.objectId =
                         editor.buildingData.GetCategByID(_nodeData.objectConnection.categoryId)
-                        .availableObjects.FirstOrDefault(q => q.GetName() == newVal).id;
+                        .availableObjects.FirstOrDefault(q => q.Name == newVal).id;
                     break;
                 case NodeType.Stat:
                     BuildingStats.Stat stat = editor.statData.GetCategByID(_nodeData.objectConnection.categoryId)
-                        .availableObjects.FirstOrDefault(q => q.GetName() == newVal);
+                        .availableObjects.FirstOrDefault(q => q.Name == newVal);
                     _nodeData.objectConnection.objectId = stat.id;
                     GetDescr(_nodeData, editor);
                     break;

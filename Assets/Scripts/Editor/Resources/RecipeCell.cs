@@ -15,7 +15,8 @@ public partial class RecipeCell : ListView, IUIElement
         holder = AssetDatabase.LoadAssetAtPath<ProductionRecipeHolder>(ProductionRecipeHolder.EDITOR_PATH);
         bindItem = (el, i) =>
         {
-            DropdownField field = el as DropdownField;
+            // TODO
+            /*DropdownField field = el as DropdownField;
             field.choices = holder.ObjectChoices(true);
             ProductionRecipe recipe = holder.GetObjectBySaveIndex((DataAssign)itemsSource[i]);
             if (recipe != null)
@@ -23,7 +24,7 @@ public partial class RecipeCell : ListView, IUIElement
             else
                 field.value = "None";
 
-            field.RegisterValueChangedCallback(OnChange);
+            field.RegisterValueChangedCallback(OnChange);*/
         };
         onAdd = (_list) =>
         {

@@ -11,6 +11,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.Analytics.IAnalytic;
 
 namespace Assets.Scripts.Editor.Buildings.CommonColumns
 {
@@ -97,7 +98,7 @@ namespace Assets.Scripts.Editor.Buildings.CommonColumns
                     el.parent.focusable = true;
 
                     ResourceCellNew cell = el.Q<ResourceCellNew>();
-                    cell.BindProperty(register.GetWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.cost)));
+                    cell.Bind(register.GetWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.cost)));
 
                     //cell.Open(register.GetBuildingWrapperAt(i).FindPropertyRelative(nameof(BuildingWrapper.Cost)));
                 };

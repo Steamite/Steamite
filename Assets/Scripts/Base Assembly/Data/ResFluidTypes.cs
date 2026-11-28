@@ -14,6 +14,7 @@ using static UnityEngine.Analytics.IAnalytic;
 public static class ResFluidTypes
 {
     static ResourceData data;
+    public static ResourceData Data => data;
     public static ResourceType Money;
 
     static ResourceType none;
@@ -25,7 +26,7 @@ public static class ResFluidTypes
     static List<ResourceTypeCategory> fullRes;
     public static List<ResourceTypeCategory> FullRes => fullRes;
 
-    static Dictionary<int2, byte> EditAssignsToRuntimeIndexes;
+    static Dictionary<DataAssign, byte> EditAssignsToRuntimeIndexes;
     static List<ResourceType> RuntimeAllignedIndexes;
 
     public static async Awaitable Init()
@@ -79,7 +80,7 @@ public static class ResFluidTypes
         Debug.Log("Resources loaded");
     }
 
-    public static byte GetRuntimeIndex(int2 editorAssign) => EditAssignsToRuntimeIndexes[editorAssign];
+    public static byte GetRuntimeIndex(DataAssign editorAssign) => EditAssignsToRuntimeIndexes[editorAssign];
     public static ResourceType GetResourceTypeByRuntimeIndex(byte index) => RuntimeAllignedIndexes[index];
 
     public static ResourceType GetTypeByName(string name)

@@ -4,6 +4,7 @@ using Levels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,7 +13,7 @@ using UnityEngine.UIElements;
 [Serializable]
 public class ResourceNew
 {
-    public int assignIds;
+    public DataAssign assign;
 
     public byte amount;
 }
@@ -65,7 +66,7 @@ public class BuildingWrapper : DataObject
 
             buildingInventories[i] = new()
             {
-                type = ResFluidTypes.GetRuntimeIndex(item.assignIds),
+                type = ResFluidTypes.GetRuntimeIndex(item.assign),
                 cost = item.amount,
                 stored = 0
             };

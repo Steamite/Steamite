@@ -72,7 +72,7 @@ namespace ResearchUI
                 {
                     Debug.LogError(
                         $"Cat: {node.objectConnection.categoryId}, not found" +
-                        $"{node.GetName()}");
+                        $"{node.Name}");
                     return;   
                 }
                 building = cat.Objects.FindIndex(q => q.id == node.objectConnection.objectId);

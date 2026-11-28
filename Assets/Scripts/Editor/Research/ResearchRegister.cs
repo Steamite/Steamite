@@ -314,8 +314,8 @@ namespace EditorWindows.Research
                 {
 
                     if (node.objectConnection.objectId > 0)
-                        str.Add(dataHolder.GetCategByID(node.objectConnection.categoryId)?.Objects.Find(q => q.id == node.objectConnection.objectId)?.GetName());
-                    str.AddRange(dataHolder.GetCategByID(node.objectConnection.categoryId)?.availableObjects.Select(q => q.GetName()));
+                        str.Add(dataHolder.GetCategByID(node.objectConnection.categoryId)?.Objects.Find(q => q.id == node.objectConnection.objectId)?.Name);
+                    str.AddRange(dataHolder.GetCategByID(node.objectConnection.categoryId)?.availableObjects.Select(q => q.Name));
                 }
             }
             catch
